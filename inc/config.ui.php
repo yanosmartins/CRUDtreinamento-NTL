@@ -138,7 +138,6 @@ if ($condicaoCadastroOk) {
     $page_nav['cadastro']['sub'] += array("projeto" => array("title" => "Projeto", "url" => APP_URL . "/index.php")); //SYSCB
     $page_nav['cadastro']['sub'] += array("sindicato" => array("title" => "Sindicato", "url" => APP_URL . "/index.php")); //SYSCB 
     $page_nav['cadastro']['sub'] += array("valeTransporteModal" => array("title" => "Vale Transporte Modal", "url" => APP_URL . "/index.php")); //SYSCB
-    $page_nav['cadastro']['sub'] += array("valorPosto" => array("title" => "Valor do Posto", "url" => APP_URL . "/index.php")); //SYSCB 
     $page_nav['cadastro']['sub'] += array("vinculosBeneficios" => array("title" => "Vínculos e Benefícios", "url" => APP_URL . "/index.php")); //SYSCB 
      
 }
@@ -153,37 +152,24 @@ if ($condicaoBeneficioOk) {
     $page_nav['beneficio']['sub'] += array("fechamentoMes" => array("title" => "Fechamento do Mês", "url" => APP_URL . "/index.php"));
 }
 
-// CONTRATAÇÕES
+// CONTRATAÇÕES - SYSCC
 if ($condicaoContratacaoOk) {
     $page_nav['contratacao'] = array("title" => "Contratação", "icon" => "fa fa-fax");
     $page_nav['contratacao']['sub'] = array();
 
-    //SUBMENU OPERAÇÕES MENSAIS
-    if (true) {
-        $page_nav['contratacao']['sub']['operacoesMensais'] = array("title" => "Operações Mensais");
-        $page_nav['contratacao']['sub']['operacoesMensais']['sub'] = array();
-
-        if (true) { //in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)
-            $page_nav['contratacao']['sub']['operacoesMensais']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/index.php"));
-        }
-    }
+    $page_nav['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/index.php"));
+    $page_nav['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/index.php"));
+    $page_nav['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/index.php"));
 }
 
 
-// FATURAMENTOS
+// FATURAMENTOS - SYSGEF
 if ($condicaoFaturamentoOk) {
     $page_nav['faturamento'] = array("title" => "Faturamento", "icon" => "fa fa-dollar");
     $page_nav['faturamento']['sub'] = array();
 
-    //SUBMENU OPERAÇÕES MENSAIS
-    if (true) {
-        $page_nav['faturamento']['sub']['operacoesMensais'] = array("title" => "Operações Mensais");
-        $page_nav['faturamento']['sub']['operacoesMensais']['sub'] = array();
-
-        if (true) { //in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)
-            $page_nav['faturamento']['sub']['operacoesMensais']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/index.php"));
-        }
-    }
+    $page_nav['faturamento']['sub'] += array("contrato" => array("title" => "Contrato", "url" => APP_URL . "/index.php"));
+    $page_nav['faturamento']['sub'] += array("valorPosto" => array("title" => "Valor do Posto", "url" => APP_URL . "/index.php")); //SYSCB 
 }
 
 // LICITAÇÕES - SYSGC
