@@ -21,7 +21,7 @@ include "js/repositorio.php";
                     $where = $where . " AND (USU.[login] like '%' + " . "replace('" . $nomeFiltro . "',' ','%') + " . "'%')";
                 }
 
-                $sql = " SELECT USU.codigo,USU.[login],USU.ativo FROM dbo.usuario USU  ";
+                $sql = " SELECT USU.codigo,USU.[login],USU.ativo FROM Ntl.usuario USU  ";
                 $where = $where . " AND USU.tipoUsuario = 'C' ";
                 
                 $sql = $sql.$where;

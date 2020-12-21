@@ -43,24 +43,18 @@ include("inc/nav.php");
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-<?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
-$breadcrumbs["Controle de Permissão"] = "";
-include("inc/ribbon.php");
-?>
+    <?php
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
+    $breadcrumbs["Configurações"] = "";
+    include("inc/ribbon.php");
+    ?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
 
         <!-- widget grid -->
         <section id="widget-grid" class="">
-            <div class="row" style="margin: 0 0 13px 0;">
-                <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/usuarioCadastro.php" style="float:right"></a>
-                <?php } ?>    
-            </div>                    
-
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
@@ -92,16 +86,20 @@ include("inc/ribbon.php");
                                                                     <input id="nome" maxlength="50" name="nome" type="text" value="">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-1">
-                                                                <label class="label">&nbsp;</label>
-                                                                <button id="btnSearch" type="button" class="btn btn-primary" title="Buscar">
-                                                                    <i class="fa fa-search fa-lg"></i>
-                                                                </button>
-                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
-                                            </div>   
+                                                <footer>
+                                                    <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                                        <span class="fa fa-search"></span>
+                                                    </button>
+                                                    <?php if ($condicaoGravarOK) { ?>
+                                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                                            <span class="fa fa-file"></span>
+                                                        </button>
+                                                    <?php } ?>
+                                                </footer>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -110,7 +108,7 @@ include("inc/ribbon.php");
                         </div>
                     </div>
                 </article>
-            </div>                          
+            </div>
         </section>
         <!-- end widget grid -->
     </div>
@@ -151,26 +149,24 @@ include("inc/scripts.php");
 
 
 <script>
-    $(document).ready(function () {
-        $('#btnSearch').on("click", function () {
+    $(document).ready(function() {
+        $('#btnSearch').on("click", function() {
             listarFiltro();
+        });
+        $('#btnNovo').on("click", function() {
+            novo();
         });
     });
 
     function listarFiltro() {
-        var nomeFiltro = $('#nome').val();
-        if (nomeFiltro !== "") {
-            nomeFiltro = nomeFiltro.replace(/^\s+|\s+$/g, "");
-            nomeFiltro = encodeURIComponent(nomeFiltro);
-        }
-
-        var parametrosUrl = '&nomeFiltro=' + nomeFiltro;
-        $('#resultadoBusca').load('usuarioFiltroListagem.php?' + parametrosUrl);
+        var nome = $('#nome').val();
+ 
+        $('#resultadoBusca').load('usuarioFiltroListagem.php?', {
+            nomeFiltro: nome
+        });
     }
-</script>    
 
-
-//<?php
-//	//include footer
-//	include("inc/google-analytics.php"); 
-//?>
+    function novo() {
+        $(location).attr('href', 'usuarioCadastro.php');
+    }
+</script>

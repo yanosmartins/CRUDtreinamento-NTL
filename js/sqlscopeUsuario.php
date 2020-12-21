@@ -44,6 +44,7 @@ function grava() {
         $ativo = +$_POST["ativo"];
     }
 
+    $nome = $_POST['nome']; 
     $tipoUsuario = $_POST['tipoUsuario'];
     $tipoUsuario = "'" . $tipoUsuario . "'";
     $nome = "'" . $nome . "'";

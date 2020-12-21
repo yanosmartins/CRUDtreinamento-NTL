@@ -42,7 +42,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["controle"]["sub"]["usuarios"]["active"] = true;
+$page_nav["configuracao"]["sub"]["usuarios"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -52,7 +52,7 @@ include("inc/nav.php");
     <?php
 //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
 //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Controle de Permissão"] = "";
+    $breadcrumbs["Configurações"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -183,8 +183,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/businessUsuario.js" type="text/javascript"></script>
-<!-- <script src="<?php echo ASSETS_URL; ?>/js/businessVendedor.js" type="text/javascript"></script> -->
+<script src="<?php echo ASSETS_URL; ?>/js/businessUsuario.js" type="text/javascript"></script> 
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->

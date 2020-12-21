@@ -43,20 +43,18 @@ $page_nav = array("home" => array("title" => "Home", "icon" => "fa-home", "url" 
 $condicaoConfiguracoesOK = (in_array('USUARIO_ACESSAR', $arrayPermissao, true));
 $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true));
 $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PARAMETRO_ACESSAR', $arrayPermissao, true));
-
-
+ 
 if ($condicaoConfiguracoesOK) {
     $page_nav['configuracao'] = array("title" => "Configurações", "icon" => "fa-gear");
     $page_nav['configuracao']['sub'] = array();
 
-    if (true) {
+    if (in_array('USUARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("usuarios" => array("title" => "Usuário", "url" => APP_URL . "/usuarioFiltro.php"));
     }
-    if (true) {
+    if (in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("permissoesUsuarios" => array("title" => "Permissões do Usuário", "url" => APP_URL . "/usuarioFuncionalidadeFiltro.php"));
-    }
-
-    if (true) {
+    } 
+    if (in_array('PARAMETRO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("parametro" => array("title" => "Parâmetros", "url" => APP_URL . "/parametros.php"));
     }
 }
