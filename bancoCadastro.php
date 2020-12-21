@@ -42,7 +42,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastrar"]["sub"]["banco"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["banco"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -52,7 +52,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Controle de Permissão"] = "";
+    $breadcrumbs["Tabela Básica"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -99,7 +99,7 @@ include("inc/nav.php");
                                                                     <input id="nomeBanco" name="nomeBanco" type="text" autocomplete="new-password" maxlength="100">
                                                                 </label>
                                                             </section>
-                                                            
+
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -314,7 +314,7 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'bancoFiltro.php');
+        $(location).attr('href', 'tabelaBasica_bancoFiltro.php');
     }
 
     function excluir() {
@@ -325,7 +325,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirBanco(id, function(data){ 
+        excluirBanco(id, function(data) {
             if (data.indexOf('failed') > -1) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -427,9 +427,9 @@ include("inc/scripts.php");
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
                             var piece = data.split("#");
-                            var mensagem = piece[0]; 
-                            var out = piece[1]; 
- 
+                            var mensagem = piece[0];
+                            var out = piece[1];
+
                             piece = out.split("^");
                             codigo = piece[0];
                             codigoBanco = piece[1];
