@@ -108,12 +108,15 @@ if ($condicaoTabelaBasicaOk) {
         $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
     }  
     if (in_array('MOTIVOAFASTAMENTO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
+        $page_nav['tabelaBasica']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/tabelaBasica_motivoAfastamentoFiltro.php")); //SYSCB
     }  
-     
-    $page_nav['tabelaBasica']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/index.php")); //SYSCB
-    $page_nav['tabelaBasica']['sub'] += array("municipio" => array("title" => "Município", "url" => APP_URL . "/index.php")); //SYSCB 
-    $page_nav['tabelaBasica']['sub'] += array("periodoRenovacao" => array("title" => "Período de Renovação", "url" => APP_URL . "/index.php")); //SYSGEF
+    if (in_array('MUNICIPIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("municipio" => array("title" => "Município", "url" => APP_URL . "/tabelaBasica_municipioFiltro.php")); //SYSCB 
+    }    
+    if (in_array('PERIODORENOVACAO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("periodoRenovacao" => array("title" => "Período de Renovação", "url" => APP_URL . "/tabelaBasica_periodoRenovacaoFiltro.php")); //SYSGEF
+    }   
+    
     $page_nav['tabelaBasica']['sub'] += array("periodoVigencia" => array("title" => "Período de Vigência", "url" => APP_URL . "/index.php")); //SYSGEF
     $page_nav['tabelaBasica']['sub'] += array("portal" => array("title" => "Portal", "url" => APP_URL . "/index.php")); //SYSGC 
     $page_nav['tabelaBasica']['sub'] += array("posto" => array("title" => "Posto", "url" => APP_URL . "/index.php")); 
