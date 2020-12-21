@@ -101,9 +101,16 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('INICIOREAJUSTE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("inicioReajuste" => array("title" => "Ínicio de Reajuste", "url" => APP_URL . "/tabelaBasica_inicioReajusteFiltro.php")); //SYSGEF
     } 
-    
-    $page_nav['tabelaBasica']['sub'] += array("lancamento" => array("title" => "Lançamento", "url" => APP_URL . "/index.php")); //SYSCB
-    $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/index.php"));
+    if (in_array('LANCAMENTO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("lancamento" => array("title" => "Lançamento", "url" => APP_URL . "/tabelaBasica_lancamentoFiltro.php")); //SYSCB
+    } 
+    if (in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
+    }  
+    if (in_array('MOTIVOAFASTAMENTO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
+    }  
+     
     $page_nav['tabelaBasica']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/index.php")); //SYSCB
     $page_nav['tabelaBasica']['sub'] += array("municipio" => array("title" => "Município", "url" => APP_URL . "/index.php")); //SYSCB 
     $page_nav['tabelaBasica']['sub'] += array("periodoRenovacao" => array("title" => "Período de Renovação", "url" => APP_URL . "/index.php")); //SYSGEF
