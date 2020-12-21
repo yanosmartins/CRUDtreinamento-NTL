@@ -92,10 +92,16 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('CLASSE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("classe" => array("title" => "Classe", "url" => APP_URL . "/tabelaBasica_classeFiltro.php")); //SYSGEF
     } 
-    $page_nav['tabelaBasica']['sub'] += array("classe" => array("title" => "Classe", "url" => APP_URL . "/index.php")); //SYSCC   
-    $page_nav['tabelaBasica']['sub'] += array("escala" => array("title" => "Escalas", "url" => APP_URL . "/index.php")); //SYSCC  
-    $page_nav['tabelaBasica']['sub'] += array("indiceReajuste" => array("title" => "Índice de Reajuste", "url" => APP_URL . "/index.php")); //SYSGEF 
-    $page_nav['tabelaBasica']['sub'] += array("inicioReajuste" => array("title" => "Ínicio de Reajuste", "url" => APP_URL . "/index.php")); //SYSGEF
+    if (in_array('ESCALA_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("escala" => array("title" => "Escala", "url" => APP_URL . "/tabelaBasica_escalaFiltro.php")); //SYSCC  
+    } 
+    if (in_array('INDICEREAJUSTE_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("indiceReajuste" => array("title" => "Índice de Reajuste", "url" => APP_URL . "/tabelaBasica_indiceReajusteFiltro.php")); //SYSGEF  
+    } 
+    if (in_array('INICIOREAJUSTE_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("inicioReajuste" => array("title" => "Ínicio de Reajuste", "url" => APP_URL . "/tabelaBasica_inicioReajusteFiltro.php")); //SYSGEF
+    } 
+    
     $page_nav['tabelaBasica']['sub'] += array("lancamento" => array("title" => "Lançamento", "url" => APP_URL . "/index.php")); //SYSCB
     $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/index.php"));
     $page_nav['tabelaBasica']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/index.php")); //SYSCB
