@@ -64,7 +64,7 @@ class reposit {
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $conf = explode("|", $config);   // Aqui explodimos e jogamos em array
         $conf[0] = $this->anti_injection($conf[0]);
-        $sql = "select * from [dbo]." . $conf[0] . " ";
+        $sql = "select * from [Ntl]." . $conf[0] . " ";
         $result = odbc_exec($this->sqlconnect, $sql);
 
         /* $result=iconv("iso-8859-2","utf-8",odbc_fetch_array()); */
@@ -88,7 +88,7 @@ class reposit {
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $conf = explode("|", $config);   // Aqui explodimos e jogamos em array
         $conf[2] = $this->anti_injection($conf[2]);
-        $sql = "SELECT distinct(" . $conf[3] . "),* FROM [dbo]." . $conf[0] . " a ," . $conf[1] . " b WHERE " . $conf[2];
+        $sql = "SELECT distinct(" . $conf[3] . "),* FROM [Ntl]." . $conf[0] . " a ," . $conf[1] . " b WHERE " . $conf[2];
         $result = odbc_exec($this->sqlconnect, $sql);
 //        if ($result == ""){
 //            $result = 0;
@@ -101,7 +101,7 @@ class reposit {
     function SelectAllCampos($config) {
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $conf = explode("|", $config);   // Aqui explodimos e jogamos em array
-        $sql = "select " . $conf[1] . " FROM [dbo]." . $conf[0] . " LIMIT $conf[2],$conf[3]";
+        $sql = "select " . $conf[1] . " FROM [Ntl]." . $conf[0] . " LIMIT $conf[2],$conf[3]";
         $result = odbc_exec($this->sqlconnect, $sql);
 //        if ($result == ""){
 //            $result = 0;
@@ -114,7 +114,7 @@ class reposit {
     function SelectCampos($config) {
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $conf = explode("|", $config);   // Aqui explodimos e jogamos em array
-        $sql = "select " . $conf[1] . " FROM [dbo]." . $conf[0] . "";
+        $sql = "select " . $conf[1] . " FROM [Ntl]." . $conf[0] . "";
         $result = odbc_exec($this->sqlconnect, $sql);
 //        if ($result == ""){
 //            $result = 0;
@@ -128,7 +128,7 @@ class reposit {
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $conf = explode("|", $config);   // Aqui explodimos e jogamos em array
         $conf[2] = $this->anti_injection($conf[2]);
-        $sql = "SELECT " . $conf[1] . " FROM [dbo]." . $conf[0] . " WHERE " . $conf[2];
+        $sql = "SELECT " . $conf[1] . " FROM [Ntl]." . $conf[0] . " WHERE " . $conf[2];
         $result = odbc_exec($this->sqlconnect, $sql);
 //        if ($result == ""){
 //            $result = 0;
@@ -144,7 +144,7 @@ class reposit {
 
         $args = $conf[1];
         $args = $this->anti_injection($args);
-        $sql = "SELECT * FROM [dbo]." . $conf[0] . " WHERE " . $conf[1] . " ";
+        $sql = "SELECT * FROM [Ntl]." . $conf[0] . " WHERE " . $conf[1] . " ";
         $select = odbc_exec($this->sqlconnect, $sql);
         $result = odbc_num_rows($select);
         if ($result > 0) {
@@ -170,7 +170,7 @@ class reposit {
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $conf = explode("|", $config);   // Aqui explodimos e jogamos em array 
         $conf[1] = $this->anti_injection($conf[1]);
-        $sql = "SELECT * FROM [dbo]." . $conf[0] . " WHERE " . $conf[1] . " ";
+        $sql = "SELECT * FROM [Ntl]." . $conf[0] . " WHERE " . $conf[1] . " ";
         $result = odbc_exec($this->sqlconnect, $sql);
         $this->FechaConexao(); // Fechamos a conexão
         return $result; // aqui fica o retorno de todas as condicionais
@@ -181,7 +181,7 @@ class reposit {
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $conf = explode("|", $config);   // Aqui explodimos e jogamos em array
         $conf[1] = $this->anti_injection($conf[1]);
-        $sql = "SELECT * FROM [dbo]." . $conf[0] . " WHERE " . $conf[1] . " ";
+        $sql = "SELECT * FROM [Ntl]." . $conf[0] . " WHERE " . $conf[1] . " ";
         $result = odbc_exec($this->sqlconnect, $sql);
 //               $result =odbc_num_rows($result);
         $this->FechaConexao(); // Fechamos a conexão
@@ -193,7 +193,7 @@ class reposit {
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $conf = explode("|", $config);   // Aqui explodimos e jogamos em array 
         $conf[2] = $this->anti_injection($conf[2]);
-        $sql = "SELECT * FROM [dbo]." . $conf[0] . " a, [dbo]." . $conf[1] . " b WHERE " . $conf[2] . " ";
+        $sql = "SELECT * FROM [Ntl]." . $conf[0] . " a, [Ntl]." . $conf[1] . " b WHERE " . $conf[2] . " ";
         $result = odbc_exec($this->sqlconnect, $sql);
         $this->FechaConexao(); // Fechamos a conexão
         return $result; // aqui fica o retorno de todas as condicionais
@@ -214,7 +214,7 @@ class reposit {
         $listacampos = $this->anti_injection($listacampos);
         $conf[2] = $this->anti_injection($conf[2]);
         try {
-            $sql = "update [dbo]." . $conf[0] . " set " . $listacampos . " WHERE " . $conf[2] . " ";
+            $sql = "update [Ntl]." . $conf[0] . " set " . $listacampos . " WHERE " . $conf[2] . " ";
             $select = odbc_exec($this->sqlconnect, $sql);
             $result = odbc_num_rows($select);
             if ($select == false) {
@@ -240,7 +240,7 @@ class reposit {
         // start da transação
         odbc_autocommit($this->sqlconnect, false);
         try {
-            $sql = "insert into [dbo]." . $conf[0] . "(" . $listacampos . ") values(" . $conf[2] . ") ";
+            $sql = "insert into [Ntl]." . $conf[0] . "(" . $listacampos . ") values(" . $conf[2] . ") ";
             $select = odbc_exec($this->sqlconnect, $sql);
             $result = odbc_num_rows($select);
             $newid = odbc_exec($this->sqlconnect, "select @@identity");
@@ -267,7 +267,7 @@ class reposit {
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $conf = explode("|", $config); // Aqui explodimos e jogamos em array
         $conf[1] = $this->anti_injection($conf[1]);
-        $sql = "delete from [dbo]." . $conf[0] . " WHERE " . $conf[1] . " ";
+        $sql = "delete from [Ntl]." . $conf[0] . " WHERE " . $conf[1] . " ";
         $select = odbc_exec($this->sqlconnect, $sql);
         $result = odbc_num_rows($select);
         $this->FechaConexao(); // Fechamos a conexão               
@@ -286,9 +286,9 @@ class reposit {
             $tipoUsuario = $row['tipoUsuario'];
 
             if ($tipoUsuario === "C") {
-                $sql = "SELECT F.CODIGO FROM dbo.funcionalidade F WHERE (f.nome = '" . $conf[0] . "' OR f.nome = '" . $conf[1] . "') ";
+                $sql = "SELECT F.CODIGO FROM Ntl.funcionalidade F WHERE (f.nome = '" . $conf[0] . "' OR f.nome = '" . $conf[1] . "') ";
                 $sql = $sql . " EXCEPT ";
-                $sql = $sql . " SELECT usuf.funcionalidade FROM dbo.usuarioFuncionalidade usuf INNER JOIN dbo.funcionalidade faux on faux.codigo = usuf.funcionalidade ";
+                $sql = $sql . " SELECT usuf.funcionalidade FROM Ntl.usuarioFuncionalidade usuf INNER JOIN Ntl.funcionalidade faux on faux.codigo = usuf.funcionalidade ";
                 $sql = $sql . " AND (faux.nome = '" . $conf[0] . "' OR faux.nome = '" . $conf[1] . "') ";
                 $sql = $sql . " WHERE usuf.usuario=" . $codigoUsuario . " ";
 

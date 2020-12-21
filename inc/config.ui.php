@@ -22,8 +22,8 @@ if ($row = $result) {
     $funcionario = +$row['funcionario'];
 
     if ($tipoUsuario === "C") {
-        $sql = "SELECT FNC.nome FROM dbo.usuarioFuncionalidade USUF
-				INNER JOIN dbo.funcionalidade FNC ON FNC.codigo = USUF.funcionalidade
+        $sql = "SELECT FNC.nome FROM Ntl.usuarioFuncionalidade USUF
+				INNER JOIN Ntl.funcionalidade FNC ON FNC.codigo = USUF.funcionalidade
                 WHERE USUF.usuario = " . $codigoUsuario;
         $result = $reposit->RunQuery($sql);
         while (($row = odbc_fetch_array($result))) {
@@ -31,7 +31,7 @@ if ($row = $result) {
         }
     }
     if ($tipoUsuario === "S") {
-        $sql = " SELECT nome FROM dbo.funcionalidade";
+        $sql = " SELECT nome FROM Ntl.funcionalidade";
         $result = $reposit->RunQuery($sql);
         while (($row = odbc_fetch_array($result))) {
             array_push($arrayPermissao, $row["nome"]);
@@ -40,7 +40,7 @@ if ($row = $result) {
 }
 
 $page_nav = array("home" => array("title" => "Home", "icon" => "fa-home", "url" => APP_URL . "/index.php"));
-$condicaoConfiguracoesOK = true;
+$condicaoConfiguracoesOK = (in_array('USUARIO_ACESSAR', $arrayPermissao, true));
 $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true));
 $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PARAMETRO_ACESSAR', $arrayPermissao, true));
 
