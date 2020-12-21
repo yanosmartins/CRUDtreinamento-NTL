@@ -40,6 +40,9 @@ if ($row = $result) {
 }
 
 $page_nav = array("home" => array("title" => "Home", "icon" => "fa-home", "url" => APP_URL . "/index.php"));
+
+
+//Configurações 
 $condicaoConfiguracoesOK = (in_array('USUARIO_ACESSAR', $arrayPermissao, true));
 $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true));
 $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PARAMETRO_ACESSAR', $arrayPermissao, true));
@@ -59,21 +62,28 @@ if ($condicaoConfiguracoesOK) {
     }
 }
 
-$condicaoVersaoSistemaOk = true;
-$condicaoTabelaBasicaOk =  true; //(in_array('TABELABASICA_ACESSAR', $arrayPermissao, true)); -> Descomentar quando houver banco.  
+
 $condicaoCadastroOk = true;
 $condicaoBeneficioOk = true;
 $condicaoContratacaoOk = true;
 $condicaoFaturamentoOk = true;
 $condicaoLicitacaoOk = true;
 $condicaoOperacoesEspeciaisoOk = true;
+$condicaoVersaoSistemaOk = true;
 
 // TABELAS BÁSICAS
+$condicaoTabelaBasicaOk = (in_array('TABELABASICA_ACESSAR', $arrayPermissao, true));
+$condicaoTabelaBasicaOk = (($condicaoTabelaBasicaOk) or in_array('BANCO_ACESSAR', $arrayPermissao, true));
+$condicaoTabelaBasicaOk = (($condicaoTabelaBasicaOk) or in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true));
+ 
 if ($condicaoTabelaBasicaOk) {
     $page_nav['tabelaBasica'] = array("title" => "Tabela Básica", "icon" => "fa fa-table");
     $page_nav['tabelaBasica']['sub'] = array();
-    //if (in_array('USUARIO_ACESSAR', $arrayPermissao, true)) {
-    $page_nav['tabelaBasica']['sub'] += array("banco" => array("title" => "Banco", "url" => APP_URL . "/index.php")); //SYSCC   
+   
+    if (in_array('BANCO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("banco" => array("title" => "Banco", "url" => APP_URL . "/tabelaBasica_bancoFiltro.php")); //SYSCC   
+    }
+    
     $page_nav['tabelaBasica']['sub'] += array("beneficioIndireto" => array("title" => "Benefício Indireto", "url" => APP_URL . "/index.php")); //SYSCB  
     $page_nav['tabelaBasica']['sub'] += array("caucao" => array("title" => "Caução", "url" => APP_URL . "/index.php")); //SYSGEF
     $page_nav['tabelaBasica']['sub'] += array("classe" => array("title" => "Classe", "url" => APP_URL . "/index.php")); //SYSCC  
