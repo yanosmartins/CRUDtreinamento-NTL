@@ -89,13 +89,13 @@ include("inc/nav.php");
                                                                 <label class="input">
                                                                     <input id="codigoBanco" maxlength="255" name="codigoBanco" type="text" value="">
                                                                 </label>
-                                                            </section> 
+                                                            </section>
                                                             <section class="col col-4">
                                                                 <label class="label">Nome</label>
                                                                 <label class="input">
                                                                     <input id="nomeBanco" maxlength="255" name="nomeBanco" type="text" value="">
                                                                 </label>
-                                                            </section> 
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -172,11 +172,11 @@ include("inc/scripts.php");
     function listarFiltro() {
 
         var nomeBanco = $('#nomeBanco').val();
-        var codigoBanco = $('#codigoBanco').val(); 
+        var codigoBanco = $('#codigoBanco').val();
 
         $('#resultadoBusca').load('bancoFiltroListagem.php?', {
             nomeBanco: nomeBanco,
-            codigoBanco: codigoBanco 
+            codigoBanco: codigoBanco
         });
     }
 
