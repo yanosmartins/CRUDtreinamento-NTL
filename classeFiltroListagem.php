@@ -16,20 +16,20 @@ include "js/repositorio.php";
             <tbody>
                 <?php
 
-                $nomeClasse = "";
-                $codigoClasse = "";
+                $descricao = "";
+                $reducaoBaseIR = "";
 
-                $sql = " SELECT codigo,codigoClasse, nomeClasse FROM dbo.classe ";
+                $sql = " SELECT codigo,descricao, reducaoBaseIR FROM dbo.classe ";
                 $where = "WHERE (0 = 0)";
-                $order = " order by (nomeClasse) DESC";
+                $order = " order by (reducaoBaseIR) DESC";
 
-                if ($_POST["nomeClasse"] != "") {
-                    $nomeClasse = $_POST["nomeClasse"];
-                    $where = $where . " AND (classe.nomeClasse like '%' + " . "replace('" . $nomeClasse . "',' ','%') + " . "'%')";
+                if ($_POST["descricao"] != "") {
+                    $descricao = $_POST["descricao"];
+                    $where = $where . " AND (classe.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
-                if ($_POST["codigoClasse"] != "") {
-                    $codigoClasse = $_POST["codigoClasse"];
-                    $where = $where . " AND (classe.codigoClasse like '%' + " . "replace('" . $codigoClasse . "',' ','%') + " . "'%')";
+                if ($_POST["reducaoBaseIR"] != "") {
+                    $reducaoBaseIR = $_POST["reducaoBaseIR"];
+                    $where = $where . " AND (classe.reducaoBaseIR like '%' + " . "replace('" . $reducaoBaseIR . "',' ','%') + " . "'%')";
                 }
 
                 $sql .= $where . $order;
@@ -38,12 +38,12 @@ include "js/repositorio.php";
 
                 while (($row = odbc_fetch_array($result))) {
                     $id = $row['codigo'];
-                    $codigoClasse = mb_convert_encoding($row['codigoClasse'], 'UTF-8', 'HTML-ENTITIES');
-                    $nomeClasse = mb_convert_encoding($row['nomeClasse'], 'UTF-8', 'HTML-ENTITIES');
+                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                    $reducaoBaseIR = mb_convert_encoding($row['reducaoBaseIR'], 'UTF-8', 'HTML-ENTITIES');
 
                     echo '<tr >';
-                    echo '<td class="text-left">' . $codigoclasse . '</td>';
-                    echo '<td class="text-left"><a href="classeCadastro.php?codigo=' . $id . '">' . $nomeClasse . '</a></td>';
+                    echo '<td class="text-left"><a href="classeCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left">' . $reducaoBaseIR . '</td>';
                     echo '</tr >';
                 }
                 ?>

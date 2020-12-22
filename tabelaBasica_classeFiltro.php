@@ -86,16 +86,15 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <div class="row ">
                                                             <section class="col col-4">
-                                                                <label class="label">Código da Classe</label>
+                                                                <label class="label">Descrição da Classe</label>
                                                                 <label class="input">
-
-                                                                    <input id="descricao" name="descricao" autocomplete="new-password" type="text" class="form-control" value="">
+                                                                    <input id="descricao" name="descricao" type="text" class="form-control" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Ativo</label>
+                                                                <label class="label">Redução Base IR</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                    <select name="reducaoBaseIR" id="reducaoBaseIR" class="" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option value=""></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
@@ -175,10 +174,10 @@ include("inc/scripts.php");
 
     function listarFiltro() {
         var descricao = $('#descricao').val();
-        var ativo = $('#ativo').val();
+        var reducaooBaseIR = $('#reducaoBaseIR').val();
 
         var parametrosUrl = '&descricao=' + descricao;
-        parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_tipoCaucaoListagem.php?' + parametrosUrl);
+        parametrosUrl = '&reducaoBaseIR=' + reducaoBaseIR;
+        $('#resultadoBusca').load('tabelaBasica_classeFiltroListagem.php?' + parametrosUrl);
     }
 </script>

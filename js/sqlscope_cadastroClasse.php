@@ -25,26 +25,27 @@ function gravaClasse()
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    // $possuiPermissao = $reposit->PossuiPermissao("VALETRANSPORTEUNITARIO_ACESSAR|VALETRANSPORTEUNITARIO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("CLASSE_ACESSAR|CLASSE_GRAVAR");
 
-    // if ($possuiPermissao === 0) {
-    //     $mensagem = "O usuário não tem permissão para gravar!";
-    //     echo "failed#" . $mensagem . ' ';
-    //     return;
-    // }
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para gravar!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
     session_start();
     $reposit = new reposit();
     $usuario = $_SESSION['login'];
     $classe = $_POST['classe'];
     $codigo =  validaCodigo($classe['codigo'] ?: 0);
-    $codigoClasse = validaString($classe['codigoClasse']);
-    $nomeClasse = validaString($classe['nomeClasse']);
+    $descricao = validaString($classe['descricao']);
+    $reducaoBaseIR = validaString($classe['reducaoBaseIR']);
 
 
     $sql = "dbo.classe_Atualiza(
         $codigo,
-        $codigoClasse,	
-        $nomeClasse,
+        $descricao,	
+        $reducaoBaseIR,
+        $usuario,
         $usuario
         )";
 
@@ -72,7 +73,7 @@ function recuperaClasse()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT codigo, codigoClasse, nomeClasse FROM dbo.classe WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, descricao, reducaoBaseIR FROM dbo.classe WHERE (0=0) AND codigo = " . $id;
 
 
     $reposit = new reposit();
@@ -82,12 +83,12 @@ function recuperaClasse()
     if (($row = odbc_fetch_array($result)))
         $row = array_map('utf8_encode', $row);
     $codigo = $row['codigo'];
-    $codigoClasse = $row['codigoClasse'];
-    $nomeClasse = $row['nomeClasse'];
+    $descricao = $row['descricao'];
+    $reducaoBaseIR = $row['reducaoBaseIR'];
 
     $out =   $codigo . "^" .
-        $codigoClasse . "^" .
-        $nomeClasse;
+        $descricao . "^" .
+        $reducaoBaseIR;
 
     if ($out == "") {
         echo "failed#";

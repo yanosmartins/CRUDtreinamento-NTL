@@ -161,11 +161,12 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
+
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            novo();
+            $(location).attr('href', 'bancoCadastro.php');
         });
     });
 
@@ -183,3 +184,4 @@ include("inc/scripts.php");
     function novo() {
         $(location).attr('href', 'bancoCadastro.php');
     }
+</script>
