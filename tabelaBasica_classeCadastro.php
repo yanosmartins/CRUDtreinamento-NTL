@@ -127,6 +127,9 @@ include("inc/nav.php");
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file-o"></span>
                                         </button>
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                            <span class="fa fa-trash"></span>
+                                        </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
                                             <span class="fa fa-backward "></span>
                                         </button>

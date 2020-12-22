@@ -178,7 +178,7 @@ include("inc/scripts.php");
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'classeCadastro.php');
+            $(location).attr('href', 'tabelaBasica_classeCadastro.php');
         });
     });
 
@@ -191,6 +191,6 @@ include("inc/scripts.php");
         var parametrosUrl = '&descricao=' + descricao;
         parametrosUrl += '&reducaoBaseIR=' + reducaoBaseIR;
         parametrosUrl += '&ativo=' + ativo;
-        $('#resultadoBusca').load('classeFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('tabelaBasica_classeFiltroListagem.php?' + parametrosUrl);
     }
 </script>
