@@ -7,13 +7,18 @@ require_once("inc/config.ui.php");
 
 // //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('RESPONSAVEL_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('RESPONSAVEL_GRAVAR', $arrayPermissao, true)); 
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
+} 
+
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
 }
-
-
+ 
 /* ---------------- PHP Custom Scripts ---------
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
@@ -99,7 +104,7 @@ include("inc/ribbon.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -160,17 +165,17 @@ include("inc/scripts.php");
     });
    
     function listarFiltro() {
-        let nomeResponsavel = $('#nomeResponsavel').val();
-        let ativo = $("#ativo").val();   
+        var nomeResponsavel = $('#nomeResponsavel').val();
+        var ativo = $("#ativo").val();   
  
-        $('#resultadoBusca').load('responsavelFiltroListagem.php?', {
+        $('#resultadoBusca').load('tabelaBasica_responsavelFiltroListagem.php?', {
             nomeResponsavel: nomeResponsavel,
             ativo: ativo
         });
     }
     
     function novo() {
-        $(location).attr('href', 'responsavelCadastro.php');
+        $(location).attr('href', 'tabelaBasica_responsavelCadastro.php');
     }
     
 </script>    
