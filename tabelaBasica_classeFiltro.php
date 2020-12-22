@@ -101,6 +101,16 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Ativo</label>
+                                                                <label class="select">
+                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option value="default"></option>
+                                                                        <option value="1" selected>Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -173,11 +183,14 @@ include("inc/scripts.php");
     });
 
     function listarFiltro() {
+
         var descricao = $('#descricao').val();
-        var reducaooBaseIR = $('#reducaoBaseIR').val();
+        var reducaoBaseIR = $('#reducaoBaseIR').val();
+        var ativo = $('#ativo').val();
 
         var parametrosUrl = '&descricao=' + descricao;
-        parametrosUrl = '&reducaoBaseIR=' + reducaoBaseIR;
-        $('#resultadoBusca').load('tabelaBasica_classeFiltroListagem.php?' + parametrosUrl);
+        parametrosUrl += '&reducaoBaseIR=' + reducaoBaseIR;
+        parametrosUrl += '&ativo=' + ativo;
+        $('#resultadoBusca').load('classeFiltroListagem.php?' + parametrosUrl);
     }
 </script>

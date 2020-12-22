@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('CLASSE_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('CLASSE_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('CLASSE_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('BANCO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('BANCO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('BANCO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -30,7 +30,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Classe";
+$page_title = "Banco";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -42,7 +42,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["classe"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["banco"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -65,11 +65,11 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Classe</h2>
+                            <h2>Banco</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formClasse" method="post">
+                                <form class="smart-form client-form" id="formBanco" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -87,22 +87,27 @@ include("inc/nav.php");
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
 
                                                         <div class="row">
-                                                            <section class="col col-4">
-                                                                <label class="label">Descrição da Classe </label>
+                                                            <section class="col col-2">
+                                                                <label class="label">Código do Banco </label>
                                                                 <label class="input">
-                                                                    <input id="codigoClasse" name="codigoClasse" type="text" autocomplete="new-password" maxlength="10">
+                                                                    <input id="codigoBanco" name="codigoBanco" type="text" autocomplete="new-password" maxlength="10">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-6">
+                                                                <label class="label">Nome do banco</label>
+                                                                <label class="input">
+                                                                    <input id="nomeBanco" name="nomeBanco" type="text" autocomplete="new-password" maxlength="100">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Redução Base IR</label>
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="reducaoBaseIR" id="reducaoBaseIR" class="" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -163,7 +168,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/businessClasse.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/businessBanco.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -205,6 +210,78 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
+        $("#municipioNascimento").on("change", function() {
+            let valor = $("#municipioNascimento option:selected").val();
+            $("#numeroMunicipio").val(valor);
+        });
+
+        $("#ufNascimento").on("change", function() {
+            let valor = $("#ufNascimento option:selected").text();
+            if (valor != "EX.") {
+
+                $("#numeroMunicipio").val(" ");
+                $("#naturalidade").val(" ");
+                const comboMunicipio = document.getElementById("municipioNascimento");
+                let campoMunicipio = document.createElement("option");
+                while (comboMunicipio.length > 0) {
+                    comboMunicipio.remove(0);
+                }
+                comboMunicipio.add(campoMunicipio);
+                getMunicipioPorUf();
+                getSiglaUf();
+
+            }
+        });
+
+
+        $("#paisNascimento").on("change", function() {
+            let valor = $("#paisNascimento").val();
+            $("#numeroPais").val(valor);
+
+            if (valor != 105) { //Código do Brasil
+
+                $("#nacionalidade").val("EX.");
+                $("#naturalidade").val("EX.");
+
+                //Limpa tudo da combo de Município e atribui EX. pra ela.
+                const comboMunicipio = document.getElementById("municipioNascimento");
+                let campoMunicipio = document.createElement("option");
+                while (comboMunicipio.length > 0) {
+                    comboMunicipio.remove(0);
+                }
+                campoMunicipio.text = "EX."
+                campoMunicipio.value = "EX."
+                comboMunicipio.add(campoMunicipio);
+                comboMunicipio.selectedIndex = "0";
+                $("#numeroMunicipio").val(campoMunicipio.value);
+
+                const comboUf = document.getElementById("ufNascimento");
+                let campoUf = document.createElement("option");
+                while (comboUf.length > 0) {
+                    comboUf.remove(0);
+                }
+                campoUf.text = "EX."
+                campoUf.value = "EX."
+                comboUf.add(campoUf);
+                comboUf.selectedIndex = "0";
+
+
+            } else {
+
+                $("#nacionalidade").val("Brasil");
+                $("#naturalidade").val("");
+                $("#municipioNascimento").val("");
+                $("#numeroMunicipio").val("");
+                const comboUf = document.getElementById("ufNascimento");
+                let campoUf = document.createElement("option");
+                for (var i = 0; i < comboUf.length; i++) {
+                    if (comboUf.options[i].value == 'EX.')
+                        comboUf.remove(i);
+                }
+                comboUf.add(campoUf);
+                getUf();
+            }
+        });
 
     });
 
@@ -212,12 +289,12 @@ include("inc/scripts.php");
 
 
     function gravar() {
-        let classe = $('#formClasse').serializeArray().reduce(function(obj, item) {
+        let banco = $('#formBanco').serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
             return obj;
         }, {});
 
-        gravaClaase(classe,
+        gravaBanco(banco,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -241,11 +318,11 @@ include("inc/scripts.php");
 
 
     function novo() {
-        $(location).attr('href', 'classeCadastro.php');
+        $(location).attr('href', 'bancoCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_classeFiltro.php');
+        $(location).attr('href', 'tabelaBasica_bancoFiltro.php');
     }
 
     function excluir() {
@@ -256,7 +333,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirClasse(id, function(data) {
+        excluirBanco(id, function(data) {
             if (data.indexOf('failed') > -1) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -274,6 +351,76 @@ include("inc/scripts.php");
         });
     }
 
+    /*Funções que vão até o IBGE */
+    async function getUf() {
+        const api_ibge_url = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados/';
+        const resposta = await fetch(api_ibge_url);
+        const data = await resposta.json(); //Transforma os dados em JSON
+        const comboUf = document.getElementById("ufNascimento");
+
+        for (let i in data) { // Para cada linha em JSON, é criado uma nova opção na combo ufNascimento.
+
+            let campoUf = document.createElement("option");
+            campoUf.text = data[i].nome;
+            campoUf.value = data[i].id;
+            comboUf.add(campoUf);
+        }
+
+        sortSelect(comboUf); //Arruma o select em ordem alfabética
+
+    }
+
+    async function getMunicipioPorUf() {
+
+        let valor = $("#ufNascimento option:selected").val();
+        const api_municipioPorUf_ibge_url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + valor + "/municipios";
+        const resposta = await fetch(api_municipioPorUf_ibge_url);
+        const data = await resposta.json();
+        const comboMunicipio = document.getElementById("municipioNascimento");
+
+        for (let i in data) { // Para cada linha em JSON, é criado uma nova opção na combo municipioNascimento.
+
+            let campoMunicipio = document.createElement("option");
+            campoMunicipio.text = data[i].nome;
+            campoMunicipio.value = data[i].id;
+            comboMunicipio.add(campoMunicipio);
+        }
+
+        sortSelect(comboMunicipio); //Arruma o select em ordem alfabética
+    }
+
+
+    async function getSiglaUf() {
+        let valor = $("#ufNascimento option:selected").val();
+        const api_ibge_url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + valor;
+        const resposta = await fetch(api_ibge_url);
+        const data = await resposta.json();
+
+        console.log(data);
+        let sigla = data.sigla;
+        $("#naturalidade").val(sigla);
+
+    }
+
+
+    function sortSelect(selElem) {
+        var tmpAry = new Array();
+        for (var i = 0; i < selElem.options.length; i++) {
+            tmpAry[i] = new Array();
+            tmpAry[i][0] = selElem.options[i].text;
+            tmpAry[i][1] = selElem.options[i].value;
+        }
+        tmpAry.sort();
+        while (selElem.options.length > 0) {
+            selElem.options[0] = null;
+        }
+        for (var i = 0; i < tmpAry.length; i++) {
+            var op = new Option(tmpAry[i][0], tmpAry[i][1]);
+            selElem.options[i] = op;
+        }
+        return;
+    }
+
     function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
@@ -283,7 +430,7 @@ include("inc/scripts.php");
             var idd = idx[1];
             debugger;
             if (idd !== "") {
-                recuperaClasse(idd,
+                recuperaBanco(idd,
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
@@ -292,13 +439,15 @@ include("inc/scripts.php");
                             var out = piece[1];
 
                             piece = out.split("^");
-                            var codigo = piece[0];
-                            var descricao = piece[1];
-                            var reducaoBaseIR = piece[2];
+                            codigo = piece[0];
+                            codigoBanco = piece[1];
+                            nomeBanco = piece[2];
+                            ativo = piece[3];
 
                             $("#codigo").val(codigo);
-                            $("#descricao").val(descricao);
-                            $("#reducaoBaseIR").val(reducaoBaseIR);
+                            $("#codigoBanco").val(codigoBanco);
+                            $("#nomeBanco").val(nomeBanco);
+                            $("#ativo").val(ativo);
 
                         }
                     }

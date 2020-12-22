@@ -5,54 +5,53 @@ include "girComum.php";
 
 $funcao = $_POST["funcao"];
 
-if ($funcao == 'gravaBanco') {
+if ($funcao == 'gravaClasse') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'recuperaBanco') {
+if ($funcao == 'recuperaClasse') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'excluirBanco') {
+if ($funcao == 'excluirClasse') {
     call_user_func($funcao);
 }
 
 return;
 
-function gravaBanco()
+function gravaClasse()
 {
 
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    // $possuiPermissao = $reposit->PossuiPermissao("VALETRANSPORTEUNITARIO_ACESSAR|VALETRANSPORTEUNITARIO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("CLASSE_ACESSAR|CLASSE_GRAVAR");
 
-    // if ($possuiPermissao === 0) {
-    //     $mensagem = "O usuário não tem permissão para gravar!";
-    //     echo "failed#" . $mensagem . ' ';
-    //     return;
-    // }
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para gravar!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
     session_start();
-    $reposit = new reposit();
     $usuario = $_SESSION['login'];
-    $banco = $_POST['banco'];
-    $codigo =  validaCodigo($banco['codigo']?: 0);
-    $codigoBanco = validaString($banco['codigoBanco']);
-    $nomeBanco = validaString($banco['nomeBanco']);
+    $usuario =  validaString($usuario);
+    $classe = $_POST['classe'];
+    $codigo =  validaCodigo($classe['codigo'] ?: 0);
+    $descricao = validaString($classe['descricao']);
+    $reducaoBaseIR = validaNumero($classe['reducaoBaseIR']);
+    $ativo = validaNumero($classe['ativo']);
 
 
-    $sql = "dbo.banco_Atualiza(
+    $sql = "Ntl.classe_Atualiza(
         $codigo,
-        $codigoBanco,	
-        $nomeBanco,
-        $usuario
+        $descricao,	
+        $reducaoBaseIR,
+        $usuario,
+        $ativo
         )";
 
-    $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
-     
- 
     $ret = 'sucess#';
     if ($result < 1) {
         $ret = 'failed#';
@@ -62,7 +61,7 @@ function gravaBanco()
 }
 
 
-function recuperaBanco()
+function recuperaClasse()
 {
     if ((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"]))) {
         $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
@@ -72,22 +71,25 @@ function recuperaBanco()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT codigo, codigoBanco, nomeBanco FROM dbo.banco WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, descricao, reducaoBaseIR, ativo FROM dbo.classe WHERE (0=0) AND codigo = " . $id;
 
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
+    if (($row = odbc_fetch_array($result))) {
         $row = array_map('utf8_encode', $row);
-    $codigo = $row['codigo'];
-    $codigoBanco = $row['codigoBanco']; 
-    $nomeBanco = $row['nomeBanco']; 
+        $codigo = +$row['codigo'];
+        $descricao = $row['descricao'];
+        $reducaoBaseIR = +$row['reducaoBaseIR'];
+        $ativo = +$row['ativo'];
+    }
 
     $out =   $codigo . "^" .
-        $codigoBanco . "^" .
-        $nomeBanco ;
+        $descricao . "^" .
+        $reducaoBaseIR . "^" .
+        $ativo;
 
     if ($out == "") {
         echo "failed#";
@@ -99,25 +101,26 @@ function recuperaBanco()
 }
 
 
-function excluirBanco() {
+function excluirClasse()
+{
 
-    $reposit = new reposit(); 
+    $reposit = new reposit();
 
     $id = $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um banco.";
+        $mensagem = "Selecione um classe.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
-  
-    $sql = "banco_Deleta ($id)";
+
+    $sql = "classe_Deleta ($id)";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
     if ($result < 1) {
-        echo('failed#');
+        echo ('failed#');
         return;
     }
 
@@ -147,7 +150,7 @@ function validaCodigo($value)
 }
 function validaData($value)
 {
-    if($value == ""){
+    if ($value == "") {
         $value = 'NULL';
         return $value;
     }
@@ -158,8 +161,8 @@ function validaData($value)
 }
 
 function validaDataRecupera($value)
-{   
-    if($value == ""){
+{
+    if ($value == "") {
         $value = '';
         return $value;
     }

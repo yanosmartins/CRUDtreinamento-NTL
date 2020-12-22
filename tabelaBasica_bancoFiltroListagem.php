@@ -11,6 +11,7 @@ include "js/repositorio.php";
 
                     <th class="text-left" style="min-width:30px;" scope="col">Código do Banco</th>
                     <th class="text-left" style="min-width:70px;" scope="col">Nome</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">Ativo</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,7 +20,7 @@ include "js/repositorio.php";
                 $nomeBanco = "";
                 $codigoBanco = "";
 
-                $sql = " SELECT codigo,codigoBanco, nomeBanco FROM dbo.banco ";
+                $sql = " SELECT codigo,codigoBanco, nomeBanco, ativo FROM Ntl.banco ";
                 $where = "WHERE (0 = 0)";
                 $order = " order by (nomeBanco) DESC";
 
@@ -32,6 +33,13 @@ include "js/repositorio.php";
                     $where = $where . " AND (banco.codigoBanco like '%' + " . "replace('" . $codigoBanco . "',' ','%') + " . "'%')";
                 }
 
+                if (isset($_POST["ativo"])) {
+                    $ativo = $_POST["ativo"];
+                    if ($ativo != "default") {
+                        $where = $where . " AND banco.ativo = $ativo ";
+                    }
+                }
+
                 $sql .= $where . $order;
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
@@ -40,10 +48,18 @@ include "js/repositorio.php";
                     $id = $row['codigo'];
                     $codigoBanco = mb_convert_encoding($row['codigoBanco'], 'UTF-8', 'HTML-ENTITIES');
                     $nomeBanco = mb_convert_encoding($row['nomeBanco'], 'UTF-8', 'HTML-ENTITIES');
+                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
+
+                    if ($ativo == 1) {
+                        $ativo = "Sim";
+                    } else {
+                        $ativo = "Não";
+                    }
 
                     echo '<tr >';
                     echo '<td class="text-left">' . $codigoBanco . '</td>';
                     echo '<td class="text-left"><a href="bancoCadastro.php?codigo=' . $id . '">' . $nomeBanco . '</a></td>';
+                    echo '<td class="text-left">' . $ativo . '</td>';
                     echo '</tr >';
                 }
                 ?>

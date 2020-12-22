@@ -11,6 +11,7 @@ include "js/repositorio.php";
 
                     <th class="text-left" style="min-width:30px;" scope="col">Código da Classe</th>
                     <th class="text-left" style="min-width:70px;" scope="col">Nome</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">Ativo</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,17 +20,21 @@ include "js/repositorio.php";
                 $descricao = "";
                 $reducaoBaseIR = "";
 
-                $sql = " SELECT codigo,descricao, reducaoBaseIR FROM dbo.classe ";
+                $sql = " SELECT codigo,descricao, reducaoBaseIR, ativo FROM Ntl.classe ";
                 $where = "WHERE (0 = 0)";
                 $order = " order by (reducaoBaseIR) DESC";
 
-                if ($_POST["descricao"] != "") {
-                    $descricao = $_POST["descricao"];
+                if ($_GET["descricao"] != "") {
+                    $descricao = $_GET["descricao"];
                     $where = $where . " AND (classe.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
-                if ($_POST["reducaoBaseIR"] != "") {
-                    $reducaoBaseIR = $_POST["reducaoBaseIR"];
+                if ($_GET["reducaoBaseIR"] != "") {
+                    $reducaoBaseIR = $_GET["reducaoBaseIR"];
                     $where = $where . " AND (classe.reducaoBaseIR like '%' + " . "replace('" . $reducaoBaseIR . "',' ','%') + " . "'%')";
+                }
+                if (isset($_GET["ativo"])) {
+                    $ativo = $_GET["ativo"];
+                    $where = $where . " AND classe.ativo = $ativo ";
                 }
 
                 $sql .= $where . $order;
@@ -40,10 +45,18 @@ include "js/repositorio.php";
                     $id = $row['codigo'];
                     $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
                     $reducaoBaseIR = mb_convert_encoding($row['reducaoBaseIR'], 'UTF-8', 'HTML-ENTITIES');
+                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
+
+                    if ($ativo == 1) {
+                        $ativo = "Sim";
+                    } else {
+                        $ativo = "Não";
+                    }
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="classeCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
                     echo '<td class="text-left">' . $reducaoBaseIR . '</td>';
+                    echo '<td class="text-left">' . $ativo . '</td>';
                     echo '</tr >';
                 }
                 ?>

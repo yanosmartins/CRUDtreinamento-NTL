@@ -5,27 +5,27 @@ include "girComum.php";
 
 $funcao = $_POST["funcao"];
 
-if ($funcao == 'gravaClasse') {
+if ($funcao == 'gravaBanco') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'recuperaClasse') {
+if ($funcao == 'recuperaBanco') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'excluirClasse') {
+if ($funcao == 'excluirBanco') {
     call_user_func($funcao);
 }
 
 return;
 
-function gravaClasse()
+function gravaBanco()
 {
 
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("CLASSE_ACESSAR|CLASSE_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("BANCO_ACESSAR|BANCO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -33,26 +33,24 @@ function gravaClasse()
         return;
     }
     session_start();
-    $reposit = new reposit();
+
     $usuario = $_SESSION['login'];
-    $classe = $_POST['classe'];
-    $codigo =  validaCodigo($classe['codigo'] ?: 0);
-    $descricao = validaString($classe['descricao']);
-    $reducaoBaseIR = validaString($classe['reducaoBaseIR']);
+    $usuario = validaString($usuario);
+    $banco = $_POST['banco'];
+    $codigo =  validaCodigo($banco['codigo'] ?: 0);
+    $codigoBanco = validaString($banco['codigoBanco']);
+    $nomeBanco = validaString($banco['nomeBanco']);
+    $ativo = validaNumero($banco['ativo']);
 
-
-    $sql = "dbo.classe_Atualiza(
+    $sql = "Ntl.banco_Atualiza(
         $codigo,
-        $descricao,	
-        $reducaoBaseIR,
+        $codigoBanco,	
+        $nomeBanco,
         $usuario,
-        $usuario
+        $ativo
         )";
 
-    $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
-
-
 
     $ret = 'sucess#';
     if ($result < 1) {
@@ -63,7 +61,7 @@ function gravaClasse()
 }
 
 
-function recuperaClasse()
+function recuperaBanco()
 {
     if ((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"]))) {
         $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
@@ -73,7 +71,7 @@ function recuperaClasse()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT codigo, descricao, reducaoBaseIR FROM dbo.classe WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, codigoBanco, nomeBanco, ativo FROM dbo.banco WHERE (0=0) AND codigo = " . $id;
 
 
     $reposit = new reposit();
@@ -83,12 +81,14 @@ function recuperaClasse()
     if (($row = odbc_fetch_array($result)))
         $row = array_map('utf8_encode', $row);
     $codigo = $row['codigo'];
-    $descricao = $row['descricao'];
-    $reducaoBaseIR = $row['reducaoBaseIR'];
+    $codigoBanco = $row['codigoBanco'];
+    $nomeBanco = $row['nomeBanco'];
+    $ativo = $row['ativo'];
 
     $out =   $codigo . "^" .
-        $descricao . "^" .
-        $reducaoBaseIR;
+        $codigoBanco . "^" .
+        $nomeBanco . "^" .
+        $ativo;
 
     if ($out == "") {
         echo "failed#";
@@ -100,22 +100,29 @@ function recuperaClasse()
 }
 
 
-function excluirClasse()
+function excluirBanco()
 {
+    $reposit = new reposit();
+    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
 
     $reposit = new reposit();
 
     $id = $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um classe.";
+        $mensagem = "Selecione um banco.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    $sql = "classe_Deleta ($id)";
+    $sql = "banco_Deleta ($id)";
 
-    $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
     if ($result < 1) {

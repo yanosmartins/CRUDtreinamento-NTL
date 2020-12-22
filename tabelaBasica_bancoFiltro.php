@@ -96,6 +96,16 @@ include("inc/nav.php");
                                                                     <input id="nomeBanco" maxlength="255" name="nomeBanco" type="text" value="">
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Ativo</label>
+                                                                <label class="select">
+                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option value="default"></option>
+                                                                        <option value="1" selected>Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -106,7 +116,7 @@ include("inc/nav.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -174,10 +184,12 @@ include("inc/scripts.php");
 
         var nomeBanco = $('#nomeBanco').val();
         var codigoBanco = $('#codigoBanco').val();
+        var ativo = $('#ativo').val();
 
         $('#resultadoBusca').load('bancoFiltroListagem.php?', {
             nomeBanco: nomeBanco,
-            codigoBanco: codigoBanco
+            codigoBanco: codigoBanco,
+            ativo: ativo
         });
     }
 
