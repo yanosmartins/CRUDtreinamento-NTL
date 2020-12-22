@@ -153,8 +153,7 @@ if ($condicaoTabelaBasicaOk) {
             $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("pisConfisCs" => array("title" => "PIS, CONFIS, CS", "url" => APP_URL . "/index.php"));
         }
     }
-
-    $page_nav['tabelaBasica']['sub'] += array("municipio" => array("title" => "Município", "url" => APP_URL . "/index.php")); //SYSGEF
+ 
     $page_nav['tabelaBasica']['sub'] += array("serviço" => array("title" => "Serviço", "url" => APP_URL . "/index.php")); //SYSGEF
     $page_nav['tabelaBasica']['sub'] += array("situacao" => array("title" => "Situação", "url" => APP_URL . "/index.php")); //SYSGC 
     $page_nav['tabelaBasica']['sub'] += array("tarefa" => array("title" => "Tarefa", "url" => APP_URL . "/index.php")); //SYSGC    
