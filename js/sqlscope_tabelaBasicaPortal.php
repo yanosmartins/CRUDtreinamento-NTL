@@ -17,18 +17,14 @@ if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'verificaMunicipio') {
-    call_user_func($funcao);
-}
-  
 return;
 
-function grava() {
+function grava(){
 
     $reposit = new reposit(); //Abre a conexão.
-    
+
     //Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("PORTAL_ACESSAR|PORTAL_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -38,19 +34,19 @@ function grava() {
 
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-    $codigo = $_POST['id'];
+    $codigo = +$_POST['codigo'];
     $descricao = "'" . $_POST['descricao'] . "'";
-    $sigla = "'" . $_POST['sigla']. "'" ;
-    $ativo = $_POST['ativo'];
-    $faltaAusencia = $_POST['faltaAusencia'];
+    $endereco = "'" . $_POST['endereco'] . "'";
+    $ativo = +$_POST['ativo'];
 
-    $sql = "Ntl.lancamento_Atualiza(
-            $codigo,
-            $ativo,
-            $sigla,
-            $descricao,
-            $usuario,
-            $faltaAusencia)";
+
+    $sql = "Ntl.portal_Atualiza(
+            $codigo, 
+            $descricao, 
+            $endereco, 
+            $ativo, 
+            $usuario
+            )";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -62,50 +58,53 @@ function grava() {
     return;
 }
 
-function recupera() {
-    $condicaoId = !((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"])));
+function recupera()
+{
+    $condicaoCodigo = !((empty($_POST["codigo"])) || (!isset($_POST["codigo"])) || (is_null($_POST["codigo"])));
     $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
 
-    if (($condicaoId === false) && ($condicaoLogin === false)) {
+    if (($condicaoCodigo === false) && ($condicaoLogin === false)) {
         $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    if (($condicaoId === true) && ($condicaoLogin === true)) {
+    if (($condicaoCodigo === true) && ($condicaoLogin === true)) {
         $mensagem = "Somente 1 parâmetro de pesquisa deve ser informado.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    if ($condicaoId) {
-        $codigo = $_POST["id"];
+    if ($condicaoCodigo) {
+        $codigo = $_POST["codigo"];
     }
 
     if ($condicaoLogin) {
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo,descricao,sigla,ativo,faltaAusencia FROM Ntl.lancamento WHERE (0 = 0)";
+    $sql = "SELECT codigo, descricao, endereco, ativo FROM Ntl.portal WHERE (0 = 0)";
 
-    if ($condicaoId) {
+    if ($condicaoCodigo) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
-    } 
+    }
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    
+
     if (($row = odbc_fetch_array($result))) {
         $row = array_map('utf8_encode', $row);
-        $id = +$row['codigo']; 
-        $descricao = $row['descricao']; 
-        $sigla = $row['sigla']; 
-        $ativo = +$row['ativo']; 
-        $faltaAusencia = $row['faltaAusencia']; 
+        $codigo = +$row['codigo'];
+        $descricao = $row['descricao'];
+        $endereco = $row['endereco'];
+        $ativo = +$row['ativo'];
 
-        $out = $id . "^" . $descricao . "^" . $sigla .  "^" . $ativo .  "^" . $faltaAusencia;
+        $out = $codigo . "^" .
+            $descricao . "^" .
+            $endereco .  "^" .
+            $ativo;
 
         if ($out == "") {
             echo "failed#";
@@ -116,11 +115,11 @@ function recupera() {
         return;
     }
 }
- 
-function excluir() {
 
+function excluir()
+{  
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("PORTAL_ACESSAR|PORTAL_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -128,18 +127,18 @@ function excluir() {
         return;
     }
 
-    $id = $_POST["id"];
+    $codigo = $_POST["codigo"];
 
-    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um lancamento";
+    if ((empty($_POST['codigo']) || (!isset($_POST['codigo'])) || (is_null($_POST['codigo'])))) {
+        $mensagem = "Selecione um portal!";
         echo "failed#" . $mensagem . ' ';
         return;
     }
- 
-    $result = $reposit->update('lancamento'.'|'.'ativo = 0' . '|'. 'codigo ='. $id); 
+
+    $result = $reposit->update('portal' . '|' . 'ativo = 0' . '|' . 'codigo =' . $codigo);
 
     if ($result < 1) {
-        echo('failed#');
+        echo ('failed#');
         return;
     }
 

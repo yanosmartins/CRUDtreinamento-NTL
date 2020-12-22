@@ -6,14 +6,15 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('LOCALIZACAO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('LOCALIZACAO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('CAUCAO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('CAUCAO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('CAUCAO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
+
 $esconderBtnExcluir = "";
 if ($condicaoExcluirOK === false) {
     $esconderBtnExcluir = "none";
@@ -28,7 +29,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Localização";
+$page_title = "Tipo de Caução";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -39,7 +40,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["localizacao"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["caucao"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -58,54 +59,50 @@ include("inc/nav.php");
 
         <!-- widget grid -->
         <section id="widget-grid" class="">
-            <!-- <div class="row" style="margin: 0 0 13px 0;">
-                <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroLocalizacao.php" style="float:right"></a>
-                <?php } ?>
-            </div> -->
-
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Localização
+                            <h2>Tipo de Caução
                             </h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formLocalizacao" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formTipoCaucao" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseCadastro" class="">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
                                                         Cadastro
                                                     </a>
                                                 </h4>
                                             </div>
-                                            <div id="collapseCadastro" class="panel-collapse collapse in">
+                                            <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
                                                         <div class="row ">
-                                                            <section class="col col-6">
-                                                                <label class="label">Localização</label>
+                                                            <section class="col col-4">
+                                                                <label class="label">Tipo de Caução</label>
                                                                 <label class="input">
+
                                                                     <input id="descricao" name="descricao" autocomplete="off" type="text" class="required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
-                                                                <label class="label" for="ativo">Ativo</label>
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
-                                                                        <option value='1'>Sim</option>
-                                                                        <option value='0'>Não</option>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
+                                                                    <select id="ativo" name="ativo" class="required" >
+
+                                                                        <option value="1">Sim</option> 
+                                                                        <option value="0">Não</option> 
+                                                                    </select><i></i> 
+                                                                </label> 
+                                                            </section> 
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -133,14 +130,17 @@ include("inc/nav.php");
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o"></span>
+                                            <span class="fa fa-file-o" ></span>
                                         </button>
+
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward "></span>
+                                            <span class="fa fa-backward"></span>
                                         </button>
+
                                     </footer>
                                 </form>
                             </div>
+
                         </div>
                     </div>
                 </article>
@@ -164,7 +164,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaLocalizacao.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaCaucao.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -187,8 +187,10 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
 
+
+
         $('#btnNovo').on("click", function() {
-            novo();
+            novo()
         });
         $("#btnGravar").on("click", function() {
             gravar();
@@ -199,29 +201,37 @@ include("inc/scripts.php");
         $("#btnExcluir").on("click", function() {
             excluir();
         });
+        carregaTipoCaucao();
 
-        carregaLocalizacao();
+
     });
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_localizacaoFiltro.php');
-    }
+        $(location).attr('href', 'tabelaBasica_caucaoFiltro.php');
 
+    }
     function novo() {
-        $(location).attr('href', 'tabelaBasica_localizacaoCadastro.php');
+        $(location).attr('href', 'tabelaBasica_caucaoCadastro.php');
+
     }
 
     function gravar() {
+        
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
-        var descricao = $("#descricao").val();
-        var id = +$('#codigo').val();
-        var ativo = +$('#ativo').val();
+
+        var id = +$("#codigo").val();
+        var ativo = $("#ativo").val();
+        var descricao = $("#descricao").val();  
+   
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
-            smartAlert("Erro", "Informe a Localização.", "error");
+            smartAlert("Atenção", "Informe a Descrição", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
-        gravaLocalizacao(id, ativo, descricao,
+      
+        gravaTipoCaucao(id, ativo, descricao,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {
@@ -250,12 +260,12 @@ include("inc/scripts.php");
         debugger;
         var id = +$("#codigo").val();
 
-        if (codigo === 0) {
+        if (id === 0) {
             smartAlert("Atenção", "Selecione um registro para excluir!", "error");
             return;
         }
 
-        excluirLocalizacao(id, function(data) {
+        excluirTipoCaucao(id, function(data) {
             if (data.indexOf('failed') > -1) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -272,7 +282,8 @@ include("inc/scripts.php");
         });
     }
 
-    function carregaLocalizacao() {
+
+    function carregaTipoCaucao() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
         if (params.length === 2) {
@@ -280,10 +291,11 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaLocalizacao(idd,
+                recuperaTipoCaucao(idd,
                     function(data) {
                         data = data.replace(/failed/g, '');
                         var piece = data.split("#");
+
                         //Atributos de Cliente
                         var mensagem = piece[0];
                         var out = piece[1];
@@ -293,12 +305,10 @@ include("inc/scripts.php");
                         //Atributos de cliente 
                         var codigo = +piece[0];
                         var descricao = piece[1];
-                        var ativo = +piece[2];
+
                         //Atributos de cliente        
                         $("#codigo").val(codigo);
                         $("#descricao").val(descricao);
-                        $("#ativo").val(ativo);
-
                     }
                 );
             }

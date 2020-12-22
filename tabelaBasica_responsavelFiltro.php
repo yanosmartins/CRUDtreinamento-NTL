@@ -5,26 +5,20 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('BENEFICIOINDIRETO_GRAVAR', $arrayPermissao, true));
-
+// //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
+$condicaoAcessarOK = (in_array('RESPONSAVEL_ACESSAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
 
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
-}
 
 /* ---------------- PHP Custom Scripts ---------
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Benefício Indireto";
+$page_title = "Responsável";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +30,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["beneficioIndireto"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["responsavel"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -60,11 +54,11 @@ include("inc/ribbon.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Benefício Indireto</h2>
+                            <h2>Responsável</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formUsuarioFiltro" method="post">
+                                <form class="smart-form client-form" id="formUsuarioFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -79,29 +73,23 @@ include("inc/ribbon.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        
-                                                        <div class="row">  
-                                                             
-                                                            <section class="col col-4 col-auto">
-                                                                <label class="label" for="valorModal">Benefício Indireto</label>
+                                                        <div class="row">   
+                                                            <section class="col col-6 col-auto">
+                                                                <label class="label" for="nomeResponsavel">Responsável</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" type="text" maxlength="50" autocomplete="off">
+                                                                    <input id="nomeResponsavel" name="nomeResponsavel" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            
-                                                            <section class="col col-2 col-auto">
+                                                            <section class="col col-2">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
                                                                         <option></option>
-                                                                        <option value='1' selected>Sim</option>
-                                                                        <option value='0'>Não</option>
+                                                                        <option value="1" selected>Sim</option>
+                                                                        <option value="0">Não</option>
                                                                     </select><i></i>
-                                                                </label>                                                                                                                                
                                                             </section>
-                                                              
                                                         </div>
-                                                        
                                                     </fieldset> 
                                                 </div>
                                             </div>   
@@ -111,8 +99,8 @@ include("inc/ribbon.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                       <button type="button" id="btnNovo" class="btn btn-primary pull-left" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file" ></span>
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                            <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
                                 </form>
@@ -172,20 +160,17 @@ include("inc/scripts.php");
     });
    
     function listarFiltro() {
-        var descricao = $('#descricao').val();
-        var ativo = $('#ativo').val();
-       
-        if (descricao !== "") {
-            descricao = descricao.replace(/^\s+|\s+$/g, "");
-            descricao = encodeURIComponent(descricao);
-        }
+        let nomeResponsavel = $('#nomeResponsavel').val();
+        let ativo = $("#ativo").val();   
  
-        var parametrosUrl = '&descricao=' + descricao +  '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_beneficioIndiretoFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('responsavelFiltroListagem.php?', {
+            nomeResponsavel: nomeResponsavel,
+            ativo: ativo
+        });
     }
     
     function novo() {
-        $(location).attr('href', 'tabelaBasica_beneficioIndiretoCadastro.php');
+        $(location).attr('href', 'responsavelCadastro.php');
     }
     
 </script>    

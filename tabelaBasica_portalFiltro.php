@@ -14,6 +14,11 @@ if ($condicaoAcessarOK == false) {
     header("Location:login.php");
 }
 
+$esconderBtnGravar  = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
+
 /* ---------------- PHP Custom Scripts ---------
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
@@ -98,7 +103,7 @@ include("inc/ribbon.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" style="display:<?php echo $esconderBtnGravar ?>"  title="Novo">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -163,14 +168,14 @@ include("inc/scripts.php");
         let ativo = $('#ativo').val();
         
          
-        $('#resultadoBusca').load('portalFiltroListagem.php?', {
+        $('#resultadoBusca').load('tabelaBasica_portalFiltroListagem.php?', {
             descricao: descricao,
             ativo: ativo
         });
     }
     
     function novo() {
-        $(location).attr('href', 'portalCadastro.php');
+        $(location).attr('href', 'tabelaBasica_portalCadastro.php');
     }
     
 </script>    

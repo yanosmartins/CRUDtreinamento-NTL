@@ -1,34 +1,36 @@
 <?php
-//Inicializa a página
+//initilize the page
 require_once("inc/init.php");
 
-//Requer a configuração de UI (nav, ribbon, etc.)
+//require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('LOCALIZACAO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('LOCALIZACAO_EXCLUIR', $arrayPermissao, true));
+// //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
+$condicaoAcessarOK = (in_array('PORTAL_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PORTAL_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('PORTAL_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
+
 $esconderBtnGravar = "";
 if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-/* ---------------- PHP Custom Scripts ---------
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
 
+/* ---------------- PHP Custom Scripts ---------
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Localização";
+$page_title = "Portal";
+
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -39,10 +41,10 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["localizacao"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["portal"]["active"] = true;
+
 include("inc/nav.php");
 ?>
-
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
@@ -53,33 +55,26 @@ include("inc/nav.php");
     include("inc/ribbon.php");
     ?>
 
+
     <!-- MAIN CONTENT -->
     <div id="content">
-
         <!-- widget grid -->
         <section id="widget-grid" class="">
-            <!-- <div class="row" style="margin: 0 0 13px 0;">
-                <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroLocalizacao.php" style="float:right"></a>
-                <?php } ?>
-            </div> -->
-
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Localização
-                            </h2>
+                            <h2>Portal</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formLocalizacao" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formPortal" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseCadastro" class="">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseCadastro" class="" id="accordionCadastro">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
                                                         Cadastro
@@ -89,22 +84,31 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <input id="codigo" name="codigo" type="text" class="hidden">
-                                                        <div class="row ">
-                                                            <section class="col col-6">
-                                                                <label class="label">Localização</label>
+                                                        <div class="row">
+                                                            <input id="codigo" name="codigo" type="text" class="hidden">
+                                                        </div>
+                                                        <div class="row">
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-3">
+                                                                <label class="label">Nome do portal</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="required" value="">
+                                                                    <input id="descricao" maxlength="255" name="descricao" class="required" type="text" value="" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 col-auto">
+                                                            <section class="col col-6">
+                                                                <label class="label">Endereço do portal (URL)</label>
+                                                                <label class="input">
+                                                                    <input id="endereco" maxlength="255" name="endereco" class="required" autocomplete="off" type="text" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo" class="required">
-                                                                        <option value='1'>Sim</option>
-                                                                        <option value='0'>Não</option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
                                                                     </select><i></i>
-                                                                </label>
                                                             </section>
                                                         </div>
                                                     </fieldset>
@@ -129,7 +133,7 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <button type="submited" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
@@ -147,8 +151,10 @@ include("inc/nav.php");
             </div>
         </section>
         <!-- end widget grid -->
+
     </div>
     <!-- END MAIN CONTENT -->
+
 </div>
 <!-- END MAIN PANEL -->
 
@@ -164,7 +170,9 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaLocalizacao.js" type="text/javascript"></script>
+
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaPortal.js" type="text/javascript"></script>
+
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -181,47 +189,179 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/moment/moment.min.js"></script>
 <!--<script src="/js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
+<!--<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>-->
+
+
+<!-- Form to json -->
+<script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
 
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
 
-        $('#btnNovo').on("click", function() {
+        $('#formUsuario').validate({
+            // Rules for form validation
+            rules: {
+                'responsavel': {
+                    required: true,
+                    maxlength: 155
+                }
+            },
+
+        });
+
+        carregaPagina();
+
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function(title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        $("#btnExcluir").on("click", function() {
+            var id = +$("#codigo").val();
+
+            if (id === 0) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#descricao").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
+            }
+        });
+
+        $("#btnNovo").on("click", function() {
             novo();
         });
-        $("#btnGravar").on("click", function() {
-            gravar();
-        });
+
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-        $("#btnExcluir").on("click", function() {
-            excluir();
-        });
-
-        carregaLocalizacao();
     });
 
-    function voltar() {
-        $(location).attr('href', 'tabelaBasica_localizacaoFiltro.php');
+    function carregaPagina() {
+        var urlx = window.document.URL.toString();
+        var params = urlx.split("?");
+        if (params.length === 2) {
+            var id = params[1];
+            var idx = id.split("=");
+            var codigo = idx[1];
+            if (codigo !== "") {
+                recuperaPortal(codigo,
+                    function(data) {
+                        if (data.indexOf('failed') > -1) {} else {
+                            data = data.replace(/failed/g, '');
+                            var piece = data.split("#");
+                            var mensagem = piece[0];
+                            var out = piece[1];
+
+                            piece = out.split("^");
+                            codigo = piece[0];
+                            descricao = piece[1];
+                            endereco = piece[2];
+                            ativo = +piece[3];
+
+                            $("#codigo").val(codigo);
+                            $("#descricao").val(descricao);
+                            $("#endereco").val(endereco);
+                            $("#ativo").val(ativo);
+
+                            return;
+                        }
+                    }
+                );
+            }
+        }
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_localizacaoCadastro.php');
+        $(location).attr('href', 'tabelaBasica_portalCadastro.php');
+    }
+
+    function voltar() {
+        $(location).attr('href', 'tabelaBasica_portalFiltro.php');
+    }
+
+    function excluir() {
+        var codigo = $("#codigo").val();
+
+        if (codigo === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+            return;
+        }
+
+        excluirPortal(codigo,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    } 
+                    
+                } else {
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
+                }
+            }
+        );
     }
 
     function gravar() {
         $("#btnGravar").prop('disabled', true);
-        var descricao = $("#descricao").val();
-        var id = +$('#codigo').val();
-        var ativo = +$('#ativo').val();
-        if (!descricao) {
-            smartAlert("Erro", "Informe a Localização.", "error");
+
+        var codigo = +$("#codigo").val();
+        var descricao = $("#descricao").val().trim().replace(/'/g, " ");
+        var endereco = $("#endereco").val().trim().replace(/'/g, " ");
+        var ativo = +$("#ativo").val();
+
+        if (descricao === "") {
+            smartAlert("Atenção", "Informe o nome do portal !", "error");
+            $("#descricao").focus();
             $("#btnGravar").prop('disabled', false);
             return;
         }
-        gravaLocalizacao(id, ativo, descricao,
+        if (endereco === "") {
+            smartAlert("Atenção", "Informe o endereço do portal !", "error");
+            $("#endereco").focus();
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+
+        gravaPortal(codigo, descricao, endereco, ativo,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {
@@ -243,65 +383,5 @@ include("inc/scripts.php");
                 }
             }
         );
-    }
-
-
-    function excluir() {
-        debugger;
-        var id = +$("#codigo").val();
-
-        if (codigo === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
-            return;
-        }
-
-        excluirLocalizacao(id, function(data) {
-            if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
-
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                }
-            } else {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                voltar();
-            }
-        });
-    }
-
-    function carregaLocalizacao() {
-        var urlx = window.document.URL.toString();
-        var params = urlx.split("?");
-        if (params.length === 2) {
-            var id = params[1];
-            var idx = id.split("=");
-            var idd = idx[1];
-            if (idd !== "") {
-                recuperaLocalizacao(idd,
-                    function(data) {
-                        data = data.replace(/failed/g, '');
-                        var piece = data.split("#");
-                        //Atributos de Cliente
-                        var mensagem = piece[0];
-                        var out = piece[1];
-
-                        piece = out.split("^");
-                        console.table(piece);
-                        //Atributos de cliente 
-                        var codigo = +piece[0];
-                        var descricao = piece[1];
-                        var ativo = +piece[2];
-                        //Atributos de cliente        
-                        $("#codigo").val(codigo);
-                        $("#descricao").val(descricao);
-                        $("#ativo").val(ativo);
-
-                    }
-                );
-            }
-        }
     }
 </script>

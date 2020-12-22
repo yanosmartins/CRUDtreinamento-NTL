@@ -48,10 +48,8 @@ include("inc/nav.php");
 $breadcrumbs["Tabela Básica"] = "";
 include("inc/ribbon.php");
 ?>
-
     <!-- MAIN CONTENT -->
     <div id="content">
-
         <!-- widget grid -->
         <section id="widget-grid" class="">                
             <div class="row">
@@ -78,16 +76,13 @@ include("inc/ribbon.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        
                                                         <div class="row">  
-                                                             
                                                             <section class="col col-4 col-auto">
                                                                 <label class="label" for="valorModal">Motivo do Afastamento</label>
                                                                 <label class="input">
                                                                     <input id="descricao" name="descricao" type="text" maxlength="50" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
@@ -98,9 +93,7 @@ include("inc/ribbon.php");
                                                                     </select><i></i>
                                                                 </label>                                                                                                                                
                                                             </section>
-                                                              
                                                         </div>
-                                                        
                                                     </fieldset> 
                                                 </div>
                                             </div>   
@@ -110,7 +103,7 @@ include("inc/ribbon.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -180,11 +173,11 @@ include("inc/scripts.php");
         }
  
         var parametrosUrl = '&descricao=' + descricao +  '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_motivoDoAfastamentoFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('tabelaBasica_motivoAfastamentoFiltroListagem.php?' + parametrosUrl);
     }
     
     function novo() {
-        $(location).attr('href', 'tabelaBasica_motivoDoAfastamentoCadastro.php');
+        $(location).attr('href', 'tabelaBasica_motivoAfastamentoCadastro.php');
     }
     
 </script>    
