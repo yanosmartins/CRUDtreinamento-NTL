@@ -153,11 +153,15 @@ if ($condicaoTabelaBasicaOk) {
             $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("pisConfisCs" => array("title" => "PIS, CONFIS, CS", "url" => APP_URL . "/index.php"));
         }
     }
- 
-    $page_nav['tabelaBasica']['sub'] += array("serviço" => array("title" => "Serviço", "url" => APP_URL . "/index.php")); //SYSGEF
-    $page_nav['tabelaBasica']['sub'] += array("situacao" => array("title" => "Situação", "url" => APP_URL . "/index.php")); //SYSGC 
-    $page_nav['tabelaBasica']['sub'] += array("tarefa" => array("title" => "Tarefa", "url" => APP_URL . "/index.php")); //SYSGC    
- 
+    if (in_array('SERVICO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("serviço" => array("title" => "Serviço", "url" => APP_URL . "/tabelaBasica_servicoFiltro.php")); //SYSGEF 
+    } 
+    if (in_array('SITUACAO_ACESSAR', $arrayPermissao, true)) {
+         $page_nav['tabelaBasica']['sub'] += array("situacao" => array("title" => "Situação", "url" => APP_URL . "/tabelaBasica_situacaoFiltro.php")); //SYSGC 
+    } 
+    if (in_array('TAREFA_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("tarefa" => array("title" => "Tarefa", "url" => APP_URL . "/tabelaBasica_tarefaFiltro.php")); //SYSGC    
+    }  
 }
 
 // CADASTROS
