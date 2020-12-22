@@ -39,7 +39,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['faturamento']['sub']["localizacao"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["localizacao"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -89,27 +89,23 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                    <input id="codigo" name="codigo" type="text" class="hidden">
-
+                                                        <input id="codigo" name="codigo" type="text" class="hidden">
                                                         <div class="row ">
                                                             <section class="col col-6">
                                                                 <label class="label">Localização</label>
                                                                 <label class="input">
-
-                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="required" value="" >
+                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="required" value="">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                            
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="hidden" autocomplete="off" class="form-control" autocomplete="new-password" >
-                                                                        <option></option>
-                                                                        <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
-                                                                    </select>
+                                                                    <select id="ativo" name="ativo" class="required">
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0'>Não</option>
+                                                                    </select><i></i>
                                                                 </label>
                                                             </section>
-
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -136,15 +132,15 @@ include("inc/nav.php");
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
-
-                                        <button type="button" id="btnVoltar" class="btn btn-primary" aria-hidden="true" title="Voltar" style="display:<?php echo $esconderBtnSearch ?>">
-                                            <span class="fa fa-backward"></span>
+                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <span class="fa fa-file-o"></span>
                                         </button>
-
+                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                            <span class="fa fa-backward "></span>
+                                        </button>
                                     </footer>
                                 </form>
                             </div>
-
                         </div>
                     </div>
                 </article>
@@ -192,7 +188,7 @@ include("inc/scripts.php");
     $(document).ready(function() {
 
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_localizacaoCadastro.php');
+            novo();
         });
         $("#btnGravar").on("click", function() {
             gravar();
@@ -209,25 +205,23 @@ include("inc/scripts.php");
 
     function voltar() {
         $(location).attr('href', 'tabelaBasica_localizacaoFiltro.php');
+    }
 
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_localizacaoCadastro.php');
     }
 
     function gravar() {
         $("#btnGravar").prop('disabled', true);
         var descricao = $("#descricao").val();
-
+        var id = +$('#codigo').val();
+        var ativo = +$('#ativo').val();
         if (!descricao) {
             smartAlert("Erro", "Informe a Localização.", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
-
-        let localizacao = $('#formLocalizacao').serializeArray().reduce(function(obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
-
-        gravaLocalizacao(localizacao,
+        gravaLocalizacao(id, ativo, descricao,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {
@@ -245,7 +239,7 @@ include("inc/scripts.php");
                 } else {
                     var piece = data.split("#");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    voltar();
+                    novo();
                 }
             }
         );
@@ -271,7 +265,6 @@ include("inc/scripts.php");
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                 }
-                voltar();
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                 voltar();
@@ -291,7 +284,6 @@ include("inc/scripts.php");
                     function(data) {
                         data = data.replace(/failed/g, '');
                         var piece = data.split("#");
-
                         //Atributos de Cliente
                         var mensagem = piece[0];
                         var out = piece[1];
@@ -299,13 +291,13 @@ include("inc/scripts.php");
                         piece = out.split("^");
                         console.table(piece);
                         //Atributos de cliente 
-                        debugger;
                         var codigo = +piece[0];
                         var descricao = piece[1];
-
+                        var ativo = +piece[2];
                         //Atributos de cliente        
                         $("#codigo").val(codigo);
                         $("#descricao").val(descricao);
+                        $("#ativo").val(ativo);
 
                     }
                 );

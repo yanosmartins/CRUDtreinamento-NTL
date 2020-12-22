@@ -31,10 +31,9 @@ function grava()
 
     session_start(); // PEGAR O LOGIN
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-    $localizacao = $_POST['localizacao'];
-    $codigo = +$localizacao['codigo'];
-    $descricao = "'" . $localizacao['descricao'] . "'";
-    $ativo = +$localizacao['ativo'];
+    $codigo = +$_POST['id'];
+    $descricao = "'" . $_POST['descricao'] . "'";
+    $ativo = +$_POST['ativo'];
 
     $sql = "Ntl.localizacao_Atualiza(
         $codigo ,
@@ -73,9 +72,9 @@ function recupera()
     if (($row = odbc_fetch_array($result)))
     $row = array_map('utf8_encode', $row);
     
-    $id = $row['codigo'];
+    $id = +$row['codigo'];
     $descricao = $row['descricao'];
-    $ativo = $row['ativo'];
+    $ativo = +$row['ativo'];
 
     $out =   $id . "^" .
         $descricao . "^" .
