@@ -6,24 +6,24 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('LOCALIZACAO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('POSTO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('POSTO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
 
-$condicaoAcessarOK = "";
-if ($condicaoAcessarOK === false) {
-    $condicaoAcessarOK = "none";
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
 }
 
 /* ---------------- PHP Custom Scripts ---------
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Localização";
+$page_title = "Posto";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -35,19 +35,19 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["localizacao"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["posto"]["active"] = true;
 
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-    <?php
-    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-    //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
-    include("inc/ribbon.php");
-    ?>
+<?php
+//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+//$breadcrumbs["New Crumb"] => "http://url.com"
+$breadcrumbs["Tabela Básica"] = "";
+include("inc/ribbon.php");
+?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
@@ -56,20 +56,20 @@ include("inc/nav.php");
         <section id="widget-grid" class="">
             <!-- <div class="row" style="margin: 0 0 13px 0;">
                 <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroLocalizacao.php" style="float:right"></a>
-                <?php } ?>
-            </div> -->
+                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastro.php" style="float:right"></a>
+                <?php } ?>    
+            </div>                     -->
 
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" >
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Localização</h2>
+                            <h2>Posto</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formLocalizacaoFiltro" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formpostoFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -84,15 +84,16 @@ include("inc/nav.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">
-                                                            <section class="col col-6">
-                                                                <label class="label">Localização</label>
-                                                                <label class="input"><i class=""></i>
-                                                                    <input id="descricao" maxlength="50" name="descricao" type="text" value="" autocomplete="off">
+                                                    <div class="row ">
+                                                            <section class="col col-4">
+                                                                <label class="label">Posto</label>
+                                                                <label class="input">
+
+                                                                     <input id="descricao" name="descricao" autocomplete="new-password" type="text" class="form-control" value= "">
                                                                 </label>
-                                                            </section>
+                                                            </section>   
                                                             <section class="col col-2">
-                                                            <label class="label">Ativo</label>
+                                                            <label class="label">Ativo</label> 
                                                                 <label class="select">
                                                                     <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password" >
                                                                         <option value=""></option>
@@ -100,21 +101,20 @@ include("inc/nav.php");
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                            </section>
-
+                                                            </section>                         
                                                         </div>
                                                     </fieldset>
                                                 </div>
-                                            </div>
+                                            </div>   
                                         </div>
                                     </div>
                                     <footer>
-                                    <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar" >
+                                    <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" style="display:<?php echo $esconderBtnGravar ?>" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                             <span class="fa fa-file"></span>
-                                        </button>  
+                                        </button>                                                      
                                     </footer>
                                 </form>
                             </div>
@@ -122,7 +122,7 @@ include("inc/nav.php");
                         </div>
                     </div>
                 </article>
-            </div>
+            </div>                          
         </section>
         <!-- end widget grid -->
     </div>
@@ -161,15 +161,14 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
-
 <script>
-    $(document).ready(function() {
-
-        $('#btnSearch').on("click", function() {
+    $(document).ready(function () {
+        
+        $('#btnSearch').on("click", function () {
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_localizacaoCadastro.php');
+            $(location).attr('href', 'tabelaBasica_postoCadastro.php');
         });
     });
 
@@ -179,6 +178,8 @@ include("inc/scripts.php");
 
         var parametrosUrl = '&descricao=' + descricao;
          parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_localizacaoListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('tabelaBasica_postoListagem.php?' + parametrosUrl);
     }
-</script> 
+    
+</script>    
+
