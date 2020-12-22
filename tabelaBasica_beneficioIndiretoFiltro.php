@@ -9,6 +9,7 @@ require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('BENEFICIOINDIRETO_GRAVAR', $arrayPermissao, true));
 
+
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
@@ -110,8 +111,8 @@ include("inc/ribbon.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
-                                            <span class="fa fa-file"></span>
+                                       <button type="button" id="btnNovo" class="btn btn-primary pull-left" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <span class="fa fa-file" ></span>
                                         </button>
                                     </footer>
                                 </form>

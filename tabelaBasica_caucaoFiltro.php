@@ -8,12 +8,17 @@ require_once("inc/config.ui.php");
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('CAUCAO_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('CAUCAO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('CAUCAO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
 
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
 $esconderBtnGravar = "";
 if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
@@ -112,7 +117,7 @@ include("inc/ribbon.php");
                                     <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>                                                   
                                     </footer>
@@ -169,7 +174,7 @@ include("inc/scripts.php");
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_tipoCaucaoCadastro.php');
+            $(location).attr('href', 'tabelaBasica_caucaoCadastro.php');
         });
     });
 
@@ -179,6 +184,6 @@ include("inc/scripts.php");
 
         var parametrosUrl = '&descricao=' + descricao;
          parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_tipoCaucaoListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('tabelaBasica_caucaoListagem.php?' + parametrosUrl);
     }
 </script>    

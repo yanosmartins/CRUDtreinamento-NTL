@@ -1,3 +1,4 @@
+
 <?php
 //initilize the page
 require_once("inc/init.php");
@@ -20,10 +21,11 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
+
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = " Início de Reajuste";
+$page_title = "Data Início de Reajuste";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -65,7 +67,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" >
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2> Início de Reajuste
+                            <h2>Data Início de Reajuste
                             </h2>
                         </header>
                         <div>
@@ -87,7 +89,7 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <div class="row ">
                                                         <section class="col col-2">
-                                                                <label class="label">Início de Reajuste</label>
+                                                                <label class="label">Data do Início de Reajuste</label>
                                                                 <label class="input">
                                                                     <input id="descricao" name="descricao" autocomplete="off" type="text">
                                                                 </label>
@@ -182,4 +184,5 @@ include("inc/scripts.php");
          parametrosUrl = '&ativo=' + ativo;
         $('#resultadoBusca').load('tabelaBasica_inicioReajusteListagem.php?' + parametrosUrl);
     }
-</script> 
+</script>
+
