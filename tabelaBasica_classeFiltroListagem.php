@@ -9,8 +9,8 @@ include "js/repositorio.php";
 
                     <!-- <th class="text-left" style="min-width:30px;" scope="col">Código</th> -->
 
-                    <th class="text-left" style="min-width:30px;" scope="col">Código da Classe</th>
-                    <th class="text-left" style="min-width:70px;" scope="col">Nome</th>
+                    <th class="text-left" style="min-width:30px;" scope="col">Descrição</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">Redução Base IR</th>
                     <th class="text-left" style="min-width:70px;" scope="col">Ativo</th>
                 </tr>
             </thead>
@@ -46,6 +46,12 @@ include "js/repositorio.php";
                     $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
                     $reducaoBaseIR = mb_convert_encoding($row['reducaoBaseIR'], 'UTF-8', 'HTML-ENTITIES');
                     $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
+
+                    if ($reducaoBaseIR == 1) {
+                        $reducaoBaseIR = "Sim";
+                    } else {
+                        $reducaoBaseIR = "Não";
+                    }
 
                     if ($ativo == 1) {
                         $ativo = "Sim";
