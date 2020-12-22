@@ -176,7 +176,7 @@ include("inc/scripts.php");
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'bancoCadastro.php');
+            novo();
         });
     });
 
@@ -186,7 +186,7 @@ include("inc/scripts.php");
         var codigoBanco = $('#codigoBanco').val();
         var ativo = $('#ativo').val();
 
-        $('#resultadoBusca').load('bancoFiltroListagem.php?', {
+        $('#resultadoBusca').load('tabelaBasica_bancoFiltroListagem.php?', {
             nomeBanco: nomeBanco,
             codigoBanco: codigoBanco,
             ativo: ativo
@@ -194,6 +194,6 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'bancoCadastro.php');
+        $(location).attr('href', 'tabelaBasica_bancoCadastro.php');
     }
 </script>

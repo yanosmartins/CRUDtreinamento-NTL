@@ -34,12 +34,13 @@ function gravaClasse()
     }
     session_start();
     $usuario = $_SESSION['login'];
-    $usuario =  validaString($usuario);
+    $usuario =  "'$usuario'";
     $classe = $_POST['classe'];
-    $codigo =  validaCodigo($classe['codigo'] ?: 0);
-    $descricao = validaString($classe['descricao']);
-    $reducaoBaseIR = validaNumero($classe['reducaoBaseIR']);
-    $ativo = validaNumero($classe['ativo']);
+    $codigo =  +$classe['codigo'];
+    $descricao = $classe['descricao'];
+    $descricao = "'$descricao'";
+    $reducaoBaseIR = $classe['reducaoBaseIR'];
+    $ativo = $classe['ativo'];
 
 
     $sql = "Ntl.classe_Atualiza(
@@ -103,8 +104,15 @@ function recuperaClasse()
 
 function excluirClasse()
 {
-
     $reposit = new reposit();
+
+    $possuiPermissao = $reposit->PossuiPermissao("CLASSE_ACESSAR|CLASSE_GRAVAR|CLASSE_EXCLUIR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para gravar!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
 
     $id = $_POST["id"];
 
@@ -114,10 +122,9 @@ function excluirClasse()
         return;
     }
 
-    $sql = "classe_Deleta ($id)";
+    $sql = "UPDATE Ntl.classe SET ativo = 0 WHERE codigo = $id";
 
-    $reposit = new reposit();
-    $result = $reposit->Execprocedure($sql);
+    $result = $reposit->RunQuery($sql);
 
     if ($result < 1) {
         echo ('failed#');
@@ -126,53 +133,4 @@ function excluirClasse()
 
     echo 'sucess#' . $result;
     return;
-}
-
-
-function validaString($value)
-{
-    $null = 'NULL';
-    if ($value == '')
-        return $null;
-    return '\'' . $value . '\'';
-}
-
-function validaNumero($value)
-{
-    if ($value == "") {
-        $value = 'NULL';
-    }
-    return $value;
-}
-function validaCodigo($value)
-{
-    return $value;
-}
-function validaData($value)
-{
-    if ($value == "") {
-        $value = 'NULL';
-        return $value;
-    }
-    $value = str_replace('/', '-', $value);
-    $value = date("Y-m-d", strtotime($value));
-    $value = "'" . $value . "'";
-    return $value;
-}
-
-function validaDataRecupera($value)
-{
-    if ($value == "") {
-        $value = '';
-        return $value;
-    }
-    $value = date('d/m/Y', strtotime($value));
-    return $value;
-}
-function validaVerifica($value)
-{
-    if ($value == "") {
-        $value = NULL;
-    }
-    return $value;
 }

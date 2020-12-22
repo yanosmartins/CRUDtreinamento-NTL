@@ -103,15 +103,13 @@ function recuperaBanco()
 function excluirBanco()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("BANCO_ACESSAR|BANCO_GRAVAR|BANCO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
         echo "failed#" . $mensagem . ' ';
         return;
     }
-
-    $reposit = new reposit();
 
     $id = $_POST["id"];
 
@@ -121,7 +119,7 @@ function excluirBanco()
         return;
     }
 
-    $sql = "banco_Deleta ($id)";
+    $sql = "UPDATE Ntl.banco SET ativo = 0 WHERE codigo = $id";
 
     $result = $reposit->Execprocedure($sql);
 

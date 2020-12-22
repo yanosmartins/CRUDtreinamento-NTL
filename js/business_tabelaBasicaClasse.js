@@ -1,6 +1,6 @@
 function gravaClasse(classe, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroClasse.php',
+        url: 'js/sqlscope_tabelaBasicaClasse.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'gravaClasse', classe: classe },
@@ -13,7 +13,7 @@ function gravaClasse(classe, callback) {
 
 function recuperaClasse(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroClasse.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_tabelaBasicaClasse.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'recuperaClasse', id: id }, //valores enviados ao script      
@@ -26,7 +26,7 @@ function recuperaClasse(id, callback) {
 
 function excluirClasse(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroClasse.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_tabelaBasicaClasse.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'excluirClasse', id: id },

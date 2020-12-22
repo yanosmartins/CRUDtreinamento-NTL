@@ -117,19 +117,6 @@ include("inc/nav.php");
                                         <!-- <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
                                             <span class="fa fa-trash"></span>
                                         </button> -->
-                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
-                                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                <span id="ui-id-2" class="ui-dialog-title">
-                                                </span>
-                                            </div>
-                                            <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                <p>CONFIRMA A EXCLUSÃO ? </p>
-                                            </div>
-                                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                                <div class="ui-dialog-buttonset">
-                                                </div>
-                                            </div>
-                                        </div>
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
@@ -168,7 +155,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/businessBanco.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaBanco.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -210,83 +197,7 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-        $("#municipioNascimento").on("change", function() {
-            let valor = $("#municipioNascimento option:selected").val();
-            $("#numeroMunicipio").val(valor);
-        });
-
-        $("#ufNascimento").on("change", function() {
-            let valor = $("#ufNascimento option:selected").text();
-            if (valor != "EX.") {
-
-                $("#numeroMunicipio").val(" ");
-                $("#naturalidade").val(" ");
-                const comboMunicipio = document.getElementById("municipioNascimento");
-                let campoMunicipio = document.createElement("option");
-                while (comboMunicipio.length > 0) {
-                    comboMunicipio.remove(0);
-                }
-                comboMunicipio.add(campoMunicipio);
-                getMunicipioPorUf();
-                getSiglaUf();
-
-            }
-        });
-
-
-        $("#paisNascimento").on("change", function() {
-            let valor = $("#paisNascimento").val();
-            $("#numeroPais").val(valor);
-
-            if (valor != 105) { //Código do Brasil
-
-                $("#nacionalidade").val("EX.");
-                $("#naturalidade").val("EX.");
-
-                //Limpa tudo da combo de Município e atribui EX. pra ela.
-                const comboMunicipio = document.getElementById("municipioNascimento");
-                let campoMunicipio = document.createElement("option");
-                while (comboMunicipio.length > 0) {
-                    comboMunicipio.remove(0);
-                }
-                campoMunicipio.text = "EX."
-                campoMunicipio.value = "EX."
-                comboMunicipio.add(campoMunicipio);
-                comboMunicipio.selectedIndex = "0";
-                $("#numeroMunicipio").val(campoMunicipio.value);
-
-                const comboUf = document.getElementById("ufNascimento");
-                let campoUf = document.createElement("option");
-                while (comboUf.length > 0) {
-                    comboUf.remove(0);
-                }
-                campoUf.text = "EX."
-                campoUf.value = "EX."
-                comboUf.add(campoUf);
-                comboUf.selectedIndex = "0";
-
-
-            } else {
-
-                $("#nacionalidade").val("Brasil");
-                $("#naturalidade").val("");
-                $("#municipioNascimento").val("");
-                $("#numeroMunicipio").val("");
-                const comboUf = document.getElementById("ufNascimento");
-                let campoUf = document.createElement("option");
-                for (var i = 0; i < comboUf.length; i++) {
-                    if (comboUf.options[i].value == 'EX.')
-                        comboUf.remove(i);
-                }
-                comboUf.add(campoUf);
-                getUf();
-            }
-        });
-
     });
-
-
-
 
     function gravar() {
         let banco = $('#formBanco').serializeArray().reduce(function(obj, item) {
@@ -318,7 +229,7 @@ include("inc/scripts.php");
 
 
     function novo() {
-        $(location).attr('href', 'bancoCadastro.php');
+        $(location).attr('href', 'tabelaBasica_bancoCadastro.php');
     }
 
     function voltar() {
@@ -349,76 +260,6 @@ include("inc/scripts.php");
                 voltar();
             }
         });
-    }
-
-    /*Funções que vão até o IBGE */
-    async function getUf() {
-        const api_ibge_url = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados/';
-        const resposta = await fetch(api_ibge_url);
-        const data = await resposta.json(); //Transforma os dados em JSON
-        const comboUf = document.getElementById("ufNascimento");
-
-        for (let i in data) { // Para cada linha em JSON, é criado uma nova opção na combo ufNascimento.
-
-            let campoUf = document.createElement("option");
-            campoUf.text = data[i].nome;
-            campoUf.value = data[i].id;
-            comboUf.add(campoUf);
-        }
-
-        sortSelect(comboUf); //Arruma o select em ordem alfabética
-
-    }
-
-    async function getMunicipioPorUf() {
-
-        let valor = $("#ufNascimento option:selected").val();
-        const api_municipioPorUf_ibge_url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + valor + "/municipios";
-        const resposta = await fetch(api_municipioPorUf_ibge_url);
-        const data = await resposta.json();
-        const comboMunicipio = document.getElementById("municipioNascimento");
-
-        for (let i in data) { // Para cada linha em JSON, é criado uma nova opção na combo municipioNascimento.
-
-            let campoMunicipio = document.createElement("option");
-            campoMunicipio.text = data[i].nome;
-            campoMunicipio.value = data[i].id;
-            comboMunicipio.add(campoMunicipio);
-        }
-
-        sortSelect(comboMunicipio); //Arruma o select em ordem alfabética
-    }
-
-
-    async function getSiglaUf() {
-        let valor = $("#ufNascimento option:selected").val();
-        const api_ibge_url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + valor;
-        const resposta = await fetch(api_ibge_url);
-        const data = await resposta.json();
-
-        console.log(data);
-        let sigla = data.sigla;
-        $("#naturalidade").val(sigla);
-
-    }
-
-
-    function sortSelect(selElem) {
-        var tmpAry = new Array();
-        for (var i = 0; i < selElem.options.length; i++) {
-            tmpAry[i] = new Array();
-            tmpAry[i][0] = selElem.options[i].text;
-            tmpAry[i][1] = selElem.options[i].value;
-        }
-        tmpAry.sort();
-        while (selElem.options.length > 0) {
-            selElem.options[0] = null;
-        }
-        for (var i = 0; i < tmpAry.length; i++) {
-            var op = new Option(tmpAry[i][0], tmpAry[i][1]);
-            selElem.options[i] = op;
-        }
-        return;
     }
 
     function carregaPagina() {

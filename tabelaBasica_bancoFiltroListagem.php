@@ -58,7 +58,7 @@ include "js/repositorio.php";
 
                     echo '<tr >';
                     echo '<td class="text-left">' . $codigoBanco . '</td>';
-                    echo '<td class="text-left"><a href="bancoCadastro.php?codigo=' . $id . '">' . $nomeBanco . '</a></td>';
+                    echo '<td class="text-left"><a href="tabelaBasica_bancoCadastro.php?codigo=' . $id . '">' . $nomeBanco . '</a></td>';
                     echo '<td class="text-left">' . $ativo . '</td>';
                     echo '</tr >';
                 }
