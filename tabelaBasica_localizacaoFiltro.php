@@ -14,9 +14,9 @@ if ($condicaoAcessarOK == false) {
     header("Location:login.php");
 }
 
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
+$condicaoAcessarOK = "";
+if ($condicaoAcessarOK === false) {
+    $condicaoAcessarOK = "none";
 }
 
 /* ---------------- PHP Custom Scripts ---------
@@ -109,10 +109,10 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                    <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                    <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar" >
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" style="display:<?php echo $esconderBtnGravar ?>" title="Novo">
                                             <span class="fa fa-file"></span>
                                         </button>  
                                     </footer>

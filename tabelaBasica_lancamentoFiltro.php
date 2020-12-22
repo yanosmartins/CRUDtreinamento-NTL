@@ -79,16 +79,13 @@ include("inc/nav.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-
                                                         <div class="row">
-
                                                             <section class="col col-5 col-auto">
                                                                 <label class="label" for="descricao">Lançamento descriçao</label>
                                                                 <label class="input">
                                                                     <input id="descricao" maxlength="50" name="descricao" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="sigla">Sigla</label>
                                                                 <label class="select">
@@ -107,7 +104,6 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
@@ -118,20 +114,17 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
-
                                                         </div>
-
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <footer>
-                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar" >
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -179,7 +172,6 @@ include("inc/scripts.php");
 <!--<script src="/js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
-
 
 <script>
     $(document).ready(function() {
