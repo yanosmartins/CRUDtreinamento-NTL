@@ -116,13 +116,19 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('PERIODORENOVACAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("periodoRenovacao" => array("title" => "Período de Renovação", "url" => APP_URL . "/tabelaBasica_periodoRenovacaoFiltro.php")); //SYSGEF
     }   
+    if (in_array('PERIODOVIGENCIA_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("periodoVigencia" => array("title" => "Período de Vigência", "url" => APP_URL . "/tabelaBasica_periodoVigenciaFiltro.php")); //SYSGEF
+    }
+    if (in_array('PORTAL_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("portal" => array("title" => "Portal", "url" => APP_URL . "/tabelaBasica_portalFiltro.php")); //SYSGC 
+    }
+    if (in_array('POSTO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("posto" => array("title" => "Posto", "url" => APP_URL . "/tabelaBasica_postoFiltro.php")); 
+    }
+    if (in_array('RESPONSAVEL_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("responsavel" => array("title" => "Responsável", "url" => APP_URL . "/tabelaBasica_responsavelFiltro.php")); //SYSGC 
+    } 
     
-    $page_nav['tabelaBasica']['sub'] += array("periodoVigencia" => array("title" => "Período de Vigência", "url" => APP_URL . "/index.php")); //SYSGEF
-    $page_nav['tabelaBasica']['sub'] += array("portal" => array("title" => "Portal", "url" => APP_URL . "/index.php")); //SYSGC 
-    $page_nav['tabelaBasica']['sub'] += array("posto" => array("title" => "Posto", "url" => APP_URL . "/index.php")); 
-    $page_nav['tabelaBasica']['sub'] += array("responsavel" => array("title" => "Responsável", "url" => APP_URL . "/index.php")); //SYSGC 
-
-     
     //SUBMENU RETENÇÃO CONTA VINCULADA - SYSGEF
     if (true) {
         $page_nav['tabelaBasica']['sub']['retencaoContaVinculada'] = array("title" => "Retenção Conta Vinculada");
