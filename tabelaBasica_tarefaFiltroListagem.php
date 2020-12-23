@@ -29,17 +29,17 @@ include "js/repositorio.php";
 
                 if ($_POST["descricao"] != "") {
                     $descricao = $_POST["descricao"];
-                    $where = $where . " AND (banco.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (tarefa.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
                 if ($_POST["tipo"] != "") {
                     $tipo = $_POST["tipo"];
-                    $where = $where . " AND (banco.tipo like '%' + " . "replace('" . $tipo . "',' ','%') + " . "'%')";
+                    $where = $where . " AND tarefa.tipo = $tipo ";
                 }
 
                 if (isset($_POST["ativo"])) {
                     $ativo = $_POST["ativo"];
                     if ($ativo != "default") {
-                        $where = $where . " AND banco.ativo = $ativo ";
+                        $where = $where . " AND tarefa.ativo = $ativo ";
                     }
                 }
 

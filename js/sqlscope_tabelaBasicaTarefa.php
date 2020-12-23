@@ -39,8 +39,8 @@ function gravaTarefa()
     $tarefa = $_POST['tarefa'];
     $codigo =  validaCodigo($tarefa['codigo'] ?: 0);
     $descricao = validaString($tarefa['descricao']);
-    $tipo = validaString($tarefa['tipo']);
-    $visivel = validaString($tarefa['visivel']);
+    $tipo = validaNumero($tarefa['tipo']);
+    $visivel = validaNumero($tarefa['visivel']);
     $ativo = validaNumero($tarefa['ativo']);
 
     $sql = "Ntl.tarefa_Atualiza(
@@ -48,7 +48,8 @@ function gravaTarefa()
         $descricao,	
         $tipo,
         $visivel,
-        $ativo
+        $ativo,
+        $usuario
     )";
 
     $result = $reposit->Execprocedure($sql);
