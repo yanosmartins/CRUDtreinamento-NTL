@@ -20,6 +20,7 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
+
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
