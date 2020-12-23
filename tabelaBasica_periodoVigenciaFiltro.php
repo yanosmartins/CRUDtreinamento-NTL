@@ -20,6 +20,7 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
+
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
@@ -89,7 +90,7 @@ include("inc/ribbon.php");
                                                                 <label class="label">Período de Vigência (Meses)</label>
                                                                 <label class="input"> 
 
-                                                                     <input id="descricao" name="descricao" autocomplete="new-password" type="number" class="form-control" value= "">
+                                                                     <input id="descricao" name="descricao" autocomplete="off" type="number" class="form-control" value= "">
                                                                      
                                                                 </label>
                                                             </section> 
@@ -186,3 +187,5 @@ include("inc/scripts.php");
 
     
 </script>    
+
+

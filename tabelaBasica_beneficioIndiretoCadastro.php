@@ -346,7 +346,7 @@ include("inc/scripts.php");
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
-        var id = +$("#codigo").val();
+        var codigo = +$("#codigo").val();
         var ativo = +$("#ativo").val();
         var descricao = $("#descricao").val().trim().replace(/'/g, " ");  
    
@@ -357,7 +357,7 @@ include("inc/scripts.php");
             return;
         }
       
-        gravaBeneficioIndireto(id, ativo, descricao,
+        gravaBeneficioIndireto(codigo, ativo, descricao,
                 function (data) {
                     if (data.indexOf('sucess') < 0) {
                         var piece = data.split("#");

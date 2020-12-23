@@ -196,7 +196,7 @@ include("inc/scripts.php");
 
 
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_inicioReajusteCadastro.php');
+           novo();
         });
         $("#btnGravar").on("click", function() {
             gravar();
@@ -216,13 +216,17 @@ include("inc/scripts.php");
         $(location).attr('href', 'tabelaBasica_inicioReajusteFiltro.php');
 
     }
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_inicioReajusteCadastro.php');
+
+    }
 
     function gravar() {
         
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
-        var id = +$("#codigo").val();
+        var codigo = +$("#codigo").val();
         var ativo = $("#ativo").val();
         var descricao = $("#descricao").val();  
    
@@ -233,7 +237,7 @@ include("inc/scripts.php");
             return;
         }
       
-        gravaInicioReajuste(id, ativo, descricao,
+        gravaInicioReajuste(codigo, ativo, descricao,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {
@@ -251,7 +255,7 @@ include("inc/scripts.php");
                 } else {
                     var piece = data.split("#");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    voltar();
+                    novo();
                 }
             }
         );
@@ -277,7 +281,7 @@ include("inc/scripts.php");
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                 }
-                voltar();
+               
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                 voltar();

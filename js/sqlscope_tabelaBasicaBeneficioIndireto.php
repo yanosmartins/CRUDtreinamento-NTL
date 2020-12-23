@@ -31,14 +31,14 @@ function grava() {
     }
 
     //Variáveis
-    $id = +$_POST['id'];
+    $codigo = +$_POST['codigo'];
     $ativo = $_POST['ativo'];
     session_start();
     $usuario  = $_SESSION['login'];  //Pegando o nome do usuário mantido pela sessão.
     $descricao = "'". $_POST['descricao']. "'"; 
   
     $sql = "Ntl.beneficioIndireto_Atualiza(
-        $id ,
+        $codigo ,
         $ativo ,
         $descricao ,
         $usuario

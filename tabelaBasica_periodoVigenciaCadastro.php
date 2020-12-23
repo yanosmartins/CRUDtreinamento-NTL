@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('CAUCAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('CAUCAO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('CAUCAO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PERIODOVIGENCIA_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PERIODOVIGENCIA_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('PERIODOVIGENCIA_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -29,7 +29,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Tipo de Caução";
+$page_title = "Período de Vigência";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -40,7 +40,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["caucao"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["periodoVigencia"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -59,17 +59,23 @@ include("inc/nav.php");
 
         <!-- widget grid -->
         <section id="widget-grid" class="">
+            <!-- <div class="row" style="margin: 0 0 13px 0;">
+                <?php if ($condicaoGravarOK) { ?>
+                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroPeriodoVigencia.php" style="float:right"></a>
+                <?php } ?>
+            </div> -->
+
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Tipo de Caução
+                            <h2>Período de Vigência
                             </h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formTipoCaucao" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formPeriodoVigencia" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -85,24 +91,27 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
+
                                                         <div class="row ">
-                                                            <section class="col col-4">
-                                                                <label class="label">Tipo de Caução</label>
+                                                            <section class="col col-3">
+                                                                <label class="label">Período de Vigência (Meses)</label>
                                                                 <label class="input">
 
-                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="required" value="">
+                                                                    <input id="descricao" name="descricao" autocomplete="off" type="number" autocomplete="off"  class="required" value="">
+
+                                                                </label>
+
+                                                            </section>
+                                                            <section class="col col-2">
+
+                                                                <label class="select">
+                                                                    <select name="ativo" id="ativo" class="hidden" autocomplete="off" class="form-control" >
+                                                                        <option></option>
+                                                                        <option value="1" selected>Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label">Ativo</label>
-                                                                <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required" >
-
-                                                                        <option value="1">Sim</option> 
-                                                                        <option value="0">Não</option> 
-                                                                    </select><i></i> 
-                                                                </label> 
-                                                            </section> 
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -110,10 +119,12 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
-                                            <span class="fa fa-trash"></span>
+                                    <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                            <span class="fa fa-trash" ></span>
                                         </button>
-                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                                             tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" 
+                                             style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                                                 <span id="ui-id-2" class="ui-dialog-title">
                                                 </span>
@@ -127,14 +138,13 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-floppy-o"></span>
+                                            <span class="fa fa-floppy-o" ></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file-o" ></span>
                                         </button>
-
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward"></span>
+                                            <span class="fa fa-backward " ></span>
                                         </button>
 
                                     </footer>
@@ -164,7 +174,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaCaucao.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaPeriodoVigencia.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -201,17 +211,17 @@ include("inc/scripts.php");
         $("#btnExcluir").on("click", function() {
             excluir();
         });
-        carregaTipoCaucao();
+        carregaPeriodoVigencia();
 
 
     });
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_caucaoFiltro.php');
+        $(location).attr('href', 'tabelaBasica_periodoVigenciaFiltro.php');
 
     }
     function novo() {
-        $(location).attr('href', 'tabelaBasica_caucaoCadastro.php');
+        $(location).attr('href', 'tabelaBasica_periodoVigenciaCadastro.php');
 
     }
 
@@ -231,7 +241,7 @@ include("inc/scripts.php");
             return;
         }
       
-        gravaTipoCaucao(codigo, ativo, descricao,
+        gravaPeriodoVigencia(codigo, ativo, descricao,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {
@@ -265,7 +275,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirTipoCaucao(id, function(data) {
+        excluirPeriodoVigencia(id, function(data) {
             if (data.indexOf('failed') > -1) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -283,7 +293,7 @@ include("inc/scripts.php");
     }
 
 
-    function carregaTipoCaucao() {
+    function carregaPeriodoVigencia() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
         if (params.length === 2) {
@@ -291,7 +301,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaTipoCaucao(idd,
+                recuperaPeriodoVigencia(idd,
                     function(data) {
                         data = data.replace(/failed/g, '');
                         var piece = data.split("#");

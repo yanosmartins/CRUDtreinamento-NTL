@@ -21,9 +21,18 @@ return;
 
 function grava()
 {
+    $reposit = new reposit();
+    $possuiPermissao = $reposit->PossuiPermissao("BENEFICIOINDIRETO_ACESSAR|BENEFICIOINDIRETO_GRAVAR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para gravar!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
     session_start();
     $usuario = $_SESSION['login'];
-    $codigo =  $_POST['codigo'];
+    $codigo =  +$_POST['codigo'];
     $descricao = "'" .$_POST['descricao']. "'";
     $ativo = + $_POST['ativo'];
 
@@ -34,7 +43,7 @@ function grava()
         $usuario
         )";
 
-    $reposit = new reposit();
+    
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
     if ($result < 1) {

@@ -1,9 +1,9 @@
-function gravaBeneficioIndireto(id, ativo, descricao,callback) {
+function gravaBeneficioIndireto(codigo, ativo, descricao,callback) {
     $.ajax({
         url: 'js/sqlscope_tabelaBasicaBeneficioIndireto.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", id:id, ativo:ativo, descricao:descricao}, //valores enviados ao script     
+        data: {funcao: "grava", codigo:codigo, ativo:ativo, descricao:descricao}, //valores enviados ao script     
         success: function (data) {
             callback(data);
         }

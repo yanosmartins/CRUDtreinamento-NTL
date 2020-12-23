@@ -226,7 +226,7 @@ include("inc/scripts.php");
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
-        var id = +$("#codigo").val();
+        var codigo = +$("#codigo").val();
         var ativo = $("#ativo").val();
         var descricao = $("#descricao").val();  
    
@@ -237,7 +237,7 @@ include("inc/scripts.php");
             return;
         }
       
-        gravaIndiceReajuste(id, ativo, descricao,
+        gravaIndiceReajuste(codigo, ativo, descricao,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {
