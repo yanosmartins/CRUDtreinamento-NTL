@@ -46,7 +46,7 @@ $page_nav = array("home" => array("title" => "Home", "icon" => "fa-home", "url" 
 $condicaoConfiguracoesOK = (in_array('USUARIO_ACESSAR', $arrayPermissao, true));
 $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true));
 $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PARAMETRO_ACESSAR', $arrayPermissao, true));
- 
+
 if ($condicaoConfiguracoesOK) {
     $page_nav['configuracao'] = array("title" => "Configurações", "icon" => "fa-gear");
     $page_nav['configuracao']['sub'] = array();
@@ -56,7 +56,7 @@ if ($condicaoConfiguracoesOK) {
     }
     if (in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("permissoesUsuarios" => array("title" => "Permissões do Usuário", "url" => APP_URL . "/usuarioFuncionalidadeFiltro.php"));
-    } 
+    }
     if (in_array('PARAMETRO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("parametro" => array("title" => "Parâmetros", "url" => APP_URL . "/parametros.php"));
     }
@@ -75,11 +75,11 @@ $condicaoVersaoSistemaOk = true;
 $condicaoTabelaBasicaOk = (in_array('TABELABASICA_ACESSAR', $arrayPermissao, true));
 $condicaoTabelaBasicaOk = (($condicaoTabelaBasicaOk) or in_array('BANCO_ACESSAR', $arrayPermissao, true));
 $condicaoTabelaBasicaOk = (($condicaoTabelaBasicaOk) or in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true));
- 
+
 if ($condicaoTabelaBasicaOk) {
     $page_nav['tabelaBasica'] = array("title" => "Tabela Básica", "icon" => "fa fa-table");
     $page_nav['tabelaBasica']['sub'] = array();
-   
+
     if (in_array('BANCO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("banco" => array("title" => "Banco", "url" => APP_URL . "/tabelaBasica_bancoFiltro.php")); //SYSCC   
     }
@@ -91,31 +91,31 @@ if ($condicaoTabelaBasicaOk) {
     }
     if (in_array('CLASSE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("classe" => array("title" => "Classe", "url" => APP_URL . "/tabelaBasica_classeFiltro.php")); //SYSGEF
-    } 
+    }
     if (in_array('ESCALA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("escala" => array("title" => "Escala", "url" => APP_URL . "/tabelaBasica_escalaFiltro.php")); //SYSCC  
-    } 
+    }
     if (in_array('INDICEREAJUSTE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("indiceReajuste" => array("title" => "Índice de Reajuste", "url" => APP_URL . "/tabelaBasica_indiceReajusteFiltro.php")); //SYSGEF  
-    } 
+    }
     if (in_array('INICIOREAJUSTE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("inicioReajuste" => array("title" => "Ínicio de Reajuste", "url" => APP_URL . "/tabelaBasica_inicioReajusteFiltro.php")); //SYSGEF
-    } 
+    }
     if (in_array('LANCAMENTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("lancamento" => array("title" => "Lançamento", "url" => APP_URL . "/tabelaBasica_lancamentoFiltro.php")); //SYSCB
-    } 
+    }
     if (in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
-    }  
+    }
     if (in_array('MOTIVOAFASTAMENTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/tabelaBasica_motivoAfastamentoFiltro.php")); //SYSCB
-    }  
+    }
     if (in_array('MUNICIPIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("municipio" => array("title" => "Município", "url" => APP_URL . "/tabelaBasica_municipioFiltro.php")); //SYSCB 
-    }    
+    }
     if (in_array('PERIODORENOVACAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("periodoRenovacao" => array("title" => "Período de Renovação", "url" => APP_URL . "/tabelaBasica_periodoRenovacaoFiltro.php")); //SYSGEF
-    }   
+    }
     if (in_array('PERIODOVIGENCIA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("periodoVigencia" => array("title" => "Período de Vigência", "url" => APP_URL . "/tabelaBasica_periodoVigenciaFiltro.php")); //SYSGEF
     }
@@ -123,51 +123,63 @@ if ($condicaoTabelaBasicaOk) {
         $page_nav['tabelaBasica']['sub'] += array("portal" => array("title" => "Portal", "url" => APP_URL . "/tabelaBasica_portalFiltro.php")); //SYSGC 
     }
     if (in_array('POSTO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("posto" => array("title" => "Posto", "url" => APP_URL . "/tabelaBasica_postoFiltro.php")); 
+        $page_nav['tabelaBasica']['sub'] += array("posto" => array("title" => "Posto", "url" => APP_URL . "/tabelaBasica_postoFiltro.php"));
     }
     if (in_array('RESPONSAVEL_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("responsavel" => array("title" => "Responsável", "url" => APP_URL . "/tabelaBasica_responsavelFiltro.php")); //SYSGC 
-    } 
-    
+    }
+
     //SUBMENU RETENÇÃO CONTA VINCULADA - SYSGEF
-    if (true) {
+    if (in_array('RETENCAOCONTAVINCULADA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub']['retencaoContaVinculada'] = array("title" => "Retenção Conta Vinculada");
         $page_nav['tabelaBasica']['sub']['retencaoContaVinculada']['sub'] = array();
 
-        if (true) { //in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)
-            $page_nav['tabelaBasica']['sub']['retencaoContaVinculada']['sub'] += array("decimoTerceiro" => array("title" => "13º Salário", "url" => APP_URL . "/index.php"));
-            $page_nav['tabelaBasica']['sub']['retencaoContaVinculada']['sub'] += array("feriasTercoConstitucional" => array("title" => "Férias e Terço Constitucional", "url" => APP_URL . "/index.php"));
-            $page_nav['tabelaBasica']['sub']['retencaoContaVinculada']['sub'] += array("multaFGTS" => array("title" => "Multa FGTS por Dispensa sem Justa Causa", "url" => APP_URL . "/index.php"));
+        if (in_array('DECIMOTERCEIRO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['tabelaBasica']['sub']['retencaoContaVinculada']['sub'] += array("decimoTerceiro" => array("title" => "13º Salário", "url" => APP_URL . "/tabelaBasica_decimoTerceiroFiltro.php"));
+        }
+        if (in_array('FERIASTERCOCONSTITUCIONAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['tabelaBasica']['sub']['retencaoContaVinculada']['sub'] += array("feriasTercoConstitucional" => array("title" => "Férias e Terço Constitucional", "url" => APP_URL . "/tabelaBasica_feriasTercoConstitucionalFiltro.php"));
+        }
+        if (in_array('MULTAFGTS_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['tabelaBasica']['sub']['retencaoContaVinculada']['sub'] += array("multaFGTS" => array("title" => "Multa FGTS por Dispensa sem Justa Causa", "url" => APP_URL . "/tabelaBasica_multaFgtsFiltro.php"));
         }
     }
 
     //SUBMENU RETENÇÃO TRIBUTÁRIA - SYSGEF
-    if (true) {
+    if (in_array('RETENCAOTRIBUTARIA_ACESSAR', $arrayPermissao, true)) {
+
         $page_nav['tabelaBasica']['sub']['retencaoTributaria'] = array("title" => "Retenção Tributária");
         $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] = array();
 
-        if (true) { //in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)
-            $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("iss" => array("title" => "ISS", "url" => APP_URL . "/index.php"));
-            $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("inss" => array("title" => "INSS", "url" => APP_URL . "/index.php"));
-            $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("ir" => array("title" => "IR", "url" => APP_URL . "/index.php"));
-            $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("pisConfisCs" => array("title" => "PIS, CONFIS, CS", "url" => APP_URL . "/index.php"));
+        if (in_array('ISS_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("iss" => array("title" => "ISS", "url" => APP_URL . "/tabelaBasica_issFiltro.php"));
+        }
+        if (in_array('INSS_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("inss" => array("title" => "INSS", "url" => APP_URL . "/tabelaBasica_inssFiltro.php"));
+        }
+        if (in_array('IR_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("ir" => array("title" => "IR", "url" => APP_URL . "/tabelaBasica_irFiltro.php"));
+        }
+        if (in_array('PISCONFISCS_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub'] += array("pisConfisCs" => array("title" => "PIS, CONFIS, CS", "url" => APP_URL . "/tabelaBasica_pisConfisCsFiltro.php"));
         }
     }
+
     if (in_array('SERVICO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("serviço" => array("title" => "Serviço", "url" => APP_URL . "/tabelaBasica_servicoFiltro.php")); //SYSGEF 
-    } 
+    }
     if (in_array('SITUACAO_ACESSAR', $arrayPermissao, true)) {
-         $page_nav['tabelaBasica']['sub'] += array("situacao" => array("title" => "Situação", "url" => APP_URL . "/tabelaBasica_situacaoFiltro.php")); //SYSGC 
-    } 
+        $page_nav['tabelaBasica']['sub'] += array("situacao" => array("title" => "Situação", "url" => APP_URL . "/tabelaBasica_situacaoFiltro.php")); //SYSGC 
+    }
     if (in_array('TAREFA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("tarefa" => array("title" => "Tarefa", "url" => APP_URL . "/tabelaBasica_tarefaFiltro.php")); //SYSGC    
-    }  
+    }
 }
 
 // CADASTROS
 if ($condicaoCadastroOk) {
     $page_nav['cadastro'] = array("title" => "Cadastro", "icon" => "fa-pencil-square-o");
-    $page_nav['cadastro']['sub'] = array();  
+    $page_nav['cadastro']['sub'] = array();
     $page_nav['cadastro']['sub'] += array("cargo" => array("title" => "Cargo", "url" => APP_URL . "/index.php")); //SYSCB   
     $page_nav['cadastro']['sub'] += array("contrato" => array("title" => "Contrato", "url" => APP_URL . "/index.php"));
     $page_nav['cadastro']['sub'] += array("convenioSaude" => array("title" => "Convênio de Saúde", "url" => APP_URL . "/index.php"));
@@ -175,7 +187,7 @@ if ($condicaoCadastroOk) {
     $page_nav['cadastro']['sub'] += array("feriado" => array("title" => "Feriado", "url" => APP_URL . "/index.php")); //SYSCB  
     $page_nav['cadastro']['sub'] += array("fornecedor" => array("title" => "Fornecedor", "url" => APP_URL . "/index.php")); //SYSCB
     $page_nav['cadastro']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/index.php")); //SYSCB  
-    $page_nav['cadastro']['sub'] += array("garimparPregoes" => array("title" => "Garimpar Pregões", "url" => APP_URL . "/index.php")); 
+    $page_nav['cadastro']['sub'] += array("garimparPregoes" => array("title" => "Garimpar Pregões", "url" => APP_URL . "/index.php"));
     $page_nav['cadastro']['sub'] += array("produto" => array("title" => "Produto", "url" => APP_URL . "/index.php")); //SYSCB
     $page_nav['cadastro']['sub'] += array("projeto" => array("title" => "Projeto", "url" => APP_URL . "/index.php")); //SYSCB
     $page_nav['cadastro']['sub'] += array("sindicato" => array("title" => "Sindicato", "url" => APP_URL . "/index.php")); //SYSCB  
@@ -190,11 +202,11 @@ if ($condicaoBeneficioOk) {
     $page_nav['beneficio'] = array("title" => "Benefício", "icon" => "fa fa-folder-open");
     $page_nav['beneficio']['sub'] = array();
     $page_nav['beneficio']['sub'] += array("afastamentoFuncionario" => array("title" => "Afastamento do Funcionário", "url" => APP_URL . "/index.php")); //SYSCB 
-    $page_nav['beneficio']['sub'] += array("consultaBenefício" => array("title" => "Consulta Benefício", "url" => APP_URL . "/index.php"));   
+    $page_nav['beneficio']['sub'] += array("consultaBenefício" => array("title" => "Consulta Benefício", "url" => APP_URL . "/index.php"));
     $page_nav['beneficio']['sub'] += array("ferias" => array("title" => "Férias", "url" => APP_URL . "/index.php")); //SYSCB 
     $page_nav['beneficio']['sub'] += array("fechamentoMes" => array("title" => "Fechamento do Mês", "url" => APP_URL . "/index.php"));
-    $page_nav['beneficio']['sub'] += array("folhaPonto" => array("title" => "Folha de Ponto", "url" => APP_URL . "/index.php")); 
-    $page_nav['beneficio']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/index.php"));  
+    $page_nav['beneficio']['sub'] += array("folhaPonto" => array("title" => "Folha de Ponto", "url" => APP_URL . "/index.php"));
+    $page_nav['beneficio']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/index.php"));
 }
 
 // CONTRATAÇÕES - SYSCC
@@ -212,7 +224,6 @@ if ($condicaoContratacaoOk) {
 if ($condicaoFaturamentoOk) {
     $page_nav['faturamento'] = array("title" => "Faturamento", "icon" => "fa fa-dollar");
     $page_nav['faturamento']['sub'] = array();
- 
 }
 
 // LICITAÇÕES - SYSGC
@@ -224,7 +235,7 @@ if ($condicaoLicitacaoOk) {
     $page_nav['licitacao']['sub'] += array("pregoesEmAndamento" => array("title" => "Pregões Em Andamento", "url" => APP_URL . "/index.php"));
     $page_nav['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/index.php"));
 }
- 
+
 //configuration variables
 $page_title = "";
 $page_css = array();
