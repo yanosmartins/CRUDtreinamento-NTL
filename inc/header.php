@@ -11,7 +11,7 @@ echo implode(' ', array_map(function($prop, $value) {
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="0" />                
 
-        <title> <?php echo $page_title != "" ? $page_title . " - " : ""; ?>SYSCC</title>
+        <title> <?php echo $page_title != "" ? $page_title . " - " : ""; ?>NTL - Nova Tecnologia</title>
         <meta name="description" content="">
         <meta name="author" content="">
 
