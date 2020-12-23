@@ -164,10 +164,9 @@ include("inc/scripts.php");
     });
    
     function listarFiltro() {
-        let descricao = $('#descricao').val();
-        let ativo = $('#ativo').val();
-        
-         
+        var descricao = $('#descricao').val();
+        var ativo = $('#ativo').val();
+          
         $('#resultadoBusca').load('tabelaBasica_portalFiltroListagem.php?', {
             descricao: descricao,
             ativo: ativo

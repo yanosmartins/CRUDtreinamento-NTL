@@ -85,17 +85,22 @@ include("inc/ribbon.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                     <div class="row ">
-                                                            <section class="col col-4">
-                                                                <label class="label">ME ALTERE PRO CERTO PFVR</label>
+                                                            <section class="col col-6">
+                                                                <label class="label">Descrição</label>
                                                                 <label class="input">
-
-                                                                     <input id="descricao" name="descricao" autocomplete="new-password" type="text" class="form-control" value= "">
+                                                                     <input id="descricao" name="descricao" autocomplete="off" type="text" class="form-control" value= "">
                                                                 </label>
                                                             </section>   
+                                                            <section class="col col-2"> 
+                                                                <label class="label">Código SCI</label>
+                                                                <label class="input"> 
+                                                                     <input id="codigoSCI" name="codigoSCI" autocomplete="off" type="text" class="form-control" value= "">
+                                                                </label>
+                                                            </section>
                                                             <section class="col col-2">
                                                             <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password" >
+                                                                    <select name="ativo" id="ativo" class="" class="form-control" autocomplete="off" >
                                                                         <option value=""></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
@@ -169,16 +174,19 @@ include("inc/scripts.php");
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_tipoCaucaoCadastro.php');
+            $(location).attr('href', 'tabelaBasica_escalaCadastro.php');
         });
     });
 
     function listarFiltro() {
+        debugger;
         var descricao = $('#descricao').val();
-        var ativo = $('#ativo').val();
+        var codigoSCI = $('#codigoSCI').val(); 
+        var ativo = +$('#ativo').val();
 
-        var parametrosUrl = '&descricao=' + descricao;
-         parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_tipoCaucaoListagem.php?' + parametrosUrl);
+        var parametrosUrl = '&descricao=' + descricao + 
+        '&codigoSCI=' + codigoSCI + '&ativo=' + ativo;
+        
+        $('#resultadoBusca').load('tabelaBasica_escalaFiltroListagem.php?' + parametrosUrl);
     }
 </script>    
