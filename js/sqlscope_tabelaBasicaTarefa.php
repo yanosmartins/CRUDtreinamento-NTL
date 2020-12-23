@@ -5,27 +5,27 @@ include "girComum.php";
 
 $funcao = $_POST["funcao"];
 
-if ($funcao == 'gravaBanco') {
+if ($funcao == 'gravaTarefa') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'recuperaBanco') {
+if ($funcao == 'recuperaTarefa') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'excluirBanco') {
+if ($funcao == 'excluirTarefa') {
     call_user_func($funcao);
 }
 
 return;
 
-function gravaBanco()
+function gravaTarefa()
 {
 
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("BANCO_ACESSAR|BANCO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("TAREFA_ACESSAR|TAREFA_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -36,19 +36,20 @@ function gravaBanco()
 
     $usuario = $_SESSION['login'];
     $usuario = validaString($usuario);
-    $banco = $_POST['banco'];
-    $codigo =  validaCodigo($banco['codigo'] ?: 0);
-    $codigoBanco = validaString($banco['codigoBanco']);
-    $nomeBanco = validaString($banco['nomeBanco']);
-    $ativo = validaNumero($banco['ativo']);
+    $tarefa = $_POST['tarefa'];
+    $codigo =  validaCodigo($tarefa['codigo'] ?: 0);
+    $descricao = validaString($tarefa['descricao']);
+    $tipo = validaString($tarefa['tipo']);
+    $visivel = validaString($tarefa['visivel']);
+    $ativo = validaNumero($tarefa['ativo']);
 
-    $sql = "Ntl.banco_Atualiza(
+    $sql = "Ntl.tarefa_Atualiza(
         $codigo,
-        $codigoBanco,	
-        $nomeBanco,
-        $usuario,
+        $descricao,	
+        $tipo,
+        $visivel,
         $ativo
-        )";
+    )";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -61,7 +62,7 @@ function gravaBanco()
 }
 
 
-function recuperaBanco()
+function recuperaTarefa()
 {
     if ((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"]))) {
         $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
@@ -71,7 +72,7 @@ function recuperaBanco()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT codigo, codigoBanco, nomeBanco, ativo FROM Ntl.banco WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, descricao, tipo, visivel, ativo FROM Ntl.tarefa WHERE (0=0) AND codigo = " . $id;
 
 
     $reposit = new reposit();
@@ -81,13 +82,15 @@ function recuperaBanco()
     if (($row = odbc_fetch_array($result)))
         $row = array_map('utf8_encode', $row);
     $codigo = $row['codigo'];
-    $codigoBanco = $row['codigoBanco'];
-    $nomeBanco = $row['nomeBanco'];
+    $descricao = $row['descricao'];
+    $tipo = $row['tipo'];
+    $visivel = $row['visivel'];
     $ativo = $row['ativo'];
 
     $out =   $codigo . "^" .
-        $codigoBanco . "^" .
-        $nomeBanco . "^" .
+        $descricao . "^" .
+        $tipo . "^" .
+        $visivel . "^" .
         $ativo;
 
     if ($out == "") {
@@ -100,10 +103,10 @@ function recuperaBanco()
 }
 
 
-function excluirBanco()
+function excluirTarefa()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("BANCO_ACESSAR|BANCO_GRAVAR|BANCO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("TAREFA_ACESSAR|TAREFA_GRAVAR|TAREFA_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -114,12 +117,12 @@ function excluirBanco()
     $id = $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um banco.";
+        $mensagem = "Selecione uma tarefa.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    $sql = "UPDATE Ntl.banco SET ativo = 0 WHERE codigo = $id";
+    $sql = "UPDATE Ntl.tarefa SET ativo = 0 WHERE codigo = $id";
 
     $result = $reposit->Execprocedure($sql);
 
