@@ -79,16 +79,13 @@ include("inc/ribbon.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        
                                                         <div class="row"> 
-                                                            
                                                             <section class="col col-5 col-auto">
                                                                 <label class="label" for="municipio">Município</label>
                                                                <label class="input">
                                                                    <input id="municipio" maxlength="50" name="municipio" type="text" autocomplete="off">
                                                                 </label>
                                                             </section> 
-                                                        
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="unidadeFederacao">UF</label>
                                                                 <label class="select">
@@ -96,10 +93,9 @@ include("inc/ribbon.php");
                                                                         <option></option> 
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select * from syscb.unidadeFederacao order by sigla";
+                                                                        $sql = "SELECT codigo,sigla FROM Ntl.unidadeFederacao ORDER BY sigla";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
-
                                                                             $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
                                                                         }
@@ -107,7 +103,6 @@ include("inc/ribbon.php");
                                                                     </select><i></i>
                                                                 </label>            
                                                             </section>
-                                                            
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
@@ -118,10 +113,7 @@ include("inc/ribbon.php");
                                                                     </select><i></i>
                                                                 </label>                                                                                                                                
                                                             </section>
-                                                              
-                                                            
                                                         </div>
-                                                        
                                                     </fieldset> 
                                                 </div>
                                             </div>   
@@ -179,7 +171,6 @@ include("inc/scripts.php");
 <!--<script src="/js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
-
 
 <script>
    $(document).ready(function () {

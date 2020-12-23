@@ -5,9 +5,9 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('INDICEREAJUSTE_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('INDICEREAJUSTE_GRAVAR', $arrayPermissao, true));
+// //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
+$condicaoAcessarOK = (in_array('TAREFA_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('TAREFA_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,11 +20,10 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
-
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Índice de Reajuste";
+$page_title = "Tarefa";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,41 +35,35 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["indiceReajuste"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["tarefa"]["active"] = true;
 
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-<?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
-$breadcrumbs["Tabela Básica"] = "";
-include("inc/ribbon.php");
-?>
+    <?php
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
+    $breadcrumbs["Tabela Básica"] = "";
+    include("inc/ribbon.php");
+    ?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
 
         <!-- widget grid -->
         <section id="widget-grid" class="">
-            <!-- <div class="row" style="margin: 0 0 13px 0;">
-                <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastro.php" style="float:right"></a>
-                <?php } ?>    
-            </div>                     -->
-
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Índice de Reajuste</h2>
+                            <h2>Responsável</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formIndiceReajusteFiltro" method="post">
+                                <form class="smart-form client-form" id="formUsuarioFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -85,38 +78,47 @@ include("inc/ribbon.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                    <div class="row ">
+                                                        <div class="row">
                                                             <section class="col col-3">
-                                                                <label class="label">Índice de Reajuste</label>
+                                                                <label class="label">Descrição</label>
                                                                 <label class="input">
-
-                                                                     <input id="descricao" name="descricao"  autocomplete="new-password" type="text" class="form-control" value= "">
+                                                                    <input id="descricao" name="descricao" type="text" autocomplete="new-password" maxlength="50">
                                                                 </label>
-                                                            </section>   
+                                                            </section>
                                                             <section class="col col-2">
-                                                            <label class="label">Ativo</label>
+                                                                <label class="label">Tipo</label>
+                                                                <label class="input">
+                                                                    <input id="tipo" name="tipo" type="text" autocomplete="new-password" maxlength="100">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Visivel</label>
+                                                                <label class="input">
+                                                                    <input id="visivel" name="visivel" type="text" autocomplete="new-password" maxlength="100">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password" >
-                                                                        <option value=""></option>
+                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                            </section> 
-                                                                                                                                              
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
-                                            </div>   
+                                            </div>
                                         </div>
                                     </div>
                                     <footer>
-                                    <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
-                                        </button>                                                        
+                                        </button>
                                     </footer>
                                 </form>
                             </div>
@@ -124,7 +126,7 @@ include("inc/ribbon.php");
                         </div>
                     </div>
                 </article>
-            </div>                          
+            </div>
         </section>
         <!-- end widget grid -->
     </div>
@@ -165,24 +167,28 @@ include("inc/scripts.php");
 
 
 <script>
-    $(document).ready(function () {
-
-        $('#btnSearch').on("click", function () {
+    $(document).ready(function() {
+        $('#btnSearch').on("click", function() {
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_indiceReajusteCadastro.php');
+            novo();
         });
     });
 
     function listarFiltro() {
-        var descricao = $('#descricao').val();
-        var ativo = $('#ativo').val();
+        var nomeResponsavel = $('#nomeResponsavel').val();
+        var ativo = $("#ativo").val();
 
-        var parametrosUrl = '&descricao=' + descricao;
-         parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_indiceReajusteListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('tabelaBasica_tarefaFiltroListagem.php?', {
+            descricao: descricao,
+            tipo: tipo,
+            visivel: visivel,
+            ativo: ativo
+        });
     }
 
-    
-</script>    
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_tarefaCadastro.php');
+    }
+</script>
