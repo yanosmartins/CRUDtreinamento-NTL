@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 // //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PORTAL_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PORTAL_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('PORTAL_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('ESCALA_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('ESCALA_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('ESCALA_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -29,7 +29,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Portal";
+$page_title = "Escala";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -41,7 +41,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["portal"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["Escala"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -65,11 +65,11 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Portal</h2>
+                            <h2>Escala</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formPortal" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formEscala" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -84,30 +84,31 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">
+                                                    <div class="row">
                                                             <input id="codigo" name="codigo" type="text" class="hidden">
-                                                        </div> 
-                                                        <div class="row">
-                                                            <section class="col col-3">
-                                                                <label class="label">Nome do portal</label>
-                                                                <label class="input">
-                                                                    <input id="descricao" maxlength="255" name="descricao" class="required" type="text" value="" autocomplete="off">
-                                                                </label>
-                                                            </section>
+                                                        </div>
+                                                    <div class="row ">
                                                             <section class="col col-6">
-                                                                <label class="label">Endereço do portal (URL)</label>
+                                                                <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="endereco" maxlength="255" name="endereco" class="required" autocomplete="off" type="text" value="">
+                                                                     <input id="descricao" name="descricao" autocomplete="off" type="text" class="form-control required" value= "">
+                                                                </label>
+                                                            </section>   
+                                                            <section class="col col-2"> 
+                                                                <label class="label">Código SCI</label>
+                                                                <label class="input"> 
+                                                                     <input id="codigoSCI" name="codigoSCI" autocomplete="off" type="text" class="form-control required" value= "">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="ativo">Ativo</label>
+                                                            <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
-                                                                        <option value="1">Sim</option>
+                                                                    <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
+                                                                        <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
-                                                            </section>
+                                                                </label>
+                                                            </section>                                                                                                     
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -169,7 +170,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaPortal.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaEscala.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -274,7 +275,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var codigo = idx[1];
             if (codigo !== "") {
-                recuperaPortal(codigo,
+                recuperaEscala(codigo,
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
@@ -285,12 +286,12 @@ include("inc/scripts.php");
                             piece = out.split("^");
                             codigo = piece[0];
                             descricao = piece[1];
-                            endereco = piece[2];
+                            codigoSCI = piece[2];
                             ativo = +piece[3];
 
                             $("#codigo").val(codigo);
                             $("#descricao").val(descricao);
-                            $("#endereco").val(endereco);
+                            $("#codigoSCI").val(codigoSCI);
                             $("#ativo").val(ativo);
 
                             return;
@@ -302,11 +303,11 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_portalCadastro.php');
+        $(location).attr('href', 'tabelaBasica_escalaCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_portalFiltro.php');
+        $(location).attr('href', 'tabelaBasica_escalaFiltro.php');
     }
 
     function excluir() {
@@ -317,7 +318,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirPortal(codigo,
+        excluirEscala(codigo,
             function(data) {
                 if (data.indexOf('failed') > -1) {
                     var piece = data.split("#");
@@ -338,28 +339,28 @@ include("inc/scripts.php");
     }
 
     function gravar() {
+
         $("#btnGravar").prop('disabled', true);
 
         var codigo = +$("#codigo").val();
-        var descricao = $("#descricao").val().trim();
-        var endereco = $("#endereco").val().trim(); 
+        var descricao = $("#descricao").val().trim().replace(/'/g, " ");
+        var codigoSCI = $("#codigoSCI").val().trim().replace(/'/g, " ");
         var ativo = +$("#ativo").val();
 
         if (descricao === "") {
-            smartAlert("Atenção", "Informe o nome do portal !", "error");
+            smartAlert("Atenção", "Informe o nome da escala !", "error");
             $("#descricao").focus();
             $("#btnGravar").prop('disabled', false);
             return;
         }
-        if (endereco === "") {
-            smartAlert("Atenção", "Informe o endereço do portal !", "error");
-            $("#endereco").focus();
+        if (codigoSCI === "") {
+            smartAlert("Atenção", "Informe o código da Escala !", "error");
+            $("#codigoSCI").focus();
             $("#btnGravar").prop('disabled', false);
             return;
         }
-
-
-        gravaPortal(codigo, descricao, endereco, ativo,
+ 
+        gravaEscala(codigo, descricao, codigoSCI, ativo,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {

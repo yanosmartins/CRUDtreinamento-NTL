@@ -6,8 +6,8 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Nome do Portal</th>
-                    <th class="text-left" style="min-width:30px;">Endereço do Portal (URL)</th>
+                    <th class="text-left" style="min-width:30px;">Escala</th>
+                    <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
@@ -15,19 +15,23 @@ include "js/repositorio.php";
                 $descricao = "";
                 $ativo= ""; 
                 $where = "WHERE (0 = 0)";
-
-                $descricao = "";
-                if ($_POST["descricao"] != "") {
-                    $descricao = $_POST["descricao"];
+ 
+                if ($_GET["descricao"] != "") {
+                    $descricao = $_GET["descricao"];
                     $where = $where . " AND ([descricao] like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
+                }
+             
+                if ($_GET["codigoSCI"] != "") {
+                    $codigoSCI = +$_GET["codigoSCI"];
+                    $where = $where . " AND ([codigoSCI] like '%' + " . "replace('" . $codigoSCI . "',' ','%') + " . "'%')";
                 } 
  
-                if ($_POST["ativo"] != "") {
-                    $ativo = +$_POST["ativo"];
+                if ($_GET["ativo"] != "") {
+                    $ativo = +$_GET["ativo"];
                     $where = $where . " and ativo = ".$ativo;
                 } 
 
-                $sql = " SELECT codigo, descricao, endereco FROM Ntl.portal  ";
+                $sql = " SELECT codigo, descricao, ativo FROM Ntl.escala  ";
                 
                 $sql = $sql.$where;
                 $sql .= " order by descricao "; 
@@ -35,13 +39,15 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
                 
                 while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
+                    $codigo = +$row['codigo'];
                     $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $endereco = mb_convert_encoding($row['endereco'], 'UTF-8', 'HTML-ENTITIES');
+                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
+
+                    $ativo == 1 ? $ativo = 'Sim' : $ativo = 'Não'; 
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_portalCadastro.php?id=' . $id . '">' . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $endereco . '</td>';
+                    echo '<td class="text-left"><a href="tabelaBasica_escalaCadastro.php?id=' . $codigo . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left">' . $ativo . '</td>';
                     echo '</tr >';
                  }
                 ?>               
