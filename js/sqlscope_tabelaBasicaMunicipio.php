@@ -138,66 +138,11 @@ function excluir() {
     echo 'sucess#' . $result;
     return;
 }
-function verificaMunicipio() {
-
-    $descricao = $_POST["descricao"];
  
-    $reposit = new reposit();
-    $sql = "SELECT * FROM Ntl.municipio WHERE (0=0) AND descricao = '$descricao'";
-    $result = $reposit->RunQuery($sql); 
-    $row = "";
-    $row = odbc_fetch_array($result);
-    if ($row == false) {
-        echo('failed#');
-        return;
-    }
-
-    echo 'sucess#' . $result;
-    return;
-}
- 
-function formatarNumero($value)
-{
-    $aux = $value;
-    $aux = str_replace('.', '', $aux);
-    $aux = str_replace(',', '.', $aux);
-    $aux = floatval($aux);
-    if (!$aux) {
-        $aux = 'null';
-    }
-    return $aux;
-}
-
-function formatarString($value)
-{
-    $aux = $value;
-    $aux = str_replace("'", " ", $aux);
-    if (!$aux) {
-        return 'null';
-    }
-    $aux = '\'' . trim($aux) . '\'';
-    return $aux;
-}
 
 
-function formatarData($value)
-{
-    $aux = $value;
-    if (!$aux) {
-        return 'null';
-    }
-    $aux = explode('/', $value);
-    $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
-    $data = '\'' . trim($data) . '\'';
-    return $data;
-}
 
-//Transforma uma data Y-M-D para D-M-Y. 
-function formataDataRecuperacao($campo)
-{
-    $campo = explode("-", $campo);
-    $diaCampo = explode(" ", $campo[2]);
-    $campo = $diaCampo[0] . "/" . $campo[1] . "/" . $campo[0];
-    return $campo;
-} 
+
+
+
  

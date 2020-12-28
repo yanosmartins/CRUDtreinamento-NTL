@@ -21,29 +21,32 @@ return;
 
 function grava()
 {
-    $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("BENEFICIOINDIRETO_ACESSAR|BENEFICIOINDIRETO_GRAVAR");
+    $reposit = new reposit(); //Abre a conexão.
+    //Verifica permissões
+    $possuiPermissao = $reposit->PossuiPermissao("PERIODORENOVACAO_ACESSAR|PERIODORENOVACAO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
         echo "failed#" . $mensagem . ' ';
         return;
     }
+
     session_start();
     $usuario = $_SESSION['login'];
-    $codigo =  +$_POST['codigo'];
-    $descricao = "'" .$_POST['descricao']. "'";
-    $ativo = + $_POST['ativo'];
+    $codigo = +$_POST['id'];
+    $descricao = $_POST['descricao'];
+    $ativo = +$_POST['ativo'];
 
-    $sql = "Ntl.periodoVigencia_Atualiza(
+    $sql = "Ntl.periodoRenovacao_Atualiza(
         $codigo ,
         $descricao ,
-        $ativo ,
-        $usuario
+        $ativo,
+        $usuario 
         )";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
+
     $ret = 'sucess#';
     if ($result < 1) {
         $ret = 'failed#';
@@ -51,6 +54,7 @@ function grava()
     echo $ret;
     return;
 }
+
 
 function recupera()
 {
@@ -63,20 +67,18 @@ function recupera()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT codigo, descricao, ativo FROM Ntl.periodoVigencia
+    $sql = "SELECT codigo, descricao, ativo FROM Ntl.periodoRenovacao
     WHERE (0=0) AND codigo = " . $id;
-
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
     if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
-
+    $row = array_map('utf8_encode', $row);
     $id = $row['codigo'];
     $descricao = $row['descricao'];
-    $ativo = +$row['ativo'];
+    $ativo = $row['ativo'];
 
     $out =   $id . "^" .
         $descricao . "^" .
@@ -94,7 +96,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("PERIODORENOVACAO_ACESSAR|PERIODORENOVACAO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -103,14 +105,14 @@ function excluir()
     }
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Caução.";
+        $mensagem = "Selecione um Código de Servico.";
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
         $id = +$_POST["id"];
     }
 
-    $sql = "UPDATE Ntl.periodoVigencia SET ativo = 0 WHERE codigo=$id";
+    $sql = "UPDATE Ntl.periodoRenovacao SET ativo = 0 WHERE codigo=$id";
     $result = $reposit->RunQuery($sql);
 
     if ($result < 1) {

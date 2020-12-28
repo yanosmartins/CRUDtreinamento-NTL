@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PERIODOVIGENCIA_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PERIODOVIGENCIA_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('PERIODOVIGENCIA_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PERIODORENOVACAO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PERIODORENOVACAO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('PERIODORENOVACAO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -29,7 +29,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Período de Vigência";
+$page_title = "Período de Renovação";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -40,7 +40,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["periodoVigencia"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["periodoRenovacao"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -61,7 +61,7 @@ include("inc/nav.php");
         <section id="widget-grid" class="">
             <!-- <div class="row" style="margin: 0 0 13px 0;">
                 <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroPeriodoVigencia.php" style="float:right"></a>
+                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroPeriodoRenovacao.php" style="float:right"></a>
                 <?php } ?>
             </div> -->
 
@@ -70,12 +70,12 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Período de Vigência
+                            <h2>Período de Renovação
                             </h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formPeriodoVigencia" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formPeriodoRenovacao" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -93,9 +93,9 @@ include("inc/nav.php");
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
                                                         <div class="row ">
                                                             <section class="col col-3">
-                                                                <label class="label">Período de Vigência (Meses)</label>
+                                                                <label class="label">Período de Renovação (Meses)</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" autocomplete="off" type="number" autocomplete="off" class="required" value="">
+                                                                    <input id="descricao" name="descricao" autocomplete="new-password" type="number"  class="required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
@@ -165,7 +165,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaPeriodoVigencia.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaPeriodoRenovacao.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -187,11 +187,8 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-
-
-
         $('#btnNovo').on("click", function() {
-            novo()
+            novo();
         });
         $("#btnGravar").on("click", function() {
             gravar();
@@ -202,38 +199,30 @@ include("inc/scripts.php");
         $("#btnExcluir").on("click", function() {
             excluir();
         });
-        carregaPeriodoVigencia();
-
-
+        carregaPeriodoRenovacao();
     });
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_periodoVigenciaFiltro.php');
-
+        $(location).attr('href', 'tabelaBasica_periodoRenovacaoFiltro.php');
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_periodoVigenciaCadastro.php');
-
+        $(location).attr('href', 'tabelaBasica_periodoRenovacaoCadastro.php');
     }
 
     function gravar() {
-
-        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
-
-        var codigo = +$("#codigo").val();
-        var ativo = $("#ativo").val();
+        var id = $("#codigo").val();
         var descricao = $("#descricao").val();
+        var ativo = $("#ativo").val();
 
-        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
-            smartAlert("Atenção", "Informe a Descrição", "error");
+            smartAlert("Erro", "Informe o Período de Renovação.", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
 
-        gravaPeriodoVigencia(codigo, ativo, descricao,
+        gravaPeriodoRenovacao(id, ativo,descricao,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {
@@ -257,7 +246,6 @@ include("inc/scripts.php");
         );
     }
 
-
     function excluir() {
         debugger;
         var id = +$("#codigo").val();
@@ -267,7 +255,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirPeriodoVigencia(id, function(data) {
+        excluirPeriodoRenovacao(id, function(data) {
             if (data.indexOf('failed') > -1) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -284,8 +272,7 @@ include("inc/scripts.php");
         });
     }
 
-
-    function carregaPeriodoVigencia() {
+    function carregaPeriodoRenovacao() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
         if (params.length === 2) {
@@ -293,7 +280,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaPeriodoVigencia(idd,
+                recuperaPeriodoRenovacao(idd,
                     function(data) {
                         data = data.replace(/failed/g, '');
                         var piece = data.split("#");
@@ -305,9 +292,11 @@ include("inc/scripts.php");
                         piece = out.split("^");
                         console.table(piece);
                         //Atributos de cliente 
+                        debugger;
                         var codigo = +piece[0];
                         var descricao = piece[1];
                         var ativo = +piece[2];
+
                         //Atributos de cliente        
                         $("#codigo").val(codigo);
                         $("#descricao").val(descricao);
