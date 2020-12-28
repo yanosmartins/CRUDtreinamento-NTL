@@ -25,6 +25,21 @@ return;
 
 function grava()
 {
+<<<<<<< HEAD
+=======
+
+    $reposit = new reposit(); //Abre a conexão.
+
+    //Verifica permissões
+    $possuiPermissao = $reposit->PossuiPermissao("ISS_ACESSAR|ISS_GRAVAR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para gravar!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
+>>>>>>> Breno
     session_start();
     $usuario = $_SESSION['login'];
     $iss = $_POST['iss'];
@@ -33,14 +48,21 @@ function grava()
     $ativo = +$iss['ativo'];
 
 
+<<<<<<< HEAD
     $sql = "dbo.iss_Atualiza(
+=======
+    $sql = "Ntl.iss_Atualiza(
+>>>>>>> Breno
         $codigo ,
         $ativo ,
         $percentual,
         $usuario
         )";
 
+<<<<<<< HEAD
     $reposit = new reposit();
+=======
+>>>>>>> Breno
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
     if ($result < 1) {
@@ -62,7 +84,11 @@ function recupera()
         $id = +$_POST["id"];
     }
 
+<<<<<<< HEAD
     $sql = "SELECT codigo, ativo, percentual FROM dbo.iss  
+=======
+    $sql = "SELECT codigo, ativo, percentual FROM Ntl.iss  
+>>>>>>> Breno
     WHERE (0=0) AND codigo = " . $id;
 
 
@@ -98,6 +124,18 @@ function recupera()
 function excluir()
 {
 
+<<<<<<< HEAD
+=======
+    $reposit = new reposit();
+    $possuiPermissao = $reposit->PossuiPermissao("ISS_ACESSAR|ISS_EXCLUIR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
+>>>>>>> Breno
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
         $mensagem = "Selecione um ISS.";
         echo "failed#" . $mensagem . ' ';
@@ -108,8 +146,12 @@ function excluir()
 
 
 
+<<<<<<< HEAD
     $sql = "UPDATE dbo.iss SET ativo ='0' WHERE codigo=$id";
     $reposit = new reposit();
+=======
+    $sql = "UPDATE Ntl.iss SET ativo ='0' WHERE codigo=$id";
+>>>>>>> Breno
     $result = $reposit->RunQuery($sql);
 
     if ($result < 1) {
