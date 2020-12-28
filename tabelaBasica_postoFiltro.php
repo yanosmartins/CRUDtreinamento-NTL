@@ -42,12 +42,12 @@ include("inc/nav.php");
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-<?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
-$breadcrumbs["Tabela Básica"] = "";
-include("inc/ribbon.php");
-?>
+    <?php
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
+    $breadcrumbs["Tabela Básica"] = "";
+    include("inc/ribbon.php");
+    ?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
@@ -84,37 +84,37 @@ include("inc/ribbon.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                    <div class="row ">
+                                                        <div class="row ">
                                                             <section class="col col-4">
                                                                 <label class="label">Posto</label>
                                                                 <label class="input">
 
-                                                                     <input id="descricao" name="descricao" autocomplete="new-password" type="text" class="form-control" value= "">
+                                                                    <input id="descricao" name="descricao" autocomplete="new-password" type="text" class="form-control" value="">
                                                                 </label>
-                                                            </section>   
+                                                            </section>
                                                             <section class="col col-2">
-                                                            <label class="label">Ativo</label> 
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password" >
+                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option value=""></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                            </section>                         
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
-                                            </div>   
+                                            </div>
                                         </div>
                                     </div>
                                     <footer>
-                                    <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
                                         <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                             <span class="fa fa-file"></span>
-                                        </button>                                                      
+                                        </button>
                                     </footer>
                                 </form>
                             </div>
@@ -122,7 +122,7 @@ include("inc/ribbon.php");
                         </div>
                     </div>
                 </article>
-            </div>                          
+            </div>
         </section>
         <!-- end widget grid -->
     </div>
@@ -162,9 +162,9 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
 <script>
-    $(document).ready(function () {
-        
-        $('#btnSearch').on("click", function () {
+    $(document).ready(function() {
+
+        $('#btnSearch').on("click", function() {
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
@@ -177,9 +177,7 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
 
         var parametrosUrl = '&descricao=' + descricao;
-         parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_postoListagem.php?' + parametrosUrl);
+        parametrosUrl = '&ativo=' + ativo;
+        $('#resultadoBusca').load('tabelaBasica_postoFiltroListagem.php?' + parametrosUrl);
     }
-    
-</script>    
-
+</script>

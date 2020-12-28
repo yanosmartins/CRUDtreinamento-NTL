@@ -105,11 +105,10 @@ function recuperaClasse()
 function excluirClasse()
 {
     $reposit = new reposit();
-
-    $possuiPermissao = $reposit->PossuiPermissao("CLASSE_ACESSAR|CLASSE_GRAVAR|CLASSE_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("CLASSE_ACESSAR|CLASSE_EXCLUIR");
 
     if ($possuiPermissao === 0) {
-        $mensagem = "O usuário não tem permissão para gravar!";
+        $mensagem = "O usuário não tem permissão para excluir!";
         echo "failed#" . $mensagem . ' ';
         return;
     }

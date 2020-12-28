@@ -90,19 +90,19 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Código do Banco </label>
                                                                 <label class="input">
-                                                                    <input id="codigoBanco" name="codigoBanco" type="text" autocomplete="new-password" maxlength="10">
+                                                                    <input id="codigoBanco" name="codigoBanco" type="text" autocomplete="new-password" maxlength="10" class="required" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-6">
                                                                 <label class="label">Nome do banco</label>
                                                                 <label class="input">
-                                                                    <input id="nomeBanco" name="nomeBanco" type="text" autocomplete="new-password" maxlength="100">
+                                                                    <input id="nomeBanco" name="nomeBanco" type="text" autocomplete="new-password" maxlength="100" class="required" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password" class="required" required>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>

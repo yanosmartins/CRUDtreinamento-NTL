@@ -99,7 +99,7 @@ function recuperaPosto()
 function excluirPosto()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("POSTO_ACESSAR|POSTO_GRAVAR|POSTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("POSTO_ACESSAR|POSTO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
