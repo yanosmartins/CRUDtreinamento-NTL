@@ -121,14 +121,27 @@ include("inc/nav.php");
                                             <span class="fa fa-trash"></span>
                                         </button> -->
 
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                            <span class="fa fa-trash"></span>
+                                        </button>
+                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                <span id="ui-id-2" class="ui-dialog-title">
+                                                </span>
+                                            </div>
+                                            <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                <p>CONFIRMA A EXCLUSÃO ? </p>
+                                            </div>
+                                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                <div class="ui-dialog-buttonset">
+                                                </div>
+                                            </div>
+                                        </div>
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file-o"></span>
-                                        </button>
-                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
-                                            <span class="fa fa-trash"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
                                             <span class="fa fa-backward "></span>
@@ -192,15 +205,50 @@ include("inc/scripts.php");
     $(document).ready(function() {
         carregaPagina();
 
+
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        $("#btnExcluir").on("click", function() {
+            var id = $("#codigo").val();
+
+            if (id === 0) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#nome").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
+            }
+        });
+
         $("#btnGravar").on("click", function() {
             gravar();
         });
         $("#btnNovo").on("click", function() {
             novo();
         });
-        $("#btnExcluir").on("click", function() {
-            excluir();
-        });
+
         $("#btnVoltar").on("click", function() {
             voltar();
         });
