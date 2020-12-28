@@ -62,72 +62,72 @@ include("inc/nav.php");
                 <?php } ?>
             </div> -->
 
-            <div class="row">
-                <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
-                        <header>
-                            <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>ISS</h2>
-                        </header>
-                        <div>
-                            <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formRetencaoTributariaFiltro" method="post">
-                                    <div class="panel-group smart-accordion-default" id="accordion">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
-                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Filtro
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="collapseFiltro" class="panel-collapse collapse in">
-                                                <div class="panel-body no-padding">
-                                                    <fieldset>
-                                                        <div class="row ">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+                <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                        <h2>ISS</h2>
+                    </header>
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form action="javascript:gravar()" class="smart-form client-form" id="formRetencaoTributariaFiltro" method="post">
+                                <div class="panel-group smart-accordion-default" id="accordion">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
+                                                    <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                    <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                    Filtro
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseFiltro" class="panel-collapse collapse in">
+                                            <div class="panel-body no-padding">
+                                                <fieldset>
+                                                    <div class="row ">
 
-                                                            <section class="col col-2">
-                                                                <label class="label">Percentual ISS</label>
-                                                                <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" maxlength="5" style="text-align: right;"  type="text" autocomplete="off">
+                                                        <section class="col col-2">
+                                                            <label class="label">Percentual ISS</label>
+                                                            <label class="input"><i class="icon-append fa fa-percent"></i>
+                                                                <input id="percentual" name="percentual" maxlength="5" style="text-align: right;" type="text" autocomplete="off">
 
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Ativo</label>
-                                                                <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                        <option value=""></option>
-                                                                        <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
+                                                            </label>
+                                                        </section>
+                                                        <section class="col col-2">
+                                                            <label class="label">Ativo</label>
+                                                            <label class="select">
+                                                                <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                    <option value=""></option>
+                                                                    <option value="1" selected>Sim</option>
+                                                                    <option value="0">Não</option>
+                                                                </select><i></i>
+                                                            </label>
+                                                        </section>
 
-                                                        </div>
-                                                    </fieldset>
-                                                </div>
+                                                    </div>
+                                                </fieldset>
                                             </div>
                                         </div>
                                     </div>
-                                    <footer>
+                                </div>
+                                <footer>
                                     <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
-                                            <span class="fa fa-search"></span>
-                                        </button>
-                                        
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
-                                            <span class="fa fa-file"></span>
-                                        </button>
-                                    </footer>
-                                </form>
-                            </div>
-                            <div id="resultadoBusca"></div>
+                                        <span class="fa fa-search"></span>
+                                    </button>
+
+                                    <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <span class="fa fa-file"></span>
+                                    </button>
+                                </footer>
+                            </form>
                         </div>
+                        <div id="resultadoBusca"></div>
                     </div>
-                </article>
-            </div>
+                </div>
+            </article>
+        </div>
         </section>
         <!-- end widget grid -->
     </div>
@@ -173,7 +173,7 @@ include("inc/scripts.php");
         $('#percentual').focusout(function() {
             var percentual, element;
             element = $(this);
-            element.unmask(); 
+            element.unmask();
             percentual = element.val().replace(/\D/g, '');
             if (percentual.length > 3) {
                 element.mask("99.99");
@@ -181,7 +181,7 @@ include("inc/scripts.php");
                 element.mask("9.99?9");
             }
         }).trigger('focusout');
-        
+
 
         $('#btnSearch').on("click", function() {
             listarFiltro();
@@ -199,6 +199,6 @@ include("inc/scripts.php");
         var parametrosUrl = '&descricao=' + descricao;
         var parametrosUrl = '&percentual=' + percentual;
         parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_issListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('tabelaBasica_issFiltroListagem.php?' + parametrosUrl);
     }
 </script>
