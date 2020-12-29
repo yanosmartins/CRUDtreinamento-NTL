@@ -166,7 +166,7 @@ if ($condicaoTabelaBasicaOk) {
     }
 
     if (in_array('SERVICO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("serviço" => array("title" => "Serviço", "url" => APP_URL . "/tabelaBasica_servicoFiltro.php")); //SYSGEF 
+        $page_nav['tabelaBasica']['sub'] += array("servico" => array("title" => "Serviço", "url" => APP_URL . "/tabelaBasica_servicoFiltro.php")); //SYSGEF 
     }
     if (in_array('SITUACAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("situacao" => array("title" => "Situação", "url" => APP_URL . "/tabelaBasica_situacaoFiltro.php")); //SYSGC 
