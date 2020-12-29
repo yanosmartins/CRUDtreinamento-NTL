@@ -180,12 +180,25 @@ if ($condicaoTabelaBasicaOk) {
 if ($condicaoCadastroOk) {
     $page_nav['cadastro'] = array("title" => "Cadastro", "icon" => "fa-pencil-square-o");
     $page_nav['cadastro']['sub'] = array();
-    $page_nav['cadastro']['sub'] += array("cargo" => array("title" => "Cargo", "url" => APP_URL . "/index.php")); //SYSCB   
-    $page_nav['cadastro']['sub'] += array("contrato" => array("title" => "Contrato", "url" => APP_URL . "/index.php"));
-    $page_nav['cadastro']['sub'] += array("convenioSaude" => array("title" => "Convênio de Saúde", "url" => APP_URL . "/index.php"));
-    $page_nav['cadastro']['sub'] += array("diasUteisPorMunicipio" => array("title" => "Dias Úteis por Município", "url" => APP_URL . "/index.php")); //SYSCB 
-    $page_nav['cadastro']['sub'] += array("feriado" => array("title" => "Feriado", "url" => APP_URL . "/index.php")); //SYSCB  
+
+    if (in_array('CARGO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("cargo" => array("title" => "Cargo", "url" => APP_URL . "/cadastro_cargoFiltro.php")); //SYSCB   
+    }
+    if (in_array('CONTRATO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("contrato" => array("title" => "Contrato", "url" => APP_URL . "/cadastro_contratoFiltro.php"));
+    }
+    if (in_array('CONVENIOSAUDE_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("convenioSaude" => array("title" => "Convênio de Saúde", "url" => APP_URL . "/cadastro_convenioSaudeFiltro.php"));
+    }
+    if (in_array('DIASUTEISMUNICIPIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("diasUteisPorMunicipio" => array("title" => "Dias Úteis por Município", "url" => APP_URL . "/index.php")); //SYSCB 
+    }
+    if (in_array('FERIADO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("feriado" => array("title" => "Feriado", "url" => APP_URL . "/index.php")); //SYSCB 
+    }
+    if (in_array('FORNECEDOR_ACESSAR', $arrayPermissao, true)) {
     $page_nav['cadastro']['sub'] += array("fornecedor" => array("title" => "Fornecedor", "url" => APP_URL . "/index.php")); //SYSCB
+    }
     $page_nav['cadastro']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/index.php")); //SYSCB  
     $page_nav['cadastro']['sub'] += array("garimparPregoes" => array("title" => "Garimpar Pregões", "url" => APP_URL . "/index.php"));
     $page_nav['cadastro']['sub'] += array("produto" => array("title" => "Produto", "url" => APP_URL . "/index.php")); //SYSCB
