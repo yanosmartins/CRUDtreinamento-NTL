@@ -39,7 +39,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['contaVinculada']['sub']["ferias"]["active"] = true;
+$page_nav['tabelaBasica']['sub']['retencaoContaVinculada']['sub']["feriasTercoConstitucional"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -102,15 +102,14 @@ include("inc/nav.php");
                                                             </section>   
                                                             
                                                             <section class="col col-2">
-                                                            
+                                                            <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="hidden" autocomplete="off" class="form-control" autocomplete="new-password" >
-                                                                        <option></option>
+                                                                    <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
-                                                                    </select>
+                                                                    </select><i></i>
                                                                 </label>
-                                                            </section>  
+                                                            </section>    
                                                                                                                                                                       
                                                         </div>
                                                     </fieldset>
@@ -271,32 +270,40 @@ include("inc/scripts.php");
 }
 
 
-    function excluir() {
-        debugger;
-        var id = +$("#codigo").val();
-
-        if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
-            return;
-        }
-
-        excluirFerias(id, function(data) {
-            if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
-
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+$('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
                 }
-                voltar();
-            } else {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                voltar();
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+        $("#btnExcluir").on("click", function() {
+            var id = $("#codigo").val();
+
+            if (id === 0) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#nome").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
             }
         });
-    }
 
 
     function carregaFerias() {

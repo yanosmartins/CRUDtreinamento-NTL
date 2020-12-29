@@ -100,15 +100,14 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-
+                                                            <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="hidden" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                        <option></option>
+                                                                    <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
-                                                                    </select>
+                                                                    </select><i></i>
                                                                 </label>
-                                                            </section>
+                                                            </section>    
 
                                                         </div>
                                                     </fieldset>
