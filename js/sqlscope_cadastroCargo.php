@@ -33,7 +33,7 @@ function grava()
         echo "failed#" . $mensagem . ' ';
         return;
     }
- 
+
 
     //Variáveis
     if ((empty($_POST['id'])) || (!isset($_POST['id'])) || (is_null($_POST['id']))) {
@@ -55,7 +55,7 @@ function grava()
     $descricaoMT = formatarString($_POST['cboDescricao']);
     $codigoCargoSCI = +$_POST['codigoCargoSCI'];
 
-    $sql = 'syscb.cargo_Atualiza (' . $id . ',' . $ativo . ',' . $descricao . ',' . $cbo . ',' . $descricaoMT . ',' . $usuario . ',' . $codigoCargoSCI .') ';
+    $sql = 'Ntl.cargo_Atualiza (' . $id . ',' . $ativo . ',' . $descricao . ',' . $cbo . ',' . $descricaoMT . ',' . $usuario . ',' . $codigoCargoSCI . ') ';
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -93,7 +93,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT C.* from syscb.cargo C WHERE (0 = 0)";
+    $sql = "SELECT C.codigo,C.ativo,C.descricao,C.cbo,C.descricaoMT,C.codigoCargoSCI from Ntl.cargo C WHERE (0 = 0)";
 
     if ($condicaoId) {
         $sql = $sql . " AND C.[codigo] = " . $cargoIdPesquisa . " ";
@@ -113,7 +113,7 @@ function recupera()
         $codigoCargoSCI = +$row['codigoCargoSCI'];
 
 
-        $out = $id . "^" . $ativo . "^" . $descricao . "^" . $cbo . "^" . $descricaoMT . "^". $codigoCargoSCI;
+        $out = $id . "^" . $ativo . "^" . $descricao . "^" . $cbo . "^" . $descricaoMT . "^" . $codigoCargoSCI;
 
         if ($out == "") {
             echo "failed#";
@@ -160,9 +160,9 @@ function verificaDescricao()
         echo "failed#" . $mensagem . ' ';
         return;
     }
-    $descricao = "'".$_POST["descricao"]."'";
-    
-    $sql = "SELECT * FROM syscb.cargo WHERE (0=0) AND descricao = ". $descricao;
+    $descricao = "'" . $_POST["descricao"] . "'";
+
+    $sql = "SELECT * FROM Ntl.cargo WHERE (0=0) AND descricao = " . $descricao;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 

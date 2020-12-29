@@ -28,24 +28,24 @@ $page_css[] = "your_style.css";
 include("inc/header.php");
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["cargo"]["active"] = true;
+$page_nav["cadastro"]["sub"]["cargo"]["active"] = true;
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-<?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
-$breadcrumbs["Tabela Básica"] = "";
-include("inc/ribbon.php");
-?>
+    <?php
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
+    $breadcrumbs["Cadastro"] = "";
+    include("inc/ribbon.php");
+    ?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
 
         <!-- widget grid -->
-        <section id="widget-grid" class=""> 
+        <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
@@ -70,46 +70,46 @@ include("inc/ribbon.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row"> 
-                                                            
+                                                        <div class="row">
+
                                                             <section class="col col-4 col-auto">
                                                                 <label class="label" for="descricao">Cargo</label>
                                                                 <label class="input">
                                                                     <input id="descricao" name="descricao" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            
-                                                             <section class="col col-2 col-auto">
+
+                                                            <section class="col col-2 col-auto">
                                                                 <label class="label" for="cbo">CBO</label>
                                                                 <label class="input">
-                                                                    <input id="cbo" maxlength="9" name="cbo"  value="" autocomplete="off" onkeypress="return seNumero(event)">
+                                                                    <input id="cbo" maxlength="9" name="cbo" value="" autocomplete="off" onkeypress="return seNumero(event)">
                                                                 </label>
                                                             </section>
-                                                            
+
                                                             <section class="col col-4 col-auto">
                                                                 <label class="label" for="descricao">Descrição Ministério do Trabalho</label>
                                                                 <label class="input">
-                                                                    <input id="descricaoMT"  type="text" autocomplete="off">
+                                                                    <input id="descricaoMT" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            
-                                                             <section class="col col-2 col-auto">
+
+                                                            <section class="col col-2 col-auto">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" >
+                                                                    <select id="ativo" name="ativo">
                                                                         <option></option>
-                                                                        <option value="1" selected >Sim</option> 
-                                                                        <option value="0">Não</option> 
-                                                                    </select><i></i> 
-                                                                </label> 
-                                                            </section> 
-                                                             
-                                                        </div> 
+                                                                        <option value="1" selected>Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+
+                                                        </div>
                                                     </fieldset>
                                                 </div>
-                                            </div>   
+                                            </div>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <footer>
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
@@ -117,14 +117,14 @@ include("inc/ribbon.php");
                                         <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                             <span class="fa fa-file"></span>
                                         </button>
-                                    </footer> 
+                                    </footer>
                                 </form>
                             </div>
                             <div id="resultadoBusca"></div>
                         </div>
                     </div>
                 </article>
-            </div>                          
+            </div>
         </section>
         <!-- end widget grid -->
     </div>
@@ -165,24 +165,24 @@ include("inc/scripts.php");
 
 
 <script>
-    $(document).ready(function () {
-        
-        $('#btnSearch').on("click", function () {
+    $(document).ready(function() {
+
+        $('#btnSearch').on("click", function() {
             listarFiltro();
         });
-        
-        $('#btnNovo').on("click", function () {
-           novo();
+
+        $('#btnNovo').on("click", function() {
+            novo();
         });
-        
+
     });
-   
+
     function listarFiltro() {
         var descricao = $('#descricao').val();
         var descricaoMT = $('#descricaoMT').val();
         var cbo = $('#cbo').val();
         var ativo = $('#ativo').val();
-       
+
         if (descricao !== "") {
             descricao = descricao.replace(/^\s+|\s+$/g, "");
             descricao = encodeURIComponent(descricao);
@@ -194,20 +194,19 @@ include("inc/scripts.php");
 
 
         var parametrosUrl = '&descricao=' + descricao + '&ativo=' + ativo + '&descricaoMT=' + descricaoMT + '&cbo=' + cbo;
-        $('#resultadoBusca').load('tabelaBasica_cargoFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('cadastro_cargoFiltroListagem.php?' + parametrosUrl);
     }
-    
+
     function novo() {
-        $(location).attr('href', 'tabelaBasica_CargoCadastro.php');
+        $(location).attr('href', 'cadastro_CargoCadastro.php');
     }
 
     function seNumero(evt) {
-    evt = (evt) ? evt : window.event;
-    var charCode = (evt.which) ? evt.which : evt.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
     }
-    return true;
-}
-    
-</script>    
+</script>

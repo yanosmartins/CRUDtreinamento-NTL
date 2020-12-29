@@ -24,7 +24,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["cargo"]["active"] = true;
+$page_nav["cadastro"]["sub"]["cargo"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -34,7 +34,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
+    $breadcrumbs["Cadastro"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -180,7 +180,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaCargo.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroCargo.js" type="text/javascript"></script>
 
 
 <!-- PAGE RELATED PLUGIN(S) 
@@ -326,11 +326,11 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_cargoCadastro.php');
+        $(location).attr('href', 'cadastro_cargoCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_CargoFiltro.php');
+        $(location).attr('href', 'cadastro_CargoFiltro.php');
     }
 
     function excluir() {
