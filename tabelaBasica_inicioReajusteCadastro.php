@@ -90,10 +90,10 @@ include("inc/nav.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                    <input id="codigo" name="codigo" type="text" class="hidden">
+                                                        <input id="codigo" name="codigo" type="text" class="hidden">
 
                                                         <div class="row ">
-                                                        <section class="col col-2">
+                                                            <section class="col col-3">
                                                                 <label class="label">Data do Início de Reajuste</label>
                                                                 <label class="input">
                                                                     <input id="descricao" name="descricao" autocomplete="off" class="required" type="text">
@@ -102,13 +102,13 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required" >
+                                                                    <select id="ativo" name="ativo" class="required">
 
-                                                                        <option value="1">Sim</option> 
-                                                                        <option value="0">Não</option> 
-                                                                    </select><i></i> 
-                                                                </label> 
-                                                            </section> 
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -136,7 +136,7 @@ include("inc/nav.php");
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o" ></span>
+                                            <span class="fa fa-file-o"></span>
                                         </button>
 
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
@@ -196,7 +196,7 @@ include("inc/scripts.php");
 
 
         $('#btnNovo').on("click", function() {
-           novo();
+            novo();
         });
         $("#btnGravar").on("click", function() {
             gravar();
@@ -216,27 +216,28 @@ include("inc/scripts.php");
         $(location).attr('href', 'tabelaBasica_inicioReajusteFiltro.php');
 
     }
+
     function novo() {
         $(location).attr('href', 'tabelaBasica_inicioReajusteCadastro.php');
 
     }
 
     function gravar() {
-        
+
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
         var codigo = +$("#codigo").val();
         var ativo = $("#ativo").val();
-        var descricao = $("#descricao").val();  
-   
+        var descricao = $("#descricao").val();
+
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
             smartAlert("Atenção", "Informe a Descrição", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
-      
+
         gravaInicioReajuste(codigo, ativo, descricao,
             function(data) {
 
@@ -281,7 +282,7 @@ include("inc/scripts.php");
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                 }
-               
+
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                 voltar();

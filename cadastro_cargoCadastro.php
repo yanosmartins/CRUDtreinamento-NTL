@@ -5,32 +5,14 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('BANCO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('BANCO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('BANCO_EXCLUIR', $arrayPermissao, true));
 
-if ($condicaoAcessarOK == false) {
-    unset($_SESSION['login']);
-    header("Location:login.php");
-}
-
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
-}
-
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
 
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Banco";
+$page_title = "Cargo";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -42,7 +24,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["banco"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["cargo"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -62,14 +44,14 @@ include("inc/nav.php");
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Banco</h2>
+                            <h2>Cargo</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formBanco" method="post">
+                                <form class="smart-form client-form" id="formCliente" method="post" enctype="multipart/form-data">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -84,34 +66,64 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <input id="codigo" name="codigo" type="text" class="hidden">
-
+                                                        <input id="verificaRecuperacao" name="verificaRecuperacao" type="text" readonly class="hidden" value="">
                                                         <div class="row">
-                                                            <section class="col col-2">
-                                                                <label class="label">Código do Banco </label>
+
+                                                            <section class="col col-1 col-auto">
+                                                                <label class="label">Código</label>
                                                                 <label class="input">
-                                                                    <input id="codigoBanco" name="codigoBanco" type="text" autocomplete="new-password" maxlength="10" class="required" required>
+                                                                    <input id="codigo" name="codigo" type="text" readonly class="readonly" value="" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-6">
-                                                                <label class="label">Nome do banco</label>
+                                                            <section class="col col-6 col-auto">
+                                                                <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="nomeBanco" name="nomeBanco" type="text" autocomplete="new-password" maxlength="100" class="required" required>
+                                                                    <input id="descricao" maxlength="100" name="descricao" class="required" value="" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
+
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label">Código SCI</label>
+                                                                <label class="input">
+                                                                    <input id="codigoCargoSCI" name="codigoCargoSCI" class="required" autocomplete="new-password" type="text">
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col col-2 col-auto">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" autocomplete="new-password" required>
-                                                                        <option value="1" selected>Sim</option>
+                                                                    <select id="ativo" name="ativo" class="required">
+
+                                                                        <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label">CBO</label>
+                                                                <label class="input">
+                                                                    <input id="cboNumero" maxlength="9" name="nome" class="required" autocomplete="new-password" type="text">
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col col-6 col-auto">
+                                                                <label class="label">Descrição do Ministério do Trabalho</label>
+                                                                <label class="input">
+                                                                    <input id="cboDescricao" maxlength="45" name="nome" class="required" value="" maxlength="45" autocomplete="off">
+                                                                </label>
+                                                            </section>
+
+                                                        </div>
+
+
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                     <footer>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
@@ -168,7 +180,8 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaBanco.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaCargo.js" type="text/javascript"></script>
+
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -189,14 +202,20 @@ include("inc/scripts.php");
 <!--<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>-->
 
 
+<!-- Validador de CPF -->
+<script src="js/plugin/cpfcnpj/jquery.cpfcnpj.js"></script>
+
+
 <!-- Form to json -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
 
 
+
+
+
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-        carregaPagina();
 
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
@@ -220,6 +239,7 @@ include("inc/scripts.php");
             }]
         });
 
+
         $("#btnExcluir").on("click", function() {
             var id = $("#codigo").val();
 
@@ -234,94 +254,29 @@ include("inc/scripts.php");
             }
         });
 
-        $("#btnGravar").on("click", function() {
-            gravar();
-        });
         $("#btnNovo").on("click", function() {
             novo();
         });
+
+        $("#btnGravar").on("click", function() {
+            var verificaRecuperacao = +$("#verificaRecuperacao").val();
+            if (verificaRecuperacao == 1) {
+                gravar();
+            } else {
+                verificaDescricaoExistente();
+            }
+        });
+
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-    });
-
-    function gravar() {
-
-        var codigoBanco = $("#codigoBanco").val();
-        var nomeBanco = $("#nomeBanco").val();
-        var ativo = $("#ativo").val();
-
-        if (codigoBanco == "" || codigoBanco == " ") {
-            smartAlert("Atenção", "Insira o código do Banco", "error");
-            return false;
-        }
-
-        if (nomeBanco == "" || nomeBanco === " ") {
-            smartAlert("Atenção", "Insira o nome do Banco", "error");
-            return false;
-        }
-
-        let banco = $('#formBanco').serializeArray().reduce(function(obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
-
-        gravaBanco(banco,
-            function(data) {
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        return false;
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                        return false;
-                        //                                                            return;
-                    }
-                } else {
-                    var piece = data.split("#");
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
-                }
-            }
-        );
-    }
-
-
-    function novo() {
-        $(location).attr('href', 'tabelaBasica_bancoCadastro.php');
-    }
-
-    function voltar() {
-        $(location).attr('href', 'tabelaBasica_bancoFiltro.php');
-    }
-
-    function excluir() {
-        var id = +$("#codigo").val();
-
-        if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
-            return;
-        }
-
-        excluirBanco(id, function(data) {
-            if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
-
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                }
-                voltar();
-            } else {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                voltar();
-            }
+        $("#cboNumero").on("change", function() {
+            verificaCBO();
         });
-    }
+
+        carregaPagina();
+
+    });
 
     function carregaPagina() {
         var urlx = window.document.URL.toString();
@@ -330,31 +285,185 @@ include("inc/scripts.php");
             var id = params[1];
             var idx = id.split("=");
             var idd = idx[1];
-            debugger;
             if (idd !== "") {
-                recuperaBanco(idd,
+                recuperaCargo(idd,
                     function(data) {
-                        if (data.indexOf('failed') > -1) {} else {
+                        if (data.indexOf('failed') > -1) {
+                            return;
+                        } else {
                             data = data.replace(/failed/g, '');
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var out = piece[1];
-
                             piece = out.split("^");
-                            codigo = piece[0];
-                            codigoBanco = piece[1];
-                            nomeBanco = piece[2];
-                            ativo = piece[3];
 
+                            // Atributos de vale transporte unitário que serão recuperados: 
+                            var codigo = +piece[0];
+                            var ativo = +piece[1];
+                            var descricao = piece[2];
+                            var cboNumero = piece[3];
+                            var cboDescricao = piece[4];
+                            var codigoCargoSCI = piece[5];
+
+                            //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
-                            $("#codigoBanco").val(codigoBanco);
-                            $("#nomeBanco").val(nomeBanco);
                             $("#ativo").val(ativo);
+                            $("#descricao").val(descricao);
+                            $("#cboNumero").val(cboNumero);
+                            $("#cboDescricao").val(cboDescricao);
+                            $("#codigoCargoSCI").val(codigoCargoSCI);
+                            $("#verificaRecuperacao").val(1);
+
+                            return;
 
                         }
                     }
                 );
             }
+
         }
+
     }
+
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_cargoCadastro.php');
+    }
+
+    function voltar() {
+        $(location).attr('href', 'tabelaBasica_CargoFiltro.php');
+    }
+
+    function excluir() {
+        var id = $("#codigo").val();
+
+        if (id === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+            return;
+        }
+        debugger;
+        excluirCargo(id,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
+                    voltar();
+                } else {
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
+                }
+            }
+        );
+    }
+
+    function verificaDescricaoExistente() {
+        var descricao = $("#descricao").val();
+        verificaDescricao(descricao,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    smartAlert("Atenção", "Já existe um cargo com essa descrição no Sistema!", "error");
+                    $("#descricao").focus();
+                    return false;
+                } else {
+                    gravar();
+                    return true;
+                }
+            }
+
+        );
+    }
+
+    function gravar() {
+
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
+        $("#btnGravar").prop('disabled', true);
+
+
+        // Variáveis que vão ser gravadas no banco:
+        var id = +$("#codigo").val();
+        var ativo = +$("#ativo").val();
+        var descricao = $("#descricao").val().trim().replace(/'/g, " ");
+        var cboNumero = $("#cboNumero").val();
+        var cboDescricao = $("#cboDescricao").val().trim().replace(/'/g, " ");
+        var codigoCargoSCI = +$("#codigoCargoSCI").val()
+
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+        if (!descricao) {
+            smartAlert("Atenção", "Informe a Descrição", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!cboNumero) {
+            smartAlert("Atenção", "Informe o CBO", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!cboDescricao) {
+            smartAlert("Atenção", "Informe a Descrição do Ministério do Trabalho", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+
+        gravaCargo(id, ativo, descricao, cboNumero, cboDescricao, codigoCargoSCI,
+            function(data) {
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnGravar").prop('disabled', false);
+                        return;
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                        $("#btnGravar").prop('disabled', false);
+                        return;
+                    }
+
+                } else {
+                    //Verifica se a função de recuperar os campos foi executada.
+                    var verificaRecuperacao = +$("#verificaRecuperacao").val();
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+
+                    if (verificaRecuperacao === 1) {
+                        voltar();
+                    } else {
+                        novo();
+                    }
+                }
+            }
+        );
+
+    }
+
+    function verificaCBO() {
+        var texto = document.getElementById("cboNumero").value;
+        for (letra of texto) {
+
+            letraspermitidas = "12345678 90 -"
+            var ok = false;
+            for (letra2 of letraspermitidas) {
+
+                if (letra == letra2) {
+
+                    ok = true;
+                }
+            }
+            if (!ok) {
+                //                    alert("Não digite caracteres que não sejam letras ou espaços");
+                smartAlert("Erro", "Não digite caracteres que não sejam números ou '-'", "error");
+                // document.getElementById("entrada").value="";
+                $("#cboNumero").val("");
+                return;
+
+            }
+        }
+    };
 </script>

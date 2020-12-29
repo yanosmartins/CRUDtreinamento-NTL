@@ -96,7 +96,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Redução Base IR</label>
                                                                 <label class="select">
-                                                                    <select name="reducaoBaseIR" id="reducaoBaseIR" class="" autocomplete="off" class="form-control" autocomplete="new-password" class="required" required>
+                                                                    <select name="reducaoBaseIR" id="reducaoBaseIR" autocomplete="off" class="form-control required" autocomplete="new-password" required>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
@@ -105,7 +105,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password" class="required" required>
+                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" autocomplete="new-password" required>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
@@ -259,6 +259,14 @@ include("inc/scripts.php");
 
 
     function gravar() {
+
+        var descricao = $("#descricao").val();
+
+        if (descricao == "" || descricao === " ") {
+            smartAlert("Atenção", "Insira a Descrição da Classe", "error")
+            return false;
+        }
+
         let classe = $('#formClasse').serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
             return obj;

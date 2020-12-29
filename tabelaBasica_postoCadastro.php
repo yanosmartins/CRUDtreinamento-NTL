@@ -94,14 +94,14 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                            <label class="label">Ativo</label>
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
                                                                     <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                            </section>   
+                                                            </section>
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -240,6 +240,14 @@ include("inc/scripts.php");
     });
 
     function gravar() {
+
+        var descricao = $("#descricao").val();
+
+        if (descricao == "" || descricao === " ") {
+            smartAlert("Atenção", "Insira uma Descrição", "error")
+            return false;
+        }
+
         let posto = $('#formPosto').serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
             return obj;

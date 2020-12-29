@@ -1,13 +1,11 @@
 <?php
 //initilize the page
 require_once("inc/init.php");
-
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
-
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('INICIOREAJUSTE_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('INICIOREAJUSTE_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('CARGO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('CARGO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -18,60 +16,46 @@ $esconderBtnGravar = "";
 if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
-
 /* ---------------- PHP Custom Scripts ---------
-
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
-
-$page_title = "Data Início de Reajuste";
-
+$page_title = "Cargo";
 /* ---------------- END PHP Custom Scripts ------------- */
-
 //include header
 //you can add your custom css in $page_css array.
 //Note: all css files are inside css/ folder
 $page_css[] = "your_style.css";
 include("inc/header.php");
-
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["inicioReajuste"]["active"] = true;
-
+$page_nav["tabelaBasica"]["sub"]["cargo"]["active"] = true;
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-    <?php
-    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-    //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
-    include("inc/ribbon.php");
-    ?>
+<?php
+//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+//$breadcrumbs["New Crumb"] => "http://url.com"
+$breadcrumbs["Tabela Básica"] = "";
+include("inc/ribbon.php");
+?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
 
         <!-- widget grid -->
-        <section id="widget-grid" class="">
-            <!-- <div class="row" style="margin: 0 0 13px 0;">
-                <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastro.php" style="float:right"></a>
-                <?php } ?>
-            </div> -->
-
+        <section id="widget-grid" class=""> 
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Data Início de Reajuste
-                            </h2>
+                            <h2>Cargo</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formInicioReajusteFiltro" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formCargoFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -86,29 +70,46 @@ include("inc/nav.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row ">
-                                                            <section class="col col-3">
-                                                                <label class="label">Data do Início de Reajuste</label>
+                                                        <div class="row"> 
+                                                            
+                                                            <section class="col col-4 col-auto">
+                                                                <label class="label" for="descricao">Cargo</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text">
+                                                                    <input id="descricao" name="descricao" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
+                                                            
+                                                             <section class="col col-2 col-auto">
+                                                                <label class="label" for="cbo">CBO</label>
+                                                                <label class="input">
+                                                                    <input id="cbo" maxlength="9" name="cbo"  value="" autocomplete="off" onkeypress="return seNumero(event)">
+                                                                </label>
+                                                            </section>
+                                                            
+                                                            <section class="col col-4 col-auto">
+                                                                <label class="label" for="descricao">Descrição Ministério do Trabalho</label>
+                                                                <label class="input">
+                                                                    <input id="descricaoMT"  type="text" autocomplete="off">
+                                                                </label>
+                                                            </section>
+                                                            
+                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                        <option value=""></option>
-                                                                        <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
-                                                        </div>
+                                                                    <select id="ativo" name="ativo" >
+                                                                        <option></option>
+                                                                        <option value="1" selected >Sim</option> 
+                                                                        <option value="0">Não</option> 
+                                                                    </select><i></i> 
+                                                                </label> 
+                                                            </section> 
+                                                             
+                                                        </div> 
                                                     </fieldset>
                                                 </div>
-                                            </div>
+                                            </div>   
                                         </div>
-                                    </div>
+                                    </div> 
                                     <footer>
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
@@ -116,14 +117,14 @@ include("inc/nav.php");
                                         <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                             <span class="fa fa-file"></span>
                                         </button>
-                                    </footer>
+                                    </footer> 
                                 </form>
                             </div>
                             <div id="resultadoBusca"></div>
                         </div>
                     </div>
                 </article>
-            </div>
+            </div>                          
         </section>
         <!-- end widget grid -->
     </div>
@@ -164,23 +165,49 @@ include("inc/scripts.php");
 
 
 <script>
-    $(document).ready(function() {
-
-        $('#btnSearch').on("click", function() {
+    $(document).ready(function () {
+        
+        $('#btnSearch').on("click", function () {
             listarFiltro();
         });
-        $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_inicioReajusteCadastro.php');
+        
+        $('#btnNovo').on("click", function () {
+           novo();
         });
+        
     });
-
-
+   
     function listarFiltro() {
         var descricao = $('#descricao').val();
+        var descricaoMT = $('#descricaoMT').val();
+        var cbo = $('#cbo').val();
         var ativo = $('#ativo').val();
+       
+        if (descricao !== "") {
+            descricao = descricao.replace(/^\s+|\s+$/g, "");
+            descricao = encodeURIComponent(descricao);
+        }
+        if (descricaoMT !== "") {
+            descricaoMT = descricaoMT.replace(/^\s+|\s+$/g, "");
+            descricaoMT = encodeURIComponent(descricaoMT);
+        }
 
-        var parametrosUrl = '&descricao=' + descricao;
-        parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_inicioReajusteListagem.php?' + parametrosUrl);
+
+        var parametrosUrl = '&descricao=' + descricao + '&ativo=' + ativo + '&descricaoMT=' + descricaoMT + '&cbo=' + cbo;
+        $('#resultadoBusca').load('tabelaBasica_cargoFiltroListagem.php?' + parametrosUrl);
     }
-</script>
+    
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_CargoCadastro.php');
+    }
+
+    function seNumero(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+    
+</script>    
