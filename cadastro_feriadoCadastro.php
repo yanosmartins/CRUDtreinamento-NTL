@@ -5,7 +5,23 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
+$condicaoAcessarOK = (in_array('FERIADO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('FERIADO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('FERIADO_EXCLUIR', $arrayPermissao, true));
 
+if ($condicaoAcessarOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
+
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
 
 /* ---------------- PHP Custom Scripts ---------
 
