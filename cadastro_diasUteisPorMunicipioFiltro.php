@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["diasUteisPorMunicipio"]["active"] = true;
+$page_nav["cadastro"]["sub"]["diasUteisPorMunicipio"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -46,7 +46,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
+    $breadcrumbs["Cadastro"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -83,7 +83,7 @@ include("inc/nav.php");
 
                                                         <div class="row">
 
-                                                            
+
 
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="unidadeFederacao">UF</label>
@@ -123,7 +123,7 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                                        
+
                                                             <!-- COMENTADO TEMPORARIAMENTE POR FALTA DE USO DA NTL 
                                                                 <section class="col col-4 col-auto">
                                                                 <label class="label" for="cidade">Cidade</label>
@@ -235,10 +235,10 @@ include("inc/scripts.php");
 
         //Carrega a listagem através dos parâmetros armazenados
         var parametrosUrl = '&unidadeFederacaoFiltro=' + unidadeFederacaoFiltro + '&municipioFiltro=' + municipioFiltro + '&ativoFiltro=' + ativoFiltro;
-        $('#resultadoBusca').load('tabelaBasica_diasUteisPorMunicipioFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('cadastro_diasUteisPorMunicipioFiltroListagem.php?' + parametrosUrl);
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_diasUteisPorMunicipioCadastro.php');
+        $(location).attr('href', 'cadastro_diasUteisPorMunicipioCadastro.php');
     }
 </script>

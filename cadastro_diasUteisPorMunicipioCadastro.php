@@ -24,7 +24,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["diasUteisPorMunicipio"]["active"] = true;
+$page_nav["cadastro"]["sub"]["diasUteisPorMunicipio"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -34,7 +34,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
+    $breadcrumbs["Cadastro"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -78,7 +78,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select * from syscb.unidadeFederacao order by sigla";
+                                                                        $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
 
@@ -449,7 +449,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaDiasUteisPorMunicipio.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroDiasUteisPorMunicipio.js" type="text/javascript"></script>
 
 
 <!-- PAGE RELATED PLUGIN(S) 
@@ -638,11 +638,11 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_diasUteisPorMunicipioCadastro.php');
+        $(location).attr('href', 'cadastro_diasUteisPorMunicipioCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_diasUteisPorMunicipioFiltro.php');
+        $(location).attr('href', 'cadastro_diasUteisPorMunicipioFiltro.php');
     }
 
     function excluir() {
