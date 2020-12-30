@@ -144,7 +144,16 @@ include("inc/nav.php");
                                                                 <label class="select">
                                                                     <select id="municipio" name="municipio" class="required">
                                                                         <option></option>
-
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "select * from Ntl.municipio where ativo = 1 order by descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                            $id = +$row['codigo'];
+                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
