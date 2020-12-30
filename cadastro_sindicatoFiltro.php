@@ -87,7 +87,7 @@ include("inc/nav.php");
                                                                     <select id="nomeSindicato" name="nomeSindicato">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql = "SELECT codigo, descricao FROM syscb.sindicato WHERE (0=0) AND situacao = 1";
+                                                                        $sql = "SELECT codigo, descricao FROM Ntl.sindicato WHERE (0=0) AND situacao = 1";
                                                                         $result = $reposit->RunQuery($sql);
 
                                                                         while (($row = odbc_fetch_array($result))) {
@@ -96,12 +96,9 @@ include("inc/nav.php");
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
-
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
-
                                                             <section class="col col-2">
                                                                 <label class="label">Apelido</label>
                                                                 <label class="input">
@@ -110,21 +107,19 @@ include("inc/nav.php");
                                                                     <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">CNPJ</label>
                                                                 <label class="input">
                                                                     <input id="cnpj" name="cnpj" type="text" placeholder="XX.XXX.XXX/XXXX-XX" value="" autocomplete="off">
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
+                                                                        <option></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
-                                                                        <option></option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -138,7 +133,7 @@ include("inc/nav.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo Atendimento">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo Atendimento" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -228,11 +223,11 @@ include("inc/scripts.php");
                 // var projetoId = $("#projetoId").val();
                 // $("#projetoFiltro").val(projetoId);
                 // $("#projetoFiltro").trigger('change');
-         
+
             },
 
             change: function(event, ui) {
-               
+
                 if (ui.item === null) {
                     $("#apelidoId").val('');
                     $("#apelido").val('');
@@ -242,7 +237,7 @@ include("inc/scripts.php");
             return $("<li>")
                 .append("<a>" + highlight(item.label, this.term) + "</a>")
                 .appendTo(ul);
-                
+
         };
 
 

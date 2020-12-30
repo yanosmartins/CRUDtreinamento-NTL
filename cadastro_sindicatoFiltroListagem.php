@@ -15,8 +15,7 @@ include "js/repositorio.php";
             <tbody>
                 <?php
 
-
-                $sql = "SELECT codigo, descricao, apelido, cnpj, situacao FROM syscb.sindicato WHERE (0=0) ";
+                $sql = "SELECT codigo, descricao, apelido, cnpj, situacao FROM Ntl.sindicato WHERE (0=0) ";
                 
                 if ($_GET["nomeSindicato"] != 0) {
                     $codigo = $_GET["nomeSindicato"];
@@ -58,8 +57,6 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $apelido . '</td>';
                     echo '<td class="text-left">' . $cnpj . '</td>';
                     echo '<td class="text-left">' . $ativo . '</td>';
-
-
                     echo '</tr >';
                 }
                 ?>

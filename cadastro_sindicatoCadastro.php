@@ -5,6 +5,23 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
+$condicaoAcessarOK = (in_array('SINDICATO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('SINDICATO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('SINDICATO_EXCLUIR', $arrayPermissao, true));
+
+if ($condicaoAcessarOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
+
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
 
 
 /* ---------------- PHP Custom Scripts ---------
@@ -241,7 +258,6 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <div class="row">
-
                                                             <input id="perdaBeneficio" type="hidden" name="perdaBeneficio">
                                                             <section class="col col-2">
                                                                 <label class="label" for="qtdDiaFalta">Qtd. Dias Falta</label>
@@ -273,34 +289,27 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
                                                         </div>
                                                         <div class="row">
-                                                            
                                                             <!-- <input type="hidden" placeholder="0,00" id="valorDiarioCestaBasica" name="valorDiarioCestaBasica" style="text-align: right;" class=" decimal-2-casas" /> -->
-                                                            
                                                             <section class="col col-2  col-auto">
                                                                 <label class="label">Valor Diário</label>
                                                                 <label class="input"><i class="icon-append fa fa-money"></i>
                                                                     <input type="text" placeholder="0,00" id="valorDiarioCestaBasica" style="text-align: right;" name="valorDiarioCestaBasica" class="decimal-2-casas" />
                                                                 </label>
                                                             </section>
-
-
                                                             <section class="col col-2  col-auto">
                                                                 <label class="label">Valor Mensal</label>
                                                                 <label class="input"><i class="icon-append fa fa-money"></i>
                                                                     <input type="text" placeholder="0,00" id="valorMensalCestaBasica" name="valorMensalCestaBasica" style="text-align: right;" class=" decimal-2-casas" />
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2  col-auto">
                                                                 <label class="label">Desconto em Folha</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
                                                                     <input type="text" placeholder="0,00" maxlength="3" id="descontoFolhaCestaBasica" name="descontoFolhaCestaBasica" style="text-align: right;" class=" decimal-2-casas" />
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2  col-auto">
                                                                 <label class="label">Valor do Desconto</label>
                                                                 <label class="input"><i class="icon-append fa fa-money"></i>
@@ -308,13 +317,11 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend>Plano de Saúde</legend>
                                                             </section>
                                                         </div>
-
                                                         <div class="row">
                                                             <section class="col col-2  col-auto">
                                                                 <label class="label">Valor Desconto do Sindicato</label>
@@ -322,7 +329,6 @@ include("inc/nav.php");
                                                                     <input type="text" placeholder="0,00" id="valorBolsa" name="valorBolsa" style="text-align: right;" class="decimal-2-casas" />
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2  col-auto">
                                                                 <label class="label">Percentual Desconto do Sindicato</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
@@ -349,7 +355,6 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend>Seguro de Vida</legend>
@@ -361,16 +366,13 @@ include("inc/nav.php");
                                                                 <label class="select">
                                                                     <select id="seguroVida" name="seguroVida">
                                                                         <option value='' style="display:none;">Selecione</option>
-                                                                        <option value='0'>Sim</option>
-                                                                        <option value='1'>Não</option>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0'>Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
                                                         </div>
-
                                                     </fieldset>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -403,7 +405,6 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-
                                                         <!-- LEGENDA : DIURNO -->
                                                         <div class="row">
                                                             <section class="col col-12">
@@ -423,7 +424,6 @@ include("inc/nav.php");
                                                                     <input id="horaFinalAidicionalNoturno" placeholder="HH:MM" name="horaFinalAidicionalNoturno" autocomplete="off" type="text" class="" onchange="validateHhMm(this)">
                                                                 </label>
                                                             </section>
-
                                                             <!-- <section class="col col-2">
                                                                 <label>Clockpicker:</label>
                                                                 <div class="input-group">
@@ -446,13 +446,10 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-
-
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!-- ACCORDION DE ENDEREÇO  | MINIMIZE O CÓDIGO PARA TÊ-LO POR COMPLETO.-->
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -1504,7 +1501,6 @@ include("inc/scripts.php");
                             var valorBolsaBeneficio6h = piece[54];
                             var qtdDiaFalta = piece[55];
                             var qtdDiaAusencia = piece[56];
-
                             var diaUtilJaneiroVT = piece[57];
                             var diaUtilFevereiroVT = piece[58];
                             var diaUtilMarcoVT = piece[59];
@@ -1517,10 +1513,6 @@ include("inc/scripts.php");
                             var diaUtilOutubroVT = piece[66];
                             var diaUtilNovembroVT = piece[67];
                             var diaUtilDezembroVT = piece[68];
-                           
-                         
-                         
-                           
                             var codigoSindicatoSCI  = piece[69];
                             var descontarFeriasCestaBasica  = piece[70];
                          

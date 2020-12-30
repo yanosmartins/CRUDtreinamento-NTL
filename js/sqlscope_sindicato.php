@@ -33,15 +33,13 @@ function gravaSindicato()
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("VALETRANSPORTEUNITARIO_ACESSAR|VALETRANSPORTEUNITARIO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("SINDICATO_ACESSAR|SINDICATO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
         echo "failed#" . $mensagem . ' ';
         return;
     }
-
-    $reposit = new reposit();
 
     //Atributos de vale de transporte
     $sindicato = $_POST['sindicato'];
@@ -195,7 +193,7 @@ function gravaSindicato()
 
 
 
-    $sql = "syscb.sindicato_Atualiza(
+    $sql = "Ntl.sindicato_Atualiza(
         $codigo,
         $mesBase,
         $descricao,
@@ -269,7 +267,6 @@ function gravaSindicato()
         $xmlTelefone,
         $xmlEmail)";
 
-    $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
     $ret = 'sucess#';
@@ -291,7 +288,7 @@ function recuperaSindicato()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT * FROM syscb.sindicato WHERE codigo = " . $id;
+    $sql = "SELECT * FROM Ntl.sindicato WHERE codigo = " . $id;
 
 
     $reposit = new reposit();
@@ -379,8 +376,8 @@ function recuperaSindicato()
 
         $reposit = "";
         $result = "";
-        $sql = "SELECT * FROM syscb.sindicato SI 
-        INNER JOIN syscb.sindicatoTelefone ST ON SI.codigo = ST.sindicato WHERE SI.codigo = " . $id;
+        $sql = "SELECT * FROM Ntl.sindicato SI 
+        INNER JOIN Ntl.sindicatoTelefone ST ON SI.codigo = ST.sindicato WHERE SI.codigo = " . $id;
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
 
@@ -425,8 +422,8 @@ function recuperaSindicato()
 
         $reposit = "";
         $result = "";
-        $sql = "SELECT * FROM syscb.sindicato SI 
-        INNER JOIN syscb.sindicatoEmail SE ON SI.codigo = SE.sindicato WHERE SI.codigo = " . $id;
+        $sql = "SELECT * FROM Ntl.sindicato SI 
+        INNER JOIN Ntl.sindicatoEmail SE ON SI.codigo = SE.sindicato WHERE SI.codigo = " . $id;
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
 
@@ -546,7 +543,7 @@ function excluir()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("VALETRANSPORTEUNITARIO_ACESSAR|VALETRANSPORTEUNITARIO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("SINDICATO_ACESSAR|SINDICATO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -562,9 +559,8 @@ function excluir()
         return;
     }
 
-    $sql = "UPDATE syscb.sindicato SET situacao = 0 WHERE codigo = " . $codigo;
+    $sql = "UPDATE Ntl.sindicato SET situacao = 0 WHERE codigo = " . $codigo;
 
-    $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $ret = 'sucess#';
@@ -586,7 +582,7 @@ function pesquisaCnpj()
         $condicaocnpj = "'" . $_POST["cnpj"] . "'";
     }
 
-    $sql = "SELECT codigo, cnpj FROM syscb.sindicato WHERE cnpj = " . $condicaocnpj;
+    $sql = "SELECT codigo, cnpj FROM Ntl.sindicato WHERE cnpj = " . $condicaocnpj;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -646,7 +642,7 @@ function listaSindicatoAtivoAutoComplete()
     }
 
     $reposit = new reposit();
-    $sql = "SELECT codigo,apelido FROM syscb.sindicato WHERE (0=0) AND situacao = 1 AND apelido LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY descricao";
+    $sql = "SELECT codigo,apelido FROM Ntl.sindicato WHERE (0=0) AND situacao = 1 AND apelido LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY descricao";
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();

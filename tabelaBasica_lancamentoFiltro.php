@@ -93,7 +93,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select * from syscb.lancamento order by sigla";
+                                                                        $sql = "select * from Ntl.lancamento order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
 
