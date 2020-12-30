@@ -72,7 +72,7 @@ function recuperaClasse()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT codigo, descricao, reducaoBaseIR, ativo FROM dbo.classe WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, descricao, reducaoBaseIR, ativo FROM Ntl.classe WHERE (0=0) AND codigo = " . $id;
 
 
     $reposit = new reposit();
