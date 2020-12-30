@@ -26,15 +26,15 @@ include "js/repositorio.php";
 
                 if ($_GET["descricao"] != "") {
                     $descricao = $_GET["descricao"];
-                    $where = $where . " AND (classe.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
                 if ($_GET["reducaoBaseIR"] != "") {
                     $reducaoBaseIR = $_GET["reducaoBaseIR"];
-                    $where = $where . " AND (classe.reducaoBaseIR like '%' + " . "replace('" . $reducaoBaseIR . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (reducaoBaseIR like '%' + " . "replace('" . $reducaoBaseIR . "',' ','%') + " . "'%')";
                 }
                 if (isset($_GET["ativo"])) {
                     $ativo = $_GET["ativo"];
-                    $where = $where . " AND classe.ativo = $ativo ";
+                    $where = $where . " AND ativo = $ativo ";
                 }
 
                 $sql .= $where . $order;
