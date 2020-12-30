@@ -74,7 +74,7 @@ function grava()
     $quantidadeDiaDezembro = formatarNumero(+$_POST['qtdDiasDezembro']);
 
 
-    $sql = "syscb.diasUteisPorMunicipio_Atualiza(" . $id . "," .
+    $sql = "Ntl.diasUteisPorMunicipio_Atualiza(" . $id . "," .
         $ativo . "," .
         $unidadeFederacao . "," .
         $municipio .  "," .
@@ -129,8 +129,8 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = " SELECT DM.*, M.descricao FROM syscb.diasUteisPorMunicipio DM INNER JOIN 
-    syscb.municipio M ON DM.municipio = M.codigo WHERE (0=0) AND DM.codigo = ". $condicaoId;
+    $sql = " SELECT DM.*, M.descricao FROM Ntl.diasUteisPorMunicipio DM INNER JOIN 
+    Ntl.municipio M ON DM.municipio = M.codigo WHERE (0=0) AND DM.codigo = " . $condicaoId;
 
 
     $reposit = new reposit();
@@ -207,8 +207,7 @@ function excluir()
         return;
     }
 
-    $reposit = new reposit();
-    $sql = "UPDATE syscb.diasUteisPorMunicipio SET ativo = 0 WHERE (0=0) AND codigo = ". $id;
+    $sql = "UPDATE Ntl.diasUteisPorMunicipio SET ativo = 0 WHERE (0=0) AND codigo = " . $id;
     $result = $reposit->RunQuery($sql);
 
     if ($result < 1) {
@@ -225,7 +224,7 @@ function listaComboMunicipio()
     $id = $_POST["codigo"];
 
     if ($id != "") {
-        $sql = "SELECT * FROM syscb.municipio WHERE (0 =0) AND  unidadeFederacao = '" . $id . "' AND ativo = 1";
+        $sql = "SELECT * FROM Ntl.municipio WHERE (0 =0) AND  unidadeFederacao = '" . $id . "' AND ativo = 1";
     }
 
     $reposit = new reposit();

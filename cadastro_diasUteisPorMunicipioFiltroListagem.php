@@ -1,87 +1,86 @@
 <?php
-    include "js/repositorio.php"; 
+include "js/repositorio.php";
 ?>
 <div class="table-container">
     <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    
-                    
+
+
                     <th class="text-left" style="min-width:30px;">UF</th>
                     <th class="text-left" style="min-width:35px;">Município</th>
                     <!-- <th class="text-left" style="min-width:35px;">Cidade</th> -->
                     <th class="text-left" style="min-width:35px;">Ativo</th>
-                   
+
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                    
-                    // Instâncias de dias úteis por município.
-                    $unidadeFederacaoFiltro = "";
-                    $municipioFiltro = "";
-                    // $cidadeFiltro = "";
-                    $ativoFiltro = "";
-                    $where = "WHERE (0 = 0)";
-                    
-                    // Validações do filtro.
-                    if ($_GET["unidadeFederacaoFiltro"] != "") {
-                        $unidadeFederacaoFiltro = $_GET["unidadeFederacaoFiltro"];
-                        $where=$where." and (DUPM.[unidadeFederacao] like '%' + "."replace('".$unidadeFederacaoFiltro."',' ','%') + "."'%')";
-                    }
-                    
-                    // if ($_GET["cidadeFiltro"] != "") {
-                    //     $cidadeFiltro = $_GET["cidadeFiltro"];
-                    //     $where=$where." and (DUPM.[cidade] like '%' + "."replace('".$cidadeFiltro."',' ','%') + "."'%')";
-                    // }
-                    
-                     if ($_GET["municipioFiltro"] != "") {
-                        $municipioFiltro = $_GET["municipioFiltro"];
-                        $where=$where." and (DUPM.[municipio] = ". $municipioFiltro . ")";
-                    }
-                    
-                     if ($_GET["ativoFiltro"] != "") {
-                        $ativoFiltro = $_GET["ativoFiltro"];
-                         $where=$where." and (DUPM.[ativo] =" . $ativoFiltro . ")";
-                    }
-                    
-                    //Consulta SQL 
-                    $sql="SELECT DUPM.codigo, DUPM.unidadeFederacao, M.descricao, DUPM.cidade,  DUPM.ativo FROM syscb.diasUteisPorMunicipio DUPM
-                    INNER JOIN syscb.municipio M ON M.codigo = DUPM.municipio ";
-                    $sql=$sql.$where;
-                     
-                    $reposit = new reposit();                                       
-                    $result=$reposit->RunQuery($sql);
+                <?php
 
-                    while (($row = odbc_fetch_array($result))) {
-                        $id = +$row['codigo']; 
-                        $municipio = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                        // $cidade = mb_convert_encoding($row['cidade'], 'UTF-8', 'HTML-ENTITIES');
-                        $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
-                        $ativo = +$row['ativo'];
-                        
-                        //Modifica os valores booleanos por Sim e Não.
-                        //Ativo
-                        if ($ativo==1){
-                            $descricaoAtivo = "Sim";
-                        }
-                        else{
-                            $descricaoAtivo = "Não";                            
-                        }
-                         
-                        echo '<tr >'; 
-                        echo '<td class="text-left">'.$unidadeFederacao.'</td>';
-                        echo '<td class="text-left"><a href="tabelaBasica_diasUteisPorMunicipioCadastro.php?codigo='.$id.'">'.$municipio.'</a></td>';
-                        // echo '<td class="text-left">'.$cidade.'</td>'; 
-                        echo '<td class="text-left">'.$descricaoAtivo.'</td>';
-                        echo '</tr >';
+                // Instâncias de dias úteis por município.
+                $unidadeFederacaoFiltro = "";
+                $municipioFiltro = "";
+                // $cidadeFiltro = "";
+                $ativoFiltro = "";
+                $where = "WHERE (0 = 0)";
+
+                // Validações do filtro.
+                if ($_GET["unidadeFederacaoFiltro"] != "") {
+                    $unidadeFederacaoFiltro = $_GET["unidadeFederacaoFiltro"];
+                    $where = $where . " and (DUPM.[unidadeFederacao] like '%' + " . "replace('" . $unidadeFederacaoFiltro . "',' ','%') + " . "'%')";
+                }
+
+                // if ($_GET["cidadeFiltro"] != "") {
+                //     $cidadeFiltro = $_GET["cidadeFiltro"];
+                //     $where=$where." and (DUPM.[cidade] like '%' + "."replace('".$cidadeFiltro."',' ','%') + "."'%')";
+                // }
+
+                if ($_GET["municipioFiltro"] != "") {
+                    $municipioFiltro = $_GET["municipioFiltro"];
+                    $where = $where . " and (DUPM.[municipio] = " . $municipioFiltro . ")";
+                }
+
+                if ($_GET["ativoFiltro"] != "") {
+                    $ativoFiltro = $_GET["ativoFiltro"];
+                    $where = $where . " and (DUPM.[ativo] =" . $ativoFiltro . ")";
+                }
+
+                //Consulta SQL 
+                $sql = "SELECT DUPM.codigo, DUPM.unidadeFederacao, M.descricao, DUPM.cidade,  DUPM.ativo FROM Ntl.diasUteisPorMunicipio DUPM
+                    INNER JOIN Ntl.municipio M ON M.codigo = DUPM.municipio ";
+                $sql = $sql . $where;
+
+                $reposit = new reposit();
+                $result = $reposit->RunQuery($sql);
+
+                while (($row = odbc_fetch_array($result))) {
+                    $id = +$row['codigo'];
+                    $municipio = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                    // $cidade = mb_convert_encoding($row['cidade'], 'UTF-8', 'HTML-ENTITIES');
+                    $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
+                    $ativo = +$row['ativo'];
+
+                    //Modifica os valores booleanos por Sim e Não.
+                    //Ativo
+                    if ($ativo == 1) {
+                        $descricaoAtivo = "Sim";
+                    } else {
+                        $descricaoAtivo = "Não";
                     }
-                ?>               
+
+                    echo '<tr >';
+                    echo '<td class="text-left">' . $unidadeFederacao . '</td>';
+                    echo '<td class="text-left"><a href=cadastro_diasUteisPorMunicipioCadastro.php?codigo=' . $id . '">' . $municipio . '</a></td>';
+                    // echo '<td class="text-left">'.$cidade.'</td>'; 
+                    echo '<td class="text-left">' . $descricaoAtivo . '</td>';
+                    echo '</tr >';
+                }
+                ?>
             </tbody>
-        </table>        
-    </div>    
-</div>    
+        </table>
+    </div>
+</div>
 <!-- PAGE RELATED PLUGIN(S) -->
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
@@ -89,8 +88,8 @@
 <script src="js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css"/>
- 
+<link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css" />
+
 <script type="text/javascript" src="js/plugin/JSZip-2.5.0/jszip.min.js"></script>
 <script type="text/javascript" src="js/plugin/pdfmake-0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="js/plugin/pdfmake-0.1.36/vfs_fonts.js"></script>
@@ -101,7 +100,7 @@
 
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         var responsiveHelper_datatable_tabletools = undefined;
 
         var breakpointDefinition = {
@@ -115,8 +114,8 @@
             // Tabletools options:
             //   https://datatables.net/extensions/tabletools/button_options
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'B'l'C>r>" +
-                    "t" +
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+                "t" +
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
             "oLanguage": {
                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>',
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -143,22 +142,28 @@
             "buttons": [
                 //{extend: 'copy', className: 'btn btn-default'},
                 //{extend: 'csv', className: 'btn btn-default'},
-                {extend: 'excel', className: 'btn btn-default'},
-                {extend: 'pdf', className: 'btn btn-default'},
+                {
+                    extend: 'excel',
+                    className: 'btn btn-default'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn btn-default'
+                },
                 //{extend: 'print', className: 'btn btn-default'}
             ],
             "autoWidth": true,
-            
-            "preDrawCallback": function () {
+
+            "preDrawCallback": function() {
                 // Initialize the responsive datatables helper once.
                 if (!responsiveHelper_datatable_tabletools) {
                     responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#tableSearchResult'), breakpointDefinition);
                 }
             },
-            "rowCallback": function (nRow) {
+            "rowCallback": function(nRow) {
                 responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
             },
-            "drawCallback": function (oSettings) {
+            "drawCallback": function(oSettings) {
                 responsiveHelper_datatable_tabletools.respond();
             }
         });
