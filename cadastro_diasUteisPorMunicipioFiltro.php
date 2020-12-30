@@ -92,7 +92,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select * from syscb.unidadeFederacao order by sigla";
+                                                                        $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
 
@@ -111,7 +111,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = " select * from syscb.municipio where ativo = 1 order by descricao";
+                                                                        $sql = " select * from Ntl.municipio where ativo = 1 order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
                                                                             $codigo = +$row['codigo'];

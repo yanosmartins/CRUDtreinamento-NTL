@@ -71,7 +71,7 @@ include "js/repositorio.php";
 
                     echo '<tr >';
                     echo '<td class="text-left">' . $unidadeFederacao . '</td>';
-                    echo '<td class="text-left"><a href=cadastro_diasUteisPorMunicipioCadastro.php?codigo=' . $id . '">' . $municipio . '</a></td>';
+                    echo "<td class=\"text-left\"><a href=cadastro_diasUteisPorMunicipioCadastro.php?codigo=$id>" . $municipio . '</a></td>';
                     // echo '<td class="text-left">'.$cidade.'</td>'; 
                     echo '<td class="text-left">' . $descricaoAtivo . '</td>';
                     echo '</tr >';
