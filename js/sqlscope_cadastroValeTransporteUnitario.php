@@ -50,14 +50,14 @@ function grava()
     } else {
         $ativo = +$_POST["ativo"];
     }
- 
+
     session_start();
     $usuario = formatarString($_SESSION['login']);  //Pegando o nome do usuário mantido pela sessão.
     $unidadeFederacao = formatarString($_POST['unidadeFederacao']);
     $descricao = formatarString($_POST['descricao']);
     $valorUnitario = formatarNumero($_POST['valorUnitario']);
 
-    $sql = "syscb.valeTransporteUnitario_Atualiza(" . $id . "," . $ativo . "," . $unidadeFederacao . "," . $descricao . "," . $valorUnitario . "," . $usuario . ") ";
+    $sql = "Ntl.valeTransporteUnitario_Atualiza(" . $id . "," . $ativo . "," . $unidadeFederacao . "," . $descricao . "," . $valorUnitario . "," . $usuario . ") ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -96,7 +96,7 @@ function recupera()
     }
 
     $sql = "SELECT VTU.[codigo], VTU.[descricao], VTU.[valorUnitario], VTU.[unidadeFederacao], VTU.[ativo]
-                FROM [syscb].[valeTransporteUnitario] VTU WHERE (0 = 0)";
+                FROM [Ntl].[valeTransporteUnitario] VTU WHERE (0 = 0)";
 
     if ($condicaoId) {
         $sql = $sql . " AND VTU.codigo = " . $usuarioIdPesquisa . " ";
@@ -171,9 +171,9 @@ function verificaDescricao()
         echo "failed#" . $mensagem . ' ';
         return;
     }
-    $descricao = "'".$_POST["descricao"]."'";
-    
-    $sql = "SELECT * FROM syscb.valeTransporteUnitario WHERE (0=0) AND descricao = ". $descricao;
+    $descricao = "'" . $_POST["descricao"] . "'";
+
+    $sql = "SELECT * FROM Ntl.valeTransporteUnitario WHERE (0=0) AND descricao = " . $descricao;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 

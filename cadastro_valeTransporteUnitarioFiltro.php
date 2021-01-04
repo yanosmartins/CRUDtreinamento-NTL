@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["valeTransporteUnitario"]["active"] = true;
+$page_nav["cadastro"]["sub"]["valeTransporteUnitario"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -46,7 +46,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
+    $breadcrumbs["Cadastro"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -107,7 +107,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select * from syscb.unidadeFederacao order by sigla";
+                                                                        $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
                                                                             $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
@@ -222,10 +222,10 @@ include("inc/scripts.php");
 
         var parametrosUrl = '&descricaoFiltro=' + descricaoFiltro + '&valorMinimo=' + valorMinimo + '&valorMaximo=' +
             valorMaximo + '&unidadeFederacao=' + unidadeFederacao + '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_valeTransporteUnitarioFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('cadastro_valeTransporteUnitarioFiltroListagem.php?' + parametrosUrl);
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_valeTransporteUnitarioCadastro.php');
+        $(location).attr('href', 'cadastro_valeTransporteUnitarioCadastro.php');
     }
 </script>

@@ -24,7 +24,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["valeTransporteUnitario"]["active"] = true;
+$page_nav["cadastro"]["sub"]["valeTransporteUnitario"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -34,7 +34,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
+    $breadcrumbs["Cadastro"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -90,7 +90,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select * from syscb.unidadeFederacao order by sigla";
+                                                                        $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
                                                                             $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
@@ -172,7 +172,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaValeTransporteUnitario.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroValeTransporteUnitario.js" type="text/javascript"></script>
 
 
 <!-- PAGE RELATED PLUGIN(S) 
@@ -264,12 +264,12 @@ include("inc/scripts.php");
         });
 
         $("#btnGravar").on("click", function() {
-        var verifica = $("#verificaRecuperacao").val();
-        if(verifica == 1){
-            gravar();
-        }else{
-            verificaDescricaoExistente();
-        }
+            var verifica = $("#verificaRecuperacao").val();
+            if (verifica == 1) {
+                gravar();
+            } else {
+                verificaDescricaoExistente();
+            }
         });
 
         $("#btnVoltar").on("click", function() {
@@ -323,11 +323,11 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_valeTransporteUnitarioCadastro.php');
+        $(location).attr('href', 'cadastro_valeTransporteUnitarioCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_valeTransporteUnitarioFiltro.php');
+        $(location).attr('href', 'cadastro_valeTransporteUnitarioFiltro.php');
     }
 
     function excluir() {
@@ -372,6 +372,7 @@ include("inc/scripts.php");
 
         );
     }
+
     function gravar() {
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
@@ -400,7 +401,7 @@ include("inc/scripts.php");
             $("#btnGravar").prop('disabled', false);
             return;
         }
- 
+
         //Chama a função de gravar do business de vale transporte.
         gravaValeTransporteUnitario(id, ativo, unidadeFederacao, descricao, valorUnitario,
             function(data) {

@@ -25,7 +25,7 @@ include "js/repositorio.php";
                 $where = "WHERE (0 = 0)";
 
                 $sql = "SELECT VTU.[codigo], VTU.[descricao], VTU.[valorUnitario], VTU.[unidadeFederacao], VTU.[ativo]"
-                    . " FROM [syscb].[valeTransporteUnitario] VTU ";
+                    . " FROM [Ntl].[valeTransporteUnitario] VTU ";
 
                 //Condições de pesquisa: 
                 if ($_GET["descricaoFiltro"] != "") {
@@ -42,7 +42,7 @@ include "js/repositorio.php";
                     $valorMaximo = +$_GET["valorMaximo"];
                     $where =  $where . " AND VTU.[valorUnitario] <= " . $valorMaximo;
                 }
-  
+
                 if ($_GET["unidadeFederacao"] != "") {
                     $unidadeFederacao = $_GET["unidadeFederacao"];
                     $where = $where . " AND VTU.[unidadeFederacao] = '" . $unidadeFederacao . "'";
@@ -72,7 +72,7 @@ include "js/repositorio.php";
                     }
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_valeTransporteUnitarioCadastro.php?id=' . $id . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left"><a href="cadastro_valeTransporteUnitarioCadastro.php?id=' . $id . '">' . $descricao . '</a></td>';
                     echo '<td class="text-right"> R$ ' . number_format(round($valorUnitario, 2), 2, ',', '.') . '</td>';
                     echo '<td class="text-left">' . $uf . '</td>';
                     echo '<td class="text-left">' . $descricaoAtivo . '</td>';
