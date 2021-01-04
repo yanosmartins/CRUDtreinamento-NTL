@@ -26,7 +26,7 @@ include "js/repositorio.php";
 
                 $where = "WHERE (0 = 0)";
 
-                $sql = "SELECT VTM.codigo, VTM.descricao, VTM.ativo, VTM.valorTotal FROM syscb.valeTransporteModal VTM ";
+                $sql = "SELECT VTM.codigo, VTM.descricao, VTM.ativo, VTM.valorTotal FROM Ntl.valeTransporteModal VTM ";
 
                 if ($_GET["descricao"] != "") {
                     $descricao = $_GET["descricao"];
@@ -66,7 +66,7 @@ include "js/repositorio.php";
                     }
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_valeTransporteModalCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left"><a href="cadastro_valeTransporteModalCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
                     echo '<td class="text-left"> R$ ' . number_format(round($valorTotal, 2), 2, ',', '.') . '</td>';
                     echo '<td class="text-left">' . $ativo . '</td>';
 

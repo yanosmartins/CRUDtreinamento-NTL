@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["valeTransporteModal"]["active"] = true;
+$page_nav["cadastro"]["sub"]["valeTransporteModal"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -46,7 +46,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
+    $breadcrumbs["Cadastro"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -198,7 +198,7 @@ include("inc/scripts.php");
         if (valorMaximo != "") {
             valorMaximo = parseFloat(valorMaximo.toString().replace(".", "").replace(",", ".")); //Transforma os valores em float.
         }
-  
+
         if (descricao !== "") {
             descricao = descricao.replace(/^\s+|\s+$/g, "");
             descricao = encodeURIComponent(descricao);
@@ -207,10 +207,10 @@ include("inc/scripts.php");
         var parametrosUrl = '&descricao=' + descricao + '&valorMinimo=' + valorMinimo + '&valorMaximo=' + valorMaximo +
             '&ativo=' + ativo;
 
-        $('#resultadoBusca').load('tabelaBasica_valeTransporteModalFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('cadastro_valeTransporteModalFiltroListagem.php?' + parametrosUrl);
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_valeTransporteModalCadastro.php');
+        $(location).attr('href', 'cadastro_valeTransporteModalCadastro.php');
     }
 </script>

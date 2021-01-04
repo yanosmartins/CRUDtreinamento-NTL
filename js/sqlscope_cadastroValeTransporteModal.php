@@ -11,18 +11,19 @@ if ($funcao == 'recupera') {
 if ($funcao == 'recuperaValeTransporteUnitario') {
     call_user_func($funcao);
 }
- 
+
 if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
 if ($funcao == 'verificaDescricao') {
     call_user_func($funcao);
 }
- 
+
 return;
-function grava() {
+function grava()
+{
     $reposit = new reposit(); //Abre a conexão. 
-    
+
     //Verifica permissões
     $possuiPermissao = $reposit->PossuiPermissao("VALETRANSPORTEMODAL_ACESSAR|VALETRANSPORTEMODAL_GRAVAR");
     if ($possuiPermissao === 0) {
@@ -30,9 +31,9 @@ function grava() {
         echo "failed#" . $mensagem . ' ';
         return;
     }
- 
+
     $reposit = new reposit();
- 
+
     //Atributos de dias úteis por município
     if ((empty($_POST['id'])) || (!isset($_POST['id'])) || (is_null($_POST['id']))) {
         $id = 0;
@@ -44,12 +45,12 @@ function grava() {
     } else {
         $ativo = +$_POST["ativo"];
     }
-    
+
     //Variáveis que estão sendo passadas.
     session_start();
     $usuario = formatarString($_SESSION['login']);  //Pegando o nome do usuário mantido pela sessão.
-    $descricao = formatarString($_POST['descricao']); 
-    $valorTotal = formatarNumero($_POST['valorTotal']); 
+    $descricao = formatarString($_POST['descricao']);
+    $valorTotal = formatarNumero($_POST['valorTotal']);
 
     //Início do Json
     $strValeTransporteModal = $_POST["jsonValeTransporteModal"];
@@ -71,7 +72,7 @@ function grava() {
                 }
                 if (($campo === "descricaoValeTransporteModal")) {
                     continue;
-                } 
+                }
                 $xmlValeTransporteModal = $xmlValeTransporteModal . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
             $xmlValeTransporteModal = $xmlValeTransporteModal . "</" . $nomeTabela . ">";
@@ -90,7 +91,7 @@ function grava() {
     }
     $xmlValeTransporteModal = "'" . $xmlValeTransporteModal . "'";
     //Fim do Json
-    $sql = "syscb.valeTransporteModal_Atualiza(" . $id . "," . $ativo . "," . $descricao . ",". $valorTotal . "," . $usuario . ",". $xmlValeTransporteModal.") ";
+    $sql = "Ntl.valeTransporteModal_Atualiza(" . $id . "," . $ativo . "," . $descricao . "," . $valorTotal . "," . $usuario . "," . $xmlValeTransporteModal . ") ";
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
@@ -100,7 +101,8 @@ function grava() {
     echo $ret;
     return;
 }
-function recupera() {
+function recupera()
+{
     $condicaoId = !((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"])));
     $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
     if (($condicaoId === false) && ($condicaoLogin === false)) {
@@ -119,50 +121,51 @@ function recupera() {
     if ($condicaoLogin) {
         $loginPesquisa = $_POST["loginPesquisa"];
     }
-    $sql = "SELECT * FROM syscb.valeTransporteModal  VTM WHERE (0=0)";
+    $sql = "SELECT * FROM Ntl.valeTransporteModal  VTM WHERE (0=0)";
     if ($condicaoId) {
         $sql = $sql . " AND VTM.codigo = " . $valeTransporteModalIdPesquisa . " ";
-    } 
-    
+    }
+
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
     $out = "";
-    
+
     if (($row = odbc_fetch_array($result))) {
         $id = +$row['codigo'];
-        $ativo = +$row['ativo']; 
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES'); 
-        $valorTotal = mb_convert_encoding($row['valorTotal'], 'UTF-8', 'HTML-ENTITIES'); 
-          
+        $ativo = +$row['ativo'];
+        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+        $valorTotal = mb_convert_encoding($row['valorTotal'], 'UTF-8', 'HTML-ENTITIES');
+
         $out = $id . "^" . $descricao . "^" . $ativo . "^" .  $valorTotal;
-        
+
         // Recupera JSON de transporte modal
         $sqlValeTransporteModal = "SELECT VTMD.codigo, VTMD.valeTransporteModal, VTU.descricao, VTMD.valeTransporteUnitario, VTMD.valorUnitario
-        FROM syscb.valeTransporteModalDetalhe VTMD
-        INNER JOIN syscb.valeTransporteUnitario VTU ON VTU.codigo = VTMD.valeTransporteUnitario
+        FROM Ntl.valeTransporteModalDetalhe VTMD
+        INNER JOIN Ntl.valeTransporteUnitario VTU ON VTU.codigo = VTMD.valeTransporteUnitario
         WHERE (0=0) AND VTMD.valeTransporteModal =" . $id;
         $repositValeTransporteModal = new reposit();
         $resultValeTransporteModal = $repositValeTransporteModal->RunQuery($sqlValeTransporteModal);
         $contadorValeTransporteModal = 0;
         $arrayValeTransporteModal = array();
         while (($row = odbc_fetch_array($resultValeTransporteModal))) {
-            
-            $valeTransporteUnitarioId = $row['codigo'];  
-            $descricaoValeTransporteModal =  mb_convert_encoding($row["descricao"], 'UTF-8', 'HTML-ENTITIES'); 
+
+            $valeTransporteUnitarioId = $row['codigo'];
+            $descricaoValeTransporteModal =  mb_convert_encoding($row["descricao"], 'UTF-8', 'HTML-ENTITIES');
             $valeTransporteUnitario = $row['valeTransporteUnitario'];
             $valorUnitario = $row["valorUnitario"];
-          
-           
+
+
             $contadorValeTransporteModal = $contadorValeTransporteModal + 1;
             $arrayValeTransporteModal[] = array(
                 "valeTransporteUnitarioId" => $valeTransporteUnitarioId,
-                "sequencialValeTransporteModal" => $contadorValeTransporteModal, 
+                "sequencialValeTransporteModal" => $contadorValeTransporteModal,
                 "descricaoValeTransporteModal" => $descricaoValeTransporteModal,
                 "valeTransporteUnitario" => $valeTransporteUnitario,
-                "valorUnitario" => $valorUnitario, );
+                "valorUnitario" => $valorUnitario,
+            );
         }
         $strArrayValeTransporteModal = json_encode($arrayValeTransporteModal);
-         
+
         if ($out == "") {
             echo "failed|";
         }
@@ -171,12 +174,13 @@ function recupera() {
         }
         return;
     }
-} 
- 
-function recuperaValeTransporteUnitario() {
+}
+
+function recuperaValeTransporteUnitario()
+{
     $id = $_POST['id'];
- 
-    $sql = "SELECT VTU.valorUnitario, VTU.unidadeFederacao FROM syscb.valeTransporteUnitario VTU WHERE (0=0) AND VTU.codigo = " . $id;
+
+    $sql = "SELECT VTU.valorUnitario, VTU.unidadeFederacao FROM Ntl.valeTransporteUnitario VTU WHERE (0=0) AND VTU.codigo = " . $id;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
     $out = "";
@@ -192,9 +196,9 @@ function recuperaValeTransporteUnitario() {
         }
         return;
     }
-    
 }
-function excluir() {
+function excluir()
+{
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("VALETRANSPORTEMODAL_ACESSAR|VALETRANSPORTEMODAL_EXCLUIR");
     if ($possuiPermissao === 0) {
@@ -208,12 +212,12 @@ function excluir() {
         echo "failed#" . $mensagem . ' ';
         return;
     }
-  
+
     $reposit = new reposit();
-    $result = $reposit->update('valeTransporteModal'.'|'.'ativo = 0' . '|'. 'codigo ='. $id); 
-     
+    $result = $reposit->update('valeTransporteModal' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+
     if ($result < 1) {
-        echo('failed#');
+        echo ('failed#');
         return;
     }
     echo 'sucess#' . $result;
@@ -229,9 +233,9 @@ function verificaDescricao()
         echo "failed#" . $mensagem . ' ';
         return;
     }
-    $descricao = "'".$_POST["descricao"]."'";
-    
-    $sql = "SELECT * FROM syscb.valeTransporteModal WHERE (0=0) AND descricao = ". $descricao;
+    $descricao = "'" . $_POST["descricao"] . "'";
+
+    $sql = "SELECT * FROM Ntl.valeTransporteModal WHERE (0=0) AND descricao = " . $descricao;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
@@ -288,5 +292,4 @@ function formataDataRecuperacao($campo)
     $diaCampo = explode(" ", $campo[2]);
     $campo = $diaCampo[0] . "/" . $campo[1] . "/" . $campo[0];
     return $campo;
-} 
- 
+}

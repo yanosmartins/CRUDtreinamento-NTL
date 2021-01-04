@@ -15,16 +15,16 @@ $page_css[] = "your_style.css";
 include("inc/header.php");
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["valeTransporteModal"]["active"] = true;
+$page_nav["cadastro"]["sub"]["valeTransporteModal"]["active"] = true;
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
     <?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
+    $breadcrumbs["Cadastro"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -41,7 +41,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formCliente" method="post" enctype="multipart/form-data">    
+                                <form class="smart-form client-form" id="formCliente" method="post" enctype="multipart/form-data">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -55,19 +55,19 @@ include("inc/nav.php");
                                             </div>
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
-                                                    <input id="verificaRecuperacao" name="verificaRecuperacao" type="text"  readonly class="hidden" value="">
-                                                      
-                                                    <fieldset >  
+                                                    <input id="verificaRecuperacao" name="verificaRecuperacao" type="text" readonly class="hidden" value="">
+
+                                                    <fieldset>
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend>Informações do Modal</legend>
                                                             </section>
                                                         </div>
-                                                          
+
                                                         <div class="row">
                                                             <input id="codigo" name="codigo" type="text" class="hidden" value="">
 
-                                                            <section class="col col-6 col-auto"> 
+                                                            <section class="col col-6 col-auto">
                                                                 <label class="label" for="descricao">Descrição</label>
                                                                 <label class="input">
                                                                     <input id="descricao" name="descricao" type="text" maxlength="50" autocomplete="off" class="required" required>
@@ -77,22 +77,22 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required" required> 
+                                                                    <select id="ativo" name="ativo" class="required" required>
                                                                         <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
-                                                                </label>  
+                                                                </label>
                                                             </section>
 
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="valorTotal">Valor Total</label>
                                                                 <label class="input"><i class="icon-append fa fa-usd"></i>
-                                                                    <input type="text" id="valorTotal" placeholder="0,00" name="valorTotal"  class="readonly decimal-2-casas text-right" disabled>
+                                                                    <input type="text" id="valorTotal" placeholder="0,00" name="valorTotal" class="readonly decimal-2-casas text-right" disabled>
                                                                 </label>
-                                                            </section> 
+                                                            </section>
 
                                                         </div>
-                                                         
+
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend>Itens do modal</legend>
@@ -105,16 +105,16 @@ include("inc/nav.php");
                                                         <div class="row" id="formValeTransporteModal" name="formValeTransporteModal">
                                                             <input id="valeTransporteModalDetalheId" name="valeTransporteModalDetalheId" type="hidden" value="">
                                                             <input id="sequencialValeTransporteModal" name="sequencialValeTransporteModal" type="hidden" value="">
-                                                            <input id="descricaoValeTransporteModal" name="descricaoValeTransporteModal" type="hidden" value=""> 
-                                                            
+                                                            <input id="descricaoValeTransporteModal" name="descricaoValeTransporteModal" type="hidden" value="">
+
                                                             <section class="col col-6 col-auto">
-                                                                <label class="label" for="valeTransporteUnitario">Transporte Unitário</label> 
+                                                                <label class="label" for="valeTransporteUnitario">Transporte Unitário</label>
                                                                 <label class="select">
-                                                                    <select id="valeTransporteUnitario" name="valeTransporteUnitario" class="required" required >
+                                                                    <select id="valeTransporteUnitario" name="valeTransporteUnitario" class="required" required>
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select VTU.codigo, VTU.descricao  from syscb.valeTransporteUnitario VTU order by descricao";
+                                                                        $sql = "select VTU.codigo, VTU.descricao  from Ntl.valeTransporteUnitario VTU order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
                                                                             $id = +$row['codigo'];
@@ -123,17 +123,17 @@ include("inc/nav.php");
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
-                                                                </label> 
-                                                            </section> 
+                                                                </label>
+                                                            </section>
 
                                                             <section class="col col-2">
                                                                 <label class="label" for="unidadeFederacao">UF</label>
                                                                 <label class="select">
-                                                                    <select id="unidadeFederacao" name="unidadeFederacao" class="readonly" disabled >
+                                                                    <select id="unidadeFederacao" name="unidadeFederacao" class="readonly" disabled>
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select sigla  from syscb.unidadeFederacao order by sigla";
+                                                                        $sql = "select sigla  from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
                                                                             $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
@@ -141,22 +141,23 @@ include("inc/nav.php");
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
-                                                                </label> 
-                                                            </section> 
-                                                            
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="valorUnitario">Valor Unitário</label>
-                                                                <label class="input"><i class="icon-append fa fa-usd"></i>
-                                                                    <input type="text" id="valorUnitario" name="valorUnitario" placeholder="0,00"  class="readonly decimal-2-casas text-right" readonly>
                                                                 </label>
                                                             </section>
 
-                                                            
-                                                        </div>  
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="valorUnitario">Valor Unitário</label>
+                                                                <label class="input"><i class="icon-append fa fa-usd"></i>
+                                                                    <input type="text" id="valorUnitario" name="valorUnitario" placeholder="0,00" class="readonly decimal-2-casas text-right" readonly>
+                                                                </label>
+                                                            </section>
 
-                                                        <div class="row">  <!-- Botões da lista --> 
+
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <!-- Botões da lista -->
                                                             <section class="col col-12">
-                                                               
+
                                                                 <button id="btnAddValeTransporteModal" type="button" class="btn btn-primary" title="Adicionar vale de transporte modal">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
@@ -172,7 +173,7 @@ include("inc/nav.php");
                                                                     <tr role="row">
                                                                         <th></th>
                                                                         <th class="text-left" style="min-width: 10px;">Transporte Unitário</th>
-                                                                        <th class="text-left" style="min-width: 10px;">Valor</th> 
+                                                                        <th class="text-left" style="min-width: 10px;">Valor</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -180,19 +181,17 @@ include("inc/nav.php");
                                                             </table>
                                                         </div>
                                                     </fieldset>
-                                                </div>                                                        
+                                                </div>
                                             </div>
 
                                         </div>
 
-                                    </div> 
+                                    </div>
                                     <footer>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
-                                            <span class="fa fa-trash" ></span>
+                                            <span class="fa fa-trash"></span>
                                         </button>
-                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
-                                             tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" 
-                                             style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                                                 <span id="ui-id-2" class="ui-dialog-title">
                                                 </span>
@@ -206,19 +205,19 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-floppy-o" ></span>
+                                            <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o" ></span>
+                                            <span class="fa fa-file-o"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward " ></span>
+                                            <span class="fa fa-backward "></span>
                                         </button>
                                     </footer>
-                                </form>                                            
+                                </form>
                             </div>
-                        </div>                                
-                    </div>                                
+                        </div>
+                    </div>
                 </article>
             </div>
         </section>
@@ -243,7 +242,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaValeTransporteModal.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroValeTransporteModal.js" type="text/javascript"></script>
 
 
 <!-- PAGE RELATED PLUGIN(S) 
@@ -274,14 +273,14 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
 
 
-<script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>   
+<script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 
 
 
 <script language="JavaScript" type="text/javascript">
     //Transforma  os atributos das listas em JSON
     jsonValeTransporteModalArray = JSON.parse($("#JsonValeTransporteModal").val());
-    $(document).ready(function () {
+    $(document).ready(function() {
         carregaPagina();
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
@@ -290,35 +289,35 @@ include("inc/scripts.php");
             modal: true,
             title: "Atenção",
             buttons: [{
-                    html: "Excluir registro",
-                    "class": "btn btn-success",
-                    click: function () {
-                        $(this).dialog("close");
-                        excluir();
-                    }
-                }, {
-                    html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                    "class": "btn btn-default",
-                    click: function () {
-                        $(this).dialog("close");
-                    }
-                }]
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
         });
         //Ações dos botões de vale transporte modal
         //Adicionar um registro na lista.
-        $('#btnAddValeTransporteModal').on("click", function () {
- 
+        $('#btnAddValeTransporteModal').on("click", function() {
+
             if (validaValeTransporteModal() === true) {
                 addValeTransporteModal();
             }
-        }); 
-        
-        
-        $('#btnRemoverValeTransporteModal').on("click", function () {
+        });
+
+
+        $('#btnRemoverValeTransporteModal').on("click", function() {
             excluirValeTransporteModal();
         });
-        
-        $("#btnExcluir").on("click", function () {
+
+        $("#btnExcluir").on("click", function() {
             var id = $("#codigo").val();
             if (id === 0) {
                 smartAlert("Atenção", "Selecione um registro para excluir !", "error");
@@ -329,29 +328,31 @@ include("inc/scripts.php");
                 $('#dlgSimpleExcluir').dialog('open');
             }
         });
-  
-        $("#btnNovo").on("click", function () {
+
+        $("#btnNovo").on("click", function() {
             novo();
         });
-        $("#btnGravar").on("click", function () {
+        $("#btnGravar").on("click", function() {
             var verifica = $("#verificaRecuperacao").val();
-            if(verifica == 1){
+            if (verifica == 1) {
                 gravar();
-            }else{
+            } else {
                 verificaDescricaoExistente();
             }
         });
-        $("#btnVoltar").on("click", function () {
+        $("#btnVoltar").on("click", function() {
             voltar();
         });
-        $('.dinheiro').mask('#.##9,99', {reverse: true});
-        $("#valeTransporteUnitario").on("change", function () {
+        $('.dinheiro').mask('#.##9,99', {
+            reverse: true
+        });
+        $("#valeTransporteUnitario").on("change", function() {
             var id = $("#valeTransporteUnitario").val();
-            
-           
-            if(id>0){
-            recuperaValorTransporteUnitario(id,
-                    function (data) {
+
+
+            if (id > 0) {
+                recuperaValorTransporteUnitario(id,
+                    function(data) {
                         if (data.indexOf('failed') > -1) {
                             return;
                         } else {
@@ -361,10 +362,10 @@ include("inc/scripts.php");
                             var out = piece[1];
                             piece = out.split("^");
                             // Atributos de vale transporte unitário que serão recuperados: 
-                           
+
                             var valorUnitario = piece[0];
                             var unidadeFederacao = piece[1];
-                            
+
                             //Mostra apenas dois pontos decimais para o usuário, e com vírgula.
                             valorUnitario = (Math.round(valorUnitario * 100) / 100).toFixed(2);
                             valorUnitario = valorUnitario.replace('.', ',');
@@ -374,16 +375,17 @@ include("inc/scripts.php");
                             return;
                         }
                     }
-            );
-    
+                );
+
             } else {
                 //Limpa caso seja selecionado em branco
                 $("#valorUnitario").val("");
                 $("#unidadeFederacao").val("");
             }
-            
+
         });
     });
+
     function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
@@ -392,8 +394,8 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaValeTransporteModal(idd, 
-                    function(data){
+                recuperaValeTransporteModal(idd,
+                    function(data) {
                         if (data.indexOf('failed') > -1) {
                             return;
                         } else {
@@ -401,37 +403,40 @@ include("inc/scripts.php");
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var out = piece[1];
-                             
-                            var strArrayValeTransporteModal = piece[2]; 
+
+                            var strArrayValeTransporteModal = piece[2];
                             piece = out.split("^");
-                            
+
                             var codigo = +piece[0];
                             var descricao = piece[1];
-                            var ativo = piece[2]; 
-                             
+                            var ativo = piece[2];
+
                             $("#codigo").val(codigo);
                             $("#descricao").val(descricao);
                             $("#ativo").val(ativo);
                             $("#verificaRecuperacao").val(1);
-                             
-                            
-                            $("#JsonValeTransporteModal").val(strArrayValeTransporteModal); 
-                            jsonValeTransporteModalArray = JSON.parse($("#JsonValeTransporteModal").val()); 
+
+
+                            $("#JsonValeTransporteModal").val(strArrayValeTransporteModal);
+                            jsonValeTransporteModalArray = JSON.parse($("#JsonValeTransporteModal").val());
                             fillTableValeTransporteModal();
                             return;
-                    }
+                        }
                     }
                 );
             }
         }
         $("#descricao").focus();
     }
+
     function novo() {
-        $(location).attr('href', 'tabelaBasica_valeTransporteModalCadastro.php');
+        $(location).attr('href', 'cadastro_valeTransporteModalCadastro.php');
     }
+
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_valeTransporteModalFiltro.php');
+        $(location).attr('href', 'cadastro_valeTransporteModalFiltro.php');
     }
+
     function excluir() {
         var id = $("#codigo").val();
         if (id === 0) {
@@ -439,16 +444,16 @@ include("inc/scripts.php");
             return;
         }
         excluirValeTransporte(id,
-            function(data){
+            function(data) {
                 if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                }
-                voltar();
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
+                    voltar();
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     voltar();
@@ -475,57 +480,57 @@ include("inc/scripts.php");
     }
 
     function gravar() {
-        
+
         $("#btnGravar").prop('disabled', true);
-        
+
         var id = +$("#codigo").val();
         var ativo = +$("#ativo").val();
-        var descricao = $("#descricao").val().trim().replace(/'/g, " "); 
-        var valorTotal =  $("#valorTotal").val(); 
-         
-        var jsonValeTransporteModal = $("#JsonValeTransporteModal").val(); 
-        
+        var descricao = $("#descricao").val().trim().replace(/'/g, " ");
+        var valorTotal = $("#valorTotal").val();
+
+        var jsonValeTransporteModal = $("#JsonValeTransporteModal").val();
+
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
             smartAlert("Atenção", "Informe a Descrição", "error");
             $("#btnGravar").prop('disabled', false);
-        
+
             return;
         }
-        
-         if (jsonValeTransporteModal === "[]") {
+
+        if (jsonValeTransporteModal === "[]") {
             smartAlert("Atenção", "Informe o Transporte Unitário", "error");
             $("#btnGravar").prop('disabled', false);
-        
+
             return;
         }
-        
-        
+
+
         gravaValeTransporteModal(id, ativo, descricao, valorTotal, jsonValeTransporteModal,
-                function (data) {
-                    if (data.indexOf('failed') > -1) {
-                        var piece = data.split("#");
-                        var mensagem = piece[1];
-                        if (mensagem !== "") {
-                            smartAlert("Atenção", mensagem, "error");
-                             $("#btnGravar").prop('disabled', false);
-                        } else {
-                            smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                            $("#btnGravar").prop('disabled', false);
-                        }
-                    }else {  
-                        
-                        //Verifica se a função de recuperar os campos foi executada.
-                        var verificaRecuperacao =  +$("#verificaRecuperacao").val();  
-                        smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                        
-                        if(verificaRecuperacao === 1){
-                            voltar();
-                        } else {
-                            novo();
-                        } 
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnGravar").prop('disabled', false);
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                        $("#btnGravar").prop('disabled', false);
+                    }
+                } else {
+
+                    //Verifica se a função de recuperar os campos foi executada.
+                    var verificaRecuperacao = +$("#verificaRecuperacao").val();
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+
+                    if (verificaRecuperacao === 1) {
+                        voltar();
+                    } else {
+                        novo();
                     }
                 }
+            }
         );
     }
 
@@ -533,12 +538,18 @@ include("inc/scripts.php");
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
         var fieldName = node.getAttribute ? node.getAttribute('name') : '';
         if (fieldName !== '' && (fieldId === "descricaoValeTransporteModal")) {
-            return {name: fieldName, value: $("#valeTransporteUnitario option:selected").text()};
+            return {
+                name: fieldName,
+                value: $("#valeTransporteUnitario option:selected").text()
+            };
         }
         //Retorna o valor correto do valor unitário
         if ((fieldName !== '') && (fieldId === "valorUnitario")) {
             var value = $("#" + fieldId).val();
-            return {name: fieldName, value: parseFloat(value.toString().replace(".", "").replace(",", "."))};
+            return {
+                name: fieldName,
+                value: parseFloat(value.toString().replace(".", "").replace(",", "."))
+            };
         }
         return false;
     }
@@ -550,30 +561,30 @@ include("inc/scripts.php");
         var valeTransporteUnitario = $('#valeTransporteUnitario').val();
         var unidadeFederacao = $('#unidadeFederacao').val();
         var sequencial = +$('#sequencialValeTransporteModal').val();
-        
+
         if (valeTransporteUnitario === '') {
             smartAlert("Erro", "Informe o Transporte Unitário", "error");
             return false;
-        } 
-        
+        }
+
         for (i = jsonValeTransporteModalArray.length - 1; i >= 0; i--) {
-                if (valeTransporteUnitario > 0) {
-                    if ((jsonValeTransporteModalArray[i].valeTransporteUnitario === valeTransporteUnitario) && (jsonValeTransporteModalArray[i].sequencialValeTransporteModal !== sequencial)) {
-                        achou = true;
-                        break;
-                    }
+            if (valeTransporteUnitario > 0) {
+                if ((jsonValeTransporteModalArray[i].valeTransporteUnitario === valeTransporteUnitario) && (jsonValeTransporteModalArray[i].sequencialValeTransporteModal !== sequencial)) {
+                    achou = true;
+                    break;
                 }
             }
- 
-            if (achou === true) {
-                smartAlert("Erro", "Já existe o Transporte Unitário na lista.", "error");
-                return false;
-            }
-        
-        
+        }
+
+        if (achou === true) {
+            smartAlert("Erro", "Já existe o Transporte Unitário na lista.", "error");
+            return false;
+        }
+
+
         return true;
     }
-    
+
     function addValeTransporteModal() {
         var item = $("#formValeTransporteModal").toObject({
             mode: 'combine',
@@ -603,19 +614,19 @@ include("inc/scripts.php");
         });
 
         if (index >= 0)
-        jsonValeTransporteModalArray.splice(index, 1, item);
+            jsonValeTransporteModalArray.splice(index, 1, item);
         else
-        jsonValeTransporteModalArray.push(item);
+            jsonValeTransporteModalArray.push(item);
 
         $("#JsonValeTransporteModal").val(JSON.stringify(jsonValeTransporteModalArray));
         fillTableValeTransporteModal();
         clearFormValeTransporteModal();
 
     }
- 
+
     function excluirValeTransporteModal() {
-        var arrSequencial = []; 
-        $('#tableValeTransporteModal input[type=checkbox]:checked').each(function () {
+        var arrSequencial = [];
+        $('#tableValeTransporteModal input[type=checkbox]:checked').each(function() {
             arrSequencial.push(parseInt($(this).val()));
         });
         if (arrSequencial.length > 0) {
@@ -627,21 +638,21 @@ include("inc/scripts.php");
             }
             $("#JsonValeTransporteModal").val(JSON.stringify(jsonValeTransporteModalArray));
             fillTableValeTransporteModal();
-        } else{
+        } else {
             smartAlert("Erro", "Selecione pelo menos 1 modal para excluir.", "error");
         }
     }
 
     function carregaValeTransporteModal(sequencialValeTransporteModal) {
-        var arr = jQuery.grep(jsonValeTransporteModalArray, function (item, i) {
+        var arr = jQuery.grep(jsonValeTransporteModalArray, function(item, i) {
             return (item.sequencialValeTransporteModal === sequencialValeTransporteModal);
         });
         clearFormValeTransporteModal();
         if (arr.length > 0) {
             var item = arr[0];
             $("#valeTransporteModalDetalheId").val(item.valeTransporteModalDetalheId);
-            $("#valeTransporteUnitario").val(item.valeTransporteUnitario); 
-            $("#valorUnitario").val(roundDecimal(floatToString(item.valorUnitario),2));
+            $("#valeTransporteUnitario").val(item.valeTransporteUnitario);
+            $("#valorUnitario").val(roundDecimal(floatToString(item.valorUnitario), 2));
             $("#unidadeFederacao").val(item.unidadeFederacao);
             $("#sequencialValeTransporteModal").val(item.sequencialValeTransporteModal);
             $("#descricaoValeTransporteModal").val(item.descricaoValeTransporteModal);
@@ -650,36 +661,36 @@ include("inc/scripts.php");
 
     // Função que preenche as tabelas com os valores dos formulários
     function fillTableValeTransporteModal() {
-        
+
         //Verifica se o valor é nulo ou inexistente, e transforma ele em 0. 
-        if(($("#valorTotal").val() === "")){
-            var valorTotal = 0; 
-        } 
-        
-        valorTotal = parseFloat(valorTotal); 
-        if(isNaN(valorTotal)){
-            valorTotal = 0; 
+        if (($("#valorTotal").val() === "")) {
+            var valorTotal = 0;
         }
-        
+
+        valorTotal = parseFloat(valorTotal);
+        if (isNaN(valorTotal)) {
+            valorTotal = 0;
+        }
+
         $("#tableValeTransporteModal tbody").empty();
         for (var i = 0; i < jsonValeTransporteModalArray.length; i++) {
-      
+
             var row = $('<tr />');
             $("#tableValeTransporteModal tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonValeTransporteModalArray[i].sequencialValeTransporteModal + '"><i></i></label></td>'));
             row.append($('<td class="text-nowrap" onclick="carregaValeTransporteModal(' + jsonValeTransporteModalArray[i].sequencialValeTransporteModal + ');">' + jsonValeTransporteModalArray[i].descricaoValeTransporteModal + '</td>'));
-            row.append($('<td class="text-right"> R$ ' +  roundDecimal(floatToString(jsonValeTransporteModalArray[i].valorUnitario),2)  + '</td>'));
-            
+            row.append($('<td class="text-right"> R$ ' + roundDecimal(floatToString(jsonValeTransporteModalArray[i].valorUnitario), 2) + '</td>'));
+
             //Transforma em float para ser somado. 
             valorTotal += parseFloat(jsonValeTransporteModalArray[i].valorUnitario);
-            
+
         }
-        
+
         //Retorna o valorTotal certo formatado para visualização.
         valorTotal = roundDecimal(floatToString(valorTotal), 2);
         $("#valorTotal").val(valorTotal);
         initializeDecimalBehaviour();
-        
+
     }
 
     function clearFormValeTransporteModal() {
@@ -689,5 +700,4 @@ include("inc/scripts.php");
         $("#valorUnitario").val('');
         $("#unidadeFederacao").val('');
     }
-    
 </script>
