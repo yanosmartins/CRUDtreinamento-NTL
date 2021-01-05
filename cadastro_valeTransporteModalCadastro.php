@@ -3,6 +3,25 @@
 require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
+
+$condicaoAcessarOK = (in_array('VALETRANSPORTEMODAL_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('VALETRANSPORTEMODAL_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('VALETRANSPORTEMODAL_EXCLUIR', $arrayPermissao, true));
+
+if ($condicaoAcessarOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
+
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
+
 /* ---------------- PHP Custom Scripts ---------
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
