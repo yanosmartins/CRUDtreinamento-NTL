@@ -151,15 +151,13 @@ include "js/repositorio.php";
 
 
 <script>
-    $(document).ready(function() {
-        $.fn.dataTable.moment('DD/MM/YYYY');
+   $(document).ready(function () {
         var responsiveHelper_datatable_tabletools = undefined;
 
         var breakpointDefinition = {
             tablet: 1024,
             phone: 480
         };
-
         /* TABLETOOLS */
         $('#tableSearchResult').dataTable({
 
