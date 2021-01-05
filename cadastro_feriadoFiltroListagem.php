@@ -149,6 +149,7 @@ include "js/repositorio.php";
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.print.min.js"></script>
 
 
+
 <script>
     $(document).ready(function() {
         $.fn.dataTable.moment('DD/MM/YYYY');
@@ -161,14 +162,12 @@ include "js/repositorio.php";
 
         /* TABLETOOLS */
         $('#tableSearchResult').dataTable({
-            "order": [
-                [5, 'desc']
-            ],
+
             // Tabletools options:
             //   https://datatables.net/extensions/tabletools/button_options
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'B'l'C>r>" +
-                "t" +
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+                    "t" +
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
             "oLanguage": {
                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>',
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -195,28 +194,22 @@ include "js/repositorio.php";
             "buttons": [
                 //{extend: 'copy', className: 'btn btn-default'},
                 //{extend: 'csv', className: 'btn btn-default'},
-                {
-                    extend: 'excel',
-                    className: 'btn btn-default'
-                },
-                {
-                    extend: 'pdf',
-                    className: 'btn btn-default'
-                },
+                {extend: 'excel', className: 'btn btn-default'},
+                {extend: 'pdf', className: 'btn btn-default'},
                 //{extend: 'print', className: 'btn btn-default'}
             ],
             "autoWidth": true,
-
-            "preDrawCallback": function() {
+            
+            "preDrawCallback": function () {
                 // Initialize the responsive datatables helper once.
                 if (!responsiveHelper_datatable_tabletools) {
                     responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#tableSearchResult'), breakpointDefinition);
                 }
             },
-            "rowCallback": function(nRow) {
+            "rowCallback": function (nRow) {
                 responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
             },
-            "drawCallback": function(oSettings) {
+            "drawCallback": function (oSettings) {
                 responsiveHelper_datatable_tabletools.respond();
             }
         });
