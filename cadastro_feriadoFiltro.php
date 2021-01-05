@@ -222,7 +222,6 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
-
 <script>
     $(document).ready(function() {
         $('#btnSearch').on("click", function() {
@@ -281,6 +280,9 @@ include("inc/scripts.php");
 
         var parametrosUrl = '&ativo=' + ativo + '&descricao=' + descricao + '&tipoFeriado=' + tipoFeriado + '&municipio=' +
             municipio + '&unidadeFederacao=' + unidadeFederacao + '&dataInicial=' + dataInicial + '&dataFinal=' + dataFinal;
+
+        parametrosUrl.replace(" ", "")
+
         $('#resultadoBusca').load('cadastro_feriadoFiltroListagem.php?' + parametrosUrl);
     }
 

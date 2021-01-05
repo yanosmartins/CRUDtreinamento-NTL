@@ -547,7 +547,7 @@ include("inc/scripts.php");
 
 
     function gravar() {
-        $("#btnGravar").prop('disabled', true);
+        // $("#btnGravar").prop('disabled', true);
 
         var id = +$("#codigo").val();
         var ativo = +$("#ativo").val();
