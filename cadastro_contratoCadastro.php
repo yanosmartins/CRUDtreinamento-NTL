@@ -1573,7 +1573,7 @@ include("inc/scripts.php");
             return;
         }
        
-        // $("#btnGravar").prop('disabled', true);
+        $("#btnGravar").prop('disabled', true);
         $("#ativo").val(1);
 
         let contrato = $('#formContrato').serializeArray().reduce(function(obj, item) {
