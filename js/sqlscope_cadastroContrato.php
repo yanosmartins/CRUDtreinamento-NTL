@@ -216,11 +216,6 @@ function grava()
 
     
     //Fim do Json  Faturamento
-
-    
-
-
-
     $sql = "Ntl.contrato_Atualiza(            
                 $codigo,
                 $ativo,
@@ -261,7 +256,7 @@ function grava()
                 $envioSolicitacao,               
                 $anotacoesSolicitacao, 
                 $usuario,
-                $xmlJsonFaturamento          
+                '$xmlJsonFaturamento'          
                 )";
 
     $reposit = new reposit();
@@ -494,11 +489,11 @@ function recupera()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT FA.contrato AS clienteFaturamento, FA.localizacao,LO.descricao AS descricaoLocalizacao, FA.cepFaturamento, FA.logradouroFaturamento, 
+    $sql = "SELECT FA.contrato AS contrato, FA.localizacao,LO.descricao AS descricaoLocalizacao, FA.cepFaturamento, FA.logradouroFaturamento, 
     FA.numeroFaturamento, FA.complementoFaturamento,FA.bairroFaturamento, FA.cidadeFaturamento, FA.ufFaturamento, 
     FA.iss, ISS.percentual AS issPercentual, FA.inss, INSS.percentual AS inssPercentual,FA.ir, IR.percentual AS irPercentual, FA.pisConfisCs, PIS.percentual AS pisConfisCsPercentual,
     FA.codigoServico, SE.descricaoCodigo AS codigoDescricao, FA.descricaoServico, SE.descricaoServico AS servicoDescricao, FA.aliquotaIss
-          FROM Ntl.faturamento FA
+          FROM Ntl.contratoFaturamento FA
           
           LEFT JOIN Ntl.localizacao LO ON localizacao = LO.codigo 
           LEFT JOIN Ntl.iss ISS ON iss = ISS.codigo
@@ -506,7 +501,7 @@ function recupera()
           LEFT JOIN Ntl.ir IR ON ir = IR.codigo
           LEFT JOIN Ntl.pisConfisCs PIS ON pisConfisCs = PIS.codigo
           LEFT JOIN Ntl.servico SE ON codigoServico = SE.codigo
-          WHERE clienteFaturamento = $id";
+          WHERE contrato = $id";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
