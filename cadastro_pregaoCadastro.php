@@ -232,7 +232,7 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?= $esconderBtnExcluir ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
@@ -248,8 +248,11 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="submited" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?= $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
+                                        </button>
+                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?= $esconderBtnGravar ?>">
+                                            <span class="fa fa-file-o"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
                                             <span class="fa fa-backward "></span>
@@ -582,7 +585,7 @@ include("inc/scripts.php");
 
     function validaData(valor) {
 
-        if ((valor == undefined) || (valor == " ")) {
+        if ((valor == undefined) || (valor == " ") || (valor == "")) {
             return;
         }
 

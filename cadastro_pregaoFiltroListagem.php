@@ -63,7 +63,7 @@ include "js/repositorio.php";
                 }
                 if ($_POST["resumoPregao"] != "") {
                     $resumoPregao = $_POST["resumoPregao"];
-                    $where = $where . " AND ( GP.objetoLicitado like '%' + " . "replace('" . $resumoPregao . "',' ','%') + " . "'%')";
+                    $where = $where . " AND ( GP.resumoPregao like '%' + " . "replace('" . $resumoPregao . "',' ','%') + " . "'%')";
                 }
 
                 $where = $where . " AND GP.condicao IS NULL AND GP.participaPregao IS NULL ORDER BY dataPregao ASC, horaPregao";
