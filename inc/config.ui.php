@@ -202,8 +202,8 @@ if ($condicaoCadastroOk) {
     if (in_array('FUNCIONARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/cadastro_funcionarioFiltro.php")); //SYSCB 
     }
-    if (in_array('GARIMPARPREGOES_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['cadastro']['sub'] += array("garimparPregoes" => array("title" => "Garimpar Pregões", "url" => APP_URL . "/cadastro_pregaoFiltro.php"));
+    if (in_array('PREGAO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("pregao" => array("title" => "Garimpar Pregões", "url" => APP_URL . "/cadastro_pregaoFiltro.php"));
     }
     if (in_array('PRODUTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("produto" => array("title" => "Produto", "url" => APP_URL . "/cadastro_produtoFiltro.php")); //SYSCB

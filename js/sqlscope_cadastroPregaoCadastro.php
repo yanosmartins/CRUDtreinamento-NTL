@@ -80,7 +80,7 @@ function grava()
 
     //XML DE UPLOAD:
     $nomeXml =  "ArrayOfUpload";
-    $nomeTabela = "garimpaPregaoDocumento";
+    $nomeTabela = "pregaoDocumento";
     if (sizeof($uploadArray) > 0) {
         $xmlUpload = '<?xml version="1.0"?>';
         $xmlUpload = $xmlUpload . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
@@ -141,7 +141,7 @@ function grava()
     $arrayTarefa = json_decode($strArrayTarefa, true);
     $xmlTarefa = "";
     $nomeXml = "ArrayOfTarefa";
-    $nomeTabela = "garimpaPregaoDetalhe";
+    $nomeTabela = "pregaoDetalhe";
     if (sizeof($arrayTarefa) > 0) {
         $xmlTarefa = '<?xml version="1.0"?>';
         $xmlTarefa = $xmlTarefa . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
@@ -188,7 +188,7 @@ function grava()
     }
     $xmlTarefa = "'" . $xmlTarefa . "'";
 
-    $sql = "Ntl.garimpaPregao_Atualiza( 
+    $sql = "Ntl.pregao_Atualiza( 
         $codigo,
         $portal,  
         $ativo,
@@ -228,7 +228,7 @@ function recupera()
         $codigo = +$_POST["codigo"];
     }
 
-    $sql = "SELECT codigo, portal, ativo, orgaoLicitante, resumoPregao, objetoLicitado, oportunidadeCompra,numeroPregao,dataPregao,horaPregao,usuarioCadastro,dataCadastro,observacao,garimpado,participaPregao FROM Ntl.garimpaPregao WHERE (0=0) AND codigo = " . $codigo;
+    $sql = "SELECT codigo, portal, ativo, orgaoLicitante, resumoPregao, objetoLicitado, oportunidadeCompra,numeroPregao,dataPregao,horaPregao,usuarioCadastro,dataCadastro,observacao,garimpado,participaPregao FROM Ntl.pregao WHERE (0=0) AND codigo = " . $codigo;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -256,8 +256,8 @@ function recupera()
     $reposit = "";
     $result = "";
     $sql = "SELECT GPD.codigo, GPD.tarefa, GPD.responsavel, GPD.dataFinal, GPD.dataSolicitacao, GPD.observacao, GPD.tipo
-    FROM Ntl.garimpaPregaoDetalhe  GPD
-    INNER JOIN Ntl.garimpaPregao GP ON GP.codigo = GPD.garimpaPregao
+    FROM Ntl.pregaoDetalhe  GPD
+    INNER JOIN Ntl.pregao GP ON GP.codigo = GPD.pregao
     WHERE (0=0) AND GP.codigo = " . $codigo;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -325,7 +325,7 @@ function excluir()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("GARIMPARPREGOES_ACESSAR|GARIMPARPREGOES_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("PREGAO_ACESSAR|PREGAO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -341,7 +341,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('garimpaPregao' . '|' . 'ativo = 0' . '|' . 'codigo =' . $codigo);
+    $result = $reposit->update('pregao' . '|' . 'ativo = 0' . '|' . 'codigo =' . $codigo);
 
     if ($result < 1) {
         echo ('failed#');
@@ -357,9 +357,9 @@ function recuperaUpload()
     $id = +$_POST['id'] ?: 0;
     $diretorioAlvo = "../uploads/";
 
-    $sql = " SELECT codigo, nomeArquivo, tipoArquivo, endereco, idCampo, garimpaPregao 
-    FROM Ntl.garimpaPregaoDocumento 
-    WHERE (0=0) AND garimpaPregao = " . $id;
+    $sql = " SELECT codigo, nomeArquivo, tipoArquivo, endereco, idCampo, pregao 
+    FROM Ntl.pregaoDocumento 
+    WHERE (0=0) AND pregao = " . $id;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
@@ -504,7 +504,7 @@ function listaNomeOrgaoLicitante()
     }
 
     $reposit = new reposit();
-    $sql = "SELECT codigo, orgaoLicitante FROM Ntl.garimpaPregao WHERE (0=0) AND ativo = 1 AND orgaoLicitante LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY orgaoLicitante";
+    $sql = "SELECT codigo, orgaoLicitante FROM Ntl.pregao WHERE (0=0) AND ativo = 1 AND orgaoLicitante LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY orgaoLicitante";
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();

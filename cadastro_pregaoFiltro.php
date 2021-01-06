@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('GARIMPARPREGOES_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('GARIMPARPREGOES_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PREGAO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PREGAO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["pregoes"]["active"] = true;
+$page_nav["cadastro"]["sub"]["pregao"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -216,7 +216,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPregoesCadastro.php',
+                    url: 'js/sqlscope_cadastroPregaoCadastro.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -265,7 +265,7 @@ include("inc/scripts.php");
         var resumoPregao = $('#resumoPregao').val();
         var orgaoLicitante = $('#orgaoLicitante').val();
 
-        $('#resultadoBusca').load('cadastro_pregoesFiltroListagem.php?', {
+        $('#resultadoBusca').load('cadastro_pregaoFiltroListagem.php?', {
             portal: portal,
             dataPregao: dataPregao,
             quemLancou: quemLancou,
@@ -277,6 +277,6 @@ include("inc/scripts.php");
 
 
     function novo() {
-        $(location).attr('href', 'cadastro_pregoesCadastro.php');
+        $(location).attr('href', 'cadastro_pregaoCadastro.php');
     }
 </script>

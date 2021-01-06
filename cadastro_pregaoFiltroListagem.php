@@ -31,7 +31,7 @@ include "js/repositorio.php";
 
                 $sql = "SELECT GP.codigo, P.descricao, P.endereco, GP.ativo, GP.orgaoLicitante, GP.objetoLicitado,
                     GP.oportunidadeCompra, GP.numeroPregao, GP.dataPregao, GP.horaPregao, GP.dataCadastro, GP.usuarioCadastro, GP.condicao, GP.resumoPregao
-                    FROM Ntl.garimpaPregao GP 
+                    FROM Ntl.pregao GP 
                     INNER JOIN Ntl.portal P ON P.codigo = GP.portal";
                 $where = " WHERE (0 = 0)";
 
@@ -105,7 +105,7 @@ include "js/repositorio.php";
                     echo '<tr >';
                     echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="' . $endereco . '">' . $portal . '</a></td>';
                     echo '<td class="text-left">' . $orgaoLicitante . '</td>';
-                    echo '<td class="text-left"><a href="cadastro_pregoesCadastro.php?id=' . $id . '">' . $numeroPregao . '</td>';
+                    echo '<td class="text-left"><a href="cadastro_pregaoCadastro.php?id=' . $id . '">' . $numeroPregao . '</td>';
                     echo '<td class="text-left">' . $dataPregao . '</td>';
                     echo '<td class="text-left">' . $horaPregao . '</td>';
                     echo '<td class="text-justify">' . $resumoPregao . '</td>';

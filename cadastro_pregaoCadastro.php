@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('GARIMPARPREGOES_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('GARIMPARPREGOES_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('GARIMPARPREGOES_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PREGAO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PREGAO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('PREGAO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -43,7 +43,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["pregoes"]["active"] = true;
+$page_nav["cadastro"]["sub"]["pregao"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -71,7 +71,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formGarimparPregoes" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formPregao" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -283,7 +283,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroPregoesCadastro.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroPregaoCadastro.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -554,11 +554,11 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'cadastro_pregoesCadastro.php');
+        $(location).attr('href', 'cadastro_pregaoCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'cadastro_pregoesFiltro.php');
+        $(location).attr('href', 'cadastro_pregaoFiltro.php');
     }
 
     function excluir() {
@@ -659,7 +659,7 @@ include("inc/scripts.php");
             return;
         }
 
-        var form = $('#formGarimparPregoes')[0];
+        var form = $('#formPregao')[0];
         var formData = new FormData(form);
         gravaPregoes(formData);
     }
