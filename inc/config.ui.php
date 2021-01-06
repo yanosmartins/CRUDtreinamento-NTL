@@ -73,8 +73,6 @@ $condicaoVersaoSistemaOk = true;
 
 // TABELAS BÁSICAS
 $condicaoTabelaBasicaOk = (in_array('TABELABASICA_ACESSAR', $arrayPermissao, true));
-$condicaoTabelaBasicaOk = (($condicaoTabelaBasicaOk) or in_array('BANCO_ACESSAR', $arrayPermissao, true));
-$condicaoTabelaBasicaOk = (($condicaoTabelaBasicaOk) or in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true));
 
 if ($condicaoTabelaBasicaOk) {
     $page_nav['tabelaBasica'] = array("title" => "Tabela Básica", "icon" => "fa fa-table");
@@ -176,6 +174,8 @@ if ($condicaoTabelaBasicaOk) {
     }
 }
 
+$condicaoCadastroOk = (in_array('CADASTRO_ACESSAR', $arrayPermissao, true));
+
 // CADASTROS
 if ($condicaoCadastroOk) {
     $page_nav['cadastro'] = array("title" => "Cadastro", "icon" => "fa-pencil-square-o");
@@ -203,7 +203,7 @@ if ($condicaoCadastroOk) {
         $page_nav['cadastro']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/cadastro_funcionarioFiltro.php")); //SYSCB 
     }
     if (in_array('PREGAO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['cadastro']['sub'] += array("pregao" => array("title" => "Garimpar Pregões", "url" => APP_URL . "/cadastro_pregaoFiltro.php"));
+        $page_nav['cadastro']['sub'] += array("garimparPregoes" => array("title" => "Garimpar Pregões", "url" => APP_URL . "/cadastro_pregaoFiltro.php"));
     }
     if (in_array('PRODUTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("produto" => array("title" => "Produto", "url" => APP_URL . "/cadastro_produtoFiltro.php")); //SYSCB
@@ -223,20 +223,35 @@ if ($condicaoCadastroOk) {
     if (in_array('VALORPOSTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("valorPosto" => array("title" => "Valor do Posto", "url" => APP_URL . "/cadastro_valorPostoFiltro.php")); //SYSCB  
     }
-    if (in_array('VINCULOBENEFICIO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['cadastro']['sub'] += array("vinculosBeneficios" => array("title" => "Vínculos e Benefícios", "url" => APP_URL . "/cadastro_beneficioPessoalPorProjetoFiltro.php")); //SYSCB 
+    if (in_array('BENEFICIOPROJETO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("beneficioProjeto" => array("title" => "Vínculos e Benefícios", "url" => APP_URL . "/cadastro_beneficioPessoalPorProjetoFiltro.php")); //SYSCB 
     }
 }
+
+$condicaoBeneficioOk = (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true));
 // BENEFÍCIOS - SYSCB 
 if ($condicaoBeneficioOk) {
     $page_nav['beneficio'] = array("title" => "Departamento Pessoal", "icon" => "fa fa-folder-open");
     $page_nav['beneficio']['sub'] = array();
-    $page_nav['beneficio']['sub'] += array("afastamentoFuncionario" => array("title" => "Afastamento do Funcionário", "url" => APP_URL . "/index.php")); //SYSCB 
-    $page_nav['beneficio']['sub'] += array("consultaBenefício" => array("title" => "Consulta Benefício", "url" => APP_URL . "/index.php"));
-    $page_nav['beneficio']['sub'] += array("ferias" => array("title" => "Férias", "url" => APP_URL . "/index.php")); //SYSCB 
-    $page_nav['beneficio']['sub'] += array("fechamentoMes" => array("title" => "Fechamento do Mês", "url" => APP_URL . "/index.php"));
-    $page_nav['beneficio']['sub'] += array("folhaPonto" => array("title" => "Folha de Ponto", "url" => APP_URL . "/index.php"));
-    $page_nav['beneficio']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/index.php"));
+
+    if (in_array('AFASTAMENTOFUNCIONARIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['beneficio']['sub'] += array("afastamentoFuncionario" => array("title" => "Afastamento do Funcionário", "url" => APP_URL . "/beneficio_afastamentoFuncionarioFiltro.php")); //SYSCB 
+    }
+    if (in_array('CONSULTABENEFICIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['beneficio']['sub'] += array("consultaBenefício" => array("title" => "Consulta Benefício", "url" => APP_URL . "/beneficio_afastamentoFuncionarioFiltro.php"));
+    }
+    if (in_array('FERIAS_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['beneficio']['sub'] += array("ferias" => array("title" => "Férias", "url" => APP_URL . "/beneficio_feriasFiltro.php")); //SYSCB 
+    }
+    if (in_array('FECHAMENTOMES_ACESSAR', $arrayPermissao, true)) {
+    $page_nav['beneficio']['sub'] += array("fechamentoMes" => array("title" => "Fechamento do Mês", "url" => APP_URL . "/beneficio_fechamentoMesFiltro.php"));
+    }
+    if (in_array('FOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
+    $page_nav['beneficio']['sub'] += array("folhaPonto" => array("title" => "Folha de Ponto", "url" => APP_URL . "/beneficio_folhaPontoFiltro.php"));
+    }
+    if (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true)) {
+    $page_nav['beneficio']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
+    }
 }
 
 // CONTRATAÇÕES - SYSCC
