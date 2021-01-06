@@ -592,6 +592,9 @@ include("inc/scripts.php");
     function gravar() {
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
+        setTimeout(() => {
+            $("#btnGravar").prop('disabled', false);
+        }, 4)
 
         //Dados 
         var id = +$("#codigo").val();
@@ -609,45 +612,38 @@ include("inc/scripts.php");
         var diaFeriado = +$("#diasDescontar").val();
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        if (!mesAno) {
+        if (mesAno === "" || mesAno === " ") {
             smartAlert("Atenção", "Informe o Mês/Ano de Referência", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
 
-        if (!projeto) {
+        if (projeto === "" || projeto === " ") {
             smartAlert("Atenção", "Informe o Projeto", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
 
-        if (!funcionario) {
+        if (funcionario === "" || funcionario === " ") {
             smartAlert("Atenção", "Informe o Funcionário", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
 
-        if (!dataInicio) {
+        if (dataInicio === "" || dataInicio === " ") {
             smartAlert("Atenção", "Informe a Data de Início", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
 
-        if (!quantidadeDias) {
+        if (quantidadeDias === "" || quantidadeDias === " ") {
             smartAlert("Atenção", "Informe os Dias", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
 
-        if (!adiantaDecimoTerceiro) {
-            smartAlert("Atenção", "Informe Adianta de CimoTerceiro", "error");
-            $("#btnGravar").prop('disabled', false);
+        if (adiantaDecimoTerceiro === "" || adiantaDecimoTerceiro === " ") {
+            smartAlert("Atenção", "Informe Adianta de Décimo Terceiro", "error");
             return;
         }
 
-        if (!abono) {
+        if (abono === "" || abono === " ") {
             smartAlert("Atenção", "Informe o Abono", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
 
@@ -658,10 +654,8 @@ include("inc/scripts.php");
                     var mensagem = piece[1];
                     if (mensagem !== "") {
                         smartAlert("Atenção", mensagem, "error");
-                        $("#btnGravar").prop('disabled', false);
                     } else {
                         smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                        $("#btnGravar").prop('disabled', false);
                     }
                 } else {
 
