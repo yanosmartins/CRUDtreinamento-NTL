@@ -56,7 +56,7 @@ function grava()
     $descontarVAVR = +$_POST['descontarVAVR'];
     $descontarTransporte = +$_POST['descontarTransporte'];
     $descontarCestaBasica = +$_POST['descontarCestaBasica'];
-    $justificativa = "'" . $_POST['justificativa'] . "'"; 
+    $justificativa = "'" . $_POST['justificativa'] . "'";
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $diaFeriado = +$_POST['diaFeriado'];
@@ -68,7 +68,7 @@ function grava()
         return;
     }
 
-    $sql = 'syscb.afastamentoFuncionario_Atualiza (' .
+    $sql = 'Ntl.afastamentoFuncionario_Atualiza (' .
         $id . ',' .
         $ativo . ',' .
         $funcionario . ',' .
@@ -84,7 +84,7 @@ function grava()
         $justificativa . ',' .
         $usuario . ',' .
         $diaFeriado . ',' .
-        $projeto .') ';
+        $projeto . ') ';
 
     $result = $reposit->Execprocedure($sql);
 
@@ -107,7 +107,7 @@ function recupera()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT * FROM syscb.afastamento WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT * FROM Ntl.afastamento WHERE (0=0) AND codigo = " . $id;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -130,9 +130,9 @@ function recupera()
         $descontarVAVR = +$row['descontarVAVR'];
         $descontarTransporte = +$row['descontarTransporte'];
         $descontarCestaBasica = +$row['descontarCestaBasica'];
-        $justificativa = $row['justificativa']; 
-        $diaFeriado = +$row['diaFeriado']; 
-        $projeto = +$row['projeto']; 
+        $justificativa = $row['justificativa'];
+        $diaFeriado = +$row['diaFeriado'];
+        $projeto = +$row['projeto'];
 
         $out = $codigo . "^" .
             $ativo . "^" .
@@ -248,8 +248,8 @@ function contaFeriado()
     $reposit = new reposit();
 
     $sqlProjeto = "SELECT BP.codigo,BP.funcionario,BP.projeto,P.apelido,P.estado,P.cidade,P.municipioFerias
-    FROM syscb.beneficioProjeto BP
-    LEFT JOIN syscb.projeto P ON P.codigo = BP.projeto WHERE BP.funcionario = $funcionario";
+    FROM Ntl.beneficioProjeto BP
+    LEFT JOIN Ntl.projeto P ON P.codigo = BP.projeto WHERE BP.funcionario = $funcionario";
 
     $reposit = new reposit();
     $resultProjeto = $reposit->RunQuery($sqlProjeto);
@@ -260,8 +260,8 @@ function contaFeriado()
         $municipioFerias =  +$row['municipioFerias'];
     }
     $sql = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
-            FROM syscbNTL.syscb.feriado F 
-            LEFT JOIN syscbNTL.syscb.municipio M ON M.codigo = F.municipio  
+            FROM Ntl.feriado F 
+            LEFT JOIN Ntl.municipio M ON M.codigo = F.municipio  
             WHERE F.ativo = 1 AND data BETWEEN $dataInicio AND $dataFim 
             AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = $estado)) OR F.tipoFeriado = 2 and M.codigo = $municipioFerias) 
             AND DATENAME(weekday,F.data) NOT IN ('Saturday', 'Sunday')";
@@ -283,7 +283,7 @@ function populaComboFuncionario()
 {
     $projeto = $_POST["projeto"];
     if ($projeto > 0) {
-        $sql = "SELECT BP.codigo, BP.funcionario, F.nome FROM syscb.beneficioProjeto BP INNER JOIN syscb.funcionario F ON BP.funcionario = F.codigo WHERE (0=0) 
+        $sql = "SELECT BP.codigo, BP.funcionario, F.nome FROM Ntl.beneficioProjeto BP INNER JOIN Ntl.funcionario F ON BP.funcionario = F.codigo WHERE (0=0) 
         AND projeto = " . $projeto . " AND BP.ativo = 1 AND F.dataDemissaoFuncionario IS NULL";
 
         $reposit = new reposit();
@@ -309,7 +309,7 @@ function populaComboFuncionario()
 
 // function temAfastamentoNasMesmasDatas($dataInicio,$dataFim) 
 // {
-//     $sql = "SELECT codigo,funcionario,dataInicio,dataFim,mesAno FROM syscb.afastamento 
+//     $sql = "SELECT codigo,funcionario,dataInicio,dataFim,mesAno FROM Ntl.afastamento 
 //     where (($dataInicio BETWEEN dataInicio AND dataFim) OR ($dataFim BETWEEN dataInicio AND dataFim)) AND funcionario = 13060" ;
 
 //     $reposit = new reposit();

@@ -531,11 +531,11 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'cadastro_afastamentoDoFuncionarioCadastro.php');
+        $(location).attr('href', 'beneficio_afastamentoFuncionarioCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'cadastro_afastamentoDoFuncionarioFiltro.php');
+        $(location).attr('href', 'beneficio_afastamentoFuncionarioFiltro.php');
     }
 
     function excluir() {

@@ -10,13 +10,13 @@ $condicaoAcessarOK = (in_array('AFASTAMENTOFUNCIONARIO_ACESSAR', $arrayPermissao
 $condicaoGravarOK = (in_array('AFASTAMENTOFUNCIONARIO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
-   unset($_SESSION['login']);
-   header("Location:login.php");
+    unset($_SESSION['login']);
+    header("Location:login.php");
 }
 
 $esconderBtnGravar = "";
 if ($condicaoGravarOK === false) {
-   $esconderBtnGravar = "none";
+    $esconderBtnGravar = "none";
 }
 
 /* ---------------- PHP Custom Scripts ---------
@@ -36,19 +36,19 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["afastamentoDoFuncionario"]["active"] = true;
+$page_nav["beneficio"]["sub"]["afastamentoDoFuncionario"]["active"] = true;
 
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-<?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
-$breadcrumbs["Cadastro"] = "";
-include("inc/ribbon.php");
-?>
+    <?php
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
+    $breadcrumbs["Departamento Pessoal"] = "";
+    include("inc/ribbon.php");
+    ?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
@@ -80,14 +80,14 @@ include("inc/ribbon.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                   
-                                                        <div class="row">  
-                                                             
+
+                                                        <div class="row">
+
                                                             <section class="col col-4 col-auto">
                                                                 <label class="label" for="funcionario">Funcionário</label>
                                                                 <label class="input">
-                                                                <input id="funcionario" name="funcionario" autocomplete="off" type="text" maxlength="255">
-                                                                </label>            
+                                                                    <input id="funcionario" name="funcionario" autocomplete="off" type="text" maxlength="255">
+                                                                </label>
                                                             </section>
 
                                                             <section class="col col-4 col-auto">
@@ -97,7 +97,7 @@ include("inc/ribbon.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, descricao FROM syscb.Projeto BP 
+                                                                        $sql = "SELECT codigo, descricao FROM Ntl.projeto BP 
                                                                                 WHERE ativo = 1 order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
@@ -117,25 +117,25 @@ include("inc/ribbon.php");
                                                                     <input id="mesAno" name="mesAno" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker" value="">
                                                                 </label>
                                                             </section>
-                                                            
+
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="motivoDoAfastamento">Motivo do Afastamento</label>
                                                                 <label class="input">
-                                                                <input id="motivoDoAfastamento" name="motivoDoAfastamento" autocomplete="off" type="text" maxlength="50">
-                                                                </label>           
+                                                                    <input id="motivoDoAfastamento" name="motivoDoAfastamento" autocomplete="off" type="text" maxlength="50">
+                                                                </label>
                                                             </section>
-                                                             
+
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="dataInicio">Data Inicial</label>
                                                                 <label class="input"><i class="icon-append fa fa-calendar"></i>
-                                                                <input id="dataInicio" name="dataInicio" autocomplete="off"  data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" type="text" class="datepicker" value="">
+                                                                    <input id="dataInicio" name="dataInicio" autocomplete="off" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" type="text" class="datepicker" value="">
                                                                 </label>
                                                             </section>
-                                                            
+
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="dataFim">Data Final</label>
                                                                 <label class="input"><i class="icon-append fa fa-calendar"></i>
-                                                                <input id="dataFim" name="dataFim" autocomplete="off"  data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" type="text" class="datepicker" value="">
+                                                                    <input id="dataFim" name="dataFim" autocomplete="off" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" type="text" class="datepicker" value="">
                                                                 </label>
                                                             </section>
 
@@ -143,18 +143,18 @@ include("inc/ribbon.php");
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
-                                                                        <option></option> 
+                                                                        <option></option>
                                                                         <option value='1' selected>Sim</option>
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>
-                                                                </label>                                                                                                                                
-                                                            </section> 
-                                                              
+                                                                </label>
+                                                            </section>
+
                                                         </div>
-                                                        
-                                                    </fieldset> 
+
+                                                    </fieldset>
                                                 </div>
-                                            </div>   
+                                            </div>
                                         </div>
                                     </div>
                                     <footer>
@@ -164,14 +164,14 @@ include("inc/ribbon.php");
                                         <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                             <span class="fa fa-file"></span>
                                         </button>
-                                    </footer> 
+                                    </footer>
                                 </form>
                             </div>
                             <div id="resultadoBusca"></div>
                         </div>
                     </div>
                 </article>
-            </div>                          
+            </div>
         </section>
         <!-- end widget grid -->
     </div>
@@ -212,11 +212,11 @@ include("inc/scripts.php");
 
 
 <script>
-    $(document).ready(function () {
-        $('#btnSearch').on("click", function () { 
+    $(document).ready(function() {
+        $('#btnSearch').on("click", function() {
             listarFiltro();
         });
-        $('#btnNovo').on("click", function () {
+        $('#btnNovo').on("click", function() {
             novo();
         });
     });
@@ -229,7 +229,7 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
         var mesAno = $('#mesAno').val();
         var projeto = +$('#projeto').val();
-                 
+
         if (funcionario !== "") {
             funcionario = funcionario.replace(/^\s+|\s+$/g, "");
             funcionario = encodeURIComponent(funcionario);
@@ -250,19 +250,19 @@ include("inc/scripts.php");
             dataFim = encodeURIComponent(dataFim);
         }
 
-        var parametrosUrl = '&funcionario=' + funcionario + '&motivoDoAfastamento=' + motivoDoAfastamento 
-        +'&dataInicio=' + dataInicio + '&dataFim=' + dataFim  + '&ativo=' + ativo + '&mesAno=' + mesAno + '&projeto=' + projeto;
-        $('#resultadoBusca').load('cadastro_afastamentoFuncionarioFiltroListagem.php?' + parametrosUrl);
+        var parametrosUrl = '&funcionario=' + funcionario + '&motivoDoAfastamento=' + motivoDoAfastamento +
+            '&dataInicio=' + dataInicio + '&dataFim=' + dataFim + '&ativo=' + ativo + '&mesAno=' + mesAno + '&projeto=' + projeto;
+        $('#resultadoBusca').load('beneficio_afastamentoFuncionarioFiltroListagem.php?' + parametrosUrl);
     }
 
     function novo() {
-        $(location).attr('href', 'cadastro_afastamentoDoFuncionarioCadastro.php');
+        $(location).attr('href', 'beneficio_afastamentoFuncionarioCadastro.php');
     }
-
-</script>    
+</script>
 
 
 //<?php
-//	//include footer
-//	include("inc/google-analytics.php"); 
-//?>
+    //	//include footer
+    //	include("inc/google-analytics.php"); 
+    //
+    ?>

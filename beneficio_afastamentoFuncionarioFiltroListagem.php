@@ -27,13 +27,13 @@ include "js/repositorio.php";
                 $where = "WHERE (0 = 0)";
 
                 $sql = "SELECT AF.codigo,AF.mesAno, F.nome AS funcionario, MA.descricao,AF.dataInicio, AF.dataFim, AF.ativo,AF.projeto,P.descricao AS nomeProjeto 
-                        FROM syscb.afastamento AF
-                        INNER JOIN syscb.funcionario F ON F.codigo = AF.funcionario
-                        INNER JOIN syscb.motivoAfastamento MA On MA.codigo = AF.motivoAfastamento 
-                        LEFT JOIN syscb.projeto P ON P.codigo = AF.projeto ";
+                        FROM Ntl.afastamento AF
+                        INNER JOIN Ntl.funcionario F ON F.codigo = AF.funcionario
+                        INNER JOIN Ntl.motivoAfastamento MA On MA.codigo = AF.motivoAfastamento 
+                        LEFT JOIN Ntl.projeto P ON P.codigo = AF.projeto ";
 
                 $where = $where . " AND dataDemissaoFuncionario IS NULL ";
-                
+
                 if ($_GET["funcionario"] != "") {
                     $funcionario = $_GET["funcionario"];
                     $where = $where . " and (F.nome like '%' + " . "replace('" . $funcionario . "',' ','%') + " . "'%')";
@@ -77,8 +77,8 @@ include "js/repositorio.php";
                     $ativo = $_GET["ativo"];
                     $where = $where . " and AF.ativo = " . $ativo;
                 }
-                
-                if ($_GET["projeto"] != 0 ) {
+
+                if ($_GET["projeto"] != 0) {
                     $projeto = $_GET["projeto"];
                     $where = $where . " and P.codigo = " . $projeto;
                 }
@@ -94,11 +94,11 @@ include "js/repositorio.php";
                     $motivoDoAfastamento = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
                     $dataInicio = mb_convert_encoding($row['dataInicio'], 'UTF-8', 'HTML-ENTITIES');
                     $dataFim = mb_convert_encoding($row['dataFim'], 'UTF-8', 'HTML-ENTITIES');
-                    
+
                     $mesAno = $row['mesAno'];
                     $mesAno = explode("-", $mesAno);
                     $mesAno = $mesAno[1] . "/" . $mesAno[0];
-                    
+
                     $dataInicioFormatada = date('d/m/Y', strtotime($dataInicio));
                     $dataFim = date('d/m/Y', strtotime($dataFim));
                     $dataFimAux = explode("/", $dataFim);
@@ -117,7 +117,7 @@ include "js/repositorio.php";
                     $projeto = mb_convert_encoding($row['nomeProjeto'], 'UTF-8', 'HTML-ENTITIES');
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="cadastro_afastamentoDoFuncionarioCadastro.php?codigo=' . $id . '">' . $funcionario . '</a></td>';
+                    echo '<td class="text-left"><a href="beneficio_afastamentoFuncionarioCadastro.php?codigo=' . $id . '">' . $funcionario . '</a></td>';
                     echo '<td class="text-left">' . $projeto . '</td>';
                     echo '<td class="text-left">' . $mesAno . '</td>';
                     echo '<td class="text-left">' . $motivoDoAfastamento . '</td>';
