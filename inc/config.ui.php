@@ -203,7 +203,7 @@ if ($condicaoCadastroOk) {
         $page_nav['cadastro']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/cadastro_funcionarioFiltro.php")); //SYSCB 
     }
     if (in_array('GARIMPARPREGOES_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['cadastro']['sub'] += array("garimparPregoes" => array("title" => "Garimpar Pregões", "url" => APP_URL . "/cadastro_garimparPregoesFiltro.php"));
+        $page_nav['cadastro']['sub'] += array("garimparPregoes" => array("title" => "Garimpar Pregões", "url" => APP_URL . "/cadastro_pregaoFiltro.php"));
     }
     if (in_array('PRODUTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("produto" => array("title" => "Produto", "url" => APP_URL . "/cadastro_produtoFiltro.php")); //SYSCB
@@ -224,7 +224,7 @@ if ($condicaoCadastroOk) {
         $page_nav['cadastro']['sub'] += array("valorPosto" => array("title" => "Valor do Posto", "url" => APP_URL . "/cadastro_valorPostoFiltro.php")); //SYSCB  
     }
     if (in_array('VINCULOBENEFICIO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['cadastro']['sub'] += array("vinculosBeneficios" => array("title" => "Vínculos e Benefícios", "url" => APP_URL . "/cadastro_vinculoBeneficioFiltro.php")); //SYSCB 
+        $page_nav['cadastro']['sub'] += array("vinculosBeneficios" => array("title" => "Vínculos e Benefícios", "url" => APP_URL . "/cadastro_beneficioPessoalPorProjetoFiltro.php")); //SYSCB 
     }
 }
 // BENEFÍCIOS - SYSCB 
