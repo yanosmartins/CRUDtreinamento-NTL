@@ -49,8 +49,8 @@ include("inc/nav.php");
 <!-- MAIN PANEL -->
 <div id="main" role="main">
     <?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
     $breadcrumbs["Tabela Básica"] = "";
     include("inc/ribbon.php");
     ?>
@@ -68,7 +68,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formCliente" method="post" enctype="multipart/form-data">    
+                                <form class="smart-form client-form" id="formCliente" method="post" enctype="multipart/form-data">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -83,67 +83,65 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <input id="verificaRecuperacao" name="verificaRecuperacao" type="text"  readonly class="hidden" value="">
-                                                       <div class="row">  
+                                                        <input id="verificaRecuperacao" name="verificaRecuperacao" type="text" readonly class="hidden" value="">
+                                                        <div class="row">
                                                             <input id="codigo" name="codigo" type="text" class="hidden" value="">
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="apelido">Apelido</label>
                                                                 <label class="input">
-                                                                    <input id="apelido" name="apelido"  maxlength="45" type="text"  class="required" autocomplete="off">
+                                                                    <input id="apelido" name="apelido" maxlength="45" type="text" class="required" autocomplete="off" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="cnpj">CNPJ</label>
                                                                 <label class="input">
-                                                                    <input id="cnpj" name="cnpj"  placeholder="XX.XXX.XXX/XXXX-XX"  type="text" class="required"  autocomplete="off">
+                                                                    <input id="cnpj" name="cnpj" placeholder="XX.XXX.XXX/XXXX-XX" type="text" class="required" autocomplete="off" required>
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                        <div class="row"> 
+                                                        <div class="row">
                                                             <section class="col col-5 col-auto">
                                                                 <label class="label" for="descricao">Descrição </label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" maxlength="45" type="text" value="" class="required" autocomplete="off">
+                                                                    <input id="descricao" name="descricao" maxlength="45" type="text" class="required" autocomplete="off" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="registroAns">Registro ANS </label>
                                                                 <label class="input">
-                                                                    <input id="registroAns" name="registroAns" maxlength="9"  type="text" value="" class="required" autocomplete="off" onkeypress="return seNumero(event)">
+                                                                    <input id="registroAns" name="registroAns" maxlength="9" type="text" class="required" required autocomplete="off" onkeypress="return seNumero(event)">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="seguroVida">Seguro de Vida</label>
                                                                 <label class="select">
-                                                                    <select id="seguroVida" name="seguroVida" class="required">
+                                                                    <select id="seguroVida" name="seguroVida" class="required" required>
                                                                         <option></option>
                                                                         <option value='1'>Sim</option>
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>
-                                                                </label>                                                                                                                                
+                                                                </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
+                                                                    <select id="ativo" name="ativo" class="required" require>
                                                                         <option value='1' selected="">Sim</option>
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>
-                                                                </label>                                                                                                                                
+                                                                </label>
                                                             </section>
                                                         </div>
                                                     </fieldset>
-                                                </div>                                                        
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <footer>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
-                                            <span class="fa fa-trash" ></span>
+                                            <span class="fa fa-trash"></span>
                                         </button>
-                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
-                                             tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" 
-                                             style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                                                 <span id="ui-id-2" class="ui-dialog-title">
                                                 </span>
@@ -157,19 +155,19 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-floppy-o" ></span>
+                                            <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o" ></span>
+                                            <span class="fa fa-file-o"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward " ></span>
+                                            <span class="fa fa-backward "></span>
                                         </button>
                                     </footer>
-                                </form>                                            
+                                </form>
                             </div>
-                        </div>                                
-                    </div>                                
+                        </div>
+                    </div>
                 </article>
             </div>
         </section>
@@ -223,14 +221,13 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
 
 <script language="JavaScript" type="text/javascript">
-    
     //Máscara dos campos:
     $("#cnpj").mask("99.999.999/9999-99", {
-            placeholder: "X"
-        }); 
-        
-    $(document).ready(function () {
-        
+        placeholder: "X"
+    });
+
+    $(document).ready(function() {
+
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -238,22 +235,22 @@ include("inc/scripts.php");
             modal: true,
             title: "Atenção",
             buttons: [{
-                    html: "Excluir registro",
-                    "class": "btn btn-success",
-                    click: function () {
-                        $(this).dialog("close");
-                        excluir();
-                    }
-                }, {
-                    html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                    "class": "btn btn-default",
-                    click: function () {
-                        $(this).dialog("close");
-                    }
-                }]
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
         });
 
-        $("#btnExcluir").on("click", function () {
+        $("#btnExcluir").on("click", function() {
             var id = $("#codigo").val();
 
             if (id === 0) {
@@ -267,18 +264,18 @@ include("inc/scripts.php");
             }
         });
 
-        $("#btnNovo").on("click", function () {
+        $("#btnNovo").on("click", function() {
             novo();
         });
 
-        $("#btnGravar").on("click", function () {
+        $("#btnGravar").on("click", function() {
             gravar();
         });
 
-        $("#btnVoltar").on("click", function () {
+        $("#btnVoltar").on("click", function() {
             voltar();
-        }); 
-        
+        });
+
         $("#cnpj").on("change", function() {
             var cnpj = $("#cnpj").val();
             if (!validacao_cnpj(cnpj)) {
@@ -288,8 +285,8 @@ include("inc/scripts.php");
         });
 
         carregaPagina();
-    }); 
- 
+    });
+
     function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
@@ -298,37 +295,37 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaConvenioSaude(idd, 
-                function(data){
-                    if (data.indexOf('failed') > -1) {
+                recuperaConvenioSaude(idd,
+                    function(data) {
+                        if (data.indexOf('failed') > -1) {
                             return;
-                            } else {
-                                data = data.replace(/failed/g, '');
-                                var piece = data.split("#"); 
-                                var mensagem = piece[0];
-                                var out = piece[1]; 
-                                piece = out.split("^");
-                                 
-                                // Atributos de vale transporte unitário que serão recuperados: 
-                                var codigo = +piece[0];
-                                var apelido = piece[1];
-                                var cnpj = piece[2];
-                                var descricao = piece[3]; 
-                                var registroAns = +piece[4];
-                                var seguroVida = +piece[5];
-                                var ativo = +piece[6];
+                        } else {
+                            data = data.replace(/failed/g, '');
+                            var piece = data.split("#");
+                            var mensagem = piece[0];
+                            var out = piece[1];
+                            piece = out.split("^");
 
-                                //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
-                                $("#codigo").val(codigo); 
-                                $("#apelido").val(apelido);
-                                $("#cnpj").val(cnpj);
-                                $("#descricao").val(descricao);
-                                $("#registroAns").val(registroAns);
-                                $("#seguroVida").val(seguroVida);
-                                $("#ativo").val(ativo);
-                                $("#verificaRecuperacao").val(1);
+                            // Atributos de vale transporte unitário que serão recuperados: 
+                            var codigo = +piece[0];
+                            var apelido = piece[1];
+                            var cnpj = piece[2];
+                            var descricao = piece[3];
+                            var registroAns = +piece[4];
+                            var seguroVida = +piece[5];
+                            var ativo = +piece[6];
 
-                                return;
+                            //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
+                            $("#codigo").val(codigo);
+                            $("#apelido").val(apelido);
+                            $("#cnpj").val(cnpj);
+                            $("#descricao").val(descricao);
+                            $("#registroAns").val(registroAns);
+                            $("#seguroVida").val(seguroVida);
+                            $("#ativo").val(ativo);
+                            $("#verificaRecuperacao").val(1);
+
+                            return;
                         }
                     }
                 );
@@ -352,17 +349,17 @@ include("inc/scripts.php");
             smartAlert("Atenção", "Selecione um registro para excluir!", "error");
             return;
         }
-        excluirConvenioSaude(id, 
-            function(data){
+        excluirConvenioSaude(id,
+            function(data) {
                 if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
 
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                }
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     voltar();
@@ -370,73 +367,80 @@ include("inc/scripts.php");
             }
         );
     }
-    
-    function gravar() { 
-        
+
+    function gravar() {
+
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
-        
+
+        setTimeout(() => {
+            $("#btnGravar").prop('disabled', false);
+        }, 5000)
         // Variáveis que vão ser gravadas no banco:
         var id = +$("#codigo").val();
         var ativo = +$("#ativo").val();
-        var apelido = $('#apelido').val().trim().replace(/'/g, " "); 
+        var apelido = $('#apelido').val().trim().replace(/'/g, " ");
         var cnpj = $('#cnpj').val();
-        var descricao = $('#descricao').val().trim().replace(/'/g, " "); 
+        var descricao = $('#descricao').val().trim().replace(/'/g, " ");
         var registroAns = $('#registroAns').val().trim();
         var seguroVida = $('#seguroVida').val();
-        
+
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!apelido) {
             smartAlert("Atenção", "Informe o Apelido", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
- 
+
         if (!cnpj) {
             smartAlert("Atenção", "Informe o CNPJ", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
-        
+
         if (!descricao) {
             smartAlert("Atenção", "Informe a Descrição", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
-        
+
         if (!seguroVida) {
             smartAlert("Atenção", "Informe o Seguro de Vida", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
-        
-          
+
+        if (!ativo) {
+            smartAlert("Atenção", "Informe o Seguro de Vida", "error");
+            return;
+        }
+
+        if (!registroAns) {
+            smartAlert("Atenção", "Informe o Seguro de Vida", "error");
+            return;
+        }
+
+
         //Chama a função de gravar do business de convênio de saúde.
-        gravaConvenioDeSaude(id, ativo, apelido, cnpj, descricao, registroAns, seguroVida, 
-            function(data){
+        gravaConvenioDeSaude(id, ativo, apelido, cnpj, descricao, registroAns, seguroVida,
+            function(data) {
                 if (data.indexOf('sucess') < 0) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                    $("#btnGravar").prop('disabled', false);
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                    $("#btnGravar").prop('disabled', false);
-                }
-                return '';
-                }else { 
-                        
-                        //Verifica se a função de recuperar os campos foi executada.
-                        var verificaRecuperacao =  +$("#verificaRecuperacao").val();  
-                        smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                        
-                        if(verificaRecuperacao === 1){
-                            voltar();
-                        } else {
-                            novo();
-                        } 
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                     }
+                    return '';
+                } else {
+
+                    //Verifica se a função de recuperar os campos foi executada.
+                    var verificaRecuperacao = +$("#verificaRecuperacao").val();
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+
+                    if (verificaRecuperacao === 1) {
+                        voltar();
+                    } else {
+                        novo();
+                    }
+                }
             }
         );
     }
