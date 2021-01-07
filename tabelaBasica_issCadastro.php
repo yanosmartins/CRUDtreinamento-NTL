@@ -40,7 +40,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub']["ISS"]["active"] = true;
+$page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub']["iss"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -139,11 +139,12 @@ include("inc/nav.php");
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
-
-                                        <button type="button" id="btnVoltar" class="btn btn-primary" aria-hidden="true" title="Voltar" style="display:<?php echo $esconderBtnSearch ?>">
-                                            <span class="fa fa-backward"></span>
+                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <span class="fa fa-file-o"></span>
                                         </button>
-
+                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                            <span class="fa fa-backward "></span>
+                                        </button>
                                     </footer>
                                 </form>
                             </div>
