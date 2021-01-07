@@ -40,8 +40,6 @@ function grava()
         return;
     }
 
-    $reposit = new reposit();
-
     //Dados
     $id = validaNumero($_POST['id']);
     $ativo = 1;
@@ -133,7 +131,6 @@ function grava()
         $diaFeriado . ',' .
         $usuario . ') ';
 
-    $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
     $ret = 'sucess#';
@@ -225,7 +222,6 @@ function excluir()
         return;
     }
 
-    $reposit = new reposit();
     $result = $reposit->update('funcionarioFerias' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
@@ -279,7 +275,6 @@ function contaFeriado()
     FROM Ntl.beneficioProjeto BP
     LEFT JOIN Ntl.projeto P ON P.codigo = BP.projeto WHERE BP.funcionario = $funcionario";
 
-    $reposit = new reposit();
     $resultProjeto = $reposit->RunQuery($sqlProjeto);
 
     if (($row = odbc_fetch_array($resultProjeto))) {

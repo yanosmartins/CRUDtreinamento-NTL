@@ -176,7 +176,6 @@ function excluir()
         return;
     }
 
-    $reposit = new reposit();
     $result = $reposit->update('afastamento' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
