@@ -95,13 +95,13 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Período de Vigência (Meses)</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" autocomplete="off" type="number" autocomplete="off" class="required" value="">
+                                                                    <input id="descricao" name="descricao" autocomplete="off" type="number" autocomplete="off" class="required" value="" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
+                                                                    <select id="ativo" name="ativo" class="required" required>
                                                                         <option value='1'>Sim</option>
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>

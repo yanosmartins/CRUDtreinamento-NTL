@@ -88,28 +88,28 @@ include("inc/nav.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                    <input id="codigo" name="codigo" type="text" class="hidden">
+                                                        <input id="codigo" name="codigo" type="text" class="hidden">
 
-                                                     <div class="row ">
-                                                               
-                                                     <section class="col col-2">
+                                                        <div class="row ">
+
+                                                            <section class="col col-2">
                                                                 <label class="label">Percentual INSS</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class = "required" autocomplete="off">
+                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
 
                                                                 </label>
-                                                            </section>   
-                                                            
+                                                            </section>
+
                                                             <section class="col col-2">
-                                                            <label class="label">Ativo</label>
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
+                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" required>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                            </section> 
-                                                                                                                                                                      
+                                                            </section>
+
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -137,7 +137,7 @@ include("inc/nav.php");
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o" ></span>
+                                            <span class="fa fa-file-o"></span>
                                         </button>
 
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
@@ -193,8 +193,8 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-        
-        $('#percentual').focusout(function() { 
+
+        $('#percentual').focusout(function() {
             var percentual, element;
             element = $(this);
             element.unmask();
@@ -206,7 +206,7 @@ include("inc/scripts.php");
             }
         }).trigger('focusout');
 
-	
+
         $('#btnNovo').on("click", function() {
             $(location).attr('href', 'tabelaBasica_inssCadastro.php');
         });
@@ -220,7 +220,7 @@ include("inc/scripts.php");
             excluir();
         });
         carregaInss();
-        
+
 
     });
 
@@ -231,115 +231,115 @@ include("inc/scripts.php");
 
     function gravar() {
 
-//Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
-   $("#btnGravar").prop('disabled', true);
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
+        $("#btnGravar").prop('disabled', true);
 
-   var codigo = +$("#codigo").val();
-   var ativo = $("#ativo").val();
-   var percentual = $("#percentual").val();
+        var codigo = +$("#codigo").val();
+        var ativo = $("#ativo").val();
+        var percentual = $("#percentual").val();
 
-   // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-   if (!percentual) {
-       smartAlert("Erro", "Informe o Inss.", "error");
-       return;
-   }
-   
-
-   gravaInss(codigo, ativo, percentual,
-       function(data) {
-
-           if (data.indexOf('sucess') < 0) {
-               var piece = data.split("#");
-               var mensagem = piece[1];
-               if (mensagem !== "") {
-                   smartAlert("Atenção", mensagem, "error");
-                   return false;
-               } else {
-                   smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                   return false;
-               }
-           } else {
-               var piece = data.split("#");
-               smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-               voltar();
-           }
-       }
-   );
-}
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+        if (!percentual) {
+            smartAlert("Erro", "Informe o Inss.", "error");
+            return;
+        }
 
 
-$('#dlgSimpleExcluir').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            title: "Atenção",
-            buttons: [{
-                html: "Excluir registro",
-                "class": "btn btn-success",
-                click: function() {
-                    $(this).dialog("close");
-                    excluir();
+        gravaInss(codigo, ativo, percentual,
+            function(data) {
+
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        return false;
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                        return false;
+                    }
+                } else {
+                    var piece = data.split("#");
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
                 }
-            }, {
-                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                "class": "btn btn-default",
-                click: function() {
-                    $(this).dialog("close");
-                }
-            }]
-        });
-        $("#btnExcluir").on("click", function() {
-            var id = $("#codigo").val();
-
-            if (id === 0) {
-                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-                $("#nome").focus();
-                return;
             }
+        );
+    }
 
-            if (id !== 0) {
-                $('#dlgSimpleExcluir').dialog('open');
+
+    $('#dlgSimpleExcluir').dialog({
+        autoOpen: false,
+        width: 400,
+        resizable: false,
+        modal: true,
+        title: "Atenção",
+        buttons: [{
+            html: "Excluir registro",
+            "class": "btn btn-success",
+            click: function() {
+                $(this).dialog("close");
+                excluir();
             }
-        });
+        }, {
+            html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+            "class": "btn btn-default",
+            click: function() {
+                $(this).dialog("close");
+            }
+        }]
+    });
+    $("#btnExcluir").on("click", function() {
+        var id = $("#codigo").val();
+
+        if (id === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+            $("#nome").focus();
+            return;
+        }
+
+        if (id !== 0) {
+            $('#dlgSimpleExcluir').dialog('open');
+        }
+    });
 
 
-function carregaInss() {
-   var urlx = window.document.URL.toString();
-   var params = urlx.split("?");
-   if (params.length === 2) {
-       var id = params[1];
-       var idx = id.split("=");
-       var idd = idx[1];
-       if (idd !== "") {
-           recuperaInss(idd,
-               function(data) {
-                   data = data.replace(/failed/g, '');
-                   var piece = data.split("#");
+    function carregaInss() {
+        var urlx = window.document.URL.toString();
+        var params = urlx.split("?");
+        if (params.length === 2) {
+            var id = params[1];
+            var idx = id.split("=");
+            var idd = idx[1];
+            if (idd !== "") {
+                recuperaInss(idd,
+                    function(data) {
+                        data = data.replace(/failed/g, '');
+                        var piece = data.split("#");
 
-                   //Atributos de Cliente
-                   var mensagem = piece[0];
-                   var out = piece[1];
+                        //Atributos de Cliente
+                        var mensagem = piece[0];
+                        var out = piece[1];
 
-                   piece = out.split("^");
-                   console.table(piece);
-                   //Atributos de cliente 
-                   debugger;
-                   var codigo = +piece[0];
-                   var percentual = piece[1];
+                        piece = out.split("^");
+                        console.table(piece);
+                        //Atributos de cliente 
+                        debugger;
+                        var codigo = +piece[0];
+                        var percentual = piece[1];
 
-                   //Atributos de cliente        
-                   $("#codigo").val(codigo);
-                   $("#percentual").val(percentual);
-
-
-
-               }
-
-           );
-       }
-   }
+                        //Atributos de cliente        
+                        $("#codigo").val(codigo);
+                        $("#percentual").val(percentual);
 
 
-}
+
+                    }
+
+                );
+            }
+        }
+
+
+    }
 </script>

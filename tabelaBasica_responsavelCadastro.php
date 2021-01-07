@@ -93,19 +93,19 @@ include("inc/nav.php");
                                                             <section class="col col-6">
                                                                 <label class="label" for="nome">Responsável</label>
                                                                 <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" class="required" type="text" value="" autocomplete="off">
+                                                                    <input id="nome" maxlength="255" name="nome" class="required" type="text" value="" autocomplete="off" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3">
                                                                 <label class="label" for="telefone">Telefone com DD</label>
                                                                 <label class="input">
-                                                                    <input id="telefone" maxlength="255" name="telefone" class="required" type="text" value="" autocomplete="off" data-mask-placeholder="X" data-mask="99999999999" class="" value="">
+                                                                    <input id="telefone" maxlength="255" name="telefone" class="required" type="text" autocomplete="off" data-mask-placeholder="X" data-mask="99999999999" value="" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
+                                                                    <select id="ativo" name="ativo" class="required" required>
                                                                         <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
@@ -272,17 +272,17 @@ include("inc/scripts.php");
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var out = piece[1];
- 
+
                             piece = out.split("^");
                             codigo = piece[0];
-                            nome = piece[1]; 
+                            nome = piece[1];
                             telefone = piece[2];
-                            ativo = +piece[3]; 
+                            ativo = +piece[3];
 
                             $("#codigo").val(codigo);
-                            $("#nome").val(nome); 
+                            $("#nome").val(nome);
                             $("#telefone").val(telefone);
-                            $("#ativo").val(ativo);  
+                            $("#ativo").val(ativo);
 
                         }
                     }
@@ -317,8 +317,8 @@ include("inc/scripts.php");
                         smartAlert("Atenção", mensagem, "error");
                     } else {
                         smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                    } 
-                    
+                    }
+
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     voltar();
@@ -329,7 +329,7 @@ include("inc/scripts.php");
 
     function gravar() {
 
-        $("#btnGravar").prop('disabled', true); 
+        $("#btnGravar").prop('disabled', true);
 
         var codigo = +$("#codigo").val();
         var nome = $("#nome").val();
@@ -351,7 +351,7 @@ include("inc/scripts.php");
         }
 
         gravaResponsavel(codigo, nome, telefone, ativo,
-            function(data) { 
+            function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
                     var mensagem = piece[1];

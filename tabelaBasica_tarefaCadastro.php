@@ -90,25 +90,25 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" type="text" autocomplete="new-password" maxlength="50">
+                                                                    <input id="descricao" name="descricao" type="text" autocomplete="new-password" maxlength="50" class="required" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Tipo</label>
                                                                 <label class="input">
-                                                                    <input id="tipo" name="tipo" type="text" autocomplete="new-password" maxlength="100">
+                                                                    <input id="tipo" name="tipo" type="text" autocomplete="new-password" maxlength="100" class="required" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Visivel</label>
                                                                 <label class="input">
-                                                                    <input id="visivel" name="visivel" type="text" autocomplete="new-password" maxlength="100">
+                                                                    <input id="visivel" name="visivel" type="text" autocomplete="new-password" maxlength="100" class="required" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" autocomplete="new-password" required>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>

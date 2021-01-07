@@ -96,18 +96,18 @@ include("inc/nav.php");
                                                                 <label class="label">Índice de Reajuste</label>
                                                                 <label class="input">
 
-                                                                    <input id="descricao" name="descricao" autocomplete="new-password" type="text"  class="required" value="">
+                                                                    <input id="descricao" name="descricao" autocomplete="new-password" type="text" class="required" value="" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                            <label class="label">Ativo</label>
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
+                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" required>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                            </section>    
+                                                            </section>
 
                                                         </div>
                                                     </fieldset>
@@ -136,7 +136,7 @@ include("inc/nav.php");
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o" ></span>
+                                            <span class="fa fa-file-o"></span>
                                         </button>
 
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
@@ -216,26 +216,28 @@ include("inc/scripts.php");
         $(location).attr('href', 'tabelaBasica_indiceReajusteFiltro.php');
 
     }
+
     function novo() {
         $(location).attr('href', 'tabelaBasica_indiceReajusteCadastro.php');
 
     }
+
     function gravar() {
-        
+
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
         var codigo = +$("#codigo").val();
         var ativo = $("#ativo").val();
-        var descricao = $("#descricao").val();  
-   
+        var descricao = $("#descricao").val();
+
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
             smartAlert("Atenção", "Informe a Descrição", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
-      
+
         gravaIndiceReajuste(codigo, ativo, descricao,
             function(data) {
 
@@ -280,7 +282,7 @@ include("inc/scripts.php");
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                 }
-                
+
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                 novo();

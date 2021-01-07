@@ -53,8 +53,8 @@ include("inc/nav.php");
 <!-- MAIN PANEL -->
 <div id="main" role="main">
     <?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
     $breadcrumbs["Tabela Básica"] = "";
     include("inc/ribbon.php");
     ?>
@@ -72,7 +72,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formCliente" method="post" enctype="multipart/form-data">    
+                                <form class="smart-form client-form" id="formCliente" method="post" enctype="multipart/form-data">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -87,66 +87,64 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        
-                                                        <input id="verificaRecuperacao" name="verificaRecuperacao" type="text"  readonly class="hidden" value="">
-                                                        <div class="row"> 
-                                                            
-                                                            <input id="codigo" name="codigo" type="text"  readonly class="hidden" value="">
-                                                            
+
+                                                        <input id="verificaRecuperacao" name="verificaRecuperacao" type="text" readonly class="hidden" value="">
+                                                        <div class="row">
+
+                                                            <input id="codigo" name="codigo" type="text" readonly class="hidden" value="">
+
                                                             <section class="col col-4 col-auto">
                                                                 <label class="label" for="descricao">Descrição</label>
-                                                                <label class="input"> 
-                                                                    <input id="descricao" maxlength="45" name="descricao" class="required" value=""  autocomplete="off">
+                                                                <label class="input">
+                                                                    <input id="descricao" maxlength="45" name="descricao" class="required" value="" autocomplete="off" required>
                                                                 </label>
                                                             </section>
-                                                            
+
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required" >
+                                                                    <select id="ativo" name="ativo" class="required" required>
 
-                                                                        <option value="1">Sim</option> 
-                                                                        <option value="0">Não</option> 
-                                                                    </select><i></i> 
-                                                                </label> 
-                                                            </section> 
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
 
                                                         </div>
                                                     </fieldset>
                                                 </div>
-                                    <footer>
-                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
-                                            <span class="fa fa-trash" ></span>
-                                        </button>
-                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
-                                             tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" 
-                                             style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
-                                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                <span id="ui-id-2" class="ui-dialog-title">
-                                                </span>
-                                            </div>
-                                            <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                <p>CONFIRMA A EXCLUSÃO ? </p>
-                                            </div>
-                                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                                <div class="ui-dialog-buttonset">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-floppy-o" ></span>
-                                        </button>
-                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o" ></span>
-                                        </button>
-                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward " ></span>
-                                        </button>
-                                    </footer>
-                                </form>                                            
+                                                <footer>
+                                                    <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                                        <span class="fa fa-trash"></span>
+                                                    </button>
+                                                    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                                        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                            <span id="ui-id-2" class="ui-dialog-title">
+                                                            </span>
+                                                        </div>
+                                                        <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                            <p>CONFIRMA A EXCLUSÃO ? </p>
+                                                        </div>
+                                                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                            <div class="ui-dialog-buttonset">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                                        <span class="fa fa-floppy-o"></span>
+                                                    </button>
+                                                    <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                                        <span class="fa fa-file-o"></span>
+                                                    </button>
+                                                    <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                                        <span class="fa fa-backward "></span>
+                                                    </button>
+                                                </footer>
+                                </form>
                             </div>
-                        </div>                                
-                    </div>                                
+                        </div>
+                    </div>
                 </article>
             </div>
         </section>
@@ -206,9 +204,8 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
+    $(document).ready(function() {
 
-    $(document).ready(function () {
- 
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -216,23 +213,23 @@ include("inc/scripts.php");
             modal: true,
             title: "Atenção",
             buttons: [{
-                    html: "Excluir registro",
-                    "class": "btn btn-success",
-                    click: function () {
-                        $(this).dialog("close");
-                        excluir();
-                    }
-                }, {
-                    html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                    "class": "btn btn-default",
-                    click: function () {
-                        $(this).dialog("close");
-                    }
-                }]
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
         });
 
 
-        $("#btnExcluir").on("click", function () {
+        $("#btnExcluir").on("click", function() {
             var id = $("#codigo").val();
 
             if (id === 0) {
@@ -246,19 +243,19 @@ include("inc/scripts.php");
             }
         });
 
-        $("#btnNovo").on("click", function () {
+        $("#btnNovo").on("click", function() {
             novo();
         });
 
-        $("#btnGravar").on("click", function () {
+        $("#btnGravar").on("click", function() {
             gravar();
         });
 
-        $("#btnVoltar").on("click", function () {
+        $("#btnVoltar").on("click", function() {
             voltar();
         });
-        
-                carregaPagina();
+
+        carregaPagina();
 
     });
 
@@ -270,40 +267,40 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-         
+
                 recuperaBeneficioIndireto(idd,
-                     function(data){
-                    if (data.indexOf('failed') > -1) {
+                    function(data) {
+                        if (data.indexOf('failed') > -1) {
                             return;
-                            } else {
-                                data = data.replace(/failed/g, '');
-                                var piece = data.split("#"); 
-                                var mensagem = piece[0];
-                                var out = piece[1]; 
-                                piece = out.split("^");
-                                 
-                                // Atributos de vale transporte unitário que serão recuperados: 
-                                var codigo = +piece[0];
-                                var descricao = piece[1];
-                                var ativo = piece[2]; 
-                                
-                                //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
-                                $("#codigo").val(codigo); 
-                                 $("#ativo").val(ativo);
-                                $("#descricao").val(descricao);  
-                                $("#verificaRecuperacao").val(1);
-                                
-                                return;
-                              
+                        } else {
+                            data = data.replace(/failed/g, '');
+                            var piece = data.split("#");
+                            var mensagem = piece[0];
+                            var out = piece[1];
+                            piece = out.split("^");
+
+                            // Atributos de vale transporte unitário que serão recuperados: 
+                            var codigo = +piece[0];
+                            var descricao = piece[1];
+                            var ativo = piece[2];
+
+                            //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
+                            $("#codigo").val(codigo);
+                            $("#ativo").val(ativo);
+                            $("#descricao").val(descricao);
+                            $("#verificaRecuperacao").val(1);
+
+                            return;
+
                         }
-                        
+
                     }
                 );
-                 
+
             }
 
         }
-     
+
     }
 
     function novo() {
@@ -314,25 +311,25 @@ include("inc/scripts.php");
         $(location).attr('href', 'tabelaBasica_beneficioIndiretoFiltro.php');
     }
 
-   function excluir() {
+    function excluir() {
         var id = $("#codigo").val();
 
         if (id === 0) {
             smartAlert("Atenção", "Selecione um registro para excluir!", "error");
             return;
         }
-        excluirBeneficioIndireto(id, 
-            function(data){
+        excluirBeneficioIndireto(id,
+            function(data) {
                 if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
 
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                }
-                voltar();
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
+                    voltar();
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     voltar();
@@ -341,52 +338,50 @@ include("inc/scripts.php");
         );
     }
 
-  function gravar() {
+    function gravar() {
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
         var codigo = +$("#codigo").val();
         var ativo = +$("#ativo").val();
-        var descricao = $("#descricao").val().trim().replace(/'/g, " ");  
-   
+        var descricao = $("#descricao").val().trim().replace(/'/g, " ");
+
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
             smartAlert("Atenção", "Informe a Descrição", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
-      
+
         gravaBeneficioIndireto(codigo, ativo, descricao,
-                function (data) {
-                    if (data.indexOf('sucess') < 0) {
-                        var piece = data.split("#");
-                        var mensagem = piece[1];
-                        
-                        if (mensagem !== "") {
-                            smartAlert("Atenção", mensagem, "error");
-                            $("#btnGravar").prop('disabled', false);
-                        } else {
-                            smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                            $("#btnGravar").prop('disabled', false);
-                        }
-                        return '';
-                    } else { 
-                        
-                        //Verifica se a função de recuperar os campos foi executada.
-                        var verificaRecuperacao =  +$("#verificaRecuperacao").val();  
-                        smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                        
-                        if(verificaRecuperacao === 1){
-                            voltar();
-                        } else {
-                            novo();
-                        } 
+            function(data) {
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnGravar").prop('disabled', false);
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                        $("#btnGravar").prop('disabled', false);
+                    }
+                    return '';
+                } else {
+
+                    //Verifica se a função de recuperar os campos foi executada.
+                    var verificaRecuperacao = +$("#verificaRecuperacao").val();
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+
+                    if (verificaRecuperacao === 1) {
+                        voltar();
+                    } else {
+                        novo();
                     }
                 }
+            }
         );
 
     }
-
 </script>
-

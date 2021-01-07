@@ -90,13 +90,13 @@ include("inc/nav.php");
                                                                 <label class="label">Tipo de Caução</label>
                                                                 <label class="input">
 
-                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="required" value="">
+                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="required" value="" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
+                                                                    <select id="ativo" name="ativo" class="required" required>
 
                                                                         <option value="1">Sim</option>
                                                                         <option value="0">Não</option>

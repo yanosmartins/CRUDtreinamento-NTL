@@ -86,24 +86,24 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <div class="row">
                                                             <input id="codigo" name="codigo" type="text" class="hidden">
-                                                        </div> 
+                                                        </div>
                                                         <div class="row">
                                                             <section class="col col-3">
                                                                 <label class="label">Nome do portal</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" maxlength="255" name="descricao" class="required" type="text" value="" autocomplete="off">
+                                                                    <input id="descricao" maxlength="255" name="descricao" class="required" type="text" value="" autocomplete="off" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-6">
                                                                 <label class="label">Endereço do portal (URL)</label>
                                                                 <label class="input">
-                                                                    <input id="endereco" maxlength="255" name="endereco" class="required" autocomplete="off" type="text" value="">
+                                                                    <input id="endereco" maxlength="255" name="endereco" class="required" autocomplete="off" type="text" value="" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
+                                                                    <select id="ativo" name="ativo" class="required" required>
                                                                         <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
@@ -327,8 +327,8 @@ include("inc/scripts.php");
                         smartAlert("Atenção", mensagem, "error");
                     } else {
                         smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                    } 
-                    
+                    }
+
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     voltar();
@@ -342,7 +342,7 @@ include("inc/scripts.php");
 
         var codigo = +$("#codigo").val();
         var descricao = $("#descricao").val().trim();
-        var endereco = $("#endereco").val().trim(); 
+        var endereco = $("#endereco").val().trim();
         var ativo = +$("#ativo").val();
 
         if (descricao === "") {

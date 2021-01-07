@@ -95,19 +95,19 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Código de Serviço</label>
                                                                 <label class="input">
-                                                                    <input id="descricaoCodigo" name="descricaoCodigo" autocomplete="off" type="text" class="required" value="">
+                                                                    <input id="descricaoCodigo" name="descricaoCodigo" autocomplete="off" type="text" class="required" value="" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-6">
                                                                 <label class="label">Descrição do Serviço</label>
                                                                 <label class="input">
-                                                                    <input id="descricaoServico" name="descricaoServico" maxlength="336" autocomplete="off" class="required" type="text" value="">
+                                                                    <input id="descricaoServico" name="descricaoServico" maxlength="336" autocomplete="off" class="required" type="text" value="" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
+                                                                    <select id="ativo" name="ativo" class="required" required>
                                                                         <option value='1' selected>Sim</option>
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>

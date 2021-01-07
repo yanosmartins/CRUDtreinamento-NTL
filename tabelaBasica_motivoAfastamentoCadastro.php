@@ -86,13 +86,13 @@ include("inc/nav.php");
                                                             <section class="col col-4 col-auto">
                                                                 <label class="label" for="motivoDoAfastamento">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" maxlength="45" name="descricao" class="required" value="" autocomplete="off">
+                                                                    <input id="descricao" maxlength="45" name="descricao" class="required" value="" autocomplete="off" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
+                                                                    <select id="ativo" name="ativo" class="required" required>
                                                                         <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>

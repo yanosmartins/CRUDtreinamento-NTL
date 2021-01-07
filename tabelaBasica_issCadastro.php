@@ -97,7 +97,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Percentual ISS</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off">
+                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
 
                                                                 </label>
                                                             </section>
@@ -105,7 +105,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
 
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="hidden" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" autocomplete="new-password" required>
                                                                         <option></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>

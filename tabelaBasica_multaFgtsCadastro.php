@@ -90,28 +90,28 @@ include("inc/nav.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                    <input id="codigo" name="codigo" type="text" class="hidden">
+                                                        <input id="codigo" name="codigo" type="text" class="hidden">
 
-                                                     <div class="row ">
-                                                               
-                                                     <section class="col col-2">
+                                                        <div class="row ">
+
+                                                            <section class="col col-2">
                                                                 <label class="label">Percentual Multa</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" class = "required" style="text-align: right;" type="text" autocomplete="off">
+                                                                    <input id="percentual" name="percentual" class="required" style="text-align: right;" type="text" autocomplete="off" required>
 
                                                                 </label>
-                                                            </section>   
-                                                            
+                                                            </section>
+
                                                             <section class="col col-2">
-                                                            <label class="label">Ativo</label>
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
+                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" required>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                            </section>  
-                                                                                                                                                                      
+                                                            </section>
+
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -139,7 +139,7 @@ include("inc/nav.php");
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o" ></span>
+                                            <span class="fa fa-file-o"></span>
                                         </button>
 
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
@@ -193,10 +193,10 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
 
-<script language="JavaScript" type="text/javascript"> 
+<script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
 
-		
+
         $('#percentual').focusout(function() {
             var percentual, element;
             element = $(this);
@@ -209,7 +209,7 @@ include("inc/scripts.php");
             }
         }).trigger('focusout');
 
-	
+
         $('#btnNovo').on("click", function() {
             $(location).attr('href', 'tabelaBasica_multaFgtsCadastro.php');
         });
@@ -223,7 +223,7 @@ include("inc/scripts.php");
             excluir();
         });
         carregaMultaFgts();
-        
+
 
     });
 
@@ -234,77 +234,77 @@ include("inc/scripts.php");
 
     function gravar() {
 
-//Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
-   $("#btnGravar").prop('disabled', true);
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
+        $("#btnGravar").prop('disabled', true);
 
-   var codigo = +$("#codigo").val();
-   var ativo = $("#ativo").val();
-   var percentual = $("#percentual").val();
+        var codigo = +$("#codigo").val();
+        var ativo = $("#ativo").val();
+        var percentual = $("#percentual").val();
 
-   // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-   if (!percentual) {
-       smartAlert("Erro", "Informe o 13º Salário.", "error");
-       return;
-   }
-   
-
-   gravaMultaFgts(codigo, ativo, percentual,
-       function(data) {
-
-           if (data.indexOf('sucess') < 0) {
-               var piece = data.split("#");
-               var mensagem = piece[1];
-               if (mensagem !== "") {
-                   smartAlert("Atenção", mensagem, "error");
-                   return false;
-               } else {
-                   smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                   return false;
-               }
-           } else {
-               var piece = data.split("#");
-               smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-               voltar();
-           }
-       }
-   );
-}
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+        if (!percentual) {
+            smartAlert("Erro", "Informe o 13º Salário.", "error");
+            return;
+        }
 
 
-$('#dlgSimpleExcluir').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            title: "Atenção",
-            buttons: [{
-                html: "Excluir registro",
-                "class": "btn btn-success",
-                click: function() {
-                    $(this).dialog("close");
-                    excluir();
+        gravaMultaFgts(codigo, ativo, percentual,
+            function(data) {
+
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        return false;
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                        return false;
+                    }
+                } else {
+                    var piece = data.split("#");
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
                 }
-            }, {
-                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                "class": "btn btn-default",
-                click: function() {
-                    $(this).dialog("close");
-                }
-            }]
-        });
-        $("#btnExcluir").on("click", function() {
-            var id = $("#codigo").val();
-
-            if (id === 0) {
-                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-                $("#nome").focus();
-                return;
             }
+        );
+    }
 
-            if (id !== 0) {
-                $('#dlgSimpleExcluir').dialog('open');
+
+    $('#dlgSimpleExcluir').dialog({
+        autoOpen: false,
+        width: 400,
+        resizable: false,
+        modal: true,
+        title: "Atenção",
+        buttons: [{
+            html: "Excluir registro",
+            "class": "btn btn-success",
+            click: function() {
+                $(this).dialog("close");
+                excluir();
             }
-        });
+        }, {
+            html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+            "class": "btn btn-default",
+            click: function() {
+                $(this).dialog("close");
+            }
+        }]
+    });
+    $("#btnExcluir").on("click", function() {
+        var id = $("#codigo").val();
+
+        if (id === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+            $("#nome").focus();
+            return;
+        }
+
+        if (id !== 0) {
+            $('#dlgSimpleExcluir').dialog('open');
+        }
+    });
 
 
     function carregaMultaFgts() {
