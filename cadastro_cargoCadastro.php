@@ -356,7 +356,6 @@ include("inc/scripts.php");
             smartAlert("Atenção", "Selecione um registro para excluir!", "error");
             return;
         }
-        debugger;
         excluirCargo(id,
             function(data) {
                 if (data.indexOf('failed') > -1) {
@@ -399,6 +398,9 @@ include("inc/scripts.php");
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
+        setTimeout(() => {
+            $("#btnGravar").prop('disabled', false);
+        }, 5000)
 
         // Variáveis que vão ser gravadas no banco:
         var id = +$("#codigo").val();
@@ -411,22 +413,23 @@ include("inc/scripts.php");
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
             smartAlert("Atenção", "Informe a Descrição", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
 
         if (!cboNumero) {
             smartAlert("Atenção", "Informe o CBO", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
 
         if (!cboDescricao) {
             smartAlert("Atenção", "Informe a Descrição do Ministério do Trabalho", "error");
-            $("#btnGravar").prop('disabled', false);
             return;
         }
 
+        if (!codigoCargoSCI) {
+            smartAlert("Atenção", "Informe o Código SCI", "error");
+            return;
+        }
 
         gravaCargo(id, ativo, descricao, cboNumero, cboDescricao, codigoCargoSCI,
             function(data) {
@@ -435,11 +438,9 @@ include("inc/scripts.php");
                     var mensagem = piece[1];
                     if (mensagem !== "") {
                         smartAlert("Atenção", mensagem, "error");
-                        $("#btnGravar").prop('disabled', false);
                         return;
                     } else {
                         smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                        $("#btnGravar").prop('disabled', false);
                         return;
                     }
 
@@ -456,7 +457,6 @@ include("inc/scripts.php");
                 }
             }
         );
-
     }
 
     function verificaCBO() {
