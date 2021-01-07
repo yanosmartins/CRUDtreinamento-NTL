@@ -90,7 +90,7 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="unidadeFederacao">UF</label>
                                                                 <label class="select">
-                                                                    <select id="unidadeFederacao" name="unidadeFederacao" class="required">
+                                                                    <select id="unidadeFederacao" name="unidadeFederacao" class="required" required>
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
@@ -109,7 +109,7 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="municipio">Município</label>
                                                                 <label class="select">
-                                                                    <select id="municipio" name="municipio" class="required">
+                                                                    <select id="municipio" name="municipio" class="required" required>
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
@@ -129,14 +129,14 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="cidade">Cidade</label>
                                                                 <label class="input">
-                                                                    <input id="cidade" name="cidade" type="text" class="required" maxlength="50" autocomplete="off">
+                                                                    <input id="cidade" name="cidade" type="text" class="required" maxlength="50" autocomplete="off" required>
                                                                 </label>
                                                             </section>
 
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
+                                                                    <select id="ativo" name="ativo" class="required" required>
                                                                         <option value='1'>Sim</option>
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>
