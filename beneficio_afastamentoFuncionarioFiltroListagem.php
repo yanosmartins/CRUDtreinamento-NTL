@@ -27,7 +27,7 @@ include "js/repositorio.php";
                 $where = "WHERE (0 = 0)";
 
                 $sql = "SELECT AF.codigo,AF.mesAno, F.nome AS funcionario, MA.descricao,AF.dataInicio, AF.dataFim, AF.ativo,AF.projeto,P.descricao AS nomeProjeto 
-                        FROM Ntl.afastamento AF
+                        FROM Beneficio.afastamento AF
                         INNER JOIN Ntl.funcionario F ON F.codigo = AF.funcionario
                         INNER JOIN Ntl.motivoAfastamento MA On MA.codigo = AF.motivoAfastamento 
                         LEFT JOIN Ntl.projeto P ON P.codigo = AF.projeto ";

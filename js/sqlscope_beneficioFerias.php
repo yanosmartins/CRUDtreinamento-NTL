@@ -113,7 +113,7 @@ function grava()
         $quantidadeDiasFinal += 1;
     }
 
-    $sql = 'Ntl.funcionarioFerias_Atualiza (' .
+    $sql = 'Beneficio.funcionarioFerias_Atualiza (' .
         $id . ',' .
         $ativo . ',' .
         $abono . ',' .
@@ -157,7 +157,7 @@ function recupera()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT * FROM Ntl.funcionarioFerias WHERE codigo = " . $id;
+    $sql = "SELECT * FROM Beneficio.funcionarioFerias WHERE codigo = " . $id;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -276,8 +276,8 @@ function contaFeriado()
     $reposit = new reposit();
 
     $sqlProjeto = "SELECT BP.codigo,BP.funcionario,BP.projeto,P.apelido,P.estado,P.cidade,P.municipioFerias
-    FROM Ntlgit statusgitsiitssststtststs.beneficioProjeto BP
-    LEFT JOIN Ntlgit statusgitsiitssststtststs.projeto P ON P.codigo = BP.projeto WHERE BP.funcionario = $funcionario";
+    FROM Ntl.beneficioProjeto BP
+    LEFT JOIN Ntl.projeto P ON P.codigo = BP.projeto WHERE BP.funcionario = $funcionario";
 
     $reposit = new reposit();
     $resultProjeto = $reposit->RunQuery($sqlProjeto);
@@ -288,8 +288,8 @@ function contaFeriado()
         $municipioFerias =  +$row['municipioFerias'];
     }
     $sql = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
-            FROM Ntlgit statusgitsiitssststtststsNTL.Ntlgit statusgitsiitssststtststs.feriado F 
-            LEFT JOIN Ntlgit statusgitsiitssststtststsNTL.Ntlgit statusgitsiitssststtststs.municipio M ON M.codigo = F.municipio  
+            FROM Ntl.feriado F 
+            LEFT JOIN Ntl.municipio M ON M.codigo = F.municipio  
             WHERE F.ativo = 1 AND data BETWEEN $dataInicio AND $dataFim 
             AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = $estado)) OR F.tipoFeriado = 2 and M.codigo = $municipioFerias) 
             AND DATENAME(weekday,F.data) NOT IN ('Saturday', 'Sunday')";
@@ -311,7 +311,7 @@ function populaComboFuncionario()
 {
     $projeto = $_POST["projeto"];
     if ($projeto > 0) {
-        $sql = "SELECT BP.codigo, BP.funcionario, F.nome FROM Ntlgit statusgitsiitssststtststs.beneficioProjeto BP INNER JOIN Ntlgit statusgitsiitssststtststs.funcionario F ON BP.funcionario = F.codigo WHERE (0=0) 
+        $sql = "SELECT BP.codigo, BP.funcionario, F.nome FROM Ntl.beneficioProjeto BP INNER JOIN Ntl.funcionario F ON BP.funcionario = F.codigo WHERE (0=0) 
         AND projeto = " . $projeto . " AND BP.ativo = 1 AND F.dataDemissaoFuncionario IS NULL";
 
         $reposit = new reposit();
@@ -337,7 +337,7 @@ function populaComboFuncionario()
 
 function temFeriasMesmoPeriodo($funcionario, $mesAno)
 {
-    $sql = "SELECT codigo,funcionario,mesAno FROM Ntlgit statusgitsiitssststtststs.funcionarioFerias 
+    $sql = "SELECT codigo,funcionario,mesAno FROM Beneficio.funcionarioFerias 
     WHERE funcionario = $funcionario and mesAno = $mesAno and ativo = 1";
 
     $reposit = new reposit();

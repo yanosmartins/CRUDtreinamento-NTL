@@ -68,7 +68,7 @@ function grava()
         return;
     }
 
-    $sql = 'Ntl.afastamentoFuncionario_Atualiza (' .
+    $sql = 'Beneficio.afastamentoFuncionario_Atualiza (' .
         $id . ',' .
         $ativo . ',' .
         $funcionario . ',' .
@@ -107,7 +107,7 @@ function recupera()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT * FROM Ntl.afastamento WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT * FROM Beneficio.afastamento WHERE (0=0) AND codigo = " . $id;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);

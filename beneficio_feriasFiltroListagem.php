@@ -25,7 +25,7 @@ include "js/repositorio.php";
 
                 $where = "WHERE (0 = 0)";
 
-                $sql = "SELECT FE.codigo, FU.nome AS funcionario, FE.dataInicio, FE.dataFim, FE.ativo,FE.projeto,P.descricao AS nomeProjeto,FE.mesAno FROM Ntl.funcionarioFerias FE
+                $sql = "SELECT FE.codigo, FU.nome AS funcionario, FE.dataInicio, FE.dataFim, FE.ativo,FE.projeto,P.descricao AS nomeProjeto,FE.mesAno FROM Beneficio.funcionarioFerias FE
                         INNER JOIN Ntl.funcionario FU ON FU.codigo = FE.funcionario
                         LEFT JOIN Ntl.projeto P ON P.codigo = FE.projeto ";
                 $where = $where . " AND FU.dataDemissaoFuncionario IS NULL"; // somente os funcionarios demitidos
