@@ -84,7 +84,7 @@ include("inc/nav.php");
                                                             <section class="col col-4">
                                                                 <label class="label" for="projeto">Projeto</label>
                                                                 <label class="select">
-                                                                    <select id="projeto" name="projeto" class="">
+                                                                    <select id="projeto" name="projeto" class="required">
                                                                     <option style="display:none;">Selecione</option>
                                                                         <?php
                                                                         $sql =  "SELECT P.codigo, P.numeroCentroCusto, P.descricao, P.apelido, C.projeto
@@ -110,7 +110,7 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Descrição do Posto</label>
                                                                 <label class="select">
-                                                                    <select id="descricaoPosto" name="descricaoPosto" class="">
+                                                                    <select id="descricaoPosto" name="descricaoPosto" class="required">
                                                                     <option style="display:none;">Selecione</option>
                                                                         <?php                                                                
                                                                         $sql =  "SELECT codigo, descricao
@@ -132,7 +132,7 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Valor do Posto</label>
                                                                 <label class="input"><i class="icon-append fa fa-money"></i>
-                                                                    <input type="text" placeholder="0,00" style="text-align: right;" id="valor" name="valor" class="decimal-2-casas" />
+                                                                    <input type="text" placeholder="0,00" style="text-align: right;" id="valor" name="valor" class="decimal-2-casas required" />
                                                                 </label>
                                                             </section>
 
@@ -330,6 +330,25 @@ include("inc/scripts.php");
     function gravar() {
         $("#btnGravar").prop('disabled', true);
         $("#ativo").val(1);
+        var projeto = $("#projeto").val();
+        var descricaoPosto = $("#descricaoPosto").val();
+        var valor = $("#valor").val();
+
+        if (!projeto) {
+            smartAlert("Erro", "Informe o projeto.", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+        if (!descricaoPosto) {
+            smartAlert("Erro", "Informe o Posto.", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+        if (!valor) {
+            smartAlert("Erro", "Digite o valor do Posto.", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
 
         let valorPosto = $('#formValorPosto').serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
