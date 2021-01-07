@@ -39,7 +39,11 @@ function gravaProjeto()
 
     $reposit = new reposit();
 
+
     //Variáveis
+    session_start();
+    $usuario = "'" . $_SESSION['login'] . "'";
+
     $projeto = $_POST['projeto'];
 
     $codigo = ($projeto['codigo']);
@@ -279,7 +283,8 @@ function gravaProjeto()
         $descontoFolhaPlanoSaude,
         $valorDescontoFolhaPlanoSaude,
         $municipioFerias,
-        $razaoSocial)";
+        $razaoSocial,
+        $usuario)";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);

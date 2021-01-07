@@ -41,6 +41,9 @@ function gravaSindicato()
         return;
     }
 
+    session_start();
+    $usuario = "'" . $_SESSION['login'] . "'";
+
     //Atributos de vale de transporte
     $sindicato = $_POST['sindicato'];
     $codigo =  validaNumero($sindicato['codigo']);
@@ -265,7 +268,8 @@ function gravaSindicato()
         $codigoSindicatoSCI,
         $descontarFeriasCestaBasica,
         $xmlTelefone,
-        $xmlEmail)";
+        $xmlEmail,
+        $usuario)";
 
     $result = $reposit->Execprocedure($sql);
 
