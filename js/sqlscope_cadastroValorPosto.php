@@ -34,6 +34,9 @@ function grava()
     $horaExtraDomFer =  +$valorPosto['horaExtraDomFer'];
     $adicionalNoturno =  +$valorPosto['adicionalNoturno'];
     $atrasos = "'" . $valorPosto['atrasos'] . "'";
+    if ($atrasos == "'Selecione'"){
+        $atrasos = "NULL";
+    }
     $ativo = $valorPosto['ativo'];
 
 

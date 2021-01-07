@@ -1564,16 +1564,22 @@ include("inc/scripts.php");
         var projeto = $("#projeto").val();
         var numeroPregao = $("#numeroPregao").val();
 
+        $("#btnGravar").prop('disabled', true);
+
         if (projeto=='Selecione' || projeto == '') {
             smartAlert("Erro", "Digite o projeto.", "error");
+            $("#btnGravar").prop('disabled', false);
+
             return;
         }
         if (!numeroPregao) {
             smartAlert("Erro", "Digite o número do pregão.", "error");
+            $("#btnGravar").prop('disabled', false);
+
             return;
         }
        
-        $("#btnGravar").prop('disabled', true);
+       
         $("#ativo").val(1);
 
         let contrato = $('#formContrato').serializeArray().reduce(function(obj, item) {
