@@ -96,10 +96,17 @@ include("inc/nav.php");
 																		<option value="">Selecione</option>
 																		<?php
 																		$reposit = new reposit();
-																		$sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
+																		// $sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
+																		$sql = "SELECT F.codigo AS codigoFuncionario, F.nome,BP.codigo,BP.ativo
+																				FROM Ntl.funcionario F
+																				LEFT JOIN Ntl.beneficioProjeto BP on BP.funcionario = F.codigo
+																				WHERE F.ativo = 1 
+																				AND (BP.codigo IS NULL OR BP.ativo = 0) AND
+																				F.dataDemissaoFuncionario IS NULL
+																				ORDER BY F.nome";
 																		$result = $reposit->RunQuery($sql);
 																		while (($row = odbc_fetch_array($result))) {
-																			$id = $row['codigo'];
+																			$id = $row['codigoFuncionario'];
 																			$descricao = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
 																		}
