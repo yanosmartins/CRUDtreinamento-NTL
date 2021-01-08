@@ -317,4 +317,26 @@ class reposit {
         return $codigoUsuarioLogado;
     }
 
+    function inativa($tabela, $where, $coluna = 'ativo', $schema = 'Ntl') {
+        $this->AbreConexao("sql"); // Abrimos a conexão
+    
+        // start da transação
+        odbc_autocommit($this->sqlconnect, false);
+        $tabela = $this->anti_injection($tabela);
+        $where = $this->anti_injection($tabela);
+        try {
+            $sql = "UPDATE [$schema].$tabela SET $coluna WHERE $where;";
+            $select = odbc_exec($this->sqlconnect, $sql);
+            $result = odbc_num_rows($select);
+            if ($select == false) {
+                $result = 0;
+            }
+        } catch (Exception $e) {
+            odbc_rollback($this->sqlconnect);
+        }
+        odbc_commit($this->sqlconnect);
+        $this->FechaConexao(); // Fechamos a conexão
+        return $result; // aqui fica o retorno de todas as condicionais
+    }
+
 }
