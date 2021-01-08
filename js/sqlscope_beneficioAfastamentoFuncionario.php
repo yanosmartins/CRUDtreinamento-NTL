@@ -176,7 +176,8 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('afastamento' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->inativa('afastamento', 'codigo =' . $id, 'ativo', 'Beneficio');
+    //"UPDATE Beneficio.afastamento SET ativo = 0 WHERE codigo = $id"
 
     if ($result < 1) {
         echo ('failed#');
