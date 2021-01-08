@@ -314,3 +314,17 @@ function preencheValorPosto(posto, callback) {
         }
     });
 }
+
+function populaComboDescricaoPosto(projeto, callback) {
+    $.ajax({
+        url: 'js/sqlscope_cadastroBeneficioPessoalPorProjeto.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: 'populaComboDescricaoPosto', projeto: projeto }, //valores enviados ao script     
+        async: false,
+        success: function (data) {
+            callback(data);
+        }
+    });
+    return;
+}

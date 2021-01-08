@@ -8,9 +8,9 @@ include_once("populaTabela/popula.php");
 
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('USUARIO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('USUARIO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('USUARIO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('BENEFICIOPROJETO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('BENEFICIOPROJETO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('BENEFICIOPROJETO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
 	unset($_SESSION['login']);
@@ -44,7 +44,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["beneficioPorProjeto"]["active"] = true;
+$page_nav["cadastro"]["sub"]["beneficioProjeto"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -96,17 +96,10 @@ include("inc/nav.php");
 																		<option value="">Selecione</option>
 																		<?php
 																		$reposit = new reposit();
-																		// $sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
-																		$sql = "SELECT F.codigo AS codigoFuncionario, F.nome,BP.codigo,BP.ativo
-																				FROM Ntl.funcionario F
-																				LEFT JOIN Ntl.beneficioProjeto BP on BP.funcionario = F.codigo
-																				WHERE F.ativo = 1 
-																				AND (BP.codigo IS NULL OR BP.ativo = 0) AND
-																				F.dataDemissaoFuncionario IS NULL
-																				ORDER BY F.nome";
+																		$sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
 																		$result = $reposit->RunQuery($sql);
 																		while (($row = odbc_fetch_array($result))) {
-																			$id = $row['codigoFuncionario'];
+																			$id = $row['codigo'];
 																			$descricao = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
 																		}
@@ -2671,10 +2664,12 @@ include("inc/scripts.php");
 		});
 		$("#projeto").on("change", function() {
 			verificaFuncionariEmProjeto();
+			popularComboDescricaoPosto();
 		});
 		$("#descricaoPosto").on("change", function() {
 			buscaValorPosto();
 		});
+
 
 		validaValeTransporte();
 		calculaTrajetoValeTransporte();
@@ -5804,4 +5799,41 @@ include("inc/scripts.php");
             }
         );
 	}
+
+	function popularComboDescricaoPosto() {
+        var projeto = $("#projeto").val()
+        if (projeto != 0) {
+            populaComboDescricaoPosto(projeto,
+                function(data) {
+                    var atributoId = '#' + 'descricaoPosto';
+                    if (data.indexOf('failed') > -1) {
+                        smartAlert("Aviso", "O Projeto informado não possui postos com valor atribuido!", "info");
+                        $("#projeto").focus()
+                        $("#descricaoPosto").val("")
+                        $("#descricaoPosto").prop("disabled", true)
+                        $("#descricaoPosto").addClass("readonly")
+                        return;
+                    } else {
+                        $("#descricaoPosto").prop("disabled", false)
+                        $("#descricaoPosto").removeClass("readonly")
+                        data = data.replace(/failed/g, '');
+                        var piece = data.split("#");
+
+                        var mensagem = piece[0];
+                        var qtdRegs = piece[1];
+                        var arrayRegistros = piece[2].split("|");
+                        var registro = "";
+
+                        $(atributoId).html('');
+                        $(atributoId).append('<option></option>');
+
+                        for (var i = 0; i < qtdRegs; i++) {
+                            registro = arrayRegistros[i].split("^");
+                            $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
+                        }
+                    }
+                }
+            );
+        }
+    }
 </script>

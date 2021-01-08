@@ -85,6 +85,9 @@ if ($funcao == 'verificaFuncionarioProjeto') {
 if ($funcao == 'preencheValorPosto') {
     call_user_func($funcao);
 }
+if ($funcao == 'populaComboDescricaoPosto') {
+    call_user_func($funcao);
+}
 
 return;
 
@@ -102,9 +105,9 @@ function gravaBeneficio()
         return;
     }
 
-    $reposit = new reposit();
+    session_start();
+    $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
 
-    
     $beneficio = $_POST['beneficio'];
     $codigo =  validaNumero($beneficio['codigo']);
     $projeto = validaNumero($beneficio['projeto']);
@@ -665,9 +668,9 @@ function gravaBeneficio()
         $escalaFerias,
         $escalaFeriasVAVR,
         $localizacao,
-        $posto)";
+        $posto,
+        $usuario)";
 
-    $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
     $ret = 'sucess#';
@@ -2094,4 +2097,34 @@ function preencheValorPosto()
         echo "sucess#" . $out;
     }
     return;
+}
+
+function populaComboDescricaoPosto()
+{
+    $projeto = $_POST["projeto"];
+    if ($projeto > 0) {
+        $sql = "SELECT VP.codigo, VP.descricaoPosto,P.descricao AS nomePosto
+        FROM Ntl.valorPosto VP 
+        LEFT JOIN Ntl.posto P on P.codigo = VP.descricaoPosto
+        where VP.ativo = 1 AND VP.projeto = $projeto order by nomePosto ";
+
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+        $contador = 0;
+        $out = "";
+        while (($row = odbc_fetch_array($result))) {
+            $id = $row['codigo'];
+            $descricaoPosto = mb_convert_encoding($row['nomePosto'], 'UTF-8', 'HTML-ENTITIES');
+
+            $out = $out . $id . "^" . $descricaoPosto . "|";
+
+            $contador = $contador + 1;
+        }
+        if ($out != "") {
+            echo "sucess#" . $contador . "#" . $out;
+            return;
+        }
+        echo "failed#";
+        return;
+    }
 }

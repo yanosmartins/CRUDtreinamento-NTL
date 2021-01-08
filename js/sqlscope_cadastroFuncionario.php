@@ -39,6 +39,8 @@ function grava()
     }
 
     $reposit = new reposit();
+    session_start();
+    $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
 
     $id = $_POST['id'];
     $ativo = 1;
@@ -232,7 +234,8 @@ function grava()
                         $ufIdentidade,
                         $xmlTelefone,
                         $xmlEmail,
-                        $xmlDependente)";
+                        $xmlDependente,
+                        $usuario)";
 
     // $sql = 'Ntl.funcionario_Atualiza (';
     // $sql .= "$id,";
