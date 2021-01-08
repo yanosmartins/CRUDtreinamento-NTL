@@ -12,10 +12,12 @@ $(function () {
 
 function showLoading() {
     $("#generalLoading").show();
+    $("#overlay").show();
 }
 
 function hideLoading() {
     $("#generalLoading").hide();
+    $("#overlay").hide();
 }
 
 
@@ -67,41 +69,41 @@ $(document).ready(function () {
 }));
 
 
-function smartAlert(title, message, type, timeout = 5000) {
+function smartAlert(title, message, type) {
     var color = "";
     var icon = "";
     switch (type.toLowerCase()) {
-      case "error":
-        color = "#c26565";
-        icon = "fa fa-times";
-        break;
-      case "success":
-        color = "#cde0c4";
-        icon = "fa fa-check";
-        break;
-      case "warning":
-        color = "#efe1b3";
-        icon = "fa fa-warning";
-        break;
-      case "info":
-      default:
-        color = "#d6dde7";
-        icon = "fa fa-info-circle";
-        break;
+        case 'error':
+            color = "#c26565";
+            icon = "fa fa-times";
+            break;
+        case 'success':
+            color = "#cde0c4";
+            icon = "fa fa-check";
+            break;
+        case 'warning':
+            color = "#efe1b3";
+            icon = "fa fa-warning";
+            break;
+        case 'info':
+        default:
+            color = "#d6dde7";
+            icon = "fa fa-info-circle";
+            break;
     }
-  
+
     $.smallBox({
-      title: title,
-      content: message.replace("\n", "<br />"),
-      color: color,
-      timeout: parseInt(timeout),
-      icon: icon,
+        title: title,
+        content: message.replace("\n", "<br />"),
+        color: color,
+        timeout: 5000,
+        icon: icon
     });
-    $(".SmallBox:has(i.fa-times)").addClass("text-color-error");
-    $(".SmallBox:has(i.fa-check)").addClass("text-color-success");
-    $(".SmallBox:has(i.fa-warning)").addClass("text-color-warning");
-    $(".SmallBox:has(i.fa-info-circle)").addClass("text-color-info");
-  }
+    $('.SmallBox:has(i.fa-times)').addClass('text-color-error');
+    $('.SmallBox:has(i.fa-check)').addClass('text-color-success');
+    $('.SmallBox:has(i.fa-warning)').addClass('text-color-warning');
+    $('.SmallBox:has(i.fa-info-circle)').addClass('text-color-info');
+}
 
 $(document).ready(function () {
     initializeDecimalBehaviour();
@@ -603,26 +605,60 @@ function validaPlaca(placa) {
     }
 }
 
-function validaData(valor){
-    var date=valor;
-var ardt=new Array;
-var ExpReg=new RegExp("(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}");
-ardt=date.split("/");
-erro=false;
-if ( date.search(ExpReg)==-1){
-    erro = true;
+//Função que quebra uma string e transforma ela em um valor.
+    function formataData(valor){
+        var y = (parseInt(valor.split('/')[2]));
+        var m = (parseInt(valor.split('/')[1]) - 1);
+        var d = (parseInt(valor.split('/')[0]));
+        valor = new Date(y,m,d); 
+        return valor;
     }
-else if (((ardt[1]==4)||(ardt[1]==6)||(ardt[1]==9)||(ardt[1]==11))&&(ardt[0]>30))
-    erro = true;
-else if ( ardt[1]==2) {
-    if ((ardt[0]>28)&&((ardt[2]%4)!=0))
-        erro = true;
-    if ((ardt[0]>29)&&((ardt[2]%4)==0))
-        erro = true;
-}
-if (erro) {
-    smartAlert("Erro", "O valor inserido é inválido.", "error"); 
-    return false;
-}
-return true;
-}
+    
+    //Função que valida todas as datas
+    function validaData(valor){
+        var date=valor;
+	var ardt=new Array;
+	var ExpReg=new RegExp("(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}");
+	ardt=date.split("/");
+	erro=false;
+	if ( date.search(ExpReg)==-1){
+		erro = true;
+		}
+	else if (((ardt[1]==4)||(ardt[1]==6)||(ardt[1]==9)||(ardt[1]==11))&&(ardt[0]>30))
+		erro = true;
+	else if ( ardt[1]==2) {
+		if ((ardt[0]>28)&&((ardt[2]%4)!=0))
+			erro = true;
+		if ((ardt[0]>29)&&((ardt[2]%4)==0))
+			erro = true;
+	}
+	if (erro) {
+		smartAlert("Erro", "O valor inserido é inválido.", "error"); 
+		return false;
+	}
+	return true;
+    }
+    
+//Função que permite digitar apenas letras em um campo html 
+    function validaCampoApenasLetras(event) {
+    var value = String.fromCharCode(event.which);
+    var pattern = new RegExp(/[a-zåäöëïüãõçÇãõáÁàÀéÉèÈíÍìÌóÓòÒúÚùÙ' ]/i);
+    return pattern.test(value);
+    }
+
+//Função que permite digitar apenas números em um campo html 
+    function validaCampoApenasNumeros(event) {
+    var value = String.fromCharCode(event.which);
+    var pattern = new RegExp(/[0123456789]/i);
+    return pattern.test(value);
+    }
+
+    function marcarDesmarcarTodos(idTabela) {
+        let desmarcados = $('#' + idTabela + ' input:checkbox:not(:checked)').length;
+        let marcados = $('#' + idTabela + ' input:checkbox:checked').length;
+        if (marcados > desmarcados) {
+            $('#' + idTabela + ' input:checkbox').prop("checked", false);
+        } else {
+            $('#' + idTabela + ' input:checkbox ').prop("checked", true);
+        }
+    }

@@ -323,9 +323,9 @@ class reposit {
         // start da transação
         odbc_autocommit($this->sqlconnect, false);
         $tabela = $this->anti_injection($tabela);
-        $where = $this->anti_injection($tabela);
+        $where = $this->anti_injection($where);
         try {
-            $sql = "UPDATE [$schema].$tabela SET $coluna WHERE $where;";
+            $sql = "UPDATE [$schema].$tabela SET $coluna WHERE $where";
             $select = odbc_exec($this->sqlconnect, $sql);
             $result = odbc_num_rows($select);
             if ($select == false) {
