@@ -222,7 +222,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('funcionarioFerias' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->inativa('funcionarioFerias', 'codigo =' . $id, 'ativo', 'Beneficio');
 
     if ($result < 1) {
         echo ('failed#');
