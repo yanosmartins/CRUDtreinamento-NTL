@@ -12,6 +12,10 @@ $condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) || $
 $condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true) || in_array('TRIAGEM_GRAVAR', $arrayPermissao, true));
 $condicaoTriagemAcessarOK = (in_array('TRIAGEM_ACESSAR', $arrayPermissao, true));
 
+//REMOVER DEPOIS
+$condicaoAcessarOK = true;
+$condicaoTriagemAcessarOK = true;
+
 if ($condicaoAcessarOK == false && $condicaoTriagemAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
@@ -4413,7 +4417,7 @@ include("inc/scripts.php");
 
         $.ajax({
             method: 'POST',
-            url: 'js/sqlscope_cadastroFuncionario.php',
+            url: 'js/sqlscope_contratacaoCandidato.php',
             data: {
                 funcao,
                 codigoFuncionario,

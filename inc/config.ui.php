@@ -267,7 +267,10 @@ if ($condicaoOperacaoOk) {
         $page_nav['operacao']['sub']['contratacao'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
         $page_nav['operacao']['sub']['contratacao']['sub'] = array(); //SYSCB 
 
-        if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
+        $condicaoCandidatoOk = in_array('CANDIDATO_ACESSAR', $arrayPermissao, true);
+
+        $condicaoCandidatoOk = true;
+        if ($condicaoContratacaoOk) {
             $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
         }
 

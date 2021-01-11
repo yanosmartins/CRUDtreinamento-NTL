@@ -19,7 +19,8 @@ if ($funcao == 'excluir') {
 
 return;
 
-function grava() {
+function grava()
+{
 
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("USUARIO_ACESSAR|USUARIO_GRAVAR");
@@ -44,7 +45,7 @@ function grava() {
         $ativo = +$_POST["ativo"];
     }
 
-    $nome = $_POST['nome']; 
+    $nome = $_POST['nome'];
     $tipoUsuario = $_POST['tipoUsuario'];
     $tipoUsuario = "'" . $tipoUsuario . "'";
     $nome = "'" . $nome . "'";
@@ -104,7 +105,7 @@ function grava() {
         }
     }
 
-    if ((!is_null($senhaConfirma)) or ( !is_null($senha))) {
+    if ((!is_null($senhaConfirma)) or (!is_null($senha))) {
         $comum = new comum();
         $validouSenha = 1;
         if (!is_null($senha)) {
@@ -163,7 +164,7 @@ function grava() {
     $usuario = $_SESSION['login'];
     $usuario = "'" . $usuario . "'";
 
-    $sql = "usuario_Atualiza (" . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . ") ";
+    $sql = "Ntl.usuario_Atualiza (" . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . ") ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -176,7 +177,8 @@ function grava() {
     return;
 }
 
-function recupera() {
+function recupera()
+{
     $condicaoId = !((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"])));
     $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
 
@@ -201,7 +203,7 @@ function recupera() {
     }
 
     $sql = " SELECT USU.codigo,USU.[login],USU.ativo,tipoUsuario
-             FROM dbo.usuario USU WHERE (0 = 0) ";
+             FROM Ntl.usuario USU WHERE (0 = 0) ";
 
     if ($condicaoId) {
         $sql = $sql . " AND USU.codigo = " . $usuarioIdPesquisa . " ";
@@ -223,9 +225,9 @@ function recupera() {
     }
 
     $out =   $id . "^" .
-    $login . "^" .
-    $ativo . "^" .
-    $tipoUsuario;
+        $login . "^" .
+        $ativo . "^" .
+        $tipoUsuario;
 
     if ($out == "") {
         echo "failed#";
@@ -234,42 +236,41 @@ function recupera() {
 
     echo "sucess#" . $out;
     return;
-
 }
-    function excluir() {
+function excluir()
+{
 
-        $reposit = new reposit();
-        $possuiPermissao = $reposit->PossuiPermissao("USUARIO_ACESSAR|USUARIO_EXCLUIR");
+    $reposit = new reposit();
+    $possuiPermissao = $reposit->PossuiPermissao("USUARIO_ACESSAR|USUARIO_EXCLUIR");
 
-        if ($possuiPermissao === 0) {
-            $mensagem = "O usuário não tem permissão para excluir!";
-            echo "failed#" . $mensagem . ' ';
-            return;
-        }
-
-        $id = $_POST["id"];
-
-        if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-            $mensagem = "Selecione um usuário.";
-            echo "failed#" . $mensagem . ' ';
-            return;
-        }
-
-        session_start();
-        $usuario = $_SESSION['login'];
-        $usuario = "'" . $usuario . "'";
-
-        $sql = "usuario_Deleta (" . $id . "," . $usuario . ") ";
-
-        $reposit = new reposit();
-        $result = $reposit->Execprocedure($sql);
-
-        if ($result < 1) {
-            echo('failed#');
-            return;
-        }
-
-        echo 'sucess#' . $result;
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
+        echo "failed#" . $mensagem . ' ';
         return;
     }
 
+    $id = $_POST["id"];
+
+    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
+        $mensagem = "Selecione um usuário.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
+    session_start();
+    $usuario = $_SESSION['login'];
+    $usuario = "'" . $usuario . "'";
+
+    $sql = "usuario_Deleta (" . $id . "," . $usuario . ") ";
+
+    $reposit = new reposit();
+    $result = $reposit->Execprocedure($sql);
+
+    if ($result < 1) {
+        echo ('failed#');
+        return;
+    }
+
+    echo 'sucess#' . $result;
+    return;
+}

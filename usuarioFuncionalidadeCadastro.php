@@ -95,7 +95,7 @@ include("inc/nav.php");
                                                                     <select id="usuario" name="usuario">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql = " SELECT USU.codigo, USU.[login] FROM dbo.usuario USU
+                                                                        $sql = " SELECT USU.codigo, USU.[login] FROM Ntl.usuario USU
                                                                              WHERE USU.tipoUsuario IN ('C','T') AND USU.ativo = 1 ";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
