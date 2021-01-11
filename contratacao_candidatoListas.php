@@ -92,9 +92,9 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                    
 
-                                                        <!--  LISTA DE FILHOS --> 
+
+                                                        <!--  LISTA DE FILHOS -->
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend> Filhos de <strong>até 14 anos</strong></legend>
@@ -155,66 +155,66 @@ include("inc/nav.php");
                                                                 </table>
                                                             </div>
 
-                                                        <!--  LISTA DE DEPENDENTES -->
-                                                        <div class="row">
-                                                            <section class="col col-12">
-                                                                <legend> Dependentes</legend>
-                                                            </section>
-                                                        </div>
-                                                        <input id="jsonDependente" name="jsonDependente" type="hidden" value="[]">
-                                                        <div id="formDependente">
-
+                                                            <!--  LISTA DE DEPENDENTES -->
                                                             <div class="row">
-                                                                <input id="DependenteId" name="DependenteId" type="hidden" value="">
-                                                                <input id="descricaoDataNascimentoDependente" name="descricaoDataNascimentoDependente" type="hidden" value="">
-                                                                <input id="sequencialDependente" name="sequencialDependente" type="hidden" value="">
-
-                                                                <section class="col col-6">
-                                                                    <label class="label" for="nomeDependente">Nome</label>
-                                                                    <label class="input"><i class="icon-append fa fa-id-card"></i>
-                                                                        <input id="nomeDependente" name="nomeDependente" maxlength="60" autocomplete="new-password">
-                                                                    </label>
-                                                                </section>
-
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="cpfDependente">CPF</label>
-                                                                    <label class="input"><i class="icon-append fa fa-id-card"></i>
-                                                                        <input id="cpfDependente" name="cpfDependente" placeholder="XXX.XXX.XXX-XX" autocomplete="new-password">
-                                                                    </label>
-                                                                </section>
-
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="dataNascimentoDependente">Nascimento</label>
-                                                                    <label class="input">
-                                                                        <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa">
-                                                                    </label>
+                                                                <section class="col col-12">
+                                                                    <legend> Dependentes</legend>
                                                                 </section>
                                                             </div>
-                                                            <div class="row">
-                                                                <section class="col col-4">
-                                                                    <button id="btnAddDependente" type="button" class="btn btn-primary" title="Adicionar Dependente">
-                                                                        <i class="fa fa-plus"></i>
-                                                                    </button>
-                                                                    <button id="btnRemoverDependente" type="button" class="btn btn-danger" title="Remover Dependente">
-                                                                        <i class="fa fa-minus"></i>
-                                                                    </button>
-                                                                </section>
-                                                            </div>
-                                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                <table id="tableDependente" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                    <thead>
-                                                                        <tr role="row">
-                                                                            <th></th>
-                                                                            <th class="text-left" style="min-width: 10px;">Nome</th>
-                                                                            <th class="text-left" style="min-width: 10px;">CPF</th>
-                                                                            <th class="text-left" style="min-width: 10px;">Data de Nascimento</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div> 
+                                                            <input id="jsonDependente" name="jsonDependente" type="hidden" value="[]">
+                                                            <div id="formDependente">
+
+                                                                <div class="row">
+                                                                    <input id="DependenteId" name="DependenteId" type="hidden" value="">
+                                                                    <input id="descricaoDataNascimentoDependente" name="descricaoDataNascimentoDependente" type="hidden" value="">
+                                                                    <input id="sequencialDependente" name="sequencialDependente" type="hidden" value="">
+
+                                                                    <section class="col col-6">
+                                                                        <label class="label" for="nomeDependente">Nome</label>
+                                                                        <label class="input"><i class="icon-append fa fa-id-card"></i>
+                                                                            <input id="nomeDependente" name="nomeDependente" maxlength="60" autocomplete="new-password">
+                                                                        </label>
+                                                                    </section>
+
+                                                                    <section class="col col-2">
+                                                                        <label class="label" for="cpfDependente">CPF</label>
+                                                                        <label class="input"><i class="icon-append fa fa-id-card"></i>
+                                                                            <input id="cpfDependente" name="cpfDependente" placeholder="XXX.XXX.XXX-XX" autocomplete="new-password">
+                                                                        </label>
+                                                                    </section>
+
+                                                                    <section class="col col-2">
+                                                                        <label class="label" for="dataNascimentoDependente">Nascimento</label>
+                                                                        <label class="input">
+                                                                            <i class="icon-append fa fa-calendar"></i>
+                                                                            <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa">
+                                                                        </label>
+                                                                    </section>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <section class="col col-4">
+                                                                        <button id="btnAddDependente" type="button" class="btn btn-primary" title="Adicionar Dependente">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverDependente" type="button" class="btn btn-danger" title="Remover Dependente">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                    <table id="tableDependente" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                        <thead>
+                                                                            <tr role="row">
+                                                                                <th></th>
+                                                                                <th class="text-left" style="min-width: 10px;">Nome</th>
+                                                                                <th class="text-left" style="min-width: 10px;">CPF</th>
+                                                                                <th class="text-left" style="min-width: 10px;">Data de Nascimento</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
 
                                                     </fieldset>
                                                 </div>
@@ -311,7 +311,7 @@ include("inc/scripts.php");
 
         carregaPagina();
 
-        
+
         //Máscaras dos campos
 
         $("#cpfFilho").mask("999.999.999-99", {
@@ -377,8 +377,8 @@ include("inc/scripts.php");
         });
 
 
-         //Botões de Dependente
-         $("#btnAddDependente").on("click", function() {
+        //Botões de Dependente
+        $("#btnAddDependente").on("click", function() {
             if (validaDependente())
                 addDependente();
         });
@@ -387,8 +387,8 @@ include("inc/scripts.php");
             excluirDependente();
         });
 
-         //Botões de Filhos
-         $("#btnAddFilho").on("click", function() {
+        //Botões de Filhos
+        $("#btnAddFilho").on("click", function() {
             if (validaFilho())
                 addFilho();
         });
@@ -416,7 +416,7 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'usuarioCadastro.php');
+        $(location).attr('href', 'contratacao_candidatoListas.php');
     }
 
     function voltar() {
@@ -449,14 +449,14 @@ include("inc/scripts.php");
             $("#login").focus();
             return;
         }
- 
+
         gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario);
     }
 
 
-     //############################################################################## LISTA DEPENDENTE INICIO ####################################################################################################################
+    //############################################################################## LISTA DEPENDENTE INICIO ####################################################################################################################
 
-     function fillTableDependente() {
+    function fillTableDependente() {
         $("#tableDependente tbody").empty();
         for (var i = 0; i < jsonDependenteArray.length; i++) {
             var row = $('<tr />');
@@ -464,40 +464,40 @@ include("inc/scripts.php");
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonDependenteArray[i].sequencialDependente + '"><i></i></label></td>'));
             row.append($('<td class="text-nowrap" onclick="carregaDependente(' + jsonDependenteArray[i].sequencialDependente + ');">' + jsonDependenteArray[i].nomeDependente + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonDependenteArray[i].cpfDependente + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonDependenteArray[i].descricaoDataNascimentoDependente + '</td>')); 
+            row.append($('<td class="text-nowrap">' + jsonDependenteArray[i].descricaoDataNascimentoDependente + '</td>'));
         }
     }
 
     function validaDependente() {
         var achouCPF = false;
         var achouRG = false;
-        var cpfDependente = $('#cpfDependente').val(); 
+        var cpfDependente = $('#cpfDependente').val();
         var sequencial = +$('#sequencialDependente').val();
 
         if (cpfDependente === '') {
             smartAlert("Erro", "Informe o CPF do Dependente", "error");
             return false;
         }
- 
+
         for (i = jsonDependenteArray.length - 1; i >= 0; i--) {
             if (cpfDependente !== "") {
                 if ((jsonDependenteArray[i].cpfDependente === cpfDependente) && (jsonDependenteArray[i].sequencialDependente !== sequencial)) {
                     achouCPF = true;
                     break;
                 }
-            } 
+            }
         }
-  
+
         if (achouCPF === true) {
             smartAlert("Erro", "Já existe o CPF do Dependente na lista.", "error");
             return false;
         }
- 
+
         return true;
     }
 
     function addDependente() {
-       
+
         var item = $("#formDependente").toObject({
             mode: 'combine',
             skipEmpty: false,
@@ -539,7 +539,7 @@ include("inc/scripts.php");
     function processDataDependente(node) {
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
         var fieldName = node.getAttribute ? node.getAttribute('name') : '';
- 
+
 
         if (fieldName !== '' && (fieldId === "descricaoDataNascimentoDependente")) {
 
@@ -567,10 +567,10 @@ include("inc/scripts.php");
     function clearFormDependente() {
         $("#nomeDependente").val('');
         $("#dataNascimentoDependente").val('');
-       $("#cpfDependente").val('');
+        $("#cpfDependente").val('');
         $("#dependenteId").val('');
-        $("#sequencialDependente").val(''); 
-        $('#descricaoDataNascimentoDependente').val(''); 
+        $("#sequencialDependente").val('');
+        $('#descricaoDataNascimentoDependente').val('');
     }
 
     function carregaDependente(sequencialDependente) {
@@ -583,10 +583,10 @@ include("inc/scripts.php");
         if (arr.length > 0) {
             var item = arr[0];
             $("#nomeDependente").val(item.nomeDependente);
-            $("#dataNascimentoDependente").val(item.descricaoDataNascimentoDependente); 
-            $("#cpfDependente").val(item.cpfDependente); 
+            $("#dataNascimentoDependente").val(item.descricaoDataNascimentoDependente);
+            $("#cpfDependente").val(item.cpfDependente);
             $("#dependenteId").val(item.dependenteId);
-            $("#sequencialDependente").val(item.sequencialDependente); 
+            $("#sequencialDependente").val(item.sequencialDependente);
         }
     }
 
@@ -609,10 +609,10 @@ include("inc/scripts.php");
             smartAlert("Erro", "Selecione pelo menos 1 dependente para excluir.", "error");
     }
 
-//############################################################################## LISTA DEPENDENTE FIM #######################################################################################################################
-//############################################################################## LISTA FILHO INICIO ####################################################################################################################
+    //############################################################################## LISTA DEPENDENTE FIM #######################################################################################################################
+    //############################################################################## LISTA FILHO INICIO ####################################################################################################################
 
- function fillTableFilho() {
+    function fillTableFilho() {
         $("#tableFilho tbody").empty();
         for (var i = 0; i < jsonFilhoArray.length; i++) {
             var row = $('<tr />');
@@ -620,35 +620,35 @@ include("inc/scripts.php");
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonFilhoArray[i].sequencialFilho + '"><i></i></label></td>'));
             row.append($('<td class="text-nowrap" onclick="carregaFilho(' + jsonFilhoArray[i].sequencialFilho + ');">' + jsonFilhoArray[i].nomeFilho + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonFilhoArray[i].cpfFilho + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonFilhoArray[i].descricaoDataNascimentoFilho + '</td>')); 
+            row.append($('<td class="text-nowrap">' + jsonFilhoArray[i].descricaoDataNascimentoFilho + '</td>'));
         }
     }
 
     function validaFilho() {
         var achouCPF = false;
         var achouRG = false;
-        var cpfFilho = $('#cpfFilho').val(); 
+        var cpfFilho = $('#cpfFilho').val();
         var sequencial = +$('#sequencialFilho').val();
 
         if (cpfFilho === '') {
             smartAlert("Erro", "Informe o CPF do Filho", "error");
             return false;
         }
- 
+
         for (i = jsonFilhoArray.length - 1; i >= 0; i--) {
             if (cpfFilho !== "") {
                 if ((jsonFilhoArray[i].cpfFilho === cpfFilho) && (jsonFilhoArray[i].sequencialFilho !== sequencial)) {
                     achouCPF = true;
                     break;
                 }
-            } 
+            }
         }
-  
+
         if (achouCPF === true) {
             smartAlert("Erro", "Já existe o CPF do Filho na lista.", "error");
             return false;
         }
- 
+
         return true;
     }
 
@@ -696,7 +696,7 @@ include("inc/scripts.php");
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
         var fieldName = node.getAttribute ? node.getAttribute('name') : '';
 
-        
+
 
         if (fieldName !== '' && (fieldId === "descricaoDataNascimentoFilho")) {
 
@@ -723,11 +723,11 @@ include("inc/scripts.php");
 
     function clearFormFilho() {
         $("#nomeFilho").val('');
-        $("#dataNascimentoFilho").val(''); 
-        $("#cpfFilho").val(''); 
+        $("#dataNascimentoFilho").val('');
+        $("#cpfFilho").val('');
         $("#filhoId").val('');
-        $("#sequencialFilho").val(''); 
-        $('#descricaoDataNascimentoFilho').val(''); 
+        $("#sequencialFilho").val('');
+        $('#descricaoDataNascimentoFilho').val('');
     }
 
     function carregaFilho(sequencialFilho) {
@@ -740,10 +740,10 @@ include("inc/scripts.php");
         if (arr.length > 0) {
             var item = arr[0];
             $("#nomeFilho").val(item.nomeFilho);
-            $("#dataNascimentoFilho").val(item.descricaoDataNascimentoFilho); 
-            $("#cpfFilho").val(item.cpfFilho); 
+            $("#dataNascimentoFilho").val(item.descricaoDataNascimentoFilho);
+            $("#cpfFilho").val(item.cpfFilho);
             $("#filhoId").val(item.filhoId);
-            $("#sequencialFilho").val(item.sequencialFilho);  
+            $("#sequencialFilho").val(item.sequencialFilho);
         }
     }
 
@@ -767,5 +767,4 @@ include("inc/scripts.php");
     }
 
     //############################################################################## LISTA Filho FIM #######################################################################################################################
-
 </script>

@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-$sql = "SELECT * FROM dbo.parametro";
+$sql = "SELECT * FROM Ntl.parametro";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 
@@ -50,7 +50,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastrar"]["sub"]["candidato"]["active"] = true;
+$page_nav["operacoes"]["sub"]["contratacao"]["active"]["candidato"]["active"] = true;
 include("inc/nav.php");
 
 ?>
@@ -1121,7 +1121,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label">Deseja Vale Transporte</label>
                                                                     <label class="select">
-                                                                        <select name="desejaVt" id="desejaVt" autocomplete="new-password" class="form-control required"> 
+                                                                        <select name="desejaVt" id="desejaVt" autocomplete="new-password" class="form-control required">
                                                                             <option value="1">Sim</option>
                                                                             <option value="0">Não</option>
                                                                         </select><i></i>
@@ -1290,7 +1290,7 @@ include("inc/nav.php");
                                                                             <option></option>
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "select * from dbo.banco order by nomeBanco";
+                                                                            $sql = "select * from Ntl.banco order by nomeBanco";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             while (($row = odbc_fetch_array($result))) {
 
@@ -1373,7 +1373,7 @@ include("inc/nav.php");
                                                                         <select id="projeto" name="projeto" class="required">
                                                                             <option></option>
                                                                             <?php
-                                                                            $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM syscbNtl.syscb.projeto where ativo = 1 order by codigo";
+                                                                            $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
                                                                             $reposit = new reposit();
                                                                             $result = $reposit->RunQuery($sql);
                                                                             while (($row = odbc_fetch_array($result))) {
@@ -1472,7 +1472,9 @@ include("inc/nav.php");
                                                                             <a target="_blank" rel="noopener noreferrer" href="https://play.google.com/store/apps/details?id=com.intsig.camscanner&hl=pt_BR">   - Play Store (android) </a> <br>
                                                                             <a target="_blank" rel="noopener noreferrer" href="https://apps.apple.com/br/app/camscanner-documento-scan/id388627783">   - Apple Store (iPhone) </a> <br>
                                                                               Caso o arquivo que você tente enviar fique muito grande mesmo com o CamScanner recomendamos que tire um print do seu celular ou computador do documento e envie o mesmo se estiver legivel; <br>
-                                                                              Por questões de segurança temos um tamanho máximo para cada campo por isso evite mandar fotos em alta resolução e de preferencia para prints ou arquivos PDF em PRETO E BRANCO.<br></p> </strong>
+                                                                              Por questões de segurança temos um tamanho máximo para cada campo por isso evite mandar fotos em alta resolução e de preferencia para prints ou arquivos PDF em PRETO E BRANCO.<br>
+                                                                        </p>
+                                                                    </strong>
                                                                 </section>
                                                             </div>
 
@@ -1826,7 +1828,7 @@ include("inc/scripts.php");
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/gir_script.js" type="text/javascript"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/businessFuncionario.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/businessUpload.js" type="text/javascript"></script>
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
@@ -1963,8 +1965,8 @@ include("inc/scripts.php");
 
         carregaPagina();
 
-        function displayHandlerPossuiVt(text){
-            if(text == 'Sim'){
+        function displayHandlerPossuiVt(text) {
+            if (text == 'Sim') {
                 $("#tipoCartaoVt").removeClass('readonly');
                 $("#tipoCartaoVt").removeAttr('disabled');
             } else {
@@ -1974,14 +1976,14 @@ include("inc/scripts.php");
             }
         }
 
-         // Show and Hide Possui Vt 
+        // Show and Hide Possui Vt 
         var sel = document.getElementById("possuiVt");
-        var possuiVt = sel.options[sel.selectedIndex].text; 
+        var possuiVt = sel.options[sel.selectedIndex].text;
         displayHandlerPossuiVt(possuiVt)
 
         sel.addEventListener("change", (event) => {
             var selp = document.getElementById("possuiVt");
-            var text = selp.options[selp.selectedIndex].text; 
+            var text = selp.options[selp.selectedIndex].text;
             displayHandlerPossuiVt(text)
         })
 
@@ -2993,7 +2995,7 @@ include("inc/scripts.php");
                             codigoBanco = piece[101];
                             projeto = piece[102];
                             logradouro = piece[103]
-                            justificativaVt = piece[104]; 
+                            justificativaVt = piece[104];
                             var tipoCartaoVt = piece[105];
                             var banco = codigoBanco;
                             banco = banco.split("-");
@@ -3234,13 +3236,13 @@ include("inc/scripts.php");
                                 $("#justificativaVt").prop('readonly', true);
                             }
 
-                            if(tipoCartaoVt !=""){
-                                
+                            if (tipoCartaoVt != "") {
+
                                 $("#tipoCartaoVt").val(tipoCartaoVt);
                                 $("#tipoCartaoVt").removeClass('readonly');
-                                $("#tipoCartaoVt").removeAttr('disabled');      
+                                $("#tipoCartaoVt").removeAttr('disabled');
                             }
- 
+
                             jsonFilhoArray = JSON.parse($("#jsonFilho").val());
                             jsonDependenteArray = JSON.parse($("#jsonDependente").val());
                             jsonTransporteArray = JSON.parse($("#jsonTransporte").val());
@@ -3280,11 +3282,11 @@ include("inc/scripts.php");
     function novo() {
         // $(location).attr('href', 'funcionarioCadastro.php');
         var candidato = "<?= $tipoUsuario ?>";
-        candidato == 'T' ? $(location).attr('href', 'login.php') : $(location).attr('href', 'funcionarioCadastro.php');
+        candidato == 'T' ? $(location).attr('href', 'login.php') : $(location).attr('href', 'contratacao_candidatoCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'funcionarioFiltro.php');
+        $(location).attr('href', 'contratacao_candidatoFiltro.php');
     }
 
     function excluir() {

@@ -54,79 +54,79 @@ include "js/repositorio.php";
                 $verificaUniforme = "";
                 $verificaAnexoDocumento = "";
 
-                $sql = " SELECT F.codigo, F.nomeCompleto, F.cargo ,F.rg, F.cpf,verificaDadoPessoal,F.verificaDadoContato,F.verificaEndereco,
-                F.verificaDocumento,F.verificaEscolaridade,F.verificaDadoConjuge,F.verificaFilho,F.verificaDependente,
-				F.verificaBeneficio,F.verificaVT,F.verificaDadoBancario,F.verificaCargo,F.verificaUniforme,F.verificaAnexoDocumento
-                FROM dbo.funcionario F
-				LEFT JOIN dbo.exportacao E ON F.codigo = E.funcionario  ";
-                $where = "WHERE (0 = 0) AND (F.ativo = 1 OR F.ativo IS NULL) AND (E.situacao IS NULL OR E.situacao = 0)";
+                $sql = " SELECT C.codigo, C.nomeCompleto, C.cargo ,C.rg, C.cpf,verificaDadoPessoal,C.verificaDadoContato,C.verificaEndereco,
+                C.verificaDocumento,C.verificaEscolaridade,C.verificaDadoConjuge,C.verificaFilho,C.verificaDependente,
+				C.verificaBeneficio,C.verificaVT,C.verificaDadoBancario,C.verificaCargo,C.verificaUniforme,C.verificaAnexoDocumento
+                FROM Contratacao.candidato C
+				LEFT JOIN Contratacao.exportacao E ON C.codigo = E.candidato ";
+                $where = "WHERE (0 = 0) AND (C.ativo = 1 OR C.ativo IS NULL) AND (E.situacao IS NULL OR E.situacao = 0)";
 
                 if ($_POST["nome"] != "") {
                     $nomeCompleto = $_POST["nome"];
-                    $where = $where . " AND (F.nomeCompleto like '%' + " . "replace('" . $nomeCompleto . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (C.nomeCompleto like '%' + " . "replace('" . $nomeCompleto . "',' ','%') + " . "'%')";
                 }
                 if ($_POST["cpf"] != "") {
                     $cpf = $_POST["cpf"];
-                    $where = $where . " AND (F.cpf like '%' + " . "replace('" . $cpf . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (C.cpf like '%' + " . "replace('" . $cpf . "',' ','%') + " . "'%')";
                 }
                 if ($_POST["rg"] != "") {
                     $rg = $_POST["rg"];
-                    $where = $where . " AND (F.rg like '%' + " . "replace('" . $rg . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (C.rg like '%' + " . "replace('" . $rg . "',' ','%') + " . "'%')";
                 }
                 if ($_POST["cargo"] != "") {
                     $cargo = $_POST["cargo"];
-                    $where = $where . " AND (F.cargo like '%' + " . "replace('" . $cargo . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (C.cargo like '%' + " . "replace('" . $cargo . "',' ','%') + " . "'%')";
                 }
 
                 if ($_POST["verifica"] != "") {
                     $verifica = $_POST["verifica"];
                     if ($verifica == 1) {
-                        $where = $where . " AND (F.verificaDadoPessoal like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaDadoContato like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaEndereco like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaDocumento like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaEscolaridade like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaDadoConjuge like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaFilho like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaDependente like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaBeneficio like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaVT like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaDadoBancario like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaCargo like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaUniforme like '%' + replace('1',' ','%') + '%')
-                            or (F.verificaAnexoDocumento like '%' + replace('1',' ','%') + '%')";
+                        $where = $where . " AND (C.verificaDadoPessoal like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaDadoContato like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaEndereco like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaDocumento like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaEscolaridade like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaDadoConjuge like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaFilho like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaDependente like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaBeneficio like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaVT like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaDadoBancario like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaCargo like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaUniforme like '%' + replace('1',' ','%') + '%')
+                            or (C.verificaAnexoDocumento like '%' + replace('1',' ','%') + '%')";
                     }
                     if ($verifica == 0) {
-                        $where = $where . " AND (F.verificaDadoPessoal like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaDadoContato like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaEndereco like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaDocumento like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaEscolaridade like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaDadoConjuge like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaFilho like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaDependente like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaBeneficio like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaVT like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaDadoBancario like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaCargo like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaUniforme like '%' + replace('0',' ','%') + '%')
-                                or (F.verificaAnexoDocumento like '%' + replace('0',' ','%') + '%')";
+                        $where = $where . " AND (C.verificaDadoPessoal like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaDadoContato like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaEndereco like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaDocumento like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaEscolaridade like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaDadoConjuge like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaFilho like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaDependente like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaBeneficio like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaVT like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaDadoBancario like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaCargo like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaUniforme like '%' + replace('0',' ','%') + '%')
+                                or (C.verificaAnexoDocumento like '%' + replace('0',' ','%') + '%')";
                     }
                     if ($verifica == 2) {
-                        $where = $where . " AND (F.verificaDadoPessoal like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaDadoContato like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaEndereco like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaDocumento like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaEscolaridade like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaDadoConjuge like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaFilho like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaDependente like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaBeneficio like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaVT like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaDadoBancario like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaCargo like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaUniforme like '%' + replace('2',' ','%') + '%')
-                                    AND (F.verificaAnexoDocumento like '%' + replace('2',' ','%') + '%')";
+                        $where = $where . " AND (C.verificaDadoPessoal like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaDadoContato like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaEndereco like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaDocumento like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaEscolaridade like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaDadoConjuge like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaFilho like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaDependente like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaBeneficio like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaVT like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaDadoBancario like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaCargo like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaUniforme like '%' + replace('2',' ','%') + '%')
+                                    AND (C.verificaAnexoDocumento like '%' + replace('2',' ','%') + '%')";
                     }
                 }
 
@@ -158,7 +158,7 @@ include "js/repositorio.php";
                     //$login = mb_convert_encoding($row['cpf'], 'UTF-8', 'HTML-ENTITIES');
                     echo '<tr >';
                     // echo "<td class='text-left'>$codigo</td>";
-                    echo '<td class="text-left"><a href="funcionarioCadastroDividida.php?codigo=' . $id . '">' . $nomeCompleto . '</a></td>';
+                    echo '<td class="text-left"><a href="contratacao_candidatoCadastroDividida.php?codigo=' . $id . '">' . $nomeCompleto . '</a></td>';
                     // echo "<td class='text-left'>$nomeCompleto</td>";
                     echo "<td class='text-center'>$cpf</td>";
                     echo "<td class='text-center'>$rg</td>";

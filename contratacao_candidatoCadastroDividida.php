@@ -55,7 +55,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastrar"]["sub"]["candidato"]["active"] = true;
+$page_nav["cadastrar"]["sub"]["contratacao"]["sub"]["candidato"]["active"] = true;
 include("inc/nav.php");
 
 ?>
@@ -326,7 +326,9 @@ include("inc/nav.php");
                                                                         <a href="https://play.google.com/store/apps/details?id=com.intsig.camscanner&hl=pt_BR">   - Play Store (android) </a> <br>
                                                                         <a href="https://apps.apple.com/br/app/camscanner-documento-scan/id388627783">   - Apple Store (iPhone) </a> <br>
                                                                           Caso o arquivo que você tente enviar fique muito grande mesmo com o CamScanner recomendamos que tire um print do seu celular ou computador do documento e envie o mesmo se estiver legivel; <br>
-                                                                          Por questões de segurança temos um tamanho máximo para cada campo por isso evite mandar fotos em alta resolução e de preferencia para prints ou arquivos PDF em PRETO E BRANCO.<br></p> </strong>
+                                                                          Por questões de segurança temos um tamanho máximo para cada campo por isso evite mandar fotos em alta resolução e de preferencia para prints ou arquivos PDF em PRETO E BRANCO.<br>
+                                                                    </p>
+                                                                </strong>
                                                             </section>
                                                         </div>
 
@@ -1618,17 +1620,17 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                    <label class="label">Tipo do Cartão</label>
-                                                                    <label class="select">
-                                                                        <select name="tipoCartaoVt" id="tipoCartaoVt" autocomplete="new-password" class="form-control required">
-                                                                            <option value="1">Bilhete Único</option>
-                                                                            <option value="2">Riocard</option>
-                                                                            <option value="3">BU Carioca</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
+                                                                <label class="label">Tipo do Cartão</label>
+                                                                <label class="select">
+                                                                    <select name="tipoCartaoVt" id="tipoCartaoVt" autocomplete="new-password" class="form-control required">
+                                                                        <option value="1">Bilhete Único</option>
+                                                                        <option value="2">Riocard</option>
+                                                                        <option value="3">BU Carioca</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
                                                             <section class="col col-2">
                                                                 <label class="label" for="numeroCartaoVt">Nº Cartão Transporte</label>
                                                                 <label class="input"><i class="icon-append fa fa-id-card"></i>
@@ -1636,11 +1638,11 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-6">
-                                                                    <label class="label" for="justificativaVt">Justificativa</label>
-                                                                    <label class="input">
-                                                                        <input id="justificativaVt" name="justificativaVt" autocomplete="off" type="text" maxlength="50" class="readonly" readonly>
-                                                                    </label>
-                                                                </section>
+                                                                <label class="label" for="justificativaVt">Justificativa</label>
+                                                                <label class="input">
+                                                                    <input id="justificativaVt" name="justificativaVt" autocomplete="off" type="text" maxlength="50" class="readonly" readonly>
+                                                                </label>
+                                                            </section>
                                                         </div>
 
 
@@ -1772,7 +1774,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select * from dbo.banco order by nomeBanco";
+                                                                        $sql = "select * from Ntl.banco order by nomeBanco";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
 
@@ -1854,7 +1856,7 @@ include("inc/nav.php");
                                                                     <select id="projeto" name="projeto" class="required">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM syscbNtl.syscb.projeto where ativo = 1 order by codigo";
+                                                                        $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
@@ -1997,7 +1999,7 @@ include("inc/scripts.php");
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/gir_script.js" type="text/javascript"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/businessFuncionario.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/businessUpload.js" type="text/javascript"></script>
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
@@ -2134,9 +2136,9 @@ include("inc/scripts.php");
 
         carregaPagina();
 
-        
-        function displayHandlerPossuiVt(text){
-            if(text == 'Sim'){
+
+        function displayHandlerPossuiVt(text) {
+            if (text == 'Sim') {
                 $("#tipoCartaoVt").removeClass('readonly');
                 $("#tipoCartaoVt").removeAttr('disabled');
             } else {
@@ -2146,14 +2148,14 @@ include("inc/scripts.php");
             }
         }
 
-         // Show and Hide Possui Vt 
+        // Show and Hide Possui Vt 
         var sel = document.getElementById("possuiVt");
-        var possuiVt = sel.options[sel.selectedIndex].text; 
+        var possuiVt = sel.options[sel.selectedIndex].text;
         displayHandlerPossuiVt(possuiVt)
 
         sel.addEventListener("change", (event) => {
             var selp = document.getElementById("possuiVt");
-            var text = selp.options[selp.selectedIndex].text; 
+            var text = selp.options[selp.selectedIndex].text;
             displayHandlerPossuiVt(text)
         })
 
@@ -2214,12 +2216,12 @@ include("inc/scripts.php");
 
             gravar();
         });
- 
+
         $("#desejaVt").on("change", function() {
             var desejaVt = +$("#desejaVt").val();
             if (desejaVt == 0) {
                 $("#justificativaVt").removeAttr("class");
-                $("#justificativaVt").prop('readonly', false); 
+                $("#justificativaVt").prop('readonly', false);
                 $("#justificativaVt").addClass('required');
                 $("#justificativaVt").prop('required', true);
             } else {
@@ -2296,21 +2298,21 @@ include("inc/scripts.php");
             if (tipoFeriado == 1) {
                 $("#pis").removeClass('readonly');
                 $("#pis").addClass('required');
-                $("#pis").removeAttr('disabled'); 
+                $("#pis").removeAttr('disabled');
             } else {
                 $("#pis").addClass('readonly');
                 $("#pis").removeClass('required');
                 $("#pis").val('');
-                $("#pis").prop('disabled', true); 
+                $("#pis").prop('disabled', true);
             }
         });
         $('#possuiVt').change(function() {
             var possuiVt = +$('#possuiVt').val();
             if (possuiVt == 1) {
-                $("#numeroCartaoVt").removeClass('readonly'); 
+                $("#numeroCartaoVt").removeClass('readonly');
                 $("#numeroCartaoVt").removeAttr('disabled');
             } else {
-                $("#numeroCartaoVt").addClass('readonly'); 
+                $("#numeroCartaoVt").addClass('readonly');
                 $("#numeroCartaoVt").val('');
                 $("#numeroCartaoVt").prop('disabled', true);
             }
@@ -3224,7 +3226,7 @@ include("inc/scripts.php");
                             $("#numeroPais").val(numeroPais);
                             $("#paisNascimento").val(paisNascimento);
                             $("#logradouro").val(logradouro);
-                            
+
 
                             //funcionario EX.
                             let valor = $("#paisNascimento").val();
@@ -3331,18 +3333,18 @@ include("inc/scripts.php");
                                 $("#justificativaVt").prop('readonly', false);
                                 $("#justificativaVt").addClass('required');
                                 $("#justificativaVt").prop('required', true);
-                                $("#justificativaVt").val(justificativaVt); 
+                                $("#justificativaVt").val(justificativaVt);
                             } else {
                                 $("#justificativaVt").addClass("readonly");
                                 $("#justificativaVt").val('');
                                 $("#justificativaVt").prop('readonly', true);
                             }
 
-                            if(tipoCartaoVt !=""){
-                                
+                            if (tipoCartaoVt != "") {
+
                                 $("#tipoCartaoVt").val(tipoCartaoVt);
                                 $("#tipoCartaoVt").removeClass('readonly');
-                                $("#tipoCartaoVt").removeAttr('disabled');      
+                                $("#tipoCartaoVt").removeAttr('disabled');
                             }
 
 
@@ -3384,11 +3386,11 @@ include("inc/scripts.php");
     function novo() {
         // $(location).attr('href', 'funcionarioCadastro.php');
         var candidato = "<?= $tipoUsuario ?>";
-        candidato == 'T' ? $(location).attr('href', 'login.php') : $(location).attr('href', 'funcionarioCadastro.php');
+        candidato == 'T' ? $(location).attr('href', 'login.php') : $(location).attr('href', 'contratacao_candidatoCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'funcionarioFiltro.php');
+        $(location).attr('href', 'contratacao_candidatoFiltro.php');
     }
 
     function excluir() {

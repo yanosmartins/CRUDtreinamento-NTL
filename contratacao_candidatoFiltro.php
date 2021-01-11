@@ -240,7 +240,7 @@ include("inc/scripts.php");
 
         //     '&pendencia=' + pendencia
 
-        $('#resultadoBusca').load('funcionarioFiltroListagem.php?', {
+        $('#resultadoBusca').load('contratacao_candidatoFiltroListagem.php?', {
             nome: nome,
             cpf: cpf,
             rg: rg,
@@ -251,7 +251,7 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'funcionarioCadastro.php');
+        $(location).attr('href', 'contratacao_candidatoCadastro.php');
     }
 
     function verificaCpf(inputField) {

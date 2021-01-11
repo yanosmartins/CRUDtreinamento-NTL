@@ -27,8 +27,8 @@ return;
 
 function gravaFuncionario()
 {
- 
-    session_start(); 
+
+    session_start();
     $usuarioCadastro = validaString($_SESSION['login']);
     $codigo =  +$_POST['codigo'];
     $sexo = validaNumero($_POST['sexo']);
@@ -105,7 +105,7 @@ function gravaFuncionario()
     $dataEmissaoRg  = validaData($_POST['dataEmissaoRg']);
     $primeiroEmprego = validaNumero($_POST['primeiroEmprego']);
     $cargo = validaString($_POST['cargo']);
-        //verificacao de dados preenchidos corretamente pelo candidato
+    //verificacao de dados preenchidos corretamente pelo candidato
     $verificaDadoPessoal = +$_POST['verificaDadoPessoal'];
     $verificaDadoContato = +$_POST['verificaDadoContato'];
     $verificaEndereco =  +$_POST['verificaEndereco'];
@@ -144,7 +144,7 @@ function gravaFuncionario()
     $variacao = validaString($_POST['variacao']);
     $projeto = validaString($_POST['projeto']);
     $logradouro = validaString($_POST['logradouro']);
-    $ativo = 1; 
+    $ativo = 1;
     $justificativaVt = validaString($_POST['justificativaVt']);
     $tipoCartaoVt = +validaNumero($_POST['tipoCartaoVt']);
 
@@ -170,14 +170,14 @@ function gravaFuncionario()
                     $campo === "numeroCamisa" || $campo === "numeroCalca" || $campo === "numeroSaia" || $campo === "numeroSapato" || $campo === "jsonDependente")) {
                     continue;
                 }
-                if ($campo === "dataNascimentoFilho" ) {
-                    if($valor == ""){
+                if ($campo === "dataNascimentoFilho") {
+                    if ($valor == "") {
                         $valor = 'NULL';
                         return $valor;
                     }
                     $valor = str_replace('/', '-', $valor);
                     $valor = date("Y-m-d", strtotime($valor));
-            }
+                }
                 $xmlFilho = $xmlFilho . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
             $xmlFilho = $xmlFilho . "</" . $nomeTabela . ">";
@@ -216,13 +216,13 @@ function gravaFuncionario()
                     continue;
                 }
                 if ($campo === "dataNascimentoDependente") {
-                    if($valor == ""){
+                    if ($valor == "") {
                         $valor = 'NULL';
                         return $valor;
                     }
                     $valor = str_replace('/', '-', $valor);
                     $valor = date("Y-m-d", strtotime($valor));
-            }
+                }
                 $xmlDependente = $xmlDependente . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
             $xmlDependente = $xmlDependente . "</" . $nomeTabela . ">";
@@ -262,14 +262,14 @@ function gravaFuncionario()
                     $campo === "numeroSapato")) {
                     continue;
                 }
-            //     if ($campo === "dataNascimentoTransporte") {
-            //         if($valor == ""){
-            //             $valor = 'NULL';
-            //             return $valor;
-            //         }
-            //         $valor = str_replace('/', '-', $valor);
-            //         $valor = date("Y-m-d", strtotime($valor));
-            // }
+                //     if ($campo === "dataNascimentoTransporte") {
+                //         if($valor == ""){
+                //             $valor = 'NULL';
+                //             return $valor;
+                //         }
+                //         $valor = str_replace('/', '-', $valor);
+                //         $valor = date("Y-m-d", strtotime($valor));
+                // }
                 $xmlTransporte = $xmlTransporte . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
             $xmlTransporte = $xmlTransporte . "</" . $nomeTabela . ">";
@@ -347,8 +347,8 @@ function gravaFuncionario()
     $tipoArquivoPermitido = array(
         "pdf",
         "png",
-        "jpg", 
-        "jpeg" 
+        "jpg",
+        "jpeg"
     );
 
     //Nome dos campos em html:
@@ -374,13 +374,13 @@ function gravaFuncionario()
 
 
     //Cria vários arrays baseados nos arquivos de upload.
-    
+
     $certidaoNascimentoArray = $_FILES['certidaoNascimento'];
     $tamanho =  count($_FILES['certidaoNascimento']['name']);
     $uniqidCertidaoNascimento = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
         $certidaoNascimentoArray["name"][$i] = str_replace("-", "_", $certidaoNascimentoArray["name"][$i]); //Substitui qualquer traço por underline. 
-        $certidaoNascimentoArray["name"][$i] = tiraAcento($certidaoNascimentoArray["name"][$i]); 
+        $certidaoNascimentoArray["name"][$i] = tiraAcento($certidaoNascimentoArray["name"][$i]);
         $arrayCertidaoNascimento[$i] = array(
             "nome" => $certidaoNascimentoArray["name"][$i],
             "tipo" => $certidaoNascimentoArray["type"][$i],
@@ -455,7 +455,7 @@ function gravaFuncionario()
     $uniqidRg = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
         $rgArray["name"][$i] = str_replace("-", "_", $rgArray["name"][$i]);  //Substitui qualquer traço por underline.
-        $rgArray["name"][$i] = tiraAcento($rgArray["name"][$i]); 
+        $rgArray["name"][$i] = tiraAcento($rgArray["name"][$i]);
         $arrayRg[$i] = array(
             "nome" => $rgArray["name"][$i],
             "tipo" => $rgArray["type"][$i],
@@ -502,7 +502,7 @@ function gravaFuncionario()
     $uniqidCertificadoReservista = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
         $certificadoReservistaArray["name"][$i] = str_replace("-", "_", $certificadoReservistaArray["name"][$i]);  //Substitui qualquer traço por underline. 
-        $certificadoReservistaArray["name"][$i] = tiraAcento($certificadoReservistaArray["name"][$i]); 
+        $certificadoReservistaArray["name"][$i] = tiraAcento($certificadoReservistaArray["name"][$i]);
         $arrayCertificadoReservista[$i] = array(
             "nome" => $certificadoReservistaArray["name"][$i],
             "tipo" => $certificadoReservistaArray["type"][$i],
@@ -546,7 +546,7 @@ function gravaFuncionario()
     $tamanho =  count($_FILES['certidaoNascimentoFilhoFile']['name']);
     $uniqidCertidaoNascimentoFilho = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
-        $certidaoNascimentoFilhoArray["name"][$i] = str_replace("-", "_", $certidaoNascimentoFilhoArray["name"][$i]);  
+        $certidaoNascimentoFilhoArray["name"][$i] = str_replace("-", "_", $certidaoNascimentoFilhoArray["name"][$i]);
         $certidaoNascimentoFilhoArray["name"][$i] = tiraAcento($certidaoNascimentoFilhoArray["name"][$i]);
         $arrayCertidaoNascimentoFilho[$i] = array(
             "nome" => $certidaoNascimentoFilhoArray["name"][$i],
@@ -561,8 +561,8 @@ function gravaFuncionario()
     $tamanho =  count($_FILES['rgFilhoFile']['name']);
     $uniqidRgFilho = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
-        $rgFilhoArray["name"][$i] = str_replace("-", "_", $rgFilhoArray["name"][$i]); 
-        $rgFilhoArray["name"][$i] = tiraAcento($rgFilhoArray["name"][$i]);  
+        $rgFilhoArray["name"][$i] = str_replace("-", "_", $rgFilhoArray["name"][$i]);
+        $rgFilhoArray["name"][$i] = tiraAcento($rgFilhoArray["name"][$i]);
         $arrayRgFilho[$i] = array(
             "nome" => $rgFilhoArray["name"][$i],
             "tipo" => $rgFilhoArray["type"][$i],
@@ -576,8 +576,8 @@ function gravaFuncionario()
     $tamanho =  count($_FILES['cpfFilhoFile']['name']);
     $uniqidCpfFilho = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
-        $cpfFilhoArray["name"][$i] = str_replace("-", "_", $cpfFilhoArray["name"][$i]);  
-        $cpfFilhoArray["name"][$i] = tiraAcento($cpfFilhoArray["name"][$i]); 
+        $cpfFilhoArray["name"][$i] = str_replace("-", "_", $cpfFilhoArray["name"][$i]);
+        $cpfFilhoArray["name"][$i] = tiraAcento($cpfFilhoArray["name"][$i]);
         $arrayCpfFilho[$i] = array(
             "nome" => $cpfFilhoArray["name"][$i],
             "tipo" => $cpfFilhoArray["type"][$i],
@@ -591,7 +591,7 @@ function gravaFuncionario()
     $tamanho =  count($_FILES['certidaoNascimentoDependenteFile']['name']);
     $uniqidCertidaoNascimentoDependente = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
-        $certidaoNascimentoDependenteArray["name"][$i] = str_replace("-", "_", $certidaoNascimentoDependenteArray["name"][$i]);  
+        $certidaoNascimentoDependenteArray["name"][$i] = str_replace("-", "_", $certidaoNascimentoDependenteArray["name"][$i]);
         $certidaoNascimentoDependenteArray["name"][$i] = tiraAcento($certidaoNascimentoDependenteArray["name"][$i]);
         $arrayCertidaoNascimentoDependente[$i] = array(
             "nome" => $certidaoNascimentoDependenteArray["name"][$i],
@@ -606,7 +606,7 @@ function gravaFuncionario()
     $tamanho =  count($_FILES['rgDependenteFile']['name']);
     $uniqidRgDependente = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
-        $rgDependenteArray["name"][$i] = str_replace("-", "_", $rgDependenteArray["name"][$i]);  
+        $rgDependenteArray["name"][$i] = str_replace("-", "_", $rgDependenteArray["name"][$i]);
         $rgDependenteArray["name"][$i] = tiraAcento($rgDependenteArray["name"][$i]);
         $arrayRgDependente[$i] = array(
             "nome" => $rgDependenteArray["name"][$i],
@@ -617,12 +617,12 @@ function gravaFuncionario()
         );
     }
 
-    
+
     $cpfDependenteArray = $_FILES['cpfDependenteFile'];
     $tamanho =  count($_FILES['cpfDependenteFile']['name']);
     $uniqidCpfDependente = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
-        $cpfDependenteArray["name"][$i] = str_replace("-", "_", $cpfDependenteArray["name"][$i]);  
+        $cpfDependenteArray["name"][$i] = str_replace("-", "_", $cpfDependenteArray["name"][$i]);
         $cpfDependenteArray["name"][$i] = tiraAcento($cpfDependenteArray["name"][$i]);
         $arrayCpfDependente[$i] = array(
             "nome" => $cpfDependenteArray["name"][$i],
@@ -635,10 +635,10 @@ function gravaFuncionario()
 
     $fotoFuncionarioArray = $_FILES['fotoFuncionario'];
     $tamanho =  count($_FILES['fotoFuncionario']['name']);
-    $uniqidFotoFuncionario= md5(uniqid(rand(), true));
+    $uniqidFotoFuncionario = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
         $fotoFuncionarioArray["name"][$i] = str_replace("-", "_", $fotoFuncionarioArray["name"][$i]); //Substitui qualquer traço por underline.
-        $fotoFuncionarioArray["name"][$i] = tiraAcento($fotoFuncionarioArray["name"][$i]); 
+        $fotoFuncionarioArray["name"][$i] = tiraAcento($fotoFuncionarioArray["name"][$i]);
         $arrayFotoFuncionario[$i] = array(
             "nome" => $fotoFuncionarioArray["name"][$i],
             "tipo" => $fotoFuncionarioArray["type"][$i],
@@ -649,10 +649,10 @@ function gravaFuncionario()
     }
     $carteiraVacinacaoFilhoArray = $_FILES['carteiraVacinacaoFilhoFile'];
     $tamanho =  count($_FILES['carteiraVacinacaoFilhoFile']['name']);
-    $uniqidCarteiraVacinacaoFilho= md5(uniqid(rand(), true));
+    $uniqidCarteiraVacinacaoFilho = md5(uniqid(rand(), true));
     for ($i = 0; $i < $tamanho; $i++) {
-        $carteiraVacinacaoFilhoArray["name"][$i] = str_replace("-", "_", $carteiraVacinacaoFilhoArray["name"][$i]); 
-        $carteiraVacinacaoFilhoArray["name"][$i] = tiraAcento($carteiraVacinacaoFilhoArray["name"][$i]); 
+        $carteiraVacinacaoFilhoArray["name"][$i] = str_replace("-", "_", $carteiraVacinacaoFilhoArray["name"][$i]);
+        $carteiraVacinacaoFilhoArray["name"][$i] = tiraAcento($carteiraVacinacaoFilhoArray["name"][$i]);
         $arrayCarteiraVacinacaoFilho[$i] = array(
             "nome" => $carteiraVacinacaoFilhoArray["name"][$i],
             "tipo" => $carteiraVacinacaoFilhoArray["type"][$i],
@@ -664,7 +664,7 @@ function gravaFuncionario()
 
     //Cria um xml baseado no arrays acima
     //CERTIDÃO DE NASCIMENTO:
-    
+
     $nomeXml =  "ArrayOfCertidaoNascimento";
     $nomeTabela = "documentos";
     if (sizeof($arrayCertidaoNascimento) > 0) {
@@ -1280,90 +1280,90 @@ function gravaFuncionario()
 
     $xmlCertidaoNascimentoDependente = "'" . $xmlCertidaoNascimentoDependente . "'";
 
-        //RG DOS DEPENDENTES
-        $nomeXml =  "ArrayOfRgDependente";
-        $nomeTabela = "documentos";
-        if (sizeof($arrayRgDependente) > 0) {
-            $xmlRgDependente = '<?xml version="1.0"?>';
-            $xmlRgDependente = $xmlRgDependente . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-    
-            foreach ($arrayRgDependente  as $chave) {
-                $xmlRgDependente = $xmlRgDependente . "<" . $nomeTabela . ">";
-                foreach ($chave as $campo => $valor) {
-    
-                    /*Caso o campo seja 'Nome Temporario' ele retira do array e continua o processo
+    //RG DOS DEPENDENTES
+    $nomeXml =  "ArrayOfRgDependente";
+    $nomeTabela = "documentos";
+    if (sizeof($arrayRgDependente) > 0) {
+        $xmlRgDependente = '<?xml version="1.0"?>';
+        $xmlRgDependente = $xmlRgDependente . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+
+        foreach ($arrayRgDependente  as $chave) {
+            $xmlRgDependente = $xmlRgDependente . "<" . $nomeTabela . ">";
+            foreach ($chave as $campo => $valor) {
+
+                /*Caso o campo seja 'Nome Temporario' ele retira do array e continua o processo
                           de criacao do xml. */
-                    if ($campo === "nomeTemporario") {
-                        continue;
-                    }
-    
-                    if (($campo === "nome") && ($valor != "")) {
-                        $valor =  $uniqidRgDependente . "_" . $valor;
-                    }
-    
-                    $xmlRgDependente = $xmlRgDependente . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+                if ($campo === "nomeTemporario") {
+                    continue;
                 }
-                $xmlRgDependente = $xmlRgDependente . "</" . $nomeTabela . ">";
+
+                if (($campo === "nome") && ($valor != "")) {
+                    $valor =  $uniqidRgDependente . "_" . $valor;
+                }
+
+                $xmlRgDependente = $xmlRgDependente . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
-            $xmlRgDependente = $xmlRgDependente . "</" . $nomeXml . ">";
-        } else {
-            $xmlRgDependente = '<?xml version="1.0"?>';
-            $xmlRgDependente = $xmlRgDependente . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-            $xmlRgDependente = $xmlRgDependente . "</" . $nomeXml . ">";
+            $xmlRgDependente = $xmlRgDependente . "</" . $nomeTabela . ">";
         }
-        $xml = simplexml_load_string($xmlRgDependente);  //Transforma o xml em uma string.
-    
-        if ($xml === false) {
-            $mensagem = "Erro na criação do XML dos rg dos dependentes. ";
-            echo "failed#" . $mensagem . ' ';
-            return;
-        }
-    
-        $xmlRgDependente = "'" . $xmlRgDependente . "'";
+        $xmlRgDependente = $xmlRgDependente . "</" . $nomeXml . ">";
+    } else {
+        $xmlRgDependente = '<?xml version="1.0"?>';
+        $xmlRgDependente = $xmlRgDependente . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlRgDependente = $xmlRgDependente . "</" . $nomeXml . ">";
+    }
+    $xml = simplexml_load_string($xmlRgDependente);  //Transforma o xml em uma string.
+
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML dos rg dos dependentes. ";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
+    $xmlRgDependente = "'" . $xmlRgDependente . "'";
 
 
-        //CPF DOS DEPENDENTES
-        $nomeXml =  "ArrayOfCpfDependente";
-        $nomeTabela = "documentos";
-        if (sizeof($arrayCpfDependente) > 0) {
-            $xmlCpfDependente = '<?xml version="1.0"?>';
-            $xmlCpfDependente = $xmlCpfDependente . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-    
-            foreach ($arrayCpfDependente  as $chave) {
-                $xmlCpfDependente = $xmlCpfDependente . "<" . $nomeTabela . ">";
-                foreach ($chave as $campo => $valor) {
-    
-                    /*Caso o campo seja 'Nome Temporario' ele retira do array e continua o processo
+    //CPF DOS DEPENDENTES
+    $nomeXml =  "ArrayOfCpfDependente";
+    $nomeTabela = "documentos";
+    if (sizeof($arrayCpfDependente) > 0) {
+        $xmlCpfDependente = '<?xml version="1.0"?>';
+        $xmlCpfDependente = $xmlCpfDependente . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+
+        foreach ($arrayCpfDependente  as $chave) {
+            $xmlCpfDependente = $xmlCpfDependente . "<" . $nomeTabela . ">";
+            foreach ($chave as $campo => $valor) {
+
+                /*Caso o campo seja 'Nome Temporario' ele retira do array e continua o processo
                           de criacao do xml. */
-                    if ($campo === "nomeTemporario") {
-                        continue;
-                    }
-    
-                    if (($campo === "nome") && ($valor != "")) {
-                        $valor =  $uniqidCpfDependente . "_" . $valor;
-                    }
-    
-                    $xmlCpfDependente = $xmlCpfDependente . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+                if ($campo === "nomeTemporario") {
+                    continue;
                 }
-                $xmlCpfDependente = $xmlCpfDependente . "</" . $nomeTabela . ">";
-            }
-            $xmlCpfDependente = $xmlCpfDependente . "</" . $nomeXml . ">";
-        } else {
-            $xmlCpfDependente = '<?xml version="1.0"?>';
-            $xmlCpfDependente = $xmlCpfDependente . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-            $xmlCpfDependente = $xmlCpfDependente . "</" . $nomeXml . ">";
-        }
-        $xml = simplexml_load_string($xmlCpfDependente);  //Transforma o xml em uma string.
-    
-        if ($xml === false) {
-            $mensagem = "Erro na criação do XML dos cpf dos dependentes. ";
-            echo "failed#" . $mensagem . ' ';
-            return;
-        }
-    
-        $xmlCpfDependente = "'" . $xmlCpfDependente . "'";
 
-        $nomeXml =  "ArrayOfFotoFuncionario";
+                if (($campo === "nome") && ($valor != "")) {
+                    $valor =  $uniqidCpfDependente . "_" . $valor;
+                }
+
+                $xmlCpfDependente = $xmlCpfDependente . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+            }
+            $xmlCpfDependente = $xmlCpfDependente . "</" . $nomeTabela . ">";
+        }
+        $xmlCpfDependente = $xmlCpfDependente . "</" . $nomeXml . ">";
+    } else {
+        $xmlCpfDependente = '<?xml version="1.0"?>';
+        $xmlCpfDependente = $xmlCpfDependente . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlCpfDependente = $xmlCpfDependente . "</" . $nomeXml . ">";
+    }
+    $xml = simplexml_load_string($xmlCpfDependente);  //Transforma o xml em uma string.
+
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML dos cpf dos dependentes. ";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
+    $xmlCpfDependente = "'" . $xmlCpfDependente . "'";
+
+    $nomeXml =  "ArrayOfFotoFuncionario";
     $nomeTabela = "documentos";
     if (sizeof($arrayFotoFuncionario) > 0) {
         $xmlFotoFuncionario = '<?xml version="1.0"?>';
@@ -1464,10 +1464,10 @@ function gravaFuncionario()
     moverArquivosParaPasta($idCpfDependente, $uniqidCpfDependente, $tipoArquivoPermitido, $diretorioFilhoCpfDependente);
     moverArquivosParaPasta($idFotoFuncionario, $uniqidFotoFuncionario, $tipoArquivoPermitido, $diretorioFilhoFotoFuncionario);
     moverArquivosParaPasta($idCarteiraVacinacaoFilho, $uniqidCarteiraVacinacaoFilho, $tipoArquivoPermitido, $diretorioFilhoCarteiraVacinacaoFilho);
- 
 
 
-    $sql = "dbo.funcionarioDocumento_Atualiza(
+
+    $sql = "Contratacao.candidatoDocumento_Atualiza(
         $codigo,							
         $nomeCompleto,						
         $cpf,								   
@@ -1654,7 +1654,7 @@ function recuperaFuncionario()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT * FROM dbo.funcionario WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT * FROM Contratacao.candidato WHERE (0=0) AND codigo = " . $id;
 
 
     $reposit = new reposit();
@@ -1663,7 +1663,7 @@ function recuperaFuncionario()
     $out = "";
     if (($row = odbc_fetch_array($result)))
         $row = array_map('utf8_encode', $row);
-     $codigo = $row['codigo'];
+    $codigo = $row['codigo'];
     $nomeCompleto = $row['nomeCompleto'];
     $cpf = $row['cpf'];
     $dataNascimento = validaDataRecupera($row['dataNascimento']);
@@ -1761,7 +1761,7 @@ function recuperaFuncionario()
     $numeroMunicipioConjuge = $row['numeroMunicipioConjuge'];
     $municipioNascimentoConjuge = $row['municipioNascimentoConjuge'];
     $possuiFilhoMenor14 = +$row['possuiFilhoMenor14'];
-    
+
     $digitoAgenciaBanco = +$row['digitoAgenciaBanco'];
     $digitoContaBanco = +$row['digitoContaBanco'];
     $tipoConta = +$row['tipoConta'];
@@ -1770,24 +1770,24 @@ function recuperaFuncionario()
     $codigoBanco = $row['codigoBanco'];
     $projeto = $row['projeto'];
     $logradouro = $row['logradouro'];
-    $justificativaVt = $row['justificativaVt']; 
+    $justificativaVt = $row['justificativaVt'];
     $tipoCartaoVt = $row['tipoCartaoVt'];
 
-    
-    
+
+
     // //----------------------Montando o array do Telefone
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT FI.codigo, FI.funcionario, FI.nomeCompleto, FI.cpf, FI.dataNascimento FROM dbo.funcionarioFilho FI 
-    INNER JOIN dbo.funcionario F ON F.codigo = FI.funcionario WHERE (0=0) AND F.codigo = " . $id;
+    $sql = "SELECT FI.codigo, FI.candidato, FI.nomeCompleto, FI.cpf, FI.dataNascimento FROM Contratacao.candidatoFilho FI 
+    INNER JOIN Contratacao.candidato F ON F.codigo = FI.candidato WHERE (0=0) AND F.codigo = " . $id;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $contadorFilho = 0;
     $arrayFilho = array();
     while ($row = odbc_fetch_array($result)) {
-    
+
         $nomeCompletoFilho = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
         $cpfFilho = $row['cpf'];
         $dataNascimentoFilho = validaDataRecupera($row['dataNascimento']);
@@ -1813,8 +1813,8 @@ function recuperaFuncionario()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT FD.codigo, FD.funcionario, FD.nomeCompleto, FD.cpf, FD.dataNascimento,FD.grauParentescoDependente FROM dbo.funcionarioDependente FD 
-    INNER JOIN dbo.funcionario F ON F.codigo = FD.funcionario WHERE (0=0) AND F.codigo = " . $id;
+    $sql = "SELECT FD.codigo, FD.candidato, FD.nomeCompleto, FD.cpf, FD.dataNascimento,FD.grauParentescoDependente FROM Contratacao.candidatoDependente FD 
+    INNER JOIN Contratacao.candidato F ON F.codigo = FD.candidato WHERE (0=0) AND F.codigo = " . $id;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
@@ -1848,8 +1848,8 @@ function recuperaFuncionario()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT FT.codigo, FT.funcionario, FT.trajeto, FT.tipo, FT.linha,FT.valor FROM dbo.funcionarioTransporte FT 
-    INNER JOIN dbo.funcionario F ON F.codigo = FT.funcionario WHERE (0=0) AND F.codigo = " . $id;
+    $sql = "SELECT FT.codigo, FT.candidato, FT.trajeto, FT.tipo, FT.linha,FT.valor FROM Contratacao.candidatoTransporte FT 
+    INNER JOIN Contratacao.candidato F ON F.codigo = FT.candidato WHERE (0=0) AND F.codigo = " . $id;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
@@ -1975,14 +1975,13 @@ function recuperaFuncionario()
         $digitoAgenciaBanco . "^" .
         $digitoContaBanco . "^" .
         $tipoConta . "^" .
-        $aprovado . "^" . 
-        $variacao . "^" . 
+        $aprovado . "^" .
+        $variacao . "^" .
         $codigoBanco . "^" .
-        $projeto . "^". 
-        $logradouro . "^". 
-        $justificativaVt . "^". 
-        $tipoCartaoVt
-        ;
+        $projeto . "^" .
+        $logradouro . "^" .
+        $justificativaVt . "^" .
+        $tipoCartaoVt;
 
     if ($out == "") {
         echo "failed#";
@@ -2012,7 +2011,7 @@ function validaNumero($value)
 
 function validaData($value)
 {
-    if($value == ""){
+    if ($value == "") {
         $value = 'NULL';
         return $value;
     }
@@ -2023,8 +2022,8 @@ function validaData($value)
 }
 
 function validaDataRecupera($value)
-{   
-    if($value == ""){
+{
+    if ($value == "") {
         $value = '';
         return $value;
     }
@@ -2045,21 +2044,21 @@ function recuperaCpf()
     $id = +$_POST["codigoFuncionario"] ?: 0;
     $cpf = validaString($_POST["cpf"]);
 
-    $sql = "SELECT codigo, cpf FROM dbo.funcionario WHERE (0=0) AND cpf = " . $cpf;
+    $sql = "SELECT codigo, cpf FROM Contratacao.candidato WHERE (0=0) AND cpf = " . $cpf;
 
-    if($id != 0){
+    if ($id != 0) {
         $sql = $sql . " AND codigo =" . $id;
     }
- 
+
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
     if (($row = odbc_fetch_array($result)))
         $row = array_map('utf8_encode', $row);
-   
+
     $codigo = $row['codigo'];
-    $cpf = $row['cpf'];  
+    $cpf = $row['cpf'];
 
     $out =   $codigo  . "^" . $cpf;
 
@@ -2073,7 +2072,7 @@ function recuperaCpf()
 }
 
 function excluir()
-{ 
+{
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("CANDIDATO_ACESSAR|CANDIDATO_EXCLUIR");
 
@@ -2103,6 +2102,7 @@ function excluir()
 
 
 
-function tiraAcento($string){
-    return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$string);
+function tiraAcento($string)
+{
+    return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/"), explode(" ", "a A e E i I o O u U n N"), $string);
 }
