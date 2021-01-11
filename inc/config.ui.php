@@ -265,8 +265,12 @@ if ($condicaoOperacaoOk) {
 
     if ($condicaoContratacaoOk) {
         $page_nav['operacao']['sub']['contratacao'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
-        $page_nav['operacao']['sub']['contratacao']['sub'] = array();
-        $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/index.php")); //SYSCB 
+        $page_nav['operacao']['sub']['contratacao']['sub'] = array(); //SYSCB 
+
+        if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
+        }
+
         $page_nav['operacao']['sub']['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/index.php"));
         $page_nav['operacao']['sub']['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/index.php"));
         $page_nav['operacao']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/index.php"));
