@@ -197,7 +197,40 @@ class comum {
         return $cripto;
     }
     
-    
+    function validaNumero($value)
+{
+    return floatval($value);
+}
+
+function validaString($value)
+{
+    if ($value == '')
+        return NULL;
+    return '\'' . $value . '\'';
+}
+
+function validaData($value)
+{
+    $value = explode("/", $value);
+    $value = $value[2] . "/" . $value[1] . "/" . $value[0];
+    $value = "'" . $value . "'";
+    return $value;
+}
+
+function validaDataXML($value)
+{
+    $value = explode("/", $value);
+    $value = $value[2] . "/" . $value[1] . "/" . $value[0];
+
+    return $value;
+}
+
+function validaDataInversa($campo)
+{
+    $campo = explode("-", $campo);
+    $diaCampo = explode(" ", $campo[2]);
+    $campo = $diaCampo[0] . "/" . $campo[1] . "/" . $campo[0];
+    return $campo;
+}
 
 }
-?>
