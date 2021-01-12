@@ -4,22 +4,25 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-// $condicaoAcessarOK = (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true));
-// $condicaoGravarOK = (in_array('PROCESSABENEFICIO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PROCESSABENEFICIO_GRAVAR', $arrayPermissao, true));
 
-// if ($condicaoAcessarOK == false) {
-//     unset($_SESSION['login']);
-//     header("Location:login.php");
-// }
+if ($condicaoAcessarOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
 
-// $esconderBtnGravar = "";
-// if ($condicaoGravarOK === false) {
-//     $esconderBtnGravar = "none";
-// }
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
+
 /* ---------------- PHP Custom Scripts ---------
+
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
-$page_title = "Processa Benefício";
+
+$page_title = "Afastamento do Funcionário";
 /* ---------------- END PHP Custom Scripts ------------- */
 //include header
 //you can add your custom css in $page_css array.
@@ -28,7 +31,7 @@ $page_css[] = "your_style.css";
 include("inc/header.php");
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]["processaBeneficio"]["active"] = true;
+$page_nav["operacao"]["sub"]["beneficio"]["sub"]["processaBeneficio"]["active"] = true;
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->

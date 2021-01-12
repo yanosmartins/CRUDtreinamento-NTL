@@ -230,7 +230,7 @@ if ($condicaoCadastroOk) {
     }
 }
 
-// OPERAÇÔES
+// OPERAÇÔES // A pedido do Márcio no dia 08/01/2020 foi pedido para colocar todos os módulos dentro de operação.
 if ($condicaoOperacaoOk) {
     $page_nav['operacao'] = array("title" => "Operações", "icon" => "fa fa-wrench");
     $page_nav['operacao']['sub'] = array();
@@ -265,8 +265,15 @@ if ($condicaoOperacaoOk) {
 
     if ($condicaoContratacaoOk) {
         $page_nav['operacao']['sub']['contratacao'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
-        $page_nav['operacao']['sub']['contratacao']['sub'] = array();
-        $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/index.php")); //SYSCB 
+        $page_nav['operacao']['sub']['contratacao']['sub'] = array(); //SYSCB 
+
+        $condicaoCandidatoOk = in_array('CANDIDATO_ACESSAR', $arrayPermissao, true);
+
+        $condicaoCandidatoOk = true;
+        if ($condicaoContratacaoOk) {
+            $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
+        }
+
         $page_nav['operacao']['sub']['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/index.php"));
         $page_nav['operacao']['sub']['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/index.php"));
         $page_nav['operacao']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/index.php"));

@@ -1,5 +1,5 @@
 <?php
-    include "js/repositorio.php"; 
+include "js/repositorio.php";
 ?>
 <div class="table-container">
     <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
@@ -12,43 +12,41 @@
             </thead>
             <tbody>
                 <?php
-                    $nomeFiltro = "";
-                    $where = "WHERE (0 = 0) and (usu.tipoUsuario IN ('C','T') ) ";
-                    
-                    $nomeFiltro = "";
-                    if ($_GET["nomeFiltro"] != "") {
-                        $nomeFiltro = $_GET["nomeFiltro"];
-                        $where=$where." and (USU.[login] like '%' + "."replace('".$nomeFiltro."',' ','%') + "."'%')";
-                        
-                    }
-                    
-                    $sql="SELECT USU.codigo,USU.[login],USU.ativo FROM dbo.usuario USU ";
-                    $sql=$sql.$where;
-                    
-                    $reposit = new reposit();                                       
-                    $result=$reposit->RunQuery($sql);
+                $nomeFiltro = "";
+                $where = "WHERE (0 = 0) and (usu.tipoUsuario IN ('C','T') ) ";
 
-                    while (($row = odbc_fetch_array($result))) {
-                        $id = +$row['codigo'];
-                        $login = mb_convert_encoding($row['login'], 'UTF-8', 'HTML-ENTITIES');
-                        $ativo = +$row['ativo'];
-                        if ($ativo==1){
-                            $descricaoAtivo = "Sim";
-                        }
-                        else{
-                            $descricaoAtivo = "Não";                            
-                        }
-                        
-                        echo '<tr >';
-                        echo '<td class="text-left"><a href="usuarioFuncionalidadeCadastro.php?codigoUsuario='.$id.'">'.$login.'</a></td>';
-                        echo '<td class="text-left">'.$descricaoAtivo.'</td>';
-                        echo '</tr >';
+                $nomeFiltro = "";
+                if ($_GET["nomeFiltro"] != "") {
+                    $nomeFiltro = $_GET["nomeFiltro"];
+                    $where = $where . " and (USU.[login] like '%' + " . "replace('" . $nomeFiltro . "',' ','%') + " . "'%')";
+                }
+
+                $sql = "SELECT USU.codigo,USU.[login],USU.ativo FROM Ntl.usuario USU ";
+                $sql = $sql . $where;
+
+                $reposit = new reposit();
+                $result = $reposit->RunQuery($sql);
+
+                while (($row = odbc_fetch_array($result))) {
+                    $id = +$row['codigo'];
+                    $login = mb_convert_encoding($row['login'], 'UTF-8', 'HTML-ENTITIES');
+                    $ativo = +$row['ativo'];
+                    if ($ativo == 1) {
+                        $descricaoAtivo = "Sim";
+                    } else {
+                        $descricaoAtivo = "Não";
                     }
-                ?>               
+
+                    echo '<tr >';
+                    echo '<td class="text-left"><a href="usuarioFuncionalidadeCadastro.php?codigoUsuario=' . $id . '">' . $login . '</a></td>';
+                    echo '<td class="text-left">' . $descricaoAtivo . '</td>';
+                    echo '</tr >';
+                }
+                ?>
             </tbody>
-        </table>        
-    </div>    
-</div>    
+        </table>
+    </div>
+</div>
 <!-- PAGE RELATED PLUGIN(S) -->
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
@@ -56,8 +54,8 @@
 <script src="js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css"/>
- 
+<link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css" />
+
 <script type="text/javascript" src="js/plugin/JSZip-2.5.0/jszip.min.js"></script>
 <script type="text/javascript" src="js/plugin/pdfmake-0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="js/plugin/pdfmake-0.1.36/vfs_fonts.js"></script>
@@ -68,7 +66,7 @@
 
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         var responsiveHelper_datatable_tabletools = undefined;
 
         var breakpointDefinition = {
@@ -82,8 +80,8 @@
             // Tabletools options:
             //   https://datatables.net/extensions/tabletools/button_options
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'B'l'C>r>" +
-                    "t" +
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+                "t" +
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
             "oLanguage": {
                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>',
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -110,22 +108,28 @@
             "buttons": [
                 //{extend: 'copy', className: 'btn btn-default'},
                 //{extend: 'csv', className: 'btn btn-default'},
-                {extend: 'excel', className: 'btn btn-default'},
-                {extend: 'pdf', className: 'btn btn-default'},
+                {
+                    extend: 'excel',
+                    className: 'btn btn-default'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn btn-default'
+                },
                 //{extend: 'print', className: 'btn btn-default'}
             ],
             "autoWidth": true,
-            
-            "preDrawCallback": function () {
+
+            "preDrawCallback": function() {
                 // Initialize the responsive datatables helper once.
                 if (!responsiveHelper_datatable_tabletools) {
                     responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#tableSearchResult'), breakpointDefinition);
                 }
             },
-            "rowCallback": function (nRow) {
+            "rowCallback": function(nRow) {
                 responsiveHelper_datatable_tabletools.createExpandIcon(nRow);
             },
-            "drawCallback": function (oSettings) {
+            "drawCallback": function(oSettings) {
                 responsiveHelper_datatable_tabletools.respond();
             }
         });
