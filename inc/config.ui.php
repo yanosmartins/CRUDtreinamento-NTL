@@ -230,7 +230,7 @@ if ($condicaoCadastroOk) {
     }
 }
 
-// OPERAÇÔES
+// OPERAÇÔES // A pedido do Márcio no dia 08/01/2020 foi pedido para colocar todos os módulos dentro de operação.
 if ($condicaoOperacaoOk) {
     $page_nav['operacao'] = array("title" => "Operações", "icon" => "fa fa-wrench");
     $page_nav['operacao']['sub'] = array();
