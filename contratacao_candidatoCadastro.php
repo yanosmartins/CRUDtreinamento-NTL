@@ -3853,104 +3853,84 @@ include("inc/scripts.php");
 
     function gravar() {
 
+        debugger
         let form = $('#formFuncionario')[0];
         let formData = new FormData(form);
         formData.append('funcao', 'gravaFuncionario');
 
         let nomeCompleto = $("#nomeCompleto").val();
-        let dataNascimento = $("#dataNascimento").val();
-        let sexo = $("#sexo").val();
-        let paisNascimento = $("#paisNascimento").val();
-        let ufNascimento = $("#ufNascimento").val();
-        let municipioNascimento = $("#municipioNascimento").val();
-        let racaCor = $("#racaCor").val();
-        let estadoCivil = $("#estadoCivil").val();
-        let nomePai = $("#nomePai").val();
-        let nomeMae = $("#nomeMae").val();
-        let cpf = $("#cpf").val();
-        let possuiPIS = $("#ctps").val();
-        let rg = $("#rg").val();
-        let emissorRg = $("#emissorRg").val();
-        let cep = $("#cep").val();
-        let endereco = $("#endereco").val();
-        let bairro = $("#bairro").val();
-        let cidade = $("#cidade").val();
-        let numero = $("#numero").val();
-        let desejaVt = $("#desejaVt").val();
-        let possuiFilhoMenor14 = $("#possuiFilhoMenor14").val();
-        let possuiVt = $("#possuiVt").val();
-        let trabalhaAtualmente = $("#trabalhaAtualmente").val();
-        let seguroDesemprego = $("#seguroDesemprego").val();
-        let desejaAssistenciaMedica = $("#desejaAssistenciaMedica").val();
-        let valeRefeicaoValeAlimentacao = $("#valeRefeicaoValeAlimentacao").val();
-        let possuiContaBancaria = $("#possuiContaBancaria").val();
-        let tipoConta = $("#tipoConta").val();
-        let fk_banco = $("#fk_banco").val();
-        let agenciaBanco = $("#agenciaBanco").val();
-        let contaCorrente = $("#contaCorrente").val();
-        let email = $("#email").val();
-        let logradouro = $("#logradouro").val();
-
         if (!nomeCompleto) {
             smartAlert("Atenção", "Digite o Nome Completo", "error");
             return;
         }
 
+        let dataNascimento = $("#dataNascimento").val();
         if (!dataNascimento) {
             smartAlert("Atenção", "Selecione a Data de Nascimento", "error");
             return;
         }
 
+        let sexo = $("#sexo").val();
         if (!sexo) {
             smartAlert("Atenção", "Selecione o Sexo", "error");
             return;
         }
 
+        let paisNascimento = $("#paisNascimento").val();
         if (!paisNascimento) {
             smartAlert("Atenção", "Selecione o País de Nascimento", "error");
             return;
         }
 
+        let ufNascimento = $("#ufNascimento").val();
         if (!ufNascimento) {
             smartAlert("Atenção", "Selecione a UF de Nascimento", "error");
             return;
         }
 
+        let municipioNascimento = $("#municipioNascimento").val();
         if (!municipioNascimento) {
             smartAlert("Atenção", "Selecione a Cidade de Nascimento", "error");
             return;
         }
 
+        let racaCor = $("#racaCor").val();
         if (!racaCor) {
             smartAlert("Atenção", "Selecione a Raça/Cor", "error");
             return;
         }
 
+        let estadoCivil = $("#estadoCivil").val();
         if (!estadoCivil) {
             smartAlert("Atenção", "Selecione o Estado Civil", "error");
             return;
         }
 
+        let nomePai = $("#nomePai").val();
         if (!nomePai) {
             smartAlert("Atenção", "Digite o Nome do Pai.  Se não tiver, digite 'Ausente'", "error");
             return;
         }
 
+        let nomeMae = $("#nomeMae").val();
         if (!nomeMae) {
             smartAlert("Atenção", "Digite o Nome da Mae.  Se não tiver, digite 'Ausente'", "error");
             return;
         }
 
+        let email = $("#email").val();
         if (!email) {
             smartAlert("Atenção", "Digite o email", "error");
             return;
         }
 
+        let cpf = $("#cpf").val();
         if (!cpf) {
             smartAlert("Atenção", "Digite o CPF", "error");
             return;
         }
 
+        let possuiPIS = $("#ctps").val();
         if (possuiPIS == 1) {
             let pis = $("#pis").val();
             if (!pis) {
@@ -3963,99 +3943,123 @@ include("inc/scripts.php");
             return;
         }
 
+        let rg = $("#rg").val();
         if (!rg) {
             smartAlert("Atenção", "Digite o RG", "error");
             return;
         }
 
+        let emissorRg = $("#emissorRg").val();
         if (!emissorRg) {
             smartAlert("Atenção", "Digite o Emissor do RG", "error");
             return;
         }
 
+        let cep = $("#cep").val();
         if (!cep) {
             smartAlert("Atenção", "Digite o CEP", "error");
             return;
         }
 
+        let endereco = $("#endereco").val();
         if (!endereco) {
             smartAlert("Atenção", "Digite o Endereço", "error");
             return;
         }
 
+        let bairro = $("#bairro").val();
         if (!bairro) {
             smartAlert("Atenção", "Digite o Bairro", "error");
             return;
         }
 
+        let cidade = $("#cidade").val();
         if (!cidade) {
             smartAlert("Atenção", "Digite a Cidade", "error");
             return;
         }
 
+        let numero = $("#numero").val();
         if (!numero) {
             smartAlert("Atenção", "Digite o Número", "error");
             return;
         }
 
+        let possuiFilhoMenor14 = $("#possuiFilhoMenor14").val();
         if (!possuiFilhoMenor14) {
             smartAlert("Atenção", "Selecione se possui filho menor de 14 anos ou não.", "error");
             return;
         }
 
+        let desejaVt = $("#desejaVt").val();
         if (!desejaVt) {
             smartAlert("Atenção", "Selecione se deseja vale de transporte ou não.", "error");
             return;
         }
 
+        let possuiVt = $("#possuiVt").val();
         if (!possuiVt) {
             smartAlert("Atenção", "Selecione se possui vale de transporte ou não.", "error");
             return;
         }
 
+        let trabalhaAtualmente = $("#trabalhaAtualmente").val();
         if (!trabalhaAtualmente) {
             smartAlert("Atenção", "Selecione se trabalha atualmente.", "error");
             return;
         }
 
+        let seguroDesemprego = $("#seguroDesemprego").val();
         if (!seguroDesemprego) {
             smartAlert("Atenção", "Selecione se está em seguro desemprego.", "error");
             return;
         }
 
+        let desejaAssistenciaMedica = $("#desejaAssistenciaMedica").val();
         if (!desejaAssistenciaMedica) {
             smartAlert("Atenção", "Selecione deseja assistência médica.", "error");
             return;
         }
 
+        let valeRefeicaoValeAlimentacao = $("#valeRefeicaoValeAlimentacao").val();
         if (!valeRefeicaoValeAlimentacao) {
             smartAlert("Atenção", "Selecione o que quiser receber: Vale Refeição ou Vale Alimentação.", "error");
             return;
         }
 
+        let possuiContaBancaria = $("#possuiContaBancaria").val();
         if (!possuiContaBancaria) {
             smartAlert("Atenção", "Selecione se possui ou não conta bancária.", "error");
             return;
         }
 
+        let logradouro = $("#logradouro").val();
         if (!logradouro) {
             smartAlert("Atenção", "Digite o Logradouro.", "error");
             return;
         }
 
         if (possuiContaBancaria == 1) {
+
+            let tipoConta = $("#tipoConta").val();
             if (tipoConta == 0 || !tipoConta) {
                 smartAlert("Atenção", "Selecione Tipo de Conta conta bancária.", "error");
                 return;
             }
+
+            let fk_banco = $("#fk_banco").val();
             if (!fk_banco) {
                 smartAlert("Atenção", "Selecione o Banco.", "error");
                 return;
             }
+
+            let agenciaBanco = $("#agenciaBanco").val();
             if (!agenciaBanco) {
                 smartAlert("Atenção", "Digite a Agência do Banco.", "error");
                 return;
             }
+
+            let contaCorrente = $("#contaCorrente").val();
             if (!contaCorrente) {
                 smartAlert("Atenção", "Digite sua Conta Bancaria.", "error");
                 return;
