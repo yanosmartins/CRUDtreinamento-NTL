@@ -634,7 +634,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("MOTIVOAFASTAMENTO_ACESSAR|MOTIVOAFASTAMENTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("FOLHAPONTO_ACESSAR|FOLHAPONTO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -649,15 +649,14 @@ function excluir()
         echo "failed#" . $mensagem . ' ';
         return;
     }
-    $sql = "UPDATE Beneficio.folhaPonto SET ativo = 0 WHERE(0=0) AND codigo = " . $id;
 
-    $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Beneficio.folhaPonto'.'|'.'ativo = 0' . '|'. 'codigo = '. $id); 
 
     if ($result < 1) {
-        echo ('failed#');
+        echo('failed#');
         return;
     }
+
     echo 'sucess#' . $result;
     return;
 }
