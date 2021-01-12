@@ -121,7 +121,7 @@ function excluir() {
         return;
     }
 
-    $codigo = $_POST["codigo"];
+    $id = $_POST["codigo"];
 
     if ((empty($_POST['codigo']) || (!isset($_POST['codigo'])) || (is_null($_POST['codigo'])))) {
         $mensagem = "Selecione um responsável.";
@@ -129,7 +129,7 @@ function excluir() {
         return;
     }
  
-    $result = $reposit->update('responsavel'.'|'.'ativo = 0' . '|'. 'codigo ='. $codigo); 
+    $result = $reposit->update('Ntl.responsavel' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo('failed#');

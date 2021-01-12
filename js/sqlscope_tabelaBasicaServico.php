@@ -22,7 +22,7 @@ return;
 
 function grava()
 {
-    session_start(); 
+    session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $codigo = +$_POST['id'];
     $descricaoCodigo = "'" . $_POST['descricaoCodigo'] . "'";
@@ -91,6 +91,15 @@ function recupera()
 
 function excluir()
 {
+    $reposit = new reposit();
+
+    $possuiPermissao = $reposit->PossuiPermissao("SERVICO_ACESSAR|SERVICO_EXCLUIR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
         $mensagem = "Selecione um Código de Servico.";
@@ -100,9 +109,7 @@ function excluir()
         $id = +$_POST["id"];
     }
 
-    $sql = "UPDATE Ntl.servico SET ativo ='0' WHERE codigo=$id";
-    $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.servico' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
