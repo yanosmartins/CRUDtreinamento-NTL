@@ -63,9 +63,6 @@ if ($condicaoConfiguracoesOK) {
 }
 
 
-$condicaoCadastroOk = true;
-$condicaoBeneficioOk = true;
-$condicaoContratacaoOk = true;
 $condicaoFaturamentoOk = true;
 $condicaoLicitacaoOk = true;
 $condicaoOperacoesEspeciaisoOk = true;
@@ -262,6 +259,8 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['beneficio']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
         }
     }
+     
+    $condicaoContratacaoOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
 
     if ($condicaoContratacaoOk) {
         $page_nav['operacao']['sub']['contratacao'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
