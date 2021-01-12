@@ -86,12 +86,12 @@ include("inc/nav.php");
                                                     <fieldset>
 
                                                         <div class="row">
-                                                        
-                                                               
-                                                                <label class="hidden">
-                                                                    <input id="codigo" name="codigo" type="text" readonly class="readonly" />
-                                                                </label>
-                                                           
+
+
+                                                            <label class="hidden">
+                                                                <input id="codigo" name="codigo" type="text" readonly class="readonly" />
+                                                            </label>
+
                                                             <section class="col col-2">
                                                                 <label class="label">CNPJ</label>
                                                                 <label class="input">
@@ -112,7 +112,7 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <div class="row">
-                                                            
+
 
                                                             <section class="col col-2">
                                                                 <label class="label">Apelido</label>
@@ -1503,6 +1503,11 @@ include("inc/scripts.php");
             $("#descontoFolhaPlanoSaude").val('');
         });
 
+        $("#telefone").mask("(99) 9999-9999?9").on("focusout", function() {
+            var len = this.value.replace(/\D/g, '').length;
+            $(this).mask(len > 10 ? "(99) 99999-999?9" : "(99) 9999-9999?9");
+        });
+
         carregaPagina();
 
     });
@@ -1755,7 +1760,7 @@ include("inc/scripts.php");
             return;
         }
 
-      
+
 
         gravaProjeto(projeto,
             function(data) {
