@@ -117,7 +117,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $tabela1 = "menuItem";
-                                                                        $arg = " (0=0) ORDER BY ordem ";
+                                                                        $arg = " (0=0) ORDER BY codigo ";
 
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->SelectCond($tabela1 . "|" . $arg . "");

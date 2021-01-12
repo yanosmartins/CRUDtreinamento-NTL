@@ -133,7 +133,7 @@ function recupera()
            INNER JOIN Ntl.menuItem SMI ON SMI.codigo = FNC.menuItem ";
     $where = "WHERE (0=0) ";
 
-    $orderby = " ORDER BY SMI.ordem, FNC.ordem ";
+    $orderby = " ORDER BY SMI.codigo, FNC.codigo ";
 
     $sql = $sql . $where . $orderby;
 
