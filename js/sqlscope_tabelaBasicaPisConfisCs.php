@@ -38,7 +38,7 @@ function grava()
     $usuario = $_SESSION['login'];
     $codigo =  +$_POST['codigo'];
     $percentual = $_POST['percentual'];
-    $ativo = + $_POST['ativo'];
+    $ativo = +$_POST['ativo'];
 
     $sql = "Ntl.pisConfisCs_Atualiza(
         $codigo ,
@@ -47,7 +47,7 @@ function grava()
         $usuario
         )";
 
-    
+
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
     if ($result < 1) {
@@ -99,7 +99,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("PISCONFISCS_ACESSAR|PISCONFISCS_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -115,8 +115,7 @@ function excluir()
         $id = +$_POST["id"];
     }
 
-    $sql = "UPDATE Ntl.pisConfisCs SET ativo = 0 WHERE codigo=$id";
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.pisConfisCs' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

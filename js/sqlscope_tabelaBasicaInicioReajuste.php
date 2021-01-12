@@ -36,8 +36,8 @@ function grava()
     session_start();
     $usuario = $_SESSION['login'];
     $codigo =  $_POST['codigo'];
-    $descricao = "'" .$_POST['descricao']. "'";
-    $ativo = + $_POST['ativo'];
+    $descricao = "'" . $_POST['descricao'] . "'";
+    $ativo = +$_POST['ativo'];
 
     $sql = "Ntl.inicioReajuste_Atualiza(
         $codigo ,
@@ -80,8 +80,8 @@ function recupera()
         $row = array_map('utf8_encode', $row);
 
     $id = $row['codigo'];
-    $descricao = $row['descricao']; 
-     $ativo = $row['ativo'];
+    $descricao = $row['descricao'];
+    $ativo = $row['ativo'];
 
 
 
@@ -103,6 +103,15 @@ function recupera()
 
 function excluir()
 {
+    $reposit = new reposit();
+
+    $possuiPermissao = $reposit->PossuiPermissao("INICIOREAJUSTE_ACESSAR|INICIOREAJUSTE_EXCLUIR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
         $mensagem = "Selecione um Início de Reajuste.";
@@ -112,11 +121,7 @@ function excluir()
         $id = +$_POST["id"];
     }
 
-
-
-    $sql = "UPDATE Ntl.inicioReajuste SET ativo = 0 WHERE codigo=$id";
-    $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.inicioReajuste' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

@@ -121,9 +121,7 @@ function excluirClasse()
         return;
     }
 
-    $sql = "UPDATE Ntl.classe SET ativo = 0 WHERE codigo = $id";
-
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.classe' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

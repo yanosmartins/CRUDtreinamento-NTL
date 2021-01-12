@@ -119,9 +119,7 @@ function excluirBanco()
         return;
     }
 
-    $sql = "UPDATE Ntl.banco SET ativo = 0 WHERE codigo = $id";
-
-    $result = $reposit->Execprocedure($sql);
+    $result = $reposit->update('Ntl.banco' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

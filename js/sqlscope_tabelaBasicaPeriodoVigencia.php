@@ -32,8 +32,8 @@ function grava()
     session_start();
     $usuario = $_SESSION['login'];
     $codigo =  +$_POST['codigo'];
-    $descricao = "'" .$_POST['descricao']. "'";
-    $ativo = + $_POST['ativo'];
+    $descricao = "'" . $_POST['descricao'] . "'";
+    $ativo = +$_POST['ativo'];
 
     $sql = "Ntl.periodoVigencia_Atualiza(
         $codigo ,
@@ -94,7 +94,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("PERIODOVIGENCIA_ACESSAR|PERIODOVIGENCIA_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -110,8 +110,7 @@ function excluir()
         $id = +$_POST["id"];
     }
 
-    $sql = "UPDATE Ntl.periodoVigencia SET ativo = 0 WHERE codigo=$id";
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.periodoVigencia' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

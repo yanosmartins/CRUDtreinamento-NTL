@@ -15,11 +15,12 @@ if ($funcao == 'recupera') {
 
 if ($funcao == 'excluir') {
     call_user_func($funcao);
-} 
+}
 
 return;
 
-function grava() {
+function grava()
+{
 
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("BENEFICIOINDIRETO_ACESSAR|BENEFICIOINDIRETO_GRAVAR");
@@ -35,8 +36,8 @@ function grava() {
     $ativo = $_POST['ativo'];
     session_start();
     $usuario  = $_SESSION['login'];  //Pegando o nome do usuário mantido pela sessão.
-    $descricao = "'". $_POST['descricao']. "'"; 
-  
+    $descricao = "'" . $_POST['descricao'] . "'";
+
     $sql = "Ntl.beneficioIndireto_Atualiza(
         $codigo ,
         $ativo ,
@@ -112,8 +113,7 @@ function excluir()
         $id = +$_POST["id"];
     }
 
-    $sql = "UPDATE Ntl.beneficioIndireto SET ativo = 0 WHERE codigo=$id";
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.beneficioIndireto' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
@@ -123,4 +123,3 @@ function excluir()
     echo 'sucess#' . $result;
     return;
 }
- 

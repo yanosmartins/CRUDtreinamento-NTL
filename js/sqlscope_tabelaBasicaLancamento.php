@@ -20,13 +20,14 @@ if ($funcao == 'excluir') {
 if ($funcao == 'verificaMunicipio') {
     call_user_func($funcao);
 }
-  
+
 return;
 
-function grava() {
+function grava()
+{
 
     $reposit = new reposit(); //Abre a conexão.
-    
+
     //Verifica permissões
     $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_GRAVAR");
 
@@ -40,7 +41,7 @@ function grava() {
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $codigo = $_POST['id'];
     $descricao = "'" . $_POST['descricao'] . "'";
-    $sigla = "'" . $_POST['sigla']. "'" ;
+    $sigla = "'" . $_POST['sigla'] . "'";
     $ativo = $_POST['ativo'];
     $faltaAusencia = $_POST['faltaAusencia'];
 
@@ -62,7 +63,8 @@ function grava() {
     return;
 }
 
-function recupera() {
+function recupera()
+{
     $condicaoId = !((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"])));
     $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
 
@@ -90,20 +92,20 @@ function recupera() {
 
     if ($condicaoId) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
-    } 
+    }
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    
+
     if (($row = odbc_fetch_array($result))) {
         $row = array_map('utf8_encode', $row);
-        $id = +$row['codigo']; 
-        $descricao = $row['descricao']; 
-        $sigla = $row['sigla']; 
-        $ativo = +$row['ativo']; 
-        $faltaAusencia = $row['faltaAusencia']; 
+        $id = +$row['codigo'];
+        $descricao = $row['descricao'];
+        $sigla = $row['sigla'];
+        $ativo = +$row['ativo'];
+        $faltaAusencia = $row['faltaAusencia'];
 
         $out = $id . "^" . $descricao . "^" . $sigla .  "^" . $ativo .  "^" . $faltaAusencia;
 
@@ -116,8 +118,9 @@ function recupera() {
         return;
     }
 }
- 
-function excluir() {
+
+function excluir()
+{
 
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
@@ -135,11 +138,11 @@ function excluir() {
         echo "failed#" . $mensagem . ' ';
         return;
     }
- 
-    $result = $reposit->update('Ntl.lancamento'.'|'.'ativo = 0' . '|'. 'codigo ='. $id); 
+
+    $result = $reposit->update('Ntl.lancamento' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
-        echo('failed#');
+        echo ('failed#');
         return;
     }
 

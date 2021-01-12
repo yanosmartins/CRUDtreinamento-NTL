@@ -21,7 +21,7 @@ return;
 function grava()
 {
     $reposit = new reposit(); //Abre a conexão.
-    $possuiPermissao = $reposit->PossuiPermissao("LOCALIZACAO_ACESSAR|LOCALIZACAO_GRAVAR");//Verifica permissões
+    $possuiPermissao = $reposit->PossuiPermissao("LOCALIZACAO_ACESSAR|LOCALIZACAO_GRAVAR"); //Verifica permissões
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -70,8 +70,8 @@ function recupera()
 
     $out = "";
     if (($row = odbc_fetch_array($result)))
-    $row = array_map('utf8_encode', $row);
-    
+        $row = array_map('utf8_encode', $row);
+
     $id = +$row['codigo'];
     $descricao = $row['descricao'];
     $ativo = +$row['ativo'];
@@ -93,7 +93,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();  //Abre a conexão.
-    $possuiPermissao = $reposit->PossuiPermissao("LOCALIZACAO_ACESSAR|LOCALIZACAO_EXCLUIR");//Verifica permissões
+    $possuiPermissao = $reposit->PossuiPermissao("LOCALIZACAO_ACESSAR|LOCALIZACAO_EXCLUIR"); //Verifica permissões
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -109,8 +109,7 @@ function excluir()
         $id = +$_POST["id"];
     }
 
-    $sql = "UPDATE Ntl.localizacao SET ativo ='0' WHERE codigo=$id";
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.localizacao' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

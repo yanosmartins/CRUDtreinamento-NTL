@@ -75,7 +75,7 @@ function recupera()
 
     $out = "";
     if (($row = odbc_fetch_array($result)))
-    $row = array_map('utf8_encode', $row);
+        $row = array_map('utf8_encode', $row);
     $id = $row['codigo'];
     $descricao = $row['descricao'];
     $ativo = $row['ativo'];
@@ -112,8 +112,7 @@ function excluir()
         $id = +$_POST["id"];
     }
 
-    $sql = "UPDATE Ntl.periodoRenovacao SET ativo = 0 WHERE codigo=$id";
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.periodoRenovacao' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

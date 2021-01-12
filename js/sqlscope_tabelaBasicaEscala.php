@@ -1,4 +1,4 @@
-<?php 
+<?php
 include "repositorio.php";
 include "girComum.php";
 
@@ -18,7 +18,8 @@ if ($funcao == 'excluir') {
 
 return;
 
-function grava(){
+function grava()
+{
 
     $reposit = new reposit(); //Abre a conexão.
 
@@ -37,7 +38,7 @@ function grava(){
     $descricao = "'" . $_POST['descricao'] . "'";
     $codigoSCI = "'" . $_POST['codigoSCI'] . "'";
     $ativo = +$_POST['ativo'];
- 
+
     $sql = "Ntl.escala_Atualiza(
             $codigo, 
             $descricao, 
@@ -115,7 +116,7 @@ function recupera()
 }
 
 function excluir()
-{  
+{
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("ESCALA_ACESSAR|ESCALA_EXCLUIR");
 
@@ -125,7 +126,7 @@ function excluir()
         return;
     }
 
-    $codigo = $_POST["codigo"];
+    $id = $_POST["codigo"];
 
     if ((empty($_POST['codigo']) || (!isset($_POST['codigo'])) || (is_null($_POST['codigo'])))) {
         $mensagem = "Selecione uma escala!";
@@ -133,7 +134,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('escala' . '|' . 'ativo = 0' . '|' . 'codigo =' . $codigo);
+    $result = $reposit->update('Ntl.escala' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
@@ -143,4 +144,3 @@ function excluir()
     echo 'sucess#' . $result;
     return;
 }
-?>

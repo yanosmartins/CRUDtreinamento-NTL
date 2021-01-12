@@ -33,12 +33,12 @@ function grava()
         echo "failed#" . $mensagem . ' ';
         return;
     }
-    
+
     session_start();
     $usuario = $_SESSION['login'];
     $codigo =  +$_POST['codigo'];
-    $descricao = "'" .$_POST['descricao']. "'";
-    $ativo = + $_POST['ativo'];
+    $descricao = "'" . $_POST['descricao'] . "'";
+    $ativo = +$_POST['ativo'];
 
     $sql = "Ntl.indiceReajuste_Atualiza(
         $codigo ,
@@ -104,6 +104,15 @@ function recupera()
 
 function excluir()
 {
+    $reposit = new reposit();
+
+    $possuiPermissao = $reposit->PossuiPermissao("INDICEREAJUSTE_ACESSAR|INDICEREAJUSTE_EXCLUIR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
         $mensagem = "Selecione um Código de Servico.";
@@ -113,11 +122,7 @@ function excluir()
         $id = +$_POST["id"];
     }
 
-
-
-    $sql = "UPDATE Ntl.indiceReajuste SET ativo = 0 WHERE codigo=$id";
-    $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.indiceReajuste' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

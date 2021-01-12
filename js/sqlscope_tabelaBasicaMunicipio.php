@@ -20,10 +20,11 @@ if ($funcao == 'excluir') {
 if ($funcao == 'verificaMunicipio') {
     call_user_func($funcao);
 }
-  
+
 return;
 
-function grava() {
+function grava()
+{
 
     $reposit = new reposit(); //Abre a conexão.
     //Verifica permissões
@@ -34,15 +35,15 @@ function grava() {
         echo "failed#" . $mensagem . ' ';
         return;
     }
- 
+
     //Atributos de Município
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $id = +$_POST["id"];
-    $ativo = +$_POST["ativo"];  
-    $descricao = "'" . $_POST['descricao'] . "'";  
-    $unidadeFederacao = "'" . $_POST['unidadeFederacao'] . "'"; 
-     
+    $ativo = +$_POST["ativo"];
+    $descricao = "'" . $_POST['descricao'] . "'";
+    $unidadeFederacao = "'" . $_POST['unidadeFederacao'] . "'";
+
     $sql = "Ntl.municipio_Atualiza($id,$ativo,$unidadeFederacao,$descricao,$usuario)";
 
     $result = $reposit->Execprocedure($sql);
@@ -55,7 +56,8 @@ function grava() {
     return;
 }
 
-function recupera() {
+function recupera()
+{
     $condicaoId = !((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"])));
     $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
 
@@ -84,18 +86,18 @@ function recupera() {
 
     if ($condicaoId) {
         $sql = $sql . " AND codigo = " . $municipioIdPesquisa . " ";
-    } 
+    }
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    
+
     if (($row = odbc_fetch_array($result))) {
-        $id = +$row['codigo']; 
+        $id = +$row['codigo'];
         $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
         $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
-        $ativo = +$row['ativo']; 
+        $ativo = +$row['ativo'];
 
         $out = $id . "^" . $descricao . "^" . $unidadeFederacao .  "^" . $ativo;
 
@@ -108,8 +110,9 @@ function recupera() {
         return;
     }
 }
- 
-function excluir() {
+
+function excluir()
+{
 
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("MUNICIPIO_ACESSAR|MUNICIPIO_EXCLUIR");
@@ -127,22 +130,14 @@ function excluir() {
         echo "failed#" . $mensagem . ' ';
         return;
     }
- 
-    $result = $reposit->update('municipio'.'|'.'ativo = 0' . '|'. 'codigo ='. $id); 
+
+    $result = $reposit->update('Ntl.municipio' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
-        echo('failed#');
+        echo ('failed#');
         return;
     }
 
     echo 'sucess#' . $result;
     return;
 }
- 
-
-
-
-
-
-
- 

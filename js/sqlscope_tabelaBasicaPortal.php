@@ -19,7 +19,8 @@ if ($funcao == 'excluir') {
 
 return;
 
-function grava(){
+function grava()
+{
 
     $reposit = new reposit(); //Abre a conexão.
 
@@ -117,7 +118,7 @@ function recupera()
 }
 
 function excluir()
-{  
+{
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("PORTAL_ACESSAR|PORTAL_EXCLUIR");
 
@@ -127,7 +128,7 @@ function excluir()
         return;
     }
 
-    $codigo = $_POST["codigo"];
+    $id = $_POST["codigo"];
 
     if ((empty($_POST['codigo']) || (!isset($_POST['codigo'])) || (is_null($_POST['codigo'])))) {
         $mensagem = "Selecione um portal!";
@@ -135,7 +136,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('portal' . '|' . 'ativo = 0' . '|' . 'codigo =' . $codigo);
+    $result = $reposit->update('Ntl.portal' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

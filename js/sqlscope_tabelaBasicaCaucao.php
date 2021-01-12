@@ -33,8 +33,8 @@ function grava()
     session_start();
     $usuario = $_SESSION['login'];
     $codigo =  +$_POST['codigo'];
-    $descricao = "'" .$_POST['descricao']. "'";
-    $ativo = + $_POST['ativo'];
+    $descricao = "'" . $_POST['descricao'] . "'";
+    $ativo = +$_POST['ativo'];
 
     $sql = "Ntl.caucao_Atualiza(
         $codigo ,
@@ -43,7 +43,7 @@ function grava()
         $usuario
         )";
 
-    
+
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
     if ($result < 1) {
@@ -111,8 +111,7 @@ function excluir()
         $id = +$_POST["id"];
     }
 
-    $sql = "UPDATE Ntl.caucao SET ativo = 0 WHERE codigo=$id";
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.caucao' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

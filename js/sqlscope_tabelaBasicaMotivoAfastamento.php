@@ -19,7 +19,8 @@ if ($funcao == 'excluir') {
 
 return;
 
-function grava() {
+function grava()
+{
 
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("MOTIVOAFASTAMENTO_ACESSAR|MOTIVOAFASTAMENTO_GRAVAR");
@@ -33,9 +34,9 @@ function grava() {
     session_start();
     $id = +$_POST['id'];
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-    $descricao = "'" . $_POST['descricao'] . "'"; 
+    $descricao = "'" . $_POST['descricao'] . "'";
     $ativo = +$_POST["ativo"];
- 
+
     $sql = "Ntl.motivoAfastamento_Atualiza ($id,$ativo,$descricao, $usuario) ";
     $result = $reposit->Execprocedure($sql);
 
@@ -47,7 +48,8 @@ function grava() {
     return;
 }
 
-function recupera() {
+function recupera()
+{
     $condicaoId = !((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"])));
     $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
 
@@ -81,13 +83,13 @@ function recupera() {
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    
+
     if (($row = odbc_fetch_array($result))) {
         $id = +$row['codigo'];
-        $ativo = +$row['ativo']; 
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES'); 
-         
-        $out = $id . "^" . $ativo . "^" . $descricao ;
+        $ativo = +$row['ativo'];
+        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+
+        $out = $id . "^" . $ativo . "^" . $descricao;
 
         if ($out == "") {
             echo "failed#";
@@ -97,9 +99,10 @@ function recupera() {
         }
         return;
     }
-} 
+}
 
-function excluir() {
+function excluir()
+{
 
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("MOTIVOAFASTAMENTO_ACESSAR|MOTIVOAFASTAMENTO_EXCLUIR");
@@ -117,12 +120,11 @@ function excluir() {
         echo "failed#" . $mensagem . ' ';
         return;
     }
-    
-    $reposit = new reposit();
-    $result = $reposit->update('motivoAfastamento'.'|'.'ativo = 0' . '|'. 'codigo ='. $id); 
-      
+
+    $result = $reposit->update('Ntl.motivoAfastamento' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+
     if ($result < 1) {
-        echo('failed#');
+        echo ('failed#');
         return;
     }
     echo 'sucess#' . $result;
