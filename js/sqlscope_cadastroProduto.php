@@ -193,7 +193,7 @@ function excluir()
     }
 
     $reposit = new reposit();
-    $result = $reposit->update('produto' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->update('Ntl.produto' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');

@@ -1216,38 +1216,30 @@ function recuperaBeneficio()
     }
 }
 
-function excluirBeneficio()
+function excluir()
 {
-
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("VALETRANSPORTEUNITARIO_ACESSAR|VALETRANSPORTEUNITARIO_EXCLUIR");
-
+    $possuiPermissao = $reposit->PossuiPermissao("BENEFICIOPROJETO_ACESSAR|BENEFICIOPROJETO_EXCLUIR");
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
         echo "failed#" . $mensagem . ' ';
         return;
     }
-
-    $codigo = $_POST["id"];
-
+    $id = $_POST["id"];
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Sindicato.";
+        $mensagem = "Selecione um Beneficio para ser excluído";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    $sql = "UPDATE Ntl.beneficioProjeto SET ativo = 0 WHERE codigo = " . $codigo;
-
     $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
+    
+    $result = $reposit->update('Ntl.beneficioProjeto' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
 
-    $ret = 'sucess#';
     if ($result < 1) {
-        $ret = 'failed#';
+        echo ('failed#');
+        return;
     }
-    echo $ret;
-    return;
-
     echo 'sucess#' . $result;
     return;
 }

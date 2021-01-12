@@ -136,7 +136,7 @@ function excluir()
     }
 
     $reposit = new reposit();
-    $result = $reposit->update('convenioSaude' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->update('Ntl.convenioSaude' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');

@@ -701,24 +701,28 @@ function preenchePregao()
 
 function excluir()
 {
-
-    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Código de Servico.";
+    $reposit = new reposit();
+    $possuiPermissao = $reposit->PossuiPermissao("CONTRATO_ACESSAR|CONTRATO_EXCLUIR");
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
         echo "failed#" . $mensagem . ' ';
         return;
-    } else {
-        $id = +$_POST["id"];
+    }
+    $id = $_POST["id"];
+    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
+        $mensagem = "Selecione um contrato para ser excluído";
+        echo "failed#" . $mensagem . ' ';
+        return;
     }
 
-    $sql = "UPDATE Ntl.contrato SET ativo ='0' WHERE codigo=$id";
     $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
+    
+    $result = $reposit->update('Ntl.contrato' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
 
     if ($result < 1) {
         echo ('failed#');
         return;
     }
-
     echo 'sucess#' . $result;
     return;
 }

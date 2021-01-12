@@ -142,7 +142,8 @@ function excluir()
     }
 
     $reposit = new reposit();
-    $result = $reposit->update('cargo' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    
+    $result = $reposit->update('Ntl.cargo' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
 
     if ($result < 1) {
         echo ('failed#');
@@ -151,6 +152,7 @@ function excluir()
     echo 'sucess#' . $result;
     return;
 }
+
 function verificaDescricao()
 {
     $reposit = new reposit();
