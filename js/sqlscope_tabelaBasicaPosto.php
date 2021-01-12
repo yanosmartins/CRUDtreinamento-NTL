@@ -115,9 +115,7 @@ function excluirPosto()
         return;
     }
 
-    $sql = "UPDATE Ntl.posto SET ativo = 0 WHERE codigo = $id";
-
-    $result = $reposit->Execprocedure($sql);
+    $result = $reposit->update('Ntl.posto' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

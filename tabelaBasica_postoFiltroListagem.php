@@ -28,12 +28,10 @@ include "js/repositorio.php";
                     $where = $where . " AND (posto.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
 
-                if (isset($_POST["ativo"])) {
-                    $ativo = $_POST["ativo"];
-                    if ($ativo != "default") {
-                        $where = $where . " AND posto.ativo = $ativo ";
-                    }
-                }
+                if ($_GET["ativo"] != "") {
+                    $ativo = $_GET["ativo"];
+                    $where = $where." AND ativo = $ativo";
+                } 
 
                 $sql .= $where . $order;
                 $reposit = new reposit();
@@ -51,7 +49,7 @@ include "js/repositorio.php";
                     }
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_tarefaCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left"><a href="tabelaBasica_postoCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
                     echo '<td class="text-left">' . $ativo . '</td>';
                     echo '</tr >';
                 }

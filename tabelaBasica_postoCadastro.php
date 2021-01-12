@@ -302,7 +302,6 @@ include("inc/scripts.php");
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                 }
-                voltar();
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                 voltar();
