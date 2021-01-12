@@ -214,7 +214,7 @@ class reposit {
         $listacampos = $this->anti_injection($listacampos);
         $conf[2] = $this->anti_injection($conf[2]);
         try {
-            $sql = "update [Ntl]." . $conf[0] . " set " . $listacampos . " WHERE " . $conf[2] . " ";
+            $sql = "update " . $conf[0] . " set " . $listacampos . " WHERE " . $conf[2] . " ";
             $select = odbc_exec($this->sqlconnect, $sql);
             $result = odbc_num_rows($select);
             if ($select == false) {
