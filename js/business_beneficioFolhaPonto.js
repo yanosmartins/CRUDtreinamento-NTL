@@ -153,4 +153,3 @@ function periodoAdicionalNoturno(funcionario, callback) {
 
     return;
 }
-

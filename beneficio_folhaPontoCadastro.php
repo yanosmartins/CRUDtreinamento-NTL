@@ -26,7 +26,6 @@ if ($condicaoExcluirOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
-
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
@@ -42,7 +41,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["beneficio"]["sub"]["folhaPonto"]["active"] = true;
+$page_nav["operacao"]["sub"]["beneficio"]["sub"]["folhaPonto"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -99,7 +98,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, descricao FROM Ntl.projeto WHERE ativo = 1 order by descricao";
+                                                                        $sql = "select codigo, descricao from Ntl.projeto where ativo = 1 order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
                                                                             $codigo = +$row['codigo'];
@@ -117,7 +116,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE dataDemissaoFuncionario IS NULL AND ativo = 1 order by nome";
+                                                                        $sql = "select codigo, nome from Ntl.funcionario where dataDemissaoFuncionario IS NULL AND ativo = 1 order by nome";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
                                                                             $codigo = +$row['codigo'];
@@ -264,6 +263,9 @@ include("inc/nav.php");
                                                                 <button id="btnRemoverValeAlimentacao" type="button" class="btn btn-danger" title="Remover Falta/Ausência">
                                                                     <i class="fa fa-minus"></i>
                                                                 </button>
+                                                                <button id="btnMarcarDesmarcarTodosValeAlimentacao" type="button" class="btn btn-success" title="Marca/Desmarca Todos">
+                                                                    <i class="fa fa-check"></i>
+                                                                </button>
                                                             </section>
                                                         </div>
 
@@ -388,6 +390,9 @@ include("inc/nav.php");
                                                                 </button>
                                                                 <button id="btnRemoverValeTransporte" type="button" class="btn btn-danger" title="Remover Falta/Ausência">
                                                                     <i class="fa fa-minus"></i>
+                                                                </button>
+                                                                <button id="btnMarcarDesmarcarTodosValeTransporte" type="button" class="btn btn-success" title="Marca/Desmarca Todos">
+                                                                    <i class="fa fa-check"></i>
                                                                 </button>
                                                             </section>
                                                         </div>
@@ -597,7 +602,7 @@ include("inc/nav.php");
 
 
                                         <!-- COMEÇO DO ACCORDION DE HORA ATRASO -->
-                                        <div class="panel panel-default">
+                                        <!-- <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseHoraAtraso" class="collapsed" id="accordionHoraAtraso">
@@ -742,7 +747,7 @@ include("inc/nav.php");
                                                     </fieldset>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <!-- FIM DO ACCORDION DE hORA eXTRA -->
 
 
@@ -1159,7 +1164,7 @@ include("inc/scripts.php");
                             addValeAlimentacao();
                         }
                     } else {
-                        if (validaValeTransporte(copiadoVT = 1)) {
+                        if (validaValeTransporte(1)) {
                             $("#faltaAusenciaValeTransporte").val($("#faltaAusenciaValeAlimentacao").val());
                             $("#dataFaltaAusenciaValeTransporteInicio").val($("#dataFaltaAusenciaValeAlimentacaoInicio").val());
                             $("#dataFaltaAusenciaValeTransporteFim").val($("#dataFaltaAusenciaValeTransporteFim").val());
@@ -1182,7 +1187,7 @@ include("inc/scripts.php");
 
                         addValeAlimentacao();
                     } else {
-                        if (validaValeTransporte()) {
+                        if (validaValeTransporte(1)) {
                             $("#faltaAusenciaValeTransporte").val($("#faltaAusenciaValeAlimentacao").val());
                             $("#dataFaltaAusenciaValeTransporteInicio").val($("#dataFaltaAusenciaValeAlimentacaoInicio").val());
                             $("#dataFaltaAusenciaValeTransporteFim").val($("#dataFaltaAusenciaValeTransporteFim").val());
@@ -1363,7 +1368,12 @@ include("inc/scripts.php");
             $("#diasDeVT").val(resultado + 1);
         });
 
-
+        $("#btnMarcarDesmarcarTodosValeTransporte").on("click", function() {
+            marcarDesmarcarTodos('tableValeTransporte');
+        });
+        $("#btnMarcarDesmarcarTodosValeAlimentacao").on("click", function() {
+            marcarDesmarcarTodos('tableValeAlimentacao');
+        });
     });
 
 
@@ -1586,13 +1596,14 @@ include("inc/scripts.php");
             return false;
         }
         for (i = jsonValeAlimentacaoArray.length - 1; i >= 0; i--) {
-            if ((jsonValeAlimentacaoArray[i].descricaoDataFaltaAusenciaValeAlimentacao === dataFaltaAusenciaValeAlimentacao) && (jsonValeAlimentacaoArray[i].sequencialValeAlimentacao !== sequencial)) {
+            if ((jsonValeAlimentacaoArray[i].descricaoDataFaltaAusenciaValeAlimentacao === dataFaltaAusenciaValeAlimentacaoInicio) ||
+                (jsonValeAlimentacaoArray[i].descricaoDataFaltaAusenciaValeAlimentacao === dataFaltaAusenciaValeAlimentacaoFim)) {
                 achouData = true;
                 break;
             }
         }
         if (achouData === true) {
-            smartAlert("Erro", "Já existe esta data em falta/ausência no VA e VR. (" + dataFaltaAusenciaValeAlimentacao + ")", "error");
+            smartAlert("Erro", "Já existe esta data em falta/ausência no VA e VR ,no periodo: (" + dataFaltaAusenciaValeAlimentacaoInicio + "  " + dataFaltaAusenciaValeAlimentacaoFim + ")", "error");
             return false;
         }
 
@@ -1637,6 +1648,8 @@ include("inc/scripts.php");
         }
         if (fieldName !== '' && (fieldId === "descricaoDataFaltaAusenciaValeAlimentacao")) {
             var dataFaltaAusencia = $("#dataFaltaAusenciaValeAlimentacao").val();
+            dataFaltaAusencia = dataFaltaAusencia.split("-");
+            dataFaltaAusencia = dataFaltaAusencia[2] + "/" + dataFaltaAusencia[1] + "/" + dataFaltaAusencia[0];
             return {
                 name: fieldName,
                 value: dataFaltaAusencia
@@ -1783,20 +1796,24 @@ include("inc/scripts.php");
         var copiado = copiadoVT;
         var achouData = false;
         // var dataFaltaAusenciaValeTransporte = $('#dataFaltaAusenciaValeTransporte').val();
-        var faltaAusenciaValeTransporte = $('#faltaAusenciaValeTransporte').val();
-        // var dataFaltaAusenciaValeTransporte = $('#dataFaltaAusenciaValeTransporte').val();
-        let dataInico = $("#dataFaltaAusenciaValeTransporteInicio").val();
-        let dataFim = $("#dataFaltaAusenciaValeTransporteFim").val();
 
+        var faltaAusenciaValeTransporte = $('#faltaAusenciaValeTransporte').val();
+        if (copiado != 1) {
+            var dataInico = FormataStringData($("#dataFaltaAusenciaValeTransporteInicio").val());
+            var dataFim = FormataStringData($("#dataFaltaAusenciaValeTransporteFim").val());
+        } else {
+            var dataInico =  FormataStringData($('#dataFaltaAusenciaValeAlimentacaoInicio').val()); // se for copiado do VA compara com as datas do campo de va
+            var dataFim = FormataStringData($('#dataFaltaAusenciaValeAlimentacaoFim').val());
+        }
         var sequencial = +$('#sequencialValeTransporte').val();
         if (copiado != 1) {
             if (faltaAusenciaValeTransporte === '') {
-                smartAlert("Erro", "Informe se há alguma Falta/Ausênciaasdasdasdas", "error");
+                smartAlert("Erro", "Informe se há alguma Falta/Ausência", "error");
                 return false;
             }
 
             if (dataInico === '') {
-                smartAlert("Erro", "Informe a Data Inico", "error");
+                smartAlert("Erro", "Informe a Data Incíco", "error");
                 return false;
             }
 
@@ -1806,19 +1823,26 @@ include("inc/scripts.php");
             }
         }
 
-
         for (i = jsonValeTransporteArray.length - 1; i >= 0; i--) {
-            if ((jsonValeTransporteArray[i].descricaoDataFaltaAusenciaValeTransporte === dataFaltaAusenciaValeTransporte) && (jsonValeTransporteArray[i].sequencialValeTransporte !== sequencial)) {
+            var dataFaltaAusenciaValeTransporte = jsonValeTransporteArray[i].dataFaltaAusenciaValeTransporte
+            // dataInico,dataFim
+            if(moment(dataFaltaAusenciaValeTransporte).isSame(moment(dataInico)) || moment(dataFaltaAusenciaValeTransporte).isSame(moment(dataFim)) ){
                 achouData = true;
                 break;
             }
         }
-        if (achouData === true) {
-            smartAlert("Erro", "Já existe esta data em falta/ausência no Vale Trasnporte. (" + dataFaltaAusenciaValeTransporte + ")", "error");
-            return false;
-        }
-
-        return true;
+    // for (i = jsonValeTransporteArray.length - 1; i >= 0; i--) {
+    //     if ((jsonValeTransporteArray[i].dataFaltaAusenciaValeTransporte === dataInico)
+    //          || ( jsonValeTransporteArray[i].dataFaltaAusenciaValeTransporte === dataFim)) {
+    //         achouData = true;
+    //         break;
+    //     }
+    // }
+    if (achouData === true) {
+        smartAlert("Erro", "Já existe esta data em falta/ausência no VT ,no periodo: (" + dataInico + "  " + dataFim + ")", "error");
+        return false;
+    }
+    return true;
     }
 
     function processDataValeTransporte(node) {
@@ -1841,8 +1865,6 @@ include("inc/scripts.php");
         }
         if (fieldName !== '' && (fieldId === "dataFaltaAusenciaValeTransporte")) {
             var dataCerta = $("#dataFaltaAusenciaValeTransporte").val();
-            dataCerta = dataCerta.split('/');
-            dataCerta = dataCerta[2] + '-' + dataCerta[1] + '-' + dataCerta[0];
             return {
                 name: fieldName,
                 value: dataCerta
@@ -1850,6 +1872,8 @@ include("inc/scripts.php");
         }
         if (fieldName !== '' && (fieldId === "descricaoDataFaltaAusenciaValeTransporte")) {
             var dataFaltaAusencia = $("#dataFaltaAusenciaValeTransporte").val();
+            dataFaltaAusencia = dataFaltaAusencia.split("-");
+            dataFaltaAusencia = dataFaltaAusencia[2] + "/" + dataFaltaAusencia[1] + "/" + dataFaltaAusencia[0];
             return {
                 name: fieldName,
                 value: dataFaltaAusencia
@@ -1960,8 +1984,8 @@ include("inc/scripts.php");
         if (arr.length > 0) {
             var item = arr[0];
             $("#faltaAusenciaValeTransporte").val(item.faltaAusenciaValeTransporte);
-            $("#dataFaltaAusenciaValeTransporteInicio").val(FormataStringDataBarra(item.descricaoDataFaltaAusenciaValeTransporte));
-            $("#dataFaltaAusenciaValeTransporteFim").val(FormataStringDataBarra(item.descricaoDataFaltaAusenciaValeTransporte));
+            $("#dataFaltaAusenciaValeTransporteInicio").val(item.descricaoDataFaltaAusenciaValeTransporte);
+            $("#dataFaltaAusenciaValeTransporteFim").val(item.descricaoDataFaltaAusenciaValeTransporte);
             $("#justificativaValeTransporte").val(item.justificativaValeTransporte);
             $("#valeTransporteId").val(item.valeTransporteId);
             $("#sequencialValeTransporte").val(item.sequencialValeTransporte);
@@ -3239,4 +3263,6 @@ include("inc/scripts.php");
                 return null;
         }
     }
+
+ 
 </script>

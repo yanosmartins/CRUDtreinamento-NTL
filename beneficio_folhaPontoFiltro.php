@@ -20,7 +20,6 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
-
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
@@ -36,7 +35,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["beneficio"]["sub"]["folhaPonto"]["active"] = true;
+$page_nav["operacao"]["sub"]["beneficio"]["sub"]["folhaPonto"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -213,4 +212,3 @@ include("inc/scripts.php");
         $('#resultadoBusca').load('beneficio_folhaPontoFiltroListagem.php?' + parametrosUrl);
     }
 </script>
- 

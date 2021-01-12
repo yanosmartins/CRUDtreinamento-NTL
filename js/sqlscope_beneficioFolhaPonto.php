@@ -174,12 +174,11 @@ function grava()
                 if (($campo === "dataFaltaAusenciaValeTransporte")) {
                     $data = $valor;
                     $data = explode("-", $data);
-                    $quantidadeData = count($data);
-                    if ($quantidadeData == 5) {
-                        $valor = $data[2] . "-" . $data[3] . "-" . $data[4];
-                    } else {
+                    // $quantidadeData = count($data);
+                    // if ($quantidadeData == 5) {
+                    //     $valor = $data[2] . "-" . $data[3] . "-" . $data[4];
+                    // } else {
                         $valor = $data[0] . "-" . $data[1] . "-" . $data[2];
-                    }
                 }
                 // if (($campo === "totalAusenciasValeTransporte")) {
                 //     continue;
@@ -289,7 +288,7 @@ function grava()
                 if (($campo === "diaSemanaFim")) {
                     continue;
                 }
-                if (($campo === "totalAdicionalNoturno")) {
+                if (($campo === "horaExtraNoturna")) {
                     if ($valor == "Não Realizou") {
                         $valor = NULL;
                     }
@@ -303,6 +302,7 @@ function grava()
                 if (($campo === "dataHoraExtraFim")) {
                     $valor = formatarDataGravaXML($valor);
                 }
+               
 
                 $xmlHoraExtra = $xmlHoraExtra . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
@@ -733,7 +733,7 @@ function recuperaDiaUtil()
     $ano = $mesAno[1];
 
     $sql = "SELECT codigo, tipoDiaUtilVAVR, tipoDiaUtilVT, sindicato, projeto,municipioDiasUteisVAVR,municipioDiasUteisVT 
-            FROM Beneficio.beneficioProjeto WHERE funcionario = " . $funcionario . " AND projeto = " . $projeto . " AND ativo = 1";
+            FROM Ntl.beneficioProjeto WHERE funcionario = " . $funcionario . " AND projeto = " . $projeto . " AND ativo = 1";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -853,7 +853,7 @@ function recuperaDiaUtil()
             break;
         case 3:
             $sql = "SELECT codigo, diaUtilJaneiroVAVR, diaUtilFevereiroVAVR, diaUtilMarcoVAVR, diaUtilAbrilVAVR, diaUtilMaioVAVR, diaUtilJunhoVAVR, diaUtilJulhoVAVR
-            , diaUtilAgostoVAVR, diaUtilSetembroVAVR, diaUtilOutubroVAVR, diaUtilNovembroVAVR, diaUtilDezembroVAVR  FROM Beneficio.beneficioProjeto 
+            , diaUtilAgostoVAVR, diaUtilSetembroVAVR, diaUtilOutubroVAVR, diaUtilNovembroVAVR, diaUtilDezembroVAVR  FROM Ntl.beneficioProjeto 
             WHERE (0=0) AND funcionario = " . $funcionario . " AND projeto = " . $projeto . "AND ativo = 1";
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
@@ -1042,7 +1042,7 @@ function recuperaDiaUtil()
             break;
         case 3:
             $sql = "SELECT codigo, diaUtilJaneiroVT, diaUtilFevereiroVT, diaUtilMarcoVT, diaUtilAbrilVT, diaUtilMaioVT, diaUtilJunhoVT, diaUtilJulhoVT
-            , diaUtilAgostoVT, diaUtilSetembroVT, diaUtilOutubroVT, diaUtilNovembroVT, diaUtilDezembroVT  FROM Beneficio.beneficioProjeto 
+            , diaUtilAgostoVT, diaUtilSetembroVT, diaUtilOutubroVT, diaUtilNovembroVT, diaUtilDezembroVT  FROM Ntl.beneficioProjeto 
             WHERE (0=0) AND funcionario = " . $funcionario . " AND projeto = " . $projeto . "AND ativo = 1";
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
@@ -1249,7 +1249,7 @@ function populaComboFuncionario()
 {
     $projeto = $_POST["projeto"];
     if ($projeto > 0) {
-        $sql = "SELECT BP.codigo, BP.funcionario, F.nome FROM Beneficio.beneficioProjeto BP INNER JOIN Beneficio.funcionario F ON BP.funcionario = F.codigo WHERE (0=0) 
+        $sql = "SELECT BP.codigo, BP.funcionario, F.nome FROM Ntl.beneficioProjeto BP INNER JOIN Ntl.funcionario F ON BP.funcionario = F.codigo WHERE (0=0) 
         AND projeto = " . $projeto . " AND BP.ativo = 1 AND F.dataDemissaoFuncionario IS NULL";
 
         $reposit = new reposit();
@@ -1277,7 +1277,7 @@ function periodoAdicionalNoturno()
 {
     $funcionario = $_POST["funcionario"];
     if ($funcionario > 0) {
-        $sql = "SELECT S.codigo, S.horaInicialAdicionalNoturno, S.horaFinalAdicionalNoturno FROM Ntl.sindicato S INNER JOIN Beneficio.beneficioProjeto 
+        $sql = "SELECT S.codigo, S.horaInicialAdicionalNoturno, S.horaFinalAdicionalNoturno FROM Ntl.sindicato S INNER JOIN Ntl.beneficioProjeto 
         BP ON BP.sindicato = S.codigo WHERE (0=0) AND ativo = 1 AND BP.funcionario = " . $funcionario;
 
         $reposit = new reposit();
