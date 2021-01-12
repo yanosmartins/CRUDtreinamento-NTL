@@ -1420,6 +1420,11 @@ include("inc/scripts.php");
             placement: 'top',
             donetext: 'Done'
         });
+        $("#telefone").mask("(99) 9999-9999?9").on("focusout", function() {
+            var len = this.value.replace(/\D/g, '').length;
+            $(this).mask(len > 10 ? "(99) 99999-999?9" : "(99) 9999-9999?9");
+        });
+
     });
 
 
