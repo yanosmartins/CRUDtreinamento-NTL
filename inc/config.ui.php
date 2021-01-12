@@ -259,22 +259,24 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['beneficio']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
         }
     }
-     
+
     $condicaoContratacaoOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
 
     if ($condicaoContratacaoOk) {
         $page_nav['operacao']['sub']['contratacao'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
-        $page_nav['operacao']['sub']['contratacao']['sub'] = array(); //SYSCB 
+        $page_nav['operacao']['sub']['contratacao']['sub'] = array();
 
-        $condicaoCandidatoOk = in_array('CANDIDATO_ACESSAR', $arrayPermissao, true);
-
-        $condicaoCandidatoOk = true;
-        if ($condicaoContratacaoOk) {
+        if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
         }
 
+        //if (in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {}
         $page_nav['operacao']['sub']['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/index.php"));
+
+        //if (in_array('RECURSOSHUMANOS_ACESSAR', $arrayPermissao, true)) {}
         $page_nav['operacao']['sub']['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/index.php"));
+
+        //if (in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {}
         $page_nav['operacao']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/index.php"));
     }
 
