@@ -151,17 +151,15 @@ function excluir()
     }
 
     $reposit = new reposit();
-    $result = $reposit->update('valeTransporteUnitario' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->update('Ntl.valeTransporteUnitario' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');
         return;
     }
-
     echo 'sucess#' . $result;
     return;
 }
-
 function verificaDescricao()
 {
     $reposit = new reposit();

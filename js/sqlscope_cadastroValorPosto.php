@@ -168,26 +168,34 @@ function preencheFuncionario()
 function excluir()
 {
 
-    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Código de Servico.";
+    $reposit = new reposit();
+    $possuiPermissao = $reposit->PossuiPermissao("VALORPOSTO_ACESSAR|VALORPOSTO_EXCLUIR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
         echo "failed#" . $mensagem . ' ';
         return;
-    } else {
-        $id = +$_POST["id"];
     }
 
-    $sql = "UPDATE Ntl.valorPosto SET ativo ='0' WHERE codigo=$id";
+    $id = $_POST["id"];
+
+    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
+        $mensagem = "Selecione um Valor do posto.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
     $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.valorPosto' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');
         return;
     }
-
     echo 'sucess#' . $result;
     return;
 }
+
 function limparValor($string)
 {
     $string = preg_replace('/[^A-Za-z0-9,\-]/', '', $string);

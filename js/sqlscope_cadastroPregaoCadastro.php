@@ -341,7 +341,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('pregao' . '|' . 'ativo = 0' . '|' . 'codigo =' . $codigo);
+    $result = $reposit->update('Ntl.pregao' . '|' . 'ativo = 0' . '|' . 'codigo =' . $codigo);
 
     if ($result < 1) {
         echo ('failed#');

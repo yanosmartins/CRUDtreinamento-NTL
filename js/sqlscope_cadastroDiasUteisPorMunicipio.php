@@ -202,23 +202,21 @@ function excluir()
     $id = $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um registro para ser excluído";
+        $mensagem = "Selecione um dia util por municipio.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    $sql = "UPDATE Ntl.diasUteisPorMunicipio SET ativo = 0 WHERE (0=0) AND codigo = " . $id;
-    $result = $reposit->RunQuery($sql);
+    $reposit = new reposit();
+    $result = $reposit->update('Ntl.diasUteisPorMunicipio' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');
         return;
     }
-
     echo 'sucess#' . $result;
     return;
 }
-
 function listaComboMunicipio()
 {
     $id = $_POST["codigo"];

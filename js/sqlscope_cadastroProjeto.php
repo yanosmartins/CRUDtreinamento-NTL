@@ -612,7 +612,7 @@ function excluirProjeto()
         return;
     }
 
-    $codigo = $_POST["id"];
+    $id = $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
         $mensagem = "Selecione um projeto.";
@@ -620,17 +620,14 @@ function excluirProjeto()
         return;
     }
 
-    $sql = "UPDATE Ntl.projeto SET ativo = 0 WHERE codigo = " . $codigo;
-
+    
     $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
+    $result = $reposit->update('Ntl.projeto' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
-    $ret = 'sucess#';
     if ($result < 1) {
-        $ret = 'failed#';
+        echo ('failed#');
+        return;
     }
-    echo $ret;
-    return;
 
     echo 'sucess#' . $result;
     return;
