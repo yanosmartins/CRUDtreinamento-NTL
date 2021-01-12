@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('CADASTRO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('CADASTRO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('CADASTRO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('CANDIDATO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -42,7 +42,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastrar"]["sub"]["candidato"]["active"] = true;
+$page_nav['operacao']['sub']['contratacao']['sub']["candidato"]["active"] = true;
 
 include("inc/nav.php");
 ?>
