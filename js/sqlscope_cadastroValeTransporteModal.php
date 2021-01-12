@@ -214,7 +214,7 @@ function excluir()
     }
 
     $reposit = new reposit();
-    $result = $reposit->update('valeTransporteModal' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->update('Ntl.valeTransporteModal' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');

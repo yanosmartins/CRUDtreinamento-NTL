@@ -152,7 +152,7 @@ function excluir() {
     }
     
     $reposit = new reposit();
-    $result = $reposit->update('fornecedor'.'|'.'ativo = 0' . '|'. 'codigo ='. $id); 
+    $result = $reposit->update('Ntl.fornecedor'.'|'.'ativo = 0' . '|'. 'codigo ='. $id); 
      
     if ($result < 1) {
         echo('failed#');

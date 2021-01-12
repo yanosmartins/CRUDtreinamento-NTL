@@ -555,25 +555,21 @@ function excluir()
         return;
     }
 
-    $codigo = $_POST["id"];
+    $id = $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Sindicato.";
+        $mensagem = "Selecione um tipo de Sindicato.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    $sql = "UPDATE Ntl.sindicato SET situacao = 0 WHERE codigo = " . $codigo;
+    $reposit = new reposit();
+    $result = $reposit->update('Ntl.sindicato' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
-    $result = $reposit->RunQuery($sql);
-
-    $ret = 'sucess#';
     if ($result < 1) {
-        $ret = 'failed#';
+        echo ('failed#');
+        return;
     }
-    echo $ret;
-    return;
-
     echo 'sucess#' . $result;
     return;
 }

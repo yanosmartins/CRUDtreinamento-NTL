@@ -1,6 +1,6 @@
 function gravaSindicato(sindicato, callback) {
     $.ajax({
-        url: 'js/sqlscope_sindicato.php',
+        url: 'js/sqlscope_cadastroSindicato.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'gravaSindicato', sindicato:sindicato}, 
@@ -15,7 +15,7 @@ function gravaSindicato(sindicato, callback) {
 
 function recuperaSindicato(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_sindicato.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_cadastroSindicato.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'recuperaSindicato', id: id}, //valores enviados ao script      
@@ -55,7 +55,7 @@ function excluirValeTransporteUnitario(id, callback) {
 }
 function excluirSindicato(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_sindicato.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_cadastroSindicato.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'excluir', id: id}, //valores enviados ao script      
@@ -67,7 +67,7 @@ function excluirSindicato(id, callback) {
 
 function pesquisaCnpj(cnpj, callback) {
     $.ajax({
-        url: 'js/sqlscope_sindicato.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_cadastroSindicato.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'pesquisaCnpj', cnpj: cnpj}, //valores enviados ao script     
