@@ -61,7 +61,7 @@ include "js/repositorio.php";
                     }
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_fornecedorCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left"><a href="cadastro_fornecedorCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
                     echo '<td class="text-left">' . $unidadeFederacao . '</td>';
                     echo '<td class="text-left">' . $municipio . '</td>';
                     echo '<td class="text-left">' . $ativo . '</td>';

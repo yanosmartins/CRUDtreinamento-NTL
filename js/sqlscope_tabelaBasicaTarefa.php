@@ -107,35 +107,30 @@ function recuperaTarefa()
 function excluirTarefa()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("TAREFA_ACESSAR|TAREFA_GRAVAR|TAREFA_EXCLUIR");
-
+    $possuiPermissao = $reposit->PossuiPermissao("TAREFA_ACESSAR|TAREFA_EXCLUIR");
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
         echo "failed#" . $mensagem . ' ';
         return;
     }
-
     $id = $_POST["id"];
-
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione uma tarefa.";
+        $mensagem = "Selecione uma tarefa para ser excluído";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    $sql = "UPDATE Ntl.tarefa SET ativo = 0 WHERE codigo = $id";
-
-    $result = $reposit->Execprocedure($sql);
+    $reposit = new reposit();
+    
+    $result = $reposit->update('Ntl.tarefa' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
 
     if ($result < 1) {
         echo ('failed#');
         return;
     }
-
     echo 'sucess#' . $result;
     return;
 }
-
 
 function validaString($value)
 {

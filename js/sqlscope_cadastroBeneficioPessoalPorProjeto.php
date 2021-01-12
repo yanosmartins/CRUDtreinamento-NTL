@@ -1216,7 +1216,7 @@ function recuperaBeneficio()
     }
 }
 
-function excluir()
+function excluirBeneficio()
 {
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("BENEFICIOPROJETO_ACESSAR|BENEFICIOPROJETO_EXCLUIR");
