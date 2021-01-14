@@ -180,11 +180,12 @@ function excluir()
     $id = $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Valor do posto.";
+        $mensagem = "Selecione um Valor do Posto.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
+    
     $reposit = new reposit();
     $result = $reposit->update('Ntl.valorPosto' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
@@ -192,6 +193,7 @@ function excluir()
         echo ('failed#');
         return;
     }
+
     echo 'sucess#' . $result;
     return;
 }

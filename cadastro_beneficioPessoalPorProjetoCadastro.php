@@ -1767,9 +1767,9 @@ include("inc/nav.php");
 										<button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
 											<span class="fa fa-file-o"></span>
 										</button>
-										<button type="button" id="btnPdf" class="btn btn-info" style="background-color:#735687" aria-hidden="true" title="PDF" style="display:<?php echo $esconderBtnGravar ?>">
+										<!-- <button type="button" id="btnPdf" class="btn btn-info" style="background-color:#735687" aria-hidden="true" title="PDF" style="display:<?php echo $esconderBtnGravar ?>">
 											<span class="fa fa-file-pdf-o"></span>
-										</button>
+										</button> -->
 										<button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
 											<span class="fa fa-backward "></span>
 										</button>
