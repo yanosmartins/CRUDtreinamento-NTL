@@ -33,22 +33,22 @@ function grava()
 
 
     session_start();
-    $usuario = validaString($_SESSION['login']); 
+    $usuario = validaString($_SESSION['login']);
     $codigo =  validaCodigo($_POST['codigo'] ?: 0);
     $ativo =  validaCodigo($_POST['ativo'] ?: 0);
-    $funcionario = validaString($_POST['funcionario']);
-    if ($funcionario != "") {
+    $candidato = validaString($_POST['funcionario']);
+    if ($candidato != "") {
 
-        $sql = "SELECT codigo FROM syscc.dbo.funcionario WHERE (0=0) AND nomeCompleto = " . $funcionario;
+        $sql = "SELECT codigo FROM Contratacao.candidato WHERE (0=0) AND nomeCompleto = " . $candidato;
 
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
 
         if (($row = odbc_fetch_array($result)))
             $row = array_map('utf8_encode', $row);
-        $funcionario = validaNumero($row['codigo']);
+        $candidato = validaNumero($row['codigo']);
     }
- 
+
     $tipoContrato = validaNumero($_POST['tipoContrato']);
     $dataAdmissao = validaData($_POST['dataAdmissao']);
     $projeto = validaNumero($_POST['projeto']);
@@ -81,7 +81,7 @@ function grava()
     $verificadoPeloGestor =  trim($_POST['verificadoPeloGestor']); //Sinaliza se o Gestor preencheu ou não todos os campos respectivos á ele.
     $verificadoPeloRh =  trim($_POST['verificadoPeloGestor']);
     $matriculaSCI = validaString($_POST['matriculaSCI']);
-    $classe = validaNumero($_POST['classe']); 
+    $classe = validaNumero($_POST['classe']);
     $prazoDeterminado = validaNumero($_POST['prazoDeterminado']);
     $dataFinal = validaData($_POST['dataFinal']);
 
@@ -95,10 +95,10 @@ function grava()
     } else {
         $verificadoPeloRh = 0;
     }
-    $sql = "dbo.controleFuncionario_Atualiza( 
+    $sql = "Contratacao.controleCandidato_Atualiza( 
         $codigo,
         $ativo,
-        $funcionario,
+        $candidato,
         $tipoContrato,
         $dataAdmissao,
         $projeto,
@@ -160,19 +160,19 @@ function recupera()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT  CF.prazoDeterminado, F.codigo as codigoFuncionario,CF.codigo, F.nomeCompleto as nomeFuncionario, 
-    F.dataNascimento, F.estadoCivil,F.telefoneResidencial,F.telefoneCelular,F.outroTelefone,F.email,F.cep,
-	F.endereco,F.bairro,F.numero,F.complemento,F.estado,F.cidade, F.logradouro,
-	F.cpf,F.pis,F.carteiraTrabalho,F.carteiraTrabalhoSerie,F.dataExpedicaoCarteiraTrabalho,F.localCarteiraTrabalho,F.rg,F.emissorRg,F.localRg,F.dataEmissaoRg,
-	F.cnh,F.categoriaCnh,F.ufCnh,F.dataEmissaoCnh,F.dataVencimentoCnh,F.primeiraCnh,F.tituloEleitor,F.zonaTituloEleitor,F.secaoTituloEleitor,F.certificadoReservista,
-	F.grauInstrucao,F.atividadesExtracurriculares,F.nomeConjuge,F.dataNascimentoConjuge,
-	F.trabalhaAtualmente,F.seguroDesemprego,F.desejaAssistenciaMedica,F.desejaAssistenciaOdontologica,F.valeRefeicaoValeAlimentacao,F.desejaVt,F.possuiVt,
-	F.numeroCartaoVt,F.agenciaBanco,F.digitoAgenciaBanco,F.contaCorrente,F.digitoContaBanco,F.fk_banco,F.variacao,F.tipoConta, F.numeroCamisa,F.numeroCalca,F.numeroSaia,F.numeroSapato,
-    CF.* 
-    FROM dbo.funcionario F
-    LEFT JOIN dbo.banco B ON F.digitoAgenciaBanco = B.codigo
-    LEFT JOIN dbo.controleFuncionario CF ON CF.funcionario = F.codigo 
-    WHERE (0=0) AND CF.codigo = " . $id;
+    $sql = "SELECT  CC.prazoDeterminado, C.codigo as codigoCandidato,CC.codigo, C.nomeCompleto as nomeCandidato, 
+    C.dataNascimento, C.estadoCivil,C.telefoneResidencial,C.telefoneCelular,C.outroTelefone,C.email,C.cep,
+	C.endereco,C.bairro,C.numero,C.complemento,C.estado,C.cidade, C.logradouro,
+	C.cpf,C.pis,C.carteiraTrabalho,C.carteiraTrabalhoSerie,C.dataExpedicaoCarteiraTrabalho,C.localCarteiraTrabalho,C.rg,C.emissorRg,C.localRg,C.dataEmissaoRg,
+	C.cnh,C.categoriaCnh,C.ufCnh,C.dataEmissaoCnh,C.dataVencimentoCnh,C.primeiraCnh,C.tituloEleitor,C.zonaTituloEleitor,C.secaoTituloEleitor,C.certificadoReservista,
+	C.grauInstrucao,C.atividadesExtracurriculares,C.nomeConjuge,C.dataNascimentoConjuge,
+	C.trabalhaAtualmente,C.seguroDesemprego,C.desejaAssistenciaMedica,C.desejaAssistenciaOdontologica,C.valeRefeicaoValeAlimentacao,C.desejaVt,C.possuiVt,
+	C.numeroCartaoVt,C.agenciaBanco,C.digitoAgenciaBanco,C.contaCorrente,C.digitoContaBanco,C.fk_banco,C.variacao,C.tipoConta, C.numeroCamisa,C.numeroCalca,C.numeroSaia,C.numeroSapato,
+    CC.* 
+    FROM Contratacao.candidato C
+    LEFT JOIN Ntl.banco B ON C.digitoAgenciaBanco = B.codigo
+    LEFT JOIN Contratacao.controleCandidato CC ON CC.candidato = C.codigo 
+    WHERE (0=0) AND CC.codigo = " . $id;
 
 
     $reposit = new reposit();
@@ -216,7 +216,7 @@ function recupera()
     $descansoSemanal = $row['descansoSemanal'];
     $tipoJornadaEsocial = $row['tipoJornadaESocial'];
     $verificadoPeloGestor = $row['verificadoPeloGestor'];
-    $verificadoPeloRh = $row['verificadoPeloRh']; 
+    $verificadoPeloRh = $row['verificadoPeloRh'];
     $agenciaBanco = $row['agenciaBanco'];
     $digitoAgenciaBanco = $row['digitoAgenciaBanco'];
     $contaCorrente = $row['contaCorrente'];
@@ -228,9 +228,9 @@ function recupera()
     $telefoneResidencial = $row['telefoneResidencial'];
     $telefoneCelular = $row['telefoneCelular'];
     $outroTelefone = $row['outroTelefone'];
-    $email = $row['email']; 
+    $email = $row['email'];
     $matriculaSCI = $row['matriculaSCI'];
-    $classe = $row['classe']; 
+    $classe = $row['classe'];
     $dataNascimento = validaDataRecupera($row['dataNascimento']);
     $estadoCivil = $row['estadoCivil'];
     $telefoneResidencial = $row['telefoneResidencial'];
@@ -253,7 +253,7 @@ function recupera()
     $rg = $row['rg'];
     $emissorRg = $row['emissorRg'];
     $localRg = $row['localRg'];
-    $dataEmissaoRg = validaDataRecupera($row['dataEmissaoRg']); 
+    $dataEmissaoRg = validaDataRecupera($row['dataEmissaoRg']);
     $cnh = $row['cnh'];
     $categoriaCnh = $row['categoriaCnh'];
     $ufCnh = $row['ufCnh'];

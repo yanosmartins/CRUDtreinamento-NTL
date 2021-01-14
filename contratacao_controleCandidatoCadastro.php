@@ -1808,11 +1808,13 @@ include("inc/scripts.php");
             //Recupera o código
             var id = variaveisUrl[0];
             var idx = id.split("=");
+            //Primeiro parametro
             var idd = idx[1];
 
             //Recupera o código do  funcionário
             var func = variaveisUrl[1];
             var codigoFunc = func.split("=");
+            //Segundo parametro
             var codigoFuncionario = codigoFunc[1];
 
             if (codigoFuncionario !== "") {

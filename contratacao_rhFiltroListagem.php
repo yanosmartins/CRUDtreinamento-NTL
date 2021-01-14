@@ -82,7 +82,7 @@ include "js/repositorio.php";
 
                     echo '<tr >';
                     // echo '<td class="text-left"><a href="controleFuncionarioCadastro.php?codigo=' . $id . '">' . $funcionario . '</a></td>';
-                    echo '<td class="text-left"><a href="contratacao_controleCandidatoCadastro.php?codigo=' . $codigoCandidato . '&funcionario=' . $codigo . '">' . $candidato . '</a></td>';
+                    echo '<td class="text-left"><a href="contratacao_controleCandidatoCadastro.php?codigo=' . $codigo . '&candidato=' . $codigoCandidato . '">' . $candidato . '</a></td>';
                     echo "<td class='text-center'>$projeto</td>";
                     echo "<td class='text-center'>$sindicato</td>";
                     echo "<td class='text-left'>$cargo</td>";
