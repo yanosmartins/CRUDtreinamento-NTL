@@ -6,9 +6,13 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('CANDIDATO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('GESTOR_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('GESTOR_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('GESTOR_EXCLUIR', $arrayPermissao, true));
+
+$condicaoAcessarOK = true;
+$condicaoGravarrOK = true;
+$condicaoExcluirOK = true;
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -30,7 +34,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Canditados";
+$page_title = "Controle do Gestor";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -42,7 +46,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['contratacao']['sub']["candidato"]["active"] = true;
+$page_nav['operacao']['sub']['contratacao']['sub']["gestor"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -65,7 +69,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Cadastro</h2>
+                            <h2>Controle do Gestor</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -85,38 +89,46 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-4">
-                                                                <label class="label">Nome</label>
+                                                            <section class="col col-3">
+                                                                <label class="label">Projeto</label>
                                                                 <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" type="text" value="">
+                                                                    <input id="projeto" maxlength="255" name="projeto" type="text" value="">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">CPF</label>
+                                                            <section class="col col-3">
+                                                                <label class="label">Funcionario</label>
                                                                 <label class="input">
-                                                                    <input id="cpf" maxlength="15" data-mask="999.999.999-99" name="cpf" type="text" value="" onchange="verificaCpf('#cpf')">
+                                                                    <input id="funcionario" maxlength="255" name="funcionario" type="text" value="">
                                                                 </label>
                                                             </section>
+
                                                             <section class="col col-2">
-                                                                <label class="label">RG</label>
+                                                                <label class="label">Sindicato</label>
                                                                 <label class="input">
-                                                                    <input id="rg" maxlength="15" data-mask="99.999.999-9" name="rg" type="text" value="">
+                                                                    <input id="sindicato" maxlength="255" name="sindicato" type="text" value="">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
+
+                                                            <section class="col col-1">
                                                                 <label class="label">Cargo</label>
                                                                 <label class="input">
-                                                                    <input id="cargo" maxlength="50" name="cargo" type="text" autocomplete="off" value="">
+                                                                    <input id="cargo" maxlength="255" name="cargo" type="text" value="">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Status</label>
+
+                                                            <section class="col col-1">
+                                                                <label class="label">Salário Base</label>
+                                                                <label class="input">
+                                                                    <input id="salarioBase" maxlength="255" name="salarioBase" type="text" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label" for="verificadoPeloGestor">Verificado</label>
                                                                 <label class="select">
-                                                                    <select id="verifica" name="verifica" class="">
+                                                                    <select id="verificadoPeloGestor" name="verificadoPeloGestor" class="">
                                                                         <option></option>
-                                                                        <option value="0">Não Verificado</option>
-                                                                        <option value="1">Pendente</option>
-                                                                        <option value="2">Verificado</option>
+                                                                        <option value="Não" selected>Não</option>
+                                                                        <option value="Sim">Sim</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -185,82 +197,38 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
+
+        listarFiltro(); //Lista assim que entrar na tela. 
+
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
+
         $('#btnNovo').on("click", function() {
             novo();
         });
-        $.datepicker.setDefaults($.datepicker.regional["pt-BR"]);
-
-        $("#dataFinal").on("change", function() {
-            var valor = "#dataFinal";
-            retorno = validaData(valor);
-            if (retorno == false) {
-                $("#dataFinal").val('');
-            }
-            if (retorno == true) {
-                var dataInicial = $('#dataInicial').datepicker('getDate');
-                var dataFinal = $('#dataFinal').datepicker('getDate');
-                var retorno = calculaDifDatas(dataInicial, dataFinal, 'D');
-                if (retorno < 0) {
-                    smartAlert("Erro", "Data de Inicio não pode ser maior do que a Final.",
-                        "error");
-                    $("#dataFinal").val('');
-                }
-            }
-        });
-
-        // $('#tipoPendencia').change(function() {
-        //     var tipoPendencia = +$('#tipoPendencia').val();
-        //     if (tipoPendencia != "") {
-        //         $("#verifica").removeClass('readonly');
-        //         // $("#numeroCartaoVt").addClass('required');
-        //         $("#verifica").removeAttr('disabled');
-        //     } else {
-        //         $("#verifica").addClass('readonly');
-        //         // $("#numeroCartaoVt").removeClass('required');
-        //         $("#verifica").val('');
-        //         $("#verifica").prop('disabled', true);
-        //     }
-        // });
     });
 
     function listarFiltro() {
 
-        var nome = $('#nome').val();
-        var cpf = $('#cpf').val();
-        var rg = $('#rg').val();
-        var cargo = $('#cargo').val();
-        // var tipoPendencia = $('#tipoPendencia').val();
-        var verifica = $('#verifica').val();
-        // var pendencia = $('#pendencia').val();
-        // var pendencia = $('#pendencia').val();
+        let projeto = $('#projeto').val();
+        let funcionario = $('#funcionario').val();
+        let sindicato = $("#sindicato").val();
+        let cargo = $("#cargo").val();
+        let salarioBase = $("#salarioBase").val();
+        let verificadoPeloGestor = $("#verificadoPeloGestor").val();
 
-
-        //     '&pendencia=' + pendencia
-
-        $('#resultadoBusca').load('contratacao_candidatoFiltroListagem.php?', {
-            nome: nome,
-            cpf: cpf,
-            rg: rg,
+        $('#resultadoBusca').load('contratacao_gestorFiltroListagem.php?', {
+            projeto: projeto,
+            funcionario: funcionario,
+            sindicato: sindicato,
             cargo: cargo,
-            // tipoPendencia: tipoPendencia,
-            verifica: verifica
+            salarioBase: salarioBase,
+            verificadoPeloGestor: verificadoPeloGestor
         });
     }
 
     function novo() {
-        $(location).attr('href', 'contratacao_candidatoCadastro.php');
-    }
-
-    function verificaCpf(inputField) {
-        var valor = $(inputField).val();
-        var retorno = validacao_cpf(valor);
-        if (retorno === false) {
-            smartAlert("Atenção", "O cpf digitado é inválido.", "error");
-            $(inputField).val('');
-            return;
-        }
+        $(location).attr('href', 'contratacao_gestorCadastro.php');
     }
 </script>

@@ -904,861 +904,862 @@ include("inc/nav.php");
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            <!--  LISTA DE DEPENDENTES -->
+                                                        </div>
+                                                        <!--  LISTA DE DEPENDENTES -->
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Informações de Dependente para IRRF</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row" style="display:<?php echo $esconderCandidato ?>">
+                                                            <section class="col col-2">
+                                                                <label class="label">STATUS</label>
+                                                                <label class="select">
+                                                                    <select name="verificaDependente" id="verificaDependente" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option></option>
+                                                                        <option value="1">PENDENTE</option>
+                                                                        <option value="2">VERIFICADO</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <input id="jsonDependente" name="jsonDependente" type="hidden" value="[]">
+                                                        <div id="formDependente">
                                                             <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Informações de Dependente para IRRF</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row" style="display:<?php echo $esconderCandidato ?>">
-                                                                <section class="col col-2">
-                                                                    <label class="label">STATUS</label>
-                                                                    <label class="select">
-                                                                        <select name="verificaDependente" id="verificaDependente" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                            <option></option>
-                                                                            <option value="1">PENDENTE</option>
-                                                                            <option value="2">VERIFICADO</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <input id="jsonDependente" name="jsonDependente" type="hidden" value="[]">
-                                                            <div id="formDependente">
-                                                                <div class="row">
-                                                                    <input id="DependenteId" name="DependenteId" type="hidden" value="">
-                                                                    <input id="descricaoDataNascimentoDependente" name="descricaoDataNascimentoDependente" type="hidden" value="">
-                                                                    <input id="sequencialDependente" name="sequencialDependente" type="hidden" value="">
-                                                                    <section class="col col-6">
-                                                                        <label class="label" for="nomeDependente">Nome</label>
-                                                                        <label class="input"><i class="icon-append fa fa-id-card"></i>
-                                                                            <input id="nomeDependente" name="nomeDependente" maxlength="60" autocomplete="new-password" onchange="verificaNome('#nomeDependente')">
-                                                                        </label>
-                                                                    </section>
-                                                                    <section class="col col-2">
-                                                                        <label class="label" for="cpfDependente">CPF</label>
-                                                                        <label class="input"><i class="icon-append fa fa-id-card"></i>
-                                                                            <input id="cpfDependente" name="cpfDependente" placeholder="XXX.XXX.XXX-XX" placeholder="XXX.XXX.XXX-XX" autocomplete="new-password" data-mask="999.999.999-99" onchange="verificaCpf('#cpfDependente')">
-                                                                        </label>
-                                                                    </section>
-                                                                    <section class="col col-2">
-                                                                        <label class="label" for="dataNascimentoDependente">Nascimento</label>
-                                                                        <label class="input">
-                                                                            <i class="icon-append fa fa-calendar"></i>
-                                                                            <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" onchange="validaCampoData('#dataNascimentoDependente')">
-                                                                        </label>
-                                                                    </section>
-                                                                    <section class="col col-2">
-                                                                        <label class="label">Tipo Dependente</label>
-                                                                        <label class="select">
-                                                                            <select name="grauParentescoDependente" id="grauParentescoDependente" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                                <option></option>
-                                                                                <option value="1">01 - Cônjuge</option>
-                                                                                <option value="2">02 - Companheiro(a) com o(a) qual tenha filho(s) ou viva há mais de 5 (cinco) anos ou possua declaração de união estável</option>
-                                                                                <option value="3">03 - Filho(a) ou enteado(a)</option>
-                                                                                <option value="4">04 - Filho(a) ou enteado(a) universitário(a) ou cursando escola técnica de 2º grau, até 24 (vinte e quatro) anos</option>
-                                                                                <option value="6">06 - Irmão(ã), neto(a) ou bisneto(a) sem arrimo dos pais, do(a) qual detenha a guarda judicial</option>
-                                                                                <option value="9">09 - Pais, avós e bisavós</option>
-                                                                                <option value="10">10 - Menor pobre do qual detenha a guarda judicial</option>
-                                                                                <option value="11">11 - A pessoa absolutamente incapaz, da qual seja tutor ou curador</option>
-                                                                                <option value="12">12 - Ex-cônjuge</option>
-                                                                            </select><i></i>
-                                                                        </label>
-                                                                    </section>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <section class="col col-4">
-                                                                        <button id="btnAddDependente" type="button" class="btn btn-primary" title="Adicionar Dependente">
-                                                                            <i class="fa fa-plus"></i>
-                                                                        </button>
-                                                                        <button id="btnRemoverDependente" type="button" class="btn btn-danger" title="Remover Dependente">
-                                                                            <i class="fa fa-minus"></i>
-                                                                        </button>
-                                                                    </section>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableDependente" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                        <thead>
-                                                                            <tr role="row">
-                                                                                <th></th>
-                                                                                <th class="text-left" style="min-width: 10px;">Nome</th>
-                                                                                <th class="text-left" style="min-width: 10px;">CPF</th>
-                                                                                <th class="text-left" style="min-width: 10px;">Data de Nascimento</th>
-                                                                                <th class="text-left" style="min-width: 10px;">Parentesco</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Informações Adicionais</strong> </legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label">Trabalha Atualmente</label>
-                                                                    <label class="select">
-                                                                        <select name="trabalhaAtualmente" id="trabalhaAtualmente" autocomplete="new-password" class="form-control required">
-                                                                            <option></option>
-                                                                            <option value="0">Sim</option>
-                                                                            <option value="1">Não</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Está em Seguro Desemprego</label>
-                                                                    <label class="select">
-                                                                        <select name="seguroDesemprego" id="seguroDesemprego" autocomplete="new-password" class="form-control required">
-                                                                            <option></option>
-                                                                            <option value="0">Sim</option>
-                                                                            <option value="1">Não</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Benefícios</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row" style="display:<?php echo $esconderCandidato ?>">
-                                                                <section class="col col-2">
-                                                                    <label class="label">STATUS</label>
-                                                                    <label class="select">
-                                                                        <select name="verificaBeneficio" id="verificaBeneficio" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                            <option></option>
-                                                                            <option value="1">PENDENTE</option>
-                                                                            <option value="2">VERIFICADO</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <strong>ATENÇÃO: </strong> <br><br>
-                                                                    <strong>• A NTL possui convênio de Assistência Médica e Odontológica custeado integralmente pelo funcionário e descontado em folha de pagamento.<br>
-                                                                          Você receberá em breve em seu e-mail as informações de valores, carências, coberturas e os formulários necessários para adesão.<br>
-                                                                          Fique atento pois a sua inclusão deverá ser feita em até 30 dias após a sua admissão para isenção de carência. 
-                                                                        <br>
-                                                                        • Disponibilizamos link com valores e informações adicionais abaixo. <br>
-                                                                        <a target="_blank" rel="noopener noreferrer" href="img/ResumoDosPlanos 23-06-2020 NTL.pdf">   - Link com valores</a> <br>
-
-                                                                        • <em> Indique abaixo a sua opção: </em>
-
-
-                                                                    </strong> <br>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label">Deseja Assistência Médica</label>
-                                                                    <label class="select">
-                                                                        <select name="desejaAssistenciaMedica" id="desejaAssistenciaMedica" autocomplete="new-password" class="form-control required">
-                                                                            <option></option>
-                                                                            <option value="1">Sim</option>
-                                                                            <option value="0">Não</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Deseja Assistência Odontológica</label>
-                                                                    <label class="select">
-                                                                        <select name="desejaAssistenciaOdontologica" id="desejaAssistenciaOdontologica" autocomplete="new-password" class="form-control required">
-                                                                            <option></option>
-                                                                            <option value="1">Sim</option>
-                                                                            <option value="0">Não</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <strong>ATENÇÃO: </strong> <br><br>
-                                                                    <strong>• A NTL oferece ao funcionário o Cartão de Alimentação ou Cartão de Refeição. <br>
-                                                                          O Alimentação é aceito em Supermercados e Mercearias para compra de mantimentos.<br>
-                                                                          O Refeição é aceito em Restaurantes e Lanchonetes para refeições e lanches. <br>
-                                                                        • <em> Indique abaixo a sua opção: </em>
-                                                                    </strong> <br>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label">Vale Refeição / Vale Alimentação</label>
-                                                                    <label class="select">
-                                                                        <select name="valeRefeicaoValeAlimentacao" id="valeRefeicaoValeAlimentacao" autocomplete="new-password" class="form-control required">
-                                                                            <option></option>
-                                                                            <option value="0">Vale Refeição</option>
-                                                                            <option value="1">Vale Alimentação</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Vale Transporte</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row" style="display:<?php echo $esconderCandidato ?>">
-                                                                <section class="col col-2">
-                                                                    <label class="label">STATUS</label>
-                                                                    <label class="select">
-                                                                        <select name="verificaVT" id="verificaVT" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                            <option></option>
-                                                                            <option value="1">PENDENTE</option>
-                                                                            <option value="2">VERIFICADO</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <strong>ATENÇÃO: </strong> <br><br>
-                                                                    <strong>• Verifique se o seu cartão está desvinculado através do seu CPF, acessando o endereço abaixo ou entrando em contato com a Riocard Mais. <br>
-                                                                          Caso o status do cartão esteja “Associado ao Usuário”, solicite a liberação à sua última empresa ou à Riocard mais com urgência. <br>
-                                                                        • Endereço: <a target="_blank" rel="noopener noreferrer" href="https://www.cartaoriocard.com.br/rcc/paraEmpresa/consultarCpf">https://www.cartaoriocard.com.br/rcc/paraEmpresa/consultarCpf</a>
-                                                                    </strong> <br>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label">Deseja Vale Transporte</label>
-                                                                    <label class="select">
-                                                                        <select name="desejaVt" id="desejaVt" autocomplete="new-password" class="form-control required">
-                                                                            <option value="1">Sim</option>
-                                                                            <option value="0">Não</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Possui Cartão Transporte</label>
-                                                                    <label class="select">
-                                                                        <select name="possuiVt" id="possuiVt" autocomplete="new-password" class="form-control required">
-                                                                            <option value="1">Sim</option>
-                                                                            <option value="0">Não</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Tipo do Cartão</label>
-                                                                    <label class="select">
-                                                                        <select name="tipoCartaoVt" id="tipoCartaoVt" autocomplete="new-password" class="form-control required">
-                                                                            <option value="1">Bilhete Único</option>
-                                                                            <option value="2">Riocard</option>
-                                                                            <option value="3">BU Carioca</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="numeroCartaoVt">Nº Cartão Transporte</label>
+                                                                <input id="DependenteId" name="DependenteId" type="hidden" value="">
+                                                                <input id="descricaoDataNascimentoDependente" name="descricaoDataNascimentoDependente" type="hidden" value="">
+                                                                <input id="sequencialDependente" name="sequencialDependente" type="hidden" value="">
+                                                                <section class="col col-6">
+                                                                    <label class="label" for="nomeDependente">Nome</label>
                                                                     <label class="input"><i class="icon-append fa fa-id-card"></i>
-                                                                        <input id="numeroCartaoVt" name="numeroCartaoVt" data-mask="9999999999999" autocomplete="new-password">
+                                                                        <input id="nomeDependente" name="nomeDependente" maxlength="60" autocomplete="new-password" onchange="verificaNome('#nomeDependente')">
                                                                     </label>
                                                                 </section>
-                                                                <section class="col col-6">
-                                                                    <label class="label" for="justificativaVt">Justificativa</label>
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="cpfDependente">CPF</label>
+                                                                    <label class="input"><i class="icon-append fa fa-id-card"></i>
+                                                                        <input id="cpfDependente" name="cpfDependente" placeholder="XXX.XXX.XXX-XX" placeholder="XXX.XXX.XXX-XX" autocomplete="new-password" data-mask="999.999.999-99" onchange="verificaCpf('#cpfDependente')">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="dataNascimentoDependente">Nascimento</label>
                                                                     <label class="input">
-                                                                        <input id="justificativaVt" name="justificativaVt" autocomplete="off" type="text" maxlength="50" class="readonly" readonly>
+                                                                        <i class="icon-append fa fa-calendar"></i>
+                                                                        <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" onchange="validaCampoData('#dataNascimentoDependente')">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Tipo Dependente</label>
+                                                                    <label class="select">
+                                                                        <select name="grauParentescoDependente" id="grauParentescoDependente" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                            <option></option>
+                                                                            <option value="1">01 - Cônjuge</option>
+                                                                            <option value="2">02 - Companheiro(a) com o(a) qual tenha filho(s) ou viva há mais de 5 (cinco) anos ou possua declaração de união estável</option>
+                                                                            <option value="3">03 - Filho(a) ou enteado(a)</option>
+                                                                            <option value="4">04 - Filho(a) ou enteado(a) universitário(a) ou cursando escola técnica de 2º grau, até 24 (vinte e quatro) anos</option>
+                                                                            <option value="6">06 - Irmão(ã), neto(a) ou bisneto(a) sem arrimo dos pais, do(a) qual detenha a guarda judicial</option>
+                                                                            <option value="9">09 - Pais, avós e bisavós</option>
+                                                                            <option value="10">10 - Menor pobre do qual detenha a guarda judicial</option>
+                                                                            <option value="11">11 - A pessoa absolutamente incapaz, da qual seja tutor ou curador</option>
+                                                                            <option value="12">12 - Ex-cônjuge</option>
+                                                                        </select><i></i>
                                                                     </label>
                                                                 </section>
                                                             </div>
-                                                            <input id="jsonTransporte" name="jsonTransporte" type="hidden" value="[]">
-                                                            <div id="formTransporte">
-                                                                <div class="row">
-                                                                    <input id="TransporteId" name="TransporteId" type="hidden" value="">
-                                                                    <input id="descricaoTransporte" name="descricaoTransporte" type="hidden" value="">
-                                                                    <input id="sequencialTransporte" name="sequencialTransporte" type="hidden" value="">
-
-                                                                    <section class="col col-2">
-                                                                        <label class="label">Trajeto</label>
-                                                                        <label class="select">
-                                                                            <select name="trajetoTransporte" id="trajetoTransporte" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                                <option></option>
-                                                                                <option value="1">Ida</option>
-                                                                                <option value="2">Volta</option>
-                                                                            </select><i></i>
-                                                                        </label>
-                                                                    </section>
-
-                                                                    <section class="col col-2">
-                                                                        <label class="label">Tipo Transporte</label>
-                                                                        <label class="select">
-                                                                            <select name="tipoTransporte" id="tipoTransporte" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                                <option></option>
-                                                                                <option value="1">Barca</option>
-                                                                                <option value="2">BRT</option>
-                                                                                <option value="3">Metrô</option>
-                                                                                <option value="4">Ônibus</option>
-                                                                                <option value="5">Õnibus Intermunicipal</option>
-                                                                                <option value="6">Trêm</option>
-                                                                                <option value="7">Van</option>
-                                                                                <option value="8">VLT</option>
-                                                                            </select><i></i>
-                                                                        </label>
-                                                                    </section>
-
-                                                                    <section class="col col-2">
-                                                                        <label class="label" for="linhaTransporte">Linha</label>
-                                                                        <label class="input"><i class="icon-append fa fa-id-card"></i>
-                                                                            <input id="linhaTransporte" name="linhaTransporte" maxlength="50" autocomplete="new-password">
-                                                                        </label>
-                                                                    </section>
-                                                                    <section class="col col-2">
-                                                                        <label class="label" for="valorTransporte">Valor</label>
-                                                                        <label class="input"><i class="icon-append fa fa-id-card"></i>
-                                                                            <input id="valorTransporte" name="valorTransporte" maxlength="20" autocomplete="new-password" class="decimal-2-casas" type="text">
-                                                                        </label>
-                                                                    </section>
-
-                                                                </div>
-                                                                <div class="row">
-                                                                    <section class="col col-4">
-                                                                        <button id="btnAddTransporte" type="button" class="btn btn-primary" title="Adicionar Transporte">
-                                                                            <i class="fa fa-plus"></i>
-                                                                        </button>
-                                                                        <button id="btnRemoverTransporte" type="button" class="btn btn-danger" title="Remover Transporte">
-                                                                            <i class="fa fa-minus"></i>
-                                                                        </button>
-                                                                    </section>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableTransporte" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                        <thead>
-                                                                            <tr role="row">
-                                                                                <th></th>
-                                                                                <th class="text-left" style="min-width: 10px;">Trajeto</th>
-                                                                                <th class="text-left" style="min-width: 10px;">Tipo Transporte</th>
-                                                                                <th class="text-left" style="min-width: 10px;">Linha</th>
-                                                                                <th class="text-left" style="min-width: 10px;">Valor</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-
-                                                                <div id="esconderPdfTransporte" name="esconderPdfTransporte" style="display:none;">
-                                                                    <a id="linkPdfTransporte" name="linkPdfTransporte">   - Baixar formulário de Vale transporte </a> <br>
+                                                            <div class="row">
+                                                                <section class="col col-4">
+                                                                    <button id="btnAddDependente" type="button" class="btn btn-primary" title="Adicionar Dependente">
+                                                                        <i class="fa fa-plus"></i>
+                                                                    </button>
+                                                                    <button id="btnRemoverDependente" type="button" class="btn btn-danger" title="Remover Dependente">
+                                                                        <i class="fa fa-minus"></i>
+                                                                    </button>
+                                                                </section>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableDependente" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th></th>
+                                                                            <th class="text-left" style="min-width: 10px;">Nome</th>
+                                                                            <th class="text-left" style="min-width: 10px;">CPF</th>
+                                                                            <th class="text-left" style="min-width: 10px;">Data de Nascimento</th>
+                                                                            <th class="text-left" style="min-width: 10px;">Parentesco</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Informações Adicionais</strong> </legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">Trabalha Atualmente</label>
+                                                                <label class="select">
+                                                                    <select name="trabalhaAtualmente" id="trabalhaAtualmente" autocomplete="new-password" class="form-control required">
+                                                                        <option></option>
+                                                                        <option value="0">Sim</option>
+                                                                        <option value="1">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Está em Seguro Desemprego</label>
+                                                                <label class="select">
+                                                                    <select name="seguroDesemprego" id="seguroDesemprego" autocomplete="new-password" class="form-control required">
+                                                                        <option></option>
+                                                                        <option value="0">Sim</option>
+                                                                        <option value="1">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Benefícios</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row" style="display:<?php echo $esconderCandidato ?>">
+                                                            <section class="col col-2">
+                                                                <label class="label">STATUS</label>
+                                                                <label class="select">
+                                                                    <select name="verificaBeneficio" id="verificaBeneficio" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option></option>
+                                                                        <option value="1">PENDENTE</option>
+                                                                        <option value="2">VERIFICADO</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <strong>ATENÇÃO: </strong> <br><br>
+                                                                <strong>• A NTL possui convênio de Assistência Médica e Odontológica custeado integralmente pelo funcionário e descontado em folha de pagamento.<br>
+                                                                      Você receberá em breve em seu e-mail as informações de valores, carências, coberturas e os formulários necessários para adesão.<br>
+                                                                      Fique atento pois a sua inclusão deverá ser feita em até 30 dias após a sua admissão para isenção de carência. 
                                                                     <br>
-                                                                </div>
-                                                            </div>
+                                                                    • Disponibilizamos link com valores e informações adicionais abaixo. <br>
+                                                                    <a target="_blank" rel="noopener noreferrer" href="img/ResumoDosPlanos 23-06-2020 NTL.pdf">   - Link com valores</a> <br>
 
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Dados Bancários</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row" style="display:<?php echo $esconderCandidato ?>">
-                                                                <section class="col col-2">
-                                                                    <label class="label">STATUS</label>
-                                                                    <label class="select">
-                                                                        <select name="verificaDadoBancario" id="verificaDadoBancario" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                            <option></option>
-                                                                            <option value="1">PENDENTE</option>
-                                                                            <option value="2">VERIFICADO</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label">Possui Conta Bancária</label>
-                                                                    <label class="select">
-                                                                        <select name="possuiContaBancaria" id="possuiContaBancaria" autocomplete="new-password" class="form-control required">
-                                                                            <option></option>
-                                                                            <option value="1">Sim</option>
-                                                                            <option value="2">Não</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Tipo de conta</label>
-                                                                    <label class="select">
-                                                                        <select name="tipoConta" id="tipoConta" autocomplete="new-password" class="form-control">
-                                                                            <option value="0" selected></option>
-                                                                            <option value="1">Corrente</option>
-                                                                            <option value="2">Poupança</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
+                                                                    • <em> Indique abaixo a sua opção: </em>
 
+
+                                                                </strong> <br>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">Deseja Assistência Médica</label>
+                                                                <label class="select">
+                                                                    <select name="desejaAssistenciaMedica" id="desejaAssistenciaMedica" autocomplete="new-password" class="form-control required">
+                                                                        <option></option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Deseja Assistência Odontológica</label>
+                                                                <label class="select">
+                                                                    <select name="desejaAssistenciaOdontologica" id="desejaAssistenciaOdontologica" autocomplete="new-password" class="form-control required">
+                                                                        <option></option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <strong>ATENÇÃO: </strong> <br><br>
+                                                                <strong>• A NTL oferece ao funcionário o Cartão de Alimentação ou Cartão de Refeição. <br>
+                                                                      O Alimentação é aceito em Supermercados e Mercearias para compra de mantimentos.<br>
+                                                                      O Refeição é aceito em Restaurantes e Lanchonetes para refeições e lanches. <br>
+                                                                    • <em> Indique abaixo a sua opção: </em>
+                                                                </strong> <br>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">Vale Refeição / Vale Alimentação</label>
+                                                                <label class="select">
+                                                                    <select name="valeRefeicaoValeAlimentacao" id="valeRefeicaoValeAlimentacao" autocomplete="new-password" class="form-control required">
+                                                                        <option></option>
+                                                                        <option value="0">Vale Refeição</option>
+                                                                        <option value="1">Vale Alimentação</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Vale Transporte</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row" style="display:<?php echo $esconderCandidato ?>">
+                                                            <section class="col col-2">
+                                                                <label class="label">STATUS</label>
+                                                                <label class="select">
+                                                                    <select name="verificaVT" id="verificaVT" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option></option>
+                                                                        <option value="1">PENDENTE</option>
+                                                                        <option value="2">VERIFICADO</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <strong>ATENÇÃO: </strong> <br><br>
+                                                                <strong>• Verifique se o seu cartão está desvinculado através do seu CPF, acessando o endereço abaixo ou entrando em contato com a Riocard Mais. <br>
+                                                                      Caso o status do cartão esteja “Associado ao Usuário”, solicite a liberação à sua última empresa ou à Riocard mais com urgência. <br>
+                                                                    • Endereço: <a target="_blank" rel="noopener noreferrer" href="https://www.cartaoriocard.com.br/rcc/paraEmpresa/consultarCpf">https://www.cartaoriocard.com.br/rcc/paraEmpresa/consultarCpf</a>
+                                                                </strong> <br>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">Deseja Vale Transporte</label>
+                                                                <label class="select">
+                                                                    <select name="desejaVt" id="desejaVt" autocomplete="new-password" class="form-control required">
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Possui Cartão Transporte</label>
+                                                                <label class="select">
+                                                                    <select name="possuiVt" id="possuiVt" autocomplete="new-password" class="form-control required">
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Tipo do Cartão</label>
+                                                                <label class="select">
+                                                                    <select name="tipoCartaoVt" id="tipoCartaoVt" autocomplete="new-password" class="form-control required">
+                                                                        <option value="1">Bilhete Único</option>
+                                                                        <option value="2">Riocard</option>
+                                                                        <option value="3">BU Carioca</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label" for="numeroCartaoVt">Nº Cartão Transporte</label>
+                                                                <label class="input"><i class="icon-append fa fa-id-card"></i>
+                                                                    <input id="numeroCartaoVt" name="numeroCartaoVt" data-mask="9999999999999" autocomplete="new-password">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-6">
+                                                                <label class="label" for="justificativaVt">Justificativa</label>
+                                                                <label class="input">
+                                                                    <input id="justificativaVt" name="justificativaVt" autocomplete="off" type="text" maxlength="50" class="readonly" readonly>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <input id="jsonTransporte" name="jsonTransporte" type="hidden" value="[]">
+                                                        <div id="formTransporte">
+                                                            <div class="row">
+                                                                <input id="TransporteId" name="TransporteId" type="hidden" value="">
+                                                                <input id="descricaoTransporte" name="descricaoTransporte" type="hidden" value="">
+                                                                <input id="sequencialTransporte" name="sequencialTransporte" type="hidden" value="">
+
+                                                                <section class="col col-2">
+                                                                    <label class="label">Trajeto</label>
+                                                                    <label class="select">
+                                                                        <select name="trajetoTransporte" id="trajetoTransporte" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                            <option></option>
+                                                                            <option value="1">Ida</option>
+                                                                            <option value="2">Volta</option>
+                                                                        </select><i></i>
+                                                                    </label>
+                                                                </section>
+
+                                                                <section class="col col-2">
+                                                                    <label class="label">Tipo Transporte</label>
+                                                                    <label class="select">
+                                                                        <select name="tipoTransporte" id="tipoTransporte" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                            <option></option>
+                                                                            <option value="1">Barca</option>
+                                                                            <option value="2">BRT</option>
+                                                                            <option value="3">Metrô</option>
+                                                                            <option value="4">Ônibus</option>
+                                                                            <option value="5">Õnibus Intermunicipal</option>
+                                                                            <option value="6">Trêm</option>
+                                                                            <option value="7">Van</option>
+                                                                            <option value="8">VLT</option>
+                                                                        </select><i></i>
+                                                                    </label>
+                                                                </section>
+
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="linhaTransporte">Linha</label>
+                                                                    <label class="input"><i class="icon-append fa fa-id-card"></i>
+                                                                        <input id="linhaTransporte" name="linhaTransporte" maxlength="50" autocomplete="new-password">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="valorTransporte">Valor</label>
+                                                                    <label class="input"><i class="icon-append fa fa-id-card"></i>
+                                                                        <input id="valorTransporte" name="valorTransporte" maxlength="20" autocomplete="new-password" class="decimal-2-casas" type="text">
+                                                                    </label>
+                                                                </section>
+
+                                                            </div>
                                                             <div class="row">
                                                                 <section class="col col-4">
-                                                                    <label class="label " for="fk_banco">Banco</label>
-                                                                    <label class="select">
-                                                                        <select id="fk_banco" name="fk_banco">
-                                                                            <option></option>
-                                                                            <?php
-                                                                            $reposit = new reposit();
-                                                                            $sql = "select * from Ntl.banco order by nomeBanco";
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            while (($row = odbc_fetch_array($result))) {
-
-                                                                                $codigo = $row['codigo'];
-                                                                                $codigoBanco = mb_convert_encoding($row['codigoBanco'], 'UTF-8', 'HTML-ENTITIES');
-                                                                                $nomeBanco = mb_convert_encoding($row['nomeBanco'], 'UTF-8', 'HTML-ENTITIES');
-                                                                                echo '<option value=' . $codigo . '>' . $codigoBanco . ' - ' . strtoupper($nomeBanco) . '</option>';
-                                                                            }
-                                                                            ?>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Agência</label>
-                                                                    <label class="input">
-                                                                        <input id="agenciaBanco" name="agenciaBanco" maxlength="5" type="text" class="" value="" autocomplete="new-password" onchange="verificaNumero('#agenciaBanco')">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-1">
-                                                                    <label class="label">Digito Agência</label>
-                                                                    <label class="input">
-                                                                        <input id="digitoAgenciaBanco" name="digitoAgenciaBanco" maxlength="2" type="text" class="" value="" autocomplete="new-password" onchange="verificaNumero('#digitoAgenciaBanco')">
-                                                                    </label>
-                                                                </section>
-
-                                                                <section class="col col-1">
-                                                                    <label class="label" id="labelVariacao">Variação</label>
-                                                                    <label class="select">
-                                                                        <select name="variacao" id="variacao" autocomplete="new-password" class="form-control">
-                                                                            <option value="0" selected></option>
-                                                                            <option value="001">001</option>
-                                                                            <option value="051">051</option>
-                                                                            <option value="013">013</option>
-                                                                            <option value="500">500</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-
-                                                                <section class="col col-2">
-                                                                    <label class="label">Conta</label>
-                                                                    <label class="input">
-                                                                        <input id="contaCorrente" name="contaCorrente" type="text" class="" maxlength="13" value="" autocomplete="new-password" onchange="verificaNumero('#contaCorrente')">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-1">
-                                                                    <label class="label">Digito Conta</label>
-                                                                    <label class="input">
-                                                                        <input id="digitoContaBanco" name="digitoContaBanco" maxlength="2" type="text" class="" value="" autocomplete="new-password" onchange="verificaNumero('#digitoContaBanco')">
-                                                                    </label>
+                                                                    <button id="btnAddTransporte" type="button" class="btn btn-primary" title="Adicionar Transporte">
+                                                                        <i class="fa fa-plus"></i>
+                                                                    </button>
+                                                                    <button id="btnRemoverTransporte" type="button" class="btn btn-danger" title="Remover Transporte">
+                                                                        <i class="fa fa-minus"></i>
+                                                                    </button>
                                                                 </section>
                                                             </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Cargo</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row" style="display:<?php echo $esconderCandidato ?>">
-                                                                <section class="col col-2">
-                                                                    <label class="label">STATUS</label>
-                                                                    <label class="select">
-                                                                        <select name="verificaCargo" id="verificaCargo" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                            <option></option>
-                                                                            <option value="1">PENDENTE</option>
-                                                                            <option value="2">VERIFICADO</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-4">
-                                                                    <label class="label">Cargo Anterior</label>
-                                                                    <label class="input">
-                                                                        <input id="cargo" name="cargo" maxlength="50" type="text" class="" value="" autocomplete="new-password" onchange="verificaNome('#cargo')">
-                                                                    </label>
-                                                                </section>
-
-                                                                <section class="col col-4">
-                                                                    <label class="label" for="projeto">Projeto</label>
-                                                                    <label class="select">
-                                                                        <select id="projeto" name="projeto" class="required">
-                                                                            <option></option>
-                                                                            <?php
-                                                                            $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
-                                                                            $reposit = new reposit();
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            while (($row = odbc_fetch_array($result))) {
-                                                                                $row = array_map('utf8_encode', $row);
-                                                                                $row = array_map('mb_strtoupper', $row);
-                                                                                $codigo = $row['codigo'];
-                                                                                $descricao = ($row['descricao']);
-                                                                                $numeroCentroCusto  = ($row['numeroCentroCusto']);
-                                                                                $apelido = ($row['apelido']);
-                                                                                echo '<option value=' . $codigo . '>  ' . $numeroCentroCusto . ' - ' . $apelido . ' - ' . $descricao . '</option>';
-                                                                            }
-                                                                            ?>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-
+                                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableTransporte" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th></th>
+                                                                            <th class="text-left" style="min-width: 10px;">Trajeto</th>
+                                                                            <th class="text-left" style="min-width: 10px;">Tipo Transporte</th>
+                                                                            <th class="text-left" style="min-width: 10px;">Linha</th>
+                                                                            <th class="text-left" style="min-width: 10px;">Valor</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
                                                             </div>
 
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Tamanho do Uniforme</strong></legend>
-                                                                </section>
+                                                            <div id="esconderPdfTransporte" name="esconderPdfTransporte" style="display:none;">
+                                                                <a id="linkPdfTransporte" name="linkPdfTransporte">   - Baixar formulário de Vale transporte </a> <br>
+                                                                <br>
                                                             </div>
-                                                            <div class="row" style="display:<?php echo $esconderCandidato ?>">
-                                                                <section class="col col-2">
-                                                                    <label class="label">STATUS</label>
-                                                                    <label class="select">
-                                                                        <select name="verificaUniforme" id="verificaUniforme" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                            <option></option>
-                                                                            <option value="1">PENDENTE</option>
-                                                                            <option value="2">VERIFICADO</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-1">
-                                                                    <label class="label">Camisa</label>
-                                                                    <label class="select">
-                                                                        <select name="numeroCamisa" id="numeroCamisa" autocomplete="new-password" class="form-control">
-                                                                            <option></option>
-                                                                            <option value="1">PP</option>
-                                                                            <option value="2">P</option>
-                                                                            <option value="3">M</option>
-                                                                            <option value="4">G</option>
-                                                                            <option value="5">GG</option>
-                                                                            <option value="6">XG</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-1">
-                                                                    <label class="label">Calça</label>
-                                                                    <label class="input">
-                                                                        <input id="numeroCalca" name="numeroCalca" type="text" class="number" data-mask="99" value="" autocomplete="new-password" max="2">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-1">
-                                                                    <label class="label">Saia</label>
-                                                                    <label class="input">
-                                                                        <input id="numeroSaia" name="numeroSaia" type="text" class="number" data-mask="99" value="" autocomplete="new-password" maxlength="2">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-1">
-                                                                    <label class="label">Sapato</label>
-                                                                    <label class="input">
-                                                                        <input id="numeroSapato" name="numeroSapato" type="text" class="numeric" data-mask="99" maxlength="2" value="" autocomplete="new-password">
-                                                                    </label>
-                                                                </section>
-                                                            </div>
+                                                        </div>
 
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Anexar Documentos</strong> </legend>
-                                                                </section>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Dados Bancários</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row" style="display:<?php echo $esconderCandidato ?>">
+                                                            <section class="col col-2">
+                                                                <label class="label">STATUS</label>
+                                                                <label class="select">
+                                                                    <select name="verificaDadoBancario" id="verificaDadoBancario" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option></option>
+                                                                        <option value="1">PENDENTE</option>
+                                                                        <option value="2">VERIFICADO</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">Possui Conta Bancária</label>
+                                                                <label class="select">
+                                                                    <select name="possuiContaBancaria" id="possuiContaBancaria" autocomplete="new-password" class="form-control required">
+                                                                        <option></option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="2">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Tipo de conta</label>
+                                                                <label class="select">
+                                                                    <select name="tipoConta" id="tipoConta" autocomplete="new-password" class="form-control">
+                                                                        <option value="0" selected></option>
+                                                                        <option value="1">Corrente</option>
+                                                                        <option value="2">Poupança</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
 
-                                                            </div>
-                                                            <div class="row" style="display:<?php echo $esconderCandidato ?>">
-                                                                <section class="col col-2">
-                                                                    <label class="label">STATUS</label>
-                                                                    <label class="select">
-                                                                        <select name="verificaAnexoDocumento" id="verificaAnexoDocumento" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                            <option></option>
-                                                                            <option value="1">PENDENTE</option>
-                                                                            <option value="2">VERIFICADO</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <strong>ATENÇÃO: <br><br>
-                                                                        • Em caso de mais de um documento conter o mesmo dado que o outro é necessario enviar somente um deles. Exemplo quem possuir CPF no RG Enviar somente a foto do RG. <br>
-                                                                        • Em caso de mais de um documento do mesmo tipo, favor digitalizar em arquivo único. <br>
-                                                                        • A digitalização dos documentos deve estar legível e de boa qualidade, pois pode inviabilizar a contratação
-                                                                        <p style="color:red"> • RECOMENDAMOS o uso do aplicativo CamScanner para digitalizar todos os documentos. Você pode fazer download nos links abaixo: <br>
-                                                                            <a target="_blank" rel="noopener noreferrer" href="https://play.google.com/store/apps/details?id=com.intsig.camscanner&hl=pt_BR">   - Play Store (android) </a> <br>
-                                                                            <a target="_blank" rel="noopener noreferrer" href="https://apps.apple.com/br/app/camscanner-documento-scan/id388627783">   - Apple Store (iPhone) </a> <br>
-                                                                              Caso o arquivo que você tente enviar fique muito grande mesmo com o CamScanner recomendamos que tire um print do seu celular ou computador do documento e envie o mesmo se estiver legivel; <br>
-                                                                              Por questões de segurança temos um tamanho máximo para cada campo por isso evite mandar fotos em alta resolução e de preferencia para prints ou arquivos PDF em PRETO E BRANCO.<br>
-                                                                        </p>
-                                                                    </strong>
-                                                                </section>
-                                                            </div>
+                                                        <div class="row">
+                                                            <section class="col col-4">
+                                                                <label class="label " for="fk_banco">Banco</label>
+                                                                <label class="select">
+                                                                    <select id="fk_banco" name="fk_banco">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "select * from Ntl.banco order by nomeBanco";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        while (($row = odbc_fetch_array($result))) {
 
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Documentos pessoais</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Foto</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="fotoFuncionario" name="fotoFuncionario[]" multiple>Selecionar
-                                                                            documentos</span><input id="fotoFuncionarioText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="fotoFuncionarioLink" class="col col-4">
+                                                                            $codigo = $row['codigo'];
+                                                                            $codigoBanco = mb_convert_encoding($row['codigoBanco'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $nomeBanco = mb_convert_encoding($row['nomeBanco'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            echo '<option value=' . $codigo . '>' . $codigoBanco . ' - ' . strtoupper($nomeBanco) . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Agência</label>
+                                                                <label class="input">
+                                                                    <input id="agenciaBanco" name="agenciaBanco" maxlength="5" type="text" class="" value="" autocomplete="new-password" onchange="verificaNumero('#agenciaBanco')">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label">Digito Agência</label>
+                                                                <label class="input">
+                                                                    <input id="digitoAgenciaBanco" name="digitoAgenciaBanco" maxlength="2" type="text" class="" value="" autocomplete="new-password" onchange="verificaNumero('#digitoAgenciaBanco')">
+                                                                </label>
+                                                            </section>
 
-                                                                </section>
-                                                            </div>
-                                                            <!-- CERTIDÃO DE NASCIMENTO -->
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Certidão de Nascimento</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="certidaoNascimento" name="certidaoNascimento[]" multiple>Selecionar
-                                                                            documentos</span><input id="certidaoNascimentoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="certidaoNascimentoLink" class="col col-4">
+                                                            <section class="col col-1">
+                                                                <label class="label" id="labelVariacao">Variação</label>
+                                                                <label class="select">
+                                                                    <select name="variacao" id="variacao" autocomplete="new-password" class="form-control">
+                                                                        <option value="0" selected></option>
+                                                                        <option value="001">001</option>
+                                                                        <option value="051">051</option>
+                                                                        <option value="013">013</option>
+                                                                        <option value="500">500</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
 
-                                                                </section>
-                                                            </div>
+                                                            <section class="col col-2">
+                                                                <label class="label">Conta</label>
+                                                                <label class="input">
+                                                                    <input id="contaCorrente" name="contaCorrente" type="text" class="" maxlength="13" value="" autocomplete="new-password" onchange="verificaNumero('#contaCorrente')">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label">Digito Conta</label>
+                                                                <label class="input">
+                                                                    <input id="digitoContaBanco" name="digitoContaBanco" maxlength="2" type="text" class="" value="" autocomplete="new-password" onchange="verificaNumero('#digitoContaBanco')">
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Cargo</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row" style="display:<?php echo $esconderCandidato ?>">
+                                                            <section class="col col-2">
+                                                                <label class="label">STATUS</label>
+                                                                <label class="select">
+                                                                    <select name="verificaCargo" id="verificaCargo" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option></option>
+                                                                        <option value="1">PENDENTE</option>
+                                                                        <option value="2">VERIFICADO</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-4">
+                                                                <label class="label">Cargo Anterior</label>
+                                                                <label class="input">
+                                                                    <input id="cargo" name="cargo" maxlength="50" type="text" class="" value="" autocomplete="new-password" onchange="verificaNome('#cargo')">
+                                                                </label>
+                                                            </section>
 
-                                                            <!-- CERTIDÃO DE CASAMENTO -->
-                                                            <div class="row">
+                                                            <section class="col col-4">
+                                                                <label class="label" for="projeto">Projeto</label>
+                                                                <label class="select">
+                                                                    <select id="projeto" name="projeto" class="required">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                            $row = array_map('utf8_encode', $row);
+                                                                            $row = array_map('mb_strtoupper', $row);
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = ($row['descricao']);
+                                                                            $numeroCentroCusto  = ($row['numeroCentroCusto']);
+                                                                            $apelido = ($row['apelido']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $numeroCentroCusto . ' - ' . $apelido . ' - ' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
 
-                                                                <section class="col col-6">
-                                                                    <label class="label">Certidão de Casamento</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="certidaoCasamentoArquivo" name="certidaoCasamentoArquivo[]" multiple>Selecionar
-                                                                            documentos</span><input id="certidaoCasamentoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="certidaoCasamentoArquivoLink" class="col col-4">
+                                                        </div>
 
-                                                                </section>
-                                                            </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Tamanho do Uniforme</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row" style="display:<?php echo $esconderCandidato ?>">
+                                                            <section class="col col-2">
+                                                                <label class="label">STATUS</label>
+                                                                <label class="select">
+                                                                    <select name="verificaUniforme" id="verificaUniforme" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option></option>
+                                                                        <option value="1">PENDENTE</option>
+                                                                        <option value="2">VERIFICADO</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-1">
+                                                                <label class="label">Camisa</label>
+                                                                <label class="select">
+                                                                    <select name="numeroCamisa" id="numeroCamisa" autocomplete="new-password" class="form-control">
+                                                                        <option></option>
+                                                                        <option value="1">PP</option>
+                                                                        <option value="2">P</option>
+                                                                        <option value="3">M</option>
+                                                                        <option value="4">G</option>
+                                                                        <option value="5">GG</option>
+                                                                        <option value="6">XG</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label">Calça</label>
+                                                                <label class="input">
+                                                                    <input id="numeroCalca" name="numeroCalca" type="text" class="number" data-mask="99" value="" autocomplete="new-password" max="2">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label">Saia</label>
+                                                                <label class="input">
+                                                                    <input id="numeroSaia" name="numeroSaia" type="text" class="number" data-mask="99" value="" autocomplete="new-password" maxlength="2">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label">Sapato</label>
+                                                                <label class="input">
+                                                                    <input id="numeroSapato" name="numeroSapato" type="text" class="numeric" data-mask="99" maxlength="2" value="" autocomplete="new-password">
+                                                                </label>
+                                                            </section>
+                                                        </div>
 
-                                                            <!-- COMPROVANTE DE RESIDÊNCIA -->
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Comprovante de Residência</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="comprovanteResidenciaArquivo" name="comprovanteResidenciaArquivo[]" multiple>Selecionar
-                                                                            documentos</span><input id="comprovanteResidenciaText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="comprovanteResidenciaArquivoLink" class="col col-4">
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Anexar Documentos</strong> </legend>
+                                                            </section>
 
-                                                                </section>
-                                                            </div>
+                                                        </div>
+                                                        <div class="row" style="display:<?php echo $esconderCandidato ?>">
+                                                            <section class="col col-2">
+                                                                <label class="label">STATUS</label>
+                                                                <label class="select">
+                                                                    <select name="verificaAnexoDocumento" id="verificaAnexoDocumento" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option></option>
+                                                                        <option value="1">PENDENTE</option>
+                                                                        <option value="2">VERIFICADO</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <strong>ATENÇÃO: <br><br>
+                                                                    • Em caso de mais de um documento conter o mesmo dado que o outro é necessario enviar somente um deles. Exemplo quem possuir CPF no RG Enviar somente a foto do RG. <br>
+                                                                    • Em caso de mais de um documento do mesmo tipo, favor digitalizar em arquivo único. <br>
+                                                                    • A digitalização dos documentos deve estar legível e de boa qualidade, pois pode inviabilizar a contratação
+                                                                    <p style="color:red"> • RECOMENDAMOS o uso do aplicativo CamScanner para digitalizar todos os documentos. Você pode fazer download nos links abaixo: <br>
+                                                                        <a target="_blank" rel="noopener noreferrer" href="https://play.google.com/store/apps/details?id=com.intsig.camscanner&hl=pt_BR">   - Play Store (android) </a> <br>
+                                                                        <a target="_blank" rel="noopener noreferrer" href="https://apps.apple.com/br/app/camscanner-documento-scan/id388627783">   - Apple Store (iPhone) </a> <br>
+                                                                          Caso o arquivo que você tente enviar fique muito grande mesmo com o CamScanner recomendamos que tire um print do seu celular ou computador do documento e envie o mesmo se estiver legivel; <br>
+                                                                          Por questões de segurança temos um tamanho máximo para cada campo por isso evite mandar fotos em alta resolução e de preferencia para prints ou arquivos PDF em PRETO E BRANCO.<br>
+                                                                    </p>
+                                                                </strong>
+                                                            </section>
+                                                        </div>
 
-                                                            <!-- CPF -->
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">CPF</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="cpfArquivo" name="cpfArquivo[]" multiple>Selecionar
-                                                                            documentos</span><input id="cpfText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="cpfArquivoLink" class="col col-4">
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Documentos pessoais</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Foto</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="fotoFuncionario" name="fotoFuncionario[]" multiple>Selecionar
+                                                                        documentos</span><input id="fotoFuncionarioText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="fotoFuncionarioLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
+                                                            </section>
+                                                        </div>
+                                                        <!-- CERTIDÃO DE NASCIMENTO -->
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Certidão de Nascimento</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="certidaoNascimento" name="certidaoNascimento[]" multiple>Selecionar
+                                                                        documentos</span><input id="certidaoNascimentoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="certidaoNascimentoLink" class="col col-4">
 
-                                                            <!-- PISPASEP -->
+                                                            </section>
+                                                        </div>
 
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <strong>ATENÇÃO: <br><br>
-                                                                        • Em caso da CTPS conter o PIS/PASEP, não é necessario enviar outro arquivo.
-                                                                        <br></p> </strong>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">PIS/PASEP - CTPS</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="pispasepArquivo" name="pispasepArquivo[]" multiple>Selecionar
-                                                                            documentos</span><input id="pispasepText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="pispasepArquivoLink" class="col col-4">
+                                                        <!-- CERTIDÃO DE CASAMENTO -->
+                                                        <div class="row">
 
-                                                                </section>
-                                                            </div>
+                                                            <section class="col col-6">
+                                                                <label class="label">Certidão de Casamento</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="certidaoCasamentoArquivo" name="certidaoCasamentoArquivo[]" multiple>Selecionar
+                                                                        documentos</span><input id="certidaoCasamentoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="certidaoCasamentoArquivoLink" class="col col-4">
 
-                                                            <!-- RG  - IDENTIDADE -->
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Identidade (RG)</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="rgArquivo" name="rgArquivo[]" multiple>Selecionar
-                                                                            documentos</span><input id="rgText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="rgArquivoLink" class="col col-4">
+                                                            </section>
+                                                        </div>
 
-                                                                </section>
-                                                            </div>
+                                                        <!-- COMPROVANTE DE RESIDÊNCIA -->
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Comprovante de Residência</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="comprovanteResidenciaArquivo" name="comprovanteResidenciaArquivo[]" multiple>Selecionar
+                                                                        documentos</span><input id="comprovanteResidenciaText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="comprovanteResidenciaArquivoLink" class="col col-4">
 
-                                                            <!-- CARTEIRA NACIONAL DE HABILITAÇÃO -->
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Carteira Nacional de Habilitação (CNH)</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="cnhArquivo" name="cnhArquivo[]" multiple>Selecionar
-                                                                            documentos</span><input id="cnhText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="cnhArquivoLink" class="col col-4">
+                                                            </section>
+                                                        </div>
 
-                                                                </section>
-                                                            </div>
+                                                        <!-- CPF -->
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">CPF</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="cpfArquivo" name="cpfArquivo[]" multiple>Selecionar
+                                                                        documentos</span><input id="cpfText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="cpfArquivoLink" class="col col-4">
 
-                                                            <!-- TITULO DE ELEITOR -->
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Titulo de Eleitor</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="tituloEleitorArquivo" name="tituloEleitorArquivo[]" multiple>Selecionar
-                                                                            documentos</span><input id="tituloEleitorText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="tituloEleitorArquivoLink" class="col col-4">
+                                                            </section>
+                                                        </div>
 
-                                                                </section>
-                                                            </div>
+                                                        <!-- PISPASEP -->
 
-                                                            <!-- CERTIFICADO DE RESERVISTA -->
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Certificado de Reservista</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="certificadoReservistaArquivo" name="certificadoReservistaArquivo[]" multiple>Selecionar
-                                                                            documentos</span><input id="certificadoReservistaText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="certificadoReservistaArquivoLink" class="col col-4">
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <strong>ATENÇÃO: <br><br>
+                                                                    • Em caso da CTPS conter o PIS/PASEP, não é necessario enviar outro arquivo.
+                                                                    <br></p> </strong>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">PIS/PASEP - CTPS</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="pispasepArquivo" name="pispasepArquivo[]" multiple>Selecionar
+                                                                        documentos</span><input id="pispasepText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="pispasepArquivoLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
+                                                            </section>
+                                                        </div>
+
+                                                        <!-- RG  - IDENTIDADE -->
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Identidade (RG)</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="rgArquivo" name="rgArquivo[]" multiple>Selecionar
+                                                                        documentos</span><input id="rgText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="rgArquivoLink" class="col col-4">
+
+                                                            </section>
+                                                        </div>
+
+                                                        <!-- CARTEIRA NACIONAL DE HABILITAÇÃO -->
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Carteira Nacional de Habilitação (CNH)</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="cnhArquivo" name="cnhArquivo[]" multiple>Selecionar
+                                                                        documentos</span><input id="cnhText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="cnhArquivoLink" class="col col-4">
+
+                                                            </section>
+                                                        </div>
+
+                                                        <!-- TITULO DE ELEITOR -->
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Titulo de Eleitor</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="tituloEleitorArquivo" name="tituloEleitorArquivo[]" multiple>Selecionar
+                                                                        documentos</span><input id="tituloEleitorText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="tituloEleitorArquivoLink" class="col col-4">
+
+                                                            </section>
+                                                        </div>
+
+                                                        <!-- CERTIFICADO DE RESERVISTA -->
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Certificado de Reservista</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="certificadoReservistaArquivo" name="certificadoReservistaArquivo[]" multiple>Selecionar
+                                                                        documentos</span><input id="certificadoReservistaText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="certificadoReservistaArquivoLink" class="col col-4">
+
+                                                            </section>
+                                                        </div>
 
 
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Documentos de qualificação profissional</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Comprovante de escolaridade</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="comprovanteEscolaridadeFile" name="comprovanteEscolaridadeFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="comprovanteEscolaridadeText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="comprovanteEscolaridadeFileLink" class="col col-4">
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Documentos de qualificação profissional</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Comprovante de escolaridade</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="comprovanteEscolaridadeFile" name="comprovanteEscolaridadeFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="comprovanteEscolaridadeText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="comprovanteEscolaridadeFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Certificados / Diplomas</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="certificadoDiplomaFile" name="certificadoDiplomaFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="certificadoDiplomaText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="certificadoDiplomaFileLink" class="col col-4">
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Certificados / Diplomas</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="certificadoDiplomaFile" name="certificadoDiplomaFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="certificadoDiplomaText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="certificadoDiplomaFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Documentos dos filhos até 14 anos</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Certidão de nascimento</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="certidaoNascimentoFilhoFile" name="certidaoNascimentoFilhoFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="certidaoNascimentoFilhoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="certidaoNascimentoFilhoFileLink" class="col col-4">
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Documentos dos filhos até 14 anos</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Certidão de nascimento</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="certidaoNascimentoFilhoFile" name="certidaoNascimentoFilhoFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="certidaoNascimentoFilhoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="certidaoNascimentoFilhoFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Identidade (RG)</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="rgFilhoFile" name="rgFilhoFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="rgFilhoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="rgFilhoFileLink" class="col col-4">
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Identidade (RG)</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="rgFilhoFile" name="rgFilhoFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="rgFilhoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="rgFilhoFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Cpf</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="cpfFilhoFile" name="cpfFilhoFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="cpfFilhoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="cpfFilhoFileLink" class="col col-4">
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Cpf</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="cpfFilhoFile" name="cpfFilhoFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="cpfFilhoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="cpfFilhoFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
+                                                            </section>
+                                                        </div>
 
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Carteira de vacinação (Para filhos com menos de 4 anos)</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="carteiraVacinacaoFilhoFile" name="carteiraVacinacaoFilhoFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="carteiraVacinacaoFilhoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="carteiraVacinacaoFilhoFileLink" class="col col-4">
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Carteira de vacinação (Para filhos com menos de 4 anos)</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="carteiraVacinacaoFilhoFile" name="carteiraVacinacaoFilhoFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="carteiraVacinacaoFilhoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="carteiraVacinacaoFilhoFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Documentos dos dependentes</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Certidão de Nascimento</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="certidaoNascimentoDependenteFile" name="certidaoNascimentoDependenteFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="certidaoNascimentoDependenteText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="certidaoNascimentoDependenteFileLink" class="col col-4">
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Documentos dos dependentes</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Certidão de Nascimento</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="certidaoNascimentoDependenteFile" name="certidaoNascimentoDependenteFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="certidaoNascimentoDependenteText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="certidaoNascimentoDependenteFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">RG</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="rgDependenteFile" name="rgDependenteFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="rgDependenteText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="rgDependenteFileLink" class="col col-4">
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">RG</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="rgDependenteFile" name="rgDependenteFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="rgDependenteText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="rgDependenteFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Cpf</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="cpfDependenteFile" name="cpfDependenteFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="cpfDependenteText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="cpfDependenteFileLink" class="col col-4">
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Cpf</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="cpfDependenteFile" name="cpfDependenteFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="cpfDependenteText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="cpfDependenteFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
+                                                            </section>
+                                                        </div>
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -4418,7 +4419,7 @@ include("inc/scripts.php");
 
         if (codigoFuncionario != "") {
             $("#esconderPdfTransporte").removeAttr("style");
-            window.open("pdfTransporte.php?id=" + codigoFuncionario, '_blank');
+            window.open("contratacao_relatorioTransporte.php?id=" + codigoFuncionario, '_blank');
         }
     }
 </script>

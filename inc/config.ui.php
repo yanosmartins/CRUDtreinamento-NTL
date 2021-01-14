@@ -270,14 +270,21 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
         }
 
-        //if (in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {}
-        $page_nav['operacao']['sub']['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/index.php"));
+        if (!in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/contratacao_gestorFiltro.php"));
+        }
 
-        //if (in_array('RECURSOSHUMANOS_ACESSAR', $arrayPermissao, true)) {}
-        $page_nav['operacao']['sub']['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/index.php"));
+        if (!in_array('CONTRATACAORH_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['contratacao']['sub'] += array("contratacoesRh" => array("title" => "Controle de Candidato", "url" => APP_URL . "/contratacao_controleCandidato.php"));
+        }
 
-        //if (in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {}
-        $page_nav['operacao']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/index.php"));
+        if (!in_array('RECURSOSHUMANOS_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/contratacao_rhFiltro.php"));
+        }
+
+        if (!in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
+        }
     }
 
     if ($condicaoFaturamentoOk) {
@@ -289,10 +296,22 @@ if ($condicaoOperacaoOk) {
     if ($condicaoLicitacaoOk) {
         $page_nav['operacao']['sub']['licitacao'] = array("title" => "Licitação", "icon" => "fa fa-line-chart");
         $page_nav['operacao']['sub']['licitacao']['sub'] = array();
-        $page_nav['operacao']['sub']['licitacao']['sub'] += array("participarPregoes" => array("title" => "Participar Pregões", "url" => APP_URL . "/index.php"));
-        $page_nav['operacao']['sub']['licitacao']['sub'] += array("pregoesNaoIniciados" => array("title" => "Pregões Não Iniciados", "url" => APP_URL . "/index.php"));
-        $page_nav['operacao']['sub']['licitacao']['sub'] += array("pregoesEmAndamento" => array("title" => "Pregões Em Andamento", "url" => APP_URL . "/index.php"));
-        $page_nav['operacao']['sub']['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/index.php"));
+
+        if (in_array('PARTICIPARPREGAO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("participarPregoes" => array("title" => "Participar Pregões", "url" => APP_URL . "/contratacao_participarPegao.php"));
+        }
+
+        if (in_array('PREGAONAOINICIADO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("pregoesNaoIniciados" => array("title" => "Pregões Não Iniciados", "url" => APP_URL . "/contratacao_pregaoNaoIniado.php"));
+        }
+
+        if (in_array('PREGAOEMANDAMENTO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("pregoesEmAndamento" => array("title" => "Pregões Em Andamento", "url" => APP_URL . "/contratacao_pregaoEmAndamento.php"));
+        }
+
+        if (in_array('RELATORIOTAREFA_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/index.php"));
+        }
     }
 }
 

@@ -3,34 +3,33 @@
 require_once("inc/init.php");
 
 //require UI configuration (nav, ribbon, etc.)
-// require_once("inc/config.ui.php");
+require_once("inc/config.ui.php");
 
-//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-// $condicaoAcessarOK = (in_array('USUARIO_ACESSAR', $arrayPermissao, true));
-// $condicaoGravarOK = (in_array('USUARIO_GRAVAR', $arrayPermissao, true));
-// $condicaoExcluirOK = (in_array('USUARIO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('CANDIDATO_EXCLUIR', $arrayPermissao, true));
 
-// if ($condicaoAcessarOK == false) {
-//     unset($_SESSION['login']);
-//     header("Location:login.php");
-// }
+if ($condicaoAcessarOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
 
-// $esconderBtnGravar = "";
-// if ($condicaoGravarOK === false) {
-//     $esconderBtnGravar = "none";
-// }
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
 
-// $esconderBtnExcluir = "";
-// if ($condicaoExcluirOK === false) {
-//     $esconderBtnExcluir = "none";
-// }
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
 
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Usuário";
+$page_title = "Candidato";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -42,7 +41,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["controle"]["sub"]["usuarios"]["active"] = true;
+$page_nav['operacao']['sub']['contratacao']['sub']["candidato"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -52,7 +51,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Controle de Permissão"] = "";
+    $breadcrumbs["Recursos Humanos"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -420,7 +419,7 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'usuarioFiltro.php');
+        $(location).attr('href', 'contratacao_candidatoFiltro.php');
     }
 
     function excluir() {

@@ -9,10 +9,10 @@ include "js/repositorio.php";
 
                     <!-- <th class="text-left" style="min-width:30px;" scope="col">Código</th> -->
 
-                    <th class="text-left" style="min-width:70px;" scope="col">Nome Completo                                                                 </th>
-                    <th class="text-left" style="min-width:30px;" scope="col">CPF                       </th>
-                    <th class="text-left" style="min-width:30px;" scope="col">RG                       </th>
-                    <th class="text-left" style="min-width:30px;" scope="col">Cargo                                              </th>
+                    <th class="text-left" style="min-width:70px;" scope="col">Nome Completo</th>
+                    <th class="text-left" style="min-width:30px;" scope="col">CPF</th>
+                    <th class="text-left" style="min-width:30px;" scope="col">RG</th>
+                    <th class="text-left" style="min-width:30px;" scope="col">Cargo</th>
 
                     <th class="text-left" style="min-width:30px;" scope="col">Dados Pessoais</th>
                     <th class="text-left" style="min-width:30px;" scope="col">Contato</th>
@@ -54,7 +54,7 @@ include "js/repositorio.php";
                 $verificaUniforme = "";
                 $verificaAnexoDocumento = "";
 
-                $sql = " SELECT C.codigo, C.nomeCompleto, C.cargo ,C.rg, C.cpf,verificaDadoPessoal,C.verificaDadoContato,C.verificaEndereco,
+                $sql = " SELECT C.codigo, C.nomeCompleto, C.cargo ,C.rg, C.cpf,C.verificaDadoPessoal,C.verificaDadoContato,C.verificaEndereco,
                 C.verificaDocumento,C.verificaEscolaridade,C.verificaDadoConjuge,C.verificaFilho,C.verificaDependente,
 				C.verificaBeneficio,C.verificaVT,C.verificaDadoBancario,C.verificaCargo,C.verificaUniforme,C.verificaAnexoDocumento
                 FROM Contratacao.candidato C

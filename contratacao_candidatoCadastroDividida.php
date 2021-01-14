@@ -1250,61 +1250,63 @@ include("inc/nav.php");
                                                                     </tbody>
                                                                 </table>
                                                             </div>
+                                                        </div>
 
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Documentos dos filhos até 14 anos</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Certidão de nascimento</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="certidaoNascimentoFilhoFile" name="certidaoNascimentoFilhoFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="certidaoNascimentoFilhoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="certidaoNascimentoFilhoFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Identidade (RG)</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="rgFilhoFile" name="rgFilhoFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="rgFilhoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="rgFilhoFileLink" class="col col-4">
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Documentos dos filhos até 14 anos</strong></legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Certidão de nascimento</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="certidaoNascimentoFilhoFile" name="certidaoNascimentoFilhoFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="certidaoNascimentoFilhoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="certidaoNascimentoFilhoFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Cpf</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="cpfFilhoFile" name="cpfFilhoFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="cpfFilhoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="cpfFilhoFileLink" class="col col-4">
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Identidade (RG)</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="rgFilhoFile" name="rgFilhoFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="rgFilhoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="rgFilhoFileLink" class="col col-4">
 
-                                                                </section>
-                                                            </div>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Cpf</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="cpfFilhoFile" name="cpfFilhoFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="cpfFilhoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="cpfFilhoFileLink" class="col col-4">
 
-                                                            <div class="row">
-                                                                <section class="col col-6">
-                                                                    <label class="label">Carteira de vacinação (Para filhos com menos de 4 anos)</label>
-                                                                    <label class="input input-file">
-                                                                        <span class="button"><input type="file" id="carteiraVacinacaoFilhoFile" name="carteiraVacinacaoFilhoFile[]" multiple>Selecionar
-                                                                            documentos</span><input id="carteiraVacinacaoFilhoText" type="text">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="carteiraVacinacaoFilhoFileLink" class="col col-4">
+                                                            </section>
+                                                        </div>
 
-                                                                </section>
-                                                            </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label">Carteira de vacinação (Para filhos com menos de 4 anos)</label>
+                                                                <label class="input input-file">
+                                                                    <span class="button"><input type="file" id="carteiraVacinacaoFilhoFile" name="carteiraVacinacaoFilhoFile[]" multiple>Selecionar
+                                                                        documentos</span><input id="carteiraVacinacaoFilhoText" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section id="carteiraVacinacaoFilhoFileLink" class="col col-4">
+
+                                                            </section>
+                                                        </div>
 
                                                     </fieldset>
                                                 </div>
@@ -4446,6 +4448,6 @@ include("inc/scripts.php");
 
     function abrePdfTransporte() {
         let codigoFuncionario = $("#codigo").val();
-        window.open("pdfTransporte.php?id=" + codigoFuncionario, '_blank');
+        window.open("contratacao_relatorioTransporte.php?id=" + codigoFuncionario, '_blank');
     }
 </script>

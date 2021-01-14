@@ -6,10 +6,11 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('CANDIDATO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('CONTRATACAORH_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('CONTRATACAORH_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('CONTRATACAORH_EXCLUIR', $arrayPermissao, true));
 
+$condicaoAcessarOK = true;
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
@@ -30,7 +31,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Canditados";
+$page_title = "RH Filtro";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -42,7 +43,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['contratacao']['sub']["candidato"]["active"] = true;
+$page_nav['operacao']['sub']['contratacao']['sub']["rh"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -86,21 +87,21 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <div class="row">
                                                             <section class="col col-4">
-                                                                <label class="label">Nome</label>
+                                                                <label class="label">Funcionario</label>
                                                                 <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" type="text" value="">
+                                                                    <input id="nome" maxlength="100" name="nome" type="text" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">CPF</label>
+                                                                <label class="label">Projeto</label>
                                                                 <label class="input">
-                                                                    <input id="cpf" maxlength="15" data-mask="999.999.999-99" name="cpf" type="text" value="" onchange="verificaCpf('#cpf')">
+                                                                    <input id="projeto" maxlength="100" name="projeto" type="text" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">RG</label>
+                                                                <label class="label">Sindicato</label>
                                                                 <label class="input">
-                                                                    <input id="rg" maxlength="15" data-mask="99.999.999-9" name="rg" type="text" value="">
+                                                                    <input id="sindicato" maxlength="15" name="sindicato" type="text" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -109,14 +110,13 @@ include("inc/nav.php");
                                                                     <input id="cargo" maxlength="50" name="cargo" type="text" autocomplete="off" value="">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Status</label>
+                                                            <section class="col col-1">
+                                                                <label class="label" for="verificadoPeloRh">Verificado</label>
                                                                 <label class="select">
-                                                                    <select id="verifica" name="verifica" class="">
+                                                                    <select id="verificadoPeloRh" name="verificadoPeloRh" class="">
                                                                         <option></option>
-                                                                        <option value="0">Não Verificado</option>
-                                                                        <option value="1">Pendente</option>
-                                                                        <option value="2">Verificado</option>
+                                                                        <option value="0" selected>Não</option>
+                                                                        <option value="1">Sim</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -129,9 +129,6 @@ include("inc/nav.php");
                                     <footer>
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
-                                        </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="<?= $esconderBtnGravar ?>">
-                                            <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
                                 </form>
@@ -185,6 +182,7 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
+        listarFiltro();
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
@@ -193,65 +191,24 @@ include("inc/scripts.php");
         });
         $.datepicker.setDefaults($.datepicker.regional["pt-BR"]);
 
-        $("#dataFinal").on("change", function() {
-            var valor = "#dataFinal";
-            retorno = validaData(valor);
-            if (retorno == false) {
-                $("#dataFinal").val('');
-            }
-            if (retorno == true) {
-                var dataInicial = $('#dataInicial').datepicker('getDate');
-                var dataFinal = $('#dataFinal').datepicker('getDate');
-                var retorno = calculaDifDatas(dataInicial, dataFinal, 'D');
-                if (retorno < 0) {
-                    smartAlert("Erro", "Data de Inicio não pode ser maior do que a Final.",
-                        "error");
-                    $("#dataFinal").val('');
-                }
-            }
-        });
-
-        // $('#tipoPendencia').change(function() {
-        //     var tipoPendencia = +$('#tipoPendencia').val();
-        //     if (tipoPendencia != "") {
-        //         $("#verifica").removeClass('readonly');
-        //         // $("#numeroCartaoVt").addClass('required');
-        //         $("#verifica").removeAttr('disabled');
-        //     } else {
-        //         $("#verifica").addClass('readonly');
-        //         // $("#numeroCartaoVt").removeClass('required');
-        //         $("#verifica").val('');
-        //         $("#verifica").prop('disabled', true);
-        //     }
-        // });
     });
 
     function listarFiltro() {
 
         var nome = $('#nome').val();
-        var cpf = $('#cpf').val();
-        var rg = $('#rg').val();
+        var projeto = $('#projeto').val();
+        var sindicato = $('#sindicato').val();
         var cargo = $('#cargo').val();
-        // var tipoPendencia = $('#tipoPendencia').val();
-        var verifica = $('#verifica').val();
-        // var pendencia = $('#pendencia').val();
-        // var pendencia = $('#pendencia').val();
+        var verificadoPeloRh = $('#verificadoPeloRh').val();
 
 
-        //     '&pendencia=' + pendencia
-
-        $('#resultadoBusca').load('contratacao_candidatoFiltroListagem.php?', {
+        $('#resultadoBusca').load('contratacao_rhFiltroListagem.php?', {
             nome: nome,
-            cpf: cpf,
-            rg: rg,
+            projeto: projeto,
+            sindicato: sindicato,
             cargo: cargo,
-            // tipoPendencia: tipoPendencia,
-            verifica: verifica
+            verificadoPeloRh: verificadoPeloRh,
         });
-    }
-
-    function novo() {
-        $(location).attr('href', 'contratacao_candidatoCadastro.php');
     }
 
     function verificaCpf(inputField) {
