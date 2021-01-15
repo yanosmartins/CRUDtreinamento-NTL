@@ -7,6 +7,7 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Login</th>
+                    <th class="text-left" style="min-width:30px;">Funcionário</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
@@ -21,7 +22,8 @@ include "js/repositorio.php";
                     $where = $where . " AND (USU.[login] like '%' + " . "replace('" . $nomeFiltro . "',' ','%') + " . "'%')";
                 }
 
-                $sql = " SELECT USU.codigo,USU.[login],USU.ativo FROM Ntl.usuario USU  ";
+                $sql = " SELECT USU.codigo,USU.[login],USU.ativo,F.nome AS nomeFuncionario FROM Ntl.usuario USU 
+                           LEFT JOIN Ntl.funcionario F ON F.codigo = USU.funcionario ";
                 $where = $where . " AND USU.tipoUsuario = 'C' ";
 
                 $sql = $sql . $where;
@@ -32,6 +34,7 @@ include "js/repositorio.php";
                     $id = +$row['codigo'];
                     $login = mb_convert_encoding($row['login'], 'UTF-8', 'HTML-ENTITIES');
                     $ativo = +$row['ativo'];
+                    $funcionario = $row['nomeFuncionario'];
                     $descricaoAtivo = "";
                     if ($ativo == 1) {
                         $descricaoAtivo = "Sim";
@@ -41,6 +44,7 @@ include "js/repositorio.php";
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="usuarioCadastro.php?id=' . $id . '">' . $login . '</a></td>';
+                    echo '<td class="text-left">' . $funcionario . '</td>';
                     echo '<td class="text-left">' . $descricaoAtivo . '</td>';
                     echo '</tr >';
                 }

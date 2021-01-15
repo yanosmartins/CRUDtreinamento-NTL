@@ -1,9 +1,9 @@
-function gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario) {
+function gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario, funcionario) {
     $.ajax({
         url: 'js/sqlscopeUsuario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", id:id, ativo:ativo, login:login, senha:senha, senhaConfirma:senhaConfirma, tipoUsuario:tipoUsuario}, //valores enviados ao script     
+        data: {funcao: "grava", id:id, ativo:ativo, login:login, senha:senha, senhaConfirma:senhaConfirma, tipoUsuario:tipoUsuario, funcionario:funcionario}, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -61,11 +61,12 @@ function recuperaUsuario(id) {
                 var login = piece[1];
                 var ativo = +piece[2];
                 var tipoUsuario = piece[3];
-             
+                var funcionario = +piece[4];
                
                 $("#codigo").val(codigo);
                 $("#login").val(login);
                 $("#ativo").val(ativo);
+                $("#funcionario").val(funcionario);
                 if (ativo === 1) {
                     $('#ativo').prop('checked', true);
                 } else {

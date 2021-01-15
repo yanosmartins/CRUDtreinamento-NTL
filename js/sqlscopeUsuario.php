@@ -50,6 +50,8 @@ function grava()
     $tipoUsuario = "'" . $tipoUsuario . "'";
     $nome = "'" . $nome . "'";
 
+    $funcionario = +$_POST['funcionario'];
+
     $login = $_POST["login"];
     if ((empty($_POST['login'])) || (!isset($_POST['login'])) || (is_null($_POST['login']))) {
         $mensagem = "Informe o login.";
@@ -164,7 +166,7 @@ function grava()
     $usuario = $_SESSION['login'];
     $usuario = "'" . $usuario . "'";
 
-    $sql = "Ntl.usuario_Atualiza (" . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . ") ";
+    $sql = "Ntl.usuario_Atualiza (" . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . "," . $funcionario . ") ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -202,7 +204,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = " SELECT USU.codigo,USU.[login],USU.ativo,tipoUsuario
+    $sql = " SELECT USU.codigo,USU.[login],USU.ativo,tipoUsuario,funcionario
              FROM Ntl.usuario USU WHERE (0 = 0) ";
 
     if ($condicaoId) {
@@ -222,12 +224,14 @@ function recupera()
         $login = mb_convert_encoding($row['login'], 'UTF-8', 'HTML-ENTITIES');
         $ativo = +$row['ativo'];
         $tipoUsuario = $row['tipoUsuario'];
+        $funcionario = +$row['funcionario'];
     }
 
     $out =   $id . "^" .
         $login . "^" .
         $ativo . "^" .
-        $tipoUsuario;
+        $tipoUsuario . "^" .
+        $funcionario;
 
     if ($out == "") {
         echo "failed#";

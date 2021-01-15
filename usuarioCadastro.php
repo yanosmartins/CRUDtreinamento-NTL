@@ -120,6 +120,26 @@ include("inc/nav.php");
                                                                     <input id="senhaConfirma" maxlength="20" name="senhaConfirma" type="password" class="required" value="">
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-4 col-auto">
+                                                                <label class="label " for="funcionario">Funcionário</label>
+                                                                <label class="select">
+                                                                    <select id="funcionario" name="funcionario">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, nome 
+                                                                        FROM Ntl.funcionario 
+                                                                        WHERE ativo = 1 AND dataDemissaoFuncionario IS NULL order by nome";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                            $id = $row['codigo'];
+                                                                            $descricao = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>                                                        
@@ -418,6 +438,7 @@ include("inc/scripts.php");
         }
         var login = $("#login").val();
         var senha = $("#senha").val();
+        var funcionario = $("#funcionario").val();
         var senhaConfirma = $("#senhaConfirma").val();
         var tipoUsuario = "C";
         if (login === "") {
@@ -470,7 +491,7 @@ include("inc/scripts.php");
                 }
             }
         }
-        gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario);
+        gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario,funcionario);
     }
 </script>
 
