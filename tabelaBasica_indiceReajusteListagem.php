@@ -19,11 +19,10 @@ include "js/repositorio.php";
 
                     $where = $where . " AND descricao = " . "'" . $descricao . "'";
                 }
-                if ($ativo !== "") {
-
-                    $where = $where . " AND ativo = $ativo " ;
+                if (($_GET['ativo'] === 1) || ($_GET['ativo'] === 0)) {
+                    $where .=  " AND situacao = " . $ativo;
                 }
-                
+
                 $reposit = new reposit();
                 $sql = "SELECT codigo, descricao, ativo
                 FROM Ntl.indiceReajuste  ";
