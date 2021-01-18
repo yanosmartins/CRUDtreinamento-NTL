@@ -84,7 +84,7 @@ include("inc/nav.php");
                                                             <section class="col col-6 col-auto">
                                                                 <label class="label" for="nome">Nome do sindicato</label>
                                                                 <label class="select">
-                                                                    <select id="nomeSindicato" name="nomeSindicato">
+                                                                    <select id="sindicato" name="sindicato">
                                                                         <option></option>
                                                                         <?php
                                                                         $sql = "SELECT codigo, descricao FROM Ntl.sindicato WHERE (0=0) AND situacao = 1";
@@ -196,7 +196,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_sindicato.php',
+                    url: 'js/sqlscope_cadastroSindicato.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -267,17 +267,12 @@ include("inc/scripts.php");
     }
 
     function listarFiltro() {
-        var nomeSindicato = $('#nomeSindicato').val();
-        var apelidoId = $("#apelidoId").val();
+        var sindicato = +$('#sindicato').val();
+        var apelidoId = +$("#apelidoId").val();
         var cnpj = $("#cnpj").val();
-        var ativo = $("#ativo").val();
-        if (nomeSindicato !== "") {
-            nomeSindicato = nomeSindicato.replace(/^\s+|\s+$/g, "");
-            nomeSindicato = encodeURIComponent(nomeSindicato);
-        }
-
+        var ativo = +$("#ativo").val();
         var parametrosUrl;
-        parametrosUrl = '&nomeSindicato=' + nomeSindicato +
+        parametrosUrl = '&sindicato=' + sindicato +
             '&apelidoId=' + apelidoId +
             '&cnpj=' + cnpj +
             '&ativo=' + ativo;

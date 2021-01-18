@@ -142,9 +142,6 @@ include("inc/nav.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="<?= $esconderBtnGravar ?>">
-                                            <span class="fa fa-file"></span>
-                                        </button>
                                     </footer>
                                 </form>
                             </div>

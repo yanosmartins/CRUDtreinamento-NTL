@@ -1,9 +1,9 @@
 <?php
  
   // Preencha de acordo com as informações reais do seu banco
-  define("SERVIDOR","168.138.146.147\MSSQLSERVER,2866"); // Servidor do Banco de Dados
-  define("USUARIO","NTL"); // Usuário do Banco de Dados
-  define("SENHA","SistemaNtl2020"); // Senha do Banco de Dados
+  define("SERVIDOR","DESKTOP-L1PESJT\SQLEXPRESS"); // Servidor do Banco de Dados
+  define("USUARIO","sa"); // Usuário do Banco de Dados
+  define("SENHA","123"); // Senha do Banco de Dados
   define("BANCO","ntl"); // Nome do Banco de Dados
   define("PORTA",""); // Porta do Banco de Dados
   //define("SOCKET",""); // SOCKET do Banco de Dados

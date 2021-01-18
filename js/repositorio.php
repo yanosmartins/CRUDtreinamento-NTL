@@ -8,8 +8,8 @@ class reposit {
     private $user = USUARIO;
     private $pass = SENHA;
     private $database = BANCO;
-    private $porta = PORTA;
-    private $socket = SOCKET;
+    // private $porta = PORTA;
+    // private $socket = SOCKET;
 
     function AbreConexao($banco) {
         switch ($banco) {
@@ -19,12 +19,12 @@ class reposit {
                 //if (!($this->sqlconnect = odbc_connect("DRIVER={SQL Server}; SERVER=$this->ip;DATABASE=$this->database;Client_CSet=UTF-8;Server_CSet=Windows-1252", $this->user,$this->pass) ))
                 if (!($this->sqlconnect = odbc_connect("DRIVER={SQL Server}; SERVER=$this->ip;DATABASE=$this->database;", $this->user, $this->pass) )) {
                     echo "<p>Conexão falhou !!!.</p>\n";
-                    odbc_close();
+                    // odbc_close();
                 } else {
                     $ok = 1;
                     setlocale(LC_NUMERIC, "en_US");
                     setlocale(LC_COLLATE, "pt_BR");
-                    setlocale(LC_TYPE, "pt_BR");
+                    // setlocale(LC_TYPE, "pt_BR");
                     setlocale(LC_MONETARY, "pt_BR");
                     setlocale(LC_TIME, "pt_BR");
                     //setlocale(LC_ALL, "pt_BR");
@@ -39,7 +39,7 @@ class reposit {
     }
 
     function FechaConexao() {
-        odbc_close();
+        // odbc_close();
         return;
     }
 
@@ -77,7 +77,6 @@ class reposit {
         $sql = iconv('UTF-8', 'CP1252', $sql);
         $this->AbreConexao("sql"); // Abrimos a conexão      
         $result = odbc_exec($this->sqlconnect, "" . $sql . "");
-        $GLOBALS["rows"] = odbc_num_rows($result);
 
         $this->FechaConexao(); // Fechamos a conexão
         return $result; // aqui fica o retorno de todas as condicionais

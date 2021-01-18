@@ -16,24 +16,25 @@ include "js/repositorio.php";
                 <?php
 
                 $sql = "SELECT codigo, descricao, apelido, cnpj, situacao FROM Ntl.sindicato WHERE (0=0) ";
-                
-                if ($_GET["nomeSindicato"] != 0) {
-                    $codigo = $_GET["nomeSindicato"];
+                $codigo = +$_GET["sindicato"];
+                $apelido = +$_GET["apelidoId"];
+                $cnpj = $_GET["cnpj"];
+                $ativo = +$_GET['ativo'] ;
+
+                if ($codigo > 0) {
                     $where =  " AND codigo = " . $codigo;
                 }
-
-                if($_GET['apelidoId'] != ""){
-                    $apelido = $_GET["apelidoId"];
+                
+                if($apelido > 0){
+                  
                     $where .= $where . " AND codigo = ". $apelido;
                 }
                 
-                if($_GET['cnpj'] != ""){
-                    $cnpj = "'%". $_GET['cnpj'] ."%'";
-                    $where .= $where . " AND (cnpj like " . "($cnpj))";
+                if($cnpj != ""){
+                    $where .= $where . " AND cnpj = $cnpj";
                 }
 
                 if($_GET['ativo'] != ""){
-                    $ativo = $_GET['ativo'] ;
                     $where .=  " AND situacao = " . $ativo;
                 }
 

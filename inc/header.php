@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br" <?php
-echo implode(' ', array_map(function($prop, $value) {
-            return $prop . '="' . $value . '"';
-        }, array_keys($page_html_prop), $page_html_prop));
+// echo implode(' ', array_map(function($prop, $value) {
+//             return $prop . '="' . $value . '"';
+//         }, array_keys($page_html_prop), $page_html_prop));
 ?>>
     <head>
         <meta charset="utf-8">
@@ -91,9 +91,9 @@ echo implode(' ', array_map(function($prop, $value) {
 
     </head>
     <body class="smart-style-0" <?php
-    echo implode(' ', array_map(function($prop, $value) {
-                return $prop . '="' . $value . '"';
-            }, array_keys($page_body_prop), $page_body_prop));
+    // echo implode(' ', array_map(function($prop, $value) {
+    //             return $prop . '="' . $value . '"';
+    //         }, array_keys($page_body_prop), $page_body_prop));
     ?>>
 
         <!-- POSSIBLE CLASSES: minified, fixed-ribbon, fixed-header, fixed-width

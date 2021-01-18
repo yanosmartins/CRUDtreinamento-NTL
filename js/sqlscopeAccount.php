@@ -5,6 +5,7 @@ include "girComum.php";
 
 $funcao = $_POST["funcao"];
 
+
 if ($funcao == 'validaSenha') {
     call_user_func($funcao);
 }
