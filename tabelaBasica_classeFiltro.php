@@ -105,7 +105,7 @@ include("inc/nav.php");
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
                                                                     <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                        <option value="default"></option>
+                                                                        <option value=""></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>

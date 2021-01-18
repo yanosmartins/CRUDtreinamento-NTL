@@ -270,7 +270,7 @@ include("inc/scripts.php");
         var sindicato = +$('#sindicato').val();
         var apelidoId = +$("#apelidoId").val();
         var cnpj = $("#cnpj").val();
-        var ativo = +$("#ativo").val();
+        var ativo = $("#ativo").val();
         var parametrosUrl;
         parametrosUrl = '&sindicato=' + sindicato +
             '&apelidoId=' + apelidoId +

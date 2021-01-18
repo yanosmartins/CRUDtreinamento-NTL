@@ -19,22 +19,22 @@ include "js/repositorio.php";
                 $codigo = +$_GET["sindicato"];
                 $apelido = +$_GET["apelidoId"];
                 $cnpj = $_GET["cnpj"];
-                $ativo = +$_GET['ativo'] ;
+                $ativo = $_GET['ativo'];
 
                 if ($codigo > 0) {
                     $where =  " AND codigo = " . $codigo;
                 }
-                
-                if($apelido > 0){
-                  
-                    $where .= $where . " AND codigo = ". $apelido;
+
+                if ($apelido > 0) {
+
+                    $where .= $where . " AND codigo = " . $apelido;
                 }
-                
-                if($cnpj != ""){
+
+                if ($cnpj != "") {
                     $where .= $where . " AND cnpj = $cnpj";
                 }
 
-                if($_GET['ativo'] != ""){
+                if (($_GET['ativo'] === 1) || ($_GET['ativo'] === 0)) {
                     $where .=  " AND situacao = " . $ativo;
                 }
 

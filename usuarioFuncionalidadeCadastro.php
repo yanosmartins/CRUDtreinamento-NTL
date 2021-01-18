@@ -317,6 +317,7 @@ include("inc/scripts.php");
     }
 
     function listarFuncionalidadePorItemMenu() {
+        debugger;
         var usuarioIdFiltro = +$('#usuario').val();
         var menuItemIdFiltro = +$('#menuItem').val();
 

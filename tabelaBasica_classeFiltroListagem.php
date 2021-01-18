@@ -32,9 +32,9 @@ include "js/repositorio.php";
                     $reducaoBaseIR = $_GET["reducaoBaseIR"];
                     $where = $where . " AND (reducaoBaseIR like '%' + " . "replace('" . $reducaoBaseIR . "',' ','%') + " . "'%')";
                 }
-                if (isset($_GET["ativo"])) {
-                    $ativo = $_GET["ativo"];
-                    $where = $where . " AND ativo = $ativo ";
+
+                if (($_GET['ativo'] === 1) || ($_GET['ativo'] === 0)) {
+                    $where .=  " AND ativo = " . $ativo;
                 }
 
                 $sql .= $where . $order;

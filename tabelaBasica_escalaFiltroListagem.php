@@ -13,45 +13,45 @@ include "js/repositorio.php";
             <tbody>
                 <?php
                 $descricao = "";
-                $ativo= ""; 
+                $ativo = "";
                 $where = "WHERE (0 = 0)";
- 
+
                 if ($_GET["descricao"] != "") {
                     $descricao = $_GET["descricao"];
                     $where = $where . " AND ([descricao] like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
-             
+
                 if ($_GET["codigoSCI"] != "") {
                     $codigoSCI = +$_GET["codigoSCI"];
                     $where = $where . " AND ([codigoSCI] like '%' + " . "replace('" . $codigoSCI . "',' ','%') + " . "'%')";
-                } 
- 
-                if ($_GET["ativo"] != "") {
-                    $ativo = +$_GET["ativo"];
-                    $where = $where . " and ativo = ".$ativo;
-                } 
+                }
+
+                if (($_GET['ativo'] === 1) || ($_GET['ativo'] === 0)) {
+                    $ativo = $_GET['ativo'];
+                    $where .=  " AND situacao = " . $ativo;
+                }
 
                 $sql = " SELECT codigo, descricao, ativo FROM Ntl.escala  ";
-                
-                $sql = $sql.$where;
-                $sql .= " order by descricao "; 
+
+                $sql = $sql . $where;
+                $sql .= " order by descricao ";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
-                
+
                 while (($row = odbc_fetch_array($result))) {
                     $codigo = +$row['codigo'];
                     $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
                     $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
 
-                    $ativo == 1 ? $ativo = 'Sim' : $ativo = 'Não'; 
+                    $ativo == 1 ? $ativo = 'Sim' : $ativo = 'Não';
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="tabelaBasica_escalaCadastro.php?id=' . $codigo . '">' . $descricao . '</a></td>';
                     echo '<td class="text-left">' . $ativo . '</td>';
                     echo '</tr >';
-                 }
-                ?>               
-          </tbody>
+                }
+                ?>
+            </tbody>
         </table>
     </div>
 </div>
