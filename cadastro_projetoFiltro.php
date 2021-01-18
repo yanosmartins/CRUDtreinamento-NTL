@@ -10,13 +10,13 @@ $condicaoAcessarOK = (in_array('PROJETO_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('PROJETO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
-   unset($_SESSION['login']);
-   header("Location:login.php");
+    unset($_SESSION['login']);
+    header("Location:login.php");
 }
 
 $esconderBtnGravar = "";
 if ($condicaoGravarOK === false) {
-   $esconderBtnGravar = "none";
+    $esconderBtnGravar = "none";
 }
 
 /* ---------------- PHP Custom Scripts ---------
@@ -106,9 +106,10 @@ include("inc/nav.php");
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
+                                                                        <option></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
-                                                                        <option></option>
+
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>

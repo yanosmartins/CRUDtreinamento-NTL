@@ -274,10 +274,6 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/contratacao_gestorFiltro.php"));
         }
 
-        if (!in_array('CONTRATACAORH_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['contratacao']['sub'] += array("contratacoesRh" => array("title" => "Controle de Candidato", "url" => APP_URL . "/contratacao_controleCandidato.php"));
-        }
-
         if (!in_array('RECURSOSHUMANOS_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/contratacao_rhFiltro.php"));
         }

@@ -114,9 +114,9 @@ include("inc/nav.php");
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
+                                                                        <option></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
-                                                                        <option></option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
