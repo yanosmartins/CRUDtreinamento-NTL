@@ -69,7 +69,7 @@ function excluirControleFuncionario(id, callback) {
 
 function recuperaNomeCompleto(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroControleGestor.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_contratacaoControleCandidato.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'recuperaNomeCompleto', id: id }, //valores enviados ao script      

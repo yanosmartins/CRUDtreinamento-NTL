@@ -168,7 +168,7 @@ include("inc/nav.php");
                                                                     <select id="projeto" name="projeto">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM syscbNtl.syscb.projeto where ativo = 1 order by descricao";
+                                                                        $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by descricao";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
@@ -190,7 +190,7 @@ include("inc/nav.php");
                                                                     <select id="cargo" name="cargo" class="required">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigoCargoSCI AS codigo, descricao  FROM syscbNtl.syscb.cargo where ativo = 1 order by descricao";
+                                                                        $sql =  "SELECT codigoCargoSCI AS codigo, descricao  FROM Ntl.cargo where ativo = 1 order by descricao";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
@@ -231,7 +231,7 @@ include("inc/nav.php");
                                                                     <select id="sindicato" name="sindicato">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigoSindicatoSCI AS codigo, descricao, apelido FROM syscbNtl.syscb.sindicato where situacao = 1 order by codigo";
+                                                                        $sql =  "SELECT codigoSindicatoSCI AS codigo, descricao, apelido FROM Ntl.sindicato where situacao = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
@@ -298,7 +298,7 @@ include("inc/nav.php");
                                                                     <select id="escalaHorario" name="escalaHorario">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM syscc.dbo.escalas order by codigo";
+                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.escalas order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
@@ -347,7 +347,7 @@ include("inc/nav.php");
                                                                     <select id="classe" name="classe" class="required">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM syscc.dbo.classe order by codigo";
+                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.classe order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
@@ -640,61 +640,6 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
 
-                                                        <!-- <div class="row">
-
-                                                            <section class="col col-4">
-                                                                <label class="label " for="fk_banco">Banco</label>
-                                                                <label class="select">
-                                                                    <select id="fk_banco" name="fk_banco" class="readonly" readonly>
-                                                                        <option></option>
-                                                                        <?php
-                                                                        $reposit = new reposit();
-                                                                        $sql = "select * from dbo.banco order by nomeBanco";
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-
-                                                                            $codigo = $row['codigo'];
-                                                                            $codigoBanco = mb_convert_encoding($row['codigoBanco'], 'UTF-8', 'HTML-ENTITIES');
-                                                                            $nomeBanco = mb_convert_encoding($row['nomeBanco'], 'UTF-8', 'HTML-ENTITIES');
-                                                                            echo '<option value=' . $codigo . '>' . $codigoBanco . ' - ' . strtoupper($nomeBanco) . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
-
-                                                            <section class="col col-2">
-                                                                <label class="label">Agência</label>
-                                                                <label class="input">
-                                                                    <input id="agenciaBanco" name="agenciaBanco" maxlength="5" type="text" class="readonly" readonly value="" autocomplete="new-password" onchange="verificaNumero('#agenciaBanco')">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-1">
-                                                                <label class="label">Digito Agência</label>
-                                                                <label class="input">
-                                                                    <input id="digitoAgenciaBanco" name="digitoAgenciaBanco" maxlength="2" type="text" class="readonly" readonly value="" autocomplete="new-password" onchange="verificaNumero('#digitoAgenciaBanco')">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-1">
-                                                                <label class="label">Variação</label>
-                                                                <label class="input">
-                                                                    <input id="variacao" name="variacao" type="text" class="readonly" readonly autocomplete="new-password" maxlength="5">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">C/C</label>
-                                                                <label class="input">
-                                                                    <input id="contaCorrente" name="contaCorrente" type="text" class="readonly" readonly maxlength="13" value="" autocomplete="new-password" onchange="verificaNumero('#contaCorrente')">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-1">
-                                                                <label class="label">Digito Conta</label>
-                                                                <label class="input">
-                                                                    <input id="digitoContaBanco" name="digitoContaBanco" maxlength="2" type="text" class="readonly" readonly value="" autocomplete="new-password" onchange="verificaNumero('#digitoContaBanco')">
-                                                                </label>
-                                                            </section>
-
-                                                        </div> -->
 
                                                         <div class="row">
                                                             <section class="col col-4">
@@ -1339,7 +1284,7 @@ include("inc/nav.php");
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
-                                                                                $sql = "select * from dbo.banco order by nomeBanco";
+                                                                                $sql = "select codigo,codigoBanco,nomeBanco from Ntl.banco order by nomeBanco";
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 while (($row = odbc_fetch_array($result))) {
 
@@ -1521,7 +1466,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoControleCandidado.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoControleCandidato.js" type="text/javascript"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/businessUpload.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -1659,7 +1604,7 @@ include("inc/scripts.php");
             }
 
             if (condicaoDias) {
-                debugger;
+
                 if (moment.isMoment(dataAdmissao) == false) {
                     dataAdmissao = formataDataObjetoMoment(dataAdmissao);
                 }
@@ -2091,7 +2036,6 @@ include("inc/scripts.php");
                         $("#numeroSapato").val(numeroSapato);
                         $("#prazoDeterminado").val(prazoDeterminado);
                         $("#dataFinal").val(dataFinal);
-                        debugger;
                         $("#logradouro").val(logradouro);
                         $("#jsonFilho").val(strArrayFilho);
                         $("#jsonDependente").val(strArrayDependente);

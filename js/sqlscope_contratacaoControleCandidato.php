@@ -73,7 +73,7 @@ function grava()
     $horasSemanais = validaString($_POST['horasSemanais']);
     $horasDiarias = validaString($_POST['horasDiarias']);
     $formaPagamento = validaNumero($_POST['formaPagamento']);
-    $tipoFuncionario = validaNumero($_POST['tipoFuncionario']);
+    $tipoCandidato = validaNumero($_POST['tipoFuncionario']);
     $modoPagamento = validaNumero($_POST['modoPagamento']);
     $regimeJornadaTrabalho = validaNumero($_POST['regimeJornadaTrabalho']);
     $descansoSemanal = validaNumero($_POST['descansoSemanal']);
@@ -123,7 +123,7 @@ function grava()
         $horasSemanais,
         $horasDiarias,
         $formaPagamento,
-        $tipoFuncionario,
+        $tipoCandidato,
         $modoPagamento,
         $regimeJornadaTrabalho,
         $descansoSemanal,
@@ -137,7 +137,6 @@ function grava()
         $dataFinal
         )";
 
-    $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
     $ret = 'success';
@@ -181,10 +180,10 @@ function recupera()
     $out = "";
     if (($row = odbc_fetch_array($result)))
         $row = array_map('utf8_encode', $row);
-    $codigoFuncionario = $row['codigoFuncionario']; //id funcionario na tabela funcionario
-    $codigo = $row['codigo']; // id na tabela controle funcionario cadastro
+    $codigoCandidato = $row['codigoCandidato']; //id candidato na tabela candidato
+    $codigo = $row['codigo']; // id na tabela controle candidato cadastro
     $ativo = $row['ativo'];
-    $funcionario = $row['nomeFuncionario'];
+    $candidato = $row['nomeCandidato'];
     $tipoContrato = $row['tipoContrato'];
     $dataAdmissao = validaDataRecupera($row['dataAdmissao']);
     $projeto = $row['projeto'];
@@ -210,7 +209,7 @@ function recupera()
     $horasSemanais = $row['horasSemanais'];
     $horasDiarias = $row['horasDiarias'];
     $formaPagamento = $row['formaPagamento'];
-    $tipoFuncionario = $row['tipoFuncionario'];
+    $tipoCandidato = $row['tipoCandidato'];
     $modoPagamento = $row['modoPagamento'];
     $regimeJornadaTrabalho = $row['regimeJornadaTrabalho'];
     $descansoSemanal = $row['descansoSemanal'];
@@ -289,8 +288,8 @@ function recupera()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT FI.codigo, FI.funcionario, FI.nomeCompleto, FI.cpf, FI.dataNascimento FROM dbo.funcionarioFilho FI 
-     INNER JOIN dbo.funcionario F ON F.codigo = FI.funcionario WHERE (0=0) AND F.codigo = " . $codigoFuncionario;
+    $sql = "SELECT CF.codigo, CF.candidato, CF.nomeCompleto, CF.cpf, CF.dataNascimento FROM Contratacao.candidatoFilho CF 
+     INNER JOIN Contratacao.candidato C ON C.codigo = CF.candidato WHERE (0=0) AND C.codigo = " . $codigoCandidato;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
@@ -323,8 +322,8 @@ function recupera()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT FD.codigo, FD.funcionario, FD.nomeCompleto, FD.cpf, FD.dataNascimento,FD.grauParentescoDependente FROM dbo.funcionarioDependente FD 
-     INNER JOIN dbo.funcionario F ON F.codigo = FD.funcionario WHERE (0=0) AND F.codigo = " . $codigoFuncionario;
+    $sql = "SELECT CD.codigo, CD.candidato, CD.nomeCompleto, CD.cpf, CD.dataNascimento,CD.grauParentescoDependente FROM Contratacao.candidatoDependente CD 
+     INNER JOIN Contratacao.candidato C ON C.codigo = CD.candidato WHERE (0=0) AND C.codigo = " . $codigoCandidato;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
@@ -355,7 +354,7 @@ function recupera()
 
     $out =   $codigo . "^" .
         $ativo . "^" .
-        $funcionario . "^" .
+        $candidato . "^" .
         $tipoContrato . "^" .
         $dataAdmissao  . "^" .
         $projeto  . "^" .
@@ -380,7 +379,7 @@ function recupera()
         $horasSemanais  . "^" .
         $horasDiarias  . "^" .
         $formaPagamento  . "^" .
-        $tipoFuncionario  . "^" .
+        $tipoCandidato  . "^" .
         $modoPagamento  . "^" .
         $regimeJornadaTrabalho  . "^" .
         $descansoSemanal  . "^" .
@@ -470,7 +469,7 @@ function recuperaCbo()
         $id = +$_POST["id"];
     }
 
-    $sql = "SELECT cbo FROM syscbNtl.syscb.cargo WHERE (0=0) AND codigoCargoSCI = " . $id;
+    $sql = "SELECT cbo FROM Ntl.cargo WHERE (0=0) AND codigoCargoSCI = " . $id;
 
 
     $reposit = new reposit();
@@ -504,7 +503,7 @@ function verificaMatricula()
 
     $id = +$_POST["id"];
 
-    $sql = "SELECT matriculaSCI, codigo FROM dbo.controleFuncionario WHERE matriculaSCI = " . $matriculaSCI;
+    $sql = "SELECT matriculaSCI, codigo FROM Contratacao.controleCandidato WHERE matriculaSCI = " . $matriculaSCI;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -526,13 +525,13 @@ function excluir()
 {
 
     $reposit = new reposit();
-    // $possuiPermissao = $reposit->PossuiPermissao("CONVENIOSAUDE_ACESSAR|CONVENIOSAUDE_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("CONTRATACOESRH_ACESSAR|CONTRATACOESRH_EXCLUIR");
 
-    // if ($possuiPermissao === 0) {
-    //     $mensagem = "O usuário não tem permissão para excluir!";
-    //     echo "failed#" . $mensagem . ' ';
-    //     return;
-    // }
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
 
     $id = $_POST["id"];
 
@@ -542,7 +541,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('controleFuncionario' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->update('Contratacao.controleCandidato' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');
