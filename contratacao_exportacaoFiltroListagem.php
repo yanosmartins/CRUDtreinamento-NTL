@@ -27,8 +27,8 @@ include "js/repositorio.php";
                 LEFT JOIN Contratacao.candidato CC ON CC.codigo = CCC.candidato
                 LEFT JOIN Ntl.projeto NP ON NP.codigo = CCC.projeto
                 LEFT JOIN Ntl.cargo NC ON NC.codigo = CCC.cargo
-				LEFT JOIN Contratacao.exportacao CE ON CE.candidato = CC.codigo
-                WHERE CCC.verificadoPeloRh = 1 ";
+				LEFT JOIN Contratacao.exportacao CE ON CE.candidato = CC.codigo";
+                // WHERE CCC.verificadoPeloRh = 1 ";
                 $where = "AND (0 = 0) ";
 
 
@@ -57,7 +57,7 @@ include "js/repositorio.php";
                     $where = $where . "AND (ISNULL(E.situacao, 0) =" . $situacao . ")";
                 }
 
-                $sql .= $where;
+                // $sql .= $where;
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 

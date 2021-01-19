@@ -44,7 +44,7 @@ function exportar()
 
         gravarLogExportacao($arrayCandidatos[$i], $nomeArquivo);
 
-        $sql = "SELECT  F.nomeCompleto,
+        $sql = "SELECT  C.nomeCompleto,
 		CC.matriculaSCI,
 		CC.classe,
         C.paisNascimento,
