@@ -405,7 +405,7 @@ include("inc/nav.php");
                                                                     <select id="ferias" name="ferias" class="form-control">
                                                                         <option style="display:none;">Selecione</option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, percentual FROM Ntl.ferias  where ativo = 1  order by codigo";
+                                                                        $sql =  "SELECT codigo, percentual FROM Ntl.feriasTercoConstitucional  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
@@ -1564,7 +1564,7 @@ include("inc/scripts.php");
         var projeto = $("#projeto").val();
         var numeroPregao = $("#numeroPregao").val();
 
-        $("#btnGravar").prop('disabled', true);
+        // $("#btnGravar").prop('disabled', true);
 
         if (projeto=='Selecione' || projeto == '') {
             smartAlert("Erro", "Digite o projeto.", "error");
