@@ -298,7 +298,7 @@ include("inc/nav.php");
                                                                     <select id="escalaHorario" name="escalaHorario">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.escalas order by codigo";
+                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.escala order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         while (($row = odbc_fetch_array($result))) {
