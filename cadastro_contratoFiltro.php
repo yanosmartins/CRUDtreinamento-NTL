@@ -85,7 +85,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="projeto">Projeto</label>
                                                                 <label class="select">
                                                                     <select id="projeto" name="projeto" class="">
-                                                                        <option style="display:none;">Selecione</option>
+                                                                        <option style="display:none;"></option>
                                                                         <option></option>
                                                                         <?php
                                                                         $sql =  "SELECT P.codigo, P.numeroCentroCusto, P.descricao, P.apelido, C.projeto

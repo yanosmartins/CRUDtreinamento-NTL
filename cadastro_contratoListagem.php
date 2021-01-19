@@ -24,7 +24,7 @@ include "js/repositorio.php";
              
 
 
-                if ($projeto != "") {
+                if ($projeto != 0) {
 
                     $where = $where . " AND C.projeto = " . $projeto;
                 }

@@ -35,7 +35,7 @@ function grava()
 {
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";
-        $contrato = $_POST['contrato'];
+    $contrato = $_POST['contrato'];
     $codigo = +$contrato['codigo'];
     $projeto = +$contrato['projeto'];
     $numeroPregao  = "'" . $contrato['numeroPregao'] . "'";
