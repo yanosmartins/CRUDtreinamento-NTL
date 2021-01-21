@@ -22,7 +22,7 @@ return;
 function grava()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("BENEFICIOINDIRETO_ACESSAR|BENEFICIOINDIRETO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("CAUCAO_ACESSAR|CAUCAO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
