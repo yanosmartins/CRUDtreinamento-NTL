@@ -292,7 +292,7 @@ include("inc/scripts.php");
             type: 'post', //metodo de envio
             data: {
                 funcao: 'exportar',
-                checkboxComIdDosFuncionarios: checkboxComIdDosFuncionarios
+                checkboxComIdDosCandidatos: checkboxComIdDosFuncionarios
             },
             success: function(data) {
                 let valor = data.split("^");

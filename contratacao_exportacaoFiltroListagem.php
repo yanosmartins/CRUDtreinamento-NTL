@@ -23,12 +23,12 @@ include "js/repositorio.php";
                 $nomeBanco = "";
                 $codigoBanco = "";
 
-                $sql = "SELECT CC.codigo, CC.nomeCompleto AS nome, NP.descricao AS projeto, CC.cpf, NC.descricao AS cargo, CE.situacao FROM Contratacao.controleCandidato CCC
-                LEFT JOIN Contratacao.candidato CC ON CC.codigo = CCC.candidato
-                LEFT JOIN Ntl.projeto NP ON NP.codigo = CCC.projeto
-                LEFT JOIN Ntl.cargo NC ON NC.codigo = CCC.cargo
-				LEFT JOIN Contratacao.exportacao CE ON CE.candidato = CC.codigo";
-                // WHERE CCC.verificadoPeloRh = 1 ";
+                $sql = "SELECT C.codigo, C.nomeCompleto AS nome, P.descricao AS projeto, C.cpf, NC.descricao AS cargo, E.situacao FROM Contratacao.controleCandidato CC
+                LEFT JOIN Contratacao.candidato C ON C.codigo = CC.candidato
+                LEFT JOIN Ntl.projeto P ON P.codigo = CC.projeto
+                LEFT JOIN Ntl.cargo NC ON NC.codigo = CC.cargo
+				LEFT JOIN Contratacao.exportacao E ON E.candidato = C.codigo
+                WHERE CC.verificadoPeloRh = 1 ";
                 $where = "AND (0 = 0) ";
 
 
@@ -38,18 +38,18 @@ include "js/repositorio.php";
                 }
 
                 if ($_POST["nome"] != "") {
-                    $candidato = $_POST["nome"];
-                    $where = $where . " and (F.nomeCompleto like '%' + " . "replace('" . $candidato . "',' ','%') + " . "'%')";
+                    $funcionario = $_POST["nome"];
+                    $where = $where . " and (C.nomeCompleto like '%' + " . "replace('" . $funcionario . "',' ','%') + " . "'%')";
                 }
 
                 if ($_POST["cpf"] != "") {
                     $cpf = $_POST["cpf"];
-                    $where = $where . " and (F.cpf like '%' + " . "replace('" . $cpf . "',' ','%') + " . "'%')";
+                    $where = $where . " and (C.cpf like '%' + " . "replace('" . $cpf . "',' ','%') + " . "'%')";
                 }
 
                 if ($_POST["cargo"] != "") {
                     $cargo = $_POST["cargo"];
-                    $where = $where . " and (C.descricao like '%' + " . "replace('" . $cargo . "',' ','%') + " . "'%')";
+                    $where = $where . " and (NC.descricao like '%' + " . "replace('" . $cargo . "',' ','%') + " . "'%')";
                 }
 
                 if ($_POST["situacao"] != "") {
@@ -57,7 +57,7 @@ include "js/repositorio.php";
                     $where = $where . "AND (ISNULL(E.situacao, 0) =" . $situacao . ")";
                 }
 
-                // $sql .= $where;
+                $sql .= $where;
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 

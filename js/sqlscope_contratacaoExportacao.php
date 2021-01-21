@@ -16,14 +16,14 @@ function exportar()
 
     $reposit = new reposit(); //Abre a conexão.
 
-    $arrayCandidatos = $_POST['checkboxComIdDosFuncionarios']; //Recupera os ids dos funcionários para a exportação.
+    $arrayCodigoCandidatos = $_POST['checkboxComIdDosCandidatos']; //Recupera os ids dos funcionários para a exportação.
 
-    if ((empty($arrayCandidatos)) || (!isset($arrayCandidatos)) || (is_null($arrayCandidatos))) {
+    if ((empty($arrayCodigoCandidatos)) || (!isset($arrayCodigoCandidatos)) || (is_null($arrayCodigoCandidatos))) {
         echo "failed";
         return;
     }
 
-    $nomeArquivo = 'SYSCCPARASCI_' . date("Ymd_is") . '.txt'; //Nome do arquivo;  
+    $nomeArquivo = 'NTLPARASCI_' . date("Ymd_is") . '.txt'; //Nome do arquivo;  
 
     /*Verifica se o diretório com o endereço especificado existe,
     se não, ele cria e atribui permissões de leitura e gravação. */
@@ -40,9 +40,9 @@ function exportar()
 
     $arrayCandidatosExportacao = array();
 
-    for ($i = 0; $i < count($arrayCandidatos); $i++) {
+    for ($i = 0; $i < count($arrayCodigoCandidatos); $i++) {
 
-        gravarLogExportacao($arrayCandidatos[$i], $nomeArquivo);
+        gravarLogExportacao($arrayCodigoCandidatos[$i], $nomeArquivo);
 
         $sql = "SELECT  C.nomeCompleto,
 		CC.matriculaSCI,
@@ -130,123 +130,117 @@ function exportar()
         LEFT JOIN Contratacao.controleCandidato CC ON CC.candidato = C.codigo 
 		LEFT JOIN Ntl.projeto P ON CC.projeto = P.codigo
         LEFT JOIN Ntl.banco B ON C.fk_banco = B.codigo
-        WHERE CF.verificadoPeloRh = 1
-        AND (0=0) AND F.codigo = " . $arrayCandidatos[$i];
+        WHERE CC.verificadoPeloRh = 1
+        AND (0=0) AND C.codigo = " . $arrayCodigoCandidatos[$i];
 
         $result = $reposit->RunQuery($sql);
-        if (($row = odbc_fetch_array($result)))
-            $row = array_map('utf8_encode', $row);
+        if ($row = odbc_fetch_array($result)) {
 
-        //Recuperação do Banco..
-        $nomeCompleto = $row['nomeCompleto'];
-        $matricula = $row['matriculaSCI'];
-        $classe = $row['classe'];
-        $endereco = $row['endereco'];
-        $numeroEndereco = $row['numero'];
-        $bairro = $row['bairro'];
-        $complemento = $row['complemento'];
-        $uf = $row['estado'];
-        $municipioNascimento = $row['municipioNascimento']; //Cidade de Nascimento -> É recuperado como código.
-        $codigoMunicipioNascimento = $municipioNascimento;
-        $ufNascimento = $row['ufNascimento']; //UfNascimento -> É recuperado como código primeiro. 
-        $paisNascimento = $row['paisNascimento'];
+            $nomeCompleto =                 $row['nomeCompleto'];
+            $matricula =                    $row['matriculaSCI'];
+            $classe =                       $row['classe'];
+            $endereco =                     $row['endereco'];
+            $numeroEndereco =               $row['numero'];
+            $bairro =                       $row['bairro'];
+            $complemento =                  $row['complemento'];
+            $uf =                           $row['estado'];
+            $municipioNascimento =          $row['municipioNascimento'];
+            $codigoMunicipioNascimento =    $municipioNascimento;
+            $ufNascimento =                 $row['ufNascimento']; //UfNascimento -> É recuperado como código primeiro. 
+            $paisNascimento =               $row['paisNascimento'];
+            $sexo =                         $row['sexo'];
+            $estadoCivil =                  $row['estadoCivil'];
+            $grauInstrucao =                $row['grauInstrucao'];
+            $telefoneResidencial =          $row['telefoneResidencial'];
+            $telefoneCelular =              $row['telefoneCelular'];
+            $email =                        $row['email'];
+            $codigoBanco =                  $row['codigoBanco'];
+            $agenciaBanco =                 $row['agenciaBanco'];
+            $nomeConjuge =                  $row['nomeConjuge'];
+            $rg =                           $row['rg'];
+            $localRg =                      $row['localRg'];
+            $emissorRg =                    $row['emissorRg'];
+            $cnh =                          $row['cnh'];
+            $categoriaCnh =                +$row['categoriaCnh'];
+            $dataEmissaoCnh =               $row['dataEmissaoCnh'];
+            $dataVencimentoCnh =            $row['dataVencimentoCnh'];
+            $primeiraCnh =                  $row['primeiraCnh'];
+            $carteiraTrabalhoSerie =        $row['carteiraTrabalhoSerie'];
+            $localCarteiraTrabalho =        $row['localCarteiraTrabalho'];
+            $cep =                          $row['cep'];
+            $cpf =                          $row['cpf'];
+            $pis =                          $row['pis'];
+            $tituloEleitor =                $row['tituloEleitor'];
+            $secaoTituloEleitor =           $row['secaoTituloEleitor'];
+            $zonaTituloEleitor =            $row['zonaTituloEleitor'];
+            $cidade =                       $row['cidade'];
+            $estado =                       $row['estado'];
+            $nacionalidade =                $row['nacionalidade'];
+            $carteiraTrabalho =             $row['carteiraTrabalho'];
+            $centroCusto =                 +$row['numeroCentroCusto'];
+            $dataNascimento =               $row['dataNascimento'];
+            $dataAdmissao =                 $row['dataAdmissao'];
+            $naturezaOcupacao =             $row['naturezaOcupacao'];
+            $sindicato =                    $row['sindicato'];
+            $formaPagamento =               $row['formaPagamento'];
+            $tipoPagamento =                $row['tipoCandidato'];
+            $horasMensais =                 $row['horasMensais'];
+            $horasSemanais =                $row['horasSemanais'];
+            $horasDiarias =                 $row['horasDiarias'];
+            $salarioBase =                  $row['salarioBase'];
+            $quantidadeDiasExperiencia =    $row['quantidadeDiasExperiencia'];
+            $quantidadeDiasProrrogacao =    $row['quantidadeDiasProrrogacao'];
+            $cbo =                          $row['cbo'];
+            $cargo =                        $row['cargoSelecionado'];
+            $primeiroEmprego =             +$row['tipoAdmissao'];
+            $vinculoEmpregaticio =          $row['vinculoEmpregaticio'];
+            $nomePai =                      $row['nomePai'];
+            $nomeMae =                      $row['nomeMae'];
+            $dataEmissaoRg =                $row['dataEmissaoRg'];
+            $ufCnh =                        $row['ufCnh'];
+            $logradouro =                   $row['logradouro'];
+            $racaCor =                     +$row['racaCor'];
+            $indicativoAdmissao =          +$row['indicativoAdmissao'];
+            $tipoContrato =                +$row['tipoContrato'];
+            $dataFinal =                    $row['dataFinal'];
+            $municipioNascimentoConjuge =   $row['municipioNascimentoConjuge'];
+            $fgtsGpsCategoriaSefip =        $row['fgtsGpsCategoriaSefip'];
+            $ufNascimentoConjuge =          $row['ufNascimentoConjuge'];
+            $dataNascimentoConjuge =        $row['dataNascimentoConjuge'];
+            $fgtsGpsCategoriaESocial =      $row['fgtsGpsCategoriaESocial'];
+            $contaCorrente =                $row['contaCorrente'];
+            $digitoContaBanco =            +$row['digitoContaBanco'];
+            $tipoConta =                   +$row['tipoConta'];
+            $regimeJornadaTrabalho =        $row['regimeJornadaTrabalho'];
+            $tipoEscala =                  +$row['tipoEscala'];
+            $escalaHorario =                $row['escalaHorario'];
+            $descansoSemanal =             +$row['descansoSemanal'];
+            $tipoJornadaESocial =          +$row['tipoJornadaESocial'];
+            $dataExpedicaoCarteiraTrabalho = $row['dataExpedicaoCarteiraTrabalho'];
+            $dataInicioRevezamento =        $row['dataInicioRevezamento'];
+            $tipoRevezamento =             +$row['tipoRevezamento'];
 
-        //Arruma os valores conectando com a API do IBGE
-        $arrayIbge = conectarIbge($ufNascimento, $municipioNascimento);
-        $ufNascimento = $arrayIbge[0];
-        $naturalidade = $ufNascimento;
-        $municipioNascimento = $arrayIbge[1];
-        $sexo = $row['sexo'];
-        $sexo = getSexo($sexo);
-        $estadoCivil = $row['estadoCivil'];
-        $grauInstrucao = $row['grauInstrucao'];
-        $telefoneResidencial = $row['telefoneResidencial'];
-        $dddTelefoneResidencial = explode(" ", $telefoneResidencial);
-        $telefoneResidencial = $dddTelefoneResidencial[1];
-        $dddTelefoneResidencial = $dddTelefoneResidencial[0];
-        $telefoneCelular = $row['telefoneCelular'];
-        $dddTelefoneCelular = explode(" ", $telefoneCelular);
-        $telefoneCelular = $dddTelefoneCelular[1];
-        $dddTelefoneCelular = $dddTelefoneCelular[0];
-        $email = $row['email'];
-        $codigoBanco = $row['codigoBanco'];
-        $agenciaBanco = $row['agenciaBanco'];
-        $agenciaJuntoComBanco = $codigoBanco . $agenciaBanco;
-        $nomeConjuge = $row['nomeConjuge'];
-        $rg = $row['rg'];
-        $localRg = $row['localRg'];
-        $emissorRg = $row['emissorRg'];
-        $cnh = $row['cnh'];
-        $categoriaCnh = +$row['categoriaCnh'];
-        $dataEmissaoCnh = $row['dataEmissaoCnh'];
-        $dataVencimentoCnh = $row['dataVencimentoCnh'];
-        $primeiraCnh = $row['primeiraCnh'];
-        $carteiraTrabalhoSerie = $row['carteiraTrabalhoSerie'];
-        $localCarteiraTrabalho = $row['localCarteiraTrabalho'];
-        $cep = $row['cep'];
-        $cpf = $row['cpf'];
-        $pis = $row['pis'];
-        $tituloEleitor = $row['tituloEleitor'];
-        $secaoTituloEleitor = $row['secaoTituloEleitor'];
-        $zonaTituloEleitor = $row['zonaTituloEleitor'];
-        $cidade = $row['cidade'];
-        $estado = $row['estado'];
-        $nacionalidade = $row['nacionalidade'];
-        $dataChegadaBrasil = '';
-        $carteiraTrabalho = $row['carteiraTrabalho'];
-        $centroCusto = +$row['numeroCentroCusto'];
-        $departamento = ""; //Fica vazio.
-        $dataNascimento = $row['dataNascimento'];
-        $dataNascimento = verificaDatetime($dataNascimento);
-        $dataAdmissao = $row['dataAdmissao'];
-        $naturezaOcupacao = $row['naturezaOcupacao'];
-        $contaFgts = "";
-        $sindicato = $row['sindicato'];
-        $formaPagamento = $row['formaPagamento'];
-        $tipoPagamento = $row['tipoCandidato'];
-        $horasMensais = $row['horasMensais'];
-        $horasSemanais = $row['horasSemanais'];
-        $horasDiarias = $row['horasDiarias'];
-        $salarioBase = $row['salarioBase'];
-        $salarioBase = round($salarioBase, PHP_ROUND_HALF_EVEN);
-        $quantidadeDiasExperiencia = $row['quantidadeDiasExperiencia'];
-        $quantidadeDiasProrrogacao = $row['quantidadeDiasProrrogacao'];
-        $cbo = $row['cbo'];
-        $cargo = $row['cargoSelecionado'];
-        $primeiroEmprego = +$row['tipoAdmissao'];
-        $vinculoEmpregaticio = $row['vinculoEmpregaticio'];
-        $nomePai = $row['nomePai'];
-        $nomeMae = $row['nomeMae'];
-        $nomeSocial = " ";
-        $logradouro = $row['logradouro'];
-        $racaCor = +$row['racaCor'];
-        $indicativoAdmissao = +$row['indicativoAdmissao'];
-        $tipoContrato = +$row['tipoContrato'];
-        $dataFinal = $row['dataFinal'];
-        $dataFinal = verificaDatetime($dataFinal);
-        $dataEmissaoRg = $row['dataEmissaoRg'];
-        $ufCnh = $row['ufCnh'];
-        $municipioNascimentoConjuge = $row['municipioNascimentoConjuge'];
-        $fgtsGpsCategoriaSefip = $row['fgtsGpsCategoriaSefip'];
-        $ufNascimentoConjuge = $row['ufNascimentoConjuge'];
-        $arrayIbgeConjuge = conectarIbge($ufNascimentoConjuge, $municipioNascimentoConjuge);
-        $ufNascimentoConjuge = $arrayIbgeConjuge[0];
-        $dataNascimentoConjuge = $row['dataNascimentoConjuge'];
-        $dataNascimentoConjuge = verificaDatetime($dataNascimentoConjuge);
-        $fgtsGpsCategoriaESocial = $row['fgtsGpsCategoriaESocial'];
-        $contaCorrente = $row['contaCorrente'];
-        $digitoContaBanco = +$row['digitoContaBanco'];
-        $tipoConta = +$row['tipoConta'];
-        $modoPagamento = "";
-        $regimeJornadaTrabalho = $row['regimeJornadaTrabalho'];
-        $tipoEscala = +$row['tipoEscala'];
-        $escalaHorario = $row['escalaHorario'];
-        $descansoSemanal = +$row['descansoSemanal'];
-        $tipoJornadaESocial = +$row['tipoJornadaESocial'];
-        $dataExpedicaoCarteiraTrabalho = $row['dataExpedicaoCarteiraTrabalho'];
-        $dataEmissaoPis = "";
-        $dataInicioRevezamento = $row['dataInicioRevezamento'];
-        $tipoRevezamento = +$row['tipoRevezamento'];
+            //Arruma os valores conectando com a API do IBGE
+            $arrayIbge = conectarIbge($ufNascimento, $codigoMunicipioNascimento);
+            $ufNascimento = $arrayIbge[0];
+            $naturalidade = $ufNascimento;
+            $municipioNascimento = $arrayIbge[1];
+            $sexo = getSexo($sexo);
+            $dddTelefoneResidencial = explode(" ", $telefoneResidencial);
+            $telefoneResidencial = $dddTelefoneResidencial[1];
+            $dddTelefoneResidencial = $dddTelefoneResidencial[0];
+            $dddTelefoneCelular = explode(" ", $telefoneCelular);
+            $telefoneCelular = $dddTelefoneCelular[1];
+            $dddTelefoneCelular = $dddTelefoneCelular[0];
+            $agenciaJuntoComBanco = $codigoBanco . $agenciaBanco;
+            $dataChegadaBrasil = '';
+            $departamento = ""; //Fica vazio.
+            $contaFgts = "";
+            $salarioBase = round($salarioBase, PHP_ROUND_HALF_EVEN);
+            $nomeSocial = " ";
+            $modoPagamento = "";
+            $dataEmissaoPis = "";
+        }
 
         $arrayCandidatosExportacaoTemp = array(
             "nome" => $nomeCompleto,
@@ -282,6 +276,12 @@ function exportar()
         $primeiraCnh = verificaDatetime($primeiraCnh);
         $dataExpedicaoCarteiraTrabalho = verificaDatetime($dataExpedicaoCarteiraTrabalho);
         $dataInicioRevezamento = verificaDatetime($dataInicioRevezamento);
+        $dataNascimentoConjuge = verificaDatetime($dataNascimentoConjuge);
+        $dataFinal = verificaDatetime($dataFinal);
+        $dataNascimento = verificaDatetime($dataNascimento);
+
+        $arrayIbgeConjuge = conectarIbge($ufNascimentoConjuge, $municipioNascimentoConjuge);
+        $ufNascimentoConjuge = $arrayIbgeConjuge[0];
 
         array_push($arrayCandidatosExportacao, $arrayCandidatosExportacaoTemp);
 
@@ -579,7 +579,7 @@ function exportar()
 
     $xmlCandidatosExportacao = "'" . $xmlCandidatosExportacao . "'";
 
-    $sql = "Contratacao.exportacao_Atualiza(0,$xmlCandidatosExportacao)";
+    $sql = "Contratacao.exportacao_Atualiza(codigo,nome,sexo,cpf,pisPasep,rg,ufIdentidade,orgaoEmissorRg,dataEmissaoRG,cnh,categoriaCNH,dataEmissaoCNH,dataVencimentoCNH,primeiraHabilitacaoCNH,numeroCarteiraTrabalho,serieCarteiraTrabalho,ufCarteiraTrabalho,cep,logradouro,numeroLogradouro,complemento,ufLogradouro,cargo,xmlTelefone,xmlEmail)";
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 

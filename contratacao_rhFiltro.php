@@ -87,7 +87,7 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <div class="row">
                                                             <section class="col col-4">
-                                                                <label class="label">Funcionario</label>
+                                                                <label class="label">Candidato</label>
                                                                 <label class="input">
                                                                     <input id="nome" maxlength="100" name="nome" type="text" value="">
                                                                 </label>

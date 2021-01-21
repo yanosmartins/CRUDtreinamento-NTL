@@ -267,7 +267,7 @@ if ($condicaoOperacaoOk) {
         $page_nav['operacao']['sub']['contratacao']['sub'] = array();
 
         if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
+            $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Triagem", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
         }
 
         if (!in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {
