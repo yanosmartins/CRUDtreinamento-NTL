@@ -100,9 +100,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
 
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $id = +$row['codigo'];
-                                                                            $login = mb_convert_encoding($row['login'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $id = (int) $row['codigo'];
+                                                                            $login = $row['login'];
 
                                                                             echo '<option value=' . $id . '>' . $login . '</option>';
                                                                         }
@@ -122,9 +122,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->SelectCond($tabela1 . "|" . $arg . "");
 
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $id = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $id = (int) $row['codigo'];
+                                                                            $descricao = $row['descricao'];
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>

@@ -18,8 +18,8 @@ include "js/repositorio.php";
 
 
                 $where = " WHERE (0=0) ";
-                $projeto = +$_GET["projeto"];
-                $descricaoPosto = +$_GET["descricaoPosto"];
+                $projeto = (int) $_GET["projeto"];
+                $descricaoPosto = (int) $_GET["descricaoPosto"];
                 
                 
                 
@@ -47,14 +47,14 @@ include "js/repositorio.php";
                 $sql = $sql . $where;
 
                 $result = $reposit->RunQuery($sql);
-                while (($row = odbc_fetch_array($result))) {
+                foreach($result as $row) {
                    
-                    $codigo = +$row['codigo'];
-                    $projeto = mb_convert_encoding($row['descricaoProjeto'], 'UTF-8', 'HTML-ENTITIES');
-                    $valor = +$row['valor'];
+                    $codigo = (int) $row['codigo'];
+                    $projeto = $row['descricaoProjeto'];
+                    $valor = (float) $row['valor'];
                     $valor = str_replace('.', ',', $valor);
 
-                    $descricaoPosto = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                    $descricaoPosto = $row['descricao'];
                     
                     
                     echo '<tr >';

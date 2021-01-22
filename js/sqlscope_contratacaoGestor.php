@@ -42,8 +42,8 @@ function grava()
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
 
-        if (($row = odbc_fetch_array($result)))
-            $row = array_map('utf8_encode', $row);
+        if($row = $result[0])
+
         $candidato = validaNumero($row['codigo']);
     }
 
@@ -70,7 +70,7 @@ function grava()
         $verificadoPeloGestor = 0;
     }
 
-    $sql = "Contratacao.controleGestor_Atualiza( 
+    $sql = "Contratacao.controleGestor_Atualiza 
         $codigo,
         $candidato,
         $tipoContrato,
@@ -90,7 +90,7 @@ function grava()
         $usuario,
         $dataFinal, 
         $ativo
-        )";
+        ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -111,7 +111,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = " SELECT F.codigo as codigoCandidato,CF.codigo, F.nomeCompleto as nomeCandidato, 
@@ -132,8 +132,8 @@ function recupera()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $codigoCandidato = $row['codigoCandidato']; //id Candidato na tabela Candidato
     $codigo = $row['codigo']; // id na tabela controle Candidato cadastro
     $nomeCompleto = $row['nomeCandidato'];
@@ -223,9 +223,9 @@ function recupera()
 
     $contadorFilho = 0;
     $arrayFilho = array();
-    while ($row = odbc_fetch_array($result)) {
+    foreach($result as $row) {
 
-        $nomeCompletoFilho = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
+        $nomeCompletoFilho = $row['nomeCompleto'];
         $cpfFilho = $row['cpf'];
         $dataNascimentoFilho = validaDataRecupera($row['dataNascimento']);
 
@@ -257,8 +257,8 @@ function recupera()
 
     $contadorDependente = 0;
     $arrayDependente = array();
-    while ($row = odbc_fetch_array($result)) {
-        $nomeCompletoDependente = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
+    foreach($result as $row) {
+        $nomeCompletoDependente = $row['nomeCompleto'];
         $cpfDependente = $row['cpf'];
         $dataNascimentoDependente = validaDataRecupera($row['dataNascimento']);
         $grauParentescoDependente = $row['grauParentescoDependente'];
@@ -368,7 +368,7 @@ function recuperaValores()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT * FROM Contratacao.candidato WHERE (0=0) AND codigo = " . $id;
@@ -377,8 +377,8 @@ function recuperaValores()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
 
     $nomeCompleto = $row['nomeCompleto'];
     $dataNascimento = validaDataRecupera($row['dataNascimento']);
@@ -452,9 +452,9 @@ function recuperaValores()
 
     $contadorFilho = 0;
     $arrayFilho = array();
-    while ($row = odbc_fetch_array($result)) {
+    foreach($result as $row) {
 
-        $nomeCompletoFilho = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
+        $nomeCompletoFilho = $row['nomeCompleto'];
         $cpfFilho = $row['cpf'];
         $dataNascimentoFilho = validaDataRecupera($row['dataNascimento']);
 
@@ -484,8 +484,8 @@ function recuperaValores()
 
     $contadorDependente = 0;
     $arrayDependente = array();
-    while ($row = odbc_fetch_array($result)) {
-        $nomeCompletoDependente = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
+    foreach($result as $row) {
+        $nomeCompletoDependente = $row['nomeCompleto'];
         $cpfDependente = $row['cpf'];
         $dataNascimentoDependente = validaDataRecupera($row['dataNascimento']);
         $grauParentescoDependente = $row['grauParentescoDependente'];
@@ -580,7 +580,7 @@ function recuperaCbo()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT cbo FROM Ntl.cargo WHERE (0=0) AND codigoCargoSCI = " . $id;
@@ -590,8 +590,8 @@ function recuperaCbo()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $cbo = $row['cbo'];
 
     $out =   $cbo;

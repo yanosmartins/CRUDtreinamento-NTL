@@ -281,7 +281,7 @@ include("inc/scripts.php");
                 "class": "btn btn-success",
                 click: function() {
                     $(this).dialog("close");
-                    excluir();
+                    excluirDecimoTerceiro();
                 }
             }, {
                 html: "<i class='fa fa-times'></i>&nbsp; Cancelar",

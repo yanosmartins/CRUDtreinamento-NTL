@@ -44,13 +44,13 @@ function grava()
     if ((empty($_POST['id'])) || (!isset($_POST['id'])) || (is_null($_POST['id']))) {
         $id = 0;
     } else {
-        $id = formatarNumero(+$_POST["id"]);
+        $id = formatarNumero((int) $_POST["id"]);
     }
 
     if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
         $ativo = 0;
     } else {
-        $ativo = formatarNumero(+$_POST["ativo"]);
+        $ativo = formatarNumero((int) $_POST["ativo"]);
     }
 
     session_start();
@@ -60,21 +60,21 @@ function grava()
     $cidade = formatarString($_POST['cidade']);
 
     //Quantidades de dias do mês.  Todos são números.
-    $quantidadeDiaJaneiro = formatarNumero(+$_POST['qtdDiasJaneiro']);
-    $quantidadeDiaFevereiro = formatarNumero(+$_POST['qtdDiasFevereiro']);
-    $quantidadeDiaMarco = formatarNumero(+$_POST['qtdDiasMarco']);
-    $quantidadeDiaAbril = formatarNumero(+$_POST['qtdDiasAbril']);
-    $quantidadeDiaMaio = formatarNumero(+$_POST['qtdDiasMaio']);
-    $quantidadeDiaJunho = formatarNumero(+$_POST['qtdDiasJunho']);
-    $quantidadeDiaJulho = formatarNumero(+$_POST['qtdDiasJulho']);
-    $quantidadeDiaAgosto = formatarNumero($_POST['qtdDiasAgosto']);
-    $quantidadeDiaSetembro = formatarNumero(+$_POST['qtdDiasSetembro']);
-    $quantidadeDiaOutubro = formatarNumero(+$_POST['qtdDiasOutubro']);
-    $quantidadeDiaNovembro = formatarNumero(+$_POST['qtdDiasNovembro']);
-    $quantidadeDiaDezembro = formatarNumero(+$_POST['qtdDiasDezembro']);
+    $quantidadeDiaJaneiro = formatarNumero((int) $_POST['qtdDiasJaneiro']);
+    $quantidadeDiaFevereiro = formatarNumero((int) $_POST['qtdDiasFevereiro']);
+    $quantidadeDiaMarco = formatarNumero((int) $_POST['qtdDiasMarco']);
+    $quantidadeDiaAbril = formatarNumero((int) $_POST['qtdDiasAbril']);
+    $quantidadeDiaMaio = formatarNumero((int) $_POST['qtdDiasMaio']);
+    $quantidadeDiaJunho = formatarNumero((int) $_POST['qtdDiasJunho']);
+    $quantidadeDiaJulho = formatarNumero((int) $_POST['qtdDiasJulho']);
+    $quantidadeDiaAgosto = formatarNumero((int) $_POST['qtdDiasAgosto']);
+    $quantidadeDiaSetembro = formatarNumero((int) $_POST['qtdDiasSetembro']);
+    $quantidadeDiaOutubro = formatarNumero((int) $_POST['qtdDiasOutubro']);
+    $quantidadeDiaNovembro = formatarNumero((int) $_POST['qtdDiasNovembro']);
+    $quantidadeDiaDezembro = formatarNumero((int) $_POST['qtdDiasDezembro']);
 
 
-    $sql = "Ntl.diasUteisPorMunicipio_Atualiza(" . $id . "," .
+    $sql = "Ntl.diasUteisPorMunicipio_Atualiza " . $id . "," .
         $ativo . "," .
         $unidadeFederacao . "," .
         $municipio .  "," .
@@ -91,7 +91,7 @@ function grava()
         $quantidadeDiaOutubro . "," .
         $quantidadeDiaNovembro  . "," .
         $quantidadeDiaDezembro . "," .
-        $usuario . ") ";
+        $usuario . " ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -138,11 +138,11 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
-        $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
+        $unidadeFederacao = $row['unidadeFederacao'];
         $municipio = $row['municipio'];
-        $cidade = mb_convert_encoding($row['cidade'], 'UTF-8', 'HTML-ENTITIES');
+        $cidade = $row['cidade'];
         $ativo = +$row['ativo'];
         $quantidadeDiaJaneiro = +$row['quantidadeDiaJaneiro'];
         $quantidadeDiaFevereiro = +$row['quantidadeDiaFevereiro'];
@@ -156,7 +156,7 @@ function recupera()
         $quantidadeDiaOutubro = +$row['quantidadeDiaOutubro'];
         $quantidadeDiaNovembro = +$row['quantidadeDiaNovembro'];
         $quantidadeDiaDezembro = +$row['quantidadeDiaDezembro'];
-        $nomeMunicipio = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+        $nomeMunicipio = $row['descricao'];
 
         $out = $id . "^" .
             $unidadeFederacao . "^" .
@@ -231,9 +231,9 @@ function listaComboMunicipio()
     $out = "";
     $contador = 0;
 
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
-        $municipio = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+        $municipio = $row['descricao'];
 
         $out = $out . $id . "^" . $municipio . "|";
         $contador = $contador + 1;

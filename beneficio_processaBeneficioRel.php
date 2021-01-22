@@ -14,7 +14,7 @@ if ((empty($_GET["id"])) || (!isset($_GET["id"])) || (is_null($_GET["id"]))) {
     echo "failed#" . $mensagem . ' ';
     return;
 } else {
-    $id = +$_GET["id"];
+    $id = (int) $_GET["id"];
 }
 
 $sql = "SELECT * , P.descricao as projetoDescricao , S.descricao as sindicatoDescricao, S.apelido as siglaSindicato, F.nome as funcionarioNome FROM syscb.beneficioProjeto as BP 
@@ -28,14 +28,14 @@ WHERE BP.codigo = " . $id;
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
 
 
-        $projeto =  mb_convert_encoding($row['projetoDescricao'], 'UTF-8', 'HTML-ENTITIES');
-        $funcionario = mb_convert_encoding($row['funcionarioNome'], 'UTF-8', 'HTML-ENTITIES');
+        $projeto =  $row['projetoDescricao'];
+        $funcionario = $row['funcionarioNome'];
         $tipoDiaUtil = validaNumeroRecupera($row['tipoDiaUtil']);
         $sindicatoSigla = validaNumeroRecupera($row['siglaSindicato']); 
-        $sindicato = mb_convert_encoding($row['sindicatoDescricao'], 'UTF-8', 'HTML-ENTITIES');
+        $sindicato = $row['sindicatoDescricao'];
         $salarioFuncionario = validaNumeroRecupera($row['salarioFuncionario']);
 
         $percentualDescontoProjetoVR = validaNumeroRecupera($row['percentualDescontoProjetoVR']);
@@ -145,15 +145,15 @@ WHERE BP.codigo = " . $id;
 
         $contadorPlanoSaude = 0;
         $arrayPlanoSaude = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
 
 
 
             $funcionarioPlanoSaude = $funcionario;
             $convenio = $row['apelido'];
-            $cobranca = +$row['cobranca'];
-            $idade = +$row['idade'];
+            $cobranca = (int) $row['cobranca'];
+            $idade = (int) $row['idade'];
 
             $produto = $row['produtoDescricao'];
 
@@ -185,7 +185,7 @@ WHERE BP.codigo = " . $id;
             $valorDescontoPlanoSaude = $row['valorDescontoPlanoSaude'];
             $valorDescontoPlanoSaude = str_replace('.', ',', $valorDescontoPlanoSaude);
 
-            $baseDescontoTitular = +$row['baseDesconto'];
+            $baseDescontoTitular = (float) $row['baseDesconto'];
 
             $contadorPlanoSaude = $contadorPlanoSaude + 1;
             $arrayPlanoSaude[] = array(
@@ -223,18 +223,18 @@ WHERE BP.codigo = " . $id;
 
         $contadorPlanoSaudeDependente = 0;
         $arrayPlanoSaudeDependente = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
 
 
 
-            $dependentePlanoSaude = +$row['dependente'];
-            $convenio = +$row['convenio'];
-            $cobranca = +$row['cobranca'];
-            $idade = +$row['idade'];
 
-            $produto = +$row['produto'];
-            $baseDescontoDependente = +$row['baseDesconto'];
+            $dependentePlanoSaude = (int) $row['dependente'];
+            $convenio = (int) $row['convenio'];
+            $cobranca = (int) $row['cobranca'];
+            $idade = (int) $row['idade'];
+
+            $produto = (int) $row['produto'];
+            $baseDescontoDependente = (float) $row['baseDesconto'];
 
             $percentualDescontoSindicato = $row['percentualDescontoSindicato'];
             $percentualDescontoSindicato = str_replace('.', ',', $percentualDescontoSindicato);
@@ -295,11 +295,11 @@ WHERE BP.codigo = " . $id;
 
         $contadorVT = 0;
         $arrayVT = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
             $beneficioProjetoId = $row['beneficioProjeto'];
-            $trajetoIdaVolta = +$row['trajetoIdaVolta'];
-            $tipoDesconto = +$row['tipoDesconto'];
+            $trajetoIdaVolta = (int) $row['trajetoIdaVolta'];
+            $tipoDesconto = (int) $row['tipoDesconto'];
             if ($tipoDesconto == 1) {
                 $descricaoTipoDesconto = "Conforme a lei";
             } else if ($tipoDesconto == 2) {
@@ -309,13 +309,13 @@ WHERE BP.codigo = " . $id;
             }
 
 
-            $tipoVale = +$row['tipoVale']; //
+            $tipoVale = (int) $row['tipoVale']; //
             if ($tipoVale == 0) {
                 $descricaoTipoVale = "Modal";
             } else if ($tipoVale == 1) {
                 $descricaoTipoVale = "Unitário";
             }
-            $trajeto = +$row['trajeto']; //
+            $trajeto = (int) $row['trajeto']; //
             if ($trajeto == 1) {
                 $descricaoTrajeto =  "Ida";
             } else if ($trajeto == 2) {
@@ -333,7 +333,7 @@ WHERE BP.codigo = " . $id;
             }
 
             $observacaoVT = $row['observacao'];
-            $codigoVT = +$row['transporte'];
+            $codigoVT = (int) $row['transporte'];
 
 
 
@@ -342,8 +342,8 @@ WHERE BP.codigo = " . $id;
                 $sql = "SELECT codigo, descricao FROM syscb.valeTransporteModal WHERE codigo =  " . $codigoVT;
                 $reposit = new reposit();
                 $result2 = $reposit->RunQuery($sql);
-                if ($row = odbc_fetch_array($result2)) {
-                    $row = array_map('utf8_encode', $row);
+                if($row = $result2[0]) {
+
                     $descricaoVT = $row['descricao'];
                 }
             } else {
@@ -351,8 +351,8 @@ WHERE BP.codigo = " . $id;
                 $sql = "SELECT codigo, descricao FROM syscb.valeTransporteUnitario WHERE codigo =  " . $codigoVT;
                 $reposit = new reposit();
                 $result2 = $reposit->RunQuery($sql);
-                if ($row = odbc_fetch_array($result2)) {
-                    $row = array_map('utf8_encode', $row);
+                if($row = $result2[0]) {
+
                     $descricaoVT = $row['descricao'];
                 }
             }
@@ -391,8 +391,8 @@ WHERE BP.codigo = " . $id;
 
         $contadorBeneficioDireto = 0;
         $arrayBeneficioIndireto = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
 
 
             $valorBeneficioFuncionario = $row['valorBeneficioFuncionario'];
@@ -407,7 +407,7 @@ WHERE BP.codigo = " . $id;
             $valorFinalBeneficio = $row['valorFinalBeneficio'];
             $valorFinalBeneficio = str_replace('.', ',', $valorFinalBeneficio);
 
-            $beneficio = +$row['beneficio']; //
+            $beneficio = (int) $row['beneficio']; //
             
 
 

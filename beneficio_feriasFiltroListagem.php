@@ -79,16 +79,16 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $funcionario = mb_convert_encoding($row['funcionario'], 'UTF-8', 'HTML-ENTITIES');
-                    $dataInicio = mb_convert_encoding($row['dataInicio'], 'UTF-8', 'HTML-ENTITIES');
-                    $dataFim = mb_convert_encoding($row['dataFim'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $funcionario = $row['funcionario'];
+                    $dataInicio = $row['dataInicio'];
+                    $dataFim = $row['dataFim'];
 
                     $dataInicioFormatada = date('d/m/Y', strtotime($dataInicio));
                     $dataFim = date('d/m/Y', strtotime($dataFim));
 
-                    $ativo = +$row['ativo'];
+                    $ativo = (int) $row['ativo'];
 
                     if ($ativo == 1) {
                         $ativo = "Sim";
@@ -100,7 +100,7 @@ include "js/repositorio.php";
                     $mesAno = explode("-", $mesAno);
                     $mesAno = $mesAno[1] . "/" . $mesAno[0];
 
-                    $projeto = mb_convert_encoding($row['nomeProjeto'], 'UTF-8', 'HTML-ENTITIES');
+                    $projeto = $row['nomeProjeto'];
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="beneficio_feriasCadastro.php?codigo=' . $id . '">' . $funcionario . '</a></td>';

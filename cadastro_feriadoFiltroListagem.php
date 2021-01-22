@@ -85,14 +85,14 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $tipoFeriado = mb_convert_encoding($row['tipoFeriado'], 'UTF-8', 'HTML-ENTITIES');
-                    $municipio = mb_convert_encoding($row['municipio'], 'UTF-8', 'HTML-ENTITIES');
-                    $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
-                    $data = mb_convert_encoding($row['data'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = +$row['ativo'];
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $descricao = $row['descricao'];
+                    $tipoFeriado = $row['tipoFeriado'];
+                    $municipio = $row['municipio'];
+                    $unidadeFederacao = $row['unidadeFederacao'];
+                    $data = $row['data'];
+                    $ativo = (int) $row['ativo'];
 
                     $dataSeparada = explode(" ", $data);
                     $dataSeparadaCerta = explode("-", $dataSeparada[0]);

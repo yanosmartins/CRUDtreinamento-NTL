@@ -32,12 +32,12 @@ function grava()
     }
 
     session_start();
-    $id = +$_POST['id'];
+    $id = (int) $_POST['id'];
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $descricao = "'" . $_POST['descricao'] . "'";
-    $ativo = +$_POST["ativo"];
+    $ativo = (int) $_POST["ativo"];
 
-    $sql = "Ntl.motivoAfastamento_Atualiza ($id,$ativo,$descricao, $usuario) ";
+    $sql = "Ntl.motivoAfastamento_Atualiza $id,$ativo,$descricao, $usuario ";
     $result = $reposit->Execprocedure($sql);
 
     $ret = 'sucess#';
@@ -84,10 +84,10 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
         $ativo = +$row['ativo'];
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row['descricao'];
 
         $out = $id . "^" . $ativo . "^" . $descricao;
 

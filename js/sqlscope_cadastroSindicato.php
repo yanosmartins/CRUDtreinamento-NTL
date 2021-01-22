@@ -196,7 +196,7 @@ function gravaSindicato()
 
 
 
-    $sql = "Ntl.sindicato_Atualiza(
+    $sql = "Ntl.sindicato_Atualiza 
         $codigo,
         $mesBase,
         $descricao,
@@ -269,7 +269,7 @@ function gravaSindicato()
         $descontarFeriasCestaBasica,
         $xmlTelefone,
         $xmlEmail,
-        $usuario)";
+        $usuario";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -289,7 +289,7 @@ function recuperaSindicato()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT * FROM Ntl.sindicato WHERE codigo = " . $id;
@@ -299,13 +299,13 @@ function recuperaSindicato()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
 
 
         $id = +$row['codigo'];
         $mesBase = +$row['mesBase'];
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-        $apelido = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row['descricao'];
+        $apelido = $row['apelido'];
         $cnpj = $row['cnpj'];
         $codigoSindicatoSCI = +$row['codigoSindicatoSCI'];
         $valorBolsaBeneficio = validaNumeroRecupera($row['valorBolsaBeneficio']);
@@ -329,11 +329,11 @@ function recuperaSindicato()
         $percentualBolsaPlanoSaude = validaNumeroRecupera($row['percentualBolsaPlanoSaude']);
         $seguroVida = validaNumeroRecupera($row['seguroVida']);
         $cep = $row['cep'];
-        $logradouro =  mb_convert_encoding($row['logradouro'], 'UTF-8', 'HTML-ENTITIES');
+        $logradouro =  $row['logradouro'];
         $numeroEndereco = +$row['numeroEndereco'];
-        $complemento = mb_convert_encoding($row['complemento'], 'UTF-8', 'HTML-ENTITIES');
-        $bairro = mb_convert_encoding($row['bairro'], 'UTF-8', 'HTML-ENTITIES');
-        $cidade = mb_convert_encoding($row['cidade'], 'UTF-8', 'HTML-ENTITIES');
+        $complemento = $row['complemento'];
+        $bairro = $row['bairro'];
+        $cidade = $row['cidade'];
         $estado = $row['estado'];
         $percentualHoraExtraSegundaSabado = validaNumeroRecupera($row['percentualHoraExtraSegundaSabado']);
         $percentualHoraExtraDomingoFeriado = validaNumeroRecupera($row['percentualHoraExtraDomingoFeriado']);
@@ -387,7 +387,7 @@ function recuperaSindicato()
 
         $contadorTelefone = 0;
         $arrayTelefone = array();
-        while ($row = odbc_fetch_array($result)) {
+        foreach($result as $row) {
             $telefoneId = $row['codigo'];
             $telefone = $row['telefone'];
             $principal = +$row['principal'];
@@ -433,7 +433,7 @@ function recuperaSindicato()
 
         $contadorEmail = 0;
         $arrayEmail = array();
-        while ($row = odbc_fetch_array($result)) {
+        foreach($result as $row) {
             $emailId = $row['codigo'];
             $email = $row['email'];
             $principal = +$row['principal'];
@@ -588,7 +588,7 @@ function pesquisaCnpj()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $cnpj = $row['cnpj'];
         //manda os dados pra piece e depois são explodidos
         $out = $cnpj;
@@ -646,9 +646,9 @@ function listaSindicatoAtivoAutoComplete()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
-        $descricao = mb_convert_encoding($row["apelido"], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row["apelido"];
         $contador = $contador + 1;
         $array[] = array("id" => $id, "apelido" => $descricao);
     }

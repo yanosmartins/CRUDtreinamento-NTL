@@ -38,12 +38,12 @@ function grava()
     if ((empty($_POST['id'])) || (!isset($_POST['id'])) || (is_null($_POST['id']))) {
         $id = 0;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
     if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
         $ativo = 0;
     } else {
-        $ativo = +$_POST["ativo"];
+        $ativo = (int) $_POST["ativo"];
     }
 
     //Variáveis que estão sendo passadas.
@@ -91,7 +91,7 @@ function grava()
     }
     $xmlValeTransporteModal = "'" . $xmlValeTransporteModal . "'";
     //Fim do Json
-    $sql = "Ntl.valeTransporteModal_Atualiza(" . $id . "," . $ativo . "," . $descricao . "," . $valorTotal . "," . $usuario . "," . $xmlValeTransporteModal . ") ";
+    $sql = "Ntl.valeTransporteModal_Atualiza " . $id . "," . $ativo . "," . $descricao . "," . $valorTotal . "," . $usuario . "," . $xmlValeTransporteModal . " ";
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
@@ -130,11 +130,11 @@ function recupera()
     $result = $reposit->RunQuery($sql);
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
         $ativo = +$row['ativo'];
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-        $valorTotal = mb_convert_encoding($row['valorTotal'], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row['descricao'];
+        $valorTotal = $row['valorTotal'];
 
         $out = $id . "^" . $descricao . "^" . $ativo . "^" .  $valorTotal;
 
@@ -147,10 +147,10 @@ function recupera()
         $resultValeTransporteModal = $repositValeTransporteModal->RunQuery($sqlValeTransporteModal);
         $contadorValeTransporteModal = 0;
         $arrayValeTransporteModal = array();
-        while (($row = odbc_fetch_array($resultValeTransporteModal))) {
+        foreach ($resultValeTransporteModal as $row){
 
             $valeTransporteUnitarioId = $row['codigo'];
-            $descricaoValeTransporteModal =  mb_convert_encoding($row["descricao"], 'UTF-8', 'HTML-ENTITIES');
+            $descricaoValeTransporteModal =  $row["descricao"];
             $valeTransporteUnitario = $row['valeTransporteUnitario'];
             $valorUnitario = $row["valorUnitario"];
 
@@ -184,9 +184,9 @@ function recuperaValeTransporteUnitario()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
-        $valorUnitario = mb_convert_encoding($row['valorUnitario'], 'UTF-8', 'HTML-ENTITIES');
-        $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
+    if($row = $result[0]) {
+        $valorUnitario = $row['valorUnitario'];
+        $unidadeFederacao = $row['unidadeFederacao'];
         $out = $valorUnitario . '^' . $unidadeFederacao;
         if ($out == "") {
             echo "failed#";
@@ -239,7 +239,7 @@ function verificaDescricao()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    $row = odbc_fetch_array($result);
+    $row = $result[0];
     if ($row == false) {
         echo ('sucess#');
         return;

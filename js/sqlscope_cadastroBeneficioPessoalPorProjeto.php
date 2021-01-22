@@ -114,7 +114,7 @@ function gravaBeneficio()
     $funcionario = validaNumero($beneficio['funcionario']);
     $tipoDiaUtil = validaNumero($beneficio['tipoDiaUtil']);
     $sindicato = validaNumero($beneficio['sindicato']);
-    $municipioDiasUteisVAVR = $beneficio['municipioDiasUteis'];
+    $municipioDiasUteisVAVR = $beneficio['municipioDiasUteis'] ?: 'null';
     $municipioDiasUteisVT = validaNumero($beneficio['municipioDiasUteisVT']);
 
     //###########       VAVR      ###############//
@@ -593,7 +593,7 @@ function gravaBeneficio()
     $xmlBeneficioIndireto = "'" . $xmlBeneficioIndireto . "'";
 
 
-    $sql = "Ntl.beneficioProjeto_Atualiza(
+    $sql = "Ntl.beneficioProjeto_Atualiza
         $codigo,
         $projeto,
         $funcionario,
@@ -669,7 +669,7 @@ function gravaBeneficio()
         $escalaFeriasVAVR,
         $localizacao,
         $posto,
-        $usuario)";
+        $usuario";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -690,7 +690,7 @@ function recuperaBeneficio()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT * FROM Ntl.beneficioProjeto WHERE codigo = " . $id;
@@ -700,7 +700,7 @@ function recuperaBeneficio()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
 
 
         $id = validaNumeroRecupera($row['codigo']);
@@ -827,8 +827,8 @@ function recuperaBeneficio()
 
         $contadorPlanoSaude = 0;
         $arrayPlanoSaude = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
 
 
 
@@ -906,8 +906,8 @@ function recuperaBeneficio()
 
         $contadorPlanoSaudeDependente = 0;
         $arrayPlanoSaudeDependente = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
 
 
 
@@ -978,8 +978,8 @@ function recuperaBeneficio()
 
         $contadorVT = 0;
         $arrayVT = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
             $beneficioProjetoId = $row['beneficioProjeto'];
             $trajetoIdaVolta = +$row['trajetoIdaVolta'];
             $tipoDesconto = +$row['tipoDesconto'];
@@ -1023,8 +1023,8 @@ function recuperaBeneficio()
                 $sql = "SELECT codigo, descricao FROM Ntl.valeTransporteModal WHERE codigo =  " . $codigoVT;
                 $reposit = new reposit();
                 $result2 = $reposit->RunQuery($sql);
-                if ($row = odbc_fetch_array($result2)) {
-                    $row = array_map('utf8_encode', $row);
+                if($row = $result2[0]) {
+
                     $descricaoVT = $row['descricao'];
                 }
             } else {
@@ -1032,8 +1032,8 @@ function recuperaBeneficio()
                 $sql = "SELECT codigo, descricao FROM Ntl.valeTransporteUnitario WHERE codigo =  " . $codigoVT;
                 $reposit = new reposit();
                 $result2 = $reposit->RunQuery($sql);
-                if ($row = odbc_fetch_array($result2)) {
-                    $row = array_map('utf8_encode', $row);
+                if($row = $result2[0]) {
+
                     $descricaoVT = $row['descricao'];
                 }
             }
@@ -1074,8 +1074,8 @@ function recuperaBeneficio()
 
         $contadorBeneficioDireto = 0;
         $arrayBeneficioIndireto = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
 
 
             $valorBeneficioFuncionario = $row['valorBeneficioFuncionario'];
@@ -1251,7 +1251,7 @@ function recuperaValeTransporteModal()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
     $sql = "SELECT codigo, descricao, valorTotal FROM Ntl.valeTransporteModal WHERE codigo = " . $id;
@@ -1260,7 +1260,7 @@ function recuperaValeTransporteModal()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
         $valorTotal = +$row['valorTotal'];
 
@@ -1285,8 +1285,8 @@ function valorProdutoPlanoSaude()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
-        $idade = +$_POST["idade"];
+        $id = (int) $_POST["codigo"];
+        $idade = (int) $_POST["idade"];
     }
 
 
@@ -1296,8 +1296,8 @@ function valorProdutoPlanoSaude()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $cobranca = +$row["cobranca"];
         if ($cobranca == 1) {
             $result = "";
@@ -1306,8 +1306,8 @@ function valorProdutoPlanoSaude()
                     WHERE produto = " . $id . " AND " . $idade . " BETWEEN idadeInicial AND idadeFinal";
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if (($row = odbc_fetch_array($result))) {
-                $row = array_map('utf8_encode', $row);
+            if($row = $result[0]) {
+
                 $valorIdade = +$row['valorIdade'];
                 //$valorIdade = str_replace('.', ',', $valorIdade);
                 $out = $valorIdade;
@@ -1325,7 +1325,7 @@ function valorProdutoPlanoSaude()
             $sql = "SELECT codigo, valorProduto FROM Ntl.produto WHERE codigo = " . $id;
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if (($row = odbc_fetch_array($result))) {
+            if($row = $result[0]) {
                 $valorProduto = $row['valorProduto'];
             }
             $out = $valorProduto;
@@ -1347,7 +1347,7 @@ function calculaIdadeFuncionario()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
     $sql = "SELECT codigo, dataNascimento FROM Ntl.funcionario WHERE codigo = " . $id;
@@ -1356,7 +1356,7 @@ function calculaIdadeFuncionario()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
         $dataNascimento = $row['dataNascimento'];
 
@@ -1384,7 +1384,7 @@ function calculaIdadeDependente()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
     $sql = "SELECT codigo, dataNascimentoDependente FROM Ntl.funcionarioDependente WHERE codigo = " . $id;
@@ -1393,7 +1393,7 @@ function calculaIdadeDependente()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
         $dataNascimento = $row['dataNascimentoDependente'];
 
@@ -1421,7 +1421,7 @@ function recuperaValeTransporteUnitario()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
     $sql = "SELECT codigo, valorUnitario FROM Ntl.valeTransporteUnitario WHERE codigo = " . $id;
@@ -1430,7 +1430,7 @@ function recuperaValeTransporteUnitario()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
         $valorUnitario = +$row['valorUnitario'];
 
@@ -1446,7 +1446,7 @@ function recuperaValeTransporteUnitario()
 }
 function populaComboNomeDependentePlanoSaude()
 {
-    $id = +$_POST["codigo"];
+    $id = (int) $_POST["codigo"];
 
     $sql = "SELECT codigo, nomeDependente FROM Ntl.funcionarioDependente WHERE funcionario = " . $id;
 
@@ -1457,9 +1457,9 @@ function populaComboNomeDependentePlanoSaude()
     $out = "";
     $contador = 0;
 
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
-        $nomeDependente = mb_convert_encoding($row['nomeDependente'], 'UTF-8', 'HTML-ENTITIES');
+        $nomeDependente = $row['nomeDependente'];
 
         if ($nomeDependente == "") {
             $nomeDependente = "Não Possui";
@@ -1478,7 +1478,7 @@ function populaComboNomeDependentePlanoSaude()
 function populaCobrancaPlanoSaude()
 {
 
-    $id = +$_POST["codigo"];
+    $id = (int) $_POST["codigo"];
 
     $sql = "SELECT codigo, cobranca FROM Ntl.produto WHERE codigo = " . $id;
 
@@ -1488,7 +1488,7 @@ function populaCobrancaPlanoSaude()
     $out = "";
     $contador = 0;
 
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
         $cobranca = $row['cobranca'];
 
@@ -1506,7 +1506,7 @@ function populaCobrancaPlanoSaude()
 function populaComboProdutoPlanoSaude()
 {
 
-    $id = +$_POST["codigo"];
+    $id = (int) $_POST["codigo"];
     $sql = "SELECT codigo, produto, cobranca FROM Ntl.produto WHERE (0=0) AND ativo = 1 AND convenioSaude = " . $id . " ORDER BY produto";
 
     $reposit = new reposit();
@@ -1514,8 +1514,8 @@ function populaComboProdutoPlanoSaude()
 
     $out = "";
     $contador = 0;
-    while (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    foreach($result as $row) {
+
         $id = +$row['codigo'];
         $produto = $row['produto'];
         $out .= $id . "^" . $produto . "|";
@@ -1534,7 +1534,7 @@ function populaComboProdutoPlanoSaude()
 function listaComboVT()
 {
 
-    $id = +$_POST["codigo"];
+    $id = (int) $_POST["codigo"];
 
     if ($id == 0) {
         $sql = "SELECT * FROM Ntl.valeTransporteModal WHERE descricao != '' AND valorTotal IS NOT NULL ORDER BY descricao";
@@ -1548,9 +1548,9 @@ function listaComboVT()
     $out = "";
     $contador = 0;
 
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
-        $valeTransporte = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+        $valeTransporte = $row['descricao'];
 
         $out = $out . $id . "^" . $valeTransporte . "|";
         $contador = $contador + 1;
@@ -1571,7 +1571,7 @@ function descontoTipoDiaUtilSindicato()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
 
@@ -1582,7 +1582,7 @@ function descontoTipoDiaUtilSindicato()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
         $dataNascimento = $row['dataNascimento'];
 
@@ -1611,7 +1611,7 @@ function valorDescontoSindicatoValeRefeicao()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
 
@@ -1619,8 +1619,8 @@ function valorDescontoSindicatoValeRefeicao()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $descontoFolhaVR = validaNumero($row["descontoFolhaRefeicao"]);
         $valorDescontoFolhaVR = validaNumero($row['valorDescontoRefeicao']);
 
@@ -1643,7 +1643,7 @@ function valorDescontoProjetoValeRefeicao()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
 
@@ -1651,8 +1651,8 @@ function valorDescontoProjetoValeRefeicao()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $descontoFolhaVR = validaNumero($row["descontoFolhaVR"]);
         $valorDescontoFolhaVR = validaNumero($row['valorDescontoFolhaVR']);
 
@@ -1675,7 +1675,7 @@ function valorDescontoSindicatoPlanoSaude()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
 
@@ -1683,8 +1683,8 @@ function valorDescontoSindicatoPlanoSaude()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $valorBolsaPlanoSaude = validaNumeroRecupera($row["valorBolsaPlanoSaude"]);
         if ($valorBolsaPlanoSaude == 0) {
             $valorBolsaPlanoSaude = 0;
@@ -1710,7 +1710,7 @@ function valorDescontoProjetoPlanoSaude()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
 
@@ -1718,8 +1718,8 @@ function valorDescontoProjetoPlanoSaude()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $valorDescontoFolhaPlanoSaude = validaNumeroRecupera($row["valorDescontoFolhaPlanoSaude"]);
         $descontoFolhaPlanoSaude = validaNumeroRecupera($row['descontoFolhaPlanoSaude']);
 
@@ -1742,7 +1742,7 @@ function valorDescontoProdutoPlanoSaude()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
 
@@ -1750,8 +1750,8 @@ function valorDescontoProdutoPlanoSaude()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $valorDescontoFolhaPlanoSaude = validaNumeroRecupera($row["valorDescontoFolha"]);
         if ($valorDescontoFolhaPlanoSaude == 0) {
             $valorDescontoFolhaPlanoSaude = 0;
@@ -1781,7 +1781,7 @@ function valorBolsaBeneficioSindicato()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
     $sql = "SELECT codigo,valorBolsaBeneficio FROM Ntl.sindicato WHERE (0=0) AND codigo = " . $id;
@@ -1790,7 +1790,7 @@ function valorBolsaBeneficioSindicato()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $valorBolsaBeneficio = validaNumeroRecupera($row['valorBolsaBeneficio']);
 
         $out = $valorBolsaBeneficio;
@@ -1813,7 +1813,7 @@ function descricaoSindicato()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
     $sql = "SELECT codigo,descricao FROM Ntl.sindicato WHERE (0=0) AND codigo = " . $id;
@@ -1822,8 +1822,8 @@ function descricaoSindicato()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $descricao = $row['descricao'];
 
         $out = $descricao;
@@ -1837,11 +1837,11 @@ function descricaoSindicato()
 }
 function recuperaDescontoVR()
 {
-    $id = +$_POST["codigo"];
+    $id = (int) $_POST["codigo"];
     if ($id >= 0) {
 
-        $projeto = +$_POST["projeto"];
-        $sindicato = +$_POST["sindicato"];
+        $projeto = (int) $_POST["projeto"];
+        $sindicato = (int) $_POST["sindicato"];
     } else {
         return false;
     }
@@ -1854,8 +1854,8 @@ function recuperaDescontoVR()
         $out = "";
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
-        if (($row = odbc_fetch_array($result))) {
-            $row = array_map('utf8_encode', $row);
+        if($row = $result[0]) {
+
             $valorDiarioVR = validaNumeroRecupera($row['valorDiarioVR']);
             $valorMensalVR = validaNumeroRecupera($row['valorMensalVR']);
             $descontoFolhaVR = validaNumeroRecupera($row['descontoFolhaVR']);
@@ -1878,8 +1878,8 @@ function recuperaDescontoVR()
         $verificacao = 1;
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
-        if (($row = odbc_fetch_array($result))) {
-            $row = array_map('utf8_encode', $row);
+        if($row = $result[0]) {
+
             $valorDiarioRefeicao = validaNumeroRecupera($row['valorDiarioRefeicao']);
             $valorMensalRefeicao = validaNumeroRecupera($row['valorMensalRefeicao']);
             $descontoFolhaRefeicao = validaNumeroRecupera($row['descontoFolhaRefeicao']);
@@ -1901,11 +1901,11 @@ function recuperaDescontoVR()
 }
 function recuperaDescontoVA()
 {
-    $id = +$_POST["codigo"];
+    $id = (int) $_POST["codigo"];
     if ($id >= 0) {
 
-        $projeto = +$_POST["projeto"];
-        $sindicato = +$_POST["sindicato"];
+        $projeto = (int) $_POST["projeto"];
+        $sindicato = (int) $_POST["sindicato"];
     } else {
         return false;
     }
@@ -1918,8 +1918,8 @@ function recuperaDescontoVA()
         $out = "";
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
-        if (($row = odbc_fetch_array($result))) {
-            $row = array_map('utf8_encode', $row);
+        if($row = $result[0]) {
+
             $valorDiarioVA = validaNumeroRecupera($row['valorDiarioVAVR']);
             $valorMensalVA = validaNumeroRecupera($row['valorMensalVAVR']);
             $descontoFolhaVA = validaNumeroRecupera($row['descontoFolhaVAVR']);
@@ -1942,8 +1942,8 @@ function recuperaDescontoVA()
         $verificacao = 1;
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
-        if (($row = odbc_fetch_array($result))) {
-            $row = array_map('utf8_encode', $row);
+        if($row = $result[0]) {
+
             $valorDiarioAlimentacao = validaNumeroRecupera($row['valorDiarioAlimentacao']);
             $valorMensalAlimentacao = validaNumeroRecupera($row['valorMensalAlimentacao']);
             $descontoFolhaAlimentacao = validaNumeroRecupera($row['descontoFolhaAlimentacao']);
@@ -1971,7 +1971,7 @@ function valorCestaBasicaSindicato()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["codigo"];
+        $id = (int) $_POST["codigo"];
     }
 
     $sql = "SELECT valorMensalCestaBasica, descontoFolhaCestaBasica, valorDescontoCestaBasica FROM Ntl.sindicato WHERE (0=0) AND codigo = " . $id;
@@ -1980,7 +1980,7 @@ function valorCestaBasicaSindicato()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $valorMensalCestaBasica = validaNumeroRecupera($row['valorMensalCestaBasica']);
         if ($valorMensalCestaBasica == 0) {
             $valorMensalCestaBasica = 0;
@@ -2018,7 +2018,7 @@ function verificaFuncionarioProjeto()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    $row = odbc_fetch_array($result);
+    $row = $result[0];
 
     if ($row == false) {
         echo "failed#";
@@ -2075,13 +2075,13 @@ function validaDataRecupera($campo)
 
 function preencheValorPosto()
 {   
-    $posto = +$_POST['posto'];
+    $posto = (int) $_POST['posto'];
    
     $sql = "SELECT codigo,descricaoPosto,valor FROM Ntl.valorPosto WHERE codigo = $posto";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $valorPosto = $row['valor'];
     }
     $out = $valorPosto;
@@ -2104,9 +2104,9 @@ function populaComboDescricaoPosto()
         $result = $reposit->RunQuery($sql);
         $contador = 0;
         $out = "";
-        while (($row = odbc_fetch_array($result))) {
+        foreach($result as $row) {
             $id = $row['codigo'];
-            $descricaoPosto = mb_convert_encoding($row['nomePosto'], 'UTF-8', 'HTML-ENTITIES');
+            $descricaoPosto = $row['nomePosto'];
 
             $out = $out . $id . "^" . $descricaoPosto . "|";
 

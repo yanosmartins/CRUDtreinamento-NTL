@@ -47,12 +47,12 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
-                    $municipio = mb_convert_encoding($row['descricaoMunicipio'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = +$row['ativo'];
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $descricao = $row['descricao'];
+                    $unidadeFederacao = $row['unidadeFederacao'];
+                    $municipio = $row['descricaoMunicipio'];
+                    $ativo = (int) $row['ativo'];
      
                     if ($ativo == 1) {
                         $ativo = "Sim";

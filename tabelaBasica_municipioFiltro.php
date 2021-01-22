@@ -95,8 +95,8 @@ include("inc/ribbon.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo,sigla FROM Ntl.unidadeFederacao ORDER BY sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
                                                                         }
                                                                         ?>

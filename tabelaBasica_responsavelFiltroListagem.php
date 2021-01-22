@@ -34,10 +34,10 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
+                foreach($result as $row) {
                     $id = $row['codigo'];
-                    $nome = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES'); 
-                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES'); 
+                    $nome = $row['nome'];
+                    $ativo = $row['ativo'];
                     $ativo == 1 ? $descricaoAtivo = 'Sim' : $descricaoAtivo = 'Não';
                      
                     echo '<tr >';  

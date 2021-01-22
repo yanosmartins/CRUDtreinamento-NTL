@@ -16,10 +16,10 @@ include "js/repositorio.php";
                 <?php
 
                 $sql = "SELECT codigo, descricao, apelido, cnpj, situacao FROM Ntl.sindicato WHERE (0=0) ";
-                $codigo = +$_GET["sindicato"];
-                $apelido = +$_GET["apelidoId"];
+                $codigo = (int) $_GET["sindicato"];
+                $apelido = (int) $_GET["apelidoId"];
                 $cnpj = $_GET["cnpj"];
-                $ativo = $_GET['ativo'];
+                $ativo = (int) $_GET['ativo'] ;
 
                 if ($codigo > 0) {
                     $where =  " AND codigo = " . $codigo;
@@ -42,12 +42,12 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $apelido = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
-                    $cnpj = mb_convert_encoding($row['cnpj'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = +$row['situacao'];
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $descricao = $row['descricao'];
+                    $apelido = $row['apelido'];
+                    $cnpj = $row['cnpj'];
+                    $ativo = (int) $row['situacao'];
                     if ($ativo == 1) {
                         $ativo = "Sim";
                     } else {

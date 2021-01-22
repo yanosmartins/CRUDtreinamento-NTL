@@ -89,9 +89,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo,descricao FROM Ntl.projeto WHERE ativo = 1 ORDER BY descricao ";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
-                                                                            $id = +$row['codigo'];
+                                                                        foreach($result as $row) {
+
+                                                                            $id = (int) $row['codigo'];
                                                                             $descricao = $row['descricao'];
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }

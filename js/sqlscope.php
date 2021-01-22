@@ -30,12 +30,12 @@ function recuperaCep() {
             $out = "^^^^";
             break;
         case '1':
-            $tipoLogradouro = mb_convert_encoding($resultado_busca['tipo_logradouro'], 'UTF-8', 'HTML-ENTITIES');
-            $logradouro = mb_convert_encoding($resultado_busca['logradouro'], 'UTF-8', 'HTML-ENTITIES');
+            $tipoLogradouro = $resultado_busca['tipo_logradouro'];
+            $logradouro = $resultado_busca['logradouro'];
             $endereco = $tipoLogradouro . " " . $logradouro;
-            $bairro = mb_convert_encoding($resultado_busca['bairro'], 'UTF-8', 'HTML-ENTITIES');
+            $bairro = $resultado_busca['bairro'];
             $bairro = str_replace("'", " ", $bairro);
-            $cidade = mb_convert_encoding($resultado_busca['cidade'], 'UTF-8', 'HTML-ENTITIES');
+            $cidade = $resultado_busca['cidade'];
             $uf = mb_convert_encoding(trim($resultado_busca['uf']), 'UTF-8', 'HTML-ENTITIES');
 
             $out = $endereco . "^" . $bairro . "^" . $cidade . "^" . $uf;

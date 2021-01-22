@@ -93,8 +93,8 @@ include("inc/nav.php");
                                                                         order by codigo ";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -118,8 +118,8 @@ include("inc/nav.php");
                                                                         order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);

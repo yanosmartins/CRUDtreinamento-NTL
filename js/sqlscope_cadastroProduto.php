@@ -37,22 +37,22 @@ function grava()
     if ((empty($_POST['id'])) || (!isset($_POST['id'])) || (is_null($_POST['id']))) {
         $id = 0;
     } else {
-        $id = formatarNumero(+$_POST["id"]);
+        $id = formatarNumero((int) $_POST["id"]);
     }
 
     if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
         $ativo = 0;
     } else {
-        $ativo = formatarNumero(+$_POST["ativo"]);
+        $ativo = formatarNumero((int) $_POST["ativo"]);
     }
 
     session_start();
     $usuario = formatarString($_SESSION['login']);  //Pegando o nome do usuário mantido pela sessão.
-    $convenioSaude = +$_POST['convenioSaude'];
+    $convenioSaude = (int) $_POST['convenioSaude'];
     $produto = formatarString($_POST['produto']);
-    $mesAniversario = formatarNumero(+$_POST['mesAniversario']);
+    $mesAniversario = formatarNumero((int) $_POST['mesAniversario']);
     $cobranca = formatarString($_POST['cobranca']);
-    $seguroVida = formatarNumero(+$_POST['seguroDeVida']);
+    $seguroVida = formatarNumero((int) $_POST['seguroDeVida']);
     $valorProduto = formatarNumero($_POST['valorProduto']);
     $descontoFolha = validaNumero($_POST['descontoFolha']);
     $valorDescontoFolha = validaNumero($_POST['valorDescontoFolha']);
@@ -96,9 +96,9 @@ function grava()
     }
     $xmlIdadeProduto = "'" . $xmlIdadeProduto . "'";
     //Fim do Json
-    $sql = "Ntl.produto_Atualiza (" . $id . "," . $ativo . "," . $convenioSaude . "," . $produto . ","
+    $sql = "Ntl.produto_Atualiza " . $id . "," . $ativo . "," . $convenioSaude . "," . $produto . ","
         . $mesAniversario . "," . $cobranca . "," . $seguroVida . "," . $valorProduto . "," . $descontoFolha . "," . $valorDescontoFolha . ","
-        . $usuario . "," . $xmlIdadeProduto . ") ";
+        . $usuario . "," . $xmlIdadeProduto . " ";
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
@@ -118,8 +118,8 @@ function recupera()
         $sql = "SELECT * FROM Ntl.produto WHERE (0=0) AND codigo =" . $id;
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
-        if (($row = odbc_fetch_array($result))) {
-            $row = array_map('utf8_encode', $row);
+        if($row = $result[0]) {
+
             $codigo = +$row['codigo'];
             $produto = $row['produto'];
             $convenioSaude = +$row['convenioSaude'];
@@ -138,7 +138,7 @@ function recupera()
         $result = $reposit->RunQuery($sql);
         $contadorProduto = 0;
         $arrayProduto = array();
-        while (($row = odbc_fetch_array($result))) {
+        foreach($result as $row) {
 
             $codigoIdade = +$row['codigo'];
             //$produtoIdade = +$row['produto'];

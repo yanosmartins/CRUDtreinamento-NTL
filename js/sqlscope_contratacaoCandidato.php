@@ -30,7 +30,7 @@ function gravaFuncionario()
 
     session_start();
     $usuarioCadastro = validaString($_SESSION['login']);
-    $codigo =  +$_POST['codigo'];
+    $codigo =  (int) $_POST['codigo'];
     $sexo = validaNumero($_POST['sexo']);
     $nomeCompleto = validaString($_POST['nomeCompleto']);
     $nomeCompleto = strtoupper(tiraAcento($nomeCompleto));
@@ -106,20 +106,20 @@ function gravaFuncionario()
     $primeiroEmprego = validaNumero($_POST['primeiroEmprego']);
     $cargo = validaString($_POST['cargo']);
     //verificacao de dados preenchidos corretamente pelo candidato
-    $verificaDadoPessoal = +$_POST['verificaDadoPessoal'];
-    $verificaDadoContato = +$_POST['verificaDadoContato'];
-    $verificaEndereco =  +$_POST['verificaEndereco'];
-    $verificaDocumento =  +$_POST['verificaDocumento'];
-    $verificaEscolaridade =  +$_POST['verificaEscolaridade'];
-    $verificaDadoConjuge =  +$_POST['verificaDadoConjuge'];
-    $verificaFilho =  +$_POST['verificaFilho'];
-    $verificaDependente =  +$_POST['verificaDependente'];
-    $verificaBeneficio =  +$_POST['verificaBeneficio'];
-    $verificaVT =  +$_POST['verificaVT'];
-    $verificaDadoBancario =  +$_POST['verificaDadoBancario'];
-    $verificaCargo =  +$_POST['verificaCargo'];
-    $verificaUniforme =  +$_POST['verificaUniforme'];
-    $verificaAnexoDocumento =  +$_POST['verificaAnexoDocumento'];
+    $verificaDadoPessoal = (int) $_POST['verificaDadoPessoal'];
+    $verificaDadoContato = (int) ['verificaDadoContato'];
+    $verificaEndereco =  (int) $_POST['verificaEndereco'];
+    $verificaDocumento =  (int) $_POST['verificaDocumento'];
+    $verificaEscolaridade =  (int) $_POST['verificaEscolaridade'];
+    $verificaDadoConjuge =  (int) $_POST['verificaDadoConjuge'];
+    $verificaFilho =  (int) $_POST['verificaFilho'];
+    $verificaDependente =  (int) $_POST['verificaDependente'];
+    $verificaBeneficio =  (int) $_POST['verificaBeneficio'];
+    $verificaVT =  (int) $_POST['verificaVT'];
+    $verificaDadoBancario =  (int) $_POST['verificaDadoBancario'];
+    $verificaCargo =  (int) $_POST['verificaCargo'];
+    $verificaUniforme =  (int) $_POST['verificaUniforme'];
+    $verificaAnexoDocumento =  (int) $_POST['verificaAnexoDocumento'];
 
     $carteiraTrabalho = validaString($_POST['carteiraTrabalho']);
     $carteiraTrabalhoSerie = validaString($_POST['carteiraTrabalhoSerie']);
@@ -1431,7 +1431,7 @@ function gravaFuncionario()
 
 
 
-    $sql = "Contratacao.candidatoDocumento_Atualiza(
+    $sql = "Contratacao.candidatoDocumento_Atualiza
         $codigo,							
         $nomeCompleto,						
         $cpf,								   
@@ -1561,7 +1561,7 @@ function gravaFuncionario()
         $ativo,
         $justificativaVt, 
         $tipoCartaoVt
-        )";
+        ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -1618,7 +1618,7 @@ function recuperaFuncionario()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT * FROM Contratacao.candidato WHERE (0=0) AND codigo = " . $id;
@@ -1626,8 +1626,8 @@ function recuperaFuncionario()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $codigo = $row['codigo'];
     $nomeCompleto = $row['nomeCompleto'];
     $cpf = $row['cpf'];
@@ -1746,9 +1746,9 @@ function recuperaFuncionario()
 
     $contadorFilho = 0;
     $arrayFilho = array();
-    while ($row = odbc_fetch_array($result)) {
+    foreach($result as $row) {
 
-        $nomeCompletoFilho = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
+        $nomeCompletoFilho = $row['nomeCompleto'];
         $cpfFilho = $row['cpf'];
         $dataNascimentoFilho = validaDataRecupera($row['dataNascimento']);
 
@@ -1774,8 +1774,8 @@ function recuperaFuncionario()
 
     $contadorDependente = 0;
     $arrayDependente = array();
-    while ($row = odbc_fetch_array($result)) {
-        $nomeCompletoDependente = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
+    foreach($result as $row) {
+        $nomeCompletoDependente = $row['nomeCompleto'];
         $cpfDependente = $row['cpf'];
         $dataNascimentoDependente = validaDataRecupera($row['dataNascimento']);
         $grauParentescoDependente = $row['grauParentescoDependente'];
@@ -1803,10 +1803,10 @@ function recuperaFuncionario()
 
     $contadorTransporte = 0;
     $arrayTransporte = array();
-    while ($row = odbc_fetch_array($result)) {
-        $trajetoTransporte = mb_convert_encoding($row['trajeto'], 'UTF-8', 'HTML-ENTITIES');
+    foreach($result as $row) {
+        $trajetoTransporte = $row['trajeto'];
         $tipoTransporte = $row['tipo'];
-        $linhaTransporte = mb_convert_encoding($row['linha'], 'UTF-8', 'HTML-ENTITIES');
+        $linhaTransporte = $row['linha'];
         $valorTransporte = $row['valor'];
 
         $contadorTransporte = $contadorTransporte + 1;
@@ -1991,7 +1991,7 @@ function validaVerifica($value)
 
 function recuperaCpf()
 {
-    $id = +$_POST["codigoFuncionario"] ?: 0;
+    $id = (int) $_POST["codigoFuncionario"] ?: 0;
     $cpf = validaString($_POST["cpf"]);
 
     $sql = "SELECT codigo, cpf FROM Contratacao.candidato WHERE (0=0) AND cpf = " . $cpf;
@@ -2004,8 +2004,8 @@ function recuperaCpf()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
 
     $codigo = $row['codigo'];
     $cpf = $row['cpf'];
@@ -2032,7 +2032,7 @@ function excluir()
         return;
     }
 
-    $id = +$_POST["id"];
+    $id = (int) $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
         $mensagem = "Selecione um candidato.";

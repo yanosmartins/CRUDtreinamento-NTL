@@ -64,7 +64,7 @@ include("inc/nav.php");
 
                                                     $reposit = new reposit();
 
-                                                    $codigo = +$_GET["codigo"];
+                                                    $codigo = (int) $_GET["codigo"];
 
                                                     if ($codigo != 0) {
                                                         $sql = "SELECT V.codigo,V.versao FROM sysgc.dbo.controleVersao V WHERE V.codigo = $codigo";
@@ -73,10 +73,10 @@ include("inc/nav.php");
                                                     }
 
                                                     $result = $reposit->RunQuery($sql);
-                                                    $row = odbc_fetch_array($result);
+                                                    $row = $result[0];
 
-                                                    $codigo = mb_convert_encoding($row["codigo"], 'UTF-8', 'HTML-ENTITIES');
-                                                    $versao = mb_convert_encoding($row["versao"], 'UTF-8', 'HTML-ENTITIES');
+                                                    $codigo = $row["codigo"];
+                                                    $versao = $row["versao"];
                                                     ?>
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
@@ -96,11 +96,11 @@ include("inc/nav.php");
 
                                                             $result = $reposit->RunQuery($sql);
 
-                                                            while ($row = odbc_fetch_array($result)) {
-                                                                $codigo = +$row['codigo'];
-                                                                $titulo = mb_convert_encoding($row['titulo'], 'UTF-8', 'HTML-ENTITIES');
+                                                            foreach($result as $row) {
+                                                                $codigo = (int) $row['codigo'];
+                                                                $titulo = $row['titulo'];
                                                                 $titulo = str_replace("U+0027", "'", $titulo);
-                                                                $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                $descricao = $row['descricao'];
                                                                 $descricao = str_replace("U+0027", "'", $descricao);
                                                                 if (strlen($titulo) >= 72) {
                                                                     echo "

@@ -37,7 +37,7 @@ function grava() {
     $reposit = new reposit();
 
     //Variáveis
-    $id =  +$_POST['id'];
+    $id =  (int) $_POST['id'];
     $ativo = formatarNumero($_POST['ativo']);
     session_start();
     $usuario = formatarString($_SESSION['login']);  //Pegando o nome do usuário mantido pela sessão.
@@ -46,14 +46,14 @@ function grava() {
     $unidadeFederacao = formatarString($_POST['unidadeFederacao']); 
     $municipio = formatarNumero($_POST['municipio']); 
 
-    $sql = "Ntl.fornecedor_Atualiza (".
+    $sql = "Ntl.fornecedor_Atualiza ".
      $id . ",".
      $ativo . "," .
      $descricao . "," .
      $cnpj . "," .
      $unidadeFederacao . "," .
      $municipio  . "," .
-     $usuario .") ";
+     $usuario ." ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -104,14 +104,14 @@ function recupera() {
 
     $out = "";
     
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
         $ativo = +$row['ativo']; 
-        $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES'); 
+        $unidadeFederacao = $row['unidadeFederacao'];
         $municipio = +$row['municipio']; 
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES'); 
-        $cnpj =  mb_convert_encoding($row['cnpj'], 'UTF-8', 'HTML-ENTITIES'); 
-        $nomeMunicipio = mb_convert_encoding($row['nomeMunicipio'], 'UTF-8', 'HTML-ENTITIES'); 
+        $descricao = $row['descricao'];
+        $cnpj =  $row['cnpj'];
+        $nomeMunicipio = $row['nomeMunicipio'];
         
         $out = $id . "^" . 
         $ativo . "^" . 
@@ -176,9 +176,9 @@ function listaComboMunicipio(){
     $out = "";
     $contador = 0;
 
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
-        $municipio = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+        $municipio = $row['descricao'];
 
         $out = $out . $id . "^" . $municipio . "|";
         $contador = $contador + 1;

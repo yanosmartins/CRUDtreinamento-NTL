@@ -36,10 +36,10 @@ include "js/repositorio.php";
                 $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $codigo = +$row['codigo'];
+                foreach($result as $row) {
+                    $codigo = (int) $row['codigo'];
                     $descricaoCodigo = $row['descricaoCodigo'];
-                    $descricaoServico =mb_convert_encoding($row['descricaoServico'], 'UTF-8', 'HTML-ENTITIES');
+                    $descricaoServico =$row['descricaoServico'];
                     $ativo = $row['ativo'];
 
                     echo '<tr>';

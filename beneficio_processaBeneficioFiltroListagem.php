@@ -150,71 +150,70 @@ include "js/repositorio.php";
                 $value = explode("/", $mesAno);
                 $mesAno = "'" . $value[1] . "-" . $value[0] . "-" . "01 00:0:00'";
 
-                while (($row = odbc_fetch_array($result1))) {
-                    $row = array_map('utf8_encode', $row);
-                    $id = +$row['codigo'];
+                foreach ($result1 as $row) {
+                    $id = (int) $row['codigo'];
                     $funcionario = $row['nome'];
-                    $funcionarioCodigo = +$row['funcionario'];
-                    $tipoDiaUtilVAVR = +$row['tipoDiaUtilVAVR'];
-                    $sindicato = +$row['sindicato'];
-                    $projeto = +$row['projeto'];
-                    $tipoDiaUtilVT = +$row['tipoDiaUtilVT'];
-                    $perdaBeneficio = +$row['perdaBeneficio'];
-                    $valorTotalFuncionarioVT = +$row['valorTotalFuncionarioVT'];
-                    $valorCestaBasica = +$row['valorCestaBasica'];
-                    $valorTotalPlanoSaude = +$row['valorTotalPlanoSaude'];
-                    $trajetoIdaVoltaVT = +$row['trajetoIdaVolta'];
-                    $valorDiarioVT = +$row['valorTotalVTDiario'];
-                    $totalValorAcrescimoBeneficioIndireto = +$row['totalValorAcrescimoBeneficioIndireto'];
-                    $totalValorAbaterBeneficioIndireto = +$row['totalValorAbaterBeneficioIndireto'];
-                    $municipioDiasUteisVAVR = +$row['municipioDiasUteisVAVR'];
-                    $municipioDiasUteisVT = +$row['municipioDiasUteisVT'];
+                    $funcionarioCodigo = (int) $row['funcionario'];
+                    $tipoDiaUtilVAVR = (int) $row['tipoDiaUtilVAVR'];
+                    $sindicato = (int) $row['sindicato'];
+                    $projeto = (int) $row['projeto'];
+                    $tipoDiaUtilVT = (int) $row['tipoDiaUtilVT'];
+                    $perdaBeneficio = (int) $row['perdaBeneficio'];
+                    $valorTotalFuncionarioVT = (float) $row['valorTotalFuncionarioVT'];
+                    $valorCestaBasica = (float) $row['valorCestaBasica'];
+                    $valorTotalPlanoSaude = (float) $row['valorTotalPlanoSaude'];
+                    $trajetoIdaVoltaVT = $row['trajetoIdaVolta'];
+                    $valorDiarioVT = (float) $row['valorTotalVTDiario'];
+                    $totalValorAcrescimoBeneficioIndireto = (float) $row['totalValorAcrescimoBeneficioIndireto'];
+                    $totalValorAbaterBeneficioIndireto = (float) $row['totalValorAbaterBeneficioIndireto'];
+                    $municipioDiasUteisVAVR = (int) $row['municipioDiasUteisVAVR'];
+                    $municipioDiasUteisVT = (int) $row['municipioDiasUteisVT'];
 
-                    // $descontoFeriasAlimentacao = +$row['descontoFeriasAlimentacao']; // temporariamente desabilitado
-                    // $descontoFeriasRefeicao = +$row['descontoFeriasRefeicao'];
-                    $escalaFerias = +$row['escalaFerias'];
-                    $escalaFeriasVAVR = +$row['escalaFeriasVAVR'];
-                    // $descontarFeriasCestaBasica = +$row['descontarFeriasCestaBasica']; // discutir logica 
+                    // $descontoFeriasAlimentacao = (int) $row['descontoFeriasAlimentacao']; // temporariamente desabilitado
+                    // $descontoFeriasRefeicao = (int) $row['descontoFeriasRefeicao'];
+                    $escalaFerias = (int) $row['escalaFerias'];
+                    $escalaFeriasVAVR = (int) $row['escalaFeriasVAVR'];
+                    // $descontarFeriasCestaBasica = (int) $row['descontarFeriasCestaBasica']; // discutir logica
 
                     switch ($tipoDiaUtilVAVR) {
                             //Projeto
                         case 1:
                             switch ($mes) {
                                 case 1:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilJaneiroVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilJaneiroVAVR'];
                                     break;
                                 case 2:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilFevereiroVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilFevereiroVAVR'];
                                     break;
                                 case 3:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilMarcoVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilMarcoVAVR'];
                                     break;
                                 case 4:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilAbrilVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilAbrilVAVR'];
                                     break;
                                 case 5:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilMaioVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilMaioVAVR'];
                                     break;
                                 case 6:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilJunhoVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilJunhoVAVR'];
                                     break;
                                 case 7:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilJulhoVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilJulhoVAVR'];
                                     break;
                                 case 8:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilAgostoVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilAgostoVAVR'];
                                     break;
                                 case 9:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilSetembroVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilSetembroVAVR'];
                                     break;
                                 case 10:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilOutubroVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilOutubroVAVR'];
                                     break;
                                 case 11:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilNovembroVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilNovembroVAVR'];
                                     break;
                                 case 12:
-                                    $diaUtilVAVR = +$row['projetoDiaUtilDezembroVAVR'];
+                                    $diaUtilVAVR = (int) $row['projetoDiaUtilDezembroVAVR'];
                                     break;
                                 default:
                                     # code...
@@ -226,40 +225,40 @@ include "js/repositorio.php";
                         case 2:
                             switch ($mes) {
                                 case 1:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilJaneiroVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilJaneiroVAVR'];
                                     break;
                                 case 2:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilFevereiroVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilFevereiroVAVR'];
                                     break;
                                 case 3:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilMarcoVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilMarcoVAVR'];
                                     break;
                                 case 4:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilAbrilVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilAbrilVAVR'];
                                     break;
                                 case 5:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilMaioVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilMaioVAVR'];
                                     break;
                                 case 6:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilJunhoVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilJunhoVAVR'];
                                     break;
                                 case 7:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilJulhoVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilJulhoVAVR'];
                                     break;
                                 case 8:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilAgostoVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilAgostoVAVR'];
                                     break;
                                 case 9:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilSetembroVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilSetembroVAVR'];
                                     break;
                                 case 10:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilOutubroVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilOutubroVAVR'];
                                     break;
                                 case 11:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilNovembroVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilNovembroVAVR'];
                                     break;
                                 case 12:
-                                    $diaUtilVAVR = +$row['sindicatoDiaUtilDezembroVAVR'];
+                                    $diaUtilVAVR = (int) $row['sindicatoDiaUtilDezembroVAVR'];
                                     break;
                                 default:
                                     # code...
@@ -270,40 +269,40 @@ include "js/repositorio.php";
                         case 3:
                             switch ($mes) {
                                 case 1:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilJaneiroVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilJaneiroVAVR'];
                                     break;
                                 case 2:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilFevereiroVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilFevereiroVAVR'];
                                     break;
                                 case 3:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilMarcoVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilMarcoVAVR'];
                                     break;
                                 case 4:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilAbrilVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilAbrilVAVR'];
                                     break;
                                 case 5:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilMaioVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilMaioVAVR'];
                                     break;
                                 case 6:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilJunhoVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilJunhoVAVR'];
                                     break;
                                 case 7:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilJulhoVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilJulhoVAVR'];
                                     break;
                                 case 8:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilAgostoVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilAgostoVAVR'];
                                     break;
                                 case 9:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilSetembroVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilSetembroVAVR'];
                                     break;
                                 case 10:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilOutubroVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilOutubroVAVR'];
                                     break;
                                 case 11:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilNovembroVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilNovembroVAVR'];
                                     break;
                                 case 12:
-                                    $diaUtilVAVR = +$row['beneficioProjetoDiaUtilDezembroVAVR'];
+                                    $diaUtilVAVR = (int) $row['beneficioProjetoDiaUtilDezembroVAVR'];
                                     break;
                                 default:
                                     # code...
@@ -319,40 +318,40 @@ include "js/repositorio.php";
                         case 5:
                             switch ($mes) {
                                 case 1:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRJaneiro'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRJaneiro'];
                                     break;
                                 case 2:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRFevereiro'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRFevereiro'];
                                     break;
                                 case 3:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRMarco'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRMarco'];
                                     break;
                                 case 4:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRAbril'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRAbril'];
                                     break;
                                 case 5:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRMaio'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRMaio'];
                                     break;
                                 case 6:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRJunho'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRJunho'];
                                     break;
                                 case 7:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRJulho'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRJulho'];
                                     break;
                                 case 8:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRAgosto'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRAgosto'];
                                     break;
                                 case 9:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRSetembro'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRSetembro'];
                                     break;
                                 case 10:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVROutubro'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVROutubro'];
                                     break;
                                 case 11:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRNovembro'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRNovembro'];
                                     break;
                                 case 12:
-                                    $diaUtilVAVR = +$row['beneficioMunicipioDiaUtilVAVRDezembro'];
+                                    $diaUtilVAVR = (int) $row['beneficioMunicipioDiaUtilVAVRDezembro'];
                                     break;
                                 default:
                                     # code...
@@ -369,40 +368,40 @@ include "js/repositorio.php";
                         case 1:
                             switch ($mes) {
                                 case 1:
-                                    $diaUtilVT = +$row['projetoDiaUtilJaneiroVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilJaneiroVT'];
                                     break;
                                 case 2:
-                                    $diaUtilVT = +$row['projetoDiaUtilFevereiroVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilFevereiroVT'];
                                     break;
                                 case 3:
-                                    $diaUtilVT = +$row['projetoDiaUtilMarcoVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilMarcoVT'];
                                     break;
                                 case 4:
-                                    $diaUtilVT = +$row['projetoDiaUtilAbrilVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilAbrilVT'];
                                     break;
                                 case 5:
-                                    $diaUtilVT = +$row['projetoDiaUtilMaioVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilMaioVT'];
                                     break;
                                 case 6:
-                                    $diaUtilVT = +$row['projetoDiaUtilJunhoVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilJunhoVT'];
                                     break;
                                 case 7:
-                                    $diaUtilVT = +$row['projetoDiaUtilJulhoVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilJulhoVT'];
                                     break;
                                 case 8:
-                                    $diaUtilVT = +$row['projetoDiaUtilAgostoVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilAgostoVT'];
                                     break;
                                 case 9:
-                                    $diaUtilVT = +$row['projetoDiaUtilSetembroVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilSetembroVT'];
                                     break;
                                 case 10:
-                                    $diaUtilVT = +$row['projetoDiaUtilOutubroVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilOutubroVT'];
                                     break;
                                 case 11:
-                                    $diaUtilVT = +$row['projetoDiaUtilNovembroVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilNovembroVT'];
                                     break;
                                 case 12:
-                                    $diaUtilVT = +$row['projetoDiaUtilDezembroVT'];
+                                    $diaUtilVT = (int) $row['projetoDiaUtilDezembroVT'];
                                     break;
                                 default:
                                     # code...
@@ -414,40 +413,40 @@ include "js/repositorio.php";
                         case 2:
                             switch ($mes) {
                                 case 1:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilJaneiroVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilJaneiroVT'];
                                     break;
                                 case 2:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilFevereiroVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilFevereiroVT'];
                                     break;
                                 case 3:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilMarcoVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilMarcoVT'];
                                     break;
                                 case 4:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilAbrilVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilAbrilVT'];
                                     break;
                                 case 5:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilMaioVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilMaioVT'];
                                     break;
                                 case 6:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilJunhoVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilJunhoVT'];
                                     break;
                                 case 7:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilJulhoVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilJulhoVT'];
                                     break;
                                 case 8:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilAgostoVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilAgostoVT'];
                                     break;
                                 case 9:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilSetembroVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilSetembroVT'];
                                     break;
                                 case 10:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilOutubroVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilOutubroVT'];
                                     break;
                                 case 11:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilNovembroVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilNovembroVT'];
                                     break;
                                 case 12:
-                                    $diaUtilVT = +$row['sindicatoDiaUtilDezembroVT'];
+                                    $diaUtilVT = (int) $row['sindicatoDiaUtilDezembroVT'];
                                     break;
                                 default:
                                     # code...
@@ -459,40 +458,40 @@ include "js/repositorio.php";
                         case 3:
                             switch ($mes) {
                                 case 1:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilJaneiroVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilJaneiroVT'];
                                     break;
                                 case 2:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilFevereiroVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilFevereiroVT'];
                                     break;
                                 case 3:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilMarcoVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilMarcoVT'];
                                     break;
                                 case 4:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilAbrilVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilAbrilVT'];
                                     break;
                                 case 5:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilMaioVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilMaioVT'];
                                     break;
                                 case 6:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilJunhoVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilJunhoVT'];
                                     break;
                                 case 7:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilJulhoVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilJulhoVT'];
                                     break;
                                 case 8:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilAgostoVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilAgostoVT'];
                                     break;
                                 case 9:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilSetembroVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilSetembroVT'];
                                     break;
                                 case 10:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilOutubroVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilOutubroVT'];
                                     break;
                                 case 11:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilNovembroVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilNovembroVT'];
                                     break;
                                 case 12:
-                                    $diaUtilVT = +$row['beneficioProjetoDiaUtilDezembroVT'];
+                                    $diaUtilVT = (int) $row['beneficioProjetoDiaUtilDezembroVT'];
                                     break;
                                 default:
                                     # code...
@@ -509,40 +508,40 @@ include "js/repositorio.php";
                         case 5:
                             switch ($mes) {
                                 case 1:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTJaneiro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTJaneiro'];
                                     break;
                                 case 2:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTFevereiro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTFevereiro'];
                                     break;
                                 case 3:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTMarco'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTMarco'];
                                     break;
                                 case 4:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTAbril'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTAbril'];
                                     break;
                                 case 5:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTMaio'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTMaio'];
                                     break;
                                 case 6:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTJunho'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTJunho'];
                                     break;
                                 case 7:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTJulho'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTJulho'];
                                     break;
                                 case 8:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTAgosto'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTAgosto'];
                                     break;
                                 case 9:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTSetembro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTSetembro'];
                                     break;
                                 case 10:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTOutubro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTOutubro'];
                                     break;
                                 case 11:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTNovembro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTNovembro'];
                                     break;
                                 case 12:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTDezembro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTDezembro'];
                                     break;
                                 default:
                                     # code...
@@ -556,24 +555,24 @@ include "js/repositorio.php";
                     }
 
                     //Aqui começam os calculos de VAVR
-                    $tipoDescontoVAVR = +$row['tipoDescontoVAVR'];
+                    $tipoDescontoVAVR = (int) $row['tipoDescontoVAVR'];
                     switch ($tipoDescontoVAVR) {
                             //Projeto
                         case 0:
-                            $valorDiarioFuncionarioVAVR =  +$row['valorDiarioProjetoVAVR'];
-                            $valorMensalFuncionarioVAVR =  +$row['valorMensalProjetoVAVR'];
+                            $valorDiarioFuncionarioVAVR =  (float) $row['valorDiarioProjetoVAVR'];
+                            $valorMensalFuncionarioVAVR =  (float) $row['valorMensalProjetoVAVR'];
                             $descricaoDescontoVAVR = 'Projeto';
                             break;
                             //Sindicato
                         case 1:
-                            $valorDiarioFuncionarioVAVR =  +$row['valorDiarioSindicatoVAVR'];
-                            $valorMensalFuncionarioVAVR =  +$row['valorMensalSindicatoVAVR'];
+                            $valorDiarioFuncionarioVAVR =  (float) $row['valorDiarioSindicatoVAVR'];
+                            $valorMensalFuncionarioVAVR =  (float) $row['valorMensalSindicatoVAVR'];
                             $descricaoDescontoVAVR = 'Sindicato';
                             break;
                             //Funcionario
                         case 2:
-                            $valorDiarioFuncionarioVAVR =  +$row['valorDiarioFuncionarioVAVR'];
-                            $valorMensalFuncionarioVAVR =  +$row['valorMensalFuncionarioVAVR'];
+                            $valorDiarioFuncionarioVAVR =  (float) $row['valorDiarioFuncionarioVAVR'];
+                            $valorMensalFuncionarioVAVR =  (float) $row['valorMensalFuncionarioVAVR'];
                             $descricaoDescontoVAVR = 'Funcionário';
                             break;
                         default:
@@ -583,40 +582,40 @@ include "js/repositorio.php";
                         case 5:
                             switch ($mes) {
                                 case 1:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTJaneiro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTJaneiro'];
                                     break;
                                 case 2:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTFevereiro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTFevereiro'];
                                     break;
                                 case 3:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTMarco'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTMarco'];
                                     break;
                                 case 4:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTAbril'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTAbril'];
                                     break;
                                 case 5:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTMaio'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTMaio'];
                                     break;
                                 case 6:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTJunho'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTJunho'];
                                     break;
                                 case 7:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTJulho'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTJulho'];
                                     break;
                                 case 8:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTAgosto'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTAgosto'];
                                     break;
                                 case 9:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTSetembro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTSetembro'];
                                     break;
                                 case 10:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTOutubro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTOutubro'];
                                     break;
                                 case 11:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTNovembro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTNovembro'];
                                     break;
                                 case 12:
-                                    $diaUtilVT = +$row['beneficioMunicipioDiaUtilVTDezembro'];
+                                    $diaUtilVT = (int) $row['beneficioMunicipioDiaUtilVTDezembro'];
                                     break;
                                 default:
                                     # code...
@@ -642,48 +641,48 @@ include "js/repositorio.php";
 
                     $sqlFerias = $reposit->RunQuery($sqlFerias);
 
-                    if ($rowFerias = odbc_fetch_array($sqlFerias)) {
-                        $diaUtilFerias = +$rowFerias['diaUtil'];
+                    if($rowFerias = $sqlFerias[0]) {
+                        $diaUtilFerias = (int) $rowFerias['diaUtil'];
                         $mes;
                         // pega os dias UTEIS poor municipio de acordo com mes
 
                         // if($descontoFeriasAlimentacao = 1 && $descontoFeriasRefeicao == 1){
                         // switch ($mes) {
                         //     case 1:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilJaneiro'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilJaneiro'];
                         //         break;
                         //     case 2:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilFevereiro'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilFevereiro'];
                         //         break;
                         //     case 3:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilMarco'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilMarco'];
                         //         break;
                         //     case 4:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilAbril'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilAbril'];
                         //         break;
                         //     case 5:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilMaio'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilMaio'];
                         //         break;
                         //     case 6:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilJunho'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilJunho'];
                         //         break;
                         //     case 7:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilJulho'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilJulho'];
                         //         break;
                         //     case 8:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilAgosto'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilAgosto'];
                         //         break;
                         //     case 9:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilSetembro'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilSetembro'];
                         //         break;
                         //     case 10:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilOutubro'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilOutubro'];
                         //         break;
                         //     case 11:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilNovembro'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilNovembro'];
                         //         break;
                         //     case 12:
-                        //         $diaUtilVAVR = +$row['feriasMunicipioDiaUtilDezembro'];
+                        //         $diaUtilVAVR = (int) $row['feriasMunicipioDiaUtilDezembro'];
                         //         break;
                         //     default:
                         //         # code...
@@ -716,14 +715,14 @@ include "js/repositorio.php";
 
                     $diasTrabalhadosVT = $diaUtilVT;
 
-                    while ($rowFaltaAusencia = odbc_fetch_array($resultFaltaAusencia)) {
-                        $row = array_map('utf8_encode', $row);
-                        $totalFaltasVAVR = +$rowFaltaAusencia['totalFaltasVAVR'];
-                        $totalAusenciaVAVR = +$rowFaltaAusencia['totalAusenciasVAVR'];
+                    foreach ($resultFaltaAusencia as $rowFaltaAusencia) {
+
+                        $totalFaltasVAVR = (int) $rowFaltaAusencia['totalFaltasVAVR'];
+                        $totalAusenciaVAVR = (int) $rowFaltaAusencia['totalAusenciasVAVR'];
                         $justificativaValeAlimentacao = $rowFaltaAusencia['justificativaValeAlimentacao'];
                         $faltaAusenciaValeAlimentacao = $rowFaltaAusencia['faltaAusenciaValeAlimentacao'];
-                        $totalFaltasValeTransporte = +$rowFaltaAusencia['totalFaltasValeTransporte'];
-                        $totalAusenciasValeTransporte = +$rowFaltaAusencia['totalAusenciasValeTransporte'];
+                        $totalFaltasValeTransporte = (int) $rowFaltaAusencia['totalFaltasValeTransporte'];
+                        $totalAusenciasValeTransporte = (int) $rowFaltaAusencia['totalAusenciasValeTransporte'];
 
                         $totalFaltasAusenciasVAVR = $totalAusenciaVAVR + $totalFaltasVAVR;
                         // $diasTrabalhadosVAVR = $diaUtilVAVR - $totalFaltasAusenciasVAVR;
@@ -779,23 +778,23 @@ include "js/repositorio.php";
                     $valorCestaBasicaExtra = 0;
                     $totalValorAcrescimoBeneficioIndiretoExtra = 0;
 
-                    while ($rowValorExtra = odbc_fetch_array($resultValorExtra)) {
-                        $row = array_map('utf8_encode', $row);
+                    foreach ($resultValorExtra as $rowValorExtra) {
+
                         $valorExtra = 0;
                         $beneficioExtra = $rowValorExtra['beneficioExtra'];
 
                         switch ($beneficioExtra) {
                             case 1:
-                                $valorExtraVAVR = +$rowValorExtra['valor'];
+                                $valorExtraVAVR = (float) $rowValorExtra['valor'];
                                 break;
                             case 2:
-                                $valorExtraVT = +$rowValorExtra['valor'];
+                                $valorExtraVT = (float) $rowValorExtra['valor'];
                                 break;
                             case 3:
-                                $valorCestaBasicaExtra = +$rowValorExtra['valor'];
+                                $valorCestaBasicaExtra = (float) $rowValorExtra['valor'];
                                 break;
                             case 4:
-                                $totalValorAcrescimoBeneficioIndiretoExtra = +$rowValorExtra['valor'];
+                                $totalValorAcrescimoBeneficioIndiretoExtra = (float) $rowValorExtra['valor'];
                                 break;
                             default:
                                 break;
@@ -806,8 +805,8 @@ include "js/repositorio.php";
                     // $descontaFerias = 0;
                     switch ($tipoDescontoVAVR) {
                         case 0: //projeto
-                            $abatimentoVAVR = +$row['projetoDescontoVAVR'];
-                            $projetoDescontaFerias = +$row['projetoDescontaFerias'];
+                            $abatimentoVAVR = (int) $row['projetoDescontoVAVR'];
+                            $projetoDescontaFerias = (int) $row['projetoDescontaFerias'];
 
                             if ($projetoDescontaFerias == 1) {
                                 $diasTrabalhadosVAVR -= $diaUtilFerias;
@@ -817,8 +816,8 @@ include "js/repositorio.php";
 
                             break;
                         case 1: //sindicato
-                            $abatimentoVAVR = +$row['sindicatoDescontoVAVR'];
-                            $sindicatoDescontaFerias = +$row['sindicatoDescontaFerias'];
+                            $abatimentoVAVR = (int) $row['sindicatoDescontoVAVR'];
+                            $sindicatoDescontaFerias = (int) $row['sindicatoDescontaFerias'];
 
                             if ($sindicatoDescontaFerias == 1) {
                                 $diasTrabalhadosVAVR -= $diaUtilFerias;
@@ -873,19 +872,19 @@ include "js/repositorio.php";
                     $resultAfastamento = $reposit->RunQuery($sqlAfastamento);
                     $diaUtilAfastamento = 0;
                     $afastamentoAbaterVAVR = 0;
-                    while ($rowAfastamento = odbc_fetch_array($resultAfastamento)) {
+                    foreach ($resultAfastamento as $rowAfastamento) {
                         $rowAfastamento = array_map('utf8_encode', $rowAfastamento);
-                        $diaUtilAfastamento = +$rowAfastamento['diaUtil'];
-                        $afastamentoDescontarVAVR = +$rowAfastamento['descontarVAVR'];
+                        $diaUtilAfastamento = (int) $rowAfastamento['diaUtil'];
+                        $afastamentoDescontarVAVR = (int) $rowAfastamento['descontarVAVR'];
                         if ($afastamentoDescontarVAVR == 1) {
                             $diasTrabalhadosVAVR -= $diaUtilAfastamento;
                             $afastamentoAbaterVAVR += $diaUtilAfastamento; //dias para serem mostrados na tela de processamento
                         }
-                        $afastamentoDescontarCestaBasica = +$rowAfastamento['descontarCestaBasica'];
+                        $afastamentoDescontarCestaBasica = (int) $rowAfastamento['descontarCestaBasica'];
                         if ($afastamentoDescontarCestaBasica == 1) {
                             $valorCestaBasica = 0;
                         }
-                        $afastamentoDescontarTransporte = +$rowAfastamento['descontarTransporte'];
+                        $afastamentoDescontarTransporte = (int) $rowAfastamento['descontarTransporte'];
                         if ($afastamentoDescontarTransporte == 1) {
                             $diasTrabalhadosVT -= $diaUtilAfastamento;
                         }

@@ -219,12 +219,44 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-        $("#btnExcluir").on("click", function() {
-            excluir();
+      
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
         });
+
+        $("#btnExcluir").on("click", function() {
+            var id = $("#codigo").val();
+
+            if (id === 0) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#nome").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
+            }
+        });
+
         carregaPisConfisCs();
-
-
     });
 
     function voltar() {
@@ -246,7 +278,6 @@ include("inc/scripts.php");
             smartAlert("Erro", "Informe o Inss.", "error");
             return;
         }
-
 
         gravaPisConfisCs(codigo, ativo, percentual,
             function(data) {
@@ -270,42 +301,31 @@ include("inc/scripts.php");
         );
     }
 
-
-    $('#dlgSimpleExcluir').dialog({
-        autoOpen: false,
-        width: 400,
-        resizable: false,
-        modal: true,
-        title: "Atenção",
-        buttons: [{
-            html: "Excluir registro",
-            "class": "btn btn-success",
-            click: function() {
-                $(this).dialog("close");
-                excluir();
-            }
-        }, {
-            html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-            "class": "btn btn-default",
-            click: function() {
-                $(this).dialog("close");
-            }
-        }]
-    });
-    $("#btnExcluir").on("click", function() {
-        var id = $("#codigo").val();
+    function excluir() {
+        var id = +$("#codigo").val();
 
         if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-            $("#nome").focus();
+            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
             return;
         }
 
-        if (id !== 0) {
-            $('#dlgSimpleExcluir').dialog('open');
-        }
-    });
+        excluirPisConfisCs(id, function(data) {
+            if (data.indexOf('failed') > -1) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
 
+                if (mensagem !== "") {
+                    smartAlert("Atenção", mensagem, "error");
+                } else {
+                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                }
+                voltar();
+            } else {
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                voltar();
+            }
+        });
+    }
 
     function carregaPisConfisCs() {
         var urlx = window.document.URL.toString();

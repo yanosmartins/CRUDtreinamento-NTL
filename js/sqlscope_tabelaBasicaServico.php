@@ -24,18 +24,18 @@ function grava()
 {
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-    $codigo = +$_POST['id'];
+    $codigo = (int) $_POST['id'];
     $descricaoCodigo = "'" . $_POST['descricaoCodigo'] . "'";
     $descricaoServico = "'" . $_POST['descricaoServico'] . "'";
-    $ativo = +$_POST['ativo'];
+    $ativo = (int) $_POST['ativo'];
 
-    $sql = "Ntl.servico_Atualiza(
+    $sql = "Ntl.servico_Atualiza
         $codigo ,
         $descricaoCodigo ,
         $ativo ,
         $descricaoServico,
         $usuario
-        )";
+        ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -56,7 +56,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, descricaoCodigo, descricaoServico, ativo FROM Ntl.servico
@@ -66,8 +66,8 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
 
     $id = $row['codigo'];
     $descricaoCodigo = $row['descricaoCodigo'];
@@ -106,7 +106,7 @@ function excluir()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $result = $reposit->update('Ntl.servico' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);

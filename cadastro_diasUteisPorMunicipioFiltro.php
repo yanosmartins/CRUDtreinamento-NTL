@@ -94,9 +94,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach($result as $row) {
 
-                                                                            $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
                                                                         }
                                                                         ?>
@@ -113,9 +113,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = " select * from Ntl.municipio where ativo = 1 order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $codigo = +$row['codigo'];
-                                                                            $municipio = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $municipio = $row['descricao'];
 
                                                                             echo '<option value=' . $codigo . '>' . $municipio . '</option>';
                                                                         }

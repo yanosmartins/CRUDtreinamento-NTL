@@ -87,9 +87,9 @@ include("inc/nav.php");
                                                                         $sql = "SELECT codigo, descricao FROM Ntl.Projeto BP 
                                                                                 WHERE ativo = 1 order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach($result as $row) {
                                                                             $id = $row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $descricao = $row['descricao'];
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -108,9 +108,9 @@ include("inc/nav.php");
                                                                                 INNER JOIN Ntl.funcionario F ON BP.funcionario = F.codigo 
                                                                                 WHERE BP.ativo = 1 AND F.dataDemissaoFuncionario IS NULL order by nome";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach($result as $row) {
                                                                             $id = $row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $descricao = $row['nome'];
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -141,9 +141,9 @@ include("inc/nav.php");
                                                                                 INNER JOIN Ntl.sindicato S ON BP.sindicato = S.codigo 
                                                                                 WHERE BP.ativo = 1 order by S.descricao ";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach($result as $row) {
                                                                             $id = $row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $descricao = $row['descricao'];
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>

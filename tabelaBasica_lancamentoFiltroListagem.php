@@ -41,11 +41,11 @@
                     $reposit = new reposit();                                       
                     $result=$reposit->RunQuery($sql);
 
-                    while (($row = odbc_fetch_array($result))) {
-                        $id = +$row['codigo'];
-                        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                        $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
-                        $ativo = +$row['ativo'];
+                    foreach($result as $row) {
+                        $id = (int) $row['codigo'];
+                        $descricao = $row['descricao'];
+                        $sigla = $row['sigla'];
+                        $ativo = (int) $row['ativo'];
                         
                         //Modifica os valores booleanos por Sim e Não. 
                         //Ativo

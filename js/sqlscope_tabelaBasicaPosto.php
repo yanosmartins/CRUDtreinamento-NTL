@@ -41,12 +41,12 @@ function gravaPosto()
     $descricao =  validaString($posto['descricao']);
     $ativo = validaNumero($posto['ativo']);
 
-    $sql = "Ntl.posto_Atualiza(
+    $sql = "Ntl.posto_Atualiza
         $codigo,
         $descricao,
         $ativo,
         $usuario
-        )";
+        ";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -66,7 +66,7 @@ function recuperaPosto()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, descricao, ativo FROM Ntl.posto WHERE (0=0) AND codigo = " . $id;
@@ -76,8 +76,8 @@ function recuperaPosto()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $codigo = $row['codigo'];
     $descricao = $row['descricao'];
     $ativo = $row['ativo'];

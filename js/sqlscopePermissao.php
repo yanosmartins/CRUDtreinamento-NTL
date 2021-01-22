@@ -38,7 +38,7 @@ function grava()
     }
 
     if ($condicaoIdUsuario) {
-        $idUsuario = +$_POST["codigoUsuario"];
+        $idUsuario = (int) $_POST["codigoUsuario"];
     }
 
 
@@ -86,7 +86,7 @@ function grava()
     $usuario = $_SESSION['login'];
     $usuario = "'" . $usuario . "'";
 
-    $sql = "Ntl.usuarioFuncionalidade_AtualizaPermissoesUsuario (" . $idUsuario . "," . $usuario . "," . $xmlFuncionalidade . ") ";
+    $sql = "Ntl.usuarioFuncionalidade_AtualizaPermissoesUsuario " . $idUsuario . "," . $usuario . "," . $xmlFuncionalidade . " ";
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
@@ -111,7 +111,7 @@ function recupera()
     }
 
     if ($condicaoIdUsuario) {
-        $idUsuario = +$_POST["codigoUsuario"];
+        $idUsuario = (int) $_POST["codigoUsuario"];
     }
 
     $sql = " SELECT USUF.codigo,USUF.funcionalidade
@@ -124,7 +124,7 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $arrayPermissao = array();
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         array_push($arrayPermissao, +$row["funcionalidade"]);
     }
 
@@ -141,7 +141,7 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $arrayFuncionalidade = array();
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $idFuncionalidade = +$row['codigo'];
 
         $marcado = 0;
@@ -150,8 +150,8 @@ function recupera()
         }
 
         $idMenuItem = +$row['menuItem'];
-        $nomeCompleto = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
-        $nome = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+        $nomeCompleto = $row['nomeCompleto'];
+        $nome = $row['nome'];
         $arrayFuncionalidade[] = array(
             "idFuncionalidade" => $idFuncionalidade,
             "nome" => $nome,
@@ -190,14 +190,14 @@ function excluir()
     }
 
     if ($condicaoIdUsuario) {
-        $idUsuario = +$_POST["codigoUsuario"];
+        $idUsuario = (int) $_POST["codigoUsuario"];
     }
 
     session_start();
     $usuario = $_SESSION['login'];
     $usuario = "'" . $usuario . "'";
 
-    $sql = "usuarioFuncionalidade_DeletaTodasPermissoesUsuario (" . $idUsuario . "," . $usuario . ") ";
+    $sql = "usuarioFuncionalidade_DeletaTodasPermissoesUsuario " . $idUsuario . "," . $usuario . " ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);

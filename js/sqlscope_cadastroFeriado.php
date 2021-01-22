@@ -44,13 +44,13 @@ function grava()
     if ((empty($_POST['id'])) || (!isset($_POST['id'])) || (is_null($_POST['id']))) {
         $id = 0;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
         $ativo = 0;
     } else {
-        $ativo = +$_POST["ativo"];
+        $ativo = (int) $_POST["ativo"];
     }
 
     //Variáveis que estão sendo passadas.
@@ -58,9 +58,9 @@ function grava()
     $usuario = formatarString($_SESSION['login']);  //Pegando o nome do usuário mantido pela sessão.
     $descricao = formatarString($_POST['descricao']);
     $data = formatarData($_POST['data']);
-    $tipoFeriado = formatarNumero(+$_POST['tipoFeriado']);
+    $tipoFeriado = formatarNumero((int) $_POST['tipoFeriado']);
     $unidadeFederacao = formatarString($_POST['unidadeFederacao']);
-    $municipio = formatarNumero(+$_POST['municipio']);
+    $municipio = formatarNumero((int) $_POST['municipio']);
     $diaDaSemana = $_POST['diaDaSemana'];
 
     if ($diaDaSemana == "Sunday") {
@@ -75,9 +75,9 @@ function grava()
         $sabado = 0;
     }
 
-    $sql = "Ntl.feriado_Atualiza (" . $id . "," . $ativo . "," . $descricao . "," .
+    $sql = "Ntl.feriado_Atualiza " . $id . "," . $ativo . "," . $descricao . "," .
         $data . "," . $tipoFeriado . "," . $unidadeFederacao . "," . $municipio . "," .
-        $usuario . "," . $domingo . "," . $sabado . ")";
+        $usuario . "," . $domingo . "," . $sabado . "";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -125,8 +125,7 @@ function recupera()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    $feriado = odbc_fetch_array($result);
-    $feriado = array_map('utf8_encode', $feriado);
+    $feriado = $result[0];
     echo json_encode($feriado);
 }
 
@@ -172,9 +171,9 @@ function popularComboMunicipio()
     $out = "";
     $contador = 0;
 
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row['descricao'];
 
         $out .=  $id . "^" . $descricao . "|";
 
@@ -209,7 +208,7 @@ function pesquisaData()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $dataFeriado = $row['dataFeriado'];
         //manda os dados pra piece e depois são explodidos
         $out = $dataFeriado;

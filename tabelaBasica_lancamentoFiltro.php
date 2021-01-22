@@ -95,9 +95,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select * from Ntl.lancamento order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach($result as $row) {
 
-                                                                            $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
                                                                         }
                                                                         ?>

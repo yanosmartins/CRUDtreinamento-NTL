@@ -22,14 +22,14 @@ include "js/repositorio.php";
                 }
 
                 if ($_GET["codigoSCI"] != "") {
-                    $codigoSCI = +$_GET["codigoSCI"];
+                    $codigoSCI = (int) $_GET["codigoSCI"];
                     $where = $where . " AND ([codigoSCI] like '%' + " . "replace('" . $codigoSCI . "',' ','%') + " . "'%')";
-                }
-
-                if (($_GET['ativo'] === 1) || ($_GET['ativo'] === 0)) {
-                    $ativo = $_GET['ativo'];
-                    $where .=  " AND situacao = " . $ativo;
-                }
+                } 
+ 
+                if ($_GET["ativo"] != "") {
+                    $ativo = (int) $_GET["ativo"];
+                    $where = $where . " and ativo = ".$ativo;
+                } 
 
                 $sql = " SELECT codigo, descricao, ativo FROM Ntl.escala  ";
 
@@ -37,11 +37,11 @@ include "js/repositorio.php";
                 $sql .= " order by descricao ";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
-
-                while (($row = odbc_fetch_array($result))) {
-                    $codigo = +$row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
+                
+                foreach($result as $row) {
+                    $codigo = (int) $row['codigo'];
+                    $descricao = $row['descricao'];
+                    $ativo = $row['ativo'];
 
                     $ativo == 1 ? $ativo = 'Sim' : $ativo = 'Não';
 

@@ -36,16 +36,16 @@ function grava()
 
     session_start();
     $usuario = $_SESSION['login'];
-    $codigo =  +$_POST['codigo'];
+    $codigo =  (int) $_POST['codigo'];
     $percentual = $_POST['percentual'];
-    $ativo = +$_POST['ativo'];
+    $ativo = (int) $_POST['ativo'];
 
-    $sql = "Ntl.pisConfisCs_Atualiza(
+    $sql = "Ntl.pisConfisCs_Atualiza
         $codigo ,
         $ativo ,
         $percentual ,
         $usuario
-        )";
+        ";
 
 
     $result = $reposit->Execprocedure($sql);
@@ -65,7 +65,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, percentual, ativo FROM Ntl.pisConfisCs
@@ -76,8 +76,8 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
 
     $id = $row['codigo'];
     $percentual = +$row['percentual'];
@@ -112,7 +112,7 @@ function excluir()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $result = $reposit->update('Ntl.pisConfisCs' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);

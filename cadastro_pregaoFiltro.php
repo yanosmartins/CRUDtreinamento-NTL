@@ -90,9 +90,9 @@ include("inc/nav.php");
                                                                         $sql = "SELECT codigo, descricao FROM 
                                                                         Ntl.portal WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $codigo = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $descricao = $row['descricao'];
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>

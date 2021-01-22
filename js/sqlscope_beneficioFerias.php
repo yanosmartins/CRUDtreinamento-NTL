@@ -52,9 +52,9 @@ function grava()
     $adiantaDecimoTerceiro = validaNumero($_POST['adiantaDecimoTerceiro']);
     $mesAnoInicio = $_POST['mesAnoInicio'];
     $mesAnoFim = $_POST['mesAnoFim'];
-    $diaUtil = +$_POST['diaUtil'];
-    $projeto = +$_POST['projeto'];
-    $diaFeriado = +$_POST['diaFeriado'];
+    $diaUtil = (int) $_POST['diaUtil'];
+    $projeto = (int) $_POST['projeto'];
+    $diaFeriado = (int) $_POST['diaFeriado'];
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
 
@@ -84,6 +84,7 @@ function grava()
         $dataInicioAuxUltimoDia = cal_days_in_month(CAL_GREGORIAN, $dataInicioAux[1], $dataInicioAux[2]); // 31
         $dataInicioFinalAux = $dataInicioAux[2] . "/" . $dataInicioAux[1] . "/" . $dataInicioAuxUltimoDia;
         $dataInicioFinal = "'" . $dataInicioAux[2] . "/" . $dataInicioAux[1] . "/" . $dataInicioAuxUltimoDia . "'";
+        $dataInicioFinal = (string)$dataInicioFinal; 
 
         $dataInicioAux1 =  explode("'", $dataInicio);
         // Usa a função strtotime() e pega o timestamp das duas datas:
@@ -92,13 +93,14 @@ function grava()
         // Calcula a diferença de segundos entre as duas datas:
         $diferenca = $time_final - $time_inicial;
         // Calcula a diferença de dias
-        $quantidadeDiasInicial = (int) floor($diferenca / (60 * 60 * 24));
+        $quantidadeDiasInicial = floor($diferenca / (60 * 60 * 24));
 
 
         $dataFimAux =  explode("/", $_POST['dataFim']);
         $dataFimInicialAux = $dataFimAux[2] . "/" . $dataFimAux[1];
         $dataFimInicial = "'" . $dataFimAux[2] . "/" . $dataFimAux[1] . "/01'";
         $dataFimInicialAux = $dataFimAux[2] . "/" . $dataFimAux[1] . "/01";
+        $dataFimInicialAux = (string)$dataFimInicialAux;
 
         $dataFimAux1 = explode("'", $dataFim);
         // Usa a função strtotime() e pega o timestamp das duas datas:
@@ -107,11 +109,16 @@ function grava()
         // Calcula a diferença de segundos entre as duas datas:
         $diferenca = $time_final1 - $time_inicial1;
         // Calcula a diferença de dias
-        $quantidadeDiasFinal = (int) floor($diferenca / (60 * 60 * 24));
+        $quantidadeDiasFinal = floor($diferenca / (60 * 60 * 24));
         $quantidadeDiasFinal += 1;
     }
 
-    $sql = 'Beneficio.funcionarioFerias_Atualiza (' .
+    $dataInicioFinal = (string)$dataInicioFinal ?: 'null';
+    $dataFimInicial = (string)$dataFimInicial ?: 'null';
+    $quantidadeDiasInicial = (string)$quantidadeDiasInicial ?: 'null';
+    $quantidadeDiasFinal =  (string)$quantidadeDiasFinal ?: 'null';
+
+    $sql = 'Beneficio.funcionarioFerias_Atualiza ' .
         $id . ',' .
         $ativo . ',' .
         $abono . ',' .
@@ -129,7 +136,7 @@ function grava()
         $diaUtil . ',' .
         $projeto . ',' .
         $diaFeriado . ',' .
-        $usuario . ') ';
+        $usuario . ' ';
 
     $result = $reposit->Execprocedure($sql);
 
@@ -151,7 +158,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT * FROM Beneficio.funcionarioFerias WHERE codigo = " . $id;
@@ -161,7 +168,7 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
 
         //Accordion Dados
         $id = +$row['codigo'];
@@ -169,9 +176,9 @@ function recupera()
         $abono =  +$row['abono'];
         $funcionario = +$row['funcionario'];
         $mesAno = $row['mesAno'];
-        $dataInicio = mb_convert_encoding($row['dataInicio'], 'UTF-8', 'HTML-ENTITIES');
-        $dataFim = mb_convert_encoding($row['dataFim'], 'UTF-8', 'HTML-ENTITIES');
-        $quantidadeDias = mb_convert_encoding($row['quantidadeDias'], 'UTF-8', 'HTML-ENTITIES');
+        $dataInicio = $row['dataInicio'];
+        $dataFim = $row['dataFim'];
+        $quantidadeDias = $row['quantidadeDias'];
         $adiantaDecimoTerceiro = +$row['adiantaDecimoTerceiro'];
 
         $dataInicio = formataData($dataInicio);
@@ -277,8 +284,8 @@ function contaFeriado()
 
     $resultProjeto = $reposit->RunQuery($sqlProjeto);
 
-    if (($row = odbc_fetch_array($resultProjeto))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $resultProjeto[0]) {
+
         $estado = "'" . $row['estado'] . "'";
         $municipioFerias =  +$row['municipioFerias'];
     }
@@ -291,7 +298,7 @@ function contaFeriado()
 
     // $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $feriadoNome = $row['descricao'];
         $contadorFeriado++;
     }
@@ -313,9 +320,9 @@ function populaComboFuncionario()
         $result = $reposit->RunQuery($sql);
         $contador = 0;
         $out = "";
-        while (($row = odbc_fetch_array($result))) {
+        foreach($result as $row) {
             $id = $row['funcionario'];
-            $nomeFuncionario = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+            $nomeFuncionario = $row['nome'];
 
             $out = $out . $id . "^" . $nomeFuncionario . "|";
 
@@ -338,7 +345,7 @@ function temFeriasMesmoPeriodo($funcionario, $mesAno)
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if (odbc_fetch_array($result)) {
+    if ($result[0]) {
         return true;
     } else {
         return false;

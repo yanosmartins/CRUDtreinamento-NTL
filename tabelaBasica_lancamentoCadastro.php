@@ -63,7 +63,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Município</h2>
+                            <h2>Lançamento</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -290,12 +290,14 @@ include("inc/scripts.php");
                             var descricao = piece[1];
                             var sigla = piece[2];
                             var ativo = +piece[3];
+                            var faltaAusencia = piece[4]
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
                             $("#descricao").val(descricao);
                             $("#sigla").val(sigla);
                             $("#ativo").val(ativo);
+                            $("#faltaAusencia").val(faltaAusencia);
 
                             return;
 

@@ -27,10 +27,10 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $login = mb_convert_encoding($row['login'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = +$row['ativo'];
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $login = $row['login'];
+                    $ativo = (int) $row['ativo'];
                     if ($ativo == 1) {
                         $descricaoAtivo = "Sim";
                     } else {

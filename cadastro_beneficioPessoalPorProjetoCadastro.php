@@ -98,9 +98,9 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
 																		$result = $reposit->RunQuery($sql);
-																		while (($row = odbc_fetch_array($result))) {
+																		foreach($result as $row) {
 																			$id = $row['codigo'];
-																			$descricao = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+																			$descricao = $row['nome'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
 																		}
 																		?>
@@ -116,9 +116,9 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, descricao FROM Ntl.projeto WHERE ativo = 1 ORDER BY descricao";
 																		$result = $reposit->RunQuery($sql);
-																		while (($row = odbc_fetch_array($result))) {
+																		foreach($result as $row) {
 																			$id = $row['codigo'];
-																			$descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+																			$descricao = $row['descricao'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
 																		}
 																		?>
@@ -142,9 +142,9 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, apelido FROM Ntl.sindicato WHERE situacao = 1 ORDER BY apelido";
 																		$result = $reposit->RunQuery($sql);
-																		while (($row = odbc_fetch_array($result))) {
+																		foreach($result as $row) {
 																			$id = $row['codigo'];
-																			$apelido = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
+																			$apelido = $row['apelido'];
 																			echo '<option value=' . $id . '>' . $apelido . '</option>';
 																		}
 																		?>
@@ -169,8 +169,8 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.localizacao  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -193,8 +193,8 @@ include("inc/nav.php");
 																						where VP.ativo = 1 order by nomePosto";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['nomePosto']);
@@ -258,9 +258,9 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
 																		$result = $reposit->RunQuery($sql);
-																		while (($row = odbc_fetch_array($result))) {
+																		foreach($result as $row) {
 																			$id = $row['codigo'];
-																			$descricao = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+																			$descricao = $row['nome'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
 																		}
 																		?>
@@ -292,9 +292,9 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, apelido FROM Ntl.convenioSaude WHERE ativo = 1 ORDER BY apelido";
 																		$result = $reposit->RunQuery($sql);
-																		while (($row = odbc_fetch_array($result))) {
+																		foreach($result as $row) {
 																			$id = $row['codigo'];
-																			$apelido = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
+																			$apelido = $row['apelido'];
 																			echo '<option value=' . $id . '>' . $apelido . '</option>';
 																		}
 																		?>
@@ -311,9 +311,9 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, produto FROM Ntl.produto WHERE ativo = 1 ORDER BY produto";
 																		$result = $reposit->RunQuery($sql);
-																		while (($row = odbc_fetch_array($result))) {
+																		foreach($result as $row) {
 																			$id = $row['codigo'];
-																			$descricao = mb_convert_encoding($row['produto'], 'UTF-8', 'HTML-ENTITIES');
+																			$descricao = $row['produto'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
 																		}
 																		?>
@@ -476,9 +476,9 @@ include("inc/nav.php");
 																			$sql = "SELECT codigo, funcionario, nomeDependente FROM Ntl.funcionarioDependente ORDER BY nomeDependente";
 																			$result = $reposit->RunQuery($sql);
 
-																			while (($row = odbc_fetch_array($result))) {
+																			foreach($result as $row) {
 																				$id = $row['codigo'];
-																				$descricao = mb_convert_encoding($row['nomeDependente'], 'UTF-8', 'HTML-ENTITIES');
+																				$descricao = $row['nomeDependente'];
 																				echo '<option value=' . $id . '>' . $descricao . '</option>';
 																			}
 																			?>
@@ -505,9 +505,9 @@ include("inc/nav.php");
 																			$reposit = new reposit();
 																			$sql = "SELECT codigo, apelido FROM Ntl.convenioSaude WHERE ativo = 1 ORDER BY apelido";
 																			$result = $reposit->RunQuery($sql);
-																			while (($row = odbc_fetch_array($result))) {
+																			foreach($result as $row) {
 																				$id = $row['codigo'];
-																				$apelido = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
+																				$apelido = $row['apelido'];
 																				echo '<option value=' . $id . '>' . $apelido . '</option>';
 																			}
 																			?>
@@ -524,9 +524,9 @@ include("inc/nav.php");
 																			$reposit = new reposit();
 																			$sql = "SELECT codigo, produto FROM Ntl.produto WHERE ativo = 1 ORDER BY produto";
 																			$result = $reposit->RunQuery($sql);
-																			while (($row = odbc_fetch_array($result))) {
+																			foreach($result as $row) {
 																				$id = $row['codigo'];
-																				$descricao = mb_convert_encoding($row['produto'], 'UTF-8', 'HTML-ENTITIES');
+																				$descricao = $row['produto'];
 																				echo '<option value=' . $id . '>' . $descricao . '</option>';
 																			}
 																			?>
@@ -930,9 +930,9 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, descricao, valorUnitario FROM Ntl.valeTransporteUnitario WHERE ativo = 1 ORDER BY descricao";
 																		$result = $reposit->RunQuery($sql);
-																		while (($row = odbc_fetch_array($result))) {
+																		foreach($result as $row) {
 																			$id = $row['codigo'];
-																			$descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+																			$descricao = $row['descricao'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
 																		}
 																		?>
@@ -1199,9 +1199,9 @@ include("inc/nav.php");
 																		$sql = "SELECT codigo, descricao FROM Ntl.municipio WHERE ativo = 1 ORDER BY descricao";
 																		$result = $reposit->RunQuery($sql);
 
-																		while (($row = odbc_fetch_array($result))) {
-																			$id = +$row['codigo'];
-																			$descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+																		foreach($result as $row) {
+																			$id = (int) $row['codigo'];
+																			$descricao = $row['descricao'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
 																		}
 																		?>
@@ -1465,9 +1465,9 @@ include("inc/nav.php");
 																			$sql = "SELECT codigo, descricao FROM Ntl.municipio WHERE ativo = 1 ORDER BY descricao";
 																			$result = $reposit->RunQuery($sql);
 
-																			while (($row = odbc_fetch_array($result))) {
-																				$id = +$row['codigo'];
-																				$descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+																			foreach($result as $row) {
+																				$id = (int) $row['codigo'];
+																				$descricao = $row['descricao'];
 
 																				echo '<option value=' . $id . '>' . $descricao . '</option>';
 																			}
@@ -1723,9 +1723,9 @@ include("inc/nav.php");
 																			$sql = "SELECT codigo, descricao FROM Ntl.municipio WHERE ativo = 1 ORDER BY descricao";
 																			$result = $reposit->RunQuery($sql);
 
-																			while (($row = odbc_fetch_array($result))) {
-																				$id = +$row['codigo'];
-																				$descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+																			foreach($result as $row) {
+																				$id = (int) $row['codigo'];
+																				$descricao = $row['descricao'];
 
 																				echo '<option value=' . $id . '>' . $descricao . '</option>';
 																			}

@@ -36,13 +36,13 @@ function grava()
     if ((empty($_POST['id'])) || (!isset($_POST['id'])) || (is_null($_POST['id']))) {
         $id = 0;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
         $ativo = 0;
     } else {
-        $ativo = +$_POST["ativo"];
+        $ativo = (int) $_POST["ativo"];
     }
 
     $nome = $_POST['nome'];
@@ -50,7 +50,7 @@ function grava()
     $tipoUsuario = "'" . $tipoUsuario . "'";
     $nome = "'" . $nome . "'";
 
-    $funcionario = +$_POST['funcionario'];
+    $funcionario = (int) $_POST['funcionario'];
 
     $login = $_POST["login"];
     if ((empty($_POST['login'])) || (!isset($_POST['login'])) || (is_null($_POST['login']))) {
@@ -166,7 +166,7 @@ function grava()
     $usuario = $_SESSION['login'];
     $usuario = "'" . $usuario . "'";
 
-    $sql = "Ntl.usuario_Atualiza (" . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . "," . $funcionario . ") ";
+    $sql = "Ntl.usuario_Atualiza " . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . "," . $funcionario . " ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -219,9 +219,9 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
-        $login = mb_convert_encoding($row['login'], 'UTF-8', 'HTML-ENTITIES');
+        $login = $row['login'];
         $ativo = +$row['ativo'];
         $tipoUsuario = $row['tipoUsuario'];
         $funcionario = +$row['funcionario'];
@@ -265,7 +265,7 @@ function excluir()
     $usuario = $_SESSION['login'];
     $usuario = "'" . $usuario . "'";
 
-    $sql = "usuario_Deleta (" . $id . "," . $usuario . ") ";
+    $sql = "usuario_Deleta " . $id . "," . $usuario . " ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);

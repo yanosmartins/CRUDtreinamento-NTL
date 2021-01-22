@@ -34,18 +34,18 @@ function grava()
 
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-    $codigo = +$_POST['codigo'];
+    $codigo =  (int) $_POST['codigo'];
     $descricao = "'" . $_POST['descricao'] . "'";
     $codigoSCI = "'" . $_POST['codigoSCI'] . "'";
-    $ativo = +$_POST['ativo'];
+    $ativo = (int) $_POST['ativo'];
 
-    $sql = "Ntl.escala_Atualiza(
+    $sql = "Ntl.escala_Atualiza
             $codigo, 
             $descricao, 
             $codigoSCI, 
             $ativo, 
             $usuario
-            )";
+            ";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -93,8 +93,8 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $codigo = +$row['codigo'];
         $descricao = $row['descricao'];
         $codigoSCI = $row['codigoSCI'];

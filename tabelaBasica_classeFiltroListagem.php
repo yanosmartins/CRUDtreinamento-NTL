@@ -41,11 +41,11 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
+                foreach($result as $row) {
                     $id = $row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $reducaoBaseIR = mb_convert_encoding($row['reducaoBaseIR'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
+                    $descricao = $row['descricao'];
+                    $reducaoBaseIR = $row['reducaoBaseIR'];
+                    $ativo = $row['ativo'];
 
                     if ($reducaoBaseIR == 1) {
                         $reducaoBaseIR = "Sim";
