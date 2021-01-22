@@ -32,18 +32,18 @@ function grava()
     }
 
     //Variáveis
-    $codigo = +$_POST['codigo'];
+    $codigo =  (int) $_POST['codigo'];
     $ativo = $_POST['ativo'];
     session_start();
     $usuario  = $_SESSION['login'];  //Pegando o nome do usuário mantido pela sessão.
     $descricao = "'" . $_POST['descricao'] . "'";
 
-    $sql = "Ntl.beneficioIndireto_Atualiza(
+    $sql = "Ntl.beneficioIndireto_Atualiza
         $codigo ,
         $ativo ,
         $descricao ,
         $usuario
-        )";
+        ";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -63,7 +63,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, descricao, ativo FROM Ntl.beneficioIndireto
@@ -74,8 +74,8 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
 
     $id = $row['codigo'];
     $descricao = $row['descricao'];
@@ -110,7 +110,7 @@ function excluir()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $result = $reposit->update('Ntl.beneficioIndireto' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);

@@ -41,7 +41,7 @@ function grava()
 
 
 
-    $sql = "Ntl.valorPosto_Atualiza(
+    $sql = "Ntl.valorPosto_Atualiza
                 $codigo,
                 $projeto,
                 $descricaoPosto,
@@ -52,7 +52,7 @@ function grava()
                 $atrasos,
                 $ativo,
                 $usuario         			
-                )";
+                ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -73,7 +73,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT 
@@ -93,8 +93,8 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
 
     $id = +$row['codigo'];
     $projeto = +$row['projeto'];
@@ -131,7 +131,7 @@ function recupera()
 
 function preencheFuncionario()
 {
-    $funcionario = +$_POST['funcionario'];
+    $funcionario = (int) $_POST['funcionario'];
 
     $reposit = new reposit();
 
@@ -147,8 +147,8 @@ function preencheFuncionario()
     $result = $reposit->RunQuery($sql);
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
 
         // $funcionario = $row['nomeFuncionario'];
         $cargo = $row['descricao'];

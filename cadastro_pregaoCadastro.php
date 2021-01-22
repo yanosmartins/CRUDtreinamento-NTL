@@ -101,8 +101,8 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao, endereco FROM Ntl.portal where ativo = 1 order by descricao";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
                                                                             $endereco  = ($row['endereco']);

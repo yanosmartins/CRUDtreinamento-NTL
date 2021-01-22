@@ -43,14 +43,14 @@ function gravaTarefa()
     $visivel = validaNumero($tarefa['visivel']);
     $ativo = validaNumero($tarefa['ativo']);
 
-    $sql = "Ntl.tarefa_Atualiza(
+    $sql = "Ntl.tarefa_Atualiza
         $codigo,
         $descricao,	
         $tipo,
         $visivel,
         $ativo,
         $usuario
-    )";
+    ";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -70,7 +70,7 @@ function recuperaTarefa()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, descricao, tipo, visivel, ativo FROM Ntl.tarefa WHERE (0=0) AND codigo = " . $id;
@@ -80,8 +80,8 @@ function recuperaTarefa()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $codigo = $row['codigo'];
     $descricao = $row['descricao'];
     $tipo = $row['tipo'];

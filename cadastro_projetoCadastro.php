@@ -311,9 +311,9 @@ include("inc/nav.php");
                                                                                 FROM Ntl.municipio 
                                                                                 WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
-                                                                            $id = +$row['codigo'];
+                                                                        foreach($result as $row) {
+
+                                                                            $id = (int) $row['codigo'];
                                                                             $nome = $row['descricao'];
                                                                             echo '<option value=' . $id . '>' . $nome . '</option>';
                                                                         }

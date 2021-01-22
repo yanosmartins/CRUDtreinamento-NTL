@@ -110,9 +110,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select codigo, apelido  from Ntl.sindicato where situacao=1 order by descricao ";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $codigo = +$row['codigo'];
-                                                                            $sindicato = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $sindicato = $row['apelido'];
 
                                                                             echo '<option value=' . $codigo . '>' . $sindicato . '</option>';
                                                                         }
@@ -130,9 +130,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select codigo, descricao  from Ntl.cargo where ativo=1 order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $codigo = +$row['codigo'];
-                                                                            $sindicato = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $sindicato = $row['descricao'];
 
                                                                             echo '<option value=' . $codigo . '>' . $sindicato . '</option>';
                                                                         }
@@ -261,9 +261,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach($result as $row) {
 
-                                                                            $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
                                                                         }
                                                                         ?>
@@ -313,9 +313,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach($result as $row) {
 
-                                                                            $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
                                                                         }
                                                                         ?>
@@ -366,9 +366,9 @@ include("inc/nav.php");
                                                                             $reposit = new reposit();
                                                                             $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                             $result = $reposit->RunQuery($sql);
-                                                                            while (($row = odbc_fetch_array($result))) {
+                                                                            foreach($result as $row) {
 
-                                                                                $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
+                                                                                $sigla = $row['sigla'];
                                                                                 echo '<option value=' . $sigla . '>' . $sigla . '</option>';
                                                                             }
                                                                             ?>
@@ -463,9 +463,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach($result as $row) {
 
-                                                                            $sigla = mb_convert_encoding($row['sigla'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
                                                                         }
                                                                         ?>

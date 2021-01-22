@@ -9,7 +9,7 @@
         "name": "Listen for XDebug",
         "type": "php",
         "request": "launch",
-        "port": 9003,
+        "port": 9000,
         "xdebugSettings": {
           "max_children": 999,
           "max_depth": 10,

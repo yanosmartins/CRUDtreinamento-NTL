@@ -131,9 +131,9 @@ include("inc/nav.php");
                                                                         FROM Ntl.funcionario 
                                                                         WHERE ativo = 1 AND dataDemissaoFuncionario IS NULL order by nome";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach($result as $row) {
                                                                             $id = $row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $descricao = $row['nome'];
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>

@@ -42,13 +42,13 @@ function grava()
     if ((empty($_POST['id'])) || (!isset($_POST['id'])) || (is_null($_POST['id']))) {
         $id = 0;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
         $ativo = 0;
     } else {
-        $ativo = +$_POST["ativo"];
+        $ativo = (int) $_POST["ativo"];
     }
 
     session_start();
@@ -57,7 +57,7 @@ function grava()
     $descricao = formatarString($_POST['descricao']);
     $valorUnitario = formatarNumero($_POST['valorUnitario']);
 
-    $sql = "Ntl.valeTransporteUnitario_Atualiza(" . $id . "," . $ativo . "," . $unidadeFederacao . "," . $descricao . "," . $valorUnitario . "," . $usuario . ") ";
+    $sql = "Ntl.valeTransporteUnitario_Atualiza " . $id . "," . $ativo . "," . $unidadeFederacao . "," . $descricao . "," . $valorUnitario . "," . $usuario . " ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -111,11 +111,11 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-        $valorUnitario = mb_convert_encoding($row['valorUnitario'], 'UTF-8', 'HTML-ENTITIES');
-        $uf = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row['descricao'];
+        $valorUnitario = $row['valorUnitario'];
+        $uf = $row['unidadeFederacao'];
         $ativo = +$row['ativo'];
 
         $out = $id . "^" . $descricao . "^" . $valorUnitario . "^" . $uf . "^" . $ativo;
@@ -175,7 +175,7 @@ function verificaDescricao()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    $row = odbc_fetch_array($result);
+    $row = $result[0];
     if ($row == false) {
         echo ('sucess#');
         return;

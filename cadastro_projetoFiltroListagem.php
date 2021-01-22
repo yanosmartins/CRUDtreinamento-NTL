@@ -72,15 +72,15 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
+                foreach($result as $row) {
                     $row = array_map('utf8_encode',$row);
-                    $id = +$row['codigo'];
+                    $id = (int) $row['codigo'];
                     $descricao = $row['descricao'];
                     $apelido = $row['apelido'];
                     $cnpj = $row['cnpj'];
                     $dataAssinatura = $row['dataAssinatura'];
                     $dataRenovacao = $row['dataRenovacao'];
-                    $ativo = +$row['ativo'];
+                    $ativo = (int) $row['ativo'];
 
                     $dataAux = new DateTime($dataAssinatura);
                     $dataAssinatura = $dataAux->format('d/m/Y');

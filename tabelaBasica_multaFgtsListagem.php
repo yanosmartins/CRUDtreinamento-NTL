@@ -35,10 +35,10 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
 
-                while (($row = odbc_fetch_array($result))) {
-                    $codigo = +$row['codigo'];
-                    $percentual = +$row['percentual'];
-                    $ativo = +$row['ativo'];
+                foreach($result as $row) {
+                    $codigo = (int) $row['codigo'];
+                    $percentual = (float) $row['percentual'];
+                    $ativo = (int) $row['ativo'];
 
                     echo '<tr>';                    
                     echo '<td class="text-left"><a href="tabelaBasica_multaFgtsCadastro.php?codigo=' . $codigo . '">'  . $percentual ."%". '</a></td>';

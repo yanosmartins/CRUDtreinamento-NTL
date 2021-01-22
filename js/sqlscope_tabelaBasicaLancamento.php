@@ -45,13 +45,13 @@ function grava()
     $ativo = $_POST['ativo'];
     $faltaAusencia = $_POST['faltaAusencia'];
 
-    $sql = "Ntl.lancamento_Atualiza(
+    $sql = "Ntl.lancamento_Atualiza
             $codigo,
             $ativo,
             $sigla,
             $descricao,
             $usuario,
-            $faltaAusencia)";
+            $faltaAusencia";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -99,8 +99,8 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $id = +$row['codigo'];
         $descricao = $row['descricao'];
         $sigla = $row['sigla'];
@@ -113,7 +113,7 @@ function recupera()
             echo "failed#";
         }
         if ($out != '') {
-            echo "sucess#" . $out . " ";
+            echo "sucess#" . $out;
         }
         return;
     }

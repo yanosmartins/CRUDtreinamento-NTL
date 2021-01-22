@@ -33,9 +33,9 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
 
-                while (($row = odbc_fetch_array($result))) {
-                    $codigo = +$row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $codigo = (int) $row['codigo'];
+                    $descricao = $row['descricao'];
                     $ativo = $row['ativo'];
 
                     echo '<tr>';

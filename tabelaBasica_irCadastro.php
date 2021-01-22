@@ -269,6 +269,34 @@ include("inc/scripts.php");
         );
     }
 
+    function excluir() {
+        var id = $("#codigo").val();
+
+        if (id === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+            return;
+        }
+
+        excluirIr(id,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
+                    voltar();
+                } else {
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
+                }
+            }
+        );
+    }
+
 
     $('#dlgSimpleExcluir').dialog({
         autoOpen: false,
@@ -281,7 +309,7 @@ include("inc/scripts.php");
             "class": "btn btn-success",
             click: function() {
                 $(this).dialog("close");
-                excluir();
+                excluirIr();
             }
         }, {
             html: "<i class='fa fa-times'></i>&nbsp; Cancelar",

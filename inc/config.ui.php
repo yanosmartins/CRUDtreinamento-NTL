@@ -16,7 +16,7 @@ $arrayPermissao = array();
 
 $reposit = new reposit();
 $result = $reposit->SelectCondTrue("usuario| login = " . $login . " AND ativo = 1");
-if ($row = $result) {
+if ($row = $result[0]) {
     $codigoUsuario = +$row['codigo'];
     $tipoUsuario = $row['tipoUsuario'];
     $funcionario = +$row['funcionario'];
@@ -26,14 +26,14 @@ if ($row = $result) {
 				INNER JOIN Ntl.funcionalidade FNC ON FNC.codigo = USUF.funcionalidade
                 WHERE USUF.usuario = " . $codigoUsuario;
         $result = $reposit->RunQuery($sql);
-        while (($row = odbc_fetch_array($result))) {
+        foreach($result as $row) {
             array_push($arrayPermissao, $row["nome"]);
         }
     }
     if ($tipoUsuario === "S") {
         $sql = " SELECT nome FROM Ntl.funcionalidade";
         $result = $reposit->RunQuery($sql);
-        while (($row = odbc_fetch_array($result))) {
+        foreach($result as $row) {
             array_push($arrayPermissao, $row["nome"]);
         }
     }

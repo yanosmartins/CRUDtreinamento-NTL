@@ -22,12 +22,12 @@ include "js/repositorio.php";
                 }
              
                 if ($_GET["codigoSCI"] != "") {
-                    $codigoSCI = +$_GET["codigoSCI"];
+                    $codigoSCI = (int) $_GET["codigoSCI"];
                     $where = $where . " AND ([codigoSCI] like '%' + " . "replace('" . $codigoSCI . "',' ','%') + " . "'%')";
                 } 
  
                 if ($_GET["ativo"] != "") {
-                    $ativo = +$_GET["ativo"];
+                    $ativo = (int) $_GET["ativo"];
                     $where = $where . " and ativo = ".$ativo;
                 } 
 
@@ -38,10 +38,10 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
                 
-                while (($row = odbc_fetch_array($result))) {
-                    $codigo = +$row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $codigo = (int) $row['codigo'];
+                    $descricao = $row['descricao'];
+                    $ativo = $row['ativo'];
 
                     $ativo == 1 ? $ativo = 'Sim' : $ativo = 'Não'; 
 

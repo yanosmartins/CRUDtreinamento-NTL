@@ -91,28 +91,22 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
-
                                                         <div class="row ">
-
                                                             <section class="col col-2">
                                                                 <label class="label">Percentual ISS</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
                                                                     <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
-
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2">
-
+                                                                <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" autocomplete="new-password" required>
-                                                                        <option></option>
-                                                                        <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
-                                                                    </select>
+                                                                    <select id="ativo" name="ativo" class="required" required>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0'>Não</option>
+                                                                    </select><i></i>
                                                                 </label>
                                                             </section>
-
                                                         </div>
                                                     </fieldset>
                                                 </div>

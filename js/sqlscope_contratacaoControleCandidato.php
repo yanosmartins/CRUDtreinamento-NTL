@@ -44,8 +44,8 @@ function grava()
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
 
-        if (($row = odbc_fetch_array($result)))
-            $row = array_map('utf8_encode', $row);
+        if($row = $result[0])
+
         $candidato = validaNumero($row['codigo']);
     }
 
@@ -95,7 +95,7 @@ function grava()
     } else {
         $verificadoPeloRh = 0;
     }
-    $sql = "Contratacao.controleCandidato_Atualiza( 
+    $sql = "Contratacao.controleCandidato_Atualiza 
         $codigo,
         $ativo,
         $candidato,
@@ -135,7 +135,7 @@ function grava()
         $prazoDeterminado, 
         $usuario, 
         $dataFinal
-        )";
+        ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -157,7 +157,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT  CC.prazoDeterminado, C.codigo as codigoCandidato,CC.codigo, C.nomeCompleto as nomeCandidato, 
@@ -179,8 +179,8 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $codigoFuncionario = $row['codigoFuncionario']; //id funcionario na tabela funcionario
     $codigo = $row['codigo']; // id na tabela controle funcionario cadastro
     $ativo = $row['ativo'];
@@ -198,7 +198,7 @@ function recupera()
     $dataInicioRevezamento = validaDataRecupera($row['dataInicioRevezamento']);
     $tipoRevezamento = $row['tipoRevezamento'];
     $escalaHorario = $row['escalaHorario'];
-    $tipoAdmissao = mb_convert_encoding($row['tipoAdmissao'], 'UTF-8', 'HTML-ENTITIES');
+    $tipoAdmissao = $row['tipoAdmissao'];
     $indicativoAdmissao = $row['indicativoAdmissao'];
     $naturezaOcupacao = $row['naturezaOcupacao'];
     $fgtsGpsCategoriaSefip = $row['fgtsGpsCategoriaSefip'];
@@ -296,9 +296,9 @@ function recupera()
 
     $contadorFilho = 0;
     $arrayFilho = array();
-    while ($row = odbc_fetch_array($result)) {
+    foreach($result as $row) {
 
-        $nomeCompletoFilho = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
+        $nomeCompletoFilho = $row['nomeCompleto'];
         $cpfFilho = $row['cpf'];
         $dataNascimentoFilho = validaDataRecupera($row['dataNascimento']);
 
@@ -330,8 +330,8 @@ function recupera()
 
     $contadorDependente = 0;
     $arrayDependente = array();
-    while ($row = odbc_fetch_array($result)) {
-        $nomeCompletoDependente = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
+    foreach($result as $row) {
+        $nomeCompletoDependente = $row['nomeCompleto'];
         $cpfDependente = $row['cpf'];
         $dataNascimentoDependente = validaDataRecupera($row['dataNascimento']);
         $grauParentescoDependente = $row['grauParentescoDependente'];
@@ -467,7 +467,7 @@ function recuperaCbo()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT cbo FROM syscbNtl.syscb.cargo WHERE (0=0) AND codigoCargoSCI = " . $id;
@@ -477,8 +477,8 @@ function recuperaCbo()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $cbo = $row['cbo'];
 
     $out =   $cbo;
@@ -499,17 +499,17 @@ function verificaMatricula()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $matriculaSCI = +$_POST["matriculaSCI"];
+        $matriculaSCI = $_POST["matriculaSCI"];
     }
 
-    $id = +$_POST["id"];
+    $id = (int) $_POST["id"];
 
     $sql = "SELECT matriculaSCI, codigo FROM dbo.controleFuncionario WHERE matriculaSCI = " . $matriculaSCI;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $codigo = $row['codigo'];
         if ($id != $codigo) {
             echo "sucess";

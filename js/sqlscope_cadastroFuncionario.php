@@ -197,7 +197,7 @@ function grava()
 
     // ',' .  $xmlDependente .
 
-    $sql = "Ntl.funcionario_Atualiza (
+    $sql = "Ntl.funcionario_Atualiza 
                         $id,
                         $ativo,
                         $sindicato,
@@ -235,9 +235,9 @@ function grava()
                         $xmlTelefone,
                         $xmlEmail,
                         $xmlDependente,
-                        $usuario)";
+                        $usuario";
 
-    // $sql = 'Ntl.funcionario_Atualiza (';
+    // $sql = 'Ntl.funcionario_Atualiza ';
     // $sql .= "$id,";
     // $sql .= "$ativo,";
     // $sql .= "$sindicato,";
@@ -274,7 +274,7 @@ function grava()
     // $sql .= "$ufIdentidade,";
     // $sql .= "$xmlTelefone,";
     // $sql .= "$xmlEmail,";
-    // $sql .= "$xmlDependente)";
+    // $sql .= "$xmlDependente";
 
 
     $reposit = new reposit();
@@ -296,7 +296,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT * FROM Ntl.funcionario WHERE codigo = " . $id;
@@ -306,53 +306,53 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
 
         //Accordion Dados
         $id = +$row['codigo'];
         $ativo = +$row['ativo'];
         $sindicato = +$row['sindicato'];
         $cargo = +$row['cargo'];
-        $nome = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
-        $cpf = mb_convert_encoding($row['cpf'], 'UTF-8', 'HTML-ENTITIES');
-        $matricula = mb_convert_encoding($row['matricula'], 'UTF-8', 'HTML-ENTITIES');
-        $sexo = mb_convert_encoding($row['sexo'], 'UTF-8', 'HTML-ENTITIES');
-        $dataNascimento =  mb_convert_encoding($row['dataNascimento'], 'UTF-8', 'HTML-ENTITIES');
-        $dataAdmissaoFuncionario =  mb_convert_encoding($row['dataAdmissaoFuncionario'], 'UTF-8', 'HTML-ENTITIES');
-        $dataDemissaoFuncionario =  mb_convert_encoding($row['dataDemissaoFuncionario'], 'UTF-8', 'HTML-ENTITIES');
-        $dataCancelamentoPlanoSaude =  mb_convert_encoding($row['dataCancelamentoPlanoSaude'], 'UTF-8', 'HTML-ENTITIES');
+        $nome = $row['nome'];
+        $cpf = $row['cpf'];
+        $matricula = $row['matricula'];
+        $sexo = $row['sexo'];
+        $dataNascimento =  $row['dataNascimento'];
+        $dataAdmissaoFuncionario =  $row['dataAdmissaoFuncionario'];
+        $dataDemissaoFuncionario =  $row['dataDemissaoFuncionario'];
+        $dataCancelamentoPlanoSaude =  $row['dataCancelamentoPlanoSaude'];
 
 
         //Accordion de Documentos Pessoais
         //Carteira de Trabalho
-        $pisPasep = mb_convert_encoding($row['pisPasep'], 'UTF-8', 'HTML-ENTITIES');
-        $numeroCarteiraTrabalho = mb_convert_encoding($row['numeroCarteiraTrabalho'], 'UTF-8', 'HTML-ENTITIES');
-        $serieCarteiraTrabalho = mb_convert_encoding($row['serieCarteiraTrabalho'], 'UTF-8', 'HTML-ENTITIES');
-        $ufCarteiraTrabalho = mb_convert_encoding($row['ufCarteiraTrabalho'], 'UTF-8', 'HTML-ENTITIES');
-        $dataExpedicaoCarteiraTrabalho = mb_convert_encoding($row['dataExpedicaoCarteiraTrabalho'], 'UTF-8', 'HTML-ENTITIES');
+        $pisPasep = $row['pisPasep'];
+        $numeroCarteiraTrabalho = $row['numeroCarteiraTrabalho'];
+        $serieCarteiraTrabalho = $row['serieCarteiraTrabalho'];
+        $ufCarteiraTrabalho = $row['ufCarteiraTrabalho'];
+        $dataExpedicaoCarteiraTrabalho = $row['dataExpedicaoCarteiraTrabalho'];
 
         //Identidade 
-        $rg = mb_convert_encoding($row['rg'], 'UTF-8', 'HTML-ENTITIES');
-        $dataEmissaoRG = mb_convert_encoding($row['dataEmissaoRG'], 'UTF-8', 'HTML-ENTITIES');
-        $ufIdentidade = mb_convert_encoding($row['ufIdentidade'], 'UTF-8', 'HTML-ENTITIES');
-        $orgaoEmissorRG =  mb_convert_encoding($row['orgaoEmissorRG'], 'UTF-8', 'HTML-ENTITIES');
+        $rg = $row['rg'];
+        $dataEmissaoRG = $row['dataEmissaoRG'];
+        $ufIdentidade = $row['ufIdentidade'];
+        $orgaoEmissorRG =  $row['orgaoEmissorRG'];
 
         //CNH
-        $cnh = mb_convert_encoding($row['cnh'], 'UTF-8', 'HTML-ENTITIES');
-        $categoriaCNH = mb_convert_encoding($row['categoriaCNH'], 'UTF-8', 'HTML-ENTITIES');
-        $ufCNH = mb_convert_encoding($row['ufCNH'], 'UTF-8', 'HTML-ENTITIES');
-        $dataEmissaoCNH = mb_convert_encoding($row['dataEmissaoCNH'], 'UTF-8', 'HTML-ENTITIES');
-        $dataVencimentoCNH = mb_convert_encoding($row['dataVencimentoCNH'], 'UTF-8', 'HTML-ENTITIES');
-        $primeiraHabilitacaoCNH = mb_convert_encoding($row['primeiraHabilitacaoCNH'], 'UTF-8', 'HTML-ENTITIES');
+        $cnh = $row['cnh'];
+        $categoriaCNH = $row['categoriaCNH'];
+        $ufCNH = $row['ufCNH'];
+        $dataEmissaoCNH = $row['dataEmissaoCNH'];
+        $dataVencimentoCNH = $row['dataVencimentoCNH'];
+        $primeiraHabilitacaoCNH = $row['primeiraHabilitacaoCNH'];
 
         //Accordion de Endereço
-        $cep = mb_convert_encoding($row['cep'], 'UTF-8', 'HTML-ENTITIES');
-        $logradouro = mb_convert_encoding($row['logradouro'], 'UTF-8', 'HTML-ENTITIES');
-        $numeroLogradouro = mb_convert_encoding($row['numeroLogradouro'], 'UTF-8', 'HTML-ENTITIES');
-        $complemento = mb_convert_encoding($row['complemento'], 'UTF-8', 'HTML-ENTITIES');
-        $ufLogradouro = mb_convert_encoding($row['ufLogradouro'], 'UTF-8', 'HTML-ENTITIES');
-        $cidade = mb_convert_encoding($row['cidade'], 'UTF-8', 'HTML-ENTITIES');
-        $bairro = mb_convert_encoding($row['bairro'], 'UTF-8', 'HTML-ENTITIES');
+        $cep = $row['cep'];
+        $logradouro = $row['logradouro'];
+        $numeroLogradouro = $row['numeroLogradouro'];
+        $complemento = $row['complemento'];
+        $ufLogradouro = $row['ufLogradouro'];
+        $cidade = $row['cidade'];
+        $bairro = $row['bairro'];
 
 
 
@@ -404,7 +404,7 @@ function recupera()
 
         $contadorTelefone = 0;
         $arrayTelefone = array();
-        while ($row = odbc_fetch_array($result)) {
+        foreach($result as $row) {
             $telefoneId = $row['codigo'];
             $telefone = $row['telefone'];
             $principal = +$row['principal'];
@@ -447,7 +447,7 @@ function recupera()
 
         $contadorEmail = 0;
         $arrayEmail = array();
-        while ($row = odbc_fetch_array($result)) {
+        foreach($result as $row) {
             $emailId = $row['codigo'];
             $email = $row['email'];
             $principal = +$row['principal'];
@@ -484,16 +484,16 @@ function recupera()
 
         $contadorDependente = 0;
         $arrayDependente = array();
-        while ($row = odbc_fetch_array($result)) {
+        foreach($result as $row) {
             $dependenteId = $row['codigo'];
-            $nomeDependente = mb_convert_encoding($row['nomeDependente'], 'UTF-8', 'HTML-ENTITIES');
+            $nomeDependente = $row['nomeDependente'];
             $dataNascimentoDependente = $row['dataNascimentoDependente'];
             $grauParentescoDependente = $row['grauParentescoDependente'];
-            $cpfDependente = mb_convert_encoding($row['cpfDependente'], 'UTF-8', 'HTML-ENTITIES');
-            $rgDependente = mb_convert_encoding($row['rgDependente'], 'UTF-8', 'HTML-ENTITIES');
-            $orgaoEmissorDependente = mb_convert_encoding($row['orgaoEmissorDependente'], 'UTF-8', 'HTML-ENTITIES');
+            $cpfDependente = $row['cpfDependente'];
+            $rgDependente = $row['rgDependente'];
+            $orgaoEmissorDependente = $row['orgaoEmissorDependente'];
             $descricaoDataNascimentoDependente = formataDataRecuperacao($dataNascimentoDependente);
-            $descricaoGrauParentesco =  mb_convert_encoding($row['descricaoGrauParentesco'], 'UTF-8', 'HTML-ENTITIES');
+            $descricaoGrauParentesco =  $row['descricaoGrauParentesco'];
 
 
             $contadorDependente = $contadorDependente + 1;
@@ -611,9 +611,9 @@ function listaFuncionarioAtivoAutoComplete()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
-        $descricao = mb_convert_encoding($row["nome"], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row["nome"];
         $contador = $contador + 1;
         $array[] = array("id" => $id, "nome" => $descricao);
     }
@@ -633,7 +633,7 @@ function verificaCpf()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if (odbc_fetch_array($result)) {
+    if ($result[0]) {
         echo "failed#";
         return;
     } else {

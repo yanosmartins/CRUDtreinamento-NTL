@@ -90,9 +90,9 @@ include("inc/nav.php");
                                                                         $sql = "SELECT codigo, descricao FROM Ntl.sindicato WHERE (0=0) AND situacao = 1";
                                                                         $result = $reposit->RunQuery($sql);
 
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $id = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $id = (int) $row['codigo'];
+                                                                            $descricao = $row['descricao'];
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>

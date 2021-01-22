@@ -39,13 +39,13 @@ function grava()
     if ((empty($_POST['id'])) || (!isset($_POST['id'])) || (is_null($_POST['id']))) {
         $id = 0;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
         $ativo = 0;
     } else {
-        $ativo = +$_POST["ativo"];
+        $ativo = (int) $_POST["ativo"];
     }
 
     session_start();
@@ -53,9 +53,9 @@ function grava()
     $descricao = formatarString($_POST['descricao']);
     $cbo = formatarString($_POST['cboNumero']);
     $descricaoMT = formatarString($_POST['cboDescricao']);
-    $codigoCargoSCI = +$_POST['codigoCargoSCI'];
+    $codigoCargoSCI = (int) $_POST['codigoCargoSCI'];
 
-    $sql = 'Ntl.cargo_Atualiza (' . $id . ',' . $ativo . ',' . $descricao . ',' . $cbo . ',' . $descricaoMT . ',' . $usuario . ',' . $codigoCargoSCI . ') ';
+    $sql = 'Ntl.cargo_Atualiza ' . $id . ',' . $ativo . ',' . $descricao . ',' . $cbo . ',' . $descricaoMT . ',' . $usuario . ',' . $codigoCargoSCI . ' ';
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -104,12 +104,12 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
         $ativo = +$row['ativo'];
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-        $cbo =  mb_convert_encoding($row['cbo'], 'UTF-8', 'HTML-ENTITIES');
-        $descricaoMT =  mb_convert_encoding($row['descricaoMT'], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row['descricao'];
+        $cbo =  $row['cbo'];
+        $descricaoMT =  $row['descricaoMT'];
         $codigoCargoSCI = +$row['codigoCargoSCI'];
 
 
@@ -168,7 +168,7 @@ function verificaDescricao()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    $row = odbc_fetch_array($result);
+    $row = $result[0];
     if ($row == false) {
         echo ('sucess#');
         return;

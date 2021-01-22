@@ -116,7 +116,7 @@
 //
 //                $reposit = new reposit();
 //                $result = $reposit->SelectCondTrue("usuario| login=" . $login . " and ativo=1");
-//                if ($row = $result) {
+//                if ($row = $result[0]) {
 //                    $codigoUsuario = $row['codigo'];
 //
 //                    $sql = "select undCli.cliente as codigoUnidade,psj.nomeFantasia,usuUndCli.principal
@@ -133,9 +133,9 @@
 //                    $reposit = new reposit();
 //                    $result = $reposit->RunQuery($sql);
 //                    $contadorRegs = 1;
-//                    while (($row = odbc_fetch_array($result))) {
+//                    foreach($result as $row) {
 //                        $codigoUnidade = +$row['codigoUnidade'];
-//                        $nomeUnidade = mb_convert_encoding($row['nomeFantasia'], 'UTF-8', 'HTML-ENTITIES');
+//                        $nomeUnidade = $row['nomeFantasia'];
 //                        $principal = +$row['principal'];
 //
 //                        if ($principal === 1) {

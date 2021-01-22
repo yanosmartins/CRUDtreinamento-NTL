@@ -18,7 +18,7 @@ include "js/repositorio.php";
 
 
                 $where = " WHERE (0=0) ";
-                $projeto = +$_GET["projeto"];
+                $projeto = (int) $_GET["projeto"];
                 $numeroPregao = $_GET["numeroPregao"];
                 $ativo = $_GET["ativo"];
              
@@ -49,17 +49,17 @@ include "js/repositorio.php";
                 $sql = $sql . $where;
 
                 $result = $reposit->RunQuery($sql);
-                while (($row = odbc_fetch_array($result))) {
+                foreach($result as $row) {
                    
-                    $codigo = +$row['codigoSysgef'];
-                    $projeto = mb_convert_encoding($row['projeto'], 'UTF-8', 'HTML-ENTITIES');
-                    $numeroCentroCusto = +$row['numeroCentroCusto'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $apelido = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
+                    $codigo = (int) $row['codigoSysgef'];
+                    $projeto = $row['projeto'];
+                    $numeroCentroCusto = $row['numeroCentroCusto'];
+                    $descricao = $row['descricao'];
+                    $apelido = $row['apelido'];
                     $cnpj = $row['cnpj'];
                     $numeroPregao = $row['numeroPregao'];
-                    $razaoSocial =mb_convert_encoding($row['razaoSocial'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = +$row['ativo'];
+                    $razaoSocial =$row['razaoSocial'];
+                    $ativo = (int) $row['ativo'];
 
                     
                     echo '<tr >';

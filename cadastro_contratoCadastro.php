@@ -95,8 +95,8 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -261,8 +261,8 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.caucao  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -386,11 +386,11 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, percentual FROM Ntl.decimoTerceiro  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
-                                                                            $percentual = +$row['percentual'];
+                                                                            $percentual = (float) $row['percentual'];
                                                                             echo '<option value=' . $codigo . '>  ' . $percentual . "%" . '</option>';
                                                                         }
                                                                         ?>
@@ -408,11 +408,11 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, percentual FROM Ntl.ferias  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
-                                                                            $percentual = +$row['percentual'];
+                                                                            $percentual = (float) $row['percentual'];
                                                                             echo '<option value=' . $codigo . '>  ' . $percentual . "%" . '</option>';
                                                                         }
                                                                         ?>
@@ -430,11 +430,11 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, percentual FROM Ntl.multaFGTS  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
-                                                                            $percentual = +$row['percentual'];
+                                                                            $percentual = (float) $row['percentual'];
                                                                             echo '<option value=' . $codigo . '>  ' . $percentual . "%" . '</option>';
                                                                         }
                                                                         ?>
@@ -582,8 +582,8 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, descricao FROM Ntl.localizacao  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                while (($row = odbc_fetch_array($result))) {
-                                                                                    $row = array_map('utf8_encode', $row);
+                                                                                foreach($result as $row) {
+
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
                                                                                     $descricao = ($row['descricao']);
@@ -654,11 +654,11 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.iss  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                while (($row = odbc_fetch_array($result))) {
-                                                                                    $row = array_map('utf8_encode', $row);
+                                                                                foreach($result as $row) {
+
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
-                                                                                    $percentual = +$row['percentual'];
+                                                                                    $percentual = (float) $row['percentual'];
                                                                                     echo '<option value=' . $codigo . '>  ' . $percentual . "%" . '</option>';
                                                                                 }
                                                                                 ?>
@@ -674,11 +674,11 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.inss  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                while (($row = odbc_fetch_array($result))) {
-                                                                                    $row = array_map('utf8_encode', $row);
+                                                                                foreach($result as $row) {
+
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
-                                                                                    $percentual = +$row['percentual'];
+                                                                                    $percentual = (float) $row['percentual'];
                                                                                     echo '<option value=' . $codigo . '>  ' . $percentual . "%" . '</option>';
                                                                                 }
                                                                                 ?>
@@ -694,11 +694,11 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.ir  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                while (($row = odbc_fetch_array($result))) {
-                                                                                    $row = array_map('utf8_encode', $row);
+                                                                                foreach($result as $row) {
+
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
-                                                                                    $percentual = +$row['percentual'];
+                                                                                    $percentual = (float) $row['percentual'];
                                                                                     echo '<option value=' . $codigo . '>  ' . $percentual . "%" . '</option>';
                                                                                 }
                                                                                 ?>
@@ -714,11 +714,11 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.pisConfisCs  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                while (($row = odbc_fetch_array($result))) {
-                                                                                    $row = array_map('utf8_encode', $row);
+                                                                                foreach($result as $row) {
+
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
-                                                                                    $percentual = +$row['percentual'];
+                                                                                    $percentual = (float) $row['percentual'];
                                                                                     echo '<option value=' . $codigo . '>  ' . $percentual . "%" . '</option>';
                                                                                 }
                                                                                 ?>
@@ -736,8 +736,8 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, descricaoCodigo, descricaoServico FROM Ntl.servico  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                while (($row = odbc_fetch_array($result))) {
-                                                                                    $row = array_map('utf8_encode', $row);
+                                                                                foreach($result as $row) {
+
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
                                                                                     $descricaoCodigo = ($row['descricaoCodigo']);
@@ -756,8 +756,8 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, descricaoServico FROM Ntl.servico  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                while (($row = odbc_fetch_array($result))) {
-                                                                                    $row = array_map('utf8_encode', $row);
+                                                                                foreach($result as $row) {
+
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
                                                                                     $descricaoServico = ($row['descricaoServico']);
@@ -831,8 +831,8 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.indiceReajuste  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -853,8 +853,8 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.inicioReajuste  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach($result as $row) {
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);

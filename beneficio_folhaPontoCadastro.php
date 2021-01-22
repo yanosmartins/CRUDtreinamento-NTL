@@ -100,9 +100,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select codigo, descricao from Ntl.projeto where ativo = 1 order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $codigo = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $descricao = $row['descricao'];
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -118,9 +118,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select codigo, nome from Ntl.funcionario where dataDemissaoFuncionario IS NULL AND ativo = 1 order by nome";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $codigo = +$row['codigo'];
-                                                                            $nome = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $nome = $row['nome'];
                                                                             echo '<option value=' . $codigo . '>' . $nome . '</option>';
                                                                         }
                                                                         ?>

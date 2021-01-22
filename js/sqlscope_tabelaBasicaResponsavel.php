@@ -37,14 +37,14 @@ function grava() {
     $codigo = $_POST['codigo'];
     $nome = "'" . $_POST['nome'] . "'";
     $telefone = "'" . $_POST['telefone']. "'" ;
-    $ativo = +$_POST['ativo']; 
+    $ativo = (int) $_POST['ativo'];
  
-    $sql = "Ntl.responsavel_Atualiza(
+    $sql = "Ntl.responsavel_Atualiza
             $codigo,
             $nome,
             $telefone,
             $ativo,
-            $usuario)";
+            $usuario";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -91,8 +91,8 @@ function recupera() {
 
     $out = "";
     
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $codigo = +$row['codigo']; 
         $nome = $row['nome']; 
         $telefone = $row['telefone']; 

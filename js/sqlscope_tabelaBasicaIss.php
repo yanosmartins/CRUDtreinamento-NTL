@@ -44,12 +44,12 @@ function grava()
     $percentual = +$iss['percentual'];
     $ativo = +$iss['ativo'];
 
-    $sql = "Ntl.iss_Atualiza(
+    $sql = "Ntl.iss_Atualiza
         $codigo ,
         $ativo ,
         $percentual,
         $usuario
-        )";
+        ";
 
     $reposit = new reposit();
 
@@ -71,7 +71,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, ativo, percentual FROM Ntl.iss WHERE (0=0) AND codigo = " . $id;
@@ -81,8 +81,8 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
 
     $id = $row['codigo'];
     $percentual = +$row['percentual'];
@@ -123,7 +123,7 @@ function excluir()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $result = $reposit->update('Ntl.iss' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);

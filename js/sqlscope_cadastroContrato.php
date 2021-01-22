@@ -36,18 +36,18 @@ function grava()
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";
         $contrato = $_POST['contrato'];
-    $codigo = +$contrato['codigo'];
-    $projeto = +$contrato['projeto'];
+    $codigo = (int)$contrato['codigo'];
+    $projeto = (int)$contrato['projeto'];
     $numeroPregao  = "'" . $contrato['numeroPregao'] . "'";
     $numeroContrato = "'" . $contrato['numeroContrato'] . "'";
-    $contaVinculada = +$contrato['contaVinculada'];
-    $caucaoAtivo = +$contrato['caucaoAtivo'];
-    $caucao = +$contrato['caucao'];
+    $contaVinculada = (int)$contrato['contaVinculada'];
+    $caucaoAtivo = (int)$contrato['caucaoAtivo'];
+    $caucao = (int)$contrato['caucao'];
     if($caucao == 0){
         $caucao = 'NULL';
     }
     
-    $percentualCaucao = +$contrato['percentualCaucao'];
+    $percentualCaucao = (float)$contrato['percentualCaucao'];
 
     if ($contrato['dataAssinatura'] != "") {
         $aux = explode('/', $contrato['dataAssinatura']);
@@ -67,10 +67,10 @@ function grava()
         $dataInicio = 'NULL';
     }
 
-    $renovacao = +$contrato['renovacao'];
-    $vigencia = +$contrato['vigencia'];
-    $lucratividade = +$contrato['lucratividade'];
-    $outros =  +$contrato['outros'];
+    $renovacao = (int)$contrato['renovacao'];
+    $vigencia = (int)$contrato['vigencia'];
+    $lucratividade = (float)$contrato['lucratividade'];
+    $outros =  (float)$contrato['outros'];
     $valorInicial =  $contrato['valorInicial'];
     $valorInicial = limparValor($valorInicial);
     $valorAtual =  $contrato['valorAtual'];
@@ -87,14 +87,14 @@ function grava()
         $dataRenovacao = 'NULL';
     }
 
-    $ultimaRenovacao     = $contrato['ultimaRenovacao'];
-    $periodoRenovado = +$contrato['periodoRenovado'];
+    $ultimaRenovacao = (int)$contrato['ultimaRenovacao'];
+    $periodoRenovado = (int)$contrato['periodoRenovado'];
 
     if ($contrato['limiteInteresse'] != "") {
         $aux = explode('/', $contrato['limiteInteresse']);
         $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
         $data = "'" . trim($data) . "'";
-        $limiteInteresse = $data;
+        $limiteInteresse = (string)$data;
     } else {
         $limiteInteresse = 'NULL';
     }
@@ -103,7 +103,7 @@ function grava()
         $aux = explode('/', $contrato['envioInteresse']);
         $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
         $data = "'" . trim($data) . "'";
-        $envioInteresse = $data;
+        $envioInteresse = (string)$data;
     } else {
         $envioInteresse = 'NULL';
     }
@@ -112,11 +112,11 @@ function grava()
     $tipoFaturamento = "'" . $contrato['tipoFaturamento'] . "'";
     $prazoPagamento = "'" . $contrato['prazoPagamento'] . "'";
     $condicoesPrazo = "'" . $contrato['condicoesPrazo'] . "'";
-    $indiceReajuste = +$contrato['indiceReajuste'];
+    $indiceReajuste = (int)$contrato['indiceReajuste'];
     if($indiceReajuste == 0){
         $indiceReajuste = 'NULL';
     }
-    $inicioReajuste = +$contrato['inicioReajuste'];
+    $inicioReajuste = (int)$contrato['inicioReajuste'];
     if($inicioReajuste == 0){
         $inicioReajuste = 'NULL';
     }
@@ -125,7 +125,7 @@ function grava()
         $dia = 01;
         $data =  $aux[1] . '-' . $aux[0] . '-' . $dia;
         $data = "'" . trim($data) . "'";
-        $periodoComunicacao = $data;
+        $periodoComunicacao = (string)$data;
     } else {
         $periodoComunicacao = 'NULL';
     }
@@ -134,7 +134,7 @@ function grava()
         $aux = explode('/', $contrato['envioComunicacao']);
         $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
         $data = "'" . trim($data) . "'";
-        $envioComunicacao = $data;
+        $envioComunicacao = (string)$data;
     } else {
         $envioComunicacao = 'NULL';
     }
@@ -146,7 +146,7 @@ function grava()
         $dia = 01;
         $data = $aux[1] . '-' . $aux[0] . '-' . $dia;
         $data = "'" . trim($data) . "'";
-        $periodoSolicitacao = $data;
+        $periodoSolicitacao = (string)$data;
     } else {
         $periodoSolicitacao = 'NULL';
     }
@@ -155,29 +155,26 @@ function grava()
         $aux = explode('/', $contrato['envioSolicitacao']);
         $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
         $data = "'" . trim($data) . "'";
-        $envioSolicitacao = $data;
+        $envioSolicitacao = (string)$data;
     } else {
         $envioSolicitacao = 'NULL';
     }
 
     $anotacoesSolicitacao = "'" . $contrato['anotacoesSolicitacao'] . "'";
-    $decimoTerceiro = +$contrato['decimoTerceiro'];
+    $decimoTerceiro = (int)$contrato['decimoTerceiro'];
     if($decimoTerceiro == 0){
         $decimoTerceiro = "NULL";
     }
-    $multaFGTS = +$contrato['multaFGTS'];
+    $multaFGTS = (int)$contrato['multaFGTS'];
     if($multaFGTS == 0){
         $multaFGTS = "NULL";
     }
-    $ferias = +$contrato['ferias'];
+    $ferias = (int)$contrato['ferias'];
     if($ferias == 0){
         $ferias = "NULL";
     }
 
-    $ativo = +$contrato['ativo'];
-
-
-
+    $ativo = (int)$contrato['ativo'];
 
     //Inicio do Json Faturamento
     $strJsonFaturamento = $contrato["JsonFaturamento"];
@@ -216,7 +213,7 @@ function grava()
 
     
     //Fim do Json  Faturamento
-    $sql = "Ntl.contrato_Atualiza(            
+    $sql = "Ntl.contrato_Atualiza          
                 $codigo,
                 $ativo,
                 $projeto,
@@ -257,7 +254,7 @@ function grava()
                 $anotacoesSolicitacao, 
                 $usuario,
                 '$xmlJsonFaturamento'          
-                )";
+                ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -278,7 +275,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT  codigo,
@@ -326,18 +323,18 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
 
-    $id = $row['codigo'];
-    $ativo = +$row['ativo'];
-    $projeto = +$row['projeto'];
-    $numeroPregao = $row['numeroPregao'];
-    $numeroContrato = $row['numeroContrato'];
-    $contaVinculada = +$row['contaVinculada'];
-    $caucaoAtivo = +$row['caucaoAtivo'];
-    $caucao = +$row['caucao'];
-    $percentualCaucao = +$row['percentualCaucao'];
+
+    $id = (int)$row['codigo'];
+    $ativo = (int)$row['ativo'];
+    $projeto = (int)$row['projeto'];
+    $numeroPregao = (string)$row['numeroPregao'];
+    $numeroContrato = (string)$row['numeroContrato'];
+    $contaVinculada = (int)$row['contaVinculada'];
+    $caucaoAtivo = (int)$row['caucaoAtivo'];
+    $caucao = (int)$row['caucao'];
+    $percentualCaucao = (float)$row['percentualCaucao'];
 
     if ($row['dataAssinatura'] != "") {
         $aux = explode(' ', $row['dataAssinatura']);
@@ -365,24 +362,25 @@ function recupera()
         $dataInicio = '';
     }
 
-    $renovacao = +$row['renovacao'];
-    $vigencia = +$row['vigencia'];
-    $lucratividade = +$row['lucratividade'];
-    $outros = +$row['outros'];
-    $valorInicial = +$row['valorInicial'];
+    $renovacao = (int)$row['renovacao'];
+    $vigencia = (int)$row['vigencia'];
+    $lucratividade = (float)$row['lucratividade'];
+    $outros = (float)$row['outros'];
+    $valorInicial = (float)$row['valorInicial'];
     $valorInicial = preencherValor($valorInicial);
     
-    $valorAtual = +$row['valorAtual'];
+    $valorAtual = (float)$row['valorAtual'];
     $valorAtual = preencherValor($valorAtual);
 
-    $objetoContrato = $row['objetoContrato'];
+    $objetoContrato = (string)$row['objetoContrato'];
 
-    $decimoTerceiro = +$row['decimoTerceiro'];
-    $multaFGTS = +$row['multaFGTS'];
-    $ferias = +$row['ferias'];
+    $decimoTerceiro = (int)$row['decimoTerceiro'];
+    $multaFGTS = (int)$row['multaFGTS'];
+    $ferias = (int)$row['ferias'];
 
-    if ($row['dataRenovacao'] != "") {
-        $aux = explode(' ', $row['dataRenovacao']);
+    $dataRenovacao = (string)$row['dataRenovacao'];
+    if ($dataRenovacao != "") {
+        $aux = explode(' ', $dataRenovacao);
         $data = $aux[1] . ' ' . $aux[0];
         $data = $aux[0];
         $data =  trim($data);
@@ -393,11 +391,13 @@ function recupera()
     } else {
         $dataRenovacao = '';
     }
-    $ultimaRenovacao = +$row['ultimaRenovacao'];
-    $periodoRenovado = $row['periodoRenovado'];
 
-    if ($row['limiteInteresse'] != "") {
-        $aux = explode(' ', $row['limiteInteresse']);
+    $ultimaRenovacao = (int)$row['ultimaRenovacao'];
+    $periodoRenovado = (string)$row['periodoRenovado'];
+
+    $limiteInteresse = (string)$row['limiteInteresse'];
+    if ($limiteInteresse != "") {
+        $aux = explode(' ', $limiteInteresse);
         $data = $aux[1] . ' ' . $aux[0];
         $data = $aux[0];
         $data =  trim($data);
@@ -409,8 +409,9 @@ function recupera()
         $limiteInteresse = '';
     }
 
-    if ($row['envioInteresse'] != "") {
-        $aux = explode(' ', $row['envioInteresse']);
+    $envioInteresse = (string)$row['envioInteresse'];
+    if ($envioInteresse != "") {
+        $aux = explode(' ', $envioInteresse);
         $data = $aux[1] . ' ' . $aux[0];
         $data = $aux[0];
         $data =  trim($data);
@@ -421,16 +422,17 @@ function recupera()
     } else {
         $envioInteresse = '';
     }
+    
+    $anotacoesRenovacao = (string)$row['anotacoesRenovacao'];
+    $tipoFaturamento = (string)$row['tipoFaturamento'];
+    $prazoPagamento = (string)$row['prazoPagamento'];
+    $condicoesPrazo = (string)$row['condicoesPrazo'];
+    $indiceReajuste = (int)$row['indiceReajuste'];
+    $inicioReajuste = (int)$row['inicioReajuste'];
 
-    $anotacoesRenovacao = $row['anotacoesRenovacao'];
-    $tipoFaturamento = $row['tipoFaturamento'];
-    $prazoPagamento = $row['prazoPagamento'];
-    $condicoesPrazo = $row['condicoesPrazo'];
-    $indiceReajuste = +$row['indiceReajuste'];
-    $inicioReajuste = +$row['inicioReajuste'];
-
-    if ($row['periodoComunicacao'] != "") {
-        $aux = explode(' ', $row['periodoComunicacao']);
+    $periodoComunicacao = (string)$row['periodoComunicacao'];
+    if ($periodoComunicacao != "") {
+        $aux = explode(' ', $periodoComunicacao);
         $data = $aux[1] . ' ' . $aux[0];
         $data = $aux[0];
         $data =  trim($data);
@@ -441,8 +443,10 @@ function recupera()
     } else {
         $periodoComunicacao = '';
     }
-    if ($row['envioComunicacao'] != "") {
-        $aux = explode(' ', $row['envioComunicacao']);
+
+    $envioComunicacao = (string)$row['envioComunicacao'];
+    if ($envioComunicacao != "") {
+        $aux = explode(' ',$envioComunicacao);
         $data = $aux[1] . ' ' . $aux[0];
         $data = $aux[0];
         $data =  trim($data);
@@ -454,10 +458,11 @@ function recupera()
         $envioComunicacao = '';
     }
 
-    $anotacoesComunicacao = $row['anotacoesComunicacao'];
+    $anotacoesComunicacao = (string)$row['anotacoesComunicacao'];
 
-    if ($row['periodoSolicitacao'] != "") {
-        $aux = explode(' ', $row['periodoSolicitacao']);
+    $periodoSolicitacao = (string)$row['periodoSolicitacao'];
+    if ($periodoSolicitacao != "") {
+        $aux = explode(' ', $periodoSolicitacao);
         $data = $aux[1] . ' ' . $aux[0];
         $data = $aux[0];
         $data =  trim($data);
@@ -480,10 +485,7 @@ function recupera()
     } else {
         $envioSolicitacao = '';
     }
-    $anotacoesSolicitacao = $row['anotacoesSolicitacao'];
-
-
-
+    $anotacoesSolicitacao = (string)$row['anotacoesSolicitacao'];
 
     // //----------------------Montando o array de Faturamento
 
@@ -508,33 +510,30 @@ function recupera()
 
     $contadorFaturamento = 0;
     $arrayFaturamento = array();
-    while ($row = odbc_fetch_array($result)) {
+    foreach($result as $row) {
 
-        $localizacao = +$row['localizacao'];
-        $localizacaoText = mb_convert_encoding($row['descricaoLocalizacao'], 'UTF-8', 'HTML-ENTITIES');
-        $cepFaturamento = $row['cepFaturamento'];
-        $logradouroFaturamento = mb_convert_encoding($row['logradouroFaturamento'], 'UTF-8', 'HTML-ENTITIES');
-        $numeroFaturamento = $row['numeroFaturamento'];
-        $complementoFaturamento = mb_convert_encoding($row['complementoFaturamento'], 'UTF-8', 'HTML-ENTITIES');
-        $bairroFaturamento = mb_convert_encoding($row['bairroFaturamento'], 'UTF-8', 'HTML-ENTITIES');
-        $cidadeFaturamento = mb_convert_encoding($row['cidadeFaturamento'], 'UTF-8', 'HTML-ENTITIES');
-        $ufFaturamento = mb_convert_encoding($row['ufFaturamento'], 'UTF-8', 'HTML-ENTITIES');
-        $iss = +$row['iss'];
-        $issText = $row['issPercentual'];
-        $inss = +$row['inss'];
-        $inssText = $row['inssPercentual'];
-        $ir = +$row['ir'];
-        $irText = $row['irPercentual'];
-        $pisConfisCs = +$row['pisConfisCs'];
-        $pisConfisCsText = $row['pisConfisCsPercentual'];
-        $codigoServico = +$row['codigoServico'];
-        $codigoServicoText = $row['codigoDescricao'];
-        $descricaoServico = +$row['descricaoServico'];
-        $descricaoServicoText = mb_convert_encoding($row['servicoDescricao'], 'UTF-8', 'HTML-ENTITIES');
-        $aliquotaIss = +$row['aliquotaIss'];
-
-
-
+        $localizacao = (int)$row['localizacao'];
+        $localizacaoText = (string)$row['descricaoLocalizacao'];
+        $cepFaturamento = (string)$row['cepFaturamento'];
+        $logradouroFaturamento = $row['logradouroFaturamento'];
+        $numeroFaturamento = (string)$row['numeroFaturamento'];
+        $complementoFaturamento = (string)$row['complementoFaturamento'];
+        $bairroFaturamento = (string)$row['bairroFaturamento'];
+        $cidadeFaturamento = (string)$row['cidadeFaturamento'];
+        $ufFaturamento = (string)$row['ufFaturamento'];
+        $iss = (int)$row['iss'];
+        $issText = (string)$row['issPercentual'];
+        $inss = (int)$row['inss'];
+        $inssText = (string)$row['inssPercentual'];
+        $ir = (int)$row['ir'];
+        $irText = (string)$row['irPercentual'];
+        $pisConfisCs = (int)$row['pisConfisCs'];
+        $pisConfisCsText = (string)$row['pisConfisCsPercentual'];
+        $codigoServico = (int)$row['codigoServico'];
+        $codigoServicoText = (string)$row['codigoDescricao'];
+        $descricaoServico = (int)$row['descricaoServico'];
+        $descricaoServicoText = (string)$row['servicoDescricao'];
+        $aliquotaIss = (int)$row['aliquotaIss'];
 
         $contadorFaturamento = $contadorFaturamento + 1;
         $arrayFaturamento[] = array(
@@ -567,15 +566,7 @@ function recupera()
     }
 
     $strArrayFaturamento = json_encode($arrayFaturamento);
-
     //------------------------Fim do Array Faturamento
-
-
-
-
-
-
-
 
     $out =
         $id . "^" .
@@ -628,7 +619,7 @@ function recupera()
 
 function preencheProjeto()
 {
-    $projeto = +$_POST['projeto'];
+    $projeto = (int) $_POST['projeto'];
 
     $reposit = new reposit();
 
@@ -640,20 +631,17 @@ function preencheProjeto()
     $result = $reposit->RunQuery($sql);
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
-
-        $cnpj = $row['cnpj'];
-        $razaoSocial = $row['razaoSocial'];
-        $cep =  $row['cep'];
-        $logradouro =  $row['endereco'];
-        $numero =  $row['numeroEndereco'];
-        $complemento =  $row['complemento'];
-        $bairro =  $row['bairro'];
-        $cidade =  $row['cidade'];
-        $uf =  $row['estado'];
+    if($row = $result[0]) {
+        $cnpj = (string)$row['cnpj'];
+        $razaoSocial = (string)$row['razaoSocial'];
+        $cep = (string)$row['cep'];
+        $logradouro = (string)$row['endereco'];
+        $numero = (string)$row['numeroEndereco'];
+        $complemento = (string)$row['complemento'];
+        $bairro = (string)$row['bairro'];
+        $cidade = (string)$row['cidade'];
+        $uf = (string)$row['estado'];
     }
-
 
     $out =  $cnpj . "^" .
         $razaoSocial . "^" .
@@ -684,11 +672,11 @@ function preenchePregao()
     $result = $reposit->RunQuery($sql);
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
 
-        $objetoLicitado = $row['objetoLicitado'];
-        $out =  $objetoLicitado;
+
+        $objetoLicitado = (string)$row['objetoLicitado'];
+        $out = $objetoLicitado;
     }
     // nao considerar vazio pois pode ter um pregao nao cadastrado no sisgc e sera
     //cadastrado na hora
@@ -748,11 +736,11 @@ function listaProjetoAutoComplete()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    while (($row = odbc_fetch_array($result))) {
-        $id = +$row['codigo'];
-        $descricao = mb_convert_encoding($row["descricao"], 'UTF-8', 'HTML-ENTITIES');
-        $numeroCentroCusto  = +$row['numeroCentroCusto'];
-        $apelido = mb_convert_encoding($row["apelido"], 'UTF-8', 'HTML-ENTITIES');
+    foreach($result as $row) {
+        $id = (int)$row['codigo'];
+        $descricao = (string)$row["descricao"];
+        $numeroCentroCusto = (string)$row['numeroCentroCusto'];
+        $apelido = (string)$row["apelido"];
         $contador = $contador + 1;
         $array[] = array("id" => $id, "numeroCentroCusto" => $numeroCentroCusto, "apelido" => $apelido, "descricao" => $descricao);
     }
@@ -783,9 +771,9 @@ function listaNumeroPregaoAutoComplete()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    while (($row = odbc_fetch_array($result))) {
-        $id = +$row['codigo'];
-        $numeroPregao = mb_convert_encoding($row["numeroPregao"], 'UTF-8', 'HTML-ENTITIES');
+    foreach($result as $row) {
+        $id = (int)$row['codigo'];
+        $numeroPregao = (string)$row["numeroPregao"];
         $contador = $contador + 1;
         $array[] = array("id" => $id, "numeroPregao" => $numeroPregao);
     }
@@ -801,7 +789,7 @@ function limparValor($string)
 {
     $string = preg_replace('/[^A-Za-z0-9,\-]/', '', $string);
     $string = str_replace(',', '.', $string);
-    return +$string;
+    return (int)$string;
 }
 
 function preencherValor($string)

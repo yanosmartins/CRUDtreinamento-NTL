@@ -34,10 +34,10 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
                 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $endereco = mb_convert_encoding($row['endereco'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $descricao = $row['descricao'];
+                    $endereco = $row['endereco'];
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="tabelaBasica_portalCadastro.php?id=' . $id . '">' . $descricao . '</a></td>';

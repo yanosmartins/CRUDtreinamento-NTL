@@ -108,9 +108,9 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select CS.codigo, CS.apelido  from Ntl.convenioSaude CS where ativo = 1 order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $id = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach($result as $row) {
+                                                                            $id = (int) $row['codigo'];
+                                                                            $descricao = $row['apelido'];
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>

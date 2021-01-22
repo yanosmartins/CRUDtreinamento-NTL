@@ -54,12 +54,12 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $municipio = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    // $cidade = mb_convert_encoding($row['cidade'], 'UTF-8', 'HTML-ENTITIES');
-                    $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = +$row['ativo'];
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $municipio = $row['descricao'];
+                    // $cidade = $row['cidade'];
+                    $unidadeFederacao = $row['unidadeFederacao'];
+                    $ativo = (int) $row['ativo'];
 
                     //Modifica os valores booleanos por Sim e Não.
                     //Ativo

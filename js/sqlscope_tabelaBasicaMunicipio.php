@@ -39,12 +39,12 @@ function grava()
     //Atributos de Município
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-    $id = +$_POST["id"];
-    $ativo = +$_POST["ativo"];
+    $id = (int) $_POST["id"];
+    $ativo = (int) $_POST["ativo"];
     $descricao = "'" . $_POST['descricao'] . "'";
     $unidadeFederacao = "'" . $_POST['unidadeFederacao'] . "'";
 
-    $sql = "Ntl.municipio_Atualiza($id,$ativo,$unidadeFederacao,$descricao,$usuario)";
+    $sql = "Ntl.municipio_Atualiza $id,$ativo,$unidadeFederacao,$descricao,$usuario";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -93,10 +93,10 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
-        $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-        $unidadeFederacao = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row['descricao'];
+        $unidadeFederacao = $row['unidadeFederacao'];
         $ativo = +$row['ativo'];
 
         $out = $id . "^" . $descricao . "^" . $unidadeFederacao .  "^" . $ativo;

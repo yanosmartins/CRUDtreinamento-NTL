@@ -41,13 +41,13 @@ function grava()
     $ativo = $_POST['ativo'];
     $corFundo = $_POST['corFundo'];
 
-    $sql = "Ntl.situacao_Atualiza(
+    $sql = "Ntl.situacao_Atualiza
             $codigo,
             $descricao,
             $ativo,
             $corFonte,
             $corFundo,
-            $usuario)";
+            $usuario";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -95,8 +95,8 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $id = +$row['codigo'];
         $descricao = $row['descricao'];
         $ativo = +$row['ativo'];

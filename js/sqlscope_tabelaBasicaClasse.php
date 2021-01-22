@@ -43,13 +43,13 @@ function gravaClasse()
     $ativo = $classe['ativo'];
 
 
-    $sql = "Ntl.classe_Atualiza(
+    $sql = "Ntl.classe_Atualiza
         $codigo,
         $descricao,	
         $reducaoBaseIR,
         $usuario,
         $ativo
-        )";
+        ";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -69,7 +69,7 @@ function recuperaClasse()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, descricao, reducaoBaseIR, ativo FROM Ntl.classe WHERE (0=0) AND codigo = " . $id;
@@ -79,8 +79,8 @@ function recuperaClasse()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $codigo = +$row['codigo'];
         $descricao = $row['descricao'];
         $reducaoBaseIR = +$row['reducaoBaseIR'];

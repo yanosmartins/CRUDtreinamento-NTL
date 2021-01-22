@@ -31,16 +31,16 @@ function grava()
 
     session_start(); // PEGAR O LOGIN
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-    $codigo = +$_POST['id'];
+    $codigo = (int) $_POST['id'];
     $descricao = "'" . $_POST['descricao'] . "'";
-    $ativo = +$_POST['ativo'];
+    $ativo = (int) $_POST['ativo'];
 
-    $sql = "Ntl.localizacao_Atualiza(
+    $sql = "Ntl.localizacao_Atualiza
         $codigo ,
         $descricao ,
         $ativo,
         $usuario 
-        )";
+        ";
 
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
@@ -59,7 +59,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, descricao, ativo FROM Ntl.localizacao
@@ -69,8 +69,8 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
 
     $id = +$row['codigo'];
     $descricao = $row['descricao'];
@@ -106,7 +106,7 @@ function excluir()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $result = $reposit->update('Ntl.localizacao' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);

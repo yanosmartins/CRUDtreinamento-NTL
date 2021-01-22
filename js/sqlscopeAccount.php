@@ -18,9 +18,9 @@ function validaSenha() {
     $senhaCript = $comum->criptografia($senha);
     $reposit = new reposit();
     $result = $reposit->SelectCondTrue("usuario| login='" . $login . "' AND CAST(login as varbinary(100)) = CAST('" . $login . "' as varbinary(100)) and ativo = 1");
-    if ($row = $result) {
+    if ($row = $result[0]) {
         $nome = $row['nome'];
-        $senhaBanco = mb_convert_encoding($row['senha'], 'UTF-8', 'HTML-ENTITIES');
+        $senhaBanco = $row['senha'];
         $reposit->FechaConexao();
         if ($senhaCript == $senhaBanco) {
             session_start();

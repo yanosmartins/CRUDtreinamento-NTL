@@ -36,16 +36,16 @@ function grava()
     }
 
     session_start();
-    $id = +$_POST["id"];
-    $ativo = +$_POST["ativo"];
+    $id = (int) $_POST["id"];
+    $ativo = (int) $_POST["ativo"];
     $usuario = "'" . $_SESSION['login'] . "'"; //Pegando o nome do usuário mantido pela sessão.
     $apelido = "'" . $_POST['apelido'] . "'";
     $cnpj = "'" . $_POST['cnpj'] . "'";
     $descricao = "'" . $_POST['descricao'] . "'";
     $registroANS = "'" . $_POST['registroAns'] . "'" ;
-    $seguroVida = +$_POST["seguroVida"];
+    $seguroVida = (int) $_POST["seguroVida"];
 
-    $sql = "Ntl.convenioSaude_Atualiza( $id, $ativo, $apelido, $cnpj, $descricao, $registroANS, $seguroVida, $usuario) ";
+    $sql = "Ntl.convenioSaude_Atualiza $id, $ativo, $apelido, $cnpj, $descricao, $registroANS, $seguroVida, $usuario ";
     $result = $reposit->Execprocedure($sql);
 
     $ret = 'sucess#';
@@ -93,8 +93,8 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $id = +$row['codigo'];
         $apelido = $row['apelido'];
         $cnpj = $row['cnpj'];

@@ -32,9 +32,9 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
 
-                while (($row = odbc_fetch_array($result))) {
-                    $codigo = +$row['codigo'];
-                    $indiceReajuste = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $codigo = (int) $row['codigo'];
+                    $indiceReajuste = $row['descricao'];
                     $ativo = $row['ativo'];
 
                     echo '<tr>';

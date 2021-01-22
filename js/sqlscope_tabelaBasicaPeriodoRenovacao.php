@@ -33,16 +33,16 @@ function grava()
 
     session_start();
     $usuario = $_SESSION['login'];
-    $codigo = +$_POST['id'];
+    $codigo = (int) $_POST['id'];
     $descricao = $_POST['descricao'];
-    $ativo = +$_POST['ativo'];
+    $ativo = (int) $_POST['ativo'];
 
-    $sql = "Ntl.periodoRenovacao_Atualiza(
+    $sql = "Ntl.periodoRenovacao_Atualiza
         $codigo ,
         $descricao ,
         $ativo,
         $usuario 
-        )";
+        ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -64,7 +64,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, descricao, ativo FROM Ntl.periodoRenovacao
@@ -74,8 +74,8 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $id = $row['codigo'];
     $descricao = $row['descricao'];
     $ativo = $row['ativo'];
@@ -109,7 +109,7 @@ function excluir()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $result = $reposit->update('Ntl.periodoRenovacao' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);

@@ -71,29 +71,29 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
+                foreach($result as $row) {
                     $id = $row['codigo'];
-                    $portal = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $endereco = mb_convert_encoding($row['endereco'], 'UTF-8', 'HTML-ENTITIES');
-                    $orgaoLicitante = mb_convert_encoding($row['orgaoLicitante'], 'UTF-8', 'HTML-ENTITIES');
-                    $numeroPregao = mb_convert_encoding($row['numeroPregao'], 'UTF-8', 'HTML-ENTITIES');
-                    $resumoPregao = mb_convert_encoding($row['resumoPregao'], 'UTF-8', 'HTML-ENTITIES');
+                    $portal = $row['descricao'];
+                    $endereco = $row['endereco'];
+                    $orgaoLicitante = $row['orgaoLicitante'];
+                    $numeroPregao = $row['numeroPregao'];
+                    $resumoPregao = $row['resumoPregao'];
 
                     //A data recuperada foi formatada para D/M/Y
-                    $dataPregao = mb_convert_encoding($row['dataPregao'], 'UTF-8', 'HTML-ENTITIES');
+                    $dataPregao = $row['dataPregao'];
                     $dataPregao = explode("-", $dataPregao);
                     $dataPregao = $dataPregao[2] . "/" . $dataPregao[1] . "/" . $dataPregao[0];
 
-                    $horaPregao = mb_convert_encoding($row['horaPregao'], 'UTF-8', 'HTML-ENTITIES');
-                    $objetoLicitado = mb_convert_encoding($row['objetoLicitado'], 'UTF-8', 'HTML-ENTITIES');
-                    $oportunidadeCompra = mb_convert_encoding($row['oportunidadeCompra'], 'UTF-8', 'HTML-ENTITIES');
-                    $usuarioCadastro = mb_convert_encoding($row['usuarioCadastro'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
+                    $horaPregao = $row['horaPregao'];
+                    $objetoLicitado = $row['objetoLicitado'];
+                    $oportunidadeCompra = $row['oportunidadeCompra'];
+                    $usuarioCadastro = $row['usuarioCadastro'];
+                    $ativo = $row['ativo'];
                     $ativo == 1 ? $descricaoAtivo = 'Sim' : $descricaoAtivo = 'Não';
-                    $usuarioCadastro = mb_convert_encoding($row['usuarioCadastro'], 'UTF-8', 'HTML-ENTITIES');
+                    $usuarioCadastro = $row['usuarioCadastro'];
 
                     //Arrumando a data e a hora em que foi gravado no sistema.
-                    $dataCadastro = mb_convert_encoding($row['dataCadastro'], 'UTF-8', 'HTML-ENTITIES');
+                    $dataCadastro = $row['dataCadastro'];
                     $descricaoData = explode(" ", $dataCadastro);
                     $descricaoData = explode("-", $descricaoData[0]);
                     $descricaoHora = explode(" ", $dataCadastro);

@@ -55,12 +55,12 @@ function grava()
     $reposit = new reposit();
 
     //Variáveis
-    $id = +$_POST['id'];
+    $id = (int) $_POST['id'];
     $ativo = 1;
     session_start();
     $usuario = formatarString($_SESSION['login']);  //Pegando o nome do usuário mantido pela sessão.
-    $projeto = +$_POST['projeto'];
-    $funcionario = +$_POST['funcionario'];
+    $projeto = (int) $_POST['projeto'];
+    $funcionario = (int) $_POST['funcionario'];
     $mesAnoFolhaPonto = formatarDataGrava('01/' . $_POST['mesAnoFolhaPonto']);
 
     //Verificando se existe um registro com o funcionário e o mês/ano cadastrados
@@ -68,28 +68,28 @@ function grava()
         $sqlFuncionario = "SELECT codigo,ativo FROM Beneficio.folhaPonto WHERE (0=0) AND ativo = 1 AND funcionario = " . $funcionario . " AND mesAnoFolhaPonto = " . $mesAnoFolhaPonto;
         $reposit = new reposit();
         $resultFuncionario = $reposit->RunQuery($sqlFuncionario);
-        $rowFuncionario = odbc_fetch_array($resultFuncionario);
+        $rowFuncionario = $resultFuncionario[0];
         if ($rowFuncionario > 0) {
             echo "#Já existe um registro com essas caracterásticas no sistema";
             return false;
         }
     }
     $justificativaFolhaPonto = formatarString($_POST['justificativaFolhaPonto']);
-    $diasUteisProjetoVAVR = +$_POST['diasUteisVAVR'];
-    $diasUteisProjetoVT = +$_POST['diasUteisVT'];
+    $diasUteisProjetoVAVR = (int) $_POST['diasUteisVAVR'];
+    $diasUteisProjetoVT = (int) $_POST['diasUteisVT'];
 
     // DIAS ÚTEIS - VALE ALIMENTAÇÃO
-    $totalFaltasValeAlimentacao = formatarNumero(+$_POST['totalFaltasValeAlimentacao']);
-    $totalAusenciasValeAlimentacao = formatarNumero(+$_POST['totalAusenciasValeAlimentacao']);
-    $diasProjetoValeAlimentacao = formatarNumero(+$_POST['diasProjetoValeAlimentacao']);
-    $totalDiasTrabalhadosValeAlimentacao = formatarNumero(+$_POST['totalDiasTrabalhadosValeAlimentacao']);
+    $totalFaltasValeAlimentacao = formatarNumero((int) $_POST['totalFaltasValeAlimentacao']);
+    $totalAusenciasValeAlimentacao = formatarNumero((int) $_POST['totalAusenciasValeAlimentacao']);
+    $diasProjetoValeAlimentacao = formatarNumero((int) $_POST['diasProjetoValeAlimentacao']);
+    $totalDiasTrabalhadosValeAlimentacao = formatarNumero((int) $_POST['totalDiasTrabalhadosValeAlimentacao']);
 
     // DIAS ÚTEIS - VALE REFEIÇÃO
-    $totalFaltasValeTransporte = +$_POST['faltasValeTransporte'];
-    $totalAusenciasValeTransporte = +$_POST['ausenciasValeTransporte'];
-    $diasProjetoValeRefeicao = formatarNumero(+$_POST['diasProjetoValeRefeicao']);
-    $totalDiasTrabalhadosValeRefeicao = formatarNumero(+$_POST['totalDiasTrabalhadosValeRefeicao']);
-    $totalDiasTrabalhadosVT = formatarNumero(+$_POST['totalDiasTrabalhadosVT']);
+    $totalFaltasValeTransporte = (int) $_POST['faltasValeTransporte'];
+    $totalAusenciasValeTransporte = (int) $_POST['ausenciasValeTransporte'];
+    $diasProjetoValeRefeicao = formatarNumero((int) $_POST['diasProjetoValeRefeicao']);
+    $totalDiasTrabalhadosValeRefeicao = formatarNumero((int) $_POST['totalDiasTrabalhadosValeRefeicao']);
+    $totalDiasTrabalhadosVT = formatarNumero((int) $_POST['totalDiasTrabalhadosVT']);
 
     //------------------------ Accordion de Vale Alimentacao ------------------
     $strArrayValeAlimentacao = $_POST['jsonValeAlimentacaoArray'];
@@ -325,7 +325,7 @@ function grava()
     $xmlHoraExtra = "'" . $xmlHoraExtra . "'";
 
 
-    $sql = "Beneficio.folhaPonto_Atualiza (" . $id . "," .
+    $sql = "Beneficio.folhaPonto_Atualiza " . $id . "," .
         $ativo . "," .
         $projeto . "," .
         $funcionario . "," .
@@ -347,7 +347,7 @@ function grava()
         $xmlValeTransporte . "," .
         $xmlValorExtra . "," .
         $xmlHoraExtra .
-        ") ";
+        " ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -367,7 +367,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, ativo, projeto, funcionario, mesAnoFolhaPonto, justificativaFolhaPonto,
@@ -382,14 +382,14 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $id = +$row['codigo'];
-        $projeto = mb_convert_encoding($row['projeto'], 'UTF-8', 'HTML-ENTITIES');
-        $funcionario = mb_convert_encoding($row['funcionario'], 'UTF-8', 'HTML-ENTITIES');
+        $projeto = $row['projeto'];
+        $funcionario = $row['funcionario'];
         $mesAnoFolhaPonto = formataDataRecuperacao($row['mesAnoFolhaPonto']);
         $mesAnoFolhaPonto = explode("/", $mesAnoFolhaPonto);
         $mesAnoFolhaPonto = $mesAnoFolhaPonto[1] . '/' . $mesAnoFolhaPonto[2];
-        $justificativaFolhaPonto = mb_convert_encoding($row['justificativaFolhaPonto'], 'UTF-8', 'HTML-ENTITIES');
+        $justificativaFolhaPonto = $row['justificativaFolhaPonto'];
 
         // Accordion Dias Úteis - Vale Alimentação
         $totalFaltasValeAlimentacao = +$row['totalFaltasVAVR'];
@@ -420,12 +420,12 @@ function recupera()
 
         $contadorValeAlimentacao = 0;
         $arrayValeAlimentacao = array();
-        while ($row = odbc_fetch_array($result)) {
+        foreach($result as $row) {
             $valeAlimentacaoId = $row['codigo'];
             $faltaAusenciaValeAlimentacao = $row['faltaAusenciaVAVR'];
             $dataFaltaAusenciaValeAlimentacao = $row['dataFaltaAusenciaVAVR'];
             $descricaoDataFaltaAusenciaValeAlimentacao = formataDataRecuperacao($dataFaltaAusenciaValeAlimentacao);
-            $justificativaValeAlimentacao = mb_convert_encoding($row['justificativaVAVR'], 'UTF-8', 'HTML-ENTITIES');
+            $justificativaValeAlimentacao = $row['justificativaVAVR'];
 
             if ($faltaAusenciaValeAlimentacao === 'F') {
                 $descricaoFaltasAusenciasValeAlimentacao = "Falta";
@@ -463,12 +463,12 @@ function recupera()
 
         $contadorValeTransporte = 0;
         $arrayValeTransporte = array();
-        while ($row = odbc_fetch_array($result)) {
+        foreach($result as $row) {
             $valeTransporteId = $row['codigo'];
             $faltaAusenciaValeTransporte = $row['faltaAusenciaValeTransporte'];
             $dataFaltaAusenciaValeTransporte = $row['dataFaltaAusenciaValeTransporte'];
             $descricaoDataFaltaAusenciaValeTransporte = formataDataRecuperacao($dataFaltaAusenciaValeTransporte);
-            $justificativaValeTransporte = mb_convert_encoding($row['justificativaValeTransporte'], 'UTF-8', 'HTML-ENTITIES');
+            $justificativaValeTransporte = $row['justificativaValeTransporte'];
 
             if ($faltaAusenciaValeTransporte === 'F') {
                 $descricaoFaltasAusenciasValeTransporte = "Falta";
@@ -500,8 +500,8 @@ function recupera()
 
         $contadorValorExtra = 0;
         $arrayValorExtra = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
             $valorExtraId = $row['codigo'];
             $beneficioExtra = $row['beneficioExtra'];
             $valorExtra = $row['valor'];
@@ -536,12 +536,12 @@ function recupera()
 
         $contadorValeAlimentacao = 0;
         $arrayValeAlimentacao = array();
-        while ($row = odbc_fetch_array($result)) {
+        foreach($result as $row) {
             $valeAlimentacaoId = $row['codigo'];
             $faltaAusenciaValeAlimentacao = $row['faltaAusenciaValeAlimentacao'];
             $dataFaltaAusenciaValeAlimentacao = $row['dataFaltaAusenciaValeAlimentacao'];
             $descricaoDataFaltaAusenciaValeAlimentacao = formataDataRecuperacao($dataFaltaAusenciaValeAlimentacao);
-            $justificativaValeAlimentacao = mb_convert_encoding($row['justificativaValeAlimentacao'], 'UTF-8', 'HTML-ENTITIES');
+            $justificativaValeAlimentacao = $row['justificativaValeAlimentacao'];
 
             if ($faltaAusenciaValeAlimentacao === 'F') {
                 $descricaoFaltasAusenciasValeAlimentacao = "Falta";
@@ -573,7 +573,7 @@ function recupera()
         $contadorHoraExtra = 0;
         $arrayHoraExtra = array();
 
-        while ($row = odbc_fetch_array($result)) {
+        foreach($result as $row) {
             $dataInicio = formataDataRecuperacao($row['dataInicio']);
             $codigo = +$row['codigo'];
             $dataFim = formataDataRecuperacao($row['dataFim']);
@@ -586,7 +586,7 @@ function recupera()
             }
             $horaExtraDiurna = validaHoraRecuperacao($row['horaExtraDiurna']);
             $folhaPonto = $row['folhaPonto'];
-            $justificativa = mb_convert_encoding($row['justificativa'], 'UTF-8', 'HTML-ENTITIES');
+            $justificativa = $row['justificativa'];
 
             $contadorHoraExtra = $contadorHoraExtra + 1;
             $arrayHoraExtra[] = array(
@@ -676,7 +676,7 @@ function verificaFerias()
 
     $contadorFerias = 0;
     $arrayFerias = array();
-    while ($row = odbc_fetch_array($result)) {
+    foreach($result as $row) {
         $feriasId = $row['codigo'];
         $dataInicio = formataDataRecuperacao($row['dataInicio']);
         $dataFim = formataDataRecuperacao($row['dataFim']);
@@ -712,7 +712,7 @@ function verificaFerias()
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $qtdFeriado = +$row['qtdFeriado'];
     }
     echo 'sucess#' . $strArrayFerias . "#" . $diasCorridos . "#" . $dataInicioParaDiff . "#" .
@@ -739,7 +739,7 @@ function recuperaDiaUtil()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         $tipoDiaUtilVAVR = $row['tipoDiaUtilVAVR'];
         $tipoDiaUtilVT = $row['tipoDiaUtilVT'];
         $sindicato = $row['sindicato'];
@@ -778,7 +778,7 @@ function recuperaDiaUtil()
 
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if (($row = odbc_fetch_array($result))) {
+            if($row = $result[0]) {
                 if ($mes == 1) {
                     $diaUtil = +$row['diaUtilJaneiroVAVR'];
                 } else if ($mes == 2) {
@@ -817,7 +817,7 @@ function recuperaDiaUtil()
 
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if (($row = odbc_fetch_array($result))) {
+            if($row = $result[0]) {
                 if ($mes == 1) {
                     $diaUtil = +$row['diaUtilJaneiroVAVR'];
                 } else if ($mes == 2) {
@@ -856,7 +856,7 @@ function recuperaDiaUtil()
             WHERE (0=0) AND funcionario = " . $funcionario . " AND projeto = " . $projeto . "AND ativo = 1";
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if (($row = odbc_fetch_array($result))) {
+            if($row = $result[0]) {
                 if ($mes == 1) {
                     $diaUtil = +$row['diaUtilJaneiroVAVR'];
                 } else if ($mes == 2) {
@@ -899,7 +899,7 @@ function recuperaDiaUtil()
 
             //     $reposit = new reposit();
             //     $result = $reposit->RunQuery($sql);
-            //     if (($row = odbc_fetch_array($result))) {
+            //     if($row = $result[0]) {
             //         $qtdFeriado = +$row['qtdFeriado'];
             //         $diasUteisComFeriado =  $diasUteisSemFeriado - $qtdFeriado;
             //     }
@@ -918,7 +918,7 @@ function recuperaDiaUtil()
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
         
-            if (($row = odbc_fetch_array($result))) {
+            if($row = $result[0]) {
                 if ($mes == 1) {
                     $diaUtil = +$row['quantidadeDiaJaneiro'];
                 } else if ($mes == 2) {
@@ -967,7 +967,7 @@ function recuperaDiaUtil()
 
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if (($row = odbc_fetch_array($result))) {
+            if($row = $result[0]) {
                 if ($mes == 1) {
                     $diaUtilVT = +$row['diaUtilJaneiroVT'];
                 } else if ($mes == 2) {
@@ -1006,7 +1006,7 @@ function recuperaDiaUtil()
 
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if (($row = odbc_fetch_array($result))) {
+            if($row = $result[0]) {
                 if ($mes == 1) {
                     $diaUtilVT = +$row['diaUtilJaneiroVT'];
                 } else if ($mes == 2) {
@@ -1045,7 +1045,7 @@ function recuperaDiaUtil()
             WHERE (0=0) AND funcionario = " . $funcionario . " AND projeto = " . $projeto . "AND ativo = 1";
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if (($row = odbc_fetch_array($result))) {
+            if($row = $result[0]) {
                 if ($mes == 1) {
                     $diaUtilVT = +$row['diaUtilJaneiroVT'];
                 } else if ($mes == 2) {
@@ -1088,7 +1088,7 @@ function recuperaDiaUtil()
 
             //     $reposit = new reposit();
             //     $result = $reposit->RunQuery($sql);
-            //     if (($row = odbc_fetch_array($result))) {
+            //     if($row = $result[0]) {
             //         $qtdFeriado = +$row['qtdFeriado'];
             //         $diasUteisComFeriado =  $diasUteisSemFeriado - $qtdFeriado;
             //     }
@@ -1108,7 +1108,7 @@ function recuperaDiaUtil()
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
 
-            if (($row = odbc_fetch_array($result))) {
+            if($row = $result[0]) {
                 if ($mes == 1) {
                     $diaUtilVT = +$row['quantidadeDiaJaneiro'];
                 } else if ($mes == 2) {
@@ -1163,7 +1163,7 @@ function verificaFeriado()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         echo 'sucess#';
         return true;
     }
@@ -1192,7 +1192,7 @@ function recuperaDiaUtilProjeto()
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    if (($row = odbc_fetch_array($result))) {
+    if($row = $result[0]) {
         if ($mes == 1) {
             $diaUtil = +$row['diaUtilJaneiroVAVR'];
             $diaUtilVT = +$row['diaUtilJaneiroVT'];
@@ -1255,9 +1255,9 @@ function populaComboFuncionario()
         $result = $reposit->RunQuery($sql);
         $contador = 0;
         $out = "";
-        while (($row = odbc_fetch_array($result))) {
+        foreach($result as $row) {
             $id = $row['funcionario'];
-            $nomeFuncionario = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+            $nomeFuncionario = $row['nome'];
 
             $out = $out . $id . "^" . $nomeFuncionario . "|";
 
@@ -1283,7 +1283,7 @@ function periodoAdicionalNoturno()
         $result = $reposit->RunQuery($sql);
 
         $out = "";
-        if (($row = odbc_fetch_array($result))) {
+        if($row = $result[0]) {
             $id = $row['codigo'];
             $horaInicialAdicionalNoturno = $row['horaInicialAdicionalNoturno'];
             $horaFinalAdicionalNoturno = $row['horaFinalAdicionalNoturno'];

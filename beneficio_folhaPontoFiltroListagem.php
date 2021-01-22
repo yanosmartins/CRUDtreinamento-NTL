@@ -47,10 +47,10 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigoFolhaPonto'];
-                    $projeto = mb_convert_encoding($row['projeto'], 'UTF-8', 'HTML-ENTITIES');
-                    $funcionario = mb_convert_encoding($row['funcionario'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $id = (int) $row['codigoFolhaPonto'];
+                    $projeto = $row['projeto'];
+                    $funcionario = $row['funcionario'];
                     $mesFolhaPonto =  $row['mesAnoFolhaPonto'];
                     $mesFolhaPonto = explode(" ", $mesFolhaPonto);
                     $mesFolhaPonto = explode("-", $mesFolhaPonto[0]);

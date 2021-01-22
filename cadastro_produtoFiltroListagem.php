@@ -59,14 +59,14 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $apelido = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
-                    $convenioSaude = mb_convert_encoding($row['convenioSaude'], 'UTF-8', 'HTML-ENTITIES');
-                    $produto = mb_convert_encoding($row['produto'], 'UTF-8', 'HTML-ENTITIES');
-                    $seguroVida = mb_convert_encoding($row['seguroVida'], 'UTF-8', 'HTML-ENTITIES');
-                    $cobranca = mb_convert_encoding($row['cobranca'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = +$row['ativo'];
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $apelido = $row['apelido'];
+                    $convenioSaude = $row['convenioSaude'];
+                    $produto = $row['produto'];
+                    $seguroVida = $row['seguroVida'];
+                    $cobranca = $row['cobranca'];
+                    $ativo = (int) $row['ativo'];
 
                     if ($ativo == 1) {
                         $ativo = "Sim";

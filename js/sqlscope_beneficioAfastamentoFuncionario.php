@@ -40,27 +40,27 @@ function grava()
         return;
     }
     //Dados
-    $id = +$_POST['id'];
+    $id = (int) $_POST['id'];
     $ativo = 1;
-    $funcionario = +$_POST['funcionario'];
+    $funcionario = (int) $_POST['funcionario'];
     $mesAno = $_POST['mesAno'];
     $mesAnoAux = explode("/", $mesAno);
     $mesAno = "'" . $mesAnoAux[1] . "/" . $mesAnoAux[0] . "/" . "01'";
-    $motivoAfastamento = +$_POST['motivoAfastamento'];
+    $motivoAfastamento = (int) $_POST['motivoAfastamento'];
     $dataInicio = validaDataGrava($_POST['dataInicio']);
     $dataFim = validaDataGrava($_POST['dataFim']);
-    $quantidadeDias = +$_POST['quantidadeDias'];
-    $diaUtil = +$_POST['diaUtil'];
+    $quantidadeDias = (int) $_POST['quantidadeDias'];
+    $diaUtil = (int) $_POST['diaUtil'];
     $mesAnoInicio = $_POST['mesAnoInicio'];
     $mesAnoFim = $_POST['mesAnoFim'];
-    $descontarVAVR = +$_POST['descontarVAVR'];
-    $descontarTransporte = +$_POST['descontarTransporte'];
-    $descontarCestaBasica = +$_POST['descontarCestaBasica'];
+    $descontarVAVR = (int) $_POST['descontarVAVR'];
+    $descontarTransporte = (int) $_POST['descontarTransporte'];
+    $descontarCestaBasica = (int) $_POST['descontarCestaBasica'];
     $justificativa = "'" . $_POST['justificativa'] . "'";
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-    $diaFeriado = +$_POST['diaFeriado'];
-    $projeto = +$_POST['projeto'];
+    $diaFeriado = (int) $_POST['diaFeriado'];
+    $projeto = (int) $_POST['projeto'];
 
 
     if ($mesAnoInicio != $mesAnoFim) {
@@ -68,7 +68,7 @@ function grava()
         return;
     }
 
-    $sql = 'Beneficio.afastamentoFuncionario_Atualiza (' .
+    $sql = 'Beneficio.afastamentoFuncionario_Atualiza ' .
         $id . ',' .
         $ativo . ',' .
         $funcionario . ',' .
@@ -84,7 +84,7 @@ function grava()
         $justificativa . ',' .
         $usuario . ',' .
         $diaFeriado . ',' .
-        $projeto . ') ';
+        $projeto . ' ';
 
     $result = $reposit->Execprocedure($sql);
 
@@ -104,7 +104,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT * FROM Beneficio.afastamento WHERE (0=0) AND codigo = " . $id;
@@ -114,8 +114,8 @@ function recupera()
 
     $out = "";
 
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $codigo = +$row['codigo'];
         $ativo = +$row['ativo'];
         $funcionario = +$row['funcionario'];
@@ -254,8 +254,8 @@ function contaFeriado()
     $reposit = new reposit();
     $resultProjeto = $reposit->RunQuery($sqlProjeto);
 
-    if (($row = odbc_fetch_array($resultProjeto))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $resultProjeto[0]) {
+
         $estado = "'" . $row['estado'] . "'";
         $municipioFerias =  +$row['municipioFerias'];
     }
@@ -268,7 +268,7 @@ function contaFeriado()
 
     // $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $feriadoNome = $row['descricao'];
         $contadorFeriado++;
     }
@@ -290,9 +290,9 @@ function populaComboFuncionario()
         $result = $reposit->RunQuery($sql);
         $contador = 0;
         $out = "";
-        while (($row = odbc_fetch_array($result))) {
+        foreach($result as $row) {
             $id = $row['funcionario'];
-            $nomeFuncionario = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
+            $nomeFuncionario = $row['nome'];
 
             $out = $out . $id . "^" . $nomeFuncionario . "|";
 
@@ -315,7 +315,7 @@ function populaComboFuncionario()
 //     $reposit = new reposit();
 //     $result = $reposit->RunQuery($sql);
 
-//     if (odbc_fetch_array($result)) {
+//     if ($result[0]) {
 //         return true;
 //     } else {
 //         return false;

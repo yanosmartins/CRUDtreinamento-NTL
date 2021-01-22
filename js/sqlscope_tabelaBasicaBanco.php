@@ -42,13 +42,13 @@ function gravaBanco()
     $nomeBanco = validaString($banco['nomeBanco']);
     $ativo = validaNumero($banco['ativo']);
 
-    $sql = "Ntl.banco_Atualiza(
+    $sql = "Ntl.banco_Atualiza
         $codigo,
         $codigoBanco,	
         $nomeBanco,
         $usuario,
         $ativo
-        )";
+        ";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -68,7 +68,7 @@ function recuperaBanco()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT codigo, codigoBanco, nomeBanco, ativo FROM Ntl.banco WHERE (0=0) AND codigo = " . $id;
@@ -78,8 +78,8 @@ function recuperaBanco()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $codigo = $row['codigo'];
     $codigoBanco = $row['codigoBanco'];
     $nomeBanco = $row['nomeBanco'];

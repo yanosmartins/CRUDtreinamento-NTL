@@ -48,12 +48,12 @@
                     $reposit = new reposit();                                       
                     $result=$reposit->RunQuery($sql);
 
-                    while (($row = odbc_fetch_array($result))) {
-                        $id = +$row['codigo'];
-                        $apelido = mb_convert_encoding($row['apelido'], 'UTF-8', 'HTML-ENTITIES');
-                        $convenio = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                        $seguro = +$row['seguroVida'];
-                        $ativo = +$row['ativo'];
+                    foreach($result as $row) {
+                        $id = (int) $row['codigo'];
+                        $apelido = $row['apelido'];
+                        $convenio = $row['descricao'];
+                        $seguro = (int) $row['seguroVida'];
+                        $ativo = (int) $row['ativo'];
                         
                         //Modifica os valores booleanos por Sim e Não.
                         //Seguro de Vida

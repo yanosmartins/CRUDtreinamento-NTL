@@ -1058,7 +1058,7 @@ function grava()
 
 
     $reposit = new reposit();
-    $sql = "Contratacao.upload_Atualiza(" . $codigo . ", " .
+    $sql = "Contratacao.upload_Atualiza " . $codigo . ", " .
         $codigoFuncionario .  ", " .
         $xmlCertidaoNascimento .  ", " .
         $xmlCertidaoCasamento . ", " .
@@ -1076,7 +1076,7 @@ function grava()
         $xmlCpfFilho . ", " .
         $xmlCertidaoNascimentoDependente . ", " .
         $xmlRgDependente . ", " .
-        $xmlCpfDependente . ")";
+        $xmlCpfDependente . "";
     $result = $reposit->Execprocedure($sql);
 
     if ($result != false) {
@@ -1126,7 +1126,7 @@ function moverArquivosParaPasta($campo, $uniqId, $tipoArquivoPermitido, $diretor
 function recupera()
 {
 
-    $id = +$_POST['id'] ?: 0;
+    $id = (int) $_POST['id'];
     $diretorioAlvo = "../uploads/";
 
     $sql = "SELECT codigo, nomeArquivo, tipoArquivo, enderecoDocumento, funcionario, idCampo 
@@ -1138,8 +1138,8 @@ function recupera()
     $contadorDocumento = 0;
     $arrayDocumentos = array();
     $out = "";
-    while ($row = odbc_fetch_array($result)) {
-        $row = array_map('utf8_encode', $row);
+    foreach($result as $row) {
+
         $nomeArquivo = $row['nomeArquivo'];
         $tipoArquivo = $row['tipoArquivo'];
         $enderecoDocumento = $row['enderecoDocumento'];

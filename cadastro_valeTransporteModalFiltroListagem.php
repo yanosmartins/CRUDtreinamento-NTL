@@ -33,12 +33,12 @@ include "js/repositorio.php";
                     $where = $where . " AND (VTM.[descricao] like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
 
-                if (+$_GET["valorMinimo"] > 0) {
+                if ((int) $_GET["valorMinimo"] > 0) {
                     $valorMinimo = $_GET["valorMinimo"];
                     $where =  $where . " AND VTM.[valorTotal] >= " . $valorMinimo;
                 }
 
-                if (+$_GET["valorMaximo"] > 0) {
+                if ((int) $_GET["valorMaximo"] > 0) {
                     $valorMaximo = $_GET["valorMaximo"];
                     $where =  $where . " AND VTM.[valorTotal] <= " . $valorMaximo;
                 }
@@ -52,11 +52,11 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = +$row['ativo'];
-                    $valorTotal = mb_convert_encoding($row['valorTotal'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $descricao = $row['descricao'];
+                    $ativo = (int) $row['ativo'];
+                    $valorTotal = $row['valorTotal'];
 
 
                     if ($ativo == 1) {

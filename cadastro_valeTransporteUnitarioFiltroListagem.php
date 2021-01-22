@@ -33,13 +33,13 @@ include "js/repositorio.php";
                     $where = $where . " AND (VTU.[descricao] like '%' + " . "replace('" . $descricaoFiltro . "',' ','%') + " . "'%')";
                 }
 
-                if (+$_GET["valorMinimo"] > 0) {
-                    $valorMinimo = +$_GET["valorMinimo"];
+                if ((int) $_GET["valorMinimo"] > 0) {
+                    $valorMinimo = (int) $_GET["valorMinimo"];
                     $where =  $where . " AND VTU.[valorUnitario] >= " . $valorMinimo;
                 }
 
-                if (+$_GET["valorMaximo"] > 0) {
-                    $valorMaximo = +$_GET["valorMaximo"];
+                if ((int) $_GET["valorMaximo"] > 0) {
+                    $valorMaximo = (int) $_GET["valorMaximo"];
                     $where =  $where . " AND VTU.[valorUnitario] <= " . $valorMaximo;
                 }
 
@@ -57,12 +57,12 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $descricao =  mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $valorUnitario = mb_convert_encoding($row['valorUnitario'], 'UTF-8', 'HTML-ENTITIES');
-                    $uf = mb_convert_encoding($row['unidadeFederacao'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = +$row['ativo'];
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $descricao =  $row['descricao'];
+                    $valorUnitario = $row['valorUnitario'];
+                    $uf = $row['unidadeFederacao'];
+                    $ativo = (int) $row['ativo'];
                     $descricaoAtivo = "";
 
                     if ($ativo == 1) {

@@ -32,8 +32,8 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
 
-                while (($row = odbc_fetch_array($result))) {
-                    $codigo = +$row['codigo'];
+                foreach($result as $row) {
+                    $codigo = (int) $row['codigo'];
                     $periodoRenovacao = $row['descricao'];
                     $ativo = $row['ativo'];
 

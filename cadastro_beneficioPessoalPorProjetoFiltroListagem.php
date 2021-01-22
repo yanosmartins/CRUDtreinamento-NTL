@@ -54,11 +54,11 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $nome = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
-                    $sindicato = mb_convert_encoding($row['descricaoSindicato'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $descricao = $row['descricao'];
+                    $nome = $row['nome'];
+                    $sindicato = $row['descricaoSindicato'];
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="cadastro_beneficioPessoalPorProjetoCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';

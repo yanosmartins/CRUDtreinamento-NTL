@@ -67,12 +67,12 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $nome = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
-                    $cpf = mb_convert_encoding($row['cpf'], 'UTF-8', 'HTML-ENTITIES');
-                    $dataAdmissaoFuncionario =  mb_convert_encoding($row['dataAdmissaoFuncionario'], 'UTF-8', 'HTML-ENTITIES');
-                    $dataDemissaoFuncionario =  mb_convert_encoding($row['dataDemissaoFuncionario'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $nome = $row['nome'];
+                    $cpf = $row['cpf'];
+                    $dataAdmissaoFuncionario =  $row['dataAdmissaoFuncionario'];
+                    $dataDemissaoFuncionario =  $row['dataDemissaoFuncionario'];
               
                     // Pega apenas o dia cadastrado da Admissão
                     $dataAdmissaoFuncionario = explode("-", $dataAdmissaoFuncionario);
@@ -89,7 +89,7 @@ include "js/repositorio.php";
                         $dataDemissaoFuncionario = " ";
                     }
                     
-                    $ativo = +$row['ativo'];
+                    $ativo = (int) $row['ativo'];
  
                     if ($ativo == 1) {
                         $ativo = "Sim";

@@ -188,7 +188,7 @@ function grava()
     }
     $xmlTarefa = "'" . $xmlTarefa . "'";
 
-    $sql = "Ntl.pregao_Atualiza( 
+    $sql = "Ntl.pregao_Atualiza 
         $codigo,
         $portal,  
         $ativo,
@@ -205,7 +205,7 @@ function grava()
         $xmlUpload, 
         $xmlTarefa, 
         $resumoPregao
-        )";
+        ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -225,7 +225,7 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $codigo = +$_POST["codigo"];
+        $codigo = (int) $_POST["codigo"];
     }
 
     $sql = "SELECT codigo, portal, ativo, orgaoLicitante, resumoPregao, objetoLicitado, oportunidadeCompra,numeroPregao,dataPregao,horaPregao,usuarioCadastro,dataCadastro,observacao,garimpado,participaPregao FROM Ntl.pregao WHERE (0=0) AND codigo = " . $codigo;
@@ -234,8 +234,8 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result)))
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0])
+
     $codigo = $row['codigo'];
     $portal = $row['portal'];
     $ativo = $row['ativo'];
@@ -264,13 +264,13 @@ function recupera()
 
     $contadorTarefa = 0;
     $arrayTarefa = array();
-    while ($row = odbc_fetch_array($result)) {
+    foreach($result as $row) {
 
         $tarefa = +$row['tarefa'];
         $responsavel = +$row['responsavel'];
         $dataFinal = validaDataRecupera($row['dataFinal']);
         $dataSolicitacao = $row['dataSolicitacao'];
-        $observacao = mb_convert_encoding($row['observacao'], 'UTF-8', 'HTML-ENTITIES');
+        $observacao = $row['observacao'];
         $tipo = +$row['tipo'];
 
         if ($dataSolicitacao != "") {
@@ -354,7 +354,7 @@ function excluir()
 function recuperaUpload()
 {
 
-    $id = +$_POST['id'] ?: 0;
+    $id = (int) $_POST['id'];
     $diretorioAlvo = "../uploads/";
 
     $sql = " SELECT codigo, nomeArquivo, tipoArquivo, endereco, idCampo, pregao 
@@ -366,8 +366,8 @@ function recuperaUpload()
     $contadorDocumento = 0;
     $arrayDocumentos = array();
     $out = "";
-    while ($row = odbc_fetch_array($result)) {
-        $row = array_map('utf8_encode', $row);
+    foreach($result as $row) {
+
         $nomeArquivo = $row['nomeArquivo'];
         $tipoArquivo = $row['tipoArquivo'];
         $endereco = $row['endereco'];
@@ -508,9 +508,9 @@ function listaNomeOrgaoLicitante()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
-        $orgaoLicitante = mb_convert_encoding($row["orgaoLicitante"], 'UTF-8', 'HTML-ENTITIES');
+        $orgaoLicitante = $row["orgaoLicitante"];
         $contador = $contador + 1;
         $array[] = array("id" => $id, "nome" => $orgaoLicitante);
     }

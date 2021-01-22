@@ -56,7 +56,7 @@ function gravaProjeto()
     $cep = validaString($projeto['cep']);
     $logradouro = validaString($projeto['logradouro']);
     $numeroEndereco = validaNumero($projeto['numero']);
-    $complemento = validaString($projeto['complemento']);
+    $complemento = validaString($projeto['complemento']) ?: 'null';
     $bairro = validaString($projeto['bairro']);
     $cidade = validaString($projeto['cidade']);
     $estado = validaString($projeto['estado']);
@@ -224,7 +224,7 @@ function gravaProjeto()
 
 
 
-    $sql = "Ntl.projeto_Atualiza(
+    $sql = "Ntl.projeto_Atualiza
         $codigo,
         $ativo,
         $cnpj,
@@ -284,7 +284,7 @@ function gravaProjeto()
         $valorDescontoFolhaPlanoSaude,
         $municipioFerias,
         $razaoSocial,
-        $usuario)";
+        $usuario";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -305,7 +305,7 @@ function recuperaProjeto()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $id = +$_POST["id"];
+        $id = (int) $_POST["id"];
     }
 
     $sql = "SELECT * FROM Ntl.projeto WHERE codigo = " . $id;
@@ -313,8 +313,8 @@ function recuperaProjeto()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if (($row = odbc_fetch_array($result))) {
-        $row = array_map('utf8_encode', $row);
+    if($row = $result[0]) {
+
         $id = +$row['codigo'];
         $cnpj = $row['cnpj'];
         $descricao = $row['descricao'];
@@ -470,8 +470,8 @@ function recuperaProjeto()
         $result = $reposit->RunQuery($sql);
         $contadorTelefone = 0;
         $arrayTelefone = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
             $telefoneId = $row['codigo'];
             $telefone = $row['telefone'];
             $principal = +$row['principal'];
@@ -510,8 +510,8 @@ function recuperaProjeto()
 
         $contadorEmail = 0;
         $arrayEmail = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
             $emailId = $row['codigo'];
             $email = $row['email'];
             $principal = +$row['principal'];
@@ -542,8 +542,8 @@ function recuperaProjeto()
 
         $contadorFolga = 0;
         $arrayFolga = array();
-        while ($row = odbc_fetch_array($result)) {
-            $row = array_map('utf8_encode', $row);
+        foreach($result as $row) {
+
             $folgaId = $row['codigo'];
             $descricaoFolga = $row['descricaoFolga'];
             $dataInicioFolga = $row['dataInicioFolga'];
@@ -654,9 +654,9 @@ function listaProjetoAtivoAutoComplete()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    while (($row = odbc_fetch_array($result))) {
+    foreach($result as $row) {
         $id = $row['codigo'];
-        $descricao = mb_convert_encoding($row["descricao"], 'UTF-8', 'HTML-ENTITIES');
+        $descricao = $row["descricao"];
         $contador = $contador + 1;
         $array[] = array("id" => $id, "descricao" => $descricao);
     }
@@ -683,7 +683,7 @@ function validaNumero($value)
 function validaString($value)
 {
     if ($value == '')
-        return NULL;
+        return 'null';
     return '\'' . $value . '\'';
 }
 

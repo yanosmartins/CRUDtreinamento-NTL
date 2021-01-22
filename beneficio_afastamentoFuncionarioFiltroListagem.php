@@ -88,12 +88,12 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $id = +$row['codigo'];
-                    $funcionario = mb_convert_encoding($row['funcionario'], 'UTF-8', 'HTML-ENTITIES');
-                    $motivoDoAfastamento = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $dataInicio = mb_convert_encoding($row['dataInicio'], 'UTF-8', 'HTML-ENTITIES');
-                    $dataFim = mb_convert_encoding($row['dataFim'], 'UTF-8', 'HTML-ENTITIES');
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $funcionario = $row['funcionario'];
+                    $motivoDoAfastamento = $row['descricao'];
+                    $dataInicio = $row['dataInicio'];
+                    $dataFim = $row['dataFim'];
 
                     $mesAno = $row['mesAno'];
                     $mesAno = explode("-", $mesAno);
@@ -106,7 +106,7 @@ include "js/repositorio.php";
                         $dataFim = "Indeterminado";
                     }
 
-                    $ativo = +$row['ativo'];
+                    $ativo = (int) $row['ativo'];
 
                     if ($ativo == 1) {
                         $ativo = "Sim";
@@ -114,7 +114,7 @@ include "js/repositorio.php";
                         $ativo = "Não";
                     }
 
-                    $projeto = mb_convert_encoding($row['nomeProjeto'], 'UTF-8', 'HTML-ENTITIES');
+                    $projeto = $row['nomeProjeto'];
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="beneficio_afastamentoFuncionarioCadastro.php?codigo=' . $id . '">' . $funcionario . '</a></td>';
