@@ -73,7 +73,7 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
+                foreach ($result as $row) {
                     $codigo = mb_convert_encoding($row['codigoControleCandidato'], 'UTF-8', 'HTML-ENTITIES');
                     $codigoCandidato = mb_convert_encoding($row['codigoCandidato'], 'UTF-8', 'HTML-ENTITIES');
                     $nomeCompleto = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');

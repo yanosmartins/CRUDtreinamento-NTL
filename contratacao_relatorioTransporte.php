@@ -24,7 +24,8 @@ FROM Contratacao.candidato WHERE (0=0) AND codigo =" . $id;
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 $out = "";
-if (($row = odbc_fetch_array($result))) {
+$row = $result[0];
+if ($row) {
     $row = array_map('utf8_encode', $row);
     $codigo = $row['codigo'];
     $nomeCompleto = $row['nomeCompleto'];
@@ -78,7 +79,7 @@ if (($row = odbc_fetch_array($result))) {
 
     $contadorTransporte = 0;
     $arrayTransporte = array();
-    while ($row = odbc_fetch_array($result)) {
+    foreach ($result as $row) {
         $trajetoTransporte = mb_convert_encoding($row['trajeto'], 'UTF-8', 'HTML-ENTITIES');
         if ($trajetoTransporte == 1) {
             $trajetoTransporte = "Ida";
