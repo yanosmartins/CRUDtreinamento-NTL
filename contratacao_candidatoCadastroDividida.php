@@ -2005,8 +2005,7 @@ include("inc/scripts.php");
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/gir_script.js" type="text/javascript"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/businessUpload.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script> 
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
@@ -3371,17 +3370,18 @@ include("inc/scripts.php");
                             var mensagem = piece[0];
                             var arrayDocumentos = JSON.parse(piece[1]);
                             for (let index = 0; index < arrayDocumentos.length; index++) {
-                                let nomeArquivo = arrayDocumentos[index].nomeArquivo;
-                                let tipoArquivo = arrayDocumentos[index].tipoArquivo;
-                                let enderecoDocumento = arrayDocumentos[index].enderecoDocumento;
-                                let nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
-                                let idCampo = arrayDocumentos[index].idCampo + "Link";
-                                let diretorio = "<?php echo $linkUpload ?>" + enderecoDocumento + nomeArquivo;
+                               
+                                var nomeArquivo = arrayDocumentos[index].nomeArquivo;
+                                var nomeVisualizacao = nomeArquivo.split("_");
+                                var tipoArquivo = arrayDocumentos[index].tipoArquivo; 
+                                var nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
+                                var idCampo = arrayDocumentos[index].idCampo + "Link";
+                                var endereco = arrayDocumentos[index].enderecoDocumento; 
+                                var diretorio = endereco + nomeArquivo;
 
-                                $("#" + idCampo).append("<a href ='" + diretorio + "' target='_blank'>" + nomeCampo + "</a><br>");
+                                $("#" + idCampo).append("<a href ='" + diretorio + "' target='_blank'>" + nomeVisualizacao[1] + "</a><br>");
 
-                            }
-                            //$("#linkCertidaoNascimento").attr("href","http://localhost/SYSCC/uploads/certidoes_de_nascimento/1473e8f806c3a408cc9adfcb6ed3b13e_thumb-1920-605933.jpg");
+                            } 
                         }
                     });
             }

@@ -32,10 +32,6 @@ $sql = "SELECT * FROM Ntl.parametro";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 
-if (($row = odbc_fetch_array($result))) {
-    $row = array_map('utf8_encode', $row);
-    $linkUpload = $row['linkUpload'];
-}
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -1492,11 +1488,11 @@ include("inc/nav.php");
                                                             <section class="col col-6">
                                                                 <label class="label">Foto</label>
                                                                 <label class="input input-file">
-                                                                    <span class="button"><input type="file" id="fotoFuncionario" name="fotoFuncionario[]" multiple>Selecionar
-                                                                        documentos</span><input id="fotoFuncionarioText" type="text">
+                                                                    <span class="button"><input type="file" id="fotoCandidato" name="fotoCandidato[]" multiple>Selecionar
+                                                                        documentos</span><input id="fotoCandidatoText" type="text">
                                                                 </label>
                                                             </section>
-                                                            <section id="fotoFuncionarioLink" class="col col-4">
+                                                            <section id="fotoCandidatoLink" class="col col-4">
 
                                                             </section>
                                                         </div>
@@ -1833,8 +1829,7 @@ include("inc/scripts.php");
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/gir_script.js" type="text/javascript"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/businessUpload.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script> 
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
@@ -2223,9 +2218,9 @@ include("inc/scripts.php");
 
         // ON CHANGES DOCUMENTOS
 
-        $("input[name='fotoFuncionario[]']").change(function() {
+        $("input[name='fotoCandidato[]']").change(function() {
 
-            let files = document.getElementById("fotoFuncionario").files;
+            let files = document.getElementById("fotoCandidato").files;
             let array = [];
             let tamanhoTotal = 0;
             let tamanhoMaximoPorCampo = 1048576; //1MB = 1048576 | 2MB = 2097152
@@ -2236,12 +2231,12 @@ include("inc/scripts.php");
             }
 
             let arrayString = array.toString();
-            $("#fotoFuncionarioText").val(arrayString);
+            $("#fotoCandidatoText").val(arrayString);
 
             if (tamanhoTotal > tamanhoMaximoPorCampo) {
                 smartAlert("Atenção", "Estes arquivos ultrapassaram o valor máximo permitido! O total de arquivos não pode ser maior do que 1MB", "error");
-                $("#fotoFuncionarioText").val("");
-                $("#fotoFuncionario").val("");
+                $("#fotoCandidatoText").val("");
+                $("#fotoCandidato").val("");
 
             }
 
@@ -3258,6 +3253,7 @@ include("inc/scripts.php");
                         }
                     }
                 );
+
                 recuperaUpload(idd,
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
@@ -3265,18 +3261,20 @@ include("inc/scripts.php");
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var arrayDocumentos = JSON.parse(piece[1]);
-                            for (let index = 0; index < arrayDocumentos.length; index++) {
-                                let nomeArquivo = arrayDocumentos[index].nomeArquivo;
-                                let tipoArquivo = arrayDocumentos[index].tipoArquivo;
-                                let enderecoDocumento = arrayDocumentos[index].enderecoDocumento;
-                                let nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
-                                let idCampo = arrayDocumentos[index].idCampo + "Link";
-                                let diretorio = "<?php echo $linkUpload ?>" + enderecoDocumento + nomeArquivo;
+                            for (var index = 0; index < arrayDocumentos.length; index++) {
+ 
+                                var nomeArquivo = arrayDocumentos[index].nomeArquivo;
+                                var nomeVisualizacao = nomeArquivo.split("_");
+                                var tipoArquivo = arrayDocumentos[index].tipoArquivo; 
+                                var nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
+                                var idCampo = arrayDocumentos[index].idCampo + "Link";
+                                var endereco = arrayDocumentos[index].enderecoDocumento; 
+                                var diretorio = endereco + nomeArquivo;
 
-                                $("#" + idCampo).append("<a href ='" + diretorio + "' target='_blank'>" + nomeCampo + "</a><br>");
-
+                                $("#" + idCampo).append("<a href ='" + diretorio + "' target='_blank'>" + nomeVisualizacao[1] + "</a><br>");
+ 
                             }
-                            //$("#linkCertidaoNascimento").attr("href","http://localhost/SYSCC/uploads/certidoes_de_nascimento/1473e8f806c3a408cc9adfcb6ed3b13e_thumb-1920-605933.jpg");
+
                         }
                     });
             }
@@ -3853,8 +3851,7 @@ include("inc/scripts.php");
 
 
     function gravar() {
-
-        debugger
+ 
         let form = $('#formFuncionario')[0];
         let formData = new FormData(form);
         formData.append('funcao', 'gravaFuncionario');
@@ -4069,35 +4066,12 @@ include("inc/scripts.php");
 
         gravaFuncionario(formData);
     }
-
-    function gravarDocumento(id) {
-
-        codigoFuncionario = id;
-        let form = $('#formFuncionario')[0];
-        let formData = new FormData(form);
-        formData.append('funcao', 'grava');
-        formData.append('codigoFuncionario', codigoFuncionario);
-        gravaUpload(formData);
-
-    }
-
-    function arrayArquivos(campo) {
-        var files = document.getElementById(campo).files;
-        var array = [];
-        for (var i = 0; i < files.length; i++) {
-            array.push(files[i].name);
-        }
-        return array;
-    }
+   
 
     function verificaNome(campo) {
-        var texto = $(campo).val();
-        // var texto = document.getElementById(inputField.value);
+        var texto = $(campo).val(); 
         for (letra of texto) {
-            if (!isNaN(texto)) {
-
-                // alert("Não digite números");
-                //  document.getElementById("entrada").value="";
+            if (!isNaN(texto)) { 
                 smartAlert("Erro", "Não digite caracteres que não sejam letras ou espaço", "error");
                 $(campo).val("");
                 return;

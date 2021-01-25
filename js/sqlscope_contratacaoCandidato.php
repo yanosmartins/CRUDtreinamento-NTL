@@ -12,13 +12,15 @@ if ($funcao == 'gravaFuncionario') {
 if ($funcao == 'recuperaFuncionario') {
     call_user_func($funcao);
 }
+ 
+if ($funcao == 'recuperaUpload') {
+    call_user_func($funcao);
+}
 
 if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
-
-
-
+   
 if ($funcao == 'recuperaCpf') {
     call_user_func($funcao);
 }
@@ -607,7 +609,7 @@ function gravaFuncionario()
             "nome" => $fotoCandidatoArray["name"][$i],
             "tipo" => $fotoCandidatoArray["type"][$i],
             "nomeTemporario" => $fotoCandidatoArray["tmp_name"][$i],
-            "enderecoDocumento" => "/uploads/foto_funcionarios/",
+            "enderecoDocumento" => "/uploads/foto_candidatos/",
             "idCampo" => $idFotoCandidato
         );
     }
@@ -1942,6 +1944,47 @@ function recuperaFuncionario()
     return;
 }
 
+function recuperaUpload()
+{
+
+    $id = +$_POST['id'] ?: 0;
+    $diretorioAlvo = "../uploads/";
+
+    $sql = "SELECT codigo, nomeArquivo, enderecoDocumento, tipoArquivo, idCampo, candidato 
+    FROM Contratacao.candidatoDocumento 
+    WHERE (0=0) AND candidato = " . $id;
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $contadorDocumento = 0;
+    $arrayDocumentos = array();
+    $out = "";
+    while ($row = odbc_fetch_array($result)) {
+        $row = array_map('utf8_encode', $row);
+        $nomeArquivo = $row['nomeArquivo'];
+        $enderecoDocumento = $row['enderecoDocumento'];
+        $tipoArquivo = $row['tipoArquivo']; 
+        $idCampo = $row['idCampo'];
+ 
+        $contadorDocumento = $contadorDocumento + 1;
+        $arrayDocumentos[] = array(
+            "nomeArquivo" => $nomeArquivo,
+            "enderecoDocumento" => $enderecoDocumento,
+            "tipoArquivo" => $tipoArquivo, 
+            "idCampo" => $idCampo
+        );
+    }
+ 
+    $strArrayDocumentos = json_encode($arrayDocumentos);
+
+    if ($strArrayDocumentos == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $strArrayDocumentos;
+    return;
+}
 
 function validaString($value)
 {
