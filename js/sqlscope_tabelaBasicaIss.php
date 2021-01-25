@@ -39,10 +39,10 @@ function grava()
 
     session_start();
     $usuario = $_SESSION['login'];
-    $iss = $_POST['iss'];
-    $codigo = +$iss['codigo'];
-    $percentual = +$iss['percentual'];
-    $ativo = +$iss['ativo'];
+
+    $codigo = $_POST['codigo'];
+    $percentual = $_POST['percentual'];
+    $ativo = $_POST['ativo'];
 
     $sql = "Ntl.iss_Atualiza
         $codigo ,

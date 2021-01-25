@@ -26,7 +26,7 @@ return;
 function grava()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("BENEFICIOINDIRETO_ACESSAR|BENEFICIOINDIRETO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("FERIASTERCOCONSTITUCIONAL_ACESSAR|FERIASTERCOCONSTITUCIONAL_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -99,7 +99,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("FERIASTERCOCONSTITUCIONAL_ACESSAR|FERIASTERCOCONSTITUCIONAL_GRAVAR|FERIASTERCOCONSTITUCIONAL_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -107,12 +107,12 @@ function excluir()
         return;
     }
 
+    $id = +$_POST["id"];
+
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Caução.";
+        $mensagem = "Selecione um Valor.";
         echo "failed#" . $mensagem . ' ';
         return;
-    } else {
-        $id = (int) $_POST["id"];
     }
 
     $result = $reposit->update('Ntl.feriasTercoConstitucional' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);

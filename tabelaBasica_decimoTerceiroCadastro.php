@@ -93,23 +93,21 @@ include("inc/nav.php");
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
 
                                                         <div class="row ">
-                                                    
-                                                        <section class="col col-2">
+
+                                                            <section class="col col-2">
                                                                 <label class="label">Percentual 13º Salário</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" class = "required" style="text-align: right;" type="text" autocomplete="off">
+                                                                    <input id="percentual" name="percentual" class="required" style="text-align: right;" type="text" autocomplete="off">
 
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                            <label class="label">Ativo</label>
+                                                            <section class="col col-1">
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
+                                                                    <select name="ativo" id="ativo" class="hidden" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
-                                                                    </select><i></i>
+                                                                    </select>
                                                                 </label>
-                                                            </section>    
+                                                            </section>
 
                                                         </div>
                                                     </fieldset>
@@ -138,7 +136,7 @@ include("inc/nav.php");
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o" ></span>
+                                            <span class="fa fa-file-o"></span>
                                         </button>
 
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
@@ -201,10 +199,47 @@ include("inc/scripts.php");
             percentual = element.val().replace(/\D/g, '');
             if (percentual.length > 5) {
                 element.mask("99.9999?9");
-            } else { 
+            } else {
                 element.mask("9.9999?9");
             }
         }).trigger('focusout');
+
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+
+        $("#btnExcluir").on("click", function() {
+            var id = $("#codigo").val();
+
+            if (id === 0) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#nome").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
+            }
+        });
 
         $('#btnNovo').on("click", function() {
             novo()
@@ -215,7 +250,7 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-       
+
         carregaDecimoTerceiro();
 
 
@@ -225,6 +260,7 @@ include("inc/scripts.php");
         $(location).attr('href', 'tabelaBasica_decimoTerceiroFiltro.php');
 
     }
+
     function novo() {
         $(location).attr('href', 'tabelaBasica_decimoTerceiroCadastro.php');
 
@@ -232,7 +268,7 @@ include("inc/scripts.php");
 
     function gravar() {
 
-     //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
         var codigo = +$("#codigo").val();
@@ -244,7 +280,7 @@ include("inc/scripts.php");
             smartAlert("Erro", "Informe o 13º Salário.", "error");
             return;
         }
-        
+        ativo = 1;
 
         gravaDecimoTerceiro(codigo, ativo, percentual,
             function(data) {
@@ -268,42 +304,35 @@ include("inc/scripts.php");
         );
     }
 
+    function excluir() {
+        var id = $("#codigo").val();
 
+        if (id === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+            return;
+        }
+        excluirDecimoTerceiro(id,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
 
-    $('#dlgSimpleExcluir').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            title: "Atenção",
-            buttons: [{
-                html: "Excluir registro",
-                "class": "btn btn-success",
-                click: function() {
-                    $(this).dialog("close");
-                    excluirDecimoTerceiro();
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
+                    voltar();
+                } else {
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
                 }
-            }, {
-                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                "class": "btn btn-default",
-                click: function() {
-                    $(this).dialog("close");
-                }
-            }]
-        });
-        $("#btnExcluir").on("click", function() {
-            var id = $("#codigo").val();
-
-            if (id === 0) {
-                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-                $("#nome").focus();
-                return;
             }
+        );
+    }
 
-            if (id !== 0) {
-                $('#dlgSimpleExcluir').dialog('open');
-            }
-        });
+
+
 
 
 
@@ -327,7 +356,7 @@ include("inc/scripts.php");
                         piece = out.split("^");
                         console.table(piece);
                         //Atributos de cliente 
-                       
+
                         var codigo = +piece[0];
                         var percentual = piece[1];
                         var ativo = piece[2];

@@ -26,7 +26,7 @@ return;
 function grava()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("BENEFICIOINDIRETO_ACESSAR|BENEFICIOINDIRETO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("DECIMOTERCEIRO_ACESSAR|DECIMOTERCEIRO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -35,10 +35,10 @@ function grava()
     }
 
     session_start();
-    $usuario = $_SESSION['login'];
+    $usuario = (string)$_SESSION['login'];
     $codigo =  (int) $_POST['codigo'];
-    $percentual = $_POST['percentual'];
-    $ativo = (int) $_POST['ativo'];
+    $percentual =  (float)$_POST['percentual'];
+    $ativo = (int)$_POST['ativo'];
 
     $sql = "Ntl.decimoTerceiro_Atualiza
         $codigo ,
@@ -79,9 +79,9 @@ function recupera()
     if($row = $result[0])
 
 
-    $id = $row['codigo'];
-    $percentual = +$row['percentual'];
-    $ativo = $row['ativo'];
+    $id = (int)$row['codigo'];
+    $percentual = (float)$row['percentual'];
+    $ativo = (int)$row['ativo'];
 
     $out =   $id . "^" .
         $percentual . "^" .
@@ -99,7 +99,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("DECIMOTERCEIRO_ACESSAR|DECIMOTERCEIRO_GRAVAR|DECIMOTERCEIRO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -107,12 +107,12 @@ function excluir()
         return;
     }
 
+    $id = +$_POST["id"];
+
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Caução.";
+        $mensagem = "Selecione um Valor.";
         echo "failed#" . $mensagem . ' ';
         return;
-    } else {
-        $id = (int) $_POST["id"];
     }
 
     $result = $reposit->update('Ntl.decimoTerceiro' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);

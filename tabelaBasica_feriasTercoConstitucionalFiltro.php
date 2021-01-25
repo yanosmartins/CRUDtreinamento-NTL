@@ -89,12 +89,17 @@ include("inc/ribbon.php");
                                                     <div class="row ">
                                          
                                                     <section class="col col-2">
-                                                                <label class="label">Percentual Férias e Terço constitucional</label>
+                                                                <label class="label">Percentual Férias e Terço constitucional</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
                                                                     <input id="percentual" name="percentual" style="text-align: right;" type="text" autocomplete="off">
 
                                                                 </label>
-                                                            </section>   
+                                                            </section>
+
+                                                            <section class="col col-1">
+                                                               
+                                                               </section> 
+                                                                
                                                             <section class="col col-2">
                                                             <label class="label">Ativo</label>
                                                                 <label class="select">

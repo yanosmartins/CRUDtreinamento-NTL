@@ -94,20 +94,23 @@ include("inc/nav.php");
                                                         <div class="row ">
 
                                                             <section class="col col-2">
-                                                                <label class="label">Percentual Férias e Terço constitucional</label>
+                                                                <label class="label">Percentual Férias e Terço constitucional</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
                                                                     <input id="percentual" name="percentual" class="required" style="text-align: right;" type="text" autocomplete="off" required>
 
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-1">
+
+                                                            </section>
+
 
                                                             <section class="col col-2">
-                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" required>
+                                                                    <select name="ativo" id="ativo" autocomplete="off" class="hidden" required>
                                                                         <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
-                                                                    </select><i></i>
+
+                                                                    </select>
                                                                 </label>
                                                             </section>
 
@@ -207,6 +210,43 @@ include("inc/scripts.php");
                 element.mask("9.9999?9");
             }
         }).trigger('focusout');
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+
+        $("#btnExcluir").on("click", function() {
+            var id = $("#codigo").val();
+
+            if (id === 0) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#nome").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
+            }
+        });
+
 
 
         $('#btnNovo').on("click", function() {
@@ -218,9 +258,7 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-        $("#btnExcluir").on("click", function() {
-            excluir();
-        });
+       
         carregaFerias();
 
 
@@ -245,7 +283,7 @@ include("inc/scripts.php");
             smartAlert("Erro", "Informe o 13º Salário.", "error");
             return;
         }
-
+        ativo = 1;
 
         gravaFerias(codigo, ativo, percentual,
             function(data) {
@@ -270,41 +308,32 @@ include("inc/scripts.php");
     }
 
 
-    $('#dlgSimpleExcluir').dialog({
-        autoOpen: false,
-        width: 400,
-        resizable: false,
-        modal: true,
-        title: "Atenção",
-        buttons: [{
-            html: "Excluir registro",
-            "class": "btn btn-success",
-            click: function() {
-                $(this).dialog("close");
-                excluir();
-            }
-        }, {
-            html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-            "class": "btn btn-default",
-            click: function() {
-                $(this).dialog("close");
-            }
-        }]
-    });
-    $("#btnExcluir").on("click", function() {
+    function excluir() {
         var id = $("#codigo").val();
 
         if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-            $("#nome").focus();
+            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
             return;
         }
+        excluirFerias(id,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
 
-        if (id !== 0) {
-            $('#dlgSimpleExcluir').dialog('open');
-        }
-    });
-
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
+                    voltar();
+                } else {
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
+                }
+            }
+        );
+    }
 
     function carregaFerias() {
         var urlx = window.document.URL.toString();

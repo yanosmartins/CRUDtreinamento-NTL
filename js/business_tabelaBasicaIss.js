@@ -1,9 +1,9 @@
-function gravaIss(iss, callback) {
+function gravaIss(codigo,percentual,ativo, callback) {
     $.ajax({
         url: 'js/sqlscope_tabelaBasicaIss.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: 'grava', iss: iss },
+        data: { funcao: 'grava', codigo: codigo, percentual:percentual, ativo:ativo },
 
         success: function (data) {
             callback(data);

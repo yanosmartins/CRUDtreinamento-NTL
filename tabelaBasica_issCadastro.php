@@ -99,12 +99,10 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required" required>
-                                                                        <option value='1'>Sim</option>
-                                                                        <option value='0'>Não</option>
-                                                                    </select><i></i>
+                                                                    <select id="ativo" name="ativo" class="hidden" required>
+                                                                        <option value='1' selected>Sim</option>
+                                                                    </select>
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -201,6 +199,43 @@ include("inc/scripts.php");
                 element.mask("9.99?9");
             }
         }).trigger('focusout');
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+
+        $("#btnExcluir").on("click", function() {
+            var id = $("#codigo").val();
+
+            if (id === 0) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#nome").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
+            }
+        });
+
 
 
         $('#btnNovo').on("click", function() {
@@ -212,9 +247,7 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-        $("#btnExcluir").on("click", function() {
-            excluir();
-        });
+
         carregaIss();
 
 
@@ -226,21 +259,21 @@ include("inc/scripts.php");
     }
 
     function gravar() {
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
+
+        var codigo = +$("#codigo").val();
+        var ativo = $("#ativo").val();
         var percentual = $("#percentual").val();
 
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!percentual) {
-            smartAlert("Erro", "Informe o Percentual.", "error");
-            $("#btnGravar").prop('disabled', false);
+            smartAlert("Erro", "Informe o Iss.", "error");
             return;
         }
+        ativo = 1;
 
-        let iss = $('#formIss').serializeArray().reduce(function(obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
-
-        gravaIss(iss,
+        gravaIss(codigo,percentual,ativo,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {

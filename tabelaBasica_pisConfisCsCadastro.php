@@ -102,13 +102,11 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
 
-                                                            <section class="col col-2">
-                                                                <label class="label">Ativo</label>
+                                                            <section class="col col-2">   
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" required>
-                                                                        <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
-                                                                    </select><i></i>
+                                                                    <select id="ativo" name="ativo" class="hidden" required>
+                                                                        <option value='1' selected>Sim</option>
+                                                                    </select>
                                                                 </label>
                                                             </section>
 
@@ -278,6 +276,7 @@ include("inc/scripts.php");
             smartAlert("Erro", "Informe o Inss.", "error");
             return;
         }
+        ativo = 1;
 
         gravaPisConfisCs(codigo, ativo, percentual,
             function(data) {

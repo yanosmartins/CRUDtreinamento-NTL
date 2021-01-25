@@ -16,26 +16,30 @@ include "js/repositorio.php";
             </thead>
             <tbody>
                 <?php
+                $where = " WHERE (0=0) ";
+                $descricao = $_GET["descricao"];
+                $reducaoBaseIR = $_GET["reducaoBaseIR"];
+                $ativo = $_GET["ativo"];
+               
 
-                $descricao = "";
-                $reducaoBaseIR = "";
+
+                if ($descricao != "") {
+
+
+                    $where = $where . " AND descricao = " . "'" . $descricao . "'";
+                }
+                if ($reducaoBaseIR !== "") {
+
+                    $where = $where . " AND reducaoBaseIR = $reducaoBaseIR ";
+                }
+                if ($ativo !== "") {
+
+                    $where = $where . " AND ativo = $ativo ";
+                }
 
                 $sql = " SELECT codigo,descricao, reducaoBaseIR, ativo FROM Ntl.classe ";
-                $where = "WHERE (0 = 0)";
                 $order = " order by (reducaoBaseIR) DESC";
 
-                if ($_GET["descricao"] != "") {
-                    $descricao = $_GET["descricao"];
-                    $where = $where . " AND (descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
-                }
-                if ($_GET["reducaoBaseIR"] != "") {
-                    $reducaoBaseIR = $_GET["reducaoBaseIR"];
-                    $where = $where . " AND (reducaoBaseIR like '%' + " . "replace('" . $reducaoBaseIR . "',' ','%') + " . "'%')";
-                }
-
-                if (($_GET['ativo'] === 1) || ($_GET['ativo'] === 0)) {
-                    $where .=  " AND ativo = " . $ativo;
-                }
 
                 $sql .= $where . $order;
                 $reposit = new reposit();
