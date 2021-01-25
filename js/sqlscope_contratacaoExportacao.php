@@ -23,10 +23,7 @@ function exportar()
         return;
     }
 
-    $nomeArquivo = 'NTLPARASCI_' . date("Ymd_is") . '.txt'; //Nome do arquivo;  
-
-    /*Verifica se o diretório com o endereço especificado existe,
-    se não, ele cria e atribui permissões de leitura e gravação. */
+    $nomeArquivo = 'NTLPARASCI_' . date("Ymd_is") . '.txt';
 
     $localExportacao = '../logs_exportacao_SCI/';
     if (!file_exists($localExportacao)) {
@@ -40,9 +37,9 @@ function exportar()
 
     $arrayCandidatosExportacao = array();
 
-    for ($i = 0; $i < count($arrayCodigoCandidatos); $i++) {
+    foreach ($arrayCodigoCandidatos as $candidato) {
 
-        gravarLogExportacao($arrayCodigoCandidatos[$i], $nomeArquivo);
+        gravarLogExportacao($candidato, $nomeArquivo);
 
         $sql = "SELECT  C.nomeCompleto,
 		CC.matriculaSCI,
@@ -131,10 +128,10 @@ function exportar()
 		LEFT JOIN Ntl.projeto P ON CC.projeto = P.codigo
         LEFT JOIN Ntl.banco B ON C.fk_banco = B.codigo
         WHERE CC.verificadoPeloRh = 1
-        AND (0=0) AND C.codigo = " . $arrayCodigoCandidatos[$i];
+        AND (0=0) AND C.codigo = " . $candidato;
 
         $result = $reposit->RunQuery($sql);
-        if ($row = odbc_fetch_array($result)) {
+        foreach ($result as $row) {
 
             $nomeCompleto =                 $row['nomeCompleto'];
             $matricula =                    $row['matriculaSCI'];
@@ -161,7 +158,7 @@ function exportar()
             $localRg =                      $row['localRg'];
             $emissorRg =                    $row['emissorRg'];
             $cnh =                          $row['cnh'];
-            $categoriaCnh =                +$row['categoriaCnh'];
+            $categoriaCnh =                 $row['categoriaCnh'];
             $dataEmissaoCnh =               $row['dataEmissaoCnh'];
             $dataVencimentoCnh =            $row['dataVencimentoCnh'];
             $primeiraCnh =                  $row['primeiraCnh'];
@@ -177,7 +174,7 @@ function exportar()
             $estado =                       $row['estado'];
             $nacionalidade =                $row['nacionalidade'];
             $carteiraTrabalho =             $row['carteiraTrabalho'];
-            $centroCusto =                 +$row['numeroCentroCusto'];
+            $centroCusto =                  $row['numeroCentroCusto'];
             $dataNascimento =               $row['dataNascimento'];
             $dataAdmissao =                 $row['dataAdmissao'];
             $naturezaOcupacao =             $row['naturezaOcupacao'];
@@ -192,16 +189,16 @@ function exportar()
             $quantidadeDiasProrrogacao =    $row['quantidadeDiasProrrogacao'];
             $cbo =                          $row['cbo'];
             $cargo =                        $row['cargoSelecionado'];
-            $primeiroEmprego =             +$row['tipoAdmissao'];
+            $primeiroEmprego =              $row['tipoAdmissao'];
             $vinculoEmpregaticio =          $row['vinculoEmpregaticio'];
             $nomePai =                      $row['nomePai'];
             $nomeMae =                      $row['nomeMae'];
             $dataEmissaoRg =                $row['dataEmissaoRg'];
             $ufCnh =                        $row['ufCnh'];
             $logradouro =                   $row['logradouro'];
-            $racaCor =                     +$row['racaCor'];
-            $indicativoAdmissao =          +$row['indicativoAdmissao'];
-            $tipoContrato =                +$row['tipoContrato'];
+            $racaCor =                      $row['racaCor'];
+            $indicativoAdmissao =           $row['indicativoAdmissao'];
+            $tipoContrato =                 $row['tipoContrato'];
             $dataFinal =                    $row['dataFinal'];
             $municipioNascimentoConjuge =   $row['municipioNascimentoConjuge'];
             $fgtsGpsCategoriaSefip =        $row['fgtsGpsCategoriaSefip'];
@@ -209,16 +206,16 @@ function exportar()
             $dataNascimentoConjuge =        $row['dataNascimentoConjuge'];
             $fgtsGpsCategoriaESocial =      $row['fgtsGpsCategoriaESocial'];
             $contaCorrente =                $row['contaCorrente'];
-            $digitoContaBanco =            +$row['digitoContaBanco'];
-            $tipoConta =                   +$row['tipoConta'];
+            $digitoContaBanco =             $row['digitoContaBanco'];
+            $tipoConta =                    $row['tipoConta'];
             $regimeJornadaTrabalho =        $row['regimeJornadaTrabalho'];
-            $tipoEscala =                  +$row['tipoEscala'];
+            $tipoEscala =                   $row['tipoEscala'];
             $escalaHorario =                $row['escalaHorario'];
-            $descansoSemanal =             +$row['descansoSemanal'];
-            $tipoJornadaESocial =          +$row['tipoJornadaESocial'];
+            $descansoSemanal =              $row['descansoSemanal'];
+            $tipoJornadaESocial =           $row['tipoJornadaESocial'];
             $dataExpedicaoCarteiraTrabalho = $row['dataExpedicaoCarteiraTrabalho'];
             $dataInicioRevezamento =        $row['dataInicioRevezamento'];
-            $tipoRevezamento =             +$row['tipoRevezamento'];
+            $tipoRevezamento =              $row['tipoRevezamento'];
 
             //Arruma os valores conectando com a API do IBGE
             $arrayIbge = conectarIbge($ufNascimento, $codigoMunicipioNascimento);
@@ -242,34 +239,6 @@ function exportar()
             $dataEmissaoPis = "";
         }
 
-        $arrayCandidatosExportacaoTemp = array(
-            "nome" => $nomeCompleto,
-            "sexo" => $sexo,
-            "cpf" => $cpf,
-            "pisPasep" => $pis,
-            "rg" => $rg,
-            "ufIdentidade" => $localRg,
-            "orgaoEmissorRg" => $emissorRg,
-            "dataEmissaoRG" => $dataEmissaoRg,
-            "cnh" => $cnh,
-            "categoriaCNH" => $categoriaCnh,
-            "dataEmissaoCNH" => $dataEmissaoCnh,
-            "dataVencimentoCNH" => $dataVencimentoCnh,
-            "primeiraHabilitacaoCNH" => $primeiraCnh,
-            "numeroCarteiraTrabalho" => $carteiraTrabalho,
-            "serieCarteiraTrabalho" => $carteiraTrabalhoSerie,
-            "ufCarteiraTrabalho" => $localCarteiraTrabalho,
-            "cep" => $cep,
-            "logradouro" => $endereco,
-            "numeroLogradouro" => $numeroEndereco,
-            "complemento" => $complemento,
-            "ufLogradouro" => $uf,
-            "cargo" => $cargo,
-            "telefone" => $telefoneCelular,
-            "email" => $email
-        );
-
-
         $dataEmissaoRg = verificaDatetime($dataEmissaoRg);
         $dataEmissaoCnh = verificaDatetime($dataEmissaoCnh);
         $dataVencimentoCnh = verificaDatetime($dataVencimentoCnh);
@@ -282,8 +251,6 @@ function exportar()
 
         $arrayIbgeConjuge = conectarIbge($ufNascimentoConjuge, $municipioNascimentoConjuge);
         $ufNascimentoConjuge = $arrayIbgeConjuge[0];
-
-        array_push($arrayCandidatosExportacao, $arrayCandidatosExportacaoTemp);
 
         //Limpando máscaras e outros caracteres.   
         $telefoneResidencial = limparCaracteres($telefoneResidencial);
@@ -447,6 +414,36 @@ function exportar()
         $dataInicioRevezamento = adicionarEspacosNumero($dataInicioRevezamento, 8);
         $tipoRevezamento = adicionarEspacosNumero($tipoRevezamento, 5);
 
+        $arrayCandidatosExportacaoTemp = array(
+            "nome" => trim($nomeCompleto),
+            "sexo" => trim($sexo),
+            "cpf" => trim($cpf),
+            "pisPasep" => trim($pis),
+            "rg" => trim($rg),
+            "ufIdentidade" => trim($localRg),
+            "orgaoEmissorRg" => trim($emissorRg),
+            "dataEmissaoRG" => trim($dataEmissaoRg),
+            "cnh" => trim($cnh),
+            "categoriaCNH" => trim($categoriaCnh),
+            "dataEmissaoCNH" => trim($dataEmissaoCnh),
+            "dataVencimentoCNH" => trim($dataVencimentoCnh),
+            "primeiraHabilitacaoCNH" => trim($primeiraCnh),
+            "numeroCarteiraTrabalho" => trim($carteiraTrabalho),
+            "serieCarteiraTrabalho" => trim($carteiraTrabalhoSerie),
+            "ufCarteiraTrabalho" => trim($localCarteiraTrabalho),
+            "cep" => trim($cep),
+            "logradouro" => trim($endereco),
+            "numeroLogradouro" => trim($numeroEndereco),
+            "complemento" => trim($complemento),
+            "ufLogradouro" => trim($uf),
+            "cargo" => trim($cargo),
+            "telefoneCelular" => trim($telefoneCelular),
+            "telefoneResidencial" => trim($telefoneResidencial),
+            "email" => trim($email)
+        );
+
+        array_push($arrayCandidatosExportacao, $arrayCandidatosExportacaoTemp);
+
         $mensagem =
             $nomeCompleto .
             $matricula .
@@ -543,50 +540,37 @@ function exportar()
             "\n";
 
 
-        fwrite($handler, $mensagem); //Cria o txt. 
+        fwrite($handler, $mensagem);
 
+        $sql = "Contratacao.exportacao_Atualiza(0,";
+        foreach ($arrayCandidatosExportacao as $candidato) {
+            foreach ($candidato as $chave => $valor) {
+                if ($chave === "email") {
+                    if (!preg_match("/[0-9]/", $valor)) {
+                        $sql .= "'" . $valor . "')";
+                    } else {
+                        $sql .= $valor . ")";
+                    }
+                    break;
+                }
+                if (!preg_match("/[0-9]/", $valor)) {
+                    $sql .= "'" . $valor . "',";
+                } else {
+                    $sql .= $valor . ",";
+                }
+            }
+
+            $result = $reposit->Execprocedure($sql);
+            $ret = 'success';
+            if ($result < 1) {
+                $ret = 'failed#';
+                return
+                    $ret . "^" . $nomeArquivo;
+            }
+        }
     }
-
     fclose($handler);
 
-    $nomeXml =  "arrayCandidatosExportacao";
-    $nomeTabela = "candidato";
-    if (sizeof($arrayCandidatosExportacao) > 0) {
-        $xmlCandidatosExportacao = '<?xml version="1.0"?>';
-        $xmlCandidatosExportacao = $xmlCandidatosExportacao . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-
-        foreach ($arrayCandidatosExportacao as $chave) {
-            $xmlCandidatosExportacao = $xmlCandidatosExportacao . "<" . $nomeTabela . ">";
-            foreach ($chave as $campo => $valor) {
-
-                $xmlCandidatosExportacao = $xmlCandidatosExportacao . "<" . $campo . ">" . $valor . "</" . $campo . ">";
-            }
-            $xmlCandidatosExportacao = $xmlCandidatosExportacao . "</" . $nomeTabela . ">";
-        }
-        $xmlCandidatosExportacao = $xmlCandidatosExportacao . "</" . $nomeXml . ">";
-    } else {
-        $xmlCandidatosExportacao = '<?xml version="1.0"?>';
-        $xmlCandidatosExportacao = $xmlCandidatosExportacao . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-        $xmlCandidatosExportacao = $xmlCandidatosExportacao . "</" . $nomeXml . ">";
-    }
-    $xml = simplexml_load_string($xmlCandidatosExportacao);  //Transforma o xml em uma string.
-
-    if ($xml === false) {
-        $mensagem = "Erro na criação do XML de certidões de nascimento ";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    }
-
-    $xmlCandidatosExportacao = "'" . $xmlCandidatosExportacao . "'";
-
-    $sql = "Contratacao.exportacao_Atualiza(codigo,nome,sexo,cpf,pisPasep,rg,ufIdentidade,orgaoEmissorRg,dataEmissaoRG,cnh,categoriaCNH,dataEmissaoCNH,dataVencimentoCNH,primeiraHabilitacaoCNH,numeroCarteiraTrabalho,serieCarteiraTrabalho,ufCarteiraTrabalho,cep,logradouro,numeroLogradouro,complemento,ufLogradouro,cargo,xmlTelefone,xmlEmail)";
-    $reposit = new reposit();
-    $result = $reposit->Execprocedure($sql);
-
-    $ret = 'success';
-    // if ($result < 1) {
-    //     $ret = 'failed#';
-    // }
     echo $ret . "^" . $nomeArquivo;
     return;
 }

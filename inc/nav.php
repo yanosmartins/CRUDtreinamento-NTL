@@ -27,7 +27,7 @@
     will not initialize.
     -->
     <nav>
-            <!-- NOTE: Notice the gaps after each icon usage <i></i>..
+        <!-- NOTE: Notice the gaps after each icon usage <i></i>..
             Please note that these links work a bit different than
             traditional hre="" links. See documentation for details.
         -->
