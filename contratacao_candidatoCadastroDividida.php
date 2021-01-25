@@ -33,11 +33,11 @@ if ($condicaoExcluirOK === false) {
     $esconderBtnExcluir = "none";
 }
 
-$sql = "SELECT * FROM dbo.parametro";
+$sql = "SELECT * FROM Ntl.parametro";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
-
-if (($row = odbc_fetch_array($result))) {
+$row = $result[0];
+if ($row) {
     $row = array_map('utf8_encode', $row);
     $linkUpload = $row['linkUpload'];
 }
@@ -1780,9 +1780,9 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select * from Ntl.banco order by nomeBanco";
+                                                                        $sql = "select codigo,codigoBanco,nomeBanco from Ntl.banco order by nomeBanco";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach ($result as $row) {
 
                                                                             $codigo = $row['codigo'];
                                                                             $codigoBanco = mb_convert_encoding($row['codigoBanco'], 'UTF-8', 'HTML-ENTITIES');
@@ -1865,7 +1865,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach ($result as $row) {
                                                                             $row = array_map('utf8_encode', $row);
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];

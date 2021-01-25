@@ -243,6 +243,7 @@ include("inc/scripts.php");
             let checkboxComIdDosFuncionarios = [];
             // Pega o valor do ID do Funcionário e joga para um array chamado 'checkboxSelecionado'.
             $("input[type='checkbox']").each(function() {
+                debugger;
                 if ($(this).prop("checked")) { //Se o checkbox tiver sido selecionado. 
                     checkboxComIdDosFuncionarios.push(($(this).attr('value'))); //Ele puxa o valor do código do funcionário pra um array.
                 }

@@ -61,14 +61,14 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
-                    $codigo = mb_convert_encoding($row['codigo'], 'UTF-8', 'HTML-ENTITIES');
-                    $nome = mb_convert_encoding($row['nome'], 'UTF-8', 'HTML-ENTITIES');
-                    $cpf = mb_convert_encoding($row['cpf'], 'UTF-8', 'HTML-ENTITIES');
-                    $projeto = mb_convert_encoding($row['projeto'], 'UTF-8', 'HTML-ENTITIES');
-                    $cargo = mb_convert_encoding($row['cargo'], 'UTF-8', 'HTML-ENTITIES');
-                    $situacao = mb_convert_encoding($row['situacao'], 'UTF-8', 'HTML-ENTITIES');
-
+                $row = array();
+                for ($i = 0; $i < count($result); $i++) {
+                    $codigo = mb_convert_encoding($result[$i]['codigo'], 'UTF-8', 'HTML-ENTITIES');
+                    $nome = mb_convert_encoding($result[$i]['nome'], 'UTF-8', 'HTML-ENTITIES');
+                    $cpf = mb_convert_encoding($result[$i]['cpf'], 'UTF-8', 'HTML-ENTITIES');
+                    $projeto = mb_convert_encoding($result[$i]['projeto'], 'UTF-8', 'HTML-ENTITIES');;
+                    $cargo = mb_convert_encoding($result[$i]['cargo'], 'UTF-8', 'HTML-ENTITIES');
+                    $situacao = mb_convert_encoding($result[$i]['situacao'], 'UTF-8', 'HTML-ENTITIES');
                     switch ($situacao) {
                         default:
                             $situacao = "<b><font color='#dbc616'>Pendente</font></b>";
