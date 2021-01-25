@@ -32,14 +32,6 @@ $sql = "SELECT * FROM Ntl.parametro";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 
-<<<<<<< HEAD
-$row = $result;
-if ($row) {
-    $row = array_map('utf8_encode', $row);
-    $linkUpload = $row['linkUpload'];
-}
-=======
->>>>>>> Thaiane
 
 /* ---------------- PHP Custom Scripts ---------
 
