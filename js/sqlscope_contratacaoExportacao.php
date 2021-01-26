@@ -542,24 +542,16 @@ function exportar()
 
         fwrite($handler, $mensagem);
 
-        $sql = "Contratacao.exportacao_Atualiza(0,";
+        $sql = "Contratacao.exportacao_Atualiza 0,";
         foreach ($arrayCandidatosExportacao as $candidato) {
             foreach ($candidato as $chave => $valor) {
-                if ($chave === "email") {
-                    if (!preg_match("/[0-9]/", $valor)) {
-                        $sql .= "'" . $valor . "')";
-                    } else {
-                        $sql .= $valor . ")";
-                    }
-                    break;
-                }
                 if (!preg_match("/[0-9]/", $valor)) {
                     $sql .= "'" . $valor . "',";
                 } else {
                     $sql .= $valor . ",";
                 }
             }
-
+            $sql = substr($sql, 0, strrpos($sql, ","));
             $result = $reposit->Execprocedure($sql);
             $ret = 'success';
             if ($result < 1) {
@@ -1333,22 +1325,23 @@ function gravarLogExportacao($candidato, $nomeTxtGerado)
     $nomeTxtGerado = "'" . $nomeTxtGerado . "'";
 
 
-    $sql = "Contratacao.logExportacao_Atualiza(
+    $sql = "Contratacao.logExportacao_Atualiza
         $codigo, 
         $candidato,
         $nomeTxtGerado, 
         $situacao,
         $usuario
-        )";
+        ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
+
     $ret = 'sucess#';
     if ($result < 1) {
-        $ret = 'failed';
+        $ret = 'failed#';
     }
-
-    return $ret;
+    echo $ret;
+    return;
 }
 
 function consultaLogExportacao($candidato)

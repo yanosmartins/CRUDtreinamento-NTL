@@ -82,7 +82,7 @@ class reposit
     }
 
     // executa store procedure
-    function ExecprocedureSemSchema($config)
+    function ExecprocedureSemSchema($config) //fecha no gerenc de tarefas do windows ai o cgi
     {
         $conf = explode("|", $config);
 
