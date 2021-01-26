@@ -93,13 +93,11 @@ include("inc/nav.php");
                                                                     <input id="descricao" name="descricao" type="text" autocomplete="new-password" maxlength="255" class="required" required>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Ativo</label>
+                                                            <section class="col col-2">   
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
-                                                                        <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
-                                                                    </select><i></i>
+                                                                    <select id="ativo" name="ativo" class="hidden" required>
+                                                                        <option value='1' selected>Sim</option>
+                                                                    </select>
                                                                 </label>
                                                             </section>
                                                     </fieldset>
@@ -247,6 +245,7 @@ include("inc/scripts.php");
             smartAlert("Atenção", "Insira uma Descrição", "error")
             return false;
         }
+        $("#ativo").val(1);
 
         let posto = $('#formPosto').serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
