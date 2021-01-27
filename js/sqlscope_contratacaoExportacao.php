@@ -264,21 +264,11 @@ function exportar()
         $secaoTituloEleitor = limparCaracteres($secaoTituloEleitor);
         $zonaTituloEleitor = limparCaracteres($zonaTituloEleitor);
         $carteiraTrabalho = limparCaracteres($carteiraTrabalho);
-        $dataNascimento = limparCaracteres($dataNascimento);
-        $dataAdmissao = limparCaracteres($dataAdmissao);
         $salarioBase = limparCaracteres($salarioBase);
         $cbo = limparCaracteres($cbo);
         $cep = limparCaracteres($cep);
         $horasDiarias = limparCaracteres($horasDiarias);
-        $dataFinal = limparCaracteres($dataFinal);
-        $dataEmissaoRg = limparCaracteres($dataEmissaoRg);
-        $dataEmissaoCnh = limparCaracteres($dataEmissaoCnh);
-        $dataVencimentoCnh = limparCaracteres($dataVencimentoCnh);
-        $primeiraCnh = limparCaracteres($primeiraCnh);
-        $dataNascimentoConjuge = limparCaracteres($dataNascimentoConjuge);
         $contaCorrente = limparCaracteres($contaCorrente);
-        $dataExpedicaoCarteiraTrabalho = limparCaracteres($dataExpedicaoCarteiraTrabalho);
-        $dataInicioRevezamento = limparCaracteres($dataInicioRevezamento);
 
         //Tirando todo os acentos.
         $nomeCompleto = tiraAcento($nomeCompleto);
@@ -349,7 +339,6 @@ function exportar()
         $zonaTituloEleitor = adicionarEspacos($zonaTituloEleitor, 3);
         $estado = adicionarEspacos($estado, 2);
         $nacionalidade = adicionarEspacos($nacionalidade, 2);
-        $dataChegadaBrasil = adicionarEspacos($dataChegadaBrasil, 8);
         $carteiraTrabalho = adicionarEspacosNumero($carteiraTrabalho, 8); //CTPS
         $carteiraTrabalhoSerie = adicionarEspacos($carteiraTrabalhoSerie, 5);
         $digitoSerieCTPS = adicionarEspacos($digitoSerieCTPS, 1);
@@ -357,8 +346,6 @@ function exportar()
         $numeroDepSF = adicionarEspacos($numeroDepSF, 2);
         $centroCusto = adicionarEspacosNumero($centroCusto, 10);
         $departamento = adicionarEspacosNumero($departamento, 10);
-        $dataNascimento = adicionarEspacos($dataNascimento, 8);
-        $dataAdmissao = adicionarEspacos($dataAdmissao, 8);
         $naturezaOcupacao = adicionarEspacos($naturezaOcupacao, 1);
         $contaFgts = adicionarEspacos($contaFgts, 6);
         $sindicato = adicionarEspacosNumero($sindicato, 3);
@@ -385,20 +372,14 @@ function exportar()
         $racaCor = adicionarEspacosNumero($racaCor, 1);
         $indicativoAdmissao = adicionarEspacosNumero($indicativoAdmissao, 1);
         $tipoContrato = adicionarEspacosNumero($tipoContrato, 1);
-        $dataFinal = adicionarEspacosNumero($dataFinal, 8);
-        $dataEmissaoRg = adicionarEspacosNumero($dataEmissaoRg, 8);
         $emissorRg = adicionarEspacos($emissorRg, 20);
         $localRg = adicionarEspacosNumero($localRg, 2);
         $cnh = adicionarEspacosNumero($cnh, 11);
         $categoriaCnh = adicionarEspacosNumero($categoriaCnh, 2);
         $ufCnh = adicionarEspacos($ufCnh, 2);
-        $dataEmissaoCnh = adicionarEspacosNumero($dataEmissaoCnh, 8);
-        $dataVencimentoCnh = adicionarEspacosNumero($dataVencimentoCnh, 8);
-        $primeiraCnh = adicionarEspacosNumero($primeiraCnh, 8);
         $municipioNascimentoConjuge = adicionarEspacosNumero($municipioNascimentoConjuge, 7);
         $fgtsGpsCategoriaSefip = adicionarEspacosNumero($fgtsGpsCategoriaSefip, 2);
         $ufNascimentoConjuge = adicionarEspacos($ufNascimentoConjuge, 2);
-        $dataNascimentoConjuge = adicionarEspacosNumero($dataNascimentoConjuge, 8);
         $fgtsGpsCategoriaESocial = adicionarEspacosNumero($fgtsGpsCategoriaESocial, 3);
         $contaCorrente = adicionarEspacosNumero($contaCorrente, 12);
         $digitoContaBanco = adicionarEspacosNumero($digitoContaBanco, 2);
@@ -409,9 +390,6 @@ function exportar()
         $escalaHorario = adicionarEspacos($escalaHorario, 10);
         $descansoSemanal = adicionarEspacosNumero($descansoSemanal, 1);
         $tipoJornadaESocial = adicionarEspacosNumero($tipoJornadaESocial, 4);
-        $dataExpedicaoCarteiraTrabalho = adicionarEspacosNumero($dataExpedicaoCarteiraTrabalho, 8);
-        $dataEmissaoPis = adicionarEspacosNumero($dataEmissaoPis, 8);
-        $dataInicioRevezamento = adicionarEspacosNumero($dataInicioRevezamento, 8);
         $tipoRevezamento = adicionarEspacosNumero($tipoRevezamento, 5);
 
         $arrayCandidatosExportacaoTemp = array(
@@ -545,7 +523,7 @@ function exportar()
         $sql = "Contratacao.exportacao_Atualiza 0,";
         foreach ($arrayCandidatosExportacao as $candidato) {
             foreach ($candidato as $chave => $valor) {
-                if (!preg_match("/[0-9]/", $valor)) {
+                if (preg_match("/[^0-9]/", $valor)) {
                     $sql .= "'" . $valor . "',";
                 } else {
                     $sql .= $valor . ",";
