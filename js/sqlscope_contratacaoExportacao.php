@@ -526,7 +526,11 @@ function exportar()
                 if (preg_match("/[^0-9]/", $valor)) {
                     $sql .= "'" . $valor . "',";
                 } else {
-                    $sql .= $valor . ",";
+                    if ($valor == '' || $valor == ' ' || is_null($valor)) {
+                        $sql .= "'" . $valor . "',";
+                    } else {
+                        $sql .= $valor . ",";
+                    }
                 }
             }
             $sql = substr($sql, 0, strrpos($sql, ","));
@@ -1328,8 +1332,8 @@ function consultaLogExportacao($candidato)
     $sql = " SELECT codigo, situacao FROM Contratacao.exportacao WHERE candidato = " . $candidato;
     $result = $reposit->RunQuery($sql);
     if ($row = $result[0])
-        
-    $codigo = $row['codigo'];
+
+        $codigo = $row['codigo'];
     $situacao = $row['situacao'];
 
     if (is_null($codigo)) {
