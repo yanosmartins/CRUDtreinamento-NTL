@@ -202,14 +202,15 @@ function grava()
     } else {
         $xmlJsonFaturamento = '<?xml version="1.0"?>';
         $xmlJsonFaturamento = $xmlJsonFaturamento . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-        $xmlJsonFaturamento = "'".$xmlJsonFaturamento . "</" . $nomeXml . ">"."'";
+        $xmlJsonFaturamento = $xmlJsonFaturamento . "</" . $nomeXml . ">";
     }
     $xml = simplexml_load_string($xmlJsonFaturamento);
     if ($xml === false) {
-        $mensagem = "Erro na criação do XML de vale transporte modal";
+        $mensagem = "Erro na criação do XML de telefone";
         echo "failed#" . $mensagem . ' ';
         return;
     }
+    $xmlJsonFaturamento = "'" . $xmlJsonFaturamento . "'";
 
     
     //Fim do Json  Faturamento
@@ -253,7 +254,7 @@ function grava()
                 $envioSolicitacao,               
                 $anotacoesSolicitacao, 
                 $usuario,
-                '$xmlJsonFaturamento'          
+                $xmlJsonFaturamento          
                 ";
 
     $reposit = new reposit();

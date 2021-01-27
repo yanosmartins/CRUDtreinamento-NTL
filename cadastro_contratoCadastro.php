@@ -95,7 +95,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
@@ -261,7 +261,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.caucao  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
@@ -386,7 +386,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, percentual FROM Ntl.decimoTerceiro  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
@@ -408,7 +408,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, percentual FROM Ntl.feriasTercoConstitucional  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
@@ -430,7 +430,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, percentual FROM Ntl.multaFGTS  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
@@ -488,8 +488,6 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
-
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
@@ -498,15 +496,12 @@ include("inc/nav.php");
                                                                     <input id="limiteInteresse" name="limiteInteresse" autocomplete="off" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="-" data-dateformat="dd/mm/yy" type="text">
                                                                 </label>
                                                             </section>
-
-
                                                             <section class="col col-2">
                                                                 <label class="label">Data de Envio do Interesse</label>
                                                                 <label class="input"><i class="icon-append fa fa-calendar"></i>
                                                                     <input id="envioInteresse" name="envioInteresse" autocomplete="off" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="-" data-dateformat="dd/mm/yy" type="text">
                                                                 </label>
                                                             </section>
-
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-12">
@@ -518,7 +513,6 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
@@ -540,7 +534,6 @@ include("inc/nav.php");
                                                                     <input id="tipoFaturamento" name="tipoFaturamento" autocomplete="off" type="text">
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2">
                                                                 <label class="label">Prazo de Pagamento</label>
                                                                 <label class="input">
@@ -559,15 +552,12 @@ include("inc/nav.php");
                                                                     <i class="">Recupera Cliente</i>
                                                                 </button>
                                                             </section>
-
                                                         </div>
-
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend> </legend>
                                                             </section>
                                                         </div>
-
                                                         <div id="formFaturamento" name="formFaturamento" class="col-sm-12">
                                                             <input id="faturamentoId" name="faturamentoId" type="hidden" value="">
                                                             <input id="sequencialFaturamento" name="sequencialFaturamento" type="hidden" value="">
@@ -582,7 +572,7 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, descricao FROM Ntl.localizacao  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                foreach($result as $row) {
+                                                                                foreach ($result as $row) {
 
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
@@ -616,35 +606,28 @@ include("inc/nav.php");
                                                                         <label class="label">Complemento</label>
                                                                         <label class="input">
                                                                             <input id="complementoFaturamento" name="complementoFaturamento" type="text" autocomplete="off" maxlength="100">
-
                                                                         </label>
                                                                     </section>
-
                                                                     <section class="col col-2">
                                                                         <label class="label">Bairro</label>
                                                                         <label class="input">
                                                                             <input id="bairroFaturamento" name="bairroFaturamento" type="text" autocomplete="off" maxlength="100">
-
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
                                                                         <label class="label">Cidade</label>
                                                                         <label class="input">
                                                                             <input id="cidadeFaturamento" name="cidadeFaturamento" type="text" class="form-control" autocomplete="off" maxlength="100">
-
                                                                         </label>
                                                                     </section>
-
                                                                     <section class="col col-1">
                                                                         <label class="label">UF</label>
                                                                         <label class="input">
                                                                             <input id="ufFaturamento" name="ufFaturamento" type="text" autocomplete="off" maxlength="100">
-
                                                                         </label>
                                                                     </section>
                                                                 </div>
                                                                 <div class="row">
-
                                                                     <section class="col col-2">
                                                                         <label class="label">Ret. ISS</label>
                                                                         <label class="select">
@@ -654,7 +637,7 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.iss  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                foreach($result as $row) {
+                                                                                foreach ($result as $row) {
 
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
@@ -674,7 +657,7 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.inss  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                foreach($result as $row) {
+                                                                                foreach ($result as $row) {
 
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
@@ -694,7 +677,7 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.ir  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                foreach($result as $row) {
+                                                                                foreach ($result as $row) {
 
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
@@ -714,7 +697,7 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.pisConfisCs  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                foreach($result as $row) {
+                                                                                foreach ($result as $row) {
 
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
@@ -724,9 +707,9 @@ include("inc/nav.php");
                                                                                 ?>
                                                                             </select><i></i>
                                                                         </label>
-                                                                    </section>                                                                   
+                                                                    </section>
                                                                 </div>
-                                                                <div class="row">                                                
+                                                                <div class="row">
                                                                     <section class="col col-2">
                                                                         <label class="label">Código de Serviço</label>
                                                                         <label class="select">
@@ -736,7 +719,7 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, descricaoCodigo, descricaoServico FROM Ntl.servico  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                foreach($result as $row) {
+                                                                                foreach ($result as $row) {
 
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
@@ -756,7 +739,7 @@ include("inc/nav.php");
                                                                                 $sql =  "SELECT codigo, descricaoServico FROM Ntl.servico  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                foreach($result as $row) {
+                                                                                foreach ($result as $row) {
 
                                                                                     $row = array_map('mb_strtoupper', $row);
                                                                                     $codigo = $row['codigo'];
@@ -774,7 +757,6 @@ include("inc/nav.php");
 
                                                                         </label>
                                                                     </section>
-
                                                                     <section class="col col-md-4">
                                                                         <label class="label"> </label>
                                                                         <button id="btnAddFaturamento" type="button" class="btn btn-primary">
@@ -796,7 +778,6 @@ include("inc/nav.php");
                                                                             <th class="text-left">Código de Serviço</th>
                                                                             <th class="text-left">Descrição do Serviço</th>
                                                                             <th class="text-left">Alíquota de ISS</th>
-
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -831,7 +812,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.indiceReajuste  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
@@ -841,9 +822,6 @@ include("inc/nav.php");
                                                                         ?>
                                                                     </select><i></i>
                                                             </section>
-
-
-
                                                             <section class="col col-2">
                                                                 <label class="label">Data do Início</label>
                                                                 <label class="select">
@@ -853,7 +831,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.inicioReajuste  where ativo = 1  order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
@@ -1109,7 +1087,9 @@ include("inc/scripts.php");
             novo();
         });
         $('#btnAddFaturamento').on("click", function() {
-            addFaturamento();
+            // if(validaFaturamento()){
+                addFaturamento();
+            // }
         });
         $('#btnRemoverFaturamento').on("click", function() {
             excluirFaturamento();
@@ -1230,7 +1210,7 @@ include("inc/scripts.php");
     function clearFormFaturamento() {
         $("#faturamentoId,#sequencialFaturamento,#cepFaturamento,#logradouroFaturamento,#numeroFaturamento,#complementoFaturamento," +
             "#bairroFaturamento,#cidadeFaturamento,#ufFaturamento,#descricaoServico,#aliquotaIss").val('');
-            $("#localizacao,#iss,#inss,#ir,#pisConfisCs,#codigoServico").val('Selecione');
+        $("#localizacao,#iss,#inss,#ir,#pisConfisCs,#codigoServico").val('Selecione');
 
     }
 
@@ -1566,7 +1546,7 @@ include("inc/scripts.php");
 
         // $("#btnGravar").prop('disabled', true);
 
-        if (projeto=='Selecione' || projeto == '') {
+        if (projeto == 'Selecione' || projeto == '') {
             smartAlert("Erro", "Digite o projeto.", "error");
             $("#btnGravar").prop('disabled', false);
 
@@ -1578,8 +1558,8 @@ include("inc/scripts.php");
 
             return;
         }
-       
-       
+
+
         $("#ativo").val(1);
 
         let contrato = $('#formContrato').serializeArray().reduce(function(obj, item) {
@@ -1747,17 +1727,10 @@ include("inc/scripts.php");
                         jsonFaturamentoArray = JSON.parse($("#JsonFaturamento").val());
                         preencherProjeto()
                         fillTableFaturamento();
-
-
-
-
-
                     }
-
                 );
             }
         }
-
-
     }
+
 </script>

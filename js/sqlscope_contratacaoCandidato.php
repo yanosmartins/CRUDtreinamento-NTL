@@ -109,7 +109,7 @@ function gravaFuncionario()
     $cargo = validaString($_POST['cargo']);
     //verificacao de dados preenchidos corretamente pelo candidato
     $verificaDadoPessoal = (int) $_POST['verificaDadoPessoal'];
-    $verificaDadoContato = (int) ['verificaDadoContato'];
+    $verificaDadoContato = (int)  $_POST['verificaDadoContato'];
     $verificaEndereco =  (int) $_POST['verificaEndereco'];
     $verificaDocumento =  (int) $_POST['verificaDocumento'];
     $verificaEscolaridade =  (int) $_POST['verificaEscolaridade'];
@@ -148,7 +148,7 @@ function gravaFuncionario()
     $logradouro = validaString($_POST['logradouro']);
     $ativo = 1;
     $justificativaVt = validaString($_POST['justificativaVt']);
-    $tipoCartaoVt = +validaNumero($_POST['tipoCartaoVt']);
+    $tipoCartaoVt = validaNumero($_POST['tipoCartaoVt']);
 
 
 
@@ -1630,16 +1630,16 @@ function recuperaFuncionario()
     $out = "";
     if($row = $result[0])
 
-    $codigo = $row['codigo'];
-    $nomeCompleto = $row['nomeCompleto'];
-    $cpf = $row['cpf'];
+    $codigo = (int)$row['codigo'];
+    $nomeCompleto = (string)$row['nomeCompleto'];
+    $cpf = (string)$row['cpf'];
     $dataNascimento = validaDataRecupera($row['dataNascimento']);
     $naturalidade = $row['naturalidade'];
     $nacionalidade = $row['nacionalidade'];
     $racaCor = $row['racaCor'];
     $estadoCivil = $row['estadoCivil'];
-    $nomePai = $row['nomePai'];
-    $nomeMae = $row['nomeMae'];
+    $nomePai = (string)$row['nomePai'];
+    $nomeMae = (string)$row['nomeMae'];
     $ctps = $row['ctps'];
     $pis = $row['pis'];
     $dataEmissaoCnh = validaDataRecupera($row['dataEmissaoCnh']);
@@ -1649,17 +1649,17 @@ function recuperaFuncionario()
     $zonaTituloEleitor = $row['zonaTituloEleitor'];
     $secaoTituloEleitor = $row['secaoTituloEleitor'];
     $certificadoReservista = $row['certificadoReservista'];
-    $telefoneResidencial = $row['telefoneResidencial'];
-    $telefoneCelular = $row['telefoneCelular'];
-    $outroTelefone = $row['outroTelefone'];
-    $email = $row['email'];
-    $cep = $row['cep'];
-    $endereco = $row['endereco'];
-    $bairro = $row['bairro'];
-    $numero = $row['numero'];
-    $complemento = $row['complemento'];
-    $estado = $row['estado'];
-    $cidade = $row['cidade'];
+    $telefoneResidencial = (string)$row['telefoneResidencial'];
+    $telefoneCelular = (string)$row['telefoneCelular'];
+    $outroTelefone = (string)$row['outroTelefone'];
+    $email = (string)$row['email'];
+    $cep = (string)$row['cep'];
+    $endereco = (string)$row['endereco'];
+    $bairro = (string)$row['bairro'];
+    $numero = (string)$row['numero'];
+    $complemento = (string)$row['complemento'];
+    $estado = (string)$row['estado'];
+    $cidade = (string)$row['cidade'];
     $grauInstrucao = $row['grauInstrucao'];
     $grauParou = $row['grauParou'];
     $anoConclusao = $row['anoConclusao'];
@@ -1667,7 +1667,7 @@ function recuperaFuncionario()
     $horarioEstudo = $row['horarioEstudo'];
     $nomeEnderecoColegioUniversidade = $row['nomeEnderecoColegioUniversidade'];
     $atividadesExtracurriculares = $row['atividadesExtracurriculares'];
-    $nomeConjuge = $row['nomeConjuge'];
+    $nomeConjuge = (string)$row['nomeConjuge'];
     $naturalidadeConjuge = $row['naturalidadeConjuge'];
     $nacionalidadeConjuge = $row['nacionalidadeConjuge'];
     $dataNascimentoConjuge = validaDataRecupera($row['dataNascimentoConjuge']);
@@ -1699,40 +1699,40 @@ function recuperaFuncionario()
     $primeiroEmprego = $row['primeiroEmprego'];
     $cargo = $row['cargo'];
 
-    $verificaDadoPessoal = +$row['verificaDadoPessoal'];
-    $verificaDadoContato = +$row['verificaDadoContato'];
-    $verificaEndereco = +$row['verificaEndereco'];
-    $verificaDocumento = +$row['verificaDocumento'];
-    $verificaEscolaridade = +$row['verificaEscolaridade'];
-    $verificaDadoConjuge = +$row['verificaDadoConjuge'];
-    $verificaFilho = +$row['verificaFilho'];
-    $verificaDependente = +$row['verificaDependente'];
-    $verificaBeneficio = +$row['verificaBeneficio'];
-    $verificaVT = +$row['verificaVT'];
-    $verificaDadoBancario = +$row['verificaDadoBancario'];
-    $verificaCargo = +$row['verificaCargo'];
-    $verificaUniforme = +$row['verificaUniforme'];
-    $verificaAnexoDocumento = +$row['verificaAnexoDocumento'];
+    $verificaDadoPessoal = (int)$row['verificaDadoPessoal'];
+    $verificaDadoContato = (int)$row['verificaDadoContato'];
+    $verificaEndereco = (int)$row['verificaEndereco'];
+    $verificaDocumento = (int)$row['verificaDocumento'];
+    $verificaEscolaridade = (int)$row['verificaEscolaridade'];
+    $verificaDadoConjuge = (int)$row['verificaDadoConjuge'];
+    $verificaFilho = (int)$row['verificaFilho'];
+    $verificaDependente = (int)$row['verificaDependente'];
+    $verificaBeneficio = (int)$row['verificaBeneficio'];
+    $verificaVT = (int)$row['verificaVT'];
+    $verificaDadoBancario = (int)$row['verificaDadoBancario'];
+    $verificaCargo = (int)$row['verificaCargo'];
+    $verificaUniforme = (int)$row['verificaUniforme'];
+    $verificaAnexoDocumento = (int)$row['verificaAnexoDocumento'];
     $carteiraTrabalho = $row['carteiraTrabalho'];
     $carteiraTrabalhoSerie = $row['carteiraTrabalhoSerie'];
     $dataExpedicaoCarteiraTrabalho = validaDataRecupera($row['dataExpedicaoCarteiraTrabalho']);
-    $numeroPais = +$row['numeroPais'];
+    $numeroPais = (int)$row['numeroPais'];
     $paisNascimento = $row['paisNascimento'];
     $ufNascimento = $row['ufNascimento'];
     $numeroMunicipio = $row['numeroMunicipio'];
     $municipioNascimento = $row['municipioNascimento'];
 
-    $numeroPaisConjuge = +$row['numeroPaisConjuge'];
+    $numeroPaisConjuge = (int)$row['numeroPaisConjuge'];
     $paisNascimentoConjuge = $row['paisNascimentoConjuge'];
     $ufNascimentoConjuge = $row['ufNascimentoConjuge'];
     $numeroMunicipioConjuge = $row['numeroMunicipioConjuge'];
     $municipioNascimentoConjuge = $row['municipioNascimentoConjuge'];
-    $possuiFilhoMenor14 = +$row['possuiFilhoMenor14'];
+    $possuiFilhoMenor14 = (int)$row['possuiFilhoMenor14'];
 
-    $digitoAgenciaBanco = +$row['digitoAgenciaBanco'];
-    $digitoContaBanco = +$row['digitoContaBanco'];
-    $tipoConta = +$row['tipoConta'];
-    $aprovado = +$row['aprovado'];
+    $digitoAgenciaBanco = (int)$row['digitoAgenciaBanco'];
+    $digitoContaBanco = (int)$row['digitoContaBanco'];
+    $tipoConta = (int)$row['tipoConta'];
+    $aprovado = (int)$row['aprovado'];
     $variacao = $row['variacao'];
     $codigoBanco = $row['codigoBanco'];
     $projeto = $row['projeto'];
@@ -1947,7 +1947,7 @@ function recuperaFuncionario()
 function recuperaUpload()
 {
 
-    $id = +$_POST['id'] ?: 0;
+    $id = (int)$_POST['id'] ?: 0;
     $diretorioAlvo = "../uploads/";
 
     $sql = "SELECT codigo, nomeArquivo, enderecoDocumento, tipoArquivo, idCampo, candidato 
@@ -1959,7 +1959,7 @@ function recuperaUpload()
     $contadorDocumento = 0;
     $arrayDocumentos = array();
     $out = "";
-    while ($row = odbc_fetch_array($result)) {
+     foreach($result as $row) {
         $row = array_map('utf8_encode', $row);
         $nomeArquivo = $row['nomeArquivo'];
         $enderecoDocumento = $row['enderecoDocumento'];
