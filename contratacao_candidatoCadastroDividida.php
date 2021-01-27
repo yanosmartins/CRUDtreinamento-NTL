@@ -345,8 +345,8 @@ include("inc/nav.php");
                                                             <section class="col col-6">
                                                                 <label class="label">Foto</label>
                                                                 <label class="input input-file">
-                                                                    <span class="button"><input type="file" id="fotoCandidato" name="fotoFuncionario[]" multiple>Selecionar
-                                                                        documentos</span><input id="fotoFuncionarioText" type="text">
+                                                                    <span class="button"><input type="file" id="fotoCandidato" name="fotoCandidato[]" multiple>Selecionar
+                                                                        documentos</span><input id="fotoCandidatoText" type="text">
                                                                 </label>
                                                             </section>
                                                             <section id="fotoCandidatoLink" class="col col-4">
@@ -2384,9 +2384,9 @@ include("inc/scripts.php");
 
         // ON CHANGES DOCUMENTOS
 
-        $("input[name='fotoFuncionario[]']").change(function() {
+        $("input[name='fotoCandidato[]']").change(function() {
 
-            let files = document.getElementById("fotoFuncionario").files;
+            let files = document.getElementById("fotoCandidato").files;
             let array = [];
             let tamanhoTotal = 0;
             let tamanhoMaximoPorCampo = 1048576; //1MB = 1048576 | 2MB = 2097152
@@ -2397,12 +2397,12 @@ include("inc/scripts.php");
             }
 
             let arrayString = array.toString();
-            $("#fotoFuncionarioText").val(arrayString);
+            $("#fotoCandidatoText").val(arrayString);
 
             if (tamanhoTotal > tamanhoMaximoPorCampo) {
                 smartAlert("Atenção", "Estes arquivos ultrapassaram o valor máximo permitido! O total de arquivos não pode ser maior do que 1MB", "error");
-                $("#fotoFuncionarioText").val("");
-                $("#fotoFuncionario").val("");
+                $("#fotoCandidatoText").val("");
+                $("#fotoCandidato").val("");
 
             }
 
