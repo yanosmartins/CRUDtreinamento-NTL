@@ -171,14 +171,15 @@ include("inc/nav.php");
                                                                     <select id="cargo" name="cargo" class="required">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigoCargoSCI AS codigo, descricao  FROM Ntl.cargo where ativo = 1 order by descricao";
+                                                                        $sql =  "SELECT codigo, codigoCargoSCI, descricao  FROM Ntl.cargo where ativo = 1 order by descricao";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
+                                                                            $codigoCargoSCI = $row['codigoCargoSCI'];
                                                                             $descricao = ($row['descricao']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $codigo . ' - ' . $descricao . '</option>';
+                                                                            echo '<option value=' . $codigo . '>  ' . $codigoCargoSCI . ' - ' . $descricao . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
