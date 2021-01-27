@@ -1960,7 +1960,7 @@ function recuperaUpload()
     $arrayDocumentos = array();
     $out = "";
      foreach($result as $row) {
-        $row = array_map('utf8_encode', $row);
+        
         $nomeArquivo = $row['nomeArquivo'];
         $enderecoDocumento = $row['enderecoDocumento'];
         $tipoArquivo = $row['tipoArquivo']; 

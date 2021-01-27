@@ -1328,7 +1328,7 @@ function consultaLogExportacao($candidato)
     $sql = " SELECT codigo, situacao FROM Contratacao.exportacao WHERE candidato = " . $candidato;
     $result = $reposit->RunQuery($sql);
     if ($row = $result[0])
-        $row = array_map('utf8_encode', $row);
+        
     $codigo = $row['codigo'];
     $situacao = $row['situacao'];
 
