@@ -66,12 +66,12 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
                 foreach ($result as $row) {
-                    $codigo = mb_convert_encoding($row['codigoControleCandidato'], 'UTF-8', 'HTML-ENTITIES');
-                    $codigoCandidato = mb_convert_encoding($row['codigoCandidato'], 'UTF-8', 'HTML-ENTITIES');
-                    $candidato = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
-                    $projeto = mb_convert_encoding($row['projeto'], 'UTF-8', 'HTML-ENTITIES');
-                    $sindicato = mb_convert_encoding($row['sindicato'], 'UTF-8', 'HTML-ENTITIES');
-                    $cargo = mb_convert_encoding($row['cargo'], 'UTF-8', 'HTML-ENTITIES');
+                    $codigo = $row['codigoControleCandidato'];
+                    $codigoCandidato = $row['codigoCandidato'];
+                    $candidato = $row['nomeCompleto'];
+                    $projeto = $row['projeto'];
+                    $sindicato = $row['sindicato'];
+                    $cargo = $row['cargo'];
                     $verificado = $row['verificadoPeloRh'];
 
                     if ($verificado == "") {

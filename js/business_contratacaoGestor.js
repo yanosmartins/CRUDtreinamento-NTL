@@ -74,3 +74,16 @@ function excluirCandidato(id) {
         }
     });
 }
+
+function recuperaUpload(id, callback) {
+    $.ajax({
+        url: 'js/sqlscope_contratacaoCandidato.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: {funcao: 'recuperaUpload', id: id }, //valores enviados ao script     
+        success: function (data) {
+            callback(data); 
+        }
+    });
+} 
+

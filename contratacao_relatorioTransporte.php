@@ -26,7 +26,7 @@ $result = $reposit->RunQuery($sql);
 $out = "";
 $row = $result[0];
 if ($row) {
-    $row = array_map('utf8_encode', $row);
+    
     $codigo = $row['codigo'];
     $nomeCompleto = $row['nomeCompleto'];
     $endereco = $row['endereco'];

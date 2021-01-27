@@ -31,6 +31,11 @@ if ($condicaoGravarOK === false) {
 $sql = "SELECT * FROM Ntl.parametro";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
+$row = $result[0];
+if ($row) {
+    
+    $linkUpload = $row['linkUpload'];
+}
 
 
 /* ---------------- PHP Custom Scripts ---------
@@ -1379,7 +1384,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                            
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -3270,7 +3275,7 @@ include("inc/scripts.php");
                                 var nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
                                 var idCampo = arrayDocumentos[index].idCampo + "Link";
                                 var endereco = arrayDocumentos[index].enderecoDocumento; 
-                                var diretorio = endereco + nomeArquivo;
+                                var diretorio = "<?php echo $linkUpload ?>" + endereco + nomeArquivo;
 
                                 $("#" + idCampo).append("<a href ='" + diretorio + "' target='_blank'>" + nomeVisualizacao[1] + "</a><br>");
  

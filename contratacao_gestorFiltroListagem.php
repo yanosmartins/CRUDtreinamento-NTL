@@ -74,14 +74,14 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
                 foreach ($result as $row) {
-                    $codigo = mb_convert_encoding($row['codigoControleCandidato'], 'UTF-8', 'HTML-ENTITIES');
-                    $codigoCandidato = mb_convert_encoding($row['codigoCandidato'], 'UTF-8', 'HTML-ENTITIES');
-                    $nomeCompleto = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
-                    $descricaoProjeto = mb_convert_encoding($row['projeto'], 'UTF-8', 'HTML-ENTITIES');
-                    $descricaoSindicato = mb_convert_encoding($row['sindicato'], 'UTF-8', 'HTML-ENTITIES');
-                    $cargo = mb_convert_encoding($row['cargo'], 'UTF-8', 'HTML-ENTITIES');
-                    $salarioBase = mb_convert_encoding($row['salarioBase'], 'UTF-8', 'HTML-ENTITIES');
-                    $verificado = mb_convert_encoding($row['verificadoPeloGestor'], 'UTF-8', 'HTML-ENTITIES');
+                    $codigo = $row['codigoControleCandidato'];
+                    $codigoCandidato = $row['codigoCandidato'];
+                    $nomeCompleto = $row['nomeCompleto'];
+                    $descricaoProjeto = $row['projeto'];
+                    $descricaoSindicato = $row['sindicato'];
+                    $cargo = $row['cargo'];
+                    $salarioBase = $row['salarioBase'];
+                    $verificado = $row['verificadoPeloGestor'];
 
                     if ($descricaoProjeto == "") {
                         $descricaoProjeto =  "<b><font color='#dbc616'> Pendente </font></b>";

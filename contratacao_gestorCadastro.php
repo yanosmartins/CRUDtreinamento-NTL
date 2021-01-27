@@ -31,15 +31,14 @@ if ($condicaoExcluirOK === false) {
     $esconderBtnExcluir = "none";
 }
 
-$sql = "SELECT * FROM dbo.parametro";
+$sql = "SELECT * FROM Ntl.parametro";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
+$row = $result[0];
+if ($row) {
 
-if ($result[0]) {
-    $row = array_map('utf8_encode', $row);
     $linkUpload = $row['linkUpload'];
 }
-
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -155,7 +154,6 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -177,7 +175,6 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -218,7 +215,6 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -285,7 +281,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = +$row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -1480,7 +1476,8 @@ include("inc/scripts.php");
 
                     }
                 });
-                recuperaUpload(id,
+
+                recuperaUpload(codigoFuncionario,
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
@@ -1499,10 +1496,8 @@ include("inc/scripts.php");
                                     "</a><br>");
 
                             }
-                            //$("#linkCertidaoNascimento").attr("href","http://localhost/SYSCC/uploads/certidoes_de_nascimento/1473e8f806c3a408cc9adfcb6ed3b13e_thumb-1920-605933.jpg");
                         }
                     });
-
             }
 
             if (idd !== "") {
@@ -1713,33 +1708,10 @@ include("inc/scripts.php");
                         } else {
                             desabilitarCampos(dataFinal);
                         }
-
-
                     }
                 });
 
-                recuperaUpload(codigoFuncionario,
-                    function(data) {
-                        if (data.indexOf('failed') > -1) {} else {
-                            data = data.replace(/failed/g, '');
-                            var piece = data.split("#");
-                            var mensagem = piece[0];
-                            var arrayDocumentos = JSON.parse(piece[1]);
-                            for (let index = 0; index < arrayDocumentos.length; index++) {
-                                let nomeArquivo = arrayDocumentos[index].nomeArquivo;
-                                let tipoArquivo = arrayDocumentos[index].tipoArquivo;
-                                let enderecoDocumento = arrayDocumentos[index].enderecoDocumento;
-                                let nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
-                                let idCampo = arrayDocumentos[index].idCampo + "Link";
-                                let diretorio = "<?php echo $linkUpload ?>" + enderecoDocumento + nomeArquivo;
 
-                                $("#" + idCampo).append("<a href ='" + diretorio + "' target='_blank'>" + nomeCampo +
-                                    "</a><br>");
-
-                            }
-                            //$("#linkCertidaoNascimento").attr("href","http://localhost/SYSCC/uploads/certidoes_de_nascimento/1473e8f806c3a408cc9adfcb6ed3b13e_thumb-1920-605933.jpg");
-                        }
-                    });
             }
         }
     }

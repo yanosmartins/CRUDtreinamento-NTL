@@ -136,10 +136,10 @@ include "js/repositorio.php";
 
                 foreach ($result as $row) {
                     $id = $row['codigo'];
-                    $nomeCompleto = mb_convert_encoding($row['nomeCompleto'], 'UTF-8', 'HTML-ENTITIES');
+                    $nomeCompleto = (string)$row['nomeCompleto'];
                     $cpf = $row['cpf'];
                     $rg = $row['rg'];
-                    $cargo = mb_convert_encoding($row['cargo'], 'UTF-8', 'HTML-ENTITIES');
+                    $cargo = (string)$row['cargo'];
                     $verificaDadoPessoal = descricaoVerifica($row['verificaDadoPessoal']);
                     $verificaDadoContato =  descricaoVerifica($row['verificaDadoContato']);
                     $verificaEndereco =  descricaoVerifica($row['verificaEndereco']);

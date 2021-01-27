@@ -33,9 +33,9 @@ if ($condicaoExcluirOK === false) {
 $sql = "SELECT * FROM Ntl.parametro";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
-
-if ($result[0]) {
-    $row = array_map('utf8_encode', $row);
+$row = $result[0];
+if ($row) {
+    
     $linkUpload = $row['linkUpload'];
 }
 
@@ -172,7 +172,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                            
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -194,7 +194,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                            
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -235,7 +235,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                            
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -302,7 +302,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                            
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = +$row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -351,7 +351,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                            
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = +$row['codigo'];
                                                                             $descricao = ($row['descricao']);

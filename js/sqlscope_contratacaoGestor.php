@@ -24,6 +24,11 @@ if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'recuperaUpload') {
+    call_user_func($funcao);
+}
+
+
 return;
 
 function grava()
@@ -135,8 +140,8 @@ function recupera()
     if($row = $result[0])
 
     $codigoCandidato = $row['codigoCandidato']; //id Candidato na tabela Candidato
-    $codigo = $row['codigo']; // id na tabela controle Candidato cadastro
-    $nomeCompleto = $row['nomeCandidato'];
+    $codigo = (int)$row['codigo']; // id na tabela controle Candidato cadastro
+    $nomeCompleto = (string)$row['nomeCandidato'];
     $tipoContrato = $row['tipoContrato'];
     $dataAdmissao = validaDataRecupera($row['dataAdmissao']);
     $projeto = $row['projeto'];
@@ -156,14 +161,14 @@ function recupera()
     $telefoneCelular = $row['telefoneCelular'];
     $outroTelefone = $row['outroTelefone'];
     $email = $row['email'];
-    $cep = $row['cep'];
-    $endereco = $row['endereco'];
-    $bairro = $row['bairro'];
-    $numero = $row['numero'];
-    $complemento = $row['complemento'];
-    $estado = $row['estado'];
-    $cidade = $row['cidade'];
-    $cpf = $row['cpf'];
+    $cep = (string)$row['cep'];
+    $endereco = (string)$row['endereco'];
+    $bairro = (string)$row['bairro'];
+    $numero = (string)$row['numero'];
+    $complemento = (string)$row['complemento'];
+    $estado = (string)$row['estado'];
+    $cidade = (string)$row['cidade'];
+    $cpf = (string)$row['cpf'];
     $pis = $row['pis'];
     $carteiraTrabalho = $row['carteiraTrabalho'];
     $carteiraTrabalhoSerie = $row['carteiraTrabalhoSerie'];
@@ -189,10 +194,10 @@ function recupera()
     $nomeConjuge = $row['nomeConjuge'];
     $dataNascimentoConjuge = validaDataRecupera($row['dataNascimentoConjuge']);
     $trabalhaAtualmente = $row['trabalhaAtualmente'];
-    $seguroDesemprego = $row['seguroDesemprego'];
+    $seguroDesemprego = (int)$row['seguroDesemprego'];
     $desejaAssistenciaMedica = $row['desejaAssistenciaMedica'];
     $desejaAssistenciaOdontologica = $row['desejaAssistenciaOdontologica'];
-    $valeRefeicaoValeAlimentacao = $row['valeRefeicaoValeAlimentacao'];
+    $valeRefeicaoValeAlimentacao = (int)$row['valeRefeicaoValeAlimentacao'];
     $desejaVt = $row['desejaVt'];
     $possuiVt = $row['possuiVt'];
     $numeroCartaoVt = $row['numeroCartaoVt'];
@@ -202,7 +207,7 @@ function recupera()
     $digitoContaBanco = $row['digitoContaBanco'];
     $fk_banco = $row['fk_banco'];
     $variacao = $row['variacao'];
-    $tipoConta = $row['tipoConta'];
+    $tipoConta = (int)$row['tipoConta'];
 
     $numeroCamisa = $row['numeroCamisa'];
     $numeroCalca = $row['numeroCalca'];
@@ -699,3 +704,5 @@ function tofloat($num)
             preg_replace("/[^0-9]/", "", substr($num, $sep + 1, strlen($num)))
     );
 }
+
+
