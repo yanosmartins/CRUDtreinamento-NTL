@@ -567,7 +567,7 @@ include("inc/nav.php");
                                                                         <label class="label">Localização</label>
                                                                         <label class="select">
                                                                             <select id="localizacao" name="localizacao" class="form-control">
-                                                                                <option style="display:none;">Selecione</option>
+                                                                                <option style="display:none;" value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, descricao FROM Ntl.localizacao  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -632,7 +632,7 @@ include("inc/nav.php");
                                                                         <label class="label">Ret. ISS</label>
                                                                         <label class="select">
                                                                             <select id="iss" name="iss" class="form-control">
-                                                                                <option style="display:none;">Selecione</option>
+                                                                                <option style="display:none;" value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.iss  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -652,7 +652,7 @@ include("inc/nav.php");
                                                                         <label class="label">Ret. INSS</label>
                                                                         <label class="select">
                                                                             <select id="inss" name="inss" class="form-control">
-                                                                                <option style="display:none;">Selecione</option>
+                                                                                <option style="display:none;"value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.inss  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -672,7 +672,7 @@ include("inc/nav.php");
                                                                         <label class="label">Ret. IR</label>
                                                                         <label class="select">
                                                                             <select id="ir" name="ir" class="form-control">
-                                                                                <option style="display:none;">Selecione</option>
+                                                                                <option style="display:none;"value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.ir  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -692,7 +692,7 @@ include("inc/nav.php");
                                                                         <label class="label">Ret. PIS,CONFIS,CS</label>
                                                                         <label class="select">
                                                                             <select id="pisConfisCs" name="pisConfisCs" class="form-control">
-                                                                                <option style="display:none;">Selecione</option>
+                                                                                <option style="display:none;"value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.pisConfisCs  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -714,7 +714,7 @@ include("inc/nav.php");
                                                                         <label class="label">Código de Serviço</label>
                                                                         <label class="select">
                                                                             <select id="codigoServico" name="codigoServico" class="form-control">
-                                                                                <option style="display:none;">Selecione</option>
+                                                                                <option style="display:none;"value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, descricaoCodigo, descricaoServico FROM Ntl.servico  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -1087,9 +1087,9 @@ include("inc/scripts.php");
             novo();
         });
         $('#btnAddFaturamento').on("click", function() {
-            // if(validaFaturamento()){
+            if(validaFaturamento()){
                 addFaturamento();
-            // }
+            }
         });
         $('#btnRemoverFaturamento').on("click", function() {
             excluirFaturamento();
@@ -1235,16 +1235,101 @@ include("inc/scripts.php");
     function validaFaturamento() {
         var existe = false;
         var achou = false;
-        var tel = $('#localizacao').val();
+        var localizacao = $('#localizacao').val();
+        var cep = $("#cepFaturamento").val();
+        var logradouro = $('#logradouroFaturamento').val();
+        var numero = $('#numeroFaturamento').val();
+        var complemento = $('#complementoFaturamento').val();
+        var bairro = $('#bairroFaturamento').val();
+        var cidade = $('#cidadeFaturamento').val();
+        var uf = $('#ufFaturamento').val();
+        var iss = $('#iss').val();
+        var inss = $('#inss').val();
+        var ir = $('#ir').val();
+        var pisConfisCs = $('#pisConfisCs').val();
+        var codigoServico = $('#codigoServico').val();
+        var descricao = $('#descricaoServico').val();
+        var aliquotaIss = $('#aliquotaIss').val();
 
-        var sequencial = parseInt($('#sequencialFaturamento').val());
+        var sequencial = +$('#sequencialFaturamento').val();
         var correspondenciaMarcado = 1;
 
-
-        if (!tel) {
+        if (!localizacao) {
             smartAlert("Erro", "Informe a Localização.", "error");
             return false;
         }
+
+        if (!logradouro) {
+            smartAlert("Erro", "Informe o Logradouro.", "error");
+            return false;
+        }
+
+        if (!cep) {
+            smartAlert("Erro", "Informe o CEP.", "error");
+            return false;
+        }
+
+        if (!numero) {
+            smartAlert("Erro", "Informe o Numero.", "error");
+            return false;
+        }
+
+        if (!complemento) {
+            smartAlert("Erro", "Informe o Complemento.", "error");
+            return false;
+        }
+
+        if (!bairro) {
+            smartAlert("Erro", "Informe o Bairro.", "error");
+            return false;
+        }
+
+        if (!cidade) {
+            smartAlert("Erro", "Informe a Cidade.", "error");
+            return false;
+        }
+
+        if (!uf) {
+            smartAlert("Erro", "Informe a Unidade Federativa.", "error");
+            return false;
+        }
+
+        if (!iss) {
+            smartAlert("Erro", "Informe o ISS.", "error");
+            return false;
+        }
+
+        if (!inss) {
+            smartAlert("Erro", "Informe o INSS.", "error");
+            return false;
+        }
+
+        if (!ir) {
+            smartAlert("Erro", "Informe o IR.", "error");
+            return false;
+        }
+
+        if (!pisConfisCs) {
+            smartAlert("Erro", "Informe o PisConfisCis.", "error");
+            return false;
+        }
+
+        if (!codigoServico) {
+            smartAlert("Erro", "Informe o Codigo Serviço.", "error");
+            return false;
+        }
+
+        if (!descricao) {
+            smartAlert("Erro", "Informe a Descrição.", "error");
+            return false;
+        }
+
+        if (!aliquotaIss) {
+            smartAlert("Erro", "Informe a aliquota Iss.", "error");
+            return false;
+        }
+
+       
         for (i = jsonFaturamentoArray.length - 1; i >= 0; i--) {
             if (correspondenciaMarcado === 1) {
                 if ((jsonFaturamentoArray[i].correspondencia == 1) && (jsonFaturamentoArray[i].sequencialFaturamento !== sequencial)) {
@@ -1252,23 +1337,23 @@ include("inc/scripts.php");
                     break;
                 }
             }
-            if (tel !== "") {
-                if ((jsonFaturamentoArray[i].logradouro === tel) && (jsonFaturamentoArray[i].sequencialFaturamento !== sequencial)) {
+            if (!localizacao) {
+                if ((jsonFaturamentoArray[i].logradouro === localizacao) && (jsonFaturamentoArray[i].sequencialFaturamento !== sequencial)) {
                     existe = true;
                     break;
                 }
             }
 
         }
-        // if (existe === true) {
-        //     smartAlert("Erro", "Faturamento já cadastrado.", "error");
-        //     return false;
-        // }
-        // if ((achou === true) && (correspondenciaMarcado === 1)) {
-        //     smartAlert("Erro", "Você já marcou pra receber Correspondencia.", "error");
-        //     return false;
-        // }
-        // return true;
+        if (existe === true) {
+            smartAlert("Erro", "Faturamento já cadastrado.", "error");
+            return false;
+        }
+        if ((achou === true) && (correspondenciaMarcado === 1)) {
+            smartAlert("Erro", "Você já marcou pra receber Correspondencia.", "error");
+            return false;
+        }
+        return true;
     }
 
     function processDataFaturamento(node) {
