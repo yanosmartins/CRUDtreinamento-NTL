@@ -5,24 +5,22 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('POSTO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('POSTO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('POSTO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('GRUPOLICITACAO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('GRUPOLICITACAO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('GRUPOLICITACAO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
 
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
-}
-
 $esconderBtnExcluir = "";
 if ($condicaoExcluirOK === false) {
     $esconderBtnExcluir = "none";
+}
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
 }
 
 /* ---------------- PHP Custom Scripts ---------
@@ -30,7 +28,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Posto";
+$page_title = "Grupo Licitação";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -42,7 +40,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["posto"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["grupoLicitacao"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -65,11 +63,11 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Posto</h2>
+                            <h2>Grupo Licitação</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formPosto" method="post">
+                                <form class="smart-form client-form" id="formCliente" method="post" enctype="multipart/form-data">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -84,22 +82,24 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <input id="codigo" name="codigo" type="text" class="hidden">
-
                                                         <div class="row">
-                                                            <section class="col col-3">
-                                                                <label class="label">Descrição</label>
+                                                            <input id="codigo" name="codigo" type="text" class="hidden" value="">
+                                                            <section class="col col-5 col-auto">
+                                                                <label class="label" for="descricao">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" type="text" autocomplete="new-password" maxlength="255" class="required" required>
+                                                                    <input id="descricao" name="descricao" type="text" class="required" maxlength="200" required autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">   
+                                                            <section class="col col-2 col-auto">
+                                                                <!-- <label class="label" for="ativo">Ativo</label> -->
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo" class="hidden" required>
-                                                                        <option value='1' selected>Sim</option>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0'>Não</option>
                                                                     </select>
                                                                 </label>
                                                             </section>
+                                                        </div>
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -160,7 +160,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaPosto.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaGrupoLicitacao.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -169,27 +169,23 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.time.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.tooltip.min.js"></script>
-
 <!-- Vector Maps Plugin: Vectormap engine, Vectormap language -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/vectormap/jquery-jvectormap-1.2.2.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/vectormap/jquery-jvectormap-world-mill-en.js"></script>
-
 <!-- Full Calendar -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/moment/moment.min.js"></script>
 <!--<script src="/js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <!--<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>-->
-
+<!-- Validador de CPF -->
+<script src="js/plugin/cpfcnpj/jquery.cpfcnpj.js"></script>
 
 <!-- Form to json -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
 
-
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-        carregaPagina();
-
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -226,87 +222,20 @@ include("inc/scripts.php");
             }
         });
 
-        $("#btnGravar").on("click", function() {
-            gravar();
-        });
         $("#btnNovo").on("click", function() {
             novo();
         });
+
+        $("#btnGravar").on("click", function() {
+            gravar()
+        });
+
         $("#btnVoltar").on("click", function() {
             voltar();
         });
+
+        carregaPagina();
     });
-
-    function gravar() {
-
-        var descricao = $("#descricao").val();
-
-        if (descricao == "" || descricao === " ") {
-            smartAlert("Atenção", "Insira uma Descrição", "error")
-            return false;
-        }
-        $("#ativo").val(1);
-
-        let posto = $('#formPosto').serializeArray().reduce(function(obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
-
-        gravaPosto(posto,
-            function(data) {
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        return false;
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                        return false;
-                        //                                                            return;
-                    }
-                } else {
-                    var piece = data.split("#");
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
-                }
-            }
-        );
-    }
-
-
-    function novo() {
-        $(location).attr('href', 'tabelaBasica_postoCadastro.php');
-    }
-
-    function voltar() {
-        $(location).attr('href', 'tabelaBasica_postoFiltro.php');
-    }
-
-    function excluir() {
-        var id = +$("#codigo").val();
-
-        if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
-            return;
-        }
-
-        excluirPosto(id, function(data) {
-            if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
-
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                }
-            } else {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                voltar();
-            }
-        });
-    }
 
     function carregaPagina() {
         var urlx = window.document.URL.toString();
@@ -316,27 +245,110 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaPosto(idd,
+                recuperaGrupoLicitacao(idd,
                     function(data) {
-                        if (data.indexOf('failed') > -1) {} else {
+                        if (data.indexOf('failed') > -1) {
+                            return;
+                        } else {
                             data = data.replace(/failed/g, '');
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var out = piece[1];
-
                             piece = out.split("^");
-                            codigo = piece[0];
-                            descricao = piece[1];
-                            ativo = piece[2];
 
+                            // Atributos de vale transporte unitário que serão recuperados: 
+                            var codigo = piece[0];
+                            var descricao = piece[1];
+                            var ativo = piece[2];
+
+                            //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
                             $("#descricao").val(descricao);
                             $("#ativo").val(ativo);
+
+                            return;
 
                         }
                     }
                 );
             }
         }
+        $("#descricao").focus();
+    }
+
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_grupoLicitacaoCadastro.php');
+    }
+
+    function voltar() {
+        $(location).attr('href', 'tabelaBasica_grupoLicitacaoFiltro.php');
+    }
+
+    function excluir() {
+        var id = $("#codigo").val();
+
+        if (id === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+            return;
+        }
+
+        excluirGrupoLicitacao(id,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
+                    voltar();
+                } else {
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
+                }
+            }
+        );
+    }
+
+    function gravar() {
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
+        // $("#btnGravar").prop('disabled', true);
+        // Variáveis que vão ser gravadas no banco:
+        var id = +$('#codigo').val();
+        var descricao = $('#descricao').val().trim().replace(/'/g, " ");
+        var ativo = +$('#ativo').val();
+
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+        if (!descricao) {
+            smartAlert("Atenção", "Informe a descrição", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        ativo = 1;
+
+        //Chama a função de gravar do business de convênio de saúde.
+        gravaGrupoLicitacao(id, ativo, descricao,
+            function(data) {
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnGravar").prop('disabled', false);
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                        $("#btnGravar").prop('disabled', false);
+                    }
+                    return '';
+                } else {
+                    var verificaRecuperacao = +$("#verificaRecuperacao").val();
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    novo();
+                }
+            }
+        );
     }
 </script>
