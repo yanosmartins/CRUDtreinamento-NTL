@@ -2217,6 +2217,10 @@ include("inc/scripts.php");
             gravar();
         });
 
+        $('#possuiContaBancaria').on('change',function() {
+        verificaBanco();
+        });
+
         $("#desejaVt").on("change", function() {
             var desejaVt = +$("#desejaVt").val();
             if (desejaVt == 0) {
@@ -2967,11 +2971,74 @@ include("inc/scripts.php");
             getSiglaUfConjuge();
 
         }
+       
     });
 
     $("#linkPdfTransporte").on("click", function() {
         abrePdfTransporte();
-    });
+        });
+
+    function verificaBanco(){
+        
+        var possuiContaBancaria = +$('#possuiContaBancaria').val();
+        if (possuiContaBancaria == 1) {
+            $("#tipoConta").removeClass('readonly');
+            $("#tipoConta").addClass('required');
+            $("#tipoConta").removeAttr('disabled');
+
+            $("#fk_banco").removeClass('readonly');
+            $("#fk_banco").addClass('required');
+            $("#fk_banco").removeAttr('disabled');
+
+            $("#agenciaBanco").removeClass('readonly');
+            $("#agenciaBanco").addClass('required');
+            $("#agenciaBanco").removeAttr('disabled');
+
+            $("#digitoAgenciaBanco").removeClass('readonly');
+            $("#digitoAgenciaBanco").addClass('required');
+            $("#digitoAgenciaBanco").removeAttr('disabled');
+
+            $("#contaCorrente").removeClass('readonly');
+            $("#contaCorrente").addClass('required');
+            $("#contaCorrente").removeAttr('disabled');
+
+            $("#digitoContaBanco").removeClass('readonly');
+            $("#digitoContaBanco").addClass('required');
+            $("#digitoContaBanco").removeAttr('disabled');
+        } else {
+            $("#tipoConta").addClass('readonly');
+            $("#tipoConta").removeClass('required');
+            $("#tipoConta").val('');
+            $("#tipoConta").prop('disabled', true);
+
+            $("#fk_banco").addClass('readonly');
+            $("#fk_banco").removeClass('required');
+            $("#fk_banco").val('');
+            $("#fk_banco").prop('disabled', true);
+
+            $("#agenciaBanco").addClass('readonly');
+            $("#agenciaBanco").removeClass('required');
+            $("#agenciaBanco").val('');
+            $("#agenciaBanco").prop('disabled', true);
+
+            $("#digitoAgenciaBanco").addClass('readonly');
+            $("#digitoAgenciaBanco").removeClass('required');
+            $("#digitoAgenciaBanco").val('');
+            $("#digitoAgenciaBanco").prop('disabled', true);
+
+            $("#variacao").val('');
+
+            $("#contaCorrente").addClass('readonly');
+            $("#contaCorrente").removeClass('required');
+            $("#contaCorrente").val('');
+            $("#contaCorrente").prop('disabled', true);
+
+            $("#digitoContaBanco").addClass('readonly');
+            $("#digitoContaBanco").removeClass('required');
+            $("#digitoContaBanco").val('');
+            $("#digitoContaBanco").prop('disabled', true);
+        }
+    }
 
     function carregaPagina() {
         var urlx = window.document.URL.toString();
@@ -3226,6 +3293,7 @@ include("inc/scripts.php");
                             $("#numeroPais").val(numeroPais);
                             $("#paisNascimento").val(paisNascimento);
                             $("#logradouro").val(logradouro);
+                            verificaBanco();
 
 
                             //funcionario EX.
