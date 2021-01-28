@@ -17,9 +17,9 @@ $arrayPermissao = array();
 $reposit = new reposit();
 $result = $reposit->SelectCondTrue("usuario| login = " . $login . " AND ativo = 1");
 if ($row = $result[0]) {
-    $codigoUsuario = +$row['codigo'];
+    $codigoUsuario = (int)$row['codigo'];
     $tipoUsuario = $row['tipoUsuario'];
-    $funcionario = +$row['funcionario'];
+    $candidato = (int)$row['candidato'];
 
     if ($tipoUsuario === "C") {
         $sql = "SELECT FNC.nome FROM Ntl.usuarioFuncionalidade USUF
@@ -63,8 +63,8 @@ if ($condicaoConfiguracoesOK) {
 }
 
 
-$condicaoFaturamentoOk = true;
-$condicaoLicitacaoOk = true;
+$condicaoFaturamentoOk = false;
+$condicaoLicitacaoOk = false;
 $condicaoOperacoesEspeciaisoOk = true;
 $condicaoVersaoSistemaOk = true;
 $condicaoTesteOk = true;
@@ -281,6 +281,10 @@ if ($condicaoOperacaoOk) {
         if (!in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
         }
+    }else if ($tipoUsuario == 'T') {
+        $page_nav['operacao']['sub']['contratacao']['sub'] = array("title" => "Cadastro", "icon" => "fa-pencil-square-o");
+        $page_nav['operacao']['sub']['contratacao']['sub'] = array();
+        $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoCadastro.php?=" . $candidato));
     }
 
     if ($condicaoFaturamentoOk) {

@@ -1272,7 +1272,7 @@ include("inc/nav.php");
                                                                     <select name="possuiContaBancaria" id="possuiContaBancaria" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
                                                                         <option value="1">Sim</option>
-                                                                        <option value="2">Não</option>
+                                                                        <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>

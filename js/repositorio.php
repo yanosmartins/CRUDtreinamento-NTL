@@ -60,7 +60,7 @@ class reposit
         try {
             $this->AbreConexao("sql");
             $pstmt = $this->sqlconnect->prepare('SET NOCOUNT ON; EXEC '
-                . '[' . self::SCHEMA . ']. '
+                // . '[' . self::SCHEMA . ']. '
                 . $conf[0]);
             $pstmt->execute();
 
@@ -336,7 +336,9 @@ class reposit
         $listacampos = str_replace(";", ",", $conf[1]) ?: $conf[1];
         $listacampos = $this->anti_injection($listacampos);
         $conf[2] = $this->anti_injection($conf[2]);
-        $sql = "UPDATE " . '[' . self::SCHEMA . ']. ' . $conf[0] . " SET " . $listacampos
+        $sql = "UPDATE "
+           // . '[' . self::SCHEMA . ']. '
+            . $conf[0] . " SET " . $listacampos
             . " WHERE "
             . $conf[2] . " ";
 
