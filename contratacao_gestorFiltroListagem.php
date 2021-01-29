@@ -65,7 +65,7 @@ include "js/repositorio.php";
                     if ($verificadoPeloGestor == "Sim") {
                         $where = $where . " AND (CF.verificadoPeloGestor = 1)";
                     } else {
-                        $where = $where . " AND (CF.verificadoPeloGestor IS NULL ) ";
+                        $where = $where . " AND (CF.verificadoPeloGestor IS NULL OR CF.verificadoPeloGestor = 0) ";
                     }
                 }
 
