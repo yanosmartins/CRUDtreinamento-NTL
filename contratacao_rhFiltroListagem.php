@@ -31,7 +31,7 @@ include "js/repositorio.php";
                 LEFT JOIN Ntl.sindicato S ON S.codigoSindicatoSCI = CF.sindicato
                 LEFT JOIN Ntl.cargo C ON C.codigoCargoSCI = CF.cargo
                 LEFT JOIN Contratacao.exportacao E ON E.candidato = CF.candidato
-                WHERE verificadoPeloGestor = '1'";
+                WHERE verificadoPeloGestor = 1";
 
                 $where = " AND (0 = 0) AND (CF.ativo IS NULL OR CF.ativo = 1) AND (E.situacao = 0 OR E.situacao IS NULL)";
 

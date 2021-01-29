@@ -127,7 +127,10 @@ include("inc/nav.php");
                                                                     <input id="funcionario" name="funcionario" type="text" class="readonly" readonly>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-6">
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-10">
                                                                 <label class="label" for="tipoContrato">Tipo de Contrato
                                                                     de Trabalho</label>
                                                                 <label class="select">
@@ -152,6 +155,12 @@ include("inc/nav.php");
                                                                             cláusula assecuratória de direito recíproco
                                                                             de rescisão antecipada</option>
                                                                     </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Prazo Determinado(dias)</label>
+                                                                <label class="input"><i></i>
+                                                                    <input id="prazoDeterminado" name="prazoDeterminado" class="number" value="" autocomplete="new-password" maxlength="3">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -255,7 +264,16 @@ include("inc/nav.php");
                                                             </section>
 
 
+                                                           
                                                             <section class="col col-2">
+                                                                <label class="label">Verificado pelo Gestor</label>
+                                                                <label class="input"><i></i>
+                                                                    <input id="verificadoPeloGestor" name="verificadoPeloGestor" class="readonly" autocomplete="new-password" type="text" value="" readonly>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                        <section class="col col-2">
                                                                 <label class="label" for="tipoEscala">Tipo de
                                                                     escala</label>
                                                                 <label class="select">
@@ -267,15 +285,6 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Verificado pelo Gestor</label>
-                                                                <label class="input"><i></i>
-                                                                    <input id="verificadoPeloGestor" name="verificadoPeloGestor" class="readonly" autocomplete="new-password" type="text" value="" readonly>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-                                                        <div class="row">
-
                                                             <section class="col col-2">
                                                                 <label class="label">Data início revezamento</label>
                                                                 <label class="input">
@@ -313,12 +322,7 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Prazo Determinado(dias)</label>
-                                                                <label class="input"><i></i>
-                                                                    <input id="prazoDeterminado" name="prazoDeterminado" class="number" value="" autocomplete="new-password" maxlength="3">
-                                                                </label>
-                                                            </section>
+                                                          
                                                             <section class="col col-2">
                                                                 <label class="label">Data Final</label>
                                                                 <label class="input">
@@ -1079,10 +1083,6 @@ include("inc/nav.php");
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-
-
-
-
                                                             <!--  LISTA DE DEPENDENTES -->
                                                             <div class="row">
                                                                 <section class="col col-12">

@@ -63,7 +63,7 @@ if ($condicaoConfiguracoesOK) {
 }
 
 
-$condicaoFaturamentoOk = true;
+$condicaoFaturamentoOk = false;
 $condicaoLicitacaoOk = false;
 $condicaoOperacoesEspeciaisoOk = true;
 $condicaoVersaoSistemaOk = true;
@@ -285,9 +285,9 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
         }
     }else if ($tipoUsuario == 'T') {
-        $page_nav['operacao']['sub']['contratacao']['sub'] = array("title" => "Cadastro", "icon" => "fa-pencil-square-o");
-        $page_nav['operacao']['sub']['contratacao']['sub'] = array();
-        $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoCadastro.php?=" . $candidato));
+        $page_nav['operacao']['sub']['candidato'] = array("title" => "Contratação", "icon" => "fa fa-folder-open");
+        $page_nav['operacao']['sub']['candidato']['sub'] = array();
+        $page_nav['operacao']['sub']['candidato']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoCadastro.php?=" . $candidato));
     }
 
     if ($condicaoFaturamentoOk) {

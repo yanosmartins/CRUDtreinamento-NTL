@@ -588,7 +588,7 @@ function recuperaCbo()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT cbo FROM Ntl.cargo WHERE (0=0) AND codigoCargoSCI = " . $id;
+    $sql = "SELECT cbo FROM Ntl.cargo WHERE (0=0) AND codigo = " . $id;
 
 
     $reposit = new reposit();
