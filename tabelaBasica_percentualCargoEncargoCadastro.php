@@ -86,8 +86,6 @@ include("inc/nav.php");
                                                     <fieldset>
                                                     <div class="row">
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
-
-                                                     
                                                             <section class="col col-5">
                                                                 <label class="label">Posto</label>
                                                                 <label class="select">
@@ -97,9 +95,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.posto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) { {
-
-                                                                            $row = array_map('mb_strtoupper', $row);
+                                                                        foreach($result as $row) { 
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
@@ -109,7 +105,6 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                    
                                                             <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
                                                             <div id="formTelefone" class="col-sm-6">
                                                                 <input id="telefoneId" name="telefoneId" type="hidden" value="">
@@ -129,12 +124,12 @@ include("inc/nav.php");
                                                                                 </select><i></i>
                                                                             </label>
                                                                         </section>
-                                                                        <section class="col col-4">
+                                                                        <!-- <section class="col col-4">
                                                                             <label class="label">Percentual</label>
                                                                             <label class="input"><i class="icon-append fa fa-percent"></i>
                                                                                 <input id="percentual" name="percentual" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                             </label>
-                                                                        </section>
+                                                                        </section> -->
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
                                                                             <button id="btnAddTelefone" type="button" class="btn btn-primary">
@@ -152,7 +147,6 @@ include("inc/nav.php");
                                                                             <tr role="row">
                                                                                 <th style="width: 2px"></th>
                                                                                 <th class="text-center" style="min-width: 500%;">Encargo</th>
-                                                                                <th class="text-center">Percentual</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -460,7 +454,7 @@ include("inc/scripts.php");
             $("#tableTelefone tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTel + '"><i></i></label></td>'));
             row.append($('<td class="text-center" onclick="carregaTelefone(' + jsonTelefoneArray[i].sequencialTel + ');">' + jsonTelefoneArray[i].encargo + '</td>'));
-            row.append($('<td class="text-center">' + jsonTelefoneArray[i].percentual + '</td>'));
+            // row.append($('<td class="text-center">' + jsonTelefoneArray[i].percentual + '</td>'));
         }
     }
 
@@ -468,7 +462,7 @@ include("inc/scripts.php");
         $("#encargo").val('');
         $("#telefoneId").val('');
         $("#sequencialTel").val('');
-        $('#percentual').val('');
+        // $('#percentual').val('');
     }
 
     function processDataTel(node) {
@@ -516,26 +510,25 @@ include("inc/scripts.php");
         if (arr.length > 0) {
             var item = arr[0];
             $("#encargo").val(item.encargo);
-            $("#percentual").val(item.percentual);
+            // $("#percentual").val(item.percentual);
             $("#sequencialTel").val(item.sequencialTel);
-            $("#telefonePrincipal").val(item.telefonePrincipal);
-            $("#telefoneWhatsApp").val(item.telefoneWhatsApp);
+  
 
-            if (item.telefonePrincipal === 1) {
-                $('#telefonePrincipal').prop('checked', true);
-                $('#descricaoTelefonePrincipal').val("Sim");
-            } else {
-                $('#telefonePrincipal').prop('checked', false);
-                $('#descricaoTelefonePrincipal').val("Não");
-            }
+            // if (item.telefonePrincipal === 1) {
+            //     $('#telefonePrincipal').prop('checked', true);
+            //     $('#descricaoTelefonePrincipal').val("Sim");
+            // } else {
+            //     $('#telefonePrincipal').prop('checked', false);
+            //     $('#descricaoTelefonePrincipal').val("Não");
+            // }
 
-            if (item.telefoneWhatsApp === 1) {
-                $('#telefoneWhatsApp').prop('checked', true);
-                $('#descricaoTelefoneWhatsApp').val("Sim");
-            } else {
-                $('#telefoneWhatsApp').prop('checked', false);
-                $('#descricaoTelefoneWhatsApp').val("Não");
-            }
+            // if (item.telefoneWhatsApp === 1) {
+            //     $('#telefoneWhatsApp').prop('checked', true);
+            //     $('#descricaoTelefoneWhatsApp').val("Sim");
+            // } else {
+            //     $('#telefoneWhatsApp').prop('checked', false);
+            //     $('#descricaoTelefoneWhatsApp').val("Não");
+            // }
         }
     }
 

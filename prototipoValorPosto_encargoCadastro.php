@@ -233,7 +233,7 @@ include("inc/scripts.php");
     });
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_encargoFiltro.php');
+        $(location).attr('href', 'prototipoValorPosto_encargoFiltro.php');
 
     }
 
