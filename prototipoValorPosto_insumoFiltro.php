@@ -37,7 +37,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]['faturamento']['sub']["percentualPostoEncargo"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]['prototipoValorPosto']['sub']["encargo"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -67,7 +67,7 @@ include("inc/nav.php");
                 <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                     <header>
                         <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                        <h2>Posto Encargo</h2>
+                        <h2>Insumos</h2>
                     </header>
                     <div>
                         <div class="widget-body no-padding">
@@ -88,37 +88,31 @@ include("inc/nav.php");
                                                 <fieldset>
                                                     <div class="row ">
 
-                                                        <section class="col col-4">
-                                                            <label class="label" for="posto">Posto</label>
-                                                            <label class="select">
-                                                                <select id="posto" name="posto">
-                                                                    <option style="display:none;">Selecione</option>
-                                                                    <?php
-                                                                    $sql =  "SELECT codigo,  descricao FROM Ntl.posto where ativo = 1 order by codigo";
-                                                                    $reposit = new reposit();
-                                                                    $result = $reposit->RunQuery($sql);
-                                                                    foreach ($result as $row) {
+                                                    <section class="col col-4">
+                                                                <label class="label">Nome</label>
+                                                                <label class="input">
+                                                                    <input id="nome" maxlength="255" name="nome" type="text" value="">
+                                                                </label>
+                                                            </section>
 
-                                                                        $row = array_map('mb_strtoupper', $row);
-                                                                        $codigo = $row['codigo'];
-                                                                        $descricao = ($row['descricao']);
-                                                                        $numeroCentroCusto  = ($row['numeroCentroCusto']);
-                                                                        $apelido = ($row['apelido']);
-                                                                        echo '<option value=' . $codigo . '>  '  . $descricao . '</option>';
-                                                                    }
-                                                                    ?>
-                                                                </select><i></i>
+                                                        <section class="col col-2">
+                                                            <label class="label">Valor</label>
+                                                            <label class="input"><i class="icon-append fa fa-percent"></i>
+                                                                <input id="percentual" name="percentual" maxlength="5" style="text-align: right;" type="text" autocomplete="off">
+
                                                             </label>
                                                         </section>
                                                         <section class="col col-2">
-                                                            <label class="label" for="ativo">Ativo</label>
+                                                            <label class="label">Ativo</label>
                                                             <label class="select">
-                                                                <select id="ativo" name="ativo">
-                                                                    <option></option>
+                                                                <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                    <option value=""></option>
                                                                     <option value="1" selected>Sim</option>
                                                                     <option value="0">Não</option>
                                                                 </select><i></i>
+                                                            </label>
                                                         </section>
+
                                                     </div>
                                                 </fieldset>
                                             </div>
@@ -179,7 +173,8 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
-<script language="JavaScript" type="text/javascript">
+
+<script>
     $(document).ready(function() {
 
         $('#percentual').focusout(function() {
@@ -199,17 +194,17 @@ include("inc/scripts.php");
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_percentualCargoEncargoCadastro.php');
+            $(location).attr('href', 'prototipoValorPosto_insumoCadastro.php');
         });
     });
 
     function listarFiltro() {
-        var posto = $('#posto').val();
-
+        var nome = $('#nome').val();
+        var percentual = $('#percentual').val();
         var ativo = $('#ativo').val();
 
-        var parametrosUrl = '&posto=' + posto;
-
+        var parametrosUrl = '&nome=' + nome;
+        var parametrosUrl = '&percentual=' + percentual;
         parametrosUrl = '&ativo=' + ativo;
         $('#resultadoBusca').load('tabelaBasica_encargoFiltroListagem.php?' + parametrosUrl);
     }
