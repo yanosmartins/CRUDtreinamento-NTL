@@ -12,10 +12,6 @@ $condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) || $
 $condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true) || in_array('TRIAGEM_GRAVAR', $arrayPermissao, true));
 $condicaoTriagemAcessarOK = (in_array('TRIAGEM_ACESSAR', $arrayPermissao, true));
 
-//REMOVER DEPOIS
-$condicaoAcessarOK = true;
-$condicaoTriagemAcessarOK = true;
-
 if ($condicaoAcessarOK == false && $condicaoTriagemAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
@@ -55,7 +51,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['contratacao']['sub']["candidato"]["active"] = true;
+$page_nav['operacao']['sub']['candidato']['sub']["candidato"]["active"] = true;
 include("inc/nav.php");
 
 ?>
@@ -1272,7 +1268,7 @@ include("inc/nav.php");
                                                                     <select name="possuiContaBancaria" id="possuiContaBancaria" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
                                                                         <option value="1">Sim</option>
-                                                                        <option value="2">Não</option>
+                                                                        <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -2807,9 +2803,21 @@ include("inc/scripts.php");
             getSiglaUfConjuge();
 
         }
+
+        
+    
+       
     });
 
-    $('#possuiContaBancaria').change(function() {
+    $("#linkPdfTransporte").on("click", function() {
+            abrePdfTransporte();
+        });
+
+    $('#possuiContaBancaria').on('change',function() {
+            verificaBanco();
+        });
+    function verificaBanco(){
+        
         var possuiContaBancaria = +$('#possuiContaBancaria').val();
         if (possuiContaBancaria == 1) {
             $("#tipoConta").removeClass('readonly');
@@ -2824,17 +2832,17 @@ include("inc/scripts.php");
             $("#agenciaBanco").addClass('required');
             $("#agenciaBanco").removeAttr('disabled');
 
-            // $("#digitoAgenciaBanco").removeClass('readonly');
-            // $("#digitoAgenciaBanco").addClass('required');
-            // $("#digitoAgenciaBanco").removeAttr('disabled');
+            $("#digitoAgenciaBanco").removeClass('readonly');
+            $("#digitoAgenciaBanco").addClass('required');
+            $("#digitoAgenciaBanco").removeAttr('disabled');
 
             $("#contaCorrente").removeClass('readonly');
             $("#contaCorrente").addClass('required');
             $("#contaCorrente").removeAttr('disabled');
 
-            // $("#digitoContaBanco").removeClass('readonly');
-            // $("#digitoContaBanco").addClass('required');
-            // $("#digitoContaBanco").removeAttr('disabled');
+            $("#digitoContaBanco").removeClass('readonly');
+            $("#digitoContaBanco").addClass('required');
+            $("#digitoContaBanco").removeAttr('disabled');
         } else {
             $("#tipoConta").addClass('readonly');
             $("#tipoConta").removeClass('required');
@@ -2868,13 +2876,7 @@ include("inc/scripts.php");
             $("#digitoContaBanco").val('');
             $("#digitoContaBanco").prop('disabled', true);
         }
-    });
-
-    $("#linkPdfTransporte").on("click", function() {
-        abrePdfTransporte();
-    });
-
-
+    }
 
     function carregaPagina() {
         var urlx = window.document.URL.toString();
@@ -3229,6 +3231,7 @@ include("inc/scripts.php");
                             $("#jsonTransporte").val(strArrayTransporte);
                             $("#logradouro").val(logradouro);
 
+                            verificaBanco()
 
                             if (justificativaVt != "") {
                                 $("#justificativaVt").removeAttr("class");

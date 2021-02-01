@@ -17,9 +17,9 @@ $arrayPermissao = array();
 $reposit = new reposit();
 $result = $reposit->SelectCondTrue("usuario| login = " . $login . " AND ativo = 1");
 if ($row = $result[0]) {
-    $codigoUsuario = +$row['codigo'];
+    $codigoUsuario = (int)$row['codigo'];
     $tipoUsuario = $row['tipoUsuario'];
-    $funcionario = +$row['funcionario'];
+    $candidato = (int)$row['candidato'];
 
     if ($tipoUsuario === "C") {
         $sql = "SELECT FNC.nome FROM Ntl.usuarioFuncionalidade USUF
@@ -64,8 +64,8 @@ if ($condicaoConfiguracoesOK) {
 
 
 $condicaoFaturamentoOk = true;
-$condicaoLicitacaoOk = true;
-$condicaoOperacoesEspeciaisoOk = true;
+$condicaoLicitacaoOk = false;
+$condicaoOperacoesEspeciaisoOk = false;
 $condicaoVersaoSistemaOk = true;
 $condicaoTesteOk = true;
 $condicaoOperacaoOk = true;
@@ -91,6 +91,12 @@ if ($condicaoTabelaBasicaOk) {
     }
     if (in_array('ESCALA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("escala" => array("title" => "Escala", "url" => APP_URL . "/tabelaBasica_escalaFiltro.php")); //SYSCC  
+    }
+    if (in_array('FUNCAO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("funcao" => array("title" => "Função", "url" => APP_URL . "/tabelaBasica_funcaoFiltro.php"));
+    }
+    if (in_array('GRUPOLICITACAO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("grupoLicitacao" => array("title" => "Grupo Licitação", "url" => APP_URL . "/tabelaBasica_grupoLicitacaoFiltro.php")); //SYSGC 
     }
     if (in_array('INDICEREAJUSTE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("indiceReajuste" => array("title" => "Índice de Reajuste", "url" => APP_URL . "/tabelaBasica_indiceReajusteFiltro.php")); //SYSGEF  
@@ -257,7 +263,7 @@ if ($condicaoOperacaoOk) {
         }
         if (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['beneficio']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
-        }
+            }
     }
 
     $condicaoContratacaoOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
@@ -281,11 +287,31 @@ if ($condicaoOperacaoOk) {
         if (!in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
         }
+    }else if ($tipoUsuario == 'T') {
+        $page_nav['operacao']['sub']['candidato'] = array("title" => "Contratação", "icon" => "fa fa-folder-open");
+        $page_nav['operacao']['sub']['candidato']['sub'] = array();
+        $page_nav['operacao']['sub']['candidato']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoCadastro.php?=" . $candidato));
     }
 
     if ($condicaoFaturamentoOk) {
-        $page_nav['operacao']['sub']['faturamento'] = array("title" => "Faturamento", "icon" => "fa fa-dollar");
+        $page_nav['operacao']['sub']['faturamento'] = array("title" => "Valor Funcionario ", "icon" => "fa fa-dollar");
         $page_nav['operacao']['sub']['faturamento']['sub'] = array();
+
+        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("BDI" => array("title" => "BDI", "url" => APP_URL . "/prototipoValorPosto_bdiFiltro.php"));
+        }
+        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/tabelaBasica_grupoFiltro.php"));
+        }
+        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("encargo" => array("title" => "Encargo", "url" => APP_URL . "/prototipoValorPosto_encargoFiltro.php"));
+        }
+        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("insumos" => array("title" => "Insumos", "url" => APP_URL . "/prototipoValorPosto_encargoFiltro.php"));
+        }
+        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("percentualPostoEncargo" => array("title" => "Percentual Cargo Encargo", "url" => APP_URL . "/tabelaBasica_percentualCargoEncargoFiltro.php"));
+        }
     }
 
     // LICITAÇÕES - SYSGC
