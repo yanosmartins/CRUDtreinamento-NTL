@@ -63,9 +63,9 @@ if ($condicaoConfiguracoesOK) {
 }
 
 
-$condicaoFaturamentoOk = false;
+$condicaoFaturamentoOk = true;
 $condicaoLicitacaoOk = false;
-$condicaoOperacoesEspeciaisoOk = true;
+$condicaoOperacoesEspeciaisoOk = false;
 $condicaoVersaoSistemaOk = true;
 $condicaoTesteOk = true;
 $condicaoOperacaoOk = true;
@@ -91,6 +91,9 @@ if ($condicaoTabelaBasicaOk) {
     }
     if (in_array('ESCALA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("escala" => array("title" => "Escala", "url" => APP_URL . "/tabelaBasica_escalaFiltro.php")); //SYSCC  
+    }
+    if (in_array('FUNCAO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("funcao" => array("title" => "Função", "url" => APP_URL . "/tabelaBasica_funcaoFiltro.php"));
     }
     if (in_array('GRUPOLICITACAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("grupoLicitacao" => array("title" => "Grupo Licitação", "url" => APP_URL . "/tabelaBasica_grupoLicitacaoFiltro.php")); //SYSGC 
@@ -260,7 +263,7 @@ if ($condicaoOperacaoOk) {
         }
         if (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['beneficio']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
-        }
+            }
     }
 
     $condicaoContratacaoOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
