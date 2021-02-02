@@ -109,7 +109,10 @@ include("inc/nav.php");
                                                                     <input id="funcionario" name="funcionario" type="text" class="readonly" readonly>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-6">
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-10">
                                                                 <label class="label" for="tipoContrato">Tipo de Contrato
                                                                     de Trabalho</label>
                                                                 <label class="select">
@@ -134,6 +137,12 @@ include("inc/nav.php");
                                                                             cláusula assecuratória de direito recíproco
                                                                             de rescisão antecipada</option>
                                                                     </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Prazo Determinado(dias)</label>
+                                                                <label class="input"><i></i>
+                                                                    <input id="prazoDeterminado" name="prazoDeterminado" class="number required" value="" autocomplete="new-password" maxlength="3">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -229,11 +238,20 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Salário base</label>
                                                                 <label class="input"><i></i>
-                                                                    <input id="salarioBase" name="salarioBase" class="decimal-2-casas required" autocomplete="new-password" type="text" value="">
+                                                                    <input id="salarioBase" name="salarioBase" class="decimal-2-casas required text-right" autocomplete="new-password" type="text" value="">
                                                                 </label>
                                                             </section>
 
 
+
+                                                            <section class="col col-2">
+                                                                <label class="label">Verificado pelo Gestor</label>
+                                                                <label class="input"><i></i>
+                                                                    <input id="verificadoPeloGestor" name="verificadoPeloGestor" class="readonly" autocomplete="new-password" type="text" value="" readonly>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
                                                             <section class="col col-2">
                                                                 <label class="label" for="tipoEscala">Tipo de
                                                                     escala</label>
@@ -247,15 +265,6 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Verificado pelo Gestor</label>
-                                                                <label class="input"><i></i>
-                                                                    <input id="verificadoPeloGestor" name="verificadoPeloGestor" class="readonly" autocomplete="new-password" type="text" value="" readonly>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-                                                        <div class="row">
-
-                                                            <section class="col col-2">
                                                                 <label class="label">Data início revezamento</label>
                                                                 <label class="input">
                                                                     <input id="dataInicioRevezamento" name="dataInicioRevezamento" type="text" data-dateformat="dd/mm/yy" class="readonly" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataInicioRevezamento')">
@@ -267,8 +276,8 @@ include("inc/nav.php");
                                                                 <label class="select">
                                                                     <select id="tipoRevezamento" name="tipoRevezamento" class="readonly">
                                                                         <option></option>
-                                                                        <option value="0">12 x 36</option>
-                                                                        <option value="1">24 x 48</option>
+                                                                        <option value="1">12 x 36</option>
+                                                                        <option value="2">24 x 48</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -293,12 +302,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
 
-                                                            <section class="col col-2">
-                                                                <label class="label">Prazo Determinado(dias)</label>
-                                                                <label class="input"><i></i>
-                                                                    <input id="prazoDeterminado" name="prazoDeterminado" class="number required" value="" autocomplete="new-password" maxlength="3">
-                                                                </label>
-                                                            </section>
+  
                                                             <section class="col col-2">
                                                                 <label class="label">Data Final</label>
                                                                 <label class="input">
@@ -1605,7 +1609,7 @@ include("inc/scripts.php");
                         $("#tipoRevezamento").val(tipoRevezamento);
                         $("#escalaHorario").val(parseFloat(escalaHorario));
 
-                        if (verificado = 1) {
+                        if (verificado == 1) {
                             verificadoPeloGestor = 'Sim';
                         } else {
                             verificadoPeloGestor = 'Não';
@@ -1929,20 +1933,23 @@ include("inc/scripts.php");
             arrayCamposGestor.push(tipoRevezamento);
         }
 
-        for (let i = 0; i < arrayCamposGestor.length; i++) {
-            if (arrayCamposGestor[i] === "") {
+        var verificadoPeloGestor = !arrayCamposGestor.find(value => value === '' || stringToFloat(value) <= 0);
+        $('#verificadoPeloGestor').val(verificadoPeloGestor ? 'Sim' : 'Não');
 
-                $("#verificadoPeloGestor").val("Não");
-                break;
-            } else {
+        // for (let i = 0; i < arrayCamposGestor.length; i++) {
+        //     if (arrayCamposGestor[i] === "") {
 
-                if ((i == arrayCamposGestor.length - 1)) { // Se todo o array for percorrido e não há nada em branco 
-                    if (arrayCamposGestor[8] != "0,00") {
-                        $("#verificadoPeloGestor").val("Sim");
-                    }
-                }
-            }
-        }
+        //         $("#verificadoPeloGestor").val("Não");
+        //         break;
+        //     } else {
+
+        //         if ((i == arrayCamposGestor.length - 1)) { // Se todo o array for percorrido e não há nada em branco 
+        //             if (arrayCamposGestor[8] != "0,00") {
+        //                 $("#verificadoPeloGestor").val("Sim");
+        //             }
+        //         }
+        //     }
+        // }
 
     }
 

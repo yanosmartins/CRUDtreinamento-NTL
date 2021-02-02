@@ -25,7 +25,7 @@ if ($funcao == 'recuperaCpf') {
     call_user_func($funcao);
 }
 
-return;
+return; 
 
 function gravaFuncionario()
 {

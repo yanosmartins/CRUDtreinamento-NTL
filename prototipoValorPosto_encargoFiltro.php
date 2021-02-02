@@ -194,7 +194,7 @@ include("inc/scripts.php");
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_encargoCadastro.php');
+            $(location).attr('href', 'prototipoValorPosto_encargoCadastro.php');
         });
     });
 

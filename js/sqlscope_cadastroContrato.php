@@ -35,7 +35,7 @@ function grava()
 {
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";
-        $contrato = $_POST['contrato'];
+    $contrato = $_POST['contrato'];
     $codigo = (int)$contrato['codigo'];
     $projeto = (int)$contrato['projeto'];
     $numeroPregao  = "'" . $contrato['numeroPregao'] . "'";
@@ -43,10 +43,10 @@ function grava()
     $contaVinculada = (int)$contrato['contaVinculada'];
     $caucaoAtivo = (int)$contrato['caucaoAtivo'];
     $caucao = (int)$contrato['caucao'];
-    if($caucao == 0){
+    if ($caucao == 0) {
         $caucao = 'NULL';
     }
-    
+
     $percentualCaucao = (float)$contrato['percentualCaucao'];
 
     if ($contrato['dataAssinatura'] != "") {
@@ -76,6 +76,7 @@ function grava()
     $valorAtual =  $contrato['valorAtual'];
     $valorAtual = limparValor($valorAtual);
     $objetoContrato = "'" . $contrato['objetoContrato'] . "'";
+
 
 
     if ($contrato['dataRenovacao'] != "") {
@@ -113,11 +114,11 @@ function grava()
     $prazoPagamento = "'" . $contrato['prazoPagamento'] . "'";
     $condicoesPrazo = "'" . $contrato['condicoesPrazo'] . "'";
     $indiceReajuste = (int)$contrato['indiceReajuste'];
-    if($indiceReajuste == 0){
+    if ($indiceReajuste == 0) {
         $indiceReajuste = 'NULL';
     }
     $inicioReajuste = (int)$contrato['inicioReajuste'];
-    if($inicioReajuste == 0){
+    if ($inicioReajuste == 0) {
         $inicioReajuste = 'NULL';
     }
     if ($contrato['periodoComunicacao'] != "") {
@@ -162,19 +163,27 @@ function grava()
 
     $anotacoesSolicitacao = "'" . $contrato['anotacoesSolicitacao'] . "'";
     $decimoTerceiro = (int)$contrato['decimoTerceiro'];
-    if($decimoTerceiro == 0){
+    if ($decimoTerceiro == 0) {
         $decimoTerceiro = "NULL";
     }
     $multaFGTS = (int)$contrato['multaFGTS'];
-    if($multaFGTS == 0){
+    if ($multaFGTS == 0) {
         $multaFGTS = "NULL";
     }
     $ferias = (int)$contrato['ferias'];
-    if($ferias == 0){
+    if ($ferias == 0) {
         $ferias = "NULL";
     }
 
     $ativo = (int)$contrato['ativo'];
+
+    $nomeContato = $contrato['nomeContato'];
+    $funcaoContrato = $contrato['funcao'];
+    $setor = $contrato['setor'];
+    $telefone = $contrato['telefone'];
+    $celular = $contrato['celular'];
+    $email = $contrato['email'];
+    $autorizaNF = $contrato['autorizaNF'];
 
     //Inicio do Json Faturamento
     $strJsonFaturamento = $contrato["JsonFaturamento"];
@@ -191,7 +200,7 @@ function grava()
                 if (($campo === "sequencialFaturamento")) {
                     continue;
                 }
-                if($valor == 'Selecione'){
+                if ($valor == 'Selecione') {
                     $valor = NULL;
                 }
                 $xmlJsonFaturamento = $xmlJsonFaturamento . "<" . $campo . ">" . $valor . "</" . $campo . ">";
@@ -212,7 +221,7 @@ function grava()
     }
     $xmlJsonFaturamento = "'" . $xmlJsonFaturamento . "'";
 
-    
+
     //Fim do Json  Faturamento
     $sql = "Ntl.contrato_Atualiza          
                 $codigo,
@@ -254,6 +263,13 @@ function grava()
                 $envioSolicitacao,               
                 $anotacoesSolicitacao, 
                 $usuario,
+                $nomeContato,
+                $funcaoContrato,
+                $setor,
+                $telefone,
+                $celular,
+                $email,
+                $autorizaNF,
                 $xmlJsonFaturamento          
                 ";
 
@@ -316,7 +332,14 @@ function recupera()
                     anotacoesComunicacao,
                     periodoSolicitacao,
                     envioSolicitacao,               
-                    anotacoesSolicitacao 
+                    anotacoesSolicitacao,
+                    contato AS 'nomeContato',
+                    funcao AS 'funcaoContrato',
+                    setor,
+                    email,
+                    telefone,
+                    celular,
+                    autorizaNF 
                     FROM Ntl.contrato
                     WHERE (0=0) AND codigo = " . $id;
 
@@ -324,10 +347,10 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0])
+    if ($row = $result[0])
 
 
-    $id = (int)$row['codigo'];
+        $id = (int)$row['codigo'];
     $ativo = (int)$row['ativo'];
     $projeto = (int)$row['projeto'];
     $numeroPregao = (string)$row['numeroPregao'];
@@ -369,7 +392,7 @@ function recupera()
     $outros = (float)$row['outros'];
     $valorInicial = (float)$row['valorInicial'];
     $valorInicial = preencherValor($valorInicial);
-    
+
     $valorAtual = (float)$row['valorAtual'];
     $valorAtual = preencherValor($valorAtual);
 
@@ -423,7 +446,7 @@ function recupera()
     } else {
         $envioInteresse = '';
     }
-    
+
     $anotacoesRenovacao = (string)$row['anotacoesRenovacao'];
     $tipoFaturamento = (string)$row['tipoFaturamento'];
     $prazoPagamento = (string)$row['prazoPagamento'];
@@ -447,7 +470,7 @@ function recupera()
 
     $envioComunicacao = (string)$row['envioComunicacao'];
     if ($envioComunicacao != "") {
-        $aux = explode(' ',$envioComunicacao);
+        $aux = explode(' ', $envioComunicacao);
         $data = $aux[1] . ' ' . $aux[0];
         $data = $aux[0];
         $data =  trim($data);
@@ -487,6 +510,13 @@ function recupera()
         $envioSolicitacao = '';
     }
     $anotacoesSolicitacao = (string)$row['anotacoesSolicitacao'];
+    $nomeContato = $row['nomeContato'];
+    $funcaoContrato = (int)$row['funcaoContrato'];
+    $setor = $row['setor'];
+    $email = $row['email'];
+    $telefone = $row['telefone'];
+    $celular = $row['celular'];
+    $autorizaNF = (int)$row['autorizaNF'];
 
     // //----------------------Montando o array de Faturamento
 
@@ -511,7 +541,7 @@ function recupera()
 
     $contadorFaturamento = 0;
     $arrayFaturamento = array();
-    foreach($result as $row) {
+    foreach ($result as $row) {
 
         $localizacao = (int)$row['localizacao'];
         $localizacaoText = (string)$row['descricaoLocalizacao'];
@@ -561,8 +591,6 @@ function recupera()
             "descricaoServico" => $descricaoServico,
             "descricaoServicoText" => $descricaoServicoText,
             "aliquotaIss" => $aliquotaIss
-
-
         );
     }
 
@@ -607,7 +635,14 @@ function recupera()
         $anotacoesComunicacao . "^" .
         $periodoSolicitacao . "^" .
         $envioSolicitacao . "^" .
-        $anotacoesSolicitacao;
+        $anotacoesSolicitacao . "^" .
+        $nomeContato . "^" .
+        $funcaoContrato . "^" .
+        $setor . "^" .
+        $email . "^" .
+        $telefone . "^" .
+        $celular . "^" .
+        $autorizaNF;
 
     if ($out == "") {
         echo "failed#";
@@ -632,7 +667,7 @@ function preencheProjeto()
     $result = $reposit->RunQuery($sql);
     $out = "";
 
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $cnpj = (string)$row['cnpj'];
         $razaoSocial = (string)$row['razaoSocial'];
         $cep = (string)$row['cep'];
@@ -673,7 +708,7 @@ function preenchePregao()
     $result = $reposit->RunQuery($sql);
     $out = "";
 
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
 
         $objetoLicitado = (string)$row['objetoLicitado'];
@@ -705,8 +740,8 @@ function excluir()
     }
 
     $reposit = new reposit();
-    
-    $result = $reposit->update('Ntl.contrato' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
+
+    $result = $reposit->update('Ntl.contrato' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');
@@ -737,7 +772,7 @@ function listaProjetoAutoComplete()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    foreach($result as $row) {
+    foreach ($result as $row) {
         $id = (int)$row['codigo'];
         $descricao = (string)$row["descricao"];
         $numeroCentroCusto = (string)$row['numeroCentroCusto'];
@@ -772,7 +807,7 @@ function listaNumeroPregaoAutoComplete()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    foreach($result as $row) {
+    foreach ($result as $row) {
         $id = (int)$row['codigo'];
         $numeroPregao = (string)$row["numeroPregao"];
         $contador = $contador + 1;
@@ -800,4 +835,3 @@ function preencherValor($string)
 
     return $string;
 }
-

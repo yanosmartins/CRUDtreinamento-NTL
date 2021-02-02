@@ -652,7 +652,7 @@ include("inc/nav.php");
                                                                         <label class="label">Ret. INSS</label>
                                                                         <label class="select">
                                                                             <select id="inss" name="inss" class="form-control">
-                                                                                <option style="display:none;"value="">Selecione</option>
+                                                                                <option style="display:none;" value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.inss  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -672,7 +672,7 @@ include("inc/nav.php");
                                                                         <label class="label">Ret. IR</label>
                                                                         <label class="select">
                                                                             <select id="ir" name="ir" class="form-control">
-                                                                                <option style="display:none;"value="">Selecione</option>
+                                                                                <option style="display:none;" value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.ir  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -692,7 +692,7 @@ include("inc/nav.php");
                                                                         <label class="label">Ret. PIS,CONFIS,CS</label>
                                                                         <label class="select">
                                                                             <select id="pisConfisCs" name="pisConfisCs" class="form-control">
-                                                                                <option style="display:none;"value="">Selecione</option>
+                                                                                <option style="display:none;" value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, percentual FROM Ntl.pisConfisCs  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -714,7 +714,7 @@ include("inc/nav.php");
                                                                         <label class="label">Código de Serviço</label>
                                                                         <label class="select">
                                                                             <select id="codigoServico" name="codigoServico" class="form-control">
-                                                                                <option style="display:none;"value="">Selecione</option>
+                                                                                <option style="display:none;" value="">Selecione</option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, descricaoCodigo, descricaoServico FROM Ntl.servico  where ativo = 1  order by codigo";
                                                                                 $reposit = new reposit();
@@ -906,6 +906,89 @@ include("inc/nav.php");
                                             </div>
 
                                         </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseContato" class="collapsed" id="accordionContato">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Contato
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseContato" class="panel-collapse collapse">
+                                                <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">Nome</label>
+                                                                <label class="input"><i class="icon-append fa fa-user"></i>
+                                                                    <input id="nomeContato" name="nomeContato" autocomplete="off" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Função</label>
+                                                                <label class="select">
+                                                                    <select name="funcao" id="funcao">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = 'SELECT descricao,codigo FROM ntl.funcao WHERE ativo = 1';
+                                                                        $result = $reposit->RunQuery($sql);
+
+                                                                        foreach ($result as $row) {
+                                                                            $row = array_map('utf8_encode', $row);
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo "<option value=\"$codigo\">$descricao</option>";
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Setor</label>
+                                                                <label class="input">
+                                                                    <input id="setor" name="setor" autocomplete="off" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Telefone</label>
+                                                                <label class="input"><i class="icon-append fa fa-phone"></i>
+                                                                    <input id="telefone" name="telefone" data-mask="(99) 9999-9999" placeholder="(XX) XXXX-XXXX" autocomplete="off" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Celular</label>
+                                                                <label class="input"><i class="icon-append fa fa-mobile"></i>
+                                                                    <input id="celular" name="celular" data-mask="(99) 9 9999-9999" placeholder="(XX) X XXXX-XXXX" autocomplete="off" type="text">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">E-mail</label>
+                                                                <label class="input"><i class="icon-append fa fa-at"></i>
+                                                                    <input id="email" name="email" placeholder='example@mail.com' autocomplete="off" type="text">
+                                                                </label>
+                                                            </section>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">Autoriza NF</label>
+                                                                <label class="select">
+                                                                    <select name="autorizaNF" id="autorizaNF">
+                                                                        <option value="0">Não</option>
+                                                                        <option value="1">Sim</option>
+                                                                    </select>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
 
 
@@ -1087,7 +1170,7 @@ include("inc/scripts.php");
             novo();
         });
         $('#btnAddFaturamento').on("click", function() {
-            if(validaFaturamento()){
+            if (validaFaturamento()) {
                 addFaturamento();
             }
         });
@@ -1329,7 +1412,7 @@ include("inc/scripts.php");
             return false;
         }
 
-       
+
         for (i = jsonFaturamentoArray.length - 1; i >= 0; i--) {
             if (correspondenciaMarcado === 1) {
                 if ((jsonFaturamentoArray[i].correspondencia == 1) && (jsonFaturamentoArray[i].sequencialFaturamento !== sequencial)) {
@@ -1765,8 +1848,13 @@ include("inc/scripts.php");
                         var periodoSolicitacao = piece[35];
                         var envioSolicitacao = piece[36];
                         var anotacoesSolicitacao = piece[37];
-
-
+                        var nomeContato = piece[38];
+                        var funcaoContrato = piece[39];
+                        var setor = piece[40];
+                        var email = piece[41];
+                        var telefone = piece[42];
+                        var celular = piece[43];
+                        var autorizaNF = piece[44];
 
                         //Atributos de cliente        
                         $("#codigo").val(codigo);
@@ -1807,6 +1895,13 @@ include("inc/scripts.php");
                         $("#periodoSolicitacao").val(periodoSolicitacao);
                         $("#envioSolicitacao").val(envioSolicitacao);
                         $("#anotacoesSolicitacao").val(anotacoesSolicitacao);
+                        $("#nomeContato").val(nomeContato)
+                        $("#funcao").val(funcaoContrato)
+                        $("#setor").val(setor)
+                        $("#email").val(email)
+                        $("#telefone").val(telefone)
+                        $("#celular").val(celular)
+                        $("#autorizaNF").val(autorizaNF)
 
                         $("#JsonFaturamento").val(strArrayFaturamento);
                         jsonFaturamentoArray = JSON.parse($("#JsonFaturamento").val());
@@ -1817,5 +1912,4 @@ include("inc/scripts.php");
             }
         }
     }
-
 </script>

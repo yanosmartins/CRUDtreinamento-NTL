@@ -12,10 +12,6 @@ $condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) || $
 $condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true) || in_array('TRIAGEM_GRAVAR', $arrayPermissao, true));
 $condicaoTriagemAcessarOK = (in_array('TRIAGEM_ACESSAR', $arrayPermissao, true));
 
-//REMOVER DEPOIS
-$condicaoAcessarOK = true;
-$condicaoTriagemAcessarOK = true;
-
 if ($condicaoAcessarOK == false && $condicaoTriagemAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
@@ -55,7 +51,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['contratacao']['sub']["candidato"]["active"] = true;
+$page_nav['operacao']['sub']['candidato']['sub']["candidato"]["active"] = true;
 include("inc/nav.php");
 
 ?>
