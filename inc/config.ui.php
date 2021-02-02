@@ -63,7 +63,7 @@ if ($condicaoConfiguracoesOK) {
 }
 
 
-$condicaoFaturamentoOk = true;
+$condicaoFaturamentoOk = false;
 $condicaoLicitacaoOk = false;
 $condicaoOperacoesEspeciaisoOk = false;
 $condicaoVersaoSistemaOk = true;
@@ -310,7 +310,10 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['faturamento']['sub'] += array("insumos" => array("title" => "Insumos", "url" => APP_URL . "/prototipoValorPosto_encargoFiltro.php"));
         }
         if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['faturamento']['sub'] += array("percentualPostoEncargo" => array("title" => "Percentual Cargo Encargo", "url" => APP_URL . "/tabelaBasica_percentualCargoEncargoFiltro.php"));
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("percentualPostoEncargo" => array("title" => "Percentual Posto Encargo", "url" => APP_URL . "/tabelaBasica_percentualCargoEncargoFiltro.php"));
+        }
+        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("projetoPosto" => array("title" => "Projeto Posto Encargo", "url" => APP_URL . "/tabelaBasica_projetoEncargoFiltro.php"));
         }
     }
 

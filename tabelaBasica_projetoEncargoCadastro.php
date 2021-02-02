@@ -96,7 +96,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.projeto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) { {
+                                                                        foreach($result as $row) { 
 
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
@@ -117,8 +117,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.posto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) { {
-
+                                                                        foreach($result as $row) {
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);

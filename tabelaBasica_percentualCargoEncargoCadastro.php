@@ -154,6 +154,55 @@ include("inc/nav.php");
                                                                     </table>
                                                                 </div>
                                                             </div>
+                                                            <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
+                                                            <div id="formTelefone" class="col-sm-6">
+                                                                <input id="telefoneId" name="telefoneId" type="hidden" value="">
+                                                                <input id="descricaoTelefonePrincipal" name="descricaoTelefonePrincipal" type="hidden" value="">
+                                                                <input id="descricaoTelefoneWhatsApp" name="descricaoTelefoneWhatsApp" type="hidden" value="">
+                                                                <input id="sequencialTel" name="sequencialTel" type="hidden" value="">
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <section class="col col-md-6">
+                                                                            <label class="label">Insumos</label>
+                                                                            <label class="select">
+                                                                                <select id="encargo">
+                                                                                    <option> </option>
+                                                                                    <option>Uniforme</option>
+                                                                                    <option>Capacete</option>
+                                                                                    <option>Computador</option>
+                                                                                </select><i></i>
+                                                                            </label>
+                                                                        </section>
+                                                                        <!-- <section class="col col-4">
+                                                                            <label class="label">Percentual</label>
+                                                                            <label class="input"><i class="icon-append fa fa-percent"></i>
+                                                                                <input id="percentual" name="percentual" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                            </label>
+                                                                        </section> -->
+                                                                        <section class="col col-md-2">
+                                                                            <label class="label">&nbsp;</label>
+                                                                            <button id="btnAddTelefone" type="button" class="btn btn-primary">
+                                                                                <i class="fa fa-plus"></i>
+                                                                            </button>
+                                                                            <button id="btnRemoverTelefone" type="button" class="btn btn-danger">
+                                                                                <i class="fa fa-minus"></i>
+                                                                            </button>
+                                                                        </section>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                    <table id="tableTelefone" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                        <thead>
+                                                                            <tr role="row">
+                                                                                <th style="width: 2px"></th>
+                                                                                <th class="text-center" style="min-width: 500%;">Insumos</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
                                                     </fieldset>
                                                 </div>
                                             </div>

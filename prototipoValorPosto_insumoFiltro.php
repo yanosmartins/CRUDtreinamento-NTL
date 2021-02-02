@@ -97,7 +97,7 @@ include("inc/nav.php");
 
                                                         <section class="col col-2">
                                                             <label class="label">Valor</label>
-                                                            <label class="input"><i class="icon-append fa fa-percent"></i>
+                                                            <label class="input"><i class="icon-append fa fa-money"></i>
                                                                 <input id="percentual" name="percentual" maxlength="5" style="text-align: right;" type="text" autocomplete="off">
 
                                                             </label>
