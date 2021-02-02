@@ -3002,6 +3002,10 @@ include("inc/scripts.php");
             $("#contaCorrente").addClass('required');
             $("#contaCorrente").removeAttr('disabled');
 
+            $("#variacao").removeClass('readonly');
+            $("#variacao").addClass('required');
+            $("#variacao").removeAttr('disabled');
+
             $("#digitoContaBanco").removeClass('readonly');
             $("#digitoContaBanco").addClass('required');
             $("#digitoContaBanco").removeAttr('disabled');
@@ -3026,7 +3030,10 @@ include("inc/scripts.php");
             $("#digitoAgenciaBanco").val('');
             $("#digitoAgenciaBanco").prop('disabled', true);
 
+            $("#variacao").addClass('readonly');
+            $("#variacao").removeClass('required');
             $("#variacao").val('');
+            $("#variacao").prop('disabled', true);
 
             $("#contaCorrente").addClass('readonly');
             $("#contaCorrente").removeClass('required');
