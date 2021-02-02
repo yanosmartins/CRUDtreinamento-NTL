@@ -177,12 +177,12 @@ function grava()
 
     $ativo = (int)$contrato['ativo'];
 
-    $nomeContato = $contrato['nomeContato'];
+    $nomeContato = "'" . $contrato['nomeContato'] . "'";
     $funcaoContrato = $contrato['funcao'];
-    $setor = $contrato['setor'];
-    $telefone = $contrato['telefone'];
-    $celular = $contrato['celular'];
-    $email = $contrato['email'];
+    $setor = "'" . $contrato['setor'] . "'";
+    $telefone = "'" . $contrato['telefone'] . "'";
+    $celular = "'" . $contrato['celular'] . "'";
+    $email = "'" . $contrato['email'] . "'";
     $autorizaNF = $contrato['autorizaNF'];
 
     //Inicio do Json Faturamento
