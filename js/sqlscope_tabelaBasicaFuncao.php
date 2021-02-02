@@ -21,7 +21,6 @@ return;
 
 function grava()
 {
-
     $reposit = new reposit(); //Abre a conexão.
 
     // Verifica permissões
@@ -111,7 +110,6 @@ function recupera()
 
 function excluir()
 {
-
     $reposit = new reposit();
     $possuiPermissao = $reposit->PossuiPermissao("FUNCAO_ACESSAR|FUNCAO_EXCLUIR");
 
@@ -129,13 +127,13 @@ function excluir()
         return;
     }
 
+
     $result = $reposit->update('Ntl.funcao' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
         return;
     }
-
     echo 'sucess#' . $result;
     return;
 }

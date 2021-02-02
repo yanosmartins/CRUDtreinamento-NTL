@@ -20,17 +20,10 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-/* ---------------- PHP Custom Scripts ---------
-  YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
-  E.G. $page_title = "Custom Title" */
-
 $page_title = "Função";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
-//include header
-//you can add your custom css in $page_css array.
-//Note: all css files are inside css/ folder
 $page_css[] = "your_style.css";
 include("inc/header.php");
 
@@ -52,7 +45,6 @@ include("inc/nav.php");
 
     <!-- MAIN CONTENT -->
     <div id="content">
-
         <!-- widget grid -->
         <section id="widget-grid" class="">
 
@@ -124,9 +116,7 @@ include("inc/nav.php");
     <!-- END MAIN CONTENT -->
 </div>
 <!-- END MAIN PANEL -->
-
 <!-- ==========================CONTENT ENDS HERE ========================== -->
-
 <!-- PAGE FOOTER -->
 <?php
 include("inc/footer.php");

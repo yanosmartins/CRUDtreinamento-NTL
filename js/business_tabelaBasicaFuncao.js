@@ -23,7 +23,6 @@ function recuperaFuncao(id, callback) {
 
     return;
 }
-  
 function excluirFuncao(id, callback) {
     $.ajax({
         url: 'js/sqlscope_tabelaBasicaFuncao.php', //caminho do arquivo a ser executado

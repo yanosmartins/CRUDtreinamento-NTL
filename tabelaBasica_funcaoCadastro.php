@@ -24,11 +24,6 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-/* ---------------- PHP Custom Scripts ---------
-
-  YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
-  E.G. $page_title = "Custom Title" */
-
 $page_title = "Função";
 
 /* ---------------- END PHP Custom Scripts ------------- */

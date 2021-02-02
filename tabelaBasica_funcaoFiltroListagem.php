@@ -85,8 +85,6 @@
             tablet: 1024,
             phone: 480
         };
-
-        /* TABLETOOLS */
         $('#tableSearchResult').dataTable({
 
             // Tabletools options:
