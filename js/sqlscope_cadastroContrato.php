@@ -332,7 +332,14 @@ function recupera()
                     anotacoesComunicacao,
                     periodoSolicitacao,
                     envioSolicitacao,               
-                    anotacoesSolicitacao 
+                    anotacoesSolicitacao,
+                    contato AS 'nomeContato',
+                    funcao AS 'funcaoContrato',
+                    setor,
+                    email,
+                    telefone,
+                    celular,
+                    autorizaNF 
                     FROM Ntl.contrato
                     WHERE (0=0) AND codigo = " . $id;
 
@@ -503,6 +510,13 @@ function recupera()
         $envioSolicitacao = '';
     }
     $anotacoesSolicitacao = (string)$row['anotacoesSolicitacao'];
+    $nomeContato = $row['nomeContato'];
+    $funcaoContrato = (int)$row['funcaoContrato'];
+    $setor = $row['setor'];
+    $email = $row['email'];
+    $telefone = $row['telefone'];
+    $celular = $row['celular'];
+    $autorizaNF = (int)$row['autorizaNF'];
 
     // //----------------------Montando o array de Faturamento
 
@@ -577,8 +591,6 @@ function recupera()
             "descricaoServico" => $descricaoServico,
             "descricaoServicoText" => $descricaoServicoText,
             "aliquotaIss" => $aliquotaIss
-
-
         );
     }
 
@@ -623,7 +635,14 @@ function recupera()
         $anotacoesComunicacao . "^" .
         $periodoSolicitacao . "^" .
         $envioSolicitacao . "^" .
-        $anotacoesSolicitacao;
+        $anotacoesSolicitacao . "^" .
+        $nomeContato . "^" .
+        $funcaoContrato . "^" .
+        $setor . "^" .
+        $email . "^" .
+        $telefone . "^" .
+        $celular . "^" .
+        $autorizaNF;
 
     if ($out == "") {
         echo "failed#";

@@ -1848,8 +1848,13 @@ include("inc/scripts.php");
                         var periodoSolicitacao = piece[35];
                         var envioSolicitacao = piece[36];
                         var anotacoesSolicitacao = piece[37];
-
-
+                        var nomeContato = piece[38];
+                        var funcaoContrato = piece[39];
+                        var setor = piece[40];
+                        var email = piece[41];
+                        var telefone = piece[42];
+                        var celular = piece[43];
+                        var autorizaNF = piece[44];
 
                         //Atributos de cliente        
                         $("#codigo").val(codigo);
@@ -1890,6 +1895,13 @@ include("inc/scripts.php");
                         $("#periodoSolicitacao").val(periodoSolicitacao);
                         $("#envioSolicitacao").val(envioSolicitacao);
                         $("#anotacoesSolicitacao").val(anotacoesSolicitacao);
+                        $("#nomeContato").val(nomeContato)
+                        $("#funcao").val(funcaoContrato)
+                        $("#setor").val(setor)
+                        $("#email").val(email)
+                        $("#telefone").val(telefone)
+                        $("#celular").val(celular)
+                        $("#autorizaNF").val(autorizaNF)
 
                         $("#JsonFaturamento").val(strArrayFaturamento);
                         jsonFaturamentoArray = JSON.parse($("#JsonFaturamento").val());
