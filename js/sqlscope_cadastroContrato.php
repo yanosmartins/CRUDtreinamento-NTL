@@ -177,13 +177,43 @@ function grava()
 
     $ativo = (int)$contrato['ativo'];
 
-    $nomeContato = "'" . $contrato['nomeContato'] . "'";
-    $funcaoContrato = $contrato['funcao'];
-    $setor = "'" . $contrato['setor'] . "'";
-    $telefone = "'" . $contrato['telefone'] . "'";
-    $celular = "'" . $contrato['celular'] . "'";
-    $email = "'" . $contrato['email'] . "'";
-    $autorizaNF = $contrato['autorizaNF'];
+    //Inicio do Json Contato
+    $strJsonContato = $contrato["JsonContato"];
+    $arrayJsonContato = json_decode($strJsonContato, true);
+    $xmlJsonContato = "";
+    $nomeXml = "ArrayOfContratoContato";
+    $nomeTabela = "contratoContato";
+    if (sizeof($arrayJsonContato) > 0) {
+        $xmlJsonContato = '<?xml version="1.0"?>';
+        $xmlJsonContato = $xmlJsonContato . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        foreach ($arrayJsonContato as $chave) {
+            $xmlJsonContato = $xmlJsonContato . "<" . $nomeTabela . ">";
+            foreach ($chave as $campo => $valor) {
+                if (($campo === "sequencialContato")) {
+                    continue;
+                }
+                if ($valor == 'Selecione') {
+                    $valor = NULL;
+                }
+                $xmlJsonContato = $xmlJsonContato . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+            }
+            $xmlJsonContato = $xmlJsonContato . "</" . $nomeTabela . ">";
+        }
+        $xmlJsonContato = $xmlJsonContato . "</" . $nomeXml . ">";
+    } else {
+        $xmlJsonContato = '<?xml version="1.0"?>';
+        $xmlJsonContato = $xmlJsonContato . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlJsonContato = $xmlJsonContato . "</" . $nomeXml . ">";
+    }
+    $xml = simplexml_load_string($xmlJsonContato);
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML de telefone";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+    $xmlJsonContato = "'" . $xmlJsonContato . "'";
+
+    //Fim do Json Contato
 
     //Inicio do Json Faturamento
     $strJsonFaturamento = $contrato["JsonFaturamento"];
@@ -263,13 +293,7 @@ function grava()
                 $envioSolicitacao,               
                 $anotacoesSolicitacao, 
                 $usuario,
-                $nomeContato,
-                $funcaoContrato,
-                $setor,
-                $telefone,
-                $celular,
-                $email,
-                $autorizaNF,
+                $xmlJsonContato,
                 $xmlJsonFaturamento          
                 ";
 
@@ -332,14 +356,7 @@ function recupera()
                     anotacoesComunicacao,
                     periodoSolicitacao,
                     envioSolicitacao,               
-                    anotacoesSolicitacao,
-                    contato AS 'nomeContato',
-                    funcao AS 'funcaoContrato',
-                    setor,
-                    email,
-                    telefone,
-                    celular,
-                    autorizaNF 
+                    anotacoesSolicitacao
                     FROM Ntl.contrato
                     WHERE (0=0) AND codigo = " . $id;
 
@@ -510,13 +527,43 @@ function recupera()
         $envioSolicitacao = '';
     }
     $anotacoesSolicitacao = (string)$row['anotacoesSolicitacao'];
-    $nomeContato = $row['nomeContato'];
-    $funcaoContrato = (int)$row['funcaoContrato'];
-    $setor = $row['setor'];
-    $email = $row['email'];
-    $telefone = $row['telefone'];
-    $celular = $row['celular'];
-    $autorizaNF = (int)$row['autorizaNF'];
+
+    // //----------------------Montando o array de Contato
+
+    $reposit = "";
+    $result = "";
+    $sql = "SELECT CC.codigo,CC.nome,CC.funcao,CC.setor,CC.email,CC.telefone,CC.celular,CC.autorizaNF FROM ntl.contratoContato CC INNER JOIN ntl.contrato C ON C.codigo = CC.contrato
+    INNER JOIN ntl.funcao F ON F.codigo = CC.funcao WHERE CC.contrato = $id";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $contadorContato = 0;
+    $arrayContato = array();
+    foreach ($result as $row) {
+        $nomeContato = (string)$row['nome'];
+        $funcaoContrato = (int)$row['funcao'];
+        $setor = (int)$row['setor'];
+        $email = (string)$row['email'];
+        $telefone = (string)$row['telefone'];
+        $celular = (string)$row['celular'];
+        $autorizaNF = (int)$row['autorizaNF'];
+
+        $contadorContato = $contadorContato + 1;
+        $arrayContato[] = array(
+            "sequencialContato" => $contadorContato,
+            "nomeContato" => $nomeContato,
+            "funcao" => $funcaoContrato,
+            "setor" => $setor,
+            "email" => $email,
+            "telefone" => $telefone,
+            "celular" => $celular,
+            "autorizaNF" => $autorizaNF
+        );
+    }
+
+    $strArrayContato = json_encode($arrayContato);
+    //------------------------Fim do Array Contato
 
     // //----------------------Montando o array de Faturamento
 
@@ -635,21 +682,14 @@ function recupera()
         $anotacoesComunicacao . "^" .
         $periodoSolicitacao . "^" .
         $envioSolicitacao . "^" .
-        $anotacoesSolicitacao . "^" .
-        $nomeContato . "^" .
-        $funcaoContrato . "^" .
-        $setor . "^" .
-        $email . "^" .
-        $telefone . "^" .
-        $celular . "^" .
-        $autorizaNF;
+        $anotacoesSolicitacao;
 
     if ($out == "") {
         echo "failed#";
         return;
     }
 
-    echo "sucess#" . $out . "#" . $strArrayFaturamento;
+    echo "sucess#" . $out . "#" . $strArrayContato . "#" . $strArrayFaturamento;
     return;
 }
 
