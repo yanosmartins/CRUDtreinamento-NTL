@@ -42,7 +42,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]['prototipoValorPosto']['sub']["projetoEncargo"]["active"] = true;
+$page_nav["operacao"]["sub"]['faturamento']['sub']["projetoPosto"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -96,7 +96,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.projeto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) { 
+                                                                        foreach ($result as $row) {
 
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
@@ -117,7 +117,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.posto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -163,9 +163,9 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-4">
-                                                                        <label class="label">Descrição</label>
+                                                                        <label class="label">Grupo</label>
                                                                         <label class="select">
-                                                                            <select id="encargo">
+                                                                            <select id="encargoGrupo">
                                                                                 <option></option>
                                                                                 <option>Grupo A</option>
                                                                                 <option>Grupo B</option>
@@ -207,16 +207,16 @@ include("inc/nav.php");
                                                                 <legend>Insumos</legend>
                                                             </section>
                                                         </div>
-                                                        <input id="jsonTabelaValor" name="jsonTabelaValor" type="hidden" value="[]">
-                                                        <div id="formTabelaValor" class="col-sm-12">
-                                                            <input id="tabelaValorId" name="tabelaValorId" type="hidden" value="">
-                                                            <input id="sequencialTabelaValor" name="sequencialTabelaValor" type="hidden" value="">
+                                                        <input id="jsonInsumos" name="jsonInsumos" type="hidden" value="[]">
+                                                        <div id="formInsumos" class="col-sm-12">
+                                                            <input id="insumosId" name="insumosId" type="hidden" value="">
+                                                            <input id="sequencialInsumos" name="sequencialInsumos" type="hidden" value="">
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <section class="col col-md-4">
                                                                         <label class="label">Insumos</label>
                                                                         <label class="select">
-                                                                            <select id="despesas">
+                                                                            <select id="insumos">
                                                                                 <option> </option>
                                                                                 <option>Uniforme</option>
                                                                                 <option>Capacete</option>
@@ -228,13 +228,13 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label">Valor</label>
                                                                         <label class="input"><i class="icon-append fa fa-money"></i>
-                                                                            <input id="valorDespesa" name="valorDespesa" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                            <input id="insumosValor" name="insumosValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-4">
-                                                                        <label class="label">Descrição</label>
+                                                                        <label class="label">Grupo</label>
                                                                         <label class="select">
-                                                                            <select id="encargo">
+                                                                            <select id="insumosGrupo">
                                                                                 <option></option>
                                                                                 <option>Grupo A</option>
                                                                                 <option>Grupo B</option>
@@ -247,17 +247,17 @@ include("inc/nav.php");
                                                                     </section>
                                                                     <section class="col col-md-2">
                                                                         <label class="label">&nbsp;</label>
-                                                                        <button id="btnAddTabelaValor" type="button" class="btn btn-primary">
+                                                                        <button id="btnAddInsumos" type="button" class="btn btn-primary">
                                                                             <i class="fa fa-plus"></i>
                                                                         </button>
-                                                                        <button id="btnRemoverTabelaValor" type="button" class="btn btn-danger">
+                                                                        <button id="btnRemoverInsumos" type="button" class="btn btn-danger">
                                                                             <i class="fa fa-minus"></i>
                                                                         </button>
                                                                     </section>
                                                                 </div>
                                                             </div>
                                                             <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                <table id="tableTabelaValor" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                <table id="tableInsumos" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                     <thead>
                                                                         <tr role="row">
                                                                             <th style="width: 2px"></th>
@@ -270,6 +270,74 @@ include("inc/nav.php");
                                                                     </tbody>
                                                                 </table>
                                                             </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend>BDI</legend>
+                                                            </section>
+                                                        </div>
+                                                        <input id="jsonBdi" name="jsonBdi" type="hidden" value="[]">
+                                                        <div id="formBdi" class="col-sm-12">
+                                                            <input id="bdiId" name="bdiId" type="hidden" value="">
+                                                            <input id="sequencialBdi" name="sequencialBdi" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-md-6">
+                                                                        <label class="label">Bdi</label>
+                                                                        <label class="select">
+                                                                            <select id="bdi">
+                                                                                <option> </option>
+                                                                                <option>Despesas Indiretas</option>
+                                                                                <option>Lucro</option>
+                                                                                <option>COFINS</option>
+                                                                                <option>Ferramenta</option>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label class="label">Percentual</label>
+                                                                        <label class="input"><i class="icon-append fa fa-percent"></i>
+                                                                            <input id="bdiValor" name="bdiValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddBdi" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverBdi" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableBdi" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th style="width: 2px"></th>
+                                                                            <th class="text-center" style="width: 750px">BDI</th>
+                                                                            <th class="text-center">percentual</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-12">
+                                                                    <legend></legend>
+                                                                </section>
+                                                            </div>
+                                                            <button type="button" id="btn" class="btn btn-info" aria-hidden="true" title="btn">
+                                                                Calcula Grupo
+                                                            </button>
+                                                            <button type="button" id="btn" class="btn btn-info" aria-hidden="true" title="btn">
+                                                                Composição
+                                                            </button>
+                                                            <button type="button" id="btn" class="btn btn-warning" aria-hidden="true" title="btn">
+                                                                Calcular Valor do Posto 
+                                                            </button>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -377,7 +445,9 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
         jsonEncargoPercentualArray = JSON.parse($("#jsonEncargoPercentual").val());
-        carregaPagina();
+        jsonInsumosArray = JSON.parse($("#jsonInsumos").val());
+        jsonBdiArray = JSON.parse($("#jsonBdi").val());
+
 
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
@@ -435,10 +505,20 @@ include("inc/scripts.php");
                 element.mask("9.99?9");
             }
         }).trigger('focusout');
+
         $("#btnAddEncargoPercentual").on("click", function() {
-            // if (validaEncargoPercentual())
             addEncargoPercentual();
         });
+
+        $("#btnAddInsumos").on("click", function() {
+            addInsumos();
+        });
+
+        $("#btnAddBdi").on("click", function() {
+            addBdi();
+        });
+
+        carregaPagina();
     });
 
     function gravar() {
@@ -590,7 +670,7 @@ include("inc/scripts.php");
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonEncargoPercentualArray[i].sequencialEncargoPercentual + '"><i></i></label></td>'));
             row.append($('<td class="text-center" onclick="carregaEncargoPercentual(' + jsonEncargoPercentualArray[i].sequencialEncargoPercentual + ');">' + jsonEncargoPercentualArray[i].encargo + '</td>'));
             row.append($('<td class="text-center">' + jsonEncargoPercentualArray[i].percentual + '</td>'));
-            row.append($('<td class="text-center">' + jsonEncargoPercentualArray[i].grupo + '</td>'));
+            row.append($('<td class="text-center">' + jsonEncargoPercentualArray[i].encargoGrupo + '</td>'));
         }
     }
 
@@ -599,7 +679,7 @@ include("inc/scripts.php");
         $("#encargoPercentualId").val('');
         $("#sequencialEncargoPercentual").val('');
         $('#percentual').val('');
-        $('#grupo').val('');
+        $('#encargoGrupo').val('');
     }
 
     function processDataEncargoPercentual(node) {
@@ -626,14 +706,14 @@ include("inc/scripts.php");
                 value: percentual
             };
         }
-        if (fieldName !== '' && (fieldId === "grupo")) {
-            var grupo = $("#grupo").val();
-            if (grupo !== '') {
-                fieldName = "grupo";
+        if (fieldName !== '' && (fieldId === "encargoGrupo")) {
+            var encargoGrupo = $("#encargoGrupo").val();
+            if (encargoGrupo !== '') {
+                fieldName = "encargoGrupo";
             }
             return {
                 name: fieldName,
-                value: grupo
+                value: encargoGrupo
             };
         }
 
@@ -660,5 +740,191 @@ include("inc/scripts.php");
             $("#percentual").val(item.percentual);
             $("#sequencialEncargoPercentual").val(item.sequencialEncargoPercentual);
         }
+    }
+
+
+    // insumos
+    function clearFormInsumos() {
+        $("#insumos").val('');
+        $("#insumosId").val('');
+        $("#sequencialInsumos").val('');
+        $('#insumosValor').val('');
+    }
+
+    function addInsumos() {
+        var item = $("#formInsumos").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataInsumos
+        });
+
+        if (item["sequencialInsumos"] === '') {
+            if (jsonInsumosArray.length === 0) {
+                item["sequencialInsumos"] = 1;
+            } else {
+                item["sequencialInsumos"] = Math.max.apply(Math, jsonInsumosArray.map(function(o) {
+                    return o.sequencialInsumos;
+                })) + 1;
+            }
+            item["encargoPercentualId"] = 0;
+        } else {
+            item["sequencialInsumos"] = +item["sequencialInsumos"];
+        }
+
+        var index = -1;
+        $.each(jsonInsumosArray, function(i, obj) {
+            if (+$('#sequencialInsumos').val() === obj.sequencialInsumos) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonInsumosArray.splice(index, 1, item);
+        else
+            jsonInsumosArray.push(item);
+
+        $("#jsonInsumos").val(JSON.stringify(jsonInsumosArray));
+        fillTableInsumos();
+        clearFormInsumos();
+
+    }
+
+    function fillTableInsumos() {
+        $("#tableInsumos tbody").empty();
+        for (var i = 0; i < jsonInsumosArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableInsumos tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonInsumosArray[i].sequencialInsumos + '"><i></i></label></td>'));
+            row.append($('<td class="text-center" onclick="carregaInsumos(' + jsonInsumosArray[i].sequencialInsumos + ');">' + jsonInsumosArray[i].insumos + '</td>'));
+            row.append($('<td class="text-center">' + jsonInsumosArray[i].insumosValor + '</td>'));
+            row.append($('<td class="text-center">' + jsonInsumosArray[i].insumosGrupo + '</td>'));
+        }
+    }
+
+
+    function processDataInsumos(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "insumos")) {
+            var insumos = $("#insumos").val();
+            if (insumos !== '') {
+                fieldName = "insumos";
+            }
+            return {
+                name: fieldName,
+                value: insumos
+            };
+        }
+        if (fieldName !== '' && (fieldId === "insumoValor")) {
+            var insumoValor = $("#insumoValor").val();
+            if (insumoValor !== '') {
+                fieldName = "insumoValor";
+            }
+            return {
+                name: fieldName,
+                value: insumoValor
+            };
+        }
+        if (fieldName !== '' && (fieldId === "insumosGrupo")) {
+            var insumosGrupo = $("#insumosGrupo").val();
+            if (insumosGrupo !== '') {
+                fieldName = "insumosGrupo";
+            }
+            return {
+                name: fieldName,
+                value: insumosGrupo
+            };
+        }
+
+        return false;
+    }
+
+    // bdi
+    function clearFormBdi() {
+        $("#bdi").val('');
+        $("#bdiId").val('');
+        $("#sequencialBdi").val('');
+        $('#bdiValor').val('');
+    }
+
+    function addBdi() {
+        var item = $("#formBdi").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataBdi
+        });
+
+        if (item["sequencialBdi"] === '') {
+            if (jsonBdiArray.length === 0) {
+                item["sequencialBdi"] = 1;
+            } else {
+                item["sequencialBdi"] = Math.max.apply(Math, jsonBdiArray.map(function(o) {
+                    return o.sequencialBdi;
+                })) + 1;
+            }
+            item["encargoPercentualId"] = 0;
+        } else {
+            item["sequencialBdi"] = +item["sequencialBdi"];
+        }
+
+        var index = -1;
+        $.each(jsonBdiArray, function(i, obj) {
+            if (+$('#sequencialBdi').val() === obj.sequencialBdi) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonBdiArray.splice(index, 1, item);
+        else
+            jsonBdiArray.push(item);
+
+        $("#jsonBdi").val(JSON.stringify(jsonBdiArray));
+        fillTableBdi();
+        clearFormBdi();
+
+    }
+
+    function fillTableBdi() {
+        $("#tableBdi tbody").empty();
+        for (var i = 0; i < jsonBdiArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableBdi tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonBdiArray[i].sequencialBdi + '"><i></i></label></td>'));
+            row.append($('<td class="text-center" onclick="carregaBdi(' + jsonBdiArray[i].sequencialBdi + ');">' + jsonBdiArray[i].bdi + '</td>'));
+            row.append($('<td class="text-center">' + jsonBdiArray[i].bdiValor + '</td>'));
+        }
+    }
+
+
+    function processDataBdi(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "bdi")) {
+            var bdi = $("#bdi").val();
+            if (bdi !== '') {
+                fieldName = "bdi";
+            }
+            return {
+                name: fieldName,
+                value: bdi
+            };
+        }
+        if (fieldName !== '' && (fieldId === "insumoValor")) {
+            var insumoValor = $("#insumoValor").val();
+            if (insumoValor !== '') {
+                fieldName = "insumoValor";
+            }
+            return {
+                name: fieldName,
+                value: insumoValor
+            };
+        }
+
+        return false;
     }
 </script>
