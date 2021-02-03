@@ -432,14 +432,10 @@ class reposit
             $tipoUsuario = $row['tipoUsuario'];
 
             if ($tipoUsuario === "C") {
-                $sql
-                    = "SELECT F.CODIGO FROM sysof.funcionalidade F WHERE (f.nome = '"
-                    . $conf[0] . "' OR f.nome = '" . $conf[1] . "') ";
+                $sql= "SELECT F.CODIGO FROM Ntl.funcionalidade F WHERE (f.nome = '". $conf[0] . "' OR f.nome = '" . $conf[1] . "') ";
                 $sql = $sql . " EXCEPT ";
-                $sql = $sql
-                    . " SELECT usuf.funcionalidade FROM sysof.usuarioFuncionalidade usuf INNER JOIN sysof.funcionalidade faux on faux.codigo = usuf.funcionalidade ";
-                $sql = $sql . " AND (faux.nome = '" . $conf[0] . "' OR faux.nome = '"
-                    . $conf[1] . "') ";
+                $sql = $sql . " SELECT usuf.funcionalidade FROM Ntl.usuarioFuncionalidade usuf INNER JOIN Ntl.funcionalidade faux on faux.codigo = usuf.funcionalidade ";
+                $sql = $sql . " AND (faux.nome = '" . $conf[0] . "' OR faux.nome = '" . $conf[1] . "') ";
                 $sql = $sql . " WHERE usuf.usuario=" . $codigoUsuario . " ";
 
                 $result = $this->RunQuery($sql);
