@@ -204,7 +204,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-12">
-                                                                <legend>Tabela Valores</legend>
+                                                                <legend>Insumos</legend>
                                                             </section>
                                                         </div>
                                                         <input id="jsonTabelaValor" name="jsonTabelaValor" type="hidden" value="[]">
@@ -214,7 +214,7 @@ include("inc/nav.php");
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <section class="col col-md-4">
-                                                                        <label class="label">Despesas</label>
+                                                                        <label class="label">Insumos</label>
                                                                         <label class="select">
                                                                             <select id="despesas">
                                                                                 <option> </option>

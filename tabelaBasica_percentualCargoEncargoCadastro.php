@@ -105,11 +105,11 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                            <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
-                                                            <div id="formTelefone" class="col-sm-6">
+                                                            <input id="jsonInsumos" name="jsonInsumos" type="hidden" value="[]">
+                                                            <div id="formInsumos" class="col-sm-6">
                                                                 <input id="telefoneId" name="telefoneId" type="hidden" value="">
-                                                                <input id="descricaoTelefonePrincipal" name="descricaoTelefonePrincipal" type="hidden" value="">
-                                                                <input id="descricaoTelefoneWhatsApp" name="descricaoTelefoneWhatsApp" type="hidden" value="">
+                                                                <input id="descricaoInsumosPrincipal" name="descricaoInsumosPrincipal" type="hidden" value="">
+                                                                <input id="descricaoInsumosWhatsApp" name="descricaoInsumosWhatsApp" type="hidden" value="">
                                                                 <input id="sequencialTel" name="sequencialTel" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
@@ -132,17 +132,17 @@ include("inc/nav.php");
                                                                         </section> -->
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddTelefone" type="button" class="btn btn-primary">
+                                                                            <button id="btnAddInsumos" type="button" class="btn btn-primary">
                                                                                 <i class="fa fa-plus"></i>
                                                                             </button>
-                                                                            <button id="btnRemoverTelefone" type="button" class="btn btn-danger">
+                                                                            <button id="btnRemoverInsumos" type="button" class="btn btn-danger">
                                                                                 <i class="fa fa-minus"></i>
                                                                             </button>
                                                                         </section>
                                                                     </div>
                                                                 </div>
                                                                 <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableTelefone" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <table id="tableInsumos" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                         <thead>
                                                                             <tr role="row">
                                                                                 <th style="width: 2px"></th>
@@ -154,11 +154,11 @@ include("inc/nav.php");
                                                                     </table>
                                                                 </div>
                                                             </div>
-                                                            <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
-                                                            <div id="formTelefone" class="col-sm-6">
+                                                            <input id="jsonInsumos" name="jsonInsumos" type="hidden" value="[]">
+                                                            <div id="formInsumos" class="col-sm-6">
                                                                 <input id="telefoneId" name="telefoneId" type="hidden" value="">
-                                                                <input id="descricaoTelefonePrincipal" name="descricaoTelefonePrincipal" type="hidden" value="">
-                                                                <input id="descricaoTelefoneWhatsApp" name="descricaoTelefoneWhatsApp" type="hidden" value="">
+                                                                <input id="descricaoInsumosPrincipal" name="descricaoInsumosPrincipal" type="hidden" value="">
+                                                                <input id="descricaoInsumosWhatsApp" name="descricaoInsumosWhatsApp" type="hidden" value="">
                                                                 <input id="sequencialTel" name="sequencialTel" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
@@ -181,17 +181,17 @@ include("inc/nav.php");
                                                                         </section> -->
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddTelefone" type="button" class="btn btn-primary">
+                                                                            <button id="btnAddInsumos" type="button" class="btn btn-primary">
                                                                                 <i class="fa fa-plus"></i>
                                                                             </button>
-                                                                            <button id="btnRemoverTelefone" type="button" class="btn btn-danger">
+                                                                            <button id="btnRemoverInsumos" type="button" class="btn btn-danger">
                                                                                 <i class="fa fa-minus"></i>
                                                                             </button>
                                                                         </section>
                                                                     </div>
                                                                 </div>
                                                                 <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableTelefone" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <table id="tableInsumos" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                         <thead>
                                                                             <tr role="row">
                                                                                 <th style="width: 2px"></th>
@@ -291,6 +291,7 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+        jsonInsumosArray = JSON.parse($("#jsonInsumos").val());
         carregaPagina();
 
         $('#dlgSimpleExcluir').dialog({

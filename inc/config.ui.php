@@ -63,7 +63,7 @@ if ($condicaoConfiguracoesOK) {
 }
 
 
-$condicaoFaturamentoOk = false;
+$condicaoFaturamentoOk = true;
 $condicaoLicitacaoOk = false;
 $condicaoOperacoesEspeciaisoOk = false;
 $condicaoVersaoSistemaOk = true;
