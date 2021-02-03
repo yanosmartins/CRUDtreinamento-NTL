@@ -532,7 +532,7 @@ function recupera()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT CC.codigo,CC.nome,CC.funcao,CC.setor,CC.email,CC.telefone,CC.celular,CC.autorizaNF FROM ntl.contratoContato CC INNER JOIN ntl.contrato C ON C.codigo = CC.contrato
+    $sql = "SELECT CC.codigo,CC.nome,CC.funcao,CC.setor,CC.email,CC.telefone,CC.celular,CC.autorizaNF,F.descricao FROM ntl.contratoContato CC INNER JOIN ntl.contrato C ON C.codigo = CC.contrato
     INNER JOIN ntl.funcao F ON F.codigo = CC.funcao WHERE CC.contrato = $id";
 
     $reposit = new reposit();
@@ -543,11 +543,14 @@ function recupera()
     foreach ($result as $row) {
         $nomeContato = (string)$row['nome'];
         $funcaoContrato = (int)$row['funcao'];
-        $setor = (int)$row['setor'];
+        $setor = (string)$row['setor'];
         $email = (string)$row['email'];
         $telefone = (string)$row['telefone'];
         $celular = (string)$row['celular'];
         $autorizaNF = (int)$row['autorizaNF'];
+        $funcaoText = (string)$row['descricao'];
+        if ($autorizaNF == 0) $autorizaText = 'Não';
+        if ($autorizaNF == 1) $autorizaText = 'Sim';
 
         $contadorContato = $contadorContato + 1;
         $arrayContato[] = array(
@@ -558,7 +561,9 @@ function recupera()
             "email" => $email,
             "telefone" => $telefone,
             "celular" => $celular,
-            "autorizaNF" => $autorizaNF
+            "autorizaNF" => $autorizaNF,
+            "funcaoText" => $funcaoText,
+            "autorizaText" => $autorizaText
         );
     }
 

@@ -1346,7 +1346,7 @@ include("inc/scripts.php");
     }
 
     function clearFormContato() {
-        debugger
+
         $("#nomeContato,#funcao,#setor,#telefone,#celular,#email,#autorizaNF,#contatoId,#sequencialContato").val('');
     }
 
@@ -1686,7 +1686,7 @@ include("inc/scripts.php");
     }
 
     function addContato() {
-        debugger
+
         var item = $("#formContato").toObject({
             mode: 'combine',
             skipEmpty: false,
@@ -2068,6 +2068,7 @@ include("inc/scripts.php");
                         //Atributos de Contrato
                         var mensagem = piece[0];
                         var out = piece[1];
+
 
                         var strArrayContato = piece[2];
 
