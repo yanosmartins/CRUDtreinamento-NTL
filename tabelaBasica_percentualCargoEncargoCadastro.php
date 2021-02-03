@@ -105,12 +105,12 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                            <input id="jsonInsumos" name="jsonInsumos" type="hidden" value="[]">
-                                                            <div id="formInsumos" class="col-sm-6">
-                                                                <input id="telefoneId" name="telefoneId" type="hidden" value="">
-                                                                <input id="descricaoInsumosPrincipal" name="descricaoInsumosPrincipal" type="hidden" value="">
-                                                                <input id="descricaoInsumosWhatsApp" name="descricaoInsumosWhatsApp" type="hidden" value="">
-                                                                <input id="sequencialTel" name="sequencialTel" type="hidden" value="">
+                                                            <input id="jsonEncargo" name="jsonEncargo" type="hidden" value="[]">
+                                                            <div id="formEncargo" class="col-sm-6">
+                                                                <input id="encargoId" name="encargoId" type="hidden" value="">
+                                                                <input id="descricaoEncargoPrincipal" name="descricaoEncargoPrincipal" type="hidden" value="">
+                                                                <input id="descricaoEncargoWhatsApp" name="descricaoInsumosWhatsApp" type="hidden" value="">
+                                                                <input id="sequencialEncargo" name="sequencialEncargo" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
                                                                         <section class="col col-md-6">
@@ -132,17 +132,17 @@ include("inc/nav.php");
                                                                         </section> -->
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddInsumos" type="button" class="btn btn-primary">
+                                                                            <button id="btnAddEncargo" type="button" class="btn btn-primary">
                                                                                 <i class="fa fa-plus"></i>
                                                                             </button>
-                                                                            <button id="btnRemoverInsumos" type="button" class="btn btn-danger">
+                                                                            <button id="btnRemoverEncargo" type="button" class="btn btn-danger">
                                                                                 <i class="fa fa-minus"></i>
                                                                             </button>
                                                                         </section>
                                                                     </div>
                                                                 </div>
                                                                 <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableInsumos" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <table id="tableEncargo" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                         <thead>
                                                                             <tr role="row">
                                                                                 <th style="width: 2px"></th>
@@ -156,16 +156,16 @@ include("inc/nav.php");
                                                             </div>
                                                             <input id="jsonInsumos" name="jsonInsumos" type="hidden" value="[]">
                                                             <div id="formInsumos" class="col-sm-6">
-                                                                <input id="telefoneId" name="telefoneId" type="hidden" value="">
+                                                                <input id="insumosId" name="insumosId" type="hidden" value="">
                                                                 <input id="descricaoInsumosPrincipal" name="descricaoInsumosPrincipal" type="hidden" value="">
                                                                 <input id="descricaoInsumosWhatsApp" name="descricaoInsumosWhatsApp" type="hidden" value="">
-                                                                <input id="sequencialTel" name="sequencialTel" type="hidden" value="">
+                                                                <input id="sequencialInsumos" name="sequencialInsumos" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
                                                                         <section class="col col-md-6">
                                                                             <label class="label">Insumos</label>
                                                                             <label class="select">
-                                                                                <select id="encargo">
+                                                                                <select id="insumos">
                                                                                     <option> </option>
                                                                                     <option>Uniforme</option>
                                                                                     <option>Capacete</option>
@@ -290,10 +290,10 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-        jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+        jsonEncargoArray = JSON.parse($("#jsonEncargo").val());
         jsonInsumosArray = JSON.parse($("#jsonInsumos").val());
         carregaPagina();
-
+        
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -350,10 +350,24 @@ include("inc/scripts.php");
                 element.mask("9.99?9");
             }
         }).trigger('focusout');
-        $("#btnAddTelefone").on("click", function() {
-            // if (validaTelefone())
-                addTelefone();
+        $("#btnAddEncargo").on("click", function() {
+                addEncargo();
         });
+
+        $("#btnRemoverEncargo").on("click", function() {
+                excluirEncargo();
+        });
+
+        $("#btnAddInsumos").on("click", function() {
+                addInsumos();
+        });
+
+        $("#btnRemoverInsumos").on("click", function() {
+                excluirInsumos();
+        });
+
+   
+
     });
 
     function gravar() {
@@ -458,61 +472,56 @@ include("inc/scripts.php");
         }
     }
 
-    function addTelefone() {
-        var item = $("#formTelefone").toObject({
+    function addEncargo() {
+        var item = $("#FormEncargo").toObject({
             mode: 'combine',
             skipEmpty: false,
             nodeCallback: processDataTel
         });
 
-        if (item["sequencialTel"] === '') {
-            if (jsonTelefoneArray.length === 0) {
-                item["sequencialTel"] = 1;
+        if (!item["sequencialEncargo"]) {
+            if (jsonEncargoArray.length === 0) {
+                item["sequencialEncargo"] = 1;
             } else {
-                item["sequencialTel"] = Math.max.apply(Math, jsonTelefoneArray.map(function(o) {
-                    return o.sequencialTel;
+                item["sequencialEncargo"] = Math.max.apply(Math, jsonEncargoArray.map(function(o) {
+                    return o.sequencialEncargo;
                 })) + 1;
             }
-            item["telefoneId"] = 0;
+            item["faturamentoId"] = 0;
         } else {
-            item["sequencialTel"] = +item["sequencialTel"];
+            item["sequencialEncargo"] = +item["sequencialEncargo"];
         }
 
+        item.encargoText = $('#encargo option:selected').text().trim();
+
         var index = -1;
-        $.each(jsonTelefoneArray, function(i, obj) {
-            if (+$('#sequencialTel').val() === obj.sequencialTel) {
+        $.each(jsonEncargoArray, function(i, obj) {
+            if (+$('#sequencialEncargo').val() === obj.sequencialEncargo) {
                 index = i;
                 return false;
             }
         });
 
         if (index >= 0)
-            jsonTelefoneArray.splice(index, 1, item);
+            jsonEncargoArray.splice(index, 1, item);
         else
-            jsonTelefoneArray.push(item);
+            jsonEncargoArray.push(item);
 
-        $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
-        fillTableTelefone();
-        clearFormTelefone();
+        $("#jsonEncargo").val(JSON.stringify(jsonEncargoArray));
+        fillTableEncargo();
+        clearFormEncargo();
 
     }
 
-    function fillTableTelefone() {
-        $("#tableTelefone tbody").empty();
-        for (var i = 0; i < jsonTelefoneArray.length; i++) {
+    function fillTableEncargo() {
+        $("#tableEncargo tbody").empty();
+        for (var i = 0; i < jsonEncargoArray.length; i++) {
             var row = $('<tr />');
-            $("#tableTelefone tbody").append(row);
-            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTel + '"><i></i></label></td>'));
-            row.append($('<td class="text-center" onclick="carregaTelefone(' + jsonTelefoneArray[i].sequencialTel + ');">' + jsonTelefoneArray[i].encargo + '</td>'));
-            // row.append($('<td class="text-center">' + jsonTelefoneArray[i].percentual + '</td>'));
+            $("#tableEncargo tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonEncargoArray[i].sequencialEncargo + '"><i></i></label></td>'));
+            row.append($('<td class="text-center" onclick="carregaTelefone(' + jsonEncargoArray[i].sequencialEncargo + ');">' + jsonEncargoArray[i].encargoText + '</td>'));
+            // row.append($('<td class="text-center">' + jsonEncargoArray[i].percentual + '</td>'));
         }
-    }
-
-    function clearFormTelefone() {
-        $("#encargo").val('');
-        $("#telefoneId").val('');
-        $("#sequencialTel").val('');
-        // $('#percentual').val('');
     }
 
     function processDataTel(node) {
@@ -520,7 +529,7 @@ include("inc/scripts.php");
         var fieldName = node.getAttribute ? node.getAttribute('name') : '';
 
         if (fieldName !== '' && (fieldId === "encargo")) {
-            var encargo = $("#encargo").val();
+            var valorTel = $("encargo").val().trim();
             if (encargo !== '') {
                 fieldName = "encargo";
             }
@@ -543,43 +552,252 @@ include("inc/scripts.php");
         return false;
     }
 
-    function clearFormTelefone() {
+    function clearFormEncargo() {
         $("#encargo").val('');
-        $("#telefoneId").val('');
-        $("#sequencialTel").val('');
+        $("#encargoId").val('');
+        $("#sequencialEncargo").val('');
         $('#percentual').val('');
     }
 
-    function carregaTelefone(sequencialTel) {
-        var arr = jQuery.grep(jsonTelefoneArray, function(item, i) {
-            return (item.sequencialTel === sequencialTel);
+    function excluirEncargo() {
+        var arrSequencial = [];
+        $('#tableEncargo input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonEncargoArray.length - 1; i >= 0; i--) {
+                var obj = jsonEncargoArray[i];
+                if (jQuery.inArray(obj.sequencialEncargo, arrSequencial) > -1) {
+                    jsonEncargoArray.splice(i, 1);
+                }
+            }
+            $("#JsonEncargo").val(JSON.stringify(jsonEncargoArray));
+            fillTableEncargo();
+        } else {
+            smartAlert("Erro", "Selecione pelo menos um encargo para excluir.", "error");
+        }
+    }
+
+
+    function carregaTelefone(sequencialEncargo) {
+        var arr = jQuery.grep(jsonEncargoArray, function(item, i) {
+            return (item.sequencialEncargo === sequencialEncargo);
         });
 
-        clearFormTelefone();
+        clearFormEncargo();
 
         if (arr.length > 0) {
             var item = arr[0];
             $("#encargo").val(item.encargo);
             // $("#percentual").val(item.percentual);
-            $("#sequencialTel").val(item.sequencialTel);
-  
+            $("#sequencialEncargo").val(item.sequencialEncargo);
+            function addTelefone() {
+        var item = $("#FormEncargo").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataTel
+        });
 
-            // if (item.telefonePrincipal === 1) {
-            //     $('#telefonePrincipal').prop('checked', true);
-            //     $('#descricaoTelefonePrincipal').val("Sim");
-            // } else {
-            //     $('#telefonePrincipal').prop('checked', false);
-            //     $('#descricaoTelefonePrincipal').val("Não");
-            // }
+        if (item["sequencialEncargo"] === '') {
+            if (jsonEncargoArray.length === 0) {
+                item["sequencialEncargo"] = 1;
+            } else {
+                item["sequencialEncargo"] = Math.max.apply(Math, jsonEncargoArray.map(function(o) {
+                    return o.sequencialEncargo;
+                })) + 1;
+            }
+            item["encargoId"] = 0;
+        } else {
+            item["sequencialEncargo"] = +item["sequencialEncargo"];
+        }
 
-            // if (item.telefoneWhatsApp === 1) {
-            //     $('#telefoneWhatsApp').prop('checked', true);
-            //     $('#descricaoTelefoneWhatsApp').val("Sim");
-            // } else {
-            //     $('#telefoneWhatsApp').prop('checked', false);
-            //     $('#descricaoTelefoneWhatsApp').val("Não");
-            // }
+        var index = -1;
+        $.each(jsonEncargoArray, function(i, obj) {
+            if (+$('#sequencialEncargo').val() === obj.sequencialEncargo) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonEncargoArray.splice(index, 1, item);
+        else
+            jsonEncargoArray.push(item);
+
+        $("#jsonEncargo").val(JSON.stringify(jsonEncargoArray));
+        fillTableEncargo();
+        clearFormEncargo();
+
+    }
+}
+    }
+
+
+    // insumos
+
+    function addInsumos() {
+        var item = $("#FormInsumos").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataInsumos
+        });
+
+        if (!item["sequencialInsumos"]) {
+            if (jsonInsumosArray.length === 0) {
+                item["sequencialInsumos"] = 1;
+            } else {
+                item["sequencialInsumos"] = Math.max.apply(Math, jsonInsumosArray.map(function(o) {
+                    return o.sequencialInsumos;
+                })) + 1;
+            }
+            item["faturamentoId"] = 0;
+        } else {
+            item["sequencialInsumos"] = +item["sequencialInsumos"];
+        }
+
+        item.insumosText = $('#insumos option:selected').text().trim();
+
+        var index = -1;
+        $.each(jsonInsumosArray, function(i, obj) {
+            if (+$('#sequencialInsumos').val() === obj.sequencialInsumos) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonInsumosArray.splice(index, 1, item);
+        else
+            jsonInsumosArray.push(item);
+
+        $("#jsonInsumos").val(JSON.stringify(jsonInsumosArray));
+        fillTableInsumos();
+        clearFormInsumos();
+
+    }
+
+    function fillTableInsumos() {
+        $("#tableInsumos tbody").empty();
+        for (var i = 0; i < jsonInsumosArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableInsumos tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonInsumosArray[i].sequencialInsumos + '"><i></i></label></td>'));
+            row.append($('<td class="text-center" onclick="carregaInsumos(' + jsonInsumosArray[i].sequencialInsumos + ');">' + jsonInsumosArray[i].insumosText + '</td>'));
+            // row.append($('<td class="text-center">' + jsonInsumosArray[i].percentual + '</td>'));
         }
     }
+
+    function processDataInsumos(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "insumos")) {
+            var valorTel = $("insumos").val().trim();
+            if (insumos !== '') {
+                fieldName = "insumos";
+            }
+            return {
+                name: fieldName,
+                value: insumos
+            };
+        }
+        if (fieldName !== '' && (fieldId === "percentual")) {
+            var percentual = $("#percentual").val();
+            if (percentual !== '') {
+                fieldName = "percentual";
+            }
+            return {
+                name: fieldName,
+                value: percentual
+            };
+        }
+
+        return false;
+    }
+
+    function clearFormInsumos() {
+        $("#insumos").val('');
+        $("#insumosId").val('');
+        $("#sequencialInsumos").val('');
+        $('#percentual').val('');
+    }
+
+    function excluirInsumos() {
+        var arrSequencial = [];
+        $('#tableInsumos input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonInsumosArray.length - 1; i >= 0; i--) {
+                var obj = jsonInsumosArray[i];
+                if (jQuery.inArray(obj.sequencialInsumos, arrSequencial) > -1) {
+                    jsonInsumosArray.splice(i, 1);
+                }
+            }
+            $("#JsonInsumos").val(JSON.stringify(jsonInsumosArray));
+            fillTableInsumos();
+        } else {
+            smartAlert("Erro", "Selecione pelo menos insumos para excluir.", "error");
+        }
+    }
+
+
+    function carregaInsumos(sequencialInsumos) {
+        var arr = jQuery.grep(jsonInsumosArray, function(item, i) {
+            return (item.sequencialInsumos === sequencialInsumos);
+        });
+
+        clearFormInsumos();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#encargo").val(item.encargo);
+            // $("#percentual").val(item.percentual);
+            $("#sequencialInsumos").val(item.sequencialInsumos);
+            function addTelefone() {
+        var item = $("#FormEncargo").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataTel
+        });
+
+        if (item["sequencialInsumos"] === '') {
+            if (jsonInsumosArray.length === 0) {
+                item["sequencialInsumos"] = 1;
+            } else {
+                item["sequencialInsumos"] = Math.max.apply(Math, jsonInsumosArray.map(function(o) {
+                    return o.sequencialInsumos;
+                })) + 1;
+            }
+            item["insumosId"] = 0;
+        } else {
+            item["sequencialInsumos"] = +item["sequencialInsumos"];
+        }
+
+        var index = -1;
+        $.each(jsonInsumosArray, function(i, obj) {
+            if (+$('#sequencialInsumos').val() === obj.sequencialInsumos) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonInsumosArray.splice(index, 1, item);
+        else
+            jsonInsumosArray.push(item);
+
+        $("#jsonInsumos").val(JSON.stringify(jsonInsumosArray));
+        fillTableInsumos();
+        clearFormInsumos();
+
+    }
+}
+
+    }
+
+        
+    
+
 
 </script>
