@@ -121,13 +121,13 @@ function grava()
 
     // Gravação do formulário no banco de dados. 
     session_start();
-    $codigo =  formatarNumero($_POST['codigo'] ?: 0);
-    $portal = formatarNumero($_POST['portal'] ?: 0);
-    $grupoResponsavel =  formatarNumero($_POST['grupo'] ?: 0);
-    $responsavelPregao =  formatarNumero($_POST['responsavelPregao'] ?: 0);
+    $codigo =  (int)$_POST['codigo'] ?: 0;
+    $portal = (int)$_POST['portal'] ?: 0;
+    $grupoResponsavel =  (int)$_POST['grupo'] ?: 0;
+    $responsavelPregao =  (int)$_POST['responsavelPregao'] ?: 0;
     $ativo = 1;
     $orgaoLicitante =  formatarString($_POST['orgaoLicitante']);
-    $participaPregao =  formatarNumero($_POST['participaPregao']);
+    $participaPregao =  (int)$_POST['participaPregao'] ?: "NULL";
 
     $numeroPregao = formatarString($_POST['numeroPregao']);
     $dataPregao = formatarData($_POST['dataPregao']);
