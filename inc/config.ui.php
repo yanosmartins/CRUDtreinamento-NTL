@@ -307,7 +307,7 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['faturamento']['sub'] += array("encargo" => array("title" => "Encargo", "url" => APP_URL . "/prototipoValorPosto_encargoFiltro.php"));
         }
         if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['faturamento']['sub'] += array("insumos" => array("title" => "Insumos", "url" => APP_URL . "/prototipoValorPosto_encargoFiltro.php"));
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("insumos" => array("title" => "Insumos", "url" => APP_URL . "/prototipoValorPosto_insumoFiltro.php"));
         }
         if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['faturamento']['sub'] += array("percentualPostoEncargo" => array("title" => "Percentual Posto Encargo", "url" => APP_URL . "/tabelaBasica_percentualCargoEncargoFiltro.php"));
@@ -323,7 +323,7 @@ if ($condicaoOperacaoOk) {
         $page_nav['operacao']['sub']['licitacao']['sub'] = array();
 
         if (in_array('PARTICIPARPREGAO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['licitacao']['sub'] += array("participarPregoes" => array("title" => "Participar Pregões", "url" => APP_URL . "/licitacao_participarPregaoFiltro.php"));
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("participarPregao" => array("title" => "Participar Pregões", "url" => APP_URL . "/licitacao_participarPregaoFiltro.php"));
         }
 
         if (in_array('PREGAONAOINICIADO_ACESSAR', $arrayPermissao, true)) {
