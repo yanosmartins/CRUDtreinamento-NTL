@@ -71,7 +71,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formPregao" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formGarimparPregoes" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -102,11 +102,58 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach($result as $row) {
-
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
                                                                             $endereco  = ($row['endereco']);
                                                                             echo '<option value=' . $codigo . '>  ' . $descricao . '&nbsp; - &nbsp;' . $endereco . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Valor Estimado</label>
+                                                                <label class="input"><i class="icon-append fa fa-money"></i>
+                                                                    <input id="valorEstimado" name="valorEstimado" class="decimal-2-casas required text-right" type="text" autocomplete="off" placeholder="0,00">
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <!-- <section class="col col-3">
+                                                                <label class="label">Estimativa do Pregão</label>
+                                                                <label class="input">
+                                                                    <input id="estimativaPregao" maxlength="255" autocomplete="off" name="estimativaPregao" class="required" type="select" value="">
+                                                                </label>
+                                                            </section> -->
+                                                            <section class="col col-3">
+                                                                <label class="label" for="grupo">Grupo Responsável pelo Pregão</label>
+                                                                <label class="select">
+                                                                    <select id="grupo" name="grupo" class="required">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.grupoLicitacao where ativo = 1 order by codigo";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = ($row['descricao']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label" for="responsavelPregao"> Responsável pelo Pregão</label>
+                                                                <label class="select">
+                                                                    <select id="responsavelPregao" name="responsavelPregao" class="required">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $nome = ($row['nome']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
@@ -211,7 +258,7 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Quem Lançou</label>
                                                                 <label class="input">
-                                                                    <input id="quemLancou" maxlength="255" name="quemLancou" class="readonly" type="select" value="" readonly>
+                                                                    <input id="quemLancou" maxlength="255" name="quemLancou" class="readonly" style="text-align: center" type="select" value="" readonly>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3">
@@ -223,7 +270,34 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Hora do Lançamento</label>
                                                                 <label class="input">
-                                                                    <input id="horaLancamento" name="horaLancamento" class="readonly" type="text" autocomplete="new-password" readonly> </label>
+                                                                    <input id="horaLancamento" name="horaLancamento" class="readonly" type="text" style="text-align: center" autocomplete="new-password" readonly> </label>
+                                                            </section>
+                                                        </div>
+
+
+
+                                                        <div class="row" id="logUsuarioAtualizacao">
+
+                                                            <section class="col col-12">
+                                                                <legend><strong>Última Atualização</strong></legend>
+                                                            </section>
+
+                                                            <section class="col col-3">
+                                                                <label class="label">Quem Lançou</label>
+                                                                <label class="input">
+                                                                    <input id="quemLancouAtualizacao" maxlength="255" name="quemLancouAtualizacao" style="text-align: center" class="readonly" type="select" value="" readonly>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label">Data do Lançamento</label>
+                                                                <label class="input">
+                                                                    <input id="dataLancamentoAtualizacao" name="dataLancamentoAtualizacao" type="text" data-dateformat="dd/mm/yy" class="readonly " style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataLancamentoAtualizacao')" readonly>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label">Hora do Lançamento</label>
+                                                                <label class="input">
+                                                                    <input id="horaLancamentoAtualizacao" name="horaLancamentoAtualizacao" class="readonly" style="text-align: center" type="text" autocomplete="new-password" readonly> </label>
                                                             </section>
                                                         </div>
                                                     </fieldset>
@@ -232,7 +306,7 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?= $esconderBtnExcluir ?>">
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
@@ -248,11 +322,8 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?= $esconderBtnGravar ?>">
+                                        <button type="submited" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
-                                        </button>
-                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?= $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
                                             <span class="fa fa-backward "></span>
@@ -460,6 +531,8 @@ include("inc/scripts.php");
         //Desabilita os campos para aparecerem só na recuperação de pregões.
         document.getElementById("legenda").style.display = "none";
         document.getElementById("logUsuario").style.display = "none";
+        document.getElementById("logUsuarioAtualizacao").style.display = "none";
+
 
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
@@ -496,9 +569,14 @@ include("inc/scripts.php");
                             horaPregao = piece[10];
                             usuarioCadastro = piece[11];
                             dataCadastro = piece[12];
+                            usuarioAlteracao = piece[13];
+                            dataAlteracao = piece[14];
                             /*Garimpado seria a proxima informação, como
                              * não tem nessa tela, pula-se um */
-                            resumoPregao = piece[14];
+                            resumoPregao = piece[16];
+                            grupoResponsavel = piece[17];
+                            responsavelPregao = piece[18];
+                            valorEstimado = piece[19];
 
                             //Arrumando o valor de dataLancamento e horaLancamento
                             dataCadastro = dataCadastro.split(" ");
@@ -506,6 +584,16 @@ include("inc/scripts.php");
                             dataLancamento = dataLancamento[2] + "/" + dataLancamento[1] + "/" + dataLancamento[0];
                             horaLancamento = dataCadastro[1].split(":");
                             horaLancamento = horaLancamento[0] + ":" + horaLancamento[1];
+
+                            //Arrumando o valor de dataLancamento e horaLancamento de Atualização
+                            if (dataAlteracao != "") {
+                                dataAlteracao = dataAlteracao.split(" ");
+                                dataLancamentoAtualizacao = dataAlteracao[0].split("-");
+                                dataLancamentoAtualizacao = dataLancamentoAtualizacao[2] + "/" + dataLancamentoAtualizacao[1] + "/" + dataLancamentoAtualizacao[0];
+                                horaLancamentoAtualizacao = dataAlteracao[1].split(":");
+                                horaLancamentoAtualizacao = horaLancamentoAtualizacao[0] + ":" + horaLancamentoAtualizacao[1];
+                            }
+
 
 
                             $("#codigo").val(codigo);
@@ -521,10 +609,19 @@ include("inc/scripts.php");
                             $("#quemLancou").val(usuarioCadastro);
                             $("#dataLancamento").val(dataLancamento);
                             $("#horaLancamento").val(horaLancamento);
+                            $("#quemLancouAtualizacao").val(usuarioAlteracao);
+                            $("#dataLancamentoAtualizacao").val(dataLancamentoAtualizacao);
+                            $("#horaLancamentoAtualizacao").val(horaLancamentoAtualizacao);
                             $("#resumoPregao").val(resumoPregao);
+                            $("#grupo").val(grupoResponsavel);
+                            $("#responsavelPregao").val(responsavelPregao);
+                            $("#valorEstimado").val(valorEstimado);
 
                             document.getElementById("legenda").style.display = "";
                             document.getElementById("logUsuario").style.display = "";
+                            if (usuarioAlteracao != "" && dataAlteracao != "") {
+                                document.getElementById("logUsuarioAtualizacao").style.display = "";
+                            }
 
                         }
                     }
@@ -545,7 +642,7 @@ include("inc/scripts.php");
                                 let idCampo = arrayDocumentos[index].idCampo + "Link";
                                 let diretorio = "<?php echo $linkUpload ?>" + endereco + nomeArquivo;
 
-                                $("#" + idCampo).append("<a href ='ChamadoNtl/" + diretorio + "' target='_blank'>" +
+                                $("#" + idCampo).append("<a href ='SYSGC/" + diretorio + "' target='_blank'>" +
                                     nomeVisualizacao[1] + "</a><br>");
 
                             }
@@ -554,10 +651,6 @@ include("inc/scripts.php");
                     });
             }
         }
-    }
-
-    function novo() {
-        $(location).attr('href', 'cadastro_pregaoCadastro.php');
     }
 
     function voltar() {
@@ -585,7 +678,7 @@ include("inc/scripts.php");
 
     function validaData(valor) {
 
-        if ((valor == undefined) || (valor == " ") || (valor == "")) {
+        if ((valor == undefined) || (valor == " ")) {
             return;
         }
 
@@ -662,7 +755,7 @@ include("inc/scripts.php");
             return;
         }
 
-        var form = $('#formPregao')[0];
+        var form = $('#formGarimparPregoes')[0];
         var formData = new FormData(form);
         gravaPregoes(formData);
     }

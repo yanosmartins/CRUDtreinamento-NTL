@@ -13,9 +13,12 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Hora do Pregão</th>
                     <th class="text-justify" style="min-width:550px;">Resumo do Pregão</th>
                     <th class="text-left" style="min-width:30px;">Oportunidade de Compra</th>
+                    <th class="text-left" style="min-width:100px;">Grupo</th>
+                    <th class="text-left" style="min-width:110px;">Responsável</th>
                     <th class="text-left" style="min-width:30px;">Quem Lançou</th>
                     <th class="text-left" style="min-width:30px;">Data</th>
                     <th class="text-left" style="min-width:30px;">Hora</th>
+                    <th class="text-left" style="min-width:60px;">Valor Estimado</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
 
                 </tr>
@@ -30,9 +33,13 @@ include "js/repositorio.php";
 
 
                 $sql = "SELECT GP.codigo, P.descricao, P.endereco, GP.ativo, GP.orgaoLicitante, GP.objetoLicitado,
-                    GP.oportunidadeCompra, GP.numeroPregao, GP.dataPregao, GP.horaPregao, GP.dataCadastro, GP.usuarioCadastro, GP.condicao, GP.resumoPregao
-                    FROM Ntl.pregao GP 
-                    INNER JOIN Ntl.portal P ON P.codigo = GP.portal";
+                GP.oportunidadeCompra, GP.numeroPregao, GP.dataPregao, GP.horaPregao, 
+                GP.dataCadastro, GP.usuarioCadastro, GP.condicao, GP.resumoPregao,
+                G.descricao AS grupoResponsavel, R.nome AS responsavel, GP.valorEstimado
+                FROM Ntl.pregao GP 
+                LEFT JOIN Ntl.portal P ON P.codigo = GP.portal
+                LEFT JOIN Ntl.grupoLicitacao G ON G.codigo = GP.grupoResponsavel
+                LEFT JOIN Ntl.responsavel R ON R.codigo = GP.responsavel";
                 $where = " WHERE (0 = 0)";
 
                 if ($_POST["portal"] != "") {
@@ -64,6 +71,16 @@ include "js/repositorio.php";
                 if ($_POST["resumoPregao"] != "") {
                     $resumoPregao = $_POST["resumoPregao"];
                     $where = $where . " AND ( GP.resumoPregao like '%' + " . "replace('" . $resumoPregao . "',' ','%') + " . "'%')";
+                }
+
+                if ($_POST["grupo"] != "") {
+                    $grupo = +$_POST["grupo"];
+                    $where = $where . " AND G.codigo = " . $grupo;
+                }
+
+                if ($_POST["responsavel"] != "") {
+                    $responsavel = +$_POST["responsavel"];
+                    $where = $where . " AND R.codigo = " . $responsavel;
                 }
 
                 $where = $where . " AND GP.condicao IS NULL AND GP.participaPregao IS NULL ORDER BY dataPregao ASC, horaPregao";
@@ -102,6 +119,10 @@ include "js/repositorio.php";
                     $descricaoHora = $descricaoHora[0] . ":" . $descricaoHora[1];
                     $descricaoData =  $descricaoData[2] . "/" . $descricaoData[1] . "/" . $descricaoData[0];
 
+                    $grupo = $row['grupoResponsavel'];
+                    $responsavel = $row['responsavel'];
+                    $valorEstimado = number_format($row['valorEstimado'], 2, ',', '.');
+
                     echo '<tr >';
                     echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="' . $endereco . '">' . $portal . '</a></td>';
                     echo '<td class="text-left">' . $orgaoLicitante . '</td>';
@@ -110,9 +131,12 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $horaPregao . '</td>';
                     echo '<td class="text-justify">' . $resumoPregao . '</td>';
                     echo '<td class="text-justify">' . $oportunidadeCompra . '</td>';
+                    echo '<td class="text-justify">' . $grupo . '</td>';
+                    echo '<td class="text-justify">' . $responsavel . '</td>';
                     echo '<td class="text-justify">' . $usuarioCadastro . '</td>';
                     echo '<td class="text-left">' . $descricaoData . '</td>';
                     echo '<td class="text-left">' . $descricaoHora . '</td>';
+                    echo '<td class="text-left">' . $valorEstimado . '</td>';
                     echo '<td class="text-left">' . $descricaoAtivo . '</td>';
                 }
                 ?>

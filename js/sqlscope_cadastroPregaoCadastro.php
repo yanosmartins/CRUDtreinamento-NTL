@@ -80,7 +80,7 @@ function grava()
 
     //XML DE UPLOAD:
     $nomeXml =  "ArrayOfUpload";
-    $nomeTabela = "pregaoDocumento";
+    $nomeTabela = "garimpaPregaoDocumento";
     if (sizeof($uploadArray) > 0) {
         $xmlUpload = '<?xml version="1.0"?>';
         $xmlUpload = $xmlUpload . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
@@ -121,21 +121,25 @@ function grava()
 
     // Gravação do formulário no banco de dados. 
     session_start();
-    $codigo =  validaCodigo($_POST['codigo'] ?: 0);
-    $portal = validaCodigo($_POST['portal'] ?: 0);
+    $codigo =  formatarNumero($_POST['codigo'] ?: 0);
+    $portal = formatarNumero($_POST['portal'] ?: 0);
+    $grupoResponsavel =  formatarNumero($_POST['grupo'] ?: 0);
+    $responsavelPregao =  formatarNumero($_POST['responsavelPregao'] ?: 0);
     $ativo = 1;
-    $orgaoLicitante =  validaString($_POST['orgaoLicitante']);
-    $participaPregao =  validaNumero($_POST['participaPregao']);
+    $orgaoLicitante =  formatarString($_POST['orgaoLicitante']);
+    $participaPregao =  formatarNumero($_POST['participaPregao']);
 
-    $numeroPregao = validaString($_POST['numeroPregao']);
-    $dataPregao = validaData($_POST['dataPregao']);
-    $horaPregao = validaString($_POST['horaPregao']);
-    $oportunidadeCompra = validaString($_POST['oportunidadeCompra']);
-    $objetoLicitado = validaString($_POST['objetoLicitado']);
-    $observacao = validaString($_POST['observacao']);
-    $usuario = validaString($_SESSION['login']);
+    $numeroPregao = formatarString($_POST['numeroPregao']);
+    $dataPregao = formatarData($_POST['dataPregao']);
+    $horaPregao = formatarString($_POST['horaPregao']);
+    $oportunidadeCompra = formatarString($_POST['oportunidadeCompra']);
+    $objetoLicitado = formatarString($_POST['objetoLicitado']);
+    $observacao = formatarString($_POST['observacao']);
+    $usuario = formatarString($_SESSION['login']);
     $garimpado = 1;
-    $resumoPregao = validaString($_POST['resumoPregao']);
+    $resumoPregao = formatarString($_POST['resumoPregao']);
+    $valorEstimado = (float)formatarFloat($_POST['valorEstimado']);
+    
 
     $strArrayTarefa = $_POST['jsonTarefa'];
     $arrayTarefa = json_decode($strArrayTarefa, true);
@@ -170,6 +174,10 @@ function grava()
                     $valor = str_replace('/', '-', $valor);
                     $valor = date("Y-m-d", strtotime($valor));
                 }
+                if($valor == 'Selecione'){
+                    $valor = NULL;
+                }
+
                 $xmlTarefa = $xmlTarefa . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
             $xmlTarefa = $xmlTarefa . "</" . $nomeTabela . ">";
@@ -190,7 +198,7 @@ function grava()
 
     $sql = "Ntl.pregao_Atualiza 
         $codigo,
-        $portal,  
+        $portal,
         $ativo,
         $orgaoLicitante, 
         $participaPregao, 
@@ -204,7 +212,10 @@ function grava()
         $garimpado,
         $xmlUpload, 
         $xmlTarefa, 
-        $resumoPregao
+        $resumoPregao,
+        $grupoResponsavel,
+        $responsavelPregao,
+        $valorEstimado
         ";
 
     $reposit = new reposit();
@@ -225,17 +236,18 @@ function recupera()
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $codigo = (int) $_POST["codigo"];
+        $codigo = +$_POST["codigo"];
     }
 
-    $sql = "SELECT codigo, portal, ativo, orgaoLicitante, resumoPregao, objetoLicitado, oportunidadeCompra,numeroPregao,dataPregao,horaPregao,usuarioCadastro,dataCadastro,observacao,garimpado,participaPregao FROM Ntl.pregao WHERE (0=0) AND codigo = " . $codigo;
+    $sql = "SELECT codigo, portal, ativo, orgaoLicitante, resumoPregao, objetoLicitado, 
+    oportunidadeCompra,numeroPregao,dataPregao,horaPregao,usuarioCadastro,dataCadastro,observacao,garimpado,participaPregao
+    ,usuarioAlteracao,dataAlteracao, grupoResponsavel, responsavel, valorEstimado FROM Ntl.pregao  WHERE (0=0) AND codigo = " . $codigo;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
     if($row = $result[0])
-
     $codigo = $row['codigo'];
     $portal = $row['portal'];
     $ativo = $row['ativo'];
@@ -249,13 +261,19 @@ function recupera()
     $horaPregao = $row['horaPregao'];
     $usuarioCadastro = $row['usuarioCadastro'];
     $dataCadastro = $row['dataCadastro'];
+    $usuarioAlteracao = $row['usuarioAlteracao'];
+    $dataAlteracao = $row['dataAlteracao'];
     $garimpado  = $row['garimpado'];
     $resumoPregao = $row['resumoPregao'];
+    $grupo = $row['grupoResponsavel'];
+    $responsavelPregao = $row['responsavel'];
+    $valorEstimado = number_format($row['valorEstimado'], 2, ',', '.');
+    
 
     //Montando o array de tarefas
     $reposit = "";
     $result = "";
-    $sql = "SELECT GPD.codigo, GPD.tarefa, GPD.responsavel, GPD.dataFinal, GPD.dataSolicitacao, GPD.observacao, GPD.tipo
+    $sql = "SELECT GPD.codigo, GPD.tarefa, GPD.responsavel,GPD.grupoResponsavel, GPD.dataFinal, GPD.dataSolicitacao, GPD.observacao, GPD.tipo
     FROM Ntl.pregaoDetalhe  GPD
     INNER JOIN Ntl.pregao GP ON GP.codigo = GPD.pregao
     WHERE (0=0) AND GP.codigo = " . $codigo;
@@ -266,12 +284,13 @@ function recupera()
     $arrayTarefa = array();
     foreach($result as $row) {
 
-        $tarefa = +$row['tarefa'];
-        $responsavel = +$row['responsavel'];
-        $dataFinal = validaDataRecupera($row['dataFinal']);
+        $tarefa = (int)$row['tarefa'];
+        $responsavel = (int)$row['responsavel'];
+        $grupoResponsavel = (int)$row['grupoResponsavel'];
+        $dataFinal = formataDataRecuperacao($row['dataFinal']);
         $dataSolicitacao = $row['dataSolicitacao'];
         $observacao = $row['observacao'];
-        $tipo = +$row['tipo'];
+        $tipo = (int)$row['tipo'];
 
         if ($dataSolicitacao != "") {
             $horario = explode(" ", $dataSolicitacao);
@@ -286,6 +305,7 @@ function recupera()
             "sequencialTarefa" => $contadorTarefa,
             "tarefa" => $tarefa,
             "responsavel" => $responsavel,
+            "grupoResponsavel" => $grupoResponsavel,
             "dataFinal" => $dataFinal,
             "dataSolicitacao" => $dataSolicitacao,
             "observacaoPrePregao" => $observacao,
@@ -308,8 +328,13 @@ function recupera()
         $horaPregao . "^" .
         $usuarioCadastro . "^" .
         $dataCadastro . "^" .
+        $usuarioAlteracao . "^" .
+        $dataAlteracao . "^" .
         $garimpado  . "^" .
-        $resumoPregao;
+        $resumoPregao. "^" .
+        $grupo . "^" .
+        $responsavelPregao. "^" .
+        $valorEstimado ;
 
     if ($out == "") {
         echo "failed#";
@@ -354,7 +379,7 @@ function excluir()
 function recuperaUpload()
 {
 
-    $id = (int) $_POST['id'];
+    $id = +$_POST['id'] ?: 0;
     $diretorioAlvo = "../uploads/";
 
     $sql = " SELECT codigo, nomeArquivo, tipoArquivo, endereco, idCampo, pregao 
@@ -395,48 +420,60 @@ function recuperaUpload()
     return;
 }
 
-
-function validaString($value)
+function formatarNumero($value)
 {
-    $null = 'NULL';
-    if ($value == '')
-        return $null;
-    return '\'' . $value . '\'';
-}
-
-function validaNumero($value)
-{
-    if ($value == "") {
-        $value = 'NULL';
+    $aux = $value;
+    $aux = str_replace('.', '', $aux);
+    $aux = str_replace(',', '.', $aux);
+    $aux = floatval($aux);
+    if (!$aux) {
+        $aux = 'null';
     }
-    return $value;
+    return $aux;
 }
 
-function validaCodigo($value)
+function formatarString($value)
 {
-    return $value;
-}
-
-function validaData($value)
-{
-    if ($value == "") {
-        $value = 'NULL';
-        return $value;
+    $aux = $value;
+    $aux = str_replace("'", " ", $aux);
+    if (!$aux) {
+        return 'null';
     }
-    $value = str_replace('/', '-', $value);
-    $value = date("Y-m-d", strtotime($value));
-    $value = "'" . $value . "'";
-    return $value;
+    $aux = '\'' . trim($aux) . '\'';
+    return $aux;
 }
 
-function validaDataRecupera($value)
+
+function formatarData($value)
 {
-    if ($value == "") {
-        $value = '';
-        return $value;
+    $aux = $value;
+    if (!$aux) {
+        return 'null';
     }
-    $value = date('d/m/Y', strtotime($value));
-    return $value;
+    $aux = explode('/', $value);
+    $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
+    $data = '\'' . trim($data) . '\'';
+    return $data;
+}
+
+function formataDataRecuperacao($campo)
+{
+    $campo = explode("-", $campo);
+    $diaCampo = explode(" ", $campo[2]);
+    $campo = $diaCampo[0] . "/" . $campo[1] . "/" . $campo[0];
+    return $campo;
+}
+
+function formatarFloat($value)
+{
+    $aux = $value;
+    $aux = str_replace('.', '', $aux);
+    $aux = str_replace(',', '.', $aux);
+    $aux = floatval($aux);
+    if (!$aux) {
+        $aux = 'null';
+    }
+    return $aux;
 }
 
 function validaVerifica($value)
@@ -504,13 +541,13 @@ function listaNomeOrgaoLicitante()
     }
 
     $reposit = new reposit();
-    $sql = "SELECT codigo, orgaoLicitante FROM Ntl.pregao WHERE (0=0) AND ativo = 1 AND orgaoLicitante LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY orgaoLicitante";
+    $sql = "SELECT codigo, orgaoLicitante FROM dbo.garimpaPregao WHERE (0=0) AND ativo = 1 AND orgaoLicitante LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY orgaoLicitante";
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    foreach($result as $row) {
+    while (($row = odbc_fetch_array($result))) {
         $id = $row['codigo'];
-        $orgaoLicitante = $row["orgaoLicitante"];
+        $orgaoLicitante = mb_convert_encoding($row["orgaoLicitante"], 'UTF-8', 'HTML-ENTITIES');
         $contador = $contador + 1;
         $array[] = array("id" => $id, "nome" => $orgaoLicitante);
     }

@@ -88,11 +88,11 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao FROM 
-                                                                        Ntl.portal WHERE ativo = 1 ORDER BY descricao";
+                                                                        sysgc.dbo.portal WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
-                                                                            $codigo = (int) $row['codigo'];
-                                                                            $descricao = $row['descricao'];
+                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                            $codigo = +$row['codigo'];
+                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -125,7 +125,8 @@ include("inc/nav.php");
                                                                 <label class="label" for="orgaoLicitante">Nome do Orgão Licitante</label>
                                                                 <label class="input">
                                                                     <input id="orgaoLicitanteId" type="hidden" value="">
-                                                                    <input id="orgaoLicitante" name="orgaoLicitanteFiltro" autocomplete="off" class="form-control" placeholder="Digite o nome do orgão licitante.." type="text" value="">
+                                                                    <input id="orgaoLicitante" name="orgaoLicitanteFiltro" autocomplete="off" class="form-control" 
+                                                                    placeholder="Digite o nome do orgão licitante.." type="text" value="">
                                                                     <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
@@ -134,6 +135,42 @@ include("inc/nav.php");
                                                                 <label class="input">
                                                                     <input id="resumoPregao" name="resumoPregao" type="text" autocomplete="on" onkeyup="contaPalavra()">
                                                                 </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label" for="grupo">Grupo Responsável pelo Pregão</label>
+                                                                <label class="select">
+                                                                    <select id="grupo" name="grupo">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.grupoLicitacao where ativo = 1 order by codigo";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = ($row['descricao']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-6">
+                                                                <label class="label" for="responsavelPregao"> Responsável pelo Pregão</label>
+                                                                <label class="select">
+                                                                    <select id="responsavelPregao" name="responsavelPregao">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $nome = ($row['nome']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
                                                             </section>
                                                         </div>
 
@@ -146,8 +183,8 @@ include("inc/nav.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?= $esconderBtnGravar ?>">
-                                            <span class=" fa fa-file"></span>
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                            <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
                                 </form>
@@ -216,7 +253,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPregaoCadastro.php',
+                    url: 'js/sqlscope_cadastroPregoes.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -264,6 +301,8 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
         var resumoPregao = $('#resumoPregao').val();
         var orgaoLicitante = $('#orgaoLicitante').val();
+        var grupo = $('#grupo').val();
+        var responsavel = $('#responsavelPregao').val();
 
         $('#resultadoBusca').load('cadastro_pregaoFiltroListagem.php?', {
             portal: portal,
@@ -271,7 +310,9 @@ include("inc/scripts.php");
             quemLancou: quemLancou,
             ativo: ativo,
             resumoPregao: resumoPregao,
-            orgaoLicitante: orgaoLicitante
+            orgaoLicitante: orgaoLicitante,
+            grupo: grupo,
+            responsavel: responsavel
         });
     }
 

@@ -1,6 +1,6 @@
 function gravaPregoes(formData) {
     formData.append('funcao', 'grava');
-    $.ajax({
+    $.ajax({ 
         url: 'js/sqlscope_cadastroPregaoCadastro.php',
         type: 'post',
         data: formData,
@@ -8,8 +8,8 @@ function gravaPregoes(formData) {
         contentType: false,
         success: function (data, textStatus) {
             if (data.trim() === 'success') {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                voltar();
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success"); 
+               voltar();
             } else {
                 smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
             }
@@ -22,11 +22,11 @@ function gravaPregoes(formData) {
 function recuperaPregoes(codigo, callback) {
     $.ajax({
         url: 'js/sqlscope_cadastroPregaoCadastro.php',
-        dataType: 'html',
+        dataType: 'html', 
         type: 'post',
-        data: { funcao: 'recupera', codigo: codigo },
+        data: {funcao: 'recupera', codigo: codigo},      
         success: function (data) {
-            callback(data);
+            callback(data); 
         }
     });
 }
@@ -36,25 +36,25 @@ function recuperaUpload(id, callback) {
         url: 'js/sqlscope_cadastroPregaoCadastro.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: 'recuperaUpload', id: id }, //valores enviados ao script     
+        data: {funcao: 'recuperaUpload', id: id }, //valores enviados ao script     
         success: function (data) {
-            callback(data);
+            callback(data); 
         }
     });
-
-}
+    
+} 
 
 function excluirPregoes(codigo, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroPregaoCadastro.php',
+        url: 'js/sqlscope_cadastroPregaoCadastro.php', 
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: 'excluir', codigo: codigo }, //valores enviados ao script   
+        data: {funcao: 'excluir', codigo: codigo}, //valores enviados ao script   
         success: function (data, textStatus) {
-            debugger;
+            debugger; 
             if (textStatus === 'success') {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                voltar();
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success"); 
+               voltar();
             } else {
                 smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
             }
