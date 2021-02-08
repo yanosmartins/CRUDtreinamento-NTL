@@ -323,15 +323,15 @@ if ($condicaoOperacaoOk) {
         $page_nav['operacao']['sub']['licitacao']['sub'] = array();
 
         if (in_array('PARTICIPARPREGAO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['licitacao']['sub'] += array("participarPregoes" => array("title" => "Participar Pregões", "url" => APP_URL . "/contratacao_participarPegaoFiltro.php"));
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("participarPregoes" => array("title" => "Participar Pregões", "url" => APP_URL . "/licitacao_participarPregaoFiltro.php"));
         }
 
         if (in_array('PREGAONAOINICIADO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['licitacao']['sub'] += array("pregoesNaoIniciados" => array("title" => "Pregões Não Iniciados", "url" => APP_URL . "/contratacao_pregaoNaoIniciadoFiltro.php"));
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("pregoesNaoIniciados" => array("title" => "Pregões Não Iniciados", "url" => APP_URL . "/licitacao_pregaoNaoIniciadoFiltro.php"));
         }
 
         if (in_array('PREGAOEMANDAMENTO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['licitacao']['sub'] += array("pregoesEmAndamento" => array("title" => "Pregões Em Andamento", "url" => APP_URL . "/contratacao_pregaoEmAndamentoFiltro.php"));
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("pregoesEmAndamento" => array("title" => "Pregões Em Andamento", "url" => APP_URL . "/licitacao_pregaoEmAndamentoFiltro.php"));
         }
 
         if (in_array('RELATORIOTAREFA_ACESSAR', $arrayPermissao, true)) {
