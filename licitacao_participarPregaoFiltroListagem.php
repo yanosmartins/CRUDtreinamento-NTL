@@ -151,7 +151,7 @@ include "js/repositorio.php";
                     echo '<tr >';
                     echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="' . $endereco . '">' . $portal . '</a></td>';
                     echo '<td class="text-left">' . $orgaoLicitante . '</td>';
-                    echo '<td class="text-left"><a href="cadastro_participarPregaoCadastro.php?id=' . $id . '">' . $numeroPregao . '</td>';
+                    echo '<td class="text-left"><a href="licitacao_participarPregaoCadastro.php?id=' . $id . '">' . $numeroPregao . '</td>';
                     echo $descricaoParticipar;
                     echo '<td class="text-left">' . $dataPregao . '</td>';
                     echo '<td class="text-left">' . $horaPregao . '</td>';

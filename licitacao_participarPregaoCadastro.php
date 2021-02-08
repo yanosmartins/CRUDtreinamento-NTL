@@ -9,8 +9,6 @@ require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('PARTICIPARPREGAO_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('PARTICIPARPREGAO_GRAVAR', $arrayPermissao, true));
 
-$condicaoAcessarOK = true;
-
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
@@ -38,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["participarPregao"]["active"] = true;
+$page_nav['operacao']['sub']['licitacao']['sub']["participarPregao"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -473,7 +471,7 @@ include("inc/scripts.php");
 ?>
 
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroParticiparPregao.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_licitacaoParticiparPregao.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -777,7 +775,7 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'cadastro_participarPregaoFiltro.php');
+        $(location).attr('href', 'licitacao_participarPregaoFiltro.php');
     }
 
     function excluir() {

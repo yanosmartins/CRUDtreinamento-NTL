@@ -9,9 +9,6 @@ require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('PARTICIPARPREGAO_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('PARTICIPARPREGAO_GRAVAR', $arrayPermissao, true));
 
-//Apagar depois
-$condicaoAcessarOK = true;
-
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
@@ -39,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["participarPregao"]["active"] = true;
+$page_nav['operacao']['sub']['licitacao']['sub']["participarPregao"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -261,7 +258,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroParticiparPregao.php',
+                    url: 'js/sqlscope_licitacaoParticiparPregao.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -322,7 +319,7 @@ include("inc/scripts.php");
         var grupo = $('#grupo').val();
         var responsavel = $('#responsavelPregao').val();
 
-        $('#resultadoBusca').load('cadastro_participarPregaoFiltroListagem.php?', {
+        $('#resultadoBusca').load('licitacao_participarPregaoFiltroListagem.php?', {
             portal: portal,
             dataPregao: dataPregao,
             quemLancou: quemLancou,

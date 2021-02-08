@@ -1,7 +1,7 @@
 function gravaPregoes(formData) {
     formData.append('funcao', 'grava');
     $.ajax({
-        url: 'js/sqlscope_cadastroParticiparPregao.php',
+        url: 'js/sqlscope_licitacaoParticiparPregao.php',
         type: 'post',
         data: formData,
         processData: false,
@@ -21,7 +21,7 @@ function gravaPregoes(formData) {
 
 function recuperaPregoes(codigo, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroParticiparPregao.php',
+        url: 'js/sqlscope_licitacaoParticiparPregao.php',
         dataType: 'html',
         type: 'post',
         data: { funcao: 'recupera', codigo: codigo },
@@ -33,7 +33,7 @@ function recuperaPregoes(codigo, callback) {
 
 function recuperaUpload(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroParticiparPregao.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_licitacaoParticiparPregao.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'recuperaUpload', id: id }, //valores enviados ao script     
@@ -46,7 +46,7 @@ function recuperaUpload(id, callback) {
 
 function excluirPregoes(codigo, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroParticiparPregao.php',
+        url: 'js/sqlscope_licitacaoParticiparPregao.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'excluir', codigo: codigo }, //valores enviados ao script   
