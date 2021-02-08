@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PREGAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PREGAO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PARTICIPARPREGAO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PARTICIPARPREGAO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Garimpar Pregões";
+$page_title = "Participar de Pregões";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["pregao"]["active"] = true;
+$page_nav['operacao']['sub']['licitacao']['sub']["participarPregao"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -60,7 +60,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Garimpar Pregões</h2>
+                            <h2>Participar de Pregões</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -88,11 +88,11 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao FROM 
-                                                                        sysgc.dbo.portal WHERE ativo = 1 ORDER BY descricao";
+                                                                        Ntl.portal WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $descricao = $row['descricao'];
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -101,16 +101,16 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Data</label>
                                                                 <label class="input">
-                                                                    <input id="dataPregao" name="dataPregao" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="on">
+                                                                    <input id="dataPregao" name="dataPregao" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3">
+                                                            <section class="col col-2">
                                                                 <label class="label">Quem Lançou</label>
                                                                 <label class="input">
-                                                                    <input id="quemLancou" maxlength="255" name="quemLancou" class="" type="select" value="">
+                                                                    <input id="quemLancou" maxlength="255" name="quemLancou" class="" type="select" value="" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3">
+                                                            <section class="col col-2">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
@@ -119,14 +119,23 @@ include("inc/nav.php");
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="participar">Participar</label>
+                                                                <label class="select">
+                                                                    <select id="participar" name="participar">
+                                                                        <option></option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="2">Não</option>
+                                                                    </select><i></i>
+                                                            </section>
+
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-6 col-auto">
                                                                 <label class="label" for="orgaoLicitante">Nome do Orgão Licitante</label>
                                                                 <label class="input">
                                                                     <input id="orgaoLicitanteId" type="hidden" value="">
-                                                                    <input id="orgaoLicitante" name="orgaoLicitanteFiltro" autocomplete="off" class="form-control" 
-                                                                    placeholder="Digite o nome do orgão licitante.." type="text" value="">
+                                                                    <input id="orgaoLicitante" name="orgaoLicitanteFiltro" autocomplete="off" class="form-control" placeholder="Digite o nome do orgão licitante.." type="text" value="">
                                                                     <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
@@ -136,6 +145,7 @@ include("inc/nav.php");
                                                                     <input id="resumoPregao" name="resumoPregao" type="text" autocomplete="on" onkeyup="contaPalavra()">
                                                                 </label>
                                                             </section>
+
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-6">
@@ -147,7 +157,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.grupoLicitacao where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
                                                                             echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
@@ -164,7 +174,8 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
+                                                                            $row = array_map('utf8_encode', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $nome = ($row['nome']);
                                                                             echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
@@ -173,7 +184,6 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                             </section>
                                                         </div>
-
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -183,9 +193,7 @@ include("inc/nav.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
-                                            <span class="fa fa-file"></span>
-                                        </button>
+
                                     </footer>
                                 </form>
                             </div>
@@ -241,9 +249,6 @@ include("inc/scripts.php");
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
-        $('#btnNovo').on("click", function() {
-            novo();
-        });
 
         $("#data").on("change", function() {
             validaCampoData("#data");
@@ -253,7 +258,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPregoes.php',
+                    url: 'js/sqlscope_licitacaoParticiparPregao.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -294,30 +299,36 @@ include("inc/scripts.php");
 
     });
 
+    function contaPalavra() {
+        var resumoPregao = $('#resumoPregao').val();
+        var total = resumoPregao.split(' ').length;
+        if (total == 21) {
+            smartAlert("Atenção", "Máximo de 20 palavras!", "error");
+        }
+    }
+
+
     function listarFiltro() {
         var portal = $('#portal').val();
         var dataPregao = $('#dataPregao').val();
         var quemLancou = $('#quemLancou').val();
+        var participar = $('#participar').val();
         var ativo = $('#ativo').val();
         var resumoPregao = $('#resumoPregao').val();
         var orgaoLicitante = $('#orgaoLicitante').val();
         var grupo = $('#grupo').val();
         var responsavel = $('#responsavelPregao').val();
 
-        $('#resultadoBusca').load('cadastro_pregaoFiltroListagem.php?', {
+        $('#resultadoBusca').load('licitacao_participarPregaoFiltroListagem.php?', {
             portal: portal,
             dataPregao: dataPregao,
             quemLancou: quemLancou,
             ativo: ativo,
+            participar: participar,
             resumoPregao: resumoPregao,
             orgaoLicitante: orgaoLicitante,
             grupo: grupo,
             responsavel: responsavel
         });
-    }
-
-
-    function novo() {
-        $(location).attr('href', 'cadastro_pregaoCadastro.php');
     }
 </script>

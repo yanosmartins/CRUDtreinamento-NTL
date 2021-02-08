@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PREGAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PREGAO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PREGAONAOINICIADO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PREGAONAOINICIADO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["pregao"]["active"] = true;
+$page_nav["operacao"]["sub"]["licitacao"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -46,7 +46,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Cadastro"] = "";
+    $breadcrumbs["Operação"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -60,7 +60,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Garimpar Pregões</h2>
+                            <h2>Pregões Não Iniciados</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -80,7 +80,17 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-4 col-auto">
+                                                            <section class="col col-6">
+                                                                <label class="label" for="tipoPesquisa">Tipo de pesquisa</label>
+                                                                <label class="select">
+                                                                    <select id="tipoPesquisa" name="tipoPesquisa">
+                                                                        <option value="0" selected>Pregão</option>
+                                                                        <option value="1">Tarefa</option>
+                                                                    </select><i></i>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6 col-auto">
                                                                 <label class="label" for="portal">Portal</label>
                                                                 <label class="select">
                                                                     <select id="portal" name="portal">
@@ -98,19 +108,47 @@ include("inc/nav.php");
                                                                         ?>
                                                                     </select><i></i>
                                                             </section>
+                                                            <section class="col col-6 col-auto">
+                                                                <label class="label" for="orgaoLicitante">Nome do Orgão Licitante</label>
+                                                                <label class="input">
+                                                                    <input id="orgaoLicitanteId" type="hidden" value="">
+                                                                    <input id="orgaoLicitante" name="orgaoLicitanteFiltro" autocomplete="off" class="form-control" placeholder="Digite o nome do orgão licitante.." type="text" value="">
+                                                                    <i class="icon-append fa fa-filter"></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-3 col-auto">
+                                                                <label class="label" for="numeroPregao">Número do Pregão</label>
+                                                                <label class="input">
+                                                                    <input id="numeroPregao" name="numeroPregao" type="text" autocomplete="off" maxlength="30" autocomplete="off">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label" for="dataPregao">Data do Pregão</label>
+                                                                <label class="input">
+                                                                    <input id="dataPregao" name="dataPregao" type="text" data-dateformat="dd/mm/yy" data-mask-placeholder="-" class="datepicker" style="text-align: center" data-mask="99/99/9999" placeholder="--/--/----" autocomplete="off">
+                                                                </label>
+                                                            </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Data</label>
+                                                                <label class="label" for="horaPregao">Hora do Pregão</label>
                                                                 <label class="input">
-                                                                    <input id="dataPregao" name="dataPregao" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="on">
+                                                                    <input id="horaPregao" name="horaPregao" type="text" autocomplete="off" placeholder="hh:mm">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3">
-                                                                <label class="label">Quem Lançou</label>
-                                                                <label class="input">
-                                                                    <input id="quemLancou" maxlength="255" name="quemLancou" class="" type="select" value="">
-                                                                </label>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="condicao">Condição do Pregão</label>
+                                                                <label class="select">
+                                                                    <select id="condicao" name="condicao">
+                                                                        <option></option>
+                                                                        <option value="1">Adiado</option>
+                                                                        <option value="2">Em andamento</option>
+                                                                        <option value="3">Cancelado</option>
+                                                                        <option value="4">Fracassado</option>
+                                                                        <option value="5">Desistência</option>
+                                                                    </select><i></i>
                                                             </section>
-                                                            <section class="col col-3">
+                                                            <section class="col col-2">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
@@ -120,17 +158,66 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                             </section>
                                                         </div>
-                                                        <div class="row">
-                                                            <section class="col col-6 col-auto">
-                                                                <label class="label" for="orgaoLicitante">Nome do Orgão Licitante</label>
-                                                                <label class="input">
-                                                                    <input id="orgaoLicitanteId" type="hidden" value="">
-                                                                    <input id="orgaoLicitante" name="orgaoLicitanteFiltro" autocomplete="off" class="form-control" 
-                                                                    placeholder="Digite o nome do orgão licitante.." type="text" value="">
-                                                                    <i class="icon-append fa fa-filter"></i>
-                                                                </label>
+                                                        <div class="row" id="rowTarefa">
+                                                            <section class="col col-3 col-auto">
+                                                                <label class="label" for="tarefa">Tarefa</label>
+                                                                <label class="select">
+                                                                    <select id="tarefa" name="tarefa">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, descricao  FROM dbo.tarefa  where ativo = 1  
+                                                                            AND (visivel = 3 OR visivel = 1) order by descricao;";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                            $row = array_map('utf8_encode', $row);
+                                                                            $codigo = $row['codigo'];
+                                                                            $nomeTarefa = ($row['descricao']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $nomeTarefa . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
                                                             </section>
-                                                            <section class="col col-6 col-auto">
+                                                            <section class="col col-3 col-auto">
+                                                                <label class="label" for="responsavel">Responsável</label>
+                                                                <label class="select">
+                                                                    <select id="responsavel" name="responsavel">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, nome FROM dbo.responsavel  where ativo = 1  
+                                                                        order by nome";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                            $row = array_map('utf8_encode', $row);
+                                                                            $codigo = $row['codigo'];
+                                                                            $nome = ($row['nome']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label" for="tipoTarefa">Tipo Tarefa</label>
+                                                                <label class="select">
+                                                                    <select id="tipoTarefa" name="tipoTarefa">
+                                                                        <option></option>
+                                                                        <option value="0">Pré-Pregão</option>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-3 col-auto">
+                                                                <label class="label" for="tarefaConcluida">Tarefa Concluída</label>
+                                                                <label class="select">
+                                                                    <select id="tarefaConcluida" name="tarefaConcluida">
+                                                                        <option value=""></option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0" selected>Não</option>
+                                                                        ?>
+                                                                    </select><i></i>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12 col-auto">
                                                                 <label class="label" for="resumoPregao">Resumo do pregão</label>
                                                                 <label class="input">
                                                                     <input id="resumoPregao" name="resumoPregao" type="text" autocomplete="on" onkeyup="contaPalavra()">
@@ -173,7 +260,6 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                             </section>
                                                         </div>
-
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -182,9 +268,6 @@ include("inc/nav.php");
                                     <footer>
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
-                                        </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
-                                            <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
                                 </form>
@@ -236,17 +319,16 @@ include("inc/scripts.php");
 <script>
     $(document).ready(function() {
 
+        $('#rowTarefa').addClass("hidden");
+
         listarFiltro();
+
+        $('#horaPregao').mask('99:99', {
+            placeholder: "hh:mm"
+        });
 
         $('#btnSearch').on("click", function() {
             listarFiltro();
-        });
-        $('#btnNovo').on("click", function() {
-            novo();
-        });
-
-        $("#data").on("change", function() {
-            validaCampoData("#data");
         });
 
         $("#orgaoLicitante").autocomplete({
@@ -292,32 +374,80 @@ include("inc/scripts.php");
                 .appendTo(ul);
         };
 
+
+
+        $('#tipoPesquisa').on("change", function() {
+            var tipoPesquisa = $('#tipoPesquisa').val();
+            if (tipoPesquisa == "0") {
+                $('#rowTarefa').addClass("hidden");
+                listarFiltro();
+            }
+            if (tipoPesquisa == "1") {
+                $('#rowTarefa').removeClass("hidden");
+                listarFiltro();
+            }
+        });
+
     });
 
-    function listarFiltro() {
-        var portal = $('#portal').val();
-        var dataPregao = $('#dataPregao').val();
-        var quemLancou = $('#quemLancou').val();
-        var ativo = $('#ativo').val();
+    function contaPalavra() {
         var resumoPregao = $('#resumoPregao').val();
-        var orgaoLicitante = $('#orgaoLicitante').val();
-        var grupo = $('#grupo').val();
-        var responsavel = $('#responsavelPregao').val();
-
-        $('#resultadoBusca').load('cadastro_pregaoFiltroListagem.php?', {
-            portal: portal,
-            dataPregao: dataPregao,
-            quemLancou: quemLancou,
-            ativo: ativo,
-            resumoPregao: resumoPregao,
-            orgaoLicitante: orgaoLicitante,
-            grupo: grupo,
-            responsavel: responsavel
-        });
+        var total = resumoPregao.split(' ').length;
+        if (total == 21) {
+            smartAlert("Atenção", "Máximo de 20 palavras!", "error");
+        }
     }
 
+    function listarFiltro() {
+        var tipoPesquisa = +$('#tipoPesquisa').val();
+        var portal = $('#portal').val();
+        var orgaoLicitante = $('#orgaoLicitante').val();
+        var numeroPregao = $('#numeroPregao').val();
+        var horaPregao = $('#horaPregao').val();
+        var dataPregao = $('#dataPregao').val();
+        var condicao = $('#condicao').val();
+        var ativo = $('#ativo').val();
+        var tarefa = $('#tarefa').val();
+        var responsavel = $('#responsavel').val();
+        var tipoTarefa = $('#tipoTarefa').val();
+        var resumoPregao = $('#resumoPregao').val();
+        var tarefaConcluida = $('#tarefaConcluida').val();
+        var grupo = $('#grupo').val();
+        var responsavelPregao = $('#responsavelPregao').val();
 
-    function novo() {
-        $(location).attr('href', 'cadastro_pregaoCadastro.php');
+        if (tipoPesquisa == "0") {
+            $('#resultadoBusca').load('contratacao_pregaoNaoIniciadoFiltroListagem.php?', {
+                portal: portal,
+                orgaoLicitante: orgaoLicitante,
+                numeroPregao: numeroPregao,
+                horaPregao: horaPregao,
+                dataPregao: dataPregao,
+                condicao: condicao,
+                ativo: ativo,
+                resumoPregao: resumoPregao,
+                grupo: grupo,
+                responsavelPregao: responsavelPregao
+            });
+        }
+
+        if (tipoPesquisa == "1") {
+            $('#resultadoBusca').load('contratacao_pregaoNaoIniciadoFiltroListagems.php?', {
+                portal: portal,
+                orgaoLicitante: orgaoLicitante,
+                numeroPregao: numeroPregao,
+                horaPregao: horaPregao,
+                dataPregao: dataPregao,
+                condicao: condicao,
+                ativo: ativo,
+                tarefa: tarefa,
+                responsavel: responsavel,
+                tipoTarefa: tipoTarefa,
+                resumoPregao: resumoPregao,
+                tarefaConcluida: tarefaConcluida,
+                grupo: grupo,
+                responsavelPregao: responsavelPregao
+
+            });
+        }
     }
 </script>

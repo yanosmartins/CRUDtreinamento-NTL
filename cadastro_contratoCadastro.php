@@ -1,5 +1,8 @@
 <?php
 //initilize the page
+
+use function PHPSTORM_META\map;
+
 require_once("inc/init.php");
 
 //require UI configuration (nav, ribbon, etc.)
@@ -919,77 +922,111 @@ include("inc/nav.php");
                                             <div id="collapseContato" class="panel-collapse collapse">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">
-                                                            <section class="col col-2">
-                                                                <label class="label">Nome</label>
-                                                                <label class="input"><i class="icon-append fa fa-user"></i>
-                                                                    <input id="nomeContato" name="nomeContato" autocomplete="off" type="text">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Função</label>
-                                                                <label class="select">
-                                                                    <select name="funcao" id="funcao">
-                                                                        <option value=""></option>
-                                                                        <?php
-                                                                        $reposit = new reposit();
-                                                                        $sql = 'SELECT descricao,codigo FROM ntl.funcao WHERE ativo = 1';
-                                                                        $result = $reposit->RunQuery($sql);
 
-                                                                        foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
-                                                                            $codigo = (int) $row['codigo'];
-                                                                            $descricao = $row['descricao'];
-                                                                            echo "<option value=\"$codigo\">$descricao</option>";
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Setor</label>
-                                                                <label class="input">
-                                                                    <input id="setor" name="setor" autocomplete="off" type="text">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Telefone</label>
-                                                                <label class="input"><i class="icon-append fa fa-phone"></i>
-                                                                    <input id="telefone" name="telefone" data-mask="(99) 9999-9999" placeholder="(XX) XXXX-XXXX" autocomplete="off" type="text">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Celular</label>
-                                                                <label class="input"><i class="icon-append fa fa-mobile"></i>
-                                                                    <input id="celular" name="celular" data-mask="(99) 9 9999-9999" placeholder="(XX) X XXXX-XXXX" autocomplete="off" type="text">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">E-mail</label>
-                                                                <label class="input"><i class="icon-append fa fa-at"></i>
-                                                                    <input id="email" name="email" placeholder='example@mail.com' autocomplete="off" type="text">
-                                                                </label>
-                                                            </section>
+                                                        <input id="JsonContato" name="JsonContato" type="hidden" value="[]">
+                                                        <div id="formContato" name="formContato" class="col-sm-12">
+                                                            <input id="contatoId" name="contatoId" type="hidden" value="">
+                                                            <input id="sequencialContato" name="sequencialContato" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-md-3">
+                                                                        <label class="label" for="nomeContato">Nome</label>
+                                                                        <label class="input"><i class="icon-append fa fa-user"></i>
+                                                                            <input id="nomeContato" maxlength="100" name="nomeContato" type="text" value="" autocomplete="off">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label" for="funcao">Função</label>
+                                                                        <label class="select">
+                                                                            <select name="funcao" id="funcao">
+                                                                                <option value="">Selecione</option>
+                                                                                <?php
+                                                                                $reposit = new reposit();
+                                                                                $sql = "SELECT codigo, descricao FROM ntl.funcao WHERE ativo = 1";
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = $row['codigo'];
+                                                                                    $descricao = $row['descricao'];
+                                                                                    echo "<option value=\"$codigo\">$descricao</option>";
+                                                                                }
+                                                                                ?>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label" for="setor">Setor</label>
+                                                                        <label class="input">
+                                                                            <input id="setor" maxlength="100" name="setor" type="text" value="" autocomplete="off">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-3">
+                                                                        <label class="label" for="telefone">Telefone</label>
+                                                                        <label class="input"><i class="icon-append fa fa-phone"></i>
+                                                                            <input id="telefone" maxlength="100" name="telefone" type="text" value="" placeholder="(XX) XXXX-XXXX" data-mask="(99) 9999-9999" autocomplete="off">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-3">
+                                                                        <label class="label" for="celular">Celular</label>
+                                                                        <label class="input"><i class="icon-append fa fa-mobile"></i>
+                                                                            <input id="celular" maxlength="100" name="celular" type="text" value="" placeholder="(XX) X XXXX-XXXX" data-mask="(99) 9 9999-9999" autocomplete="off">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-3">
+                                                                        <label class="label" for="email">Email</label>
+                                                                        <label class="input"><i class="icon-append fa fa-at"></i>
+                                                                            <input id="email" placeholder="example@mail.com" maxlength="100" name="email" type="text" value="" autocomplete="off">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label" for="autorizaNF">Autorizar NF</label>
+                                                                        <label class="select">
+                                                                            <select name="autorizaNF" id="autorizaNF">
+                                                                                <option value="0">Não</option>
+                                                                                <option value="1">Sim</option>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <section class="col col-md-4">
+                                                                        <label class="label"> </label>
+                                                                        <button id="btnAddContato" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverContato" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                            </div>
 
+                                                            <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableContato" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th style="width: 2px"></th>
+                                                                            <th class="text-left" style="min-width: 500%;">Nome</th>
+                                                                            <th class="text-left">Função</th>
+                                                                            <th class="text-left">Setor</th>
+                                                                            <th class="text-left">Telefone</th>
+                                                                            <th class="text-left">Celular</th>
+                                                                            <th class="text-left">Email</th>
+                                                                            <th class="text-left">Autorizar NF</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <section class="col col-2">
-                                                                <label class="label">Autoriza NF</label>
-                                                                <label class="select">
-                                                                    <select name="autorizaNF" id="autorizaNF">
-                                                                        <option value="0">Não</option>
-                                                                        <option value="1">Sim</option>
-                                                                    </select>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
                                                     </fieldset>
                                                 </div>
-                                            </div>
 
+                                            </div>
                                         </div>
+
                                     </div>
+
 
 
                                     <footer>
@@ -1084,6 +1121,8 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     var jsonFaturamentoArray = [];
+    var jsonContatoArray = JSON.parse($("#JsonContato").val());
+
     $(document).ready(function() {
 
         $('#cnpj').mask('99.999.999/9999-99', {
@@ -1179,6 +1218,15 @@ include("inc/scripts.php");
         });
         fillTableFaturamento();
 
+        $('#btnAddContato').on("click", function() {
+            if (validaContato()) {
+                addContato();
+            }
+        });
+        $('#btnRemoverContato').on("click", function() {
+            excluirContato();
+        });
+        fillTableContato();
 
         $("#cepFaturamento").on("change", function() {
             var cep = $("#cepFaturamento").val().replace(/\D/g, '');
@@ -1297,6 +1345,11 @@ include("inc/scripts.php");
 
     }
 
+    function clearFormContato() {
+
+        $("#nomeContato,#funcao,#setor,#telefone,#celular,#email,#autorizaNF,#contatoId,#sequencialContato").val('');
+    }
+
     function fillTableFaturamento() {
         $("#tableFaturamento tbody").empty();
         if (typeof(jsonFaturamentoArray) != 'undefined') {
@@ -1312,6 +1365,25 @@ include("inc/scripts.php");
 
             }
             clearFormFaturamento();
+        }
+    }
+
+    function fillTableContato() {
+        $("#tableContato tbody").empty();
+        if (typeof(jsonContatoArray) != 'undefined') {
+            for (var i = 0; i < jsonContatoArray.length; i++) {
+                var row = $('<tr />');
+                $("#tableContato tbody").append(row);
+                row.append($("<td><label class=\"checkbox\"><input type=\"checkbox\" name=\"checkbox\" value=\"" + jsonContatoArray[i].sequencialContato + "\"><i></i></label></td>"));
+                row.append($("<td class=\"text-nowrap\" onclick=\"carregaContato(" + jsonContatoArray[i].sequencialContato + ");\">" + jsonContatoArray[i].nomeContato + "</td>"));
+                row.append($("<td class=\"text-nowrap\" onclick=\"carregaContato(" + jsonContatoArray[i].sequencialContato + ");\">" + jsonContatoArray[i].funcaoText + "</td>"));
+                row.append($("<td class=\"text-nowrap\" onclick=\"carregaContato(" + jsonContatoArray[i].sequencialContato + ");\">" + jsonContatoArray[i].setor + "</td>"));
+                row.append($("<td class=\"text-nowrap\" onclick=\"carregaContato(" + jsonContatoArray[i].sequencialContato + ");\">" + jsonContatoArray[i].telefone + "</td>"));
+                row.append($("<td class=\"text-nowrap\" onclick=\"carregaContato(" + jsonContatoArray[i].sequencialContato + ");\">" + jsonContatoArray[i].celular + "</td>"));
+                row.append($("<td class=\"text-nowrap\" onclick=\"carregaContato(" + jsonContatoArray[i].sequencialContato + ");\">" + jsonContatoArray[i].email + "</td>"));
+                row.append($("<td class=\"text-nowrap\" onclick=\"carregaContato(" + jsonContatoArray[i].sequencialContato + ");\">" + jsonContatoArray[i].autorizaText + "</td>"));
+            }
+            clearFormContato();
         }
     }
 
@@ -1439,6 +1511,29 @@ include("inc/scripts.php");
         return true;
     }
 
+    function validaContato() {
+        var nome = $('#nomeContato').val();
+        var funcao = $("#funcao").val();
+        var setor = $('#setor').val();
+
+        if (!nome) {
+            smartAlert("Erro", "Informe o nome do contato.", "error");
+            return false;
+        }
+
+        if (!funcao) {
+            smartAlert("Erro", "Informe a função do contato.", "error");
+            return false;
+        }
+
+        if (!setor) {
+            smartAlert("Erro", "Informe o setor do contato.", "error");
+            return false;
+        }
+
+        return true;
+    }
+
     function processDataFaturamento(node) {
 
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
@@ -1449,6 +1544,94 @@ include("inc/scripts.php");
             var valorTel = $("#localizacao").val().trim();
             if (valorTel !== '') {
                 fieldName = "localizacao";
+            }
+            return {
+                name: fieldName,
+                value: valorTel
+            };
+        }
+
+        return false;
+    }
+
+    function processDataContato(node) {
+
+        //PEga atributo id
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        //pega o atributo nome
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+        var value;
+
+        if (fieldName !== '' && (fieldId === "nomeContato")) {
+            var nomeContato = $("#nomeContato").val()
+            if (nomeContato !== '') {
+                fieldName = "nomeContato";
+            }
+            return {
+                name: fieldName,
+                value: nomeContato
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "funcao")) {
+            var valorTel = $("#funcao").val().trim();
+            if (valorTel !== '') {
+                fieldName = "funcao";
+            }
+            return {
+                name: fieldName,
+                value: valorTel
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "setor")) {
+            var valorTel = $("#setor").val().trim();
+            if (valorTel !== '') {
+                fieldName = "setor";
+            }
+            return {
+                name: fieldName,
+                value: valorTel
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "telefone")) {
+            var valorTel = $("#telefone").val().trim();
+            if (valorTel !== '') {
+                fieldName = "telefone";
+            }
+            return {
+                name: fieldName,
+                value: valorTel
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "celular")) {
+            var valorTel = $("#celular").val().trim();
+            if (valorTel !== '') {
+                fieldName = "celular";
+            }
+            return {
+                name: fieldName,
+                value: valorTel
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "email")) {
+            var valorTel = $("#email").val().trim();
+            if (valorTel !== '') {
+                fieldName = "email";
+            }
+            return {
+                name: fieldName,
+                value: valorTel
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "autorizaNF")) {
+            var valorTel = $("#autorizaNF").val().trim();
+            if (valorTel !== '') {
+                fieldName = "autorizaNF";
             }
             return {
                 name: fieldName,
@@ -1471,7 +1654,7 @@ include("inc/scripts.php");
                 item["sequencialFaturamento"] = 1;
             } else {
                 item["sequencialFaturamento"] = Math.max.apply(Math, jsonFaturamentoArray.map(function(o) {
-                    return o.sequencialTel;
+                    return o.sequencialFaturamento;
                 })) + 1;
             }
             item["faturamentoId"] = 0;
@@ -1502,6 +1685,48 @@ include("inc/scripts.php");
         clearFormFaturamento();
     }
 
+    function addContato() {
+
+        var item = $("#formContato").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataContato
+        });
+
+        if (!item["sequencialContato"]) {
+            if (jsonContatoArray.length === 0) {
+                item["sequencialContato"] = 1;
+            } else {
+                item["sequencialContato"] = Math.max.apply(Math, jsonContatoArray.map(function(o) {
+                    return o.sequencialContato;
+                })) + 1;
+            }
+            item["contatoId"] = 0;
+        } else {
+            item["sequencialContato "] = +item["sequencialContato"];
+        }
+
+        item.funcaoText = $('#funcao option:selected').text().trim();
+        item.autorizaText = $('#autorizaNF option:selected').text().trim();
+
+        var index = -1;
+        $.each(jsonContatoArray, function(i, obj) {
+            if (parseInt($('#sequencialContato').val()) === obj.sequencialContato) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonContatoArray.splice(index, 1, item);
+        else
+            jsonContatoArray.push(item);
+
+        $("#JsonContato").val(JSON.stringify(jsonContatoArray));
+        fillTableContato();
+        clearFormContato();
+    }
+
     function excluirFaturamento() {
         var arrSequencial = [];
         $('#tableFaturamento input[type=checkbox]:checked').each(function() {
@@ -1519,6 +1744,24 @@ include("inc/scripts.php");
         } else {
             smartAlert("Erro", "Selecione pelo menos um faturamento para excluir.", "error");
         }
+    }
+
+    function excluirContato() {
+        var arrSequencial = [];
+        $('#tableContato input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonContatoArray.length - 1; i >= 0; i--) {
+                var obj = jsonContatoArray[i];
+                if (jQuery.inArray(obj.sequencialContato, arrSequencial) > -1) {
+                    jsonContatoArray.splice(i, 1);
+                }
+            }
+            $("#JsonContato").val(JSON.stringify(jsonContatoArray));
+            fillTableContato();
+        } else
+            smartAlert("Erro", "Selecione pelo menos um contato para excluir.", "error");
     }
 
     function carregaFaturamento(sequencialFaturamento) {
@@ -1549,6 +1792,27 @@ include("inc/scripts.php");
             $("#aliquotaIss").val(item.aliquotaIss);
 
 
+        }
+    }
+
+    function carregaContato(sequencialContato) {
+        var arr = jQuery.grep(jsonContatoArray, function(item, i) {
+            return (item.sequencialContato === sequencialContato);
+        });
+
+        clearFormContato();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#contatoId").val(item.contatoId);
+            $("#nomeContato").val(item.nomeContato);
+            $("#sequencialContato").val(item.sequencialContato);
+            $("#funcao").val(item.funcao);
+            $("#setor").val(item.setor);
+            $("#telefone").val(item.telefone);
+            $("#celular").val(item.celular);
+            $("#email").val(item.email);
+            $("#autorizaNF").val(item.autorizaNF);
         }
     }
 
@@ -1805,7 +2069,10 @@ include("inc/scripts.php");
                         var mensagem = piece[0];
                         var out = piece[1];
 
-                        var strArrayFaturamento = piece[2];
+
+                        var strArrayContato = piece[2];
+
+                        var strArrayFaturamento = piece[3];
 
                         piece = out.split("^");
                         console.table(piece);
@@ -1848,13 +2115,6 @@ include("inc/scripts.php");
                         var periodoSolicitacao = piece[35];
                         var envioSolicitacao = piece[36];
                         var anotacoesSolicitacao = piece[37];
-                        var nomeContato = piece[38];
-                        var funcaoContrato = piece[39];
-                        var setor = piece[40];
-                        var email = piece[41];
-                        var telefone = piece[42];
-                        var celular = piece[43];
-                        var autorizaNF = piece[44];
 
                         //Atributos de cliente        
                         $("#codigo").val(codigo);
@@ -1895,13 +2155,10 @@ include("inc/scripts.php");
                         $("#periodoSolicitacao").val(periodoSolicitacao);
                         $("#envioSolicitacao").val(envioSolicitacao);
                         $("#anotacoesSolicitacao").val(anotacoesSolicitacao);
-                        $("#nomeContato").val(nomeContato)
-                        $("#funcao").val(funcaoContrato)
-                        $("#setor").val(setor)
-                        $("#email").val(email)
-                        $("#telefone").val(telefone)
-                        $("#celular").val(celular)
-                        $("#autorizaNF").val(autorizaNF)
+
+                        $("#JsonContato").val(strArrayContato);
+                        jsonContatoArray = JSON.parse($("#JsonContato").val());
+                        fillTableContato();
 
                         $("#JsonFaturamento").val(strArrayFaturamento);
                         jsonFaturamentoArray = JSON.parse($("#JsonFaturamento").val());

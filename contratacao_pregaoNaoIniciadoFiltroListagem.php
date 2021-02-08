@@ -6,21 +6,19 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:110px;">Portal</th>
-                    <th class="text-justify" style="min-width:200px;">Nome do Orgão Licitante</th>
-                    <th class="text-left" style="min-width:110px;">Número do Pregão</th>
+                    <th class="text-left" style="min-width:30px;">Portal</th>
+                    <th class="text-left" style="min-width:30px;">Orgão</th>
+                    <th class="text-left" style="min-width:30px;">Número do Pregão</th>
+                    <th class="text-left" style="min-width:30px;">Oportunidade de Compra</th>
                     <th class="text-left" style="min-width:30px;">Data do Pregão</th>
                     <th class="text-left" style="min-width:30px;">Hora do Pregão</th>
-                    <th class="text-justify" style="min-width:550px;">Resumo do Pregão</th>
-                    <th class="text-left" style="min-width:30px;">Oportunidade de Compra</th>
-                    <th class="text-left" style="min-width:100px;">Grupo</th>
-                    <th class="text-left" style="min-width:110px;">Responsável</th>
-                    <th class="text-left" style="min-width:30px;">Quem Lançou</th>
-                    <th class="text-left" style="min-width:30px;">Data</th>
-                    <th class="text-left" style="min-width:30px;">Hora</th>
-                    <th class="text-left" style="min-width:60px;">Valor Estimado</th>
+                    <th class="text-left" style="min-width:30px;">Resumo do Pregão</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
-
+                    <th class="text-left" style="min-width:30px;">Condição do Pregão</th>
+                    <th class="text-left" style="min-width:110px;">Responsável</th>
+                    <th class="text-left" style="min-width:100px;">Grupo</th>
+                    <th class="text-left" style="min-width:30px;">Data de lançamento</th>
+                    <th class="text-left" style="min-width:30px;">Valor Estimado</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,21 +28,30 @@ include "js/repositorio.php";
                 $tipoTarefa = "";
                 $visivel = "";
                 $ativo = "";
+                $descricaoCondicao = "";
+                $condicao = "";
 
 
-                $sql = "SELECT GP.codigo, P.descricao, P.endereco, GP.ativo, GP.orgaoLicitante, GP.objetoLicitado,
-                GP.oportunidadeCompra, GP.numeroPregao, GP.dataPregao, GP.horaPregao, 
-                GP.dataCadastro, GP.usuarioCadastro, GP.condicao, GP.resumoPregao,
-                G.descricao AS grupoResponsavel, R.nome AS responsavel, GP.valorEstimado
+                $sql = " SELECT GP.codigo, P.descricao, P.endereco,  GP.orgaoLicitante, GP.numeroPregao, GP.oportunidadeCompra, GP.dataPregao, 
+                GP.horaPregao, GP.resumoPregao, GP.condicao, GP.ativo,GP.dataCadastro, G.descricao AS grupoResponsavel, R.nome AS responsavelPregao, GP.valorEstimado
                 FROM Ntl.pregao GP 
                 LEFT JOIN Ntl.portal P ON P.codigo = GP.portal
                 LEFT JOIN Ntl.grupoLicitacao G ON G.codigo = GP.grupoResponsavel
                 LEFT JOIN Ntl.responsavel R ON R.codigo = GP.responsavel";
-                $where = " WHERE (0 = 0)";
+                $where = " WHERE (0 = 0) AND GP.participaPregao = 1";
 
                 if ($_POST["portal"] != "") {
                     $portal = +$_POST["portal"];
                     $where = $where . " AND ( P.codigo = $portal)";
+                }
+                if ($_POST["resumoPregao"] != "") {
+                    $resumoPregao = $_POST["resumoPregao"];
+                    $where = $where . " AND ( GP.resumoPregao like '%' + " . "replace('" . $resumoPregao . "',' ','%') + " . "'%')";
+                }
+
+                if ($_POST["orgaoLicitante"] != "") {
+                    $orgaoLicitante = $_POST["orgaoLicitante"];
+                    $where = $where . " AND ( GP.orgaoLicitante like '%' + " . "replace('" . $orgaoLicitante . "',' ','%') + " . "'%')";
                 }
 
                 if ($_POST["dataPregao"] != "") {
@@ -54,23 +61,16 @@ include "js/repositorio.php";
                     $where = $where . " AND GP.dataPregao = '" . $data . "'";
                 }
 
+                if ($_POST["condicao"] != "") {
+                    $condicao = +$_POST["condicao"];
+                    $where = $where . " AND GP.condicao = " . $condicao;
+                } else {
+                    $where = $where . " AND (GP.condicao IS NULL OR GP.condicao = 0)";
+                }
+
                 if ($_POST["ativo"] != "") {
                     $ativo = +$_POST["ativo"];
                     $where = $where . " AND GP.ativo = " . $ativo;
-                }
-
-                if ($_POST["quemLancou"] != "") {
-                    $quemLancou = $_POST["quemLancou"];
-                    $where = $where . " AND ( GP.usuarioCadastro like '%' + " . "replace('" . $usuarioCadastro . "',' ','%') + " . "'%')";
-                }
-
-                if ($_POST["orgaoLicitante"] != "") {
-                    $orgaoLicitante = $_POST["orgaoLicitante"];
-                    $where = $where . " AND ( GP.orgaoLicitante like '%' + " . "replace('" . $orgaoLicitante . "',' ','%') + " . "'%')";
-                }
-                if ($_POST["resumoPregao"] != "") {
-                    $resumoPregao = $_POST["resumoPregao"];
-                    $where = $where . " AND ( GP.resumoPregao like '%' + " . "replace('" . $resumoPregao . "',' ','%') + " . "'%')";
                 }
 
                 if ($_POST["grupo"] != "") {
@@ -78,68 +78,83 @@ include "js/repositorio.php";
                     $where = $where . " AND G.codigo = " . $grupo;
                 }
 
-                if ($_POST["responsavel"] != "") {
-                    $responsavel = +$_POST["responsavel"];
-                    $where = $where . " AND R.codigo = " . $responsavel;
+                if ($_POST["responsavelPregao"] != "") {
+                    $responsavelPregao = +$_POST["responsavelPregao"];
+                    $where = $where . " AND R.codigo = " . $responsavelPregao;
                 }
 
-                $where = $where . " AND GP.condicao IS NULL AND GP.participaPregao IS NULL ORDER BY dataPregao ASC, horaPregao";
-                $sql .= $where;
+                $sql .= $where . " ORDER BY GP.dataPregao, GP.horaPregao";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
                 foreach($result as $row) {
                     $id = $row['codigo'];
-                    $portal = $row['descricao'];
-                    $endereco = $row['endereco'];
-                    $orgaoLicitante = $row['orgaoLicitante'];
-                    $numeroPregao = $row['numeroPregao'];
-                    $resumoPregao = $row['resumoPregao'];
+                    $portal = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                    $endereco = mb_convert_encoding($row['endereco'], 'UTF-8', 'HTML-ENTITIES');
+                    $orgaoLicitante = mb_convert_encoding($row['orgaoLicitante'], 'UTF-8', 'HTML-ENTITIES');
+                    $numeroPregao = mb_convert_encoding($row['numeroPregao'], 'UTF-8', 'HTML-ENTITIES');
 
                     //A data recuperada foi formatada para D/M/Y
-                    $dataPregao = $row['dataPregao'];
+                    $dataPregao = mb_convert_encoding($row['dataPregao'], 'UTF-8', 'HTML-ENTITIES');
                     $dataPregao = explode("-", $dataPregao);
                     $dataPregao = $dataPregao[2] . "/" . $dataPregao[1] . "/" . $dataPregao[0];
 
-                    $horaPregao = $row['horaPregao'];
-                    $objetoLicitado = $row['objetoLicitado'];
-                    $oportunidadeCompra = $row['oportunidadeCompra'];
-                    $usuarioCadastro = $row['usuarioCadastro'];
-                    $ativo = $row['ativo'];
+                    $dataLancamento = mb_convert_encoding($row['dataCadastro'], 'UTF-8', 'HTML-ENTITIES');
+                    $dataLancamento = explode(" ", $dataLancamento);
+                    $dataLancamento = $dataLancamento[0];
+                    $dataLancamento = explode("-", $dataLancamento);
+                    $dataLancamento = $dataLancamento[2] . "/" . $dataLancamento[1] . "/" . $dataLancamento[0];
+
+                    $horaPregao = mb_convert_encoding($row['horaPregao'], 'UTF-8', 'HTML-ENTITIES');
+                    $resumoPregao = mb_convert_encoding($row['resumoPregao'], 'UTF-8', 'HTML-ENTITIES');
+                    $oportunidadeCompra = mb_convert_encoding($row['oportunidadeCompra'], 'UTF-8', 'HTML-ENTITIES');
+                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
                     $ativo == 1 ? $descricaoAtivo = 'Sim' : $descricaoAtivo = 'Não';
-                    $usuarioCadastro = $row['usuarioCadastro'];
+                    $condicao = mb_convert_encoding(+$row['condicao'], 'UTF-8', 'HTML-ENTITIES');
+                    $descricaoCondicao = "";
 
-                    //Arrumando a data e a hora em que foi gravado no sistema.
-                    $dataCadastro = $row['dataCadastro'];
-                    $descricaoData = explode(" ", $dataCadastro);
-                    $descricaoData = explode("-", $descricaoData[0]);
-                    $descricaoHora = explode(" ", $dataCadastro);
-                    $descricaoHora = $descricaoHora[1];
-                    $descricaoHora = explode(":", $descricaoHora);
-                    $descricaoHora = $descricaoHora[0] . ":" . $descricaoHora[1];
-                    $descricaoData =  $descricaoData[2] . "/" . $descricaoData[1] . "/" . $descricaoData[0];
-
-                    $grupo = $row['grupoResponsavel'];
-                    $responsavel = $row['responsavel'];
+                    $grupo = mb_convert_encoding($row['grupoResponsavel'], 'UTF-8', 'HTML-ENTITIES');
+                    $responsavelPregao = mb_convert_encoding($row['responsavelPregao'], 'UTF-8', 'HTML-ENTITIES');
                     $valorEstimado = number_format($row['valorEstimado'], 2, ',', '.');
+
+
+                    switch ($condicao) {
+                        case "1":
+                            $descricaoCondicao = "Adiado";
+                            break;
+                        case "2":
+                            $descricaoCondicao = "Em Andamento";
+                            break;
+                        case "3":
+                            $descricaoCondicao = "Cancelado";
+                            break;
+                        case "4":
+                            $descricaoCondicao = "Fracassado";
+                            break;
+                        case "5":
+                            $descricaoCondicao = "Desistência";
+                            break;
+                    }
+
 
                     echo '<tr >';
                     echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="' . $endereco . '">' . $portal . '</a></td>';
                     echo '<td class="text-left">' . $orgaoLicitante . '</td>';
-                    echo '<td class="text-left"><a href="cadastro_pregaoCadastro.php?id=' . $id . '">' . $numeroPregao . '</td>';
+                    echo '<td class="text-left"><a href="pregoesNaoIniciadosCadastro.php?id=' . $id . '">' . $numeroPregao . '</a></td>';
+                    echo '<td class="text-justify">' . $oportunidadeCompra . '</td>';
                     echo '<td class="text-left">' . $dataPregao . '</td>';
                     echo '<td class="text-left">' . $horaPregao . '</td>';
                     echo '<td class="text-justify">' . $resumoPregao . '</td>';
-                    echo '<td class="text-justify">' . $oportunidadeCompra . '</td>';
+                    echo '<td class="text-justify">' . $descricaoAtivo . '</td>';
+                    echo '<td class="text-left">' . $descricaoCondicao . '</td>';
+                    echo '<td class="text-justify">' . $responsavelPregao . '</td>';
                     echo '<td class="text-justify">' . $grupo . '</td>';
-                    echo '<td class="text-justify">' . $responsavel . '</td>';
-                    echo '<td class="text-justify">' . $usuarioCadastro . '</td>';
-                    echo '<td class="text-left">' . $descricaoData . '</td>';
-                    echo '<td class="text-left">' . $descricaoHora . '</td>';
+                    echo '<td class="text-left">' . $dataLancamento . '</td>';
                     echo '<td class="text-left">' . $valorEstimado . '</td>';
-                    echo '<td class="text-left">' . $descricaoAtivo . '</td>';
+                    echo '</tr>';
                 }
                 ?>
+
             </tbody>
         </table>
     </div>

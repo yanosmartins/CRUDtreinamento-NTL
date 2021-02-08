@@ -6,9 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PREGAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PREGAO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('PREGAO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PARTICIPARPREGAO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PARTICIPARPREGAO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,18 +19,12 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
-
-
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Garimpar Pregões";
+$page_title = "Participar de Pregões";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -43,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["pregao"]["active"] = true;
+$page_nav['operacao']['sub']['licitacao']['sub']["participarPregao"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -67,7 +60,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Cadastro</h2>
+                            <h2>Avança - Não Avança</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -101,7 +94,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao, endereco FROM Ntl.portal where ativo = 1 order by descricao";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
                                                                             $endereco  = ($row['endereco']);
@@ -118,12 +111,6 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <div class="row">
-                                                            <!-- <section class="col col-3">
-                                                                <label class="label">Estimativa do Pregão</label>
-                                                                <label class="input">
-                                                                    <input id="estimativaPregao" maxlength="255" autocomplete="off" name="estimativaPregao" class="required" type="select" value="">
-                                                                </label>
-                                                            </section> -->
                                                             <section class="col col-3">
                                                                 <label class="label" for="grupo">Grupo Responsável pelo Pregão</label>
                                                                 <label class="select">
@@ -133,7 +120,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.grupoLicitacao where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
                                                                             echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
@@ -150,7 +137,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $nome = ($row['nome']);
                                                                             echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
@@ -166,6 +153,18 @@ include("inc/nav.php");
                                                                     <input id="orgaoLicitante" maxlength="255" autocomplete="off" name="orgaoLicitante" class="required" type="select" value="">
                                                                 </label>
                                                             </section>
+
+                                                            <section class="col col-3">
+                                                                <label class="label" for="participaPregao">Participar</label>
+                                                                <label class="select">
+                                                                    <select id="participaPregao" name="participaPregao" class="required">
+                                                                        <option></option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="2">Não</option>
+                                                                        <option value="3">Extra Processo</option>
+
+                                                                    </select><i></i>
+                                                            </section>
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-3">
@@ -177,13 +176,13 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Data do Pregão</label>
                                                                 <label class="input">
-                                                                    <input id="dataPregao" name="dataPregao" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="off">
+                                                                    <input id="dataPregao" name="dataPregao" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3">
                                                                 <label class="label">Hora do Pregão</label>
                                                                 <label class="input">
-                                                                    <input id="horaPregao" name="horaPregao" class="required" type="text" autocomplete="off" placeholder="hh:mm">
+                                                                    <input id="horaPregao" name="horaPregao" class="required" type="text" autocomplete="new-password" placeholder="hh:mm">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3">
@@ -196,7 +195,7 @@ include("inc/nav.php");
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <label class="label">Objeto Licitado</label>
-                                                                <textarea maxlength="2000" id="objetoLicitado" name="objetoLicitado" class="form-control" rows="5" style="resize:vertical"></textarea>
+                                                                <textarea maxlength="2000" id="objetoLicitado" name="objetoLicitado" class="form-control" rows="3" style="resize:vertical"></textarea>
                                                             </section>
                                                         </div>
                                                         <div class="row">
@@ -213,6 +212,118 @@ include("inc/nav.php");
                                                                 <label class="label">Resumo do Pregão</label>
                                                                 <textarea id="resumoPregao" name="resumoPregao" class="form-control" rows="3" maxlength="500" style="resize:vertical;background-color:#FFFFC0;" placeholder=" Digite um resumo do pregão para apresentação na lista.."></textarea>
                                                             </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend><strong>Tarefas Pré-Pregão</strong></legend>
+                                                            </section>
+
+                                                        </div>
+                                                        <input id="jsonTarefa" name="jsonTarefa" type="hidden" value="[]">
+                                                        <div id="formTarefa">
+                                                            <div class="row">
+                                                                <input id="tarefaId" name="tarefaId" type="hidden" value="">
+                                                                <input id="sequencialTarefa" name="sequencialTarefa" type="hidden" value="">
+                                                                <input id="dataSolicitacao" name="dataSolicitacao" type="hidden" value="">
+                                                                <input id="tipo" name="tipo" type="hidden" value="0">
+                                                                <section class="col col-3">
+                                                                    <label class="label" for="tarefa">Tarefa</label>
+                                                                    <label class="select">
+                                                                        <select id="tarefa" name="tarefa">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $sql =  "SELECT codigo, descricao  FROM Ntl.tarefa  where ativo = 1  
+                                                                            AND (visivel = 3 OR visivel = 2) order by descricao;";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = $row['codigo'];
+                                                                                $descricao = ($row['descricao']);
+                                                                                echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                </section>
+                                                                <section class="col col-3">
+                                                                    <label class="label">Data Final</label>
+                                                                    <label class="input"> <i class="icon-append fa fa-calendar"></i>
+                                                                        <input id="dataFinal" name="dataFinal" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="off" onchange="validaCampoData('#dataFinal')">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-3">
+                                                                    <label class="label" for="responsavel">Responsável</label>
+                                                                    <label class="select">
+                                                                        <select id="responsavel" name="responsavel">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $sql =  "SELECT codigo, nome  FROM Ntl.responsavel  where ativo = 1 order by nome;";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = $row['codigo'];
+                                                                                $nome = ($row['nome']);
+                                                                                echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                </section>
+                                                                <section class="col col-3">
+                                                                    <label class="label" for="grupoResponsavel">Grupo responsável</label>
+                                                                    <label class="select">
+                                                                        <select id="grupoResponsavel" name="grupoResponsavel">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $sql =  "SELECT codigo, descricao as nome  FROM Ntl.grupoLicitacao  where ativo = 1 order by nome;";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = $row['codigo'];
+                                                                                $nome = ($row['nome']);
+                                                                                echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                </section>
+
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-12">
+                                                                    <label class="label">Observação</label>
+                                                                    <textarea id="observacaoPrePregao" name="observacaoPrePregao" class="form-control" rows="3" style="resize:vertical"></textarea>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-4">
+                                                                    <button id="btnAddTarefa" type="button" class="btn btn-primary" title="Adicionar Tarefa">
+                                                                        <i class="fa fa-plus"></i>
+                                                                    </button>
+                                                                    <button id="btnRemoverTarefa" type="button" class="btn btn-danger" title="Remover Tarefa">
+                                                                        <i class="fa fa-minus"></i>
+                                                                    </button>
+                                                                </section>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableTarefa" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th></th>
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                Tarefa</th>
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                Data Final</th>
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                Responsável</th>
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                Grupo Responsável</th>
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                Data e Hora da Solicitação</th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-12">
@@ -241,13 +352,14 @@ include("inc/nav.php");
                                                                 <label class="label">Upload de Arquivo</label>
                                                                 <label class="input input-file">
                                                                     <span class="button"><input type="file" id="uploadArquivo" name="uploadArquivo[]" multiple>Selecionar
-                                                                        documentos</span><input id="uploadArquivoText" type="text" autocomplete="off">
+                                                                        documentos</span><input id="uploadArquivoText" type="text">
                                                                 </label>
                                                             </section>
                                                             <section id="uploadArquivoLink" class="col col-4">
 
                                                             </section>
                                                         </div>
+
                                                         <div class="row" id="legenda">
                                                             <section class="col col-12">
                                                                 <legend><strong></strong></legend>
@@ -273,8 +385,6 @@ include("inc/nav.php");
                                                                     <input id="horaLancamento" name="horaLancamento" class="readonly" type="text" style="text-align: center" autocomplete="new-password" readonly> </label>
                                                             </section>
                                                         </div>
-
-
 
                                                         <div class="row" id="logUsuarioAtualizacao">
 
@@ -325,6 +435,9 @@ include("inc/nav.php");
                                         <button type="submited" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
+                                        <!-- <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <span class="fa fa-file-o"></span>
+                                        </button> -->
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
                                             <span class="fa fa-backward "></span>
                                         </button>
@@ -357,7 +470,8 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroPregaoCadastro.js" type="text/javascript"></script>
+
+<script src="<?php echo ASSETS_URL; ?>/js/business_licitacaoParticiparPregao.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -384,18 +498,10 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
+    jsonTarefaArray = JSON.parse($("#jsonTarefa").val());
+
     $(document).ready(function() {
 
-        $('#formUsuario').validate({
-            // Rules for form validation
-            rules: {
-                'responsavel': {
-                    required: true,
-                    maxlength: 155
-                }
-            },
-
-        });
         $('#horaAlerta').mask('99:99', {
             placeholder: "hh:mm"
         });
@@ -444,7 +550,8 @@ include("inc/scripts.php");
             var id = +$("#codigo").val();
 
             if (id === 0) {
-                smartAlert("Atenção", "Selecione um pregão para excluir !", "error");
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#nome").focus();
                 return;
             }
 
@@ -457,19 +564,20 @@ include("inc/scripts.php");
             var dataAtual = moment().format("DD/MM/YYYY");
             var dataPregao = $("#dataPregao").val();
 
-            //Data Atual
+            //Transformando em um objeto usando moment -> Data Atual
             dataAtual = dataAtual.split("/");
             dataAtual[1] = dataAtual[1] - 1;
             dataAtual = moment([dataAtual[2], dataAtual[1], dataAtual[0]]);
 
-            //Data Pregão
+            //ransformando em um objeto usando moment -> Data Pregão
             dataPregao = dataPregao.split("/");
             dataPregao[1] = dataPregao[1] - 1;
             dataPregao = moment([dataPregao[2], dataPregao[1], dataPregao[0]]);
+
             var diferenca = dataAtual.diff(dataPregao, 'days');
 
             if (diferenca > 0) {
-                smartAlert("Atenção", "A data do pregão não pode ser anterior a data atual !", "error");
+                smartAlert("Atenção", "A data do pregão não pode ser maior do que o dia de hoje !", "error");
                 $("#dataPregao").val(" ");
                 return;
             }
@@ -484,6 +592,17 @@ include("inc/scripts.php");
             voltar();
         });
 
+        //Botões de Tarefa
+        $("#btnAddTarefa").on("click", function() {
+            if (validaTarefa())
+                addTarefa();
+        });
+
+        $("#btnRemoverTarefa").on("click", function() {
+            excluirTarefa();
+        });
+
+
         $("#dataLancamento").on("change", function() {
             validaCampoData("#dataLancamento");
         });
@@ -494,14 +613,12 @@ include("inc/scripts.php");
             validaCampoData("#dataFinal");
         });
 
-
         // UPLOADS  
         $("input[name='uploadArquivo[]']").change(function() {
 
             var files = document.getElementById("uploadArquivo").files;
             var array = [];
             var tamanhoTotal = 0;
-
             var tamanhoMaximoPorCampo =
                 20971520; // Foi configurado para 20MB como total máximo || 20MB = 20971520 bytes. 
             for (var i = 0; i < files.length; i++) {
@@ -531,8 +648,6 @@ include("inc/scripts.php");
         //Desabilita os campos para aparecerem só na recuperação de pregões.
         document.getElementById("legenda").style.display = "none";
         document.getElementById("logUsuario").style.display = "none";
-        document.getElementById("logUsuarioAtualizacao").style.display = "none";
-
 
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
@@ -548,14 +663,14 @@ include("inc/scripts.php");
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var out = piece[1];
+                            var strArrayTarefa = piece[2];
 
                             piece = out.split("^");
                             codigo = piece[0];
                             portal = piece[1];
                             ativo = piece[2];
                             orgaoLicitante = piece[3];
-                            /*Participa Pregao seria a proxima informação, como
-                             * não tem nessa tela, pula-se um */
+                            participaPregao = parseInt(piece[4]);
                             objetoLicitado = piece[5];
                             observacao = piece[6];
                             oportunidadeCompra = piece[7];
@@ -571,12 +686,12 @@ include("inc/scripts.php");
                             dataCadastro = piece[12];
                             usuarioAlteracao = piece[13];
                             dataAlteracao = piece[14];
-                            /*Garimpado seria a proxima informação, como
-                             * não tem nessa tela, pula-se um */
+                            garimpado = piece[15];
                             resumoPregao = piece[16];
                             grupoResponsavel = piece[17];
                             responsavelPregao = piece[18];
                             valorEstimado = piece[19];
+
 
                             //Arrumando o valor de dataLancamento e horaLancamento
                             dataCadastro = dataCadastro.split(" ");
@@ -586,6 +701,8 @@ include("inc/scripts.php");
                             horaLancamento = horaLancamento[0] + ":" + horaLancamento[1];
 
                             //Arrumando o valor de dataLancamento e horaLancamento de Atualização
+                            dataLancamentoAtualizacao = "";
+                            horaLancamentoAtualizacao = "";
                             if (dataAlteracao != "") {
                                 dataAlteracao = dataAlteracao.split(" ");
                                 dataLancamentoAtualizacao = dataAlteracao[0].split("-");
@@ -595,13 +712,12 @@ include("inc/scripts.php");
                             }
 
 
-
                             $("#codigo").val(codigo);
                             $("#portal").val(portal);
                             $("#ativo").val(ativo);
                             $("#orgaoLicitante").val(orgaoLicitante);
+                            $("#participaPregao").val(participaPregao);
                             $("#objetoLicitado").val(objetoLicitado);
-                            $("#observacao").val(observacao);
                             $("#oportunidadeCompra").val(oportunidadeCompra);
                             $("#numeroPregao").val(numeroPregao);
                             $("#dataPregao").val(dataPregao);
@@ -612,16 +728,21 @@ include("inc/scripts.php");
                             $("#quemLancouAtualizacao").val(usuarioAlteracao);
                             $("#dataLancamentoAtualizacao").val(dataLancamentoAtualizacao);
                             $("#horaLancamentoAtualizacao").val(horaLancamentoAtualizacao);
+                            $("#observacao").val(observacao);
                             $("#resumoPregao").val(resumoPregao);
                             $("#grupo").val(grupoResponsavel);
                             $("#responsavelPregao").val(responsavelPregao);
+                            $("#jsonTarefa").val(strArrayTarefa);
                             $("#valorEstimado").val(valorEstimado);
+                            jsonTarefaArray = JSON.parse($("#jsonTarefa").val());
+                            fillTableTarefa();
 
                             document.getElementById("legenda").style.display = "";
                             document.getElementById("logUsuario").style.display = "";
                             if (usuarioAlteracao != "" && dataAlteracao != "") {
                                 document.getElementById("logUsuarioAtualizacao").style.display = "";
                             }
+
 
                         }
                     }
@@ -642,7 +763,7 @@ include("inc/scripts.php");
                                 let idCampo = arrayDocumentos[index].idCampo + "Link";
                                 let diretorio = "<?php echo $linkUpload ?>" + endereco + nomeArquivo;
 
-                                $("#" + idCampo).append("<a href ='SYSGC/" + diretorio + "' target='_blank'>" +
+                                $("#" + idCampo).append("<a href ='ChamadoNtl/" + diretorio + "' target='_blank'>" +
                                     nomeVisualizacao[1] + "</a><br>");
 
                             }
@@ -654,7 +775,7 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'cadastro_pregaoFiltro.php');
+        $(location).attr('href', 'licitacao_participarPregaoFiltro.php');
     }
 
     function excluir() {
@@ -667,6 +788,154 @@ include("inc/scripts.php");
 
         excluirPregoes(codigo);
     }
+
+    //############################################################################## LISTA TAREFA INICIO ####################################################################################################################
+
+    function fillTableTarefa() {
+        $("#tableTarefa tbody").empty();
+        for (var i = 0; i < jsonTarefaArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableTarefa tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTarefaArray[i]
+                .sequencialTarefa + '"><i></i></label></td>'));
+
+            var tarefa = $("#tarefa option[value = '" + jsonTarefaArray[i].tarefa + "']").text();
+            var responsavel = $("#responsavel option[value = '" + jsonTarefaArray[i].responsavel + "']").text();
+            var grupoResponsavel = $("#grupoResponsavel option[value = '" + jsonTarefaArray[i].grupoResponsavel + "']").text();
+
+            row.append($('<td class="text-nowrap" onclick="carregaTarefa(' + jsonTarefaArray[i].sequencialTarefa + ');">' +
+                tarefa + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonTarefaArray[i].dataFinal + '</td>'));
+            row.append($('<td class="text-nowrap">' + responsavel + '</td>'));
+            row.append($('<td class="text-nowrap">' + grupoResponsavel + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonTarefaArray[i].dataSolicitacao + '</td>'));
+        }
+    }
+
+    function validaTarefa() {
+
+        //Cria-se uma variável para pegar o momento em que um registro foi criado na lista.
+        var dataSolicitacao = moment().format("DD/MM/YYYY HH:mm");
+        $("#dataSolicitacao").val(dataSolicitacao);
+
+        var dataFinal = $('#dataFinal').val();
+
+        if (dataFinal === '') {
+            smartAlert("Erro", "Informe a Data Final!", "error");
+            return false;
+        }
+
+        return true;
+    }
+
+    function addTarefa() {
+
+        var item = $("#formTarefa").toObject({
+            mode: 'combine',
+            skipEmpty: false
+        });
+
+        if (item["sequencialTarefa"] === '') {
+            if (jsonTarefaArray.length === 0) {
+                item["sequencialTarefa"] = 1;
+            } else {
+                item["sequencialTarefa"] = Math.max.apply(Math, jsonTarefaArray.map(function(o) {
+                    return o.sequencialTarefa;
+                })) + 1;
+            }
+            item["tarefaId"] = 0;
+        } else {
+            item["sequencialTarefa"] = +item["sequencialTarefa"];
+        }
+
+        var index = -1;
+        $.each(jsonTarefaArray, function(i, obj) {
+            if (+$('#sequencialTarefa').val() === obj.sequencialTarefa) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonTarefaArray.splice(index, 1, item);
+        else
+            jsonTarefaArray.push(item);
+
+        $("#jsonTarefa").val(JSON.stringify(jsonTarefaArray));
+        fillTableTarefa();
+        clearFormTarefa();
+
+    }
+
+    function processDataTarefa(node) {
+        // var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        // var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+
+
+        // if (fieldName !== '' && (fieldId === "dataNascimentoFilho")) {
+
+        //     var dataNascimentoFilho = $('#dataNascimentoFilho').val();
+        //     dataNascimentoFilho = dataNascimentoFilho.split("/");
+        //     dataNascimentoFilho = dataNascimentoFilho[2] + "/" + dataNascimentoFilho[1] + "/" + dataNascimentoFilho[0];
+
+        //     return {
+        //         name: fieldName,
+        //         value: dataNascimentoFilho
+        //     };
+        // }
+
+        // return false;
+    }
+
+    function clearFormTarefa() {
+        $("#tarefa").val('');
+        $("#dataFinal").val('');
+        $("#responsavel").val('');
+        $("#grupoResponsavel").val('');
+        $("#observacaoPrePregao").val('');
+        $("#sequencialTarefa").val('');
+    }
+
+    function carregaTarefa(sequencialTarefa) {
+        var arr = jQuery.grep(jsonTarefaArray, function(item, i) {
+            return (item.sequencialTarefa === sequencialTarefa);
+        });
+
+        clearFormTarefa();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#tarefa").val(item.tarefa);
+            $("#dataFinal").val(item.dataFinal);
+            $("#responsavel").val(item.responsavel);
+            $("#grupoResponsavel").val(item.grupoResponsavel);
+            $("#observacaoPrePregao").val(item.observacaoPrePregao);
+            $("#tarefaId").val(item.tarefaId);
+            $("#sequencialTarefa").val(item.sequencialTarefa);
+        }
+    }
+
+    function excluirTarefa() {
+        var arrSequencial = [];
+        $('#tableTarefa input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonTarefaArray.length - 1; i >= 0; i--) {
+                var obj = jsonTarefaArray[i];
+                if (jQuery.inArray(obj.sequencialTarefa, arrSequencial) > -1) {
+                    jsonTarefaArray.splice(i, 1);
+                }
+            }
+            $("#jsonTarefa").val(JSON.stringify(jsonTarefaArray));
+            fillTableTarefa();
+        } else
+            smartAlert("Erro", "Selecione pelo menos uma informação para excluir.", "error");
+    }
+
+    //############################################################################## LISTA Filho FIM #######################################################################################################################
+
 
     function validaCampoData(campo) {
         var valor = $(campo).val();
@@ -707,11 +976,13 @@ include("inc/scripts.php");
     function gravar() {
         var portal = $("#portal").val();
         var orgaoLicitante = $("#orgaoLicitante").val();
+        var participaPregao = $("#participaPregao option:selected").val();
         var numeroPregao = $("#numeroPregao").val();
         var dataPregao = $("#dataPregao").val();
         var horaPregao = $("#horaPregao").val();
         var oportunidadeCompra = $("#oportunidadeCompra").val();
         var resumoPregao = $("#resumoPregao").val();
+
 
         if (portal === "") {
             smartAlert("Atenção", "Selecione um portal !", "error");
@@ -722,6 +993,12 @@ include("inc/scripts.php");
         if (orgaoLicitante === "") {
             smartAlert("Atenção", "Digite o Nome do Orgão Licitante !", "error");
             $("#orgaoLicitante").focus();
+            return;
+        }
+
+        if (participaPregao === "") {
+            smartAlert("Atenção", "Escolha uma opção do Participar !", "error");
+            $("#participaPregao").focus();
             return;
         }
 
