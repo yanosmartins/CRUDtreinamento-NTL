@@ -338,6 +338,13 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/index.php"));
         }
     }
+
+    $condicaoEstoqueOk = (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true));
+
+    if ($condicaoEstoqueOk) {
+        $page_nav['operacao']['sub']['estoque'] = array("title" => "Estoque", "icon" => "fa box-open");
+        $page_nav['operacao']['sub']['estoque']['sub'] = array();
+    }
 }
 
 //configuration variables
