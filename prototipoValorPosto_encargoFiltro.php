@@ -37,7 +37,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]['prototipoValorPosto']['sub']["encargo"]["active"] = true;
+$page_nav["operacao"]["sub"]['faturamento']['sub']["encargo"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -88,12 +88,12 @@ include("inc/nav.php");
                                                 <fieldset>
                                                     <div class="row ">
 
-                                                    <section class="col col-4">
-                                                                <label class="label">Nome</label>
-                                                                <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" type="text" value="">
-                                                                </label>
-                                                            </section>
+                                                        <section class="col col-4">
+                                                            <label class="label">Nome</label>
+                                                            <label class="input">
+                                                                <input id="nome" maxlength="255" name="nome" type="text" value="">
+                                                            </label>
+                                                        </section>
 
                                                         <section class="col col-2">
                                                             <label class="label">Percentual </label>
@@ -131,8 +131,40 @@ include("inc/nav.php");
                             </form>
                         </div>
                         <div id="resultadoBusca"></div>
+                        <div class="table-container">
+                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="text-left" style="min-width:30px;">Descrição</th>
+                                            <th class="text-left" style="min-width:30px;">Percentual</th>
+                                            <th class="text-left" style="min-width:35px;">Ativo</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        echo '<tr >';
+                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SENAC</a></td>';
+                                        echo '<td class="text-left">2,0000%</td>';
+                                        echo '<td class="text-left">Sim</td>';
+                                        echo '</tr >';
+                                        echo '<tr >';
+                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">INSS</a></td>';
+                                        echo '<td class="text-left">7,799%</td>';
+                                        echo '<td class="text-left">Sim</td>';
+                                        echo '</tr >';
+                                        echo '<tr >';
+                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SESC</a></td>';
+                                        echo '<td class="text-left">5,0000%</td>';
+                                        echo '<td class="text-left">Sim</td>';
+                                        echo '</tr >';
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
             </article>
         </div>
         </section>

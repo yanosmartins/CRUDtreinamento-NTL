@@ -35,7 +35,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-// $page_nav["tabelaBasica"]["sub"]["valorPosto"]["active"] = true;
+$page_nav["operacao"]["sub"]["faturamento"]["sub"]["BDI"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -103,7 +103,7 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar" >
+                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
                                         <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
@@ -113,7 +113,41 @@ include("inc/nav.php");
                                 </form>
                             </div>
                             <div id="resultadoBusca"></div>
+                            <div class="table-container">
+                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                    <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="text-left" style="min-width:30px;">Descrição</th>
+                                                <th class="text-left" style="min-width:30px;">Percentual</th>
+                                                <th class="text-left" style="min-width:35px;">Ativo</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            echo '<tr >';
+                                            echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Despesas Indiretas</a></td>';
+                                            echo '<td class="text-left">2,0000%</td>';
+                                            echo '<td class="text-left">Sim</td>';
+                                            echo '</tr >';
+                                            echo '<tr >';
+                                            echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Lucro</a></td>';
+                                            echo '<td class="text-left">7,799%</td>';
+                                            echo '<td class="text-left">Sim</td>';
+                                            echo '</tr >';
+                                            echo '<tr >';
+                                            echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">ISS</a></td>';
+                                            echo '<td class="text-left">5,0000%</td>';
+                                            echo '<td class="text-left">Sim</td>';
+                                            echo '</tr >';
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </article>
             </div>
@@ -158,35 +192,22 @@ include("inc/scripts.php");
 <script>
     $(document).ready(function() {
         $('#btnSearch').on("click", function() {
-            // listarFiltro();
+            listarFiltro();
         });
         $('#btnNovo').on("click", function() {
             novo();
         });
     });
 
-    // function listarFiltro() {
+    function listarFiltro() {
 
-    //     var descricaoFiltro = $('#descricao').val();
-    //     var siglaFiltro = $('#sigla').val();
 
-    //     var ativoFiltro = $('#ativo').val();
 
-    //     if (descricaoFiltro !== "") {
-    //         descricaoFiltro = descricaoFiltro.replace(/^\s+|\s+$/g, "");
-    //         descricaoFiltro = encodeURIComponent(descricaoFiltro);
-    //     }
-
-    //     if (siglaFiltro !== "") {
-    //         siglaFiltro = siglaFiltro.replace(/^\s+|\s+$/g, "");
-    //         siglaFiltro = encodeURIComponent(siglaFiltro);
-    //     }
-
-    //     var parametrosUrl = '&descricaoFiltro=' + descricaoFiltro + '&siglaFiltro=' + siglaFiltro + '&ativoFiltro=' + ativoFiltro;
-    //     $('#resultadoBusca').load('tabelaBasica_lancamentoFiltroListagem.php?' + parametrosUrl);
-    // }
+        // var parametrosUrl = '&descricaoFiltro=' + descricaoFiltro + '&siglaFiltro=' + siglaFiltro + '&ativoFiltro=' + ativoFiltro;
+        $('#resultadoBusca').load('tabelaBasica_bdiFiltroListagem.php?');
+    }
 
     function novo() {
-        $(location).attr('href', 'prototipoValorPosto_bdiCadastro.php');
+        $(location).attr('href', 'tabelaBasica_bdiFiltro.php');
     }
 </script>

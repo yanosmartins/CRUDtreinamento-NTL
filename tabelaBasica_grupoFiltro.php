@@ -37,7 +37,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]['prototipoValorPosto']['sub']["grupo"]["active"] = true;
+$page_nav["operacao"]["sub"]['faturamento']['sub']["grupo"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -121,6 +121,35 @@ include("inc/nav.php");
                                 </form>
                             </div>
                             <div id="resultadoBusca"></div>
+                            <div class="table-container">
+                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                    <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="text-left" style="min-width:30px;">Descrição</th>
+                                               
+                                                <th class="text-left" style="min-width:35px;">Ativo</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            echo '<tr >';
+                                            echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Grupo A</a></td>';
+                                            echo '<td class="text-left">Sim</td>';
+                                            echo '</tr >';
+                                            echo '<tr >';
+                                            echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Grupo B</a></td>';
+                                            echo '<td class="text-left">Sim</td>';
+                                            echo '</tr >';
+                                            echo '<tr >';
+                                            echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Grupo C</a></td>';
+                                            echo '<td class="text-left">Sim</td>';
+                                            echo '</tr >';
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                         </div>
                     </div>
                 </article>
