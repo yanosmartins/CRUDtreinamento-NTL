@@ -1,7 +1,7 @@
 function gravaPregoesNaoIniciados(formData) {
     formData.append('funcao', 'grava');
     $.ajax({ 
-        url: 'js/sqlscope_contratacaoPregaoNaoIniciado.php',
+        url: 'js/sqlscope_licitacaoPregaoNaoIniciado.php',
         type: 'post',
         data: formData,
         processData: false,
@@ -22,7 +22,7 @@ function gravaPregoesNaoIniciados(formData) {
 
 function recuperaPregoesNaoIniciados(codigo, callback) {
     $.ajax({
-        url: 'js/sqlscope_contratacaoPregaoNaoIniciado.php',
+        url: 'js/sqlscope_licitacaoPregaoNaoIniciado.php',
         dataType: 'html', 
         type: 'post',
         data: {funcao: 'recupera', codigo: codigo},      
@@ -34,7 +34,7 @@ function recuperaPregoesNaoIniciados(codigo, callback) {
 
 function recuperaUpload(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_contratacaoPregaoNaoIniciado.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_licitacaoPregaoNaoIniciado.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'recuperaUpload', id: id }, //valores enviados ao script     
@@ -47,7 +47,7 @@ function recuperaUpload(id, callback) {
 
 function excluirPregoesNaoIniciados(codigo, callback) {
     $.ajax({
-        url: 'js/sqlscope_contratacaoPregaoNaoIniciado.php', 
+        url: 'js/sqlscope_licitacaoPregaoNaoIniciado.php', 
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'excluir', codigo: codigo}, //valores enviados ao script   

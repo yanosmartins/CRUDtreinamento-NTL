@@ -448,7 +448,7 @@ include "inc/footer.php";
 include "inc/scripts.php";
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoPregaoNaoIniciado.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_licitacaoPregaoNaoIniciado.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S)
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -726,7 +726,7 @@ include "inc/scripts.php";
     }
 
     function voltar() {
-        $(location).attr('href', 'contratacao_pregaoNaoIniciadoFiltro.php');
+        $(location).attr('href', 'licitacao_pregaoNaoIniciadoFiltro.php');
     }
 
     // Inclusão com o whatsapp
