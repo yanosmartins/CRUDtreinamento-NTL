@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Garimpar Pregões";
+$page_title = "Pregões Não Iniciados";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]["licitacao"]["active"] = true;
+$page_nav["operacao"]["sub"]["licitacao"]["sub"]["pregoesNaoIniciados"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -96,14 +96,14 @@ include("inc/nav.php");
                                                                     <select id="portal" name="portal">
                                                                         <option></option>
                                                                         <?php
+                                                                        $sql =  "SELECT codigo, descricao, endereco FROM Ntl.portal where ativo = 1 order by descricao";
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, descricao FROM 
-                                                                        sysgc.dbo.portal WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $codigo = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                        foreach($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = ($row['descricao']);
+                                                                            $endereco  = ($row['endereco']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $descricao . '&nbsp; - &nbsp;' . $endereco . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
@@ -165,17 +165,16 @@ include("inc/nav.php");
                                                                     <select id="tarefa" name="tarefa">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao  FROM dbo.tarefa  where ativo = 1  
-                                                                            AND (visivel = 3 OR visivel = 1) order by descricao;";
-                                                                        $reposit = new reposit();
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
-                                                                            $codigo = $row['codigo'];
-                                                                            $nomeTarefa = ($row['descricao']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $nomeTarefa . '</option>';
-                                                                        }
-                                                                        ?>
+                                                                            $sql = "SELECT codigo, descricao  FROM Ntl.tarefa  where ativo = 1
+                                                                            AND (visivel = 3 OR visivel = 2) order by descricao";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = $row['codigo'];
+                                                                                $descricao = ($row['descricao']);
+                                                                                echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
+                                                                            }
+                                                                            ?>
                                                                     </select><i></i>
                                                             </section>
                                                             <section class="col col-3 col-auto">
@@ -184,12 +183,10 @@ include("inc/nav.php");
                                                                     <select id="responsavel" name="responsavel">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, nome FROM dbo.responsavel  where ativo = 1  
-                                                                        order by nome";
+                                                                        $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $nome = ($row['nome']);
                                                                             echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
@@ -335,7 +332,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPregoes.php',
+                    url: 'js/sqlscope_cadastroPregaoCadastro.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -431,7 +428,7 @@ include("inc/scripts.php");
         }
 
         if (tipoPesquisa == "1") {
-            $('#resultadoBusca').load('contratacao_pregaoNaoIniciadoFiltroListagems.php?', {
+            $('#resultadoBusca').load('contratacao_pregaoNaoIniciadoTarefaFiltroListagem.php?', {
                 portal: portal,
                 orgaoLicitante: orgaoLicitante,
                 numeroPregao: numeroPregao,
