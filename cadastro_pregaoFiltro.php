@@ -88,11 +88,11 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao FROM 
-                                                                        sysgc.dbo.portal WHERE ativo = 1 ORDER BY descricao";
+                                                                        Ntl.portal WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $codigo = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int)$row['codigo'];
+                                                                            $descricao = $row['descricao'];
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -125,8 +125,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="orgaoLicitante">Nome do Orgão Licitante</label>
                                                                 <label class="input">
                                                                     <input id="orgaoLicitanteId" type="hidden" value="">
-                                                                    <input id="orgaoLicitante" name="orgaoLicitanteFiltro" autocomplete="off" class="form-control" 
-                                                                    placeholder="Digite o nome do orgão licitante.." type="text" value="">
+                                                                    <input id="orgaoLicitante" name="orgaoLicitanteFiltro" autocomplete="off" class="form-control" placeholder="Digite o nome do orgão licitante.." type="text" value="">
                                                                     <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
@@ -147,7 +146,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.grupoLicitacao where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
                                                                             echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
@@ -164,7 +163,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $nome = ($row['nome']);
                                                                             echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
