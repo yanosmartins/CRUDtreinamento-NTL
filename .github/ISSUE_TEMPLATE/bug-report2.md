@@ -1,5 +1,5 @@
 ---
-name: Bug report
+name: Bug report2
 about: Create a report to help us improve
 title: ''
 labels: ''
@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+**descreva seu erro**
 A clear and concise description of what the bug is.
 
 **To Reproduce**
