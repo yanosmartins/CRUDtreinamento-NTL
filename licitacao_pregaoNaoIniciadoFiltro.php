@@ -413,7 +413,7 @@ include("inc/scripts.php");
         var responsavelPregao = $('#responsavelPregao').val();
 
         if (tipoPesquisa == "0") {
-            $('#resultadoBusca').load('contratacao_pregaoNaoIniciadoFiltroListagem.php?', {
+            $('#resultadoBusca').load('licitacao_pregaoNaoIniciadoFiltroListagem.php?', {
                 portal: portal,
                 orgaoLicitante: orgaoLicitante,
                 numeroPregao: numeroPregao,
@@ -428,7 +428,7 @@ include("inc/scripts.php");
         }
 
         if (tipoPesquisa == "1") {
-            $('#resultadoBusca').load('contratacao_pregaoNaoIniciadoTarefaFiltroListagem.php?', {
+            $('#resultadoBusca').load('licitacao_pregaoNaoIniciadoTarefaFiltroListagem.php?', {
                 portal: portal,
                 orgaoLicitante: orgaoLicitante,
                 numeroPregao: numeroPregao,
