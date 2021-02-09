@@ -342,7 +342,7 @@ if ($condicaoOperacaoOk) {
     $condicaoEstoqueOk = (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true));
 
     if ($condicaoEstoqueOk) {
-        $page_nav['operacao']['sub']['estoque'] = array("title" => "Estoque", "icon" => "fa box-open");
+        $page_nav['operacao']['sub']['estoque'] = array("title" => "Estoque", "icon" => "fa fa-cubes");
         $page_nav['operacao']['sub']['estoque']['sub'] = array();
     }
 }
