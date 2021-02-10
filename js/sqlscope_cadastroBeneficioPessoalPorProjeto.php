@@ -190,7 +190,7 @@ function gravaBeneficio()
 
     $totalValorAcrescimoBeneficioIndireto = str_replace(',', '.', $beneficio['totalValorAcrescimoBeneficioIndireto']);
     $totalValorAbaterBeneficioIndireto = str_replace(',', '.', $beneficio['totalValorAbaterBeneficioIndireto']);
- 
+
     $ativo = 1;
 
     $saldoDisponivel = validaNumero($beneficio['saldoDisponivel']);
@@ -204,10 +204,10 @@ function gravaBeneficio()
 
     $localizacao = +$beneficio['localizacao'];
     $posto = +$beneficio['descricaoPosto'];
-    if($localizacao == 0){
+    if ($localizacao == 0) {
         $localizacao = 'NULL';
     }
-    if($posto == 0){
+    if ($posto == 0) {
         $posto = 'NULL';
     }
 
@@ -227,22 +227,21 @@ function gravaBeneficio()
                 if (($campo === "sequencialValeTransporte")) {
                     continue;
                 }
-                if (($campo === "valorTotalVT")) {
+                if (mb_eregi("valor", $campo)) {
                     // $valor = str_replace('.', '', $valor);
                     $valor = str_replace(',', '.', $valor);
                 }
-                if (($campo === "valorPassagem")) {
-                    // $valor = str_replace('.', '', $valor);
-                    $valor = str_replace(',', '.', $valor);
+                if (mb_ereg("^\.0", $valor)) {
+                    $valor = 0;
                 }
                 if (($campo === "dataInativacao")) {
-                    if($valor === "//" || $valor === ""){
+                    if ($valor === "//" || $valor === "") {
                         $valor = NULL;
-                    }else{
+                    } else {
                         $valor = validaData($valor);
                     }
                 }
-             
+
                 $xmlValeTransporte = $xmlValeTransporte . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
             $xmlValeTransporte = $xmlValeTransporte . "</" . $nomeTabela . ">";
@@ -276,64 +275,6 @@ function gravaBeneficio()
                 if (($campo === "sequencialPlanoSaude")) {
                     continue;
                 }
-                if (($campo === "valorFuncionarioTitular")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "descontoSindicatoTitular")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "valorDescontoSindicatoTitular")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "descontoProjetoTitular")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "valorDescontoProjetoTitular")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "valorProdutoTitular")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "valorEmpresaTitular")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-
-
                 if (($campo === "valorDependente")) {
                     continue;
                 }
@@ -355,7 +296,7 @@ function gravaBeneficio()
                 if (($campo === "valorEmpresaDependente")) {
                     continue;
                 }
-                if (($campo === "valorTotalTitular")) {
+                if (mb_eregi("valor|desconto", $campo)) {
                     if ($valor == "") {
                         $valor = 0;
                     } else {
@@ -363,35 +304,9 @@ function gravaBeneficio()
                         $valor = str_replace(',', '.', $valor);
                     }
                 }
-                if (($campo === "valorTotalGeral")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
+                if (mb_ereg("^\.0", $valor)) {
+                    $valor = 0;
                 }
-                if (($campo === "valorDescontoPlanoSaudeTitular")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "descontoPlanoSaudeTitular")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                // if (($campo === "valorFuncionarioTitular")) {
-                //     $valor = str_replace('.', '', $valor);
-                //     $valor = str_replace(',', '.', $valor);
-                // }
-
                 $xmlPlanoSaude = $xmlPlanoSaude . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
             $xmlPlanoSaude = $xmlPlanoSaude . "</" . $nomeTabela . ">";
@@ -425,62 +340,6 @@ function gravaBeneficio()
                 if (($campo === "sequencialPlanoSaudeDependente")) {
                     continue;
                 }
-                if (($campo === "valorDependente")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "descontoSindicatoDependente")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "valorDescontoSindicatoDependente")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "descontoProjetoDependente")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "valorDescontoProjetoDependente")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "valorProdutoDependente")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
-                if (($campo === "valorEmpresaDependente")) {
-                    if ($valor == "") {
-                        $valor = 0;
-                    } else {
-                        $valor = str_replace('.', '', $valor);
-                        $valor = str_replace(',', '.', $valor);
-                    }
-                }
                 if (($campo === "valorTotalTitular")) {
                     continue;
                 }
@@ -515,6 +374,18 @@ function gravaBeneficio()
                 if (($campo === "descontoPlanoSaudeTitular")) {
                     continue;
                 }
+                if (mb_eregi("valor|desconto", $campo)) {
+                    if ($valor == "") {
+                        $valor = 0;
+                    } else {
+                        $valor = str_replace('.', '', $valor);
+                        $valor = str_replace(',', '.', $valor);
+                    }
+                }
+                if (mb_ereg("^\.0", $valor)) {
+                    $valor = 0;
+                }
+
                 $xmlPlanoSaudeDependente = $xmlPlanoSaudeDependente . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
             $xmlPlanoSaudeDependente = $xmlPlanoSaudeDependente . "</" . $nomeTabela . ">";
@@ -550,29 +421,16 @@ function gravaBeneficio()
                 if (($campo === "sequencialBeneficioIndireto")) {
                     continue;
                 }
-                if (($campo === "valorBeneficioFuncionario")) {
-                    $valor = str_replace('.', '', $valor);
-                    $valor = str_replace(',', '.', $valor);
+                if (mb_eregi("valor|saldo", $campo)) {
+                    if ($valor == "") {
+                        $valor = 0;
+                    } else {
+                        $valor = str_replace('.', '', $valor);
+                        $valor = str_replace(',', '.', $valor);
+                    }
                 }
-                if (($campo === "valorAcrescimo")) {
-                    $valor = str_replace('.', '', $valor);
-                    $valor = str_replace(',', '.', $valor);
-                }
-                if (($campo === "valorAbater")) {
-                    $valor = str_replace('.', '', $valor);
-                    $valor = str_replace(',', '.', $valor);
-                }
-                if (($campo === "valorFinalBeneficio")) {
-                    $valor = str_replace('.', '', $valor);
-                    $valor = str_replace(',', '.', $valor);
-                }
-                if (($campo === "valorBolsaBeneficioSindicato")) {
-                    $valor = str_replace('.', '', $valor);
-                    $valor = str_replace(',', '.', $valor);
-                }
-                if (($campo === "saldoDisponivel")) {
-                    $valor = str_replace('.', '', $valor);
-                    $valor = str_replace(',', '.', $valor);
+                if (mb_ereg("^\.0", $valor)) {
+                    $valor = 0;
                 }
                 $xmlBeneficioIndireto = $xmlBeneficioIndireto . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
@@ -700,7 +558,7 @@ function recuperaBeneficio()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
 
         $id = validaNumeroRecupera($row['codigo']);
@@ -762,7 +620,7 @@ function recuperaBeneficio()
         $valorFuncionarioCestaBasica = validaNumeroRecupera($row['valorFuncionarioCestaBasica']);
         $valorEmpresaCestaBasica = validaNumeroRecupera($row['valorEmpresaCestaBasica']);
 
-     
+
         $consideraVAVR = validaNumeroRecupera($row['consideraVAVR']);
         $consideraVr = validaNumeroRecupera($row['consideraVr']);
         $consideraVt = validaNumeroRecupera($row['consideraVt']);
@@ -827,7 +685,7 @@ function recuperaBeneficio()
 
         $contadorPlanoSaude = 0;
         $arrayPlanoSaude = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
 
 
 
@@ -906,7 +764,7 @@ function recuperaBeneficio()
 
         $contadorPlanoSaudeDependente = 0;
         $arrayPlanoSaudeDependente = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
 
 
 
@@ -978,7 +836,7 @@ function recuperaBeneficio()
 
         $contadorVT = 0;
         $arrayVT = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
 
             $beneficioProjetoId = $row['beneficioProjeto'];
             $trajetoIdaVolta = +$row['trajetoIdaVolta'];
@@ -1008,9 +866,9 @@ function recuperaBeneficio()
                 $descricaoTrajeto = "Ida e Volta";
             }
 
-            if($trajetoIdaVolta === 1){
+            if ($trajetoIdaVolta === 1) {
                 $valorTotalVT = $row['valorTotal'];
-                $valorTotalVT = str_replace('.', ',', $valorTotalVT);                
+                $valorTotalVT = str_replace('.', ',', $valorTotalVT);
             }
             $valorTotalVT = $row['valorTotal'];
             $observacaoVT = $row['observacao'];
@@ -1023,7 +881,7 @@ function recuperaBeneficio()
                 $sql = "SELECT codigo, descricao FROM Ntl.valeTransporteModal WHERE codigo =  " . $codigoVT;
                 $reposit = new reposit();
                 $result2 = $reposit->RunQuery($sql);
-                if($row = $result2[0]) {
+                if ($row = $result2[0]) {
 
                     $descricaoVT = $row['descricao'];
                 }
@@ -1032,7 +890,7 @@ function recuperaBeneficio()
                 $sql = "SELECT codigo, descricao FROM Ntl.valeTransporteUnitario WHERE codigo =  " . $codigoVT;
                 $reposit = new reposit();
                 $result2 = $reposit->RunQuery($sql);
-                if($row = $result2[0]) {
+                if ($row = $result2[0]) {
 
                     $descricaoVT = $row['descricao'];
                 }
@@ -1055,7 +913,7 @@ function recuperaBeneficio()
                 "tipoVale" => $tipoVale,
                 "valeTransporte" => $codigoVT,
                 "trajetoVT" => $trajeto,
-                "trajetoIdaVolta" => $trajetoIdaVolta, 
+                "trajetoIdaVolta" => $trajetoIdaVolta,
                 "dataInativacao" => $dataInativacao
             );
         }
@@ -1074,7 +932,7 @@ function recuperaBeneficio()
 
         $contadorBeneficioDireto = 0;
         $arrayBeneficioIndireto = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
 
 
 
@@ -1091,7 +949,7 @@ function recuperaBeneficio()
             $valorFinalBeneficio = str_replace('.', ',', $valorFinalBeneficio);
 
             $beneficio = +$row['beneficio']; //
-            
+
 
 
 
@@ -1185,7 +1043,7 @@ function recuperaBeneficio()
             $trajetoIdaVolta . "^" .
             $diaUtilJaneiroVT   . "^" .
             $diaUtilFevereiroVT . "^" .
-            $diaUtilMarcoVT     . "^" . 
+            $diaUtilMarcoVT     . "^" .
             $diaUtilAbrilVT     . "^" .
             $diaUtilMaioVT      . "^" .
             $diaUtilJunhoVT     . "^" .
@@ -1195,15 +1053,15 @@ function recuperaBeneficio()
             $diaUtilOutubroVT   . "^" .
             $diaUtilNovembroVT  . "^" .
             $diaUtilDezembroVT . "^" .
-            $tipoDiaUtilVAVR . "^" . 
-            $tipoDiaUtilVT . "^" . 
-            $municipioDiasUteisVAVR . "^" . 
-            $municipioDiasUteisVT . "^" . 
-            $municipioFerias . "^" . 
-            $tipoBeneficio . "^" . 
-            $escalaFerias . "^" . 
-            $escalaFeriasVAVR . "^" . 
-            $localizacao . "^" . 
+            $tipoDiaUtilVAVR . "^" .
+            $tipoDiaUtilVT . "^" .
+            $municipioDiasUteisVAVR . "^" .
+            $municipioDiasUteisVT . "^" .
+            $municipioFerias . "^" .
+            $tipoBeneficio . "^" .
+            $escalaFerias . "^" .
+            $escalaFeriasVAVR . "^" .
+            $localizacao . "^" .
             $posto;
 
         if ($out == "") {
@@ -1233,8 +1091,8 @@ function excluirBeneficio()
     }
 
     $reposit = new reposit();
-    
-    $result = $reposit->update('Ntl.beneficioProjeto' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
+
+    $result = $reposit->update('Ntl.beneficioProjeto' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');
@@ -1260,7 +1118,7 @@ function recuperaValeTransporteModal()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $id = +$row['codigo'];
         $valorTotal = +$row['valorTotal'];
 
@@ -1296,7 +1154,7 @@ function valorProdutoPlanoSaude()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
         $cobranca = +$row["cobranca"];
         if ($cobranca == 1) {
@@ -1306,7 +1164,7 @@ function valorProdutoPlanoSaude()
                     WHERE produto = " . $id . " AND " . $idade . " BETWEEN idadeInicial AND idadeFinal";
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if($row = $result[0]) {
+            if ($row = $result[0]) {
 
                 $valorIdade = +$row['valorIdade'];
                 //$valorIdade = str_replace('.', ',', $valorIdade);
@@ -1325,7 +1183,7 @@ function valorProdutoPlanoSaude()
             $sql = "SELECT codigo, valorProduto FROM Ntl.produto WHERE codigo = " . $id;
             $reposit = new reposit();
             $result = $reposit->RunQuery($sql);
-            if($row = $result[0]) {
+            if ($row = $result[0]) {
                 $valorProduto = $row['valorProduto'];
             }
             $out = $valorProduto;
@@ -1356,7 +1214,7 @@ function calculaIdadeFuncionario()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $id = +$row['codigo'];
         $dataNascimento = $row['dataNascimento'];
 
@@ -1393,7 +1251,7 @@ function calculaIdadeDependente()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $id = +$row['codigo'];
         $dataNascimento = $row['dataNascimentoDependente'];
 
@@ -1430,7 +1288,7 @@ function recuperaValeTransporteUnitario()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $id = +$row['codigo'];
         $valorUnitario = +$row['valorUnitario'];
 
@@ -1457,7 +1315,7 @@ function populaComboNomeDependentePlanoSaude()
     $out = "";
     $contador = 0;
 
-    foreach($result as $row) {
+    foreach ($result as $row) {
         $id = $row['codigo'];
         $nomeDependente = $row['nomeDependente'];
 
@@ -1488,7 +1346,7 @@ function populaCobrancaPlanoSaude()
     $out = "";
     $contador = 0;
 
-    foreach($result as $row) {
+    foreach ($result as $row) {
         $id = $row['codigo'];
         $cobranca = $row['cobranca'];
 
@@ -1514,7 +1372,7 @@ function populaComboProdutoPlanoSaude()
 
     $out = "";
     $contador = 0;
-    foreach($result as $row) {
+    foreach ($result as $row) {
 
         $id = +$row['codigo'];
         $produto = $row['produto'];
@@ -1548,7 +1406,7 @@ function listaComboVT()
     $out = "";
     $contador = 0;
 
-    foreach($result as $row) {
+    foreach ($result as $row) {
         $id = $row['codigo'];
         $valeTransporte = $row['descricao'];
 
@@ -1582,7 +1440,7 @@ function descontoTipoDiaUtilSindicato()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $id = +$row['codigo'];
         $dataNascimento = $row['dataNascimento'];
 
@@ -1619,7 +1477,7 @@ function valorDescontoSindicatoValeRefeicao()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
         $descontoFolhaVR = validaNumero($row["descontoFolhaRefeicao"]);
         $valorDescontoFolhaVR = validaNumero($row['valorDescontoRefeicao']);
@@ -1651,7 +1509,7 @@ function valorDescontoProjetoValeRefeicao()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
         $descontoFolhaVR = validaNumero($row["descontoFolhaVR"]);
         $valorDescontoFolhaVR = validaNumero($row['valorDescontoFolhaVR']);
@@ -1683,7 +1541,7 @@ function valorDescontoSindicatoPlanoSaude()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
         $valorBolsaPlanoSaude = validaNumeroRecupera($row["valorBolsaPlanoSaude"]);
         if ($valorBolsaPlanoSaude == 0) {
@@ -1718,7 +1576,7 @@ function valorDescontoProjetoPlanoSaude()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
         $valorDescontoFolhaPlanoSaude = validaNumeroRecupera($row["valorDescontoFolhaPlanoSaude"]);
         $descontoFolhaPlanoSaude = validaNumeroRecupera($row['descontoFolhaPlanoSaude']);
@@ -1750,7 +1608,7 @@ function valorDescontoProdutoPlanoSaude()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
         $valorDescontoFolhaPlanoSaude = validaNumeroRecupera($row["valorDescontoFolha"]);
         if ($valorDescontoFolhaPlanoSaude == 0) {
@@ -1790,7 +1648,7 @@ function valorBolsaBeneficioSindicato()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $valorBolsaBeneficio = validaNumeroRecupera($row['valorBolsaBeneficio']);
 
         $out = $valorBolsaBeneficio;
@@ -1822,7 +1680,7 @@ function descricaoSindicato()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
         $descricao = $row['descricao'];
 
@@ -1854,7 +1712,7 @@ function recuperaDescontoVR()
         $out = "";
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
-        if($row = $result[0]) {
+        if ($row = $result[0]) {
 
             $valorDiarioVR = validaNumeroRecupera($row['valorDiarioVR']);
             $valorMensalVR = validaNumeroRecupera($row['valorMensalVR']);
@@ -1878,7 +1736,7 @@ function recuperaDescontoVR()
         $verificacao = 1;
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
-        if($row = $result[0]) {
+        if ($row = $result[0]) {
 
             $valorDiarioRefeicao = validaNumeroRecupera($row['valorDiarioRefeicao']);
             $valorMensalRefeicao = validaNumeroRecupera($row['valorMensalRefeicao']);
@@ -1918,7 +1776,7 @@ function recuperaDescontoVA()
         $out = "";
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
-        if($row = $result[0]) {
+        if ($row = $result[0]) {
 
             $valorDiarioVA = validaNumeroRecupera($row['valorDiarioVAVR']);
             $valorMensalVA = validaNumeroRecupera($row['valorMensalVAVR']);
@@ -1942,7 +1800,7 @@ function recuperaDescontoVA()
         $verificacao = 1;
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
-        if($row = $result[0]) {
+        if ($row = $result[0]) {
 
             $valorDiarioAlimentacao = validaNumeroRecupera($row['valorDiarioAlimentacao']);
             $valorMensalAlimentacao = validaNumeroRecupera($row['valorMensalAlimentacao']);
@@ -1980,7 +1838,7 @@ function valorCestaBasicaSindicato()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $valorMensalCestaBasica = validaNumeroRecupera($row['valorMensalCestaBasica']);
         if ($valorMensalCestaBasica == 0) {
             $valorMensalCestaBasica = 0;
@@ -2062,7 +1920,7 @@ function validaData($campo)
 {
     $campo = explode("/", $campo);
     $campo = $campo[2] . "/" . $campo[1] . "/" . $campo[0];
-    return  $campo ;
+    return  $campo;
 }
 //Transforma uma data Y-D-M para D-M-Y 
 function validaDataRecupera($campo)
@@ -2070,18 +1928,18 @@ function validaDataRecupera($campo)
     $campo = explode("-", $campo);
     $dia = explode(" ", $campo[2]);
     $campo = $dia[0] . "/" . $campo[1] . "/" . $campo[0];
-    return  $campo ;
+    return  $campo;
 }
 
 function preencheValorPosto()
-{   
+{
     $posto = (int) $_POST['posto'];
-   
+
     $sql = "SELECT codigo,descricaoPosto,valor FROM Ntl.valorPosto WHERE codigo = $posto";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $valorPosto = $row['valor'];
     }
     $out = $valorPosto;
@@ -2104,7 +1962,7 @@ function populaComboDescricaoPosto()
         $result = $reposit->RunQuery($sql);
         $contador = 0;
         $out = "";
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $id = $row['codigo'];
             $descricaoPosto = $row['nomePosto'];
 

@@ -7,51 +7,62 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Portal</th>
-                    <th class="text-left" style="min-width:30px;">Orgão</th>
-                    <th class="text-left" style="min-width:30px;">Número do Pregão</th>
-                    <th class="text-left" style="min-width:30px;">Oportunidade de Compra</th>
-                    <th class="text-left" style="min-width:30px;">Data do Pregão</th>
-                    <th class="text-left" style="min-width:30px;">Hora do Pregão</th>
-                    <th class="text-left" style="min-width:30px;">Resumo do Pregão</th>
-                    <th class="text-left" style="min-width:30px;">Ativo</th>
-                    <th class="text-left" style="min-width:30px;">Condição do Pregão</th>
-                    <th class="text-left" style="min-width:110px;">Responsável</th>
-                    <th class="text-left" style="min-width:100px;">Grupo</th>
-                    <th class="text-left" style="min-width:30px;">Data de lançamento</th>
-                    <th class="text-left" style="min-width:30px;">Valor Estimado</th>
+                    <th class="text-left" style="min-width:150px;">Orgão Licitante</th>
+                    <th class="text-center" style="min-width:100px;">Número do Pregao</th> 
+                    <th class="text-center" style="min-width:30px;">Data</th>
+                    <th class="text-left" style="min-width:30px;">Hora</th> 
+                    <th class="text-center" style="min-width:150px;">Condição do Pregão</th>
+                    <th class="text-center" style="min-width:100px;">Ativo</th>
+                    <th class="text-center" style="min-width:30px;">Tarefa</th>
+                    <th class="text-center" style="min-width:30px;">Responsável</th>
+                    <th class="text-center" style="min-width:35px;">Tipo Tarefa</th>
+                    <th class="text-left" style="min-width:110px;">Responsável do pregão</th> 
+                    <th class="text-left" style="min-width:100px;">Grupo do pregão</th>
+                    <th class="text-center" style="min-width:30px;">Data de Conclusão</th> 
+
                 </tr>
             </thead>
             <tbody>
                 <?php
-
-                $nomeTarefa = "";
-                $tipoTarefa = "";
-                $visivel = "";
-                $ativo = "";
-                $descricaoCondicao = "";
+                $portal = "";
+                $orgaoLicitante = "";
+                $numeroPregao = "";
+                $dataPregao = "";
+                $horaPregao = "";  
                 $condicao = "";
-
-
-                $sql = " SELECT GP.codigo, P.descricao, P.endereco,  GP.orgaoLicitante, GP.numeroPregao, GP.oportunidadeCompra, GP.dataPregao, 
-                GP.horaPregao, GP.resumoPregao, GP.condicao, GP.ativo,GP.dataCadastro, G.descricao AS grupoResponsavel, R.nome AS responsavelPregao, GP.valorEstimado
-                FROM Ntl.pregao GP 
+                $descricaoCondicao = ""; 
+                $ativo = "";
+                $tarefa = "";
+                $responsavel = "";
+                $tipoTarefa = "";  
+                $resumoPregao = "";  
+                $tarefaConcluida = "";
+ 
+                $sql = " SELECT GP.codigo, P.descricao,P.endereco,  GP.orgaoLicitante, GP.numeroPregao, GP.dataPregao, GP.horaPregao, 
+                GP.condicao, GP.ativo, T.descricao AS tarefa,R.nome AS responsavel,
+                GPD.tipo, GPD.dataConclusao, G.descricao AS grupoResponsavel, R.nome AS responsavelPregao
+                FROM Ntl.pregao GP
                 LEFT JOIN Ntl.portal P ON P.codigo = GP.portal
+                LEFT JOIN Ntl.situacao S ON S.codigo = GP.situacao
+                LEFT JOIN Ntl.pregaoDetalhe GPD ON GPD.pregao = GP.codigo
+                LEFT JOIN Ntl.tarefa T ON T.codigo = GPD.tarefa
                 LEFT JOIN Ntl.grupoLicitacao G ON G.codigo = GP.grupoResponsavel
-                LEFT JOIN Ntl.responsavel R ON R.codigo = GP.responsavel";
+                LEFT JOIN Ntl.responsavel R ON R.codigo = GPD.responsavel";
                 $where = " WHERE (0 = 0) AND GP.participaPregao = 1";
 
                 if ($_POST["portal"] != "") {
                     $portal = +$_POST["portal"];
                     $where = $where . " AND ( P.codigo = $portal)";
                 }
-                if ($_POST["resumoPregao"] != "") {
-                    $resumoPregao = $_POST["resumoPregao"];
-                    $where = $where . " AND ( GP.resumoPregao like '%' + " . "replace('" . $resumoPregao . "',' ','%') + " . "'%')";
-                }
 
                 if ($_POST["orgaoLicitante"] != "") {
                     $orgaoLicitante = $_POST["orgaoLicitante"];
                     $where = $where . " AND ( GP.orgaoLicitante like '%' + " . "replace('" . $orgaoLicitante . "',' ','%') + " . "'%')";
+                }
+
+                if ($_POST["numeroPregao"] != "") {
+                    $numeroPregao = (int)$_POST["numeroPregao"];
+                    $where = $where . " AND GP.numeroPregao = " . $numeroPregao;
                 }
 
                 if ($_POST["dataPregao"] != "") {
@@ -61,6 +72,12 @@ include "js/repositorio.php";
                     $where = $where . " AND GP.dataPregao = '" . $data . "'";
                 }
 
+                if ($_POST["horaPregao"] != "") {
+                    $horaPregao = $_POST["horaPregao"];
+                    $where = $where . " AND GP.horaPregao = '" . $horaPregao . "'";
+                }
+
+
                 if ($_POST["condicao"] != "") {
                     $condicao = +$_POST["condicao"];
                     $where = $where . " AND GP.condicao = " . $condicao;
@@ -69,9 +86,38 @@ include "js/repositorio.php";
                 }
 
                 if ($_POST["ativo"] != "") {
-                    $ativo = +$_POST["ativo"];
+                    $ativo = (int)$_POST["ativo"];
                     $where = $where . " AND GP.ativo = " . $ativo;
                 }
+
+                if ($_POST["tarefa"] != "") {
+                    $tarefa = (int)$_POST["tarefa"];
+                    $where = $where . " AND T.codigo = " . $tarefa;
+                } 
+  
+                if ($_POST["responsavel"] != "") {
+                    $responsavel = (int)$_POST["responsavel"];
+                    $where = $where . " AND R.codigo = $responsavel ";
+                }
+
+                if ($_POST["tipoTarefa"] != "") {
+                    $tipoTarefa = (int)$_POST["tipoTarefa"];
+                    $where = $where . " AND GPD.tipo = " . $tipoTarefa . " ";
+                }  
+
+                if ($_POST["tarefaConcluida"] != "") {
+                    $tarefaConcluida = +$_POST["tarefaConcluida"]; 
+                    if($tarefaConcluida == 1){
+                        $where = $where . " AND GPD.dataConclusao IS NOT NULL ";
+                    } else { 
+                        $where = $where . " AND GPD.dataConclusao IS NULL ";
+                    }
+                }  
+
+                if ($_POST["resumoPregao"] != "") {
+                    $resumoPregao = $_POST["resumoPregao"];
+                    $where = $where . " AND ( GP.resumoPregao like '%' + " . "replace('" . $resumoPregao . "',' ','%') + " . "'%')";
+                }                
 
                 if ($_POST["grupo"] != "") {
                     $grupo = +$_POST["grupo"];
@@ -88,70 +134,73 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
                 foreach($result as $row) {
-                    $id = $row['codigo'];
-                    $portal = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $endereco = mb_convert_encoding($row['endereco'], 'UTF-8', 'HTML-ENTITIES');
-                    $orgaoLicitante = mb_convert_encoding($row['orgaoLicitante'], 'UTF-8', 'HTML-ENTITIES');
-                    $numeroPregao = mb_convert_encoding($row['numeroPregao'], 'UTF-8', 'HTML-ENTITIES');
+                    $id = (int)$row['codigo'];
+                    $portal = $row['descricao'];
+                    $endereco = $row['endereco'];
+                    $orgaoLicitante = $row['orgaoLicitante'];
+                    $numeroPregao = $row['numeroPregao'];
+                   
 
                     //A data recuperada foi formatada para D/M/Y
-                    $dataPregao = mb_convert_encoding($row['dataPregao'], 'UTF-8', 'HTML-ENTITIES');
+                    $dataPregao = $row['dataPregao'];
+                    if ($dataPregao != "") {
                     $dataPregao = explode("-", $dataPregao);
                     $dataPregao = $dataPregao[2] . "/" . $dataPregao[1] . "/" . $dataPregao[0];
-
-                    $dataLancamento = mb_convert_encoding($row['dataCadastro'], 'UTF-8', 'HTML-ENTITIES');
-                    $dataLancamento = explode(" ", $dataLancamento);
-                    $dataLancamento = $dataLancamento[0];
-                    $dataLancamento = explode("-", $dataLancamento);
-                    $dataLancamento = $dataLancamento[2] . "/" . $dataLancamento[1] . "/" . $dataLancamento[0];
-
-                    $horaPregao = mb_convert_encoding($row['horaPregao'], 'UTF-8', 'HTML-ENTITIES');
-                    $resumoPregao = mb_convert_encoding($row['resumoPregao'], 'UTF-8', 'HTML-ENTITIES');
-                    $oportunidadeCompra = mb_convert_encoding($row['oportunidadeCompra'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo = mb_convert_encoding($row['ativo'], 'UTF-8', 'HTML-ENTITIES');
-                    $ativo == 1 ? $descricaoAtivo = 'Sim' : $descricaoAtivo = 'Não';
-                    $condicao = mb_convert_encoding(+$row['condicao'], 'UTF-8', 'HTML-ENTITIES');
-                    $descricaoCondicao = "";
-
-                    $grupo = mb_convert_encoding($row['grupoResponsavel'], 'UTF-8', 'HTML-ENTITIES');
-                    $responsavelPregao = mb_convert_encoding($row['responsavelPregao'], 'UTF-8', 'HTML-ENTITIES');
-                    $valorEstimado = number_format($row['valorEstimado'], 2, ',', '.');
-
-
-                    switch ($condicao) {
-                        case "1":
-                            $descricaoCondicao = "Adiado";
-                            break;
-                        case "2":
-                            $descricaoCondicao = "Em Andamento";
-                            break;
-                        case "3":
-                            $descricaoCondicao = "Cancelado";
-                            break;
-                        case "4":
-                            $descricaoCondicao = "Fracassado";
-                            break;
-                        case "5":
-                            $descricaoCondicao = "Desistência";
-                            break;
+                    $horaPregao = $row['horaPregao'];
                     }
 
+                    $dataConclusao = $row['dataConclusao'];
+                    if ($dataConclusao != "") {
+                    $dataConclusao = explode(" ", $dataConclusao);
+                    $dataConclusao = explode("-", $dataConclusao[0]);
+                    $dataConclusao = $dataConclusao[2] . "/" . $dataConclusao[1] . "/" . $dataConclusao[0];
+                    }
+                    
+                    $grupo = $row['grupoResponsavel'];
+                    $responsavelPregao = $row['responsavelPregao'];
 
-                    echo '<tr >';
+                    $condicao = $row['condicao']; 
+
+                    switch($condicao){
+                        case 1 : 
+                            $descricaoCondicao = 'Adiado';
+                        break;
+                        case 2 : 
+                            $descricaoCondicao = 'Em Andamento';
+                        break;
+                        case 3: 
+                            $descricaoCondicao = 'Cancelado';
+                        break;
+                        case 4: 
+                            $descricaoCondicao = 'Fracassado';
+                        break;
+                    }
+
+                    $ativo = $row['ativo'];  
+                    $ativo == "1" ? $descricaoAtivo = 'Sim' : $descricaoAtivo = 'Não'; 
+                    $tarefa = $row['tarefa'];
+                    $responsavel = $row['responsavel'];
+                    $tipoTarefa = $row['tipo'];
+                    $tipoTarefa == "0" ? $descricaoTipoTarefa = 'Pré-Pregão' : $descricaoTipoTarefa = ''; 
+ 
+                    $grupo = $row['grupoResponsavel'];
+                    $responsavelPregao = $row['responsavelPregao'];
+
+
+                    echo '<tr>';
                     echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="' . $endereco . '">' . $portal . '</a></td>';
                     echo '<td class="text-left">' . $orgaoLicitante . '</td>';
-                    echo '<td class="text-left"><a href="pregoesNaoIniciadosCadastro.php?id=' . $id . '">' . $numeroPregao . '</a></td>';
-                    echo '<td class="text-justify">' . $oportunidadeCompra . '</td>';
-                    echo '<td class="text-left">' . $dataPregao . '</td>';
-                    echo '<td class="text-left">' . $horaPregao . '</td>';
-                    echo '<td class="text-justify">' . $resumoPregao . '</td>';
+                    echo '<td class="text-left"><a href="licitacao_pregaoNaoIniciadoCadastro.php?id=' . $id . '">' . $numeroPregao . '</a></td>';
+                    echo '<td class="text-justify">' . $dataPregao . '</td>';
+                    echo '<td class="text-justify">' . $horaPregao . '</td>';
+                    echo '<td class="text-justify">' . $descricaoCondicao . '</td>';
                     echo '<td class="text-justify">' . $descricaoAtivo . '</td>';
-                    echo '<td class="text-left">' . $descricaoCondicao . '</td>';
+                    echo '<td class="text-justify">' . $tarefa . '</td>';
+                    echo '<td class="text-left">' . $responsavel . '</td>';
+                    echo '<td class="text-left">' . $descricaoTipoTarefa . '</td>'; 
                     echo '<td class="text-justify">' . $responsavelPregao . '</td>';
                     echo '<td class="text-justify">' . $grupo . '</td>';
-                    echo '<td class="text-left">' . $dataLancamento . '</td>';
-                    echo '<td class="text-left">' . $valorEstimado . '</td>';
-                    echo '</tr>';
+                    echo '<td class="text-left">' . $dataConclusao . '</td>'; 
                 }
                 ?>
 
@@ -215,9 +264,9 @@ include "js/repositorio.php";
                 "oAria": {
                     "sSortAscending": ": Ordenar colunas de forma ascendente",
                     "sSortDescending": ": Ordenar colunas de forma descendente"
-                },
+                }
             },
-            "aaSorting": [],
+            "aaSorting":[],
             "buttons": [
                 //{extend: 'copy', className: 'btn btn-default'},
                 //{extend: 'csv', className: 'btn btn-default'},

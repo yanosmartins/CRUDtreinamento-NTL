@@ -121,10 +121,10 @@ function grava()
 
     // Gravação do formulário no banco de dados. 
     session_start();
-    $codigo =  validaCodigo($_POST['codigo'] ?: 0);
-    $portal = validaCodigo($_POST['portal'] ?: 0);
-    $grupoResponsavel =  validaCodigo($_POST['grupo'] ?: 0);
-    $responsavelPregao =  validaCodigo($_POST['responsavelPregao'] ?: 0);
+    $codigo =  (int)$_POST['codigo'];
+    $portal = (int)$_POST['portal'];
+    $grupoResponsavel =  (int)$_POST['grupo'];
+    $responsavelPregao =  (int)$_POST['responsavelPregao'];
     $ativo = 1;
     $orgaoLicitante =  validaString($_POST['orgaoLicitante']);
     $participaPregao =  validaNumero($_POST['participaPregao']);
@@ -197,27 +197,27 @@ function grava()
     }
     $xmlTarefa = "'" . $xmlTarefa . "'";
 
-    $sql = "Ntl.pregao_Atualiza( 
+    $sql = "Ntl.pregao_Atualiza 
         $codigo,
         $portal,
-        $grupoResponsavel,
-        $responsavelPregao,
         $ativo,
-        $orgaoLicitante, 
-        $participaPregao, 
+        $orgaoLicitante,
+        $participaPregao,
         $numeroPregao,
         $dataPregao,
         $horaPregao,
         $oportunidadeCompra, 
         $objetoLicitado, 
         $observacao,
-        $usuario, 
+        $usuario,
         $garimpado,
         $xmlUpload, 
-        $xmlTarefa, 
+        $xmlTarefa,
         $resumoPregao,
+        $grupoResponsavel,
+        $responsavelPregao,
         $valorEstimado
-        )";
+        ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -248,7 +248,7 @@ function recupera()
 
     $out = "";
 
-    $row = $result;
+    $row = $result[0];
 
     $codigo = $row['codigo'];
     $portal = $row['portal'];
@@ -435,11 +435,6 @@ function validaNumero($value)
     if ($value == "") {
         $value = 'NULL';
     }
-    return $value;
-}
-
-function validaCodigo($value)
-{
     return $value;
 }
 

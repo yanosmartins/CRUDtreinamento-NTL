@@ -42,7 +42,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]['prototipoValorPosto']['sub']["percentualPostoEncargo"]["active"] = true;
+$page_nav["operacao"]["sub"]['faturamento']['sub']["percentualPostoEncargo"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -84,8 +84,8 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                    <div class="row">
-                                                        <input id="codigo" name="codigo" type="text" class="hidden">
+                                                        <div class="row">
+                                                            <input id="codigo" name="codigo" type="text" class="hidden">
                                                             <section class="col col-5">
                                                                 <label class="label">Posto</label>
                                                                 <label class="select">
@@ -95,7 +95,7 @@ include("inc/nav.php");
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.posto where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) { 
+                                                                        foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
@@ -105,104 +105,136 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                            <input id="jsonEncargo" name="jsonEncargo" type="hidden" value="[]">
-                                                            <div id="formEncargo" class="col-sm-6">
-                                                                <input id="encargoId" name="encargoId" type="hidden" value="">
-                                                                <input id="descricaoEncargoPrincipal" name="descricaoEncargoPrincipal" type="hidden" value="">
-                                                                <input id="descricaoEncargoWhatsApp" name="descricaoInsumosWhatsApp" type="hidden" value="">
-                                                                <input id="sequencialEncargo" name="sequencialEncargo" type="hidden" value="">
-                                                                <div class="form-group">
-                                                                    <div class="row">
-                                                                        <section class="col col-md-6">
-                                                                            <label class="label">Encargo</label>
-                                                                            <label class="select">
-                                                                                <select id="encargo">
-                                                                                    <option> </option>
-                                                                                    <option>ISS</option>
-                                                                                    <option>FGTS</option>
-                                                                                    <option>Encargo governamental</option>
-                                                                                </select><i></i>
-                                                                            </label>
-                                                                        </section>
-                                                                        <!-- <section class="col col-4">
+                                                        <input id="jsonEncargo" name="jsonEncargo" type="hidden" value="[]">
+                                                        <div id="formEncargo" class="col-sm-6">
+                                                            <input id="encargoId" name="encargoId" type="hidden" value="">
+                                                            <input id="descricaoEncargoPrincipal" name="descricaoEncargoPrincipal" type="hidden" value="">
+                                                            <input id="descricaoEncargoWhatsApp" name="descricaoInsumosWhatsApp" type="hidden" value="">
+                                                            <input id="sequencialEncargo" name="sequencialEncargo" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-md-6">
+                                                                        <label class="label">Encargo</label>
+                                                                        <label class="select">
+                                                                            <select id="encargo">
+                                                                                <option> </option>
+                                                                                <option>ISS</option>
+                                                                                <option>FGTS</option>
+                                                                                <option>SENAC</option>
+                                                                                <option>INSS</option>
+                                                                                <option>SESC</option>
+                                                                                <option>Encargo governamental</option>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
+                                                                    <!-- <section class="col col-4">
                                                                             <label class="label">Percentual</label>
                                                                             <label class="input"><i class="icon-append fa fa-percent"></i>
                                                                                 <input id="percentual" name="percentual" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                             </label>
                                                                         </section> -->
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddEncargo" type="button" class="btn btn-primary">
-                                                                                <i class="fa fa-plus"></i>
-                                                                            </button>
-                                                                            <button id="btnRemoverEncargo" type="button" class="btn btn-danger">
-                                                                                <i class="fa fa-minus"></i>
-                                                                            </button>
-                                                                        </section>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableEncargo" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                        <thead>
-                                                                            <tr role="row">
-                                                                                <th style="width: 2px"></th>
-                                                                                <th class="text-center" style="min-width: 500%;">Encargo</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        </tbody>
-                                                                    </table>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddEncargo" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverEncargo" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
                                                                 </div>
                                                             </div>
-                                                            <input id="jsonInsumos" name="jsonInsumos" type="hidden" value="[]">
-                                                            <div id="formInsumos" class="col-sm-6">
-                                                                <input id="insumosId" name="insumosId" type="hidden" value="">
-                                                                <input id="descricaoInsumosPrincipal" name="descricaoInsumosPrincipal" type="hidden" value="">
-                                                                <input id="descricaoInsumosWhatsApp" name="descricaoInsumosWhatsApp" type="hidden" value="">
-                                                                <input id="sequencialInsumos" name="sequencialInsumos" type="hidden" value="">
-                                                                <div class="form-group">
-                                                                    <div class="row">
-                                                                        <section class="col col-md-6">
-                                                                            <label class="label">Insumos</label>
-                                                                            <label class="select">
-                                                                                <select id="insumos">
-                                                                                    <option> </option>
-                                                                                    <option>Uniforme</option>
-                                                                                    <option>Capacete</option>
-                                                                                    <option>Computador</option>
-                                                                                </select><i></i>
-                                                                            </label>
-                                                                        </section>
-                                                                        <!-- <section class="col col-4">
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableEncargo" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th style="width: 2px"></th>
+                                                                            <th class="text-center" style="min-width: 500%;">Encargo</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <?php
+                                                                        echo '<tr >';
+                                                                        echo '<td class="text-left"><a></a></td>';
+                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SENAC</a></td>';
+                                                                        echo '</tr >';
+                                                                        echo '<tr >';
+                                                                        echo '<td class="text-left"><a></a></td>';
+                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">INSS</a></td>';
+                                                                        echo '</tr >';
+                                                                        echo '<tr >';
+                                                                        echo '<td class="text-left"><a></a></td>';
+                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SESC</a></td>';
+                                                                        echo '</tr >';
+                                                                        ?>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <input id="jsonInsumos" name="jsonInsumos" type="hidden" value="[]">
+                                                        <div id="formInsumos" class="col-sm-6">
+                                                            <input id="insumosId" name="insumosId" type="hidden" value="">
+                                                            <input id="descricaoInsumosPrincipal" name="descricaoInsumosPrincipal" type="hidden" value="">
+                                                            <input id="descricaoInsumosWhatsApp" name="descricaoInsumosWhatsApp" type="hidden" value="">
+                                                            <input id="sequencialInsumos" name="sequencialInsumos" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-md-6">
+                                                                        <label class="label">Insumos</label>
+                                                                        <label class="select">
+                                                                            <select id="insumos">
+                                                                                <option> </option>
+                                                                                <option>Uniforme</option>
+                                                                                <option>Capacete</option>
+                                                                                <option>Benefício Social Familiar - Cláusula 26º, parágrafo 2º da CCT</option>
+                                                                                <option>Computador</option>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
+                                                                    <!-- <section class="col col-4">
                                                                             <label class="label">Percentual</label>
                                                                             <label class="input"><i class="icon-append fa fa-percent"></i>
                                                                                 <input id="percentual" name="percentual" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                             </label>
                                                                         </section> -->
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddInsumos" type="button" class="btn btn-primary">
-                                                                                <i class="fa fa-plus"></i>
-                                                                            </button>
-                                                                            <button id="btnRemoverInsumos" type="button" class="btn btn-danger">
-                                                                                <i class="fa fa-minus"></i>
-                                                                            </button>
-                                                                        </section>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableInsumos" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                        <thead>
-                                                                            <tr role="row">
-                                                                                <th style="width: 2px"></th>
-                                                                                <th class="text-center" style="min-width: 500%;">Insumos</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        </tbody>
-                                                                    </table>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddInsumos" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverInsumos" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
                                                                 </div>
                                                             </div>
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableInsumos" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th style="width: 2px"></th>
+                                                                            <th class="text-center" style="min-width: 500%;">Insumos</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php
+                                                                        echo '<tr >';
+                                                                        echo '<td class="text-left"><a></a></td>';
+                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Uniforme</a></td>';
+                                                                        echo '</tr >';
+                                                                        echo '<tr >';
+                                                                        echo '<td class="text-left"><a></a></td>';
+                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Capacete</a></td>';
+                                                                        echo '</tr >';
+                                                                        echo '<tr >';
+                                                                        echo '<td class="text-left"><a></a></td>';
+                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Benefício Social Familiar - Cláusula 26º, parágrafo 2º da CCT</a></td>';
+                                                                        echo '</tr >';
+                                                                        ?>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -293,7 +325,7 @@ include("inc/scripts.php");
         jsonEncargoArray = JSON.parse($("#jsonEncargo").val());
         jsonInsumosArray = JSON.parse($("#jsonInsumos").val());
         carregaPagina();
-        
+
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -351,22 +383,22 @@ include("inc/scripts.php");
             }
         }).trigger('focusout');
         $("#btnAddEncargo").on("click", function() {
-                addEncargo();
+            addEncargo();
         });
 
         $("#btnRemoverEncargo").on("click", function() {
-                excluirEncargo();
+            excluirEncargo();
         });
 
         $("#btnAddInsumos").on("click", function() {
-                addInsumos();
+            addInsumos();
         });
 
         $("#btnRemoverInsumos").on("click", function() {
-                excluirInsumos();
+            excluirInsumos();
         });
 
-   
+
 
     });
 
@@ -591,45 +623,46 @@ include("inc/scripts.php");
             $("#encargo").val(item.encargo);
             // $("#percentual").val(item.percentual);
             $("#sequencialEncargo").val(item.sequencialEncargo);
+
             function addTelefone() {
-        var item = $("#FormEncargo").toObject({
-            mode: 'combine',
-            skipEmpty: false,
-            nodeCallback: processDataTel
-        });
+                var item = $("#FormEncargo").toObject({
+                    mode: 'combine',
+                    skipEmpty: false,
+                    nodeCallback: processDataTel
+                });
 
-        if (item["sequencialEncargo"] === '') {
-            if (jsonEncargoArray.length === 0) {
-                item["sequencialEncargo"] = 1;
-            } else {
-                item["sequencialEncargo"] = Math.max.apply(Math, jsonEncargoArray.map(function(o) {
-                    return o.sequencialEncargo;
-                })) + 1;
+                if (item["sequencialEncargo"] === '') {
+                    if (jsonEncargoArray.length === 0) {
+                        item["sequencialEncargo"] = 1;
+                    } else {
+                        item["sequencialEncargo"] = Math.max.apply(Math, jsonEncargoArray.map(function(o) {
+                            return o.sequencialEncargo;
+                        })) + 1;
+                    }
+                    item["encargoId"] = 0;
+                } else {
+                    item["sequencialEncargo"] = +item["sequencialEncargo"];
+                }
+
+                var index = -1;
+                $.each(jsonEncargoArray, function(i, obj) {
+                    if (+$('#sequencialEncargo').val() === obj.sequencialEncargo) {
+                        index = i;
+                        return false;
+                    }
+                });
+
+                if (index >= 0)
+                    jsonEncargoArray.splice(index, 1, item);
+                else
+                    jsonEncargoArray.push(item);
+
+                $("#jsonEncargo").val(JSON.stringify(jsonEncargoArray));
+                fillTableEncargo();
+                clearFormEncargo();
+
             }
-            item["encargoId"] = 0;
-        } else {
-            item["sequencialEncargo"] = +item["sequencialEncargo"];
         }
-
-        var index = -1;
-        $.each(jsonEncargoArray, function(i, obj) {
-            if (+$('#sequencialEncargo').val() === obj.sequencialEncargo) {
-                index = i;
-                return false;
-            }
-        });
-
-        if (index >= 0)
-            jsonEncargoArray.splice(index, 1, item);
-        else
-            jsonEncargoArray.push(item);
-
-        $("#jsonEncargo").val(JSON.stringify(jsonEncargoArray));
-        fillTableEncargo();
-        clearFormEncargo();
-
-    }
-}
     }
 
 
@@ -754,50 +787,46 @@ include("inc/scripts.php");
             $("#encargo").val(item.encargo);
             // $("#percentual").val(item.percentual);
             $("#sequencialInsumos").val(item.sequencialInsumos);
-            function addTelefone() {
-        var item = $("#FormEncargo").toObject({
-            mode: 'combine',
-            skipEmpty: false,
-            nodeCallback: processDataTel
-        });
 
-        if (item["sequencialInsumos"] === '') {
-            if (jsonInsumosArray.length === 0) {
-                item["sequencialInsumos"] = 1;
-            } else {
-                item["sequencialInsumos"] = Math.max.apply(Math, jsonInsumosArray.map(function(o) {
-                    return o.sequencialInsumos;
-                })) + 1;
+            function addTelefone() {
+                var item = $("#FormEncargo").toObject({
+                    mode: 'combine',
+                    skipEmpty: false,
+                    nodeCallback: processDataTel
+                });
+
+                if (item["sequencialInsumos"] === '') {
+                    if (jsonInsumosArray.length === 0) {
+                        item["sequencialInsumos"] = 1;
+                    } else {
+                        item["sequencialInsumos"] = Math.max.apply(Math, jsonInsumosArray.map(function(o) {
+                            return o.sequencialInsumos;
+                        })) + 1;
+                    }
+                    item["insumosId"] = 0;
+                } else {
+                    item["sequencialInsumos"] = +item["sequencialInsumos"];
+                }
+
+                var index = -1;
+                $.each(jsonInsumosArray, function(i, obj) {
+                    if (+$('#sequencialInsumos').val() === obj.sequencialInsumos) {
+                        index = i;
+                        return false;
+                    }
+                });
+
+                if (index >= 0)
+                    jsonInsumosArray.splice(index, 1, item);
+                else
+                    jsonInsumosArray.push(item);
+
+                $("#jsonInsumos").val(JSON.stringify(jsonInsumosArray));
+                fillTableInsumos();
+                clearFormInsumos();
+
             }
-            item["insumosId"] = 0;
-        } else {
-            item["sequencialInsumos"] = +item["sequencialInsumos"];
         }
 
-        var index = -1;
-        $.each(jsonInsumosArray, function(i, obj) {
-            if (+$('#sequencialInsumos').val() === obj.sequencialInsumos) {
-                index = i;
-                return false;
-            }
-        });
-
-        if (index >= 0)
-            jsonInsumosArray.splice(index, 1, item);
-        else
-            jsonInsumosArray.push(item);
-
-        $("#jsonInsumos").val(JSON.stringify(jsonInsumosArray));
-        fillTableInsumos();
-        clearFormInsumos();
-
     }
-}
-
-    }
-
-        
-    
-
-
 </script>

@@ -1,37 +1,35 @@
 <?php
-//initilize the page
+//Inicializa a página
 require_once("inc/init.php");
 
-//require UI configuration (nav, ribbon, etc.)
+//Requer a configuração de UI (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('TAREFA_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('TAREFA_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('TAREFA_EXCLUIR', $arrayPermissao, true));
+// $condicaoAcessarOK = (in_array('ENCARGO_ACESSAR', $arrayPermissao, true));
+// $condicaoGravarOK = (in_array('ENCARGO_GRAVAR', $arrayPermissao, true));
+// $condicaoExcluirOK = (in_array('ENCARGO_EXCLUIR', $arrayPermissao, true));
 
-if ($condicaoAcessarOK == false) {
-    unset($_SESSION['login']);
-    header("Location:login.php");
-}
+// if ($condicaoAcessarOK == false) {
+//     unset($_SESSION['login']);
+//     header("Location:login.php");
+// }
 
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
-}
-
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
+// $esconderBtnExcluir = "";
+// if ($condicaoExcluirOK === false) {
+//     $esconderBtnExcluir = "none";
+// }
+// $esconderBtnGravar = "";
+// if ($condicaoGravarOK === false) {
+//     $esconderBtnGravar = "none";
+// }
 
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Tarefa";
-
+$page_title = "Insumos";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -42,10 +40,10 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["tarefa"]["active"] = true;
-
+$page_nav["operacao"]["sub"]['faturamento']['sub']["insumos"]["active"] = true;
 include("inc/nav.php");
 ?>
+
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
@@ -58,69 +56,70 @@ include("inc/nav.php");
 
     <!-- MAIN CONTENT -->
     <div id="content">
+
         <!-- widget grid -->
         <section id="widget-grid" class="">
+            <!-- <div class="row" style="margin: 0 0 13px 0;">
+                <?php if ($condicaoGravarOK) { ?>
+                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroEncargo.php" style="float:right"></a>
+                <?php } ?>
+            </div> -->
+
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Tarefa</h2>
+                            <h2>Encargo
+                            </h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formTarefa" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formEncargo" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseCadastro" class="" id="accordionCadastro">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
                                                         Cadastro
                                                     </a>
                                                 </h4>
                                             </div>
-                                            <div id="collapseCadastro" class="panel-collapse collapse in">
+                                            <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
 
-                                                        <div class="row">
-                                                            <section class="col col-3">
-                                                                <label class="label">Descrição</label>
+                                                        <div class="row ">
+
+                                                        <section class="col col-4">
+                                                                <label class="label">Nome</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" type="text" autocomplete="new-password" maxlength="50" class="required" required>
+                                                                    <input id="nome" maxlength="255" name="nome" class="required" type="text" value="" required>
                                                                 </label>
                                                             </section>
+
                                                             <section class="col col-2">
-                                                                <label class="label" for="tipo">Tipo</label>
-                                                                <label class="select">
-                                                                    <select id="tipo" name="tipo" class="required">
-                                                                        <option></option>
-                                                                        <option value="1">Pós-Pregão</option>
-                                                                        <option value="2">Pré-Pregão</option>
-                                                                    </select><i></i>
+                                                                <label class="label">Percentual </label>
+                                                                <label class="input"><i class="icon-append fa fa-percent"></i>
+                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+
+                                                                </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label" for="visivel">Visível</label>
-                                                                <label class="select">
-                                                                    <select id="visivel" name="visivel" class="required">
-                                                                        <option></option>
-                                                                        <option value="1">Pós-Pregão</option>
-                                                                        <option value="2">Pré-Pregão</option>
-                                                                        <option value="3">Pós-Pregão e Pré-Pregão</option>
-                                                                    </select><i></i>
-                                                            </section>
+
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" autocomplete="new-password" required>
+                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
+                                                                        <option value=""></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                        </div>
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -155,16 +154,15 @@ include("inc/nav.php");
                                     </footer>
                                 </form>
                             </div>
+
                         </div>
                     </div>
                 </article>
             </div>
         </section>
         <!-- end widget grid -->
-
     </div>
     <!-- END MAIN CONTENT -->
-
 </div>
 <!-- END MAIN PANEL -->
 
@@ -180,9 +178,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaTarefa.js" type="text/javascript"></script>
-
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaEncargo.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -199,50 +195,77 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/moment/moment.min.js"></script>
 <!--<script src="/js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
-<!--<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>-->
-
-
-<!-- Form to json -->
-<script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-        carregaPagina();
 
+        // $("#percentual").mask("9?9.99");
+        $('#percentual').focusout(function() {
+            var percentual, element;
+            element = $(this);
+            element.unmask();
+            percentual = element.val().replace(/\D/g, '');
+            if (percentual.length > 3) {
+                element.mask("99.99");
+            } else {
+                element.mask("9.99?9");
+            }
+        }).trigger('focusout');
+
+
+        $('#btnNovo').on("click", function() {
+            $(location).attr('href', 'tabelaBasica_encargoCadastro.php');
+        });
         $("#btnGravar").on("click", function() {
             gravar();
-        });
-        $("#btnNovo").on("click", function() {
-            novo();
-        });
-        $("#btnExcluir").on("click", function() {
-            excluir();
         });
         $("#btnVoltar").on("click", function() {
             voltar();
         });
+        $("#btnExcluir").on("click", function() {
+            excluir();
+        });
+        carregaEncargo();
+
+
     });
 
+    function voltar() {
+        $(location).attr('href', 'prototipoValorPosto_encargoFiltro.php');
+
+    }
+
     function gravar() {
-        let tarefa = $('#formTarefa').serializeArray().reduce(function(obj, item) {
+        $("#btnGravar").prop('disabled', true);
+        var percentual = $("#percentual").val();
+
+        if (!percentual) {
+            smartAlert("Erro", "Informe o Percentual.", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        let encargo = $('#formEncargo').serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
             return obj;
         }, {});
 
-        gravaTarefa(tarefa,
+        gravaEncargo(encargo,
             function(data) {
+
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
                     var mensagem = piece[1];
                     if (mensagem !== "") {
                         smartAlert("Atenção", mensagem, "error");
+                        $("#btnGravar").prop('disabled', false);
                         return false;
                     } else {
                         smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                        $("#btnGravar").prop('disabled', false);
                         return false;
-                        //                                                            return;
                     }
                 } else {
                     var piece = data.split("#");
@@ -254,15 +277,8 @@ include("inc/scripts.php");
     }
 
 
-    function novo() {
-        $(location).attr('href', 'tabelaBasica_tarefaCadastro.php');
-    }
-
-    function voltar() {
-        $(location).attr('href', 'tabelaBasica_tarefaFiltro.php');
-    }
-
     function excluir() {
+        debugger;
         var id = +$("#codigo").val();
 
         if (id === 0) {
@@ -270,7 +286,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirTarefa(id, function(data) {
+        excluirEncargo(id, function(data) {
             if (data.indexOf('failed') > -1) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -288,40 +304,42 @@ include("inc/scripts.php");
         });
     }
 
-    function carregaPagina() {
+
+    function carregaEncargo() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
         if (params.length === 2) {
             var id = params[1];
             var idx = id.split("=");
             var idd = idx[1];
-            debugger;
             if (idd !== "") {
-                recuperaTarefa(idd,
+                recuperaEncargo(idd,
                     function(data) {
-                        if (data.indexOf('failed') > -1) {} else {
-                            data = data.replace(/failed/g, '');
-                            var piece = data.split("#");
-                            var mensagem = piece[0];
-                            var out = piece[1];
+                        data = data.replace(/failed/g, '');
+                        var piece = data.split("#");
 
-                            piece = out.split("^");
-                            let codigo = piece[0];
-                            let descricao = piece[1];
-                            let tipo = piece[2];
-                            let visivel = piece[3];
-                            let ativo = piece[4];
+                        //Atributos de Cliente
+                        var mensagem = piece[0];
+                        var out = piece[1];
 
-                            $("#codigo").val(codigo);
-                            $("#descricao").val(descricao);
-                            $("#tipo").val(tipo);
-                            $("#visivel").val(visivel);
-                            $("#ativo").val(ativo);
+                        piece = out.split("^");
+                        console.table(piece);
+                        //Atributos de cliente
+                        var codigo = +piece[0];
+                        var percentual = piece[1];
 
-                        }
+                        //Atributos de cliente        
+                        $("#codigo").val(codigo);
+                        $("#percentual").val(percentual);
+
+
+
                     }
+
                 );
             }
         }
+
+
     }
 </script>

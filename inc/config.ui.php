@@ -335,8 +335,15 @@ if ($condicaoOperacaoOk) {
         }
 
         if (in_array('RELATORIOTAREFA_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/index.php"));
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/licitacao_relatorioTarefaFiltro.php"));
         }
+    }
+
+    $condicaoEstoqueOk = (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true));
+
+    if ($condicaoEstoqueOk) {
+        $page_nav['operacao']['sub']['estoque'] = array("title" => "Estoque", "icon" => "fa fa-cubes");
+        $page_nav['operacao']['sub']['estoque']['sub'] = array();
     }
 }
 

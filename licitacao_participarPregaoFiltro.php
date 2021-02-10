@@ -175,7 +175,6 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $row = array_map('utf8_encode', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $nome = ($row['nome']);
                                                                             echo '<option value=' . $codigo . '>  ' . $nome . '</option>';

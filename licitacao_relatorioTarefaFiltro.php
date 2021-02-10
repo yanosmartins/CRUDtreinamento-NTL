@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PREGAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PREGAO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('RELATORIOTAREFA_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('RELATORIOTAREFA_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Garimpar Pregões";
+$page_title = "Pregões Não Iniciados";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["pregao"]["active"] = true;
+$page_nav["operacao"]["sub"]["licitacao"]["sub"]["relatorioTarefas"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -46,7 +46,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Cadastro"] = "";
+    $breadcrumbs["Operação"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -60,7 +60,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Garimpar Pregões</h2>
+                            <h2>Relatório de Tarefas</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -79,36 +79,24 @@ include("inc/nav.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">
-                                                            <section class="col col-4 col-auto">
-                                                                <label class="label" for="portal">Portal</label>
+                                                        <div class="row" autocomplete="off">
+                                                            <section class="col col-3 col-auto">
+                                                            <label class="label" for="portal">Portal</label>
                                                                 <label class="select">
                                                                     <select id="portal" name="portal">
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao FROM 
-                                                                        Ntl.portal WHERE ativo = 1 ORDER BY descricao";
+                                                                        sysgc.dbo.portal WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach ($result as $row) {
-                                                                            $codigo = (int)$row['codigo'];
-                                                                            $descricao = $row['descricao'];
+                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                            $codigo = +$row['codigo'];
+                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Data</label>
-                                                                <label class="input">
-                                                                    <input id="dataPregao" name="dataPregao" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="on">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-3">
-                                                                <label class="label">Quem Lançou</label>
-                                                                <label class="input">
-                                                                    <input id="quemLancou" maxlength="255" name="quemLancou" class="" type="select" value="">
-                                                                </label>
                                                             </section>
                                                             <section class="col col-3">
                                                                 <label class="label" for="ativo">Ativo</label>
@@ -119,8 +107,6 @@ include("inc/nav.php");
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                             </section>
-                                                        </div>
-                                                        <div class="row">
                                                             <section class="col col-6 col-auto">
                                                                 <label class="label" for="orgaoLicitante">Nome do Orgão Licitante</label>
                                                                 <label class="input">
@@ -129,50 +115,103 @@ include("inc/nav.php");
                                                                     <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-6 col-auto">
-                                                                <label class="label" for="resumoPregao">Resumo do pregão</label>
+                                                        </div>
+                                                        <div class="row"> 
+                                                            <section class="col col-3 col-auto">
+                                                            <label class="label" for="numeroPregao">Número do Pregão</label>
                                                                 <label class="input">
-                                                                    <input id="resumoPregao" name="resumoPregao" type="text" autocomplete="on" onkeyup="contaPalavra()">
+                                                                    <input id="numeroPregao" name="numeroPregao" type="text" autocomplete="off" maxlength="30" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                        </div>
-                                                        <div class="row">
-                                                            <section class="col col-6">
-                                                                <label class="label" for="grupo">Grupo Responsável pelo Pregão</label>
+                                                            <section class="col col-3">
+                                                                <label class="label" for="situacao">Situação</label>
                                                                 <label class="select">
-                                                                    <select id="grupo" name="grupo">
+                                                                    <select id="situacao" name="situacao">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.grupoLicitacao where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
+                                                                        $sql = "select * from dbo.situacao order by codigo";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach ($result as $row) {
+                                                                        while (($row = odbc_fetch_array($result))) {
+
                                                                             $codigo = $row['codigo'];
-                                                                            $descricao = ($row['descricao']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
+                                                                            $nomeSituacao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            echo '<option value=' . $codigo . '>' . $nomeSituacao . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
-                                                            </section>
-                                                            <section class="col col-6">
-                                                                <label class="label" for="responsavelPregao"> Responsável pelo Pregão</label>
+                                                            </section> 
+                                                            <section class="col col-3 col-auto">
+                                                            <label class="label" for="responsavel">Responsável</label>
                                                                 <label class="select">
-                                                                    <select id="responsavelPregao" name="responsavelPregao">
+                                                                    <select id="responsavel" name="responsavel">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
+                                                                        $sql =  "SELECT codigo, nome FROM dbo.responsavel  where ativo = 1  
+                                                                        order by nome";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach ($result as $row) {
+                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                            $row = array_map('utf8_encode', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $nome = ($row['nome']);
                                                                             echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
                                                                         }
+                                                                ?>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label" for="tarefaConcluida">Tarefa Concluída</label>
+                                                                <label class="select">
+                                                                    <select id="tarefaConcluida" name="tarefaConcluida">
+                                                                        <option></option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0" selected>Não</option>
+                                                                    </select><i></i>
+                                                            </section> 
+                                                            </div>
+                                                            <div class="row">
+                                                            <section class="col col-3">
+                                                                <label class="label" for="dataReabertura">Data Reabertura do Pregão</label>
+                                                                <label class="input">
+                                                                    <input id="dataReabertura" name="dataReabertura" type="text" data-dateformat="dd/mm/yy" data-mask-placeholder="-" class="datepicker" style="text-align: center" data-mask="99/99/9999" placeholder="--/--/----" autocomplete="new-password">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label" for="horaReabertura">Hora do Pregão</label>
+                                                                <label class="input">
+                                                                    <input id="horaReabertura" name="horaReabertura" type="text" autocomplete="off" placeholder="hh:mm">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3 col-auto">
+                                                            <label class="label" for="tarefa">Tarefa</label>
+                                                                <label class="select">
+                                                                    <select id="tarefa" name="tarefa">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, descricao  FROM dbo.tarefa  where ativo = 1  
+                                                                             order by descricao;";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                            $row = array_map('utf8_encode', $row);
+                                                                            $codigo = $row['codigo'];
+                                                                            $nomeTarefa = ($row['descricao']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $nomeTarefa . '</option>';
+                                                                        }
                                                                         ?>
                                                                     </select><i></i>
                                                             </section>
-                                                        </div>
-
+                                                            <section class="col col-3">
+                                                                <label class="label" for="tipoTarefa">Tipo Tarefa</label>
+                                                                <label class="select">
+                                                                    <select id="tipoTarefa" name="tipoTarefa">
+                                                                        <option></option>
+                                                                        <option value="0">Pré-Pregão</option> 
+                                                                        <option value="1">Pós-Pregão</option>
+                                                                    </select><i></i>
+                                                            </section>
+                                                        </div> 
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -181,9 +220,6 @@ include("inc/nav.php");
                                     <footer>
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
-                                        </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
-                                            <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
                                 </form>
@@ -237,17 +273,16 @@ include("inc/scripts.php");
 
         listarFiltro();
 
+
+        $('#horaReabertura').mask('99:99', {
+            placeholder: "hh:mm"
+        });
+
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
-        $('#btnNovo').on("click", function() {
-            novo();
-        });
 
-        $("#data").on("change", function() {
-            validaCampoData("#data");
-        });
-
+        //Pesquisa automática do orgão licitante.
         $("#orgaoLicitante").autocomplete({
             source: function(request, response) {
                 $.ajax({
@@ -290,33 +325,40 @@ include("inc/scripts.php");
                 .append("<a>" + highlight(item.label, this.term) + "</a>")
                 .appendTo(ul);
         };
-
     });
 
-    function listarFiltro() {
+    function listarFiltro() { 
+        
         var portal = $('#portal').val();
-        var dataPregao = $('#dataPregao').val();
-        var quemLancou = $('#quemLancou').val();
         var ativo = $('#ativo').val();
-        var resumoPregao = $('#resumoPregao').val();
-        var orgaoLicitante = $('#orgaoLicitante').val();
-        var grupo = $('#grupo').val();
-        var responsavel = $('#responsavelPregao').val();
+        var orgaoLicitante = $('#orgaoLicitante').val();   
+        var numeroPregao = $('#numeroPregao').val(); 
+        var situacao = $('#situacao').val();
+        var responsavel = $('#responsavel').val();
+        var tarefaConcluida = $('#tarefaConcluida').val();
+        var dataReabertura = $('#dataReabertura').val();
+        var horaReabertura = $('#horaReabertura').val();
+        var tarefa = $('#tarefa').val();  
+        var tipoTarefa = $('#tipoTarefa').val();
 
-        $('#resultadoBusca').load('cadastro_pregaoFiltroListagem.php?', {
+        $('#resultadoBusca').load('licitacao_relatorioTarefaFiltroListagem.php?', {
             portal: portal,
-            dataPregao: dataPregao,
-            quemLancou: quemLancou,
-            ativo: ativo,
-            resumoPregao: resumoPregao,
-            orgaoLicitante: orgaoLicitante,
-            grupo: grupo,
-            responsavel: responsavel
+            ativo:ativo, 
+            orgaoLicitante:orgaoLicitante,
+            numeroPregao:numeroPregao,
+            situacao:situacao,
+            responsavel:responsavel,
+            tarefaConcluida:tarefaConcluida,    
+            dataReabertura:dataReabertura,
+            horaReabertura:horaReabertura,
+            tarefa:tarefa,
+            tipoTarefa:tipoTarefa
         });
+
     }
 
 
     function novo() {
-        $(location).attr('href', 'cadastro_pregaoCadastro.php');
+        $(location).attr('href', 'pregoesEmAndamentoCadastro.php');
     }
 </script>
