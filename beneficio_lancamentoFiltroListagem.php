@@ -79,7 +79,7 @@ include "js/repositorio.php";
         </table>
     </div>
 </div>
-<!-- PAGE RELATED PLUGIN(S) -->
+<!-- PAGE RELATED PLUIN(S) -->
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
 <script src="js/plugin/datatables/dataTables.tableTools.min.js"></script>

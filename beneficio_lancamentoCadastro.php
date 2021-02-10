@@ -348,7 +348,7 @@ include("inc/scripts.php");
         }
 
         if (!projeto) {
-            smartAlert("Erro", "Informe o Projeto.", "error");
+            smartAlert("Erro", "Informe o Projeto", "error");
             return false;
         }
 

@@ -190,7 +190,7 @@ include("inc/nav.php");
         </section>
         <!-- end widget grid -->
     </div>
-    <!-- END MAIN CONTENT -->
+    <!-- END MAIN CONTET -->
 </div>
 <!-- END MAIN PANEL -->
 

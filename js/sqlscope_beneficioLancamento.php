@@ -35,7 +35,7 @@ function grava()
     $lancamentoTabela = $_POST['lancamentoTabela'];
     $codigo =  (int) $lancamentoTabela['codigo'];
 
-    //Inicio do Json Lançamento
+    //Inici do Json Lançamento
     $strJsonLancamento = $lancamentoTabela["JsonLancamento"];
     $arrayJsonLancamento = json_decode($strJsonLancamento, true);
     $xmlJsonLancamento = "";

@@ -28,7 +28,7 @@ function gravaLancamento(lancamentoTabela,callback) {
   
   function  excluirLancamento(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_beneficioLancamento.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_beneficioLancamento.php', //caminho do arqivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'excluir', id: id}, //valores enviados ao script     
