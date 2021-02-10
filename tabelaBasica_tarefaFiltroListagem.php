@@ -60,6 +60,20 @@ include "js/repositorio.php";
                         $ativo = "Não";
                     }
 
+                    if ($tipo == 1) {
+                        $tipo = "Pós-Pregão";
+                    } else if ($tipo == 2){
+                        $tipo = "Pré-Pregão";
+                    } 
+
+                    if ($visivel == 1) {
+                        $visivel = "Pós-Pregão";
+                    } else if ($visivel == 2){
+                        $visivel = "Pré-Pregão";
+                    } else if ($visivel == 3){
+                        $visivel = "Pós-Pregão e Pré-Pregão";
+                    }
+
                     echo '<tr >';
                     echo '<td class="text-left"><a href="tabelaBasica_tarefaCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
                     echo '<td class="text-left">' . $tipo . '</td>';

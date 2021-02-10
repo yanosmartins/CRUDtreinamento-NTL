@@ -94,16 +94,23 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Tipo</label>
-                                                                <label class="input">
-                                                                    <input id="tipo" name="tipo" type="text" autocomplete="new-password" maxlength="100" class="required" required>
-                                                                </label>
+                                                                <label class="label" for="tipo">Tipo</label>
+                                                                <label class="select">
+                                                                    <select id="tipo" name="tipo" class="required">
+                                                                        <option></option>
+                                                                        <option value="1">Pós-Pregão</option>
+                                                                        <option value="2">Pré-Pregão</option>
+                                                                    </select><i></i>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Visivel</label>
-                                                                <label class="input">
-                                                                    <input id="visivel" name="visivel" type="text" autocomplete="new-password" maxlength="100" class="required" required>
-                                                                </label>
+                                                                <label class="label" for="visivel">Visível</label>
+                                                                <label class="select">
+                                                                    <select id="visivel" name="visivel" class="required">
+                                                                        <option></option>
+                                                                        <option value="1">Pós-Pregão</option>
+                                                                        <option value="2">Pré-Pregão</option>
+                                                                        <option value="3">Pós-Pregão e Pré-Pregão</option>
+                                                                    </select><i></i>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
@@ -240,7 +247,7 @@ include("inc/scripts.php");
                 } else {
                     var piece = data.split("#");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
+                    voltar();
                 }
             }
         );

@@ -579,6 +579,10 @@ include "inc/scripts.php";
         $("#dataLancamento").on("change", function() {
             validaCampoData("#dataLancamento");
         });
+
+        $("#dataConclusao").on("change", function() {
+            validaDataConclusao();
+        });
         $("#dataPregao").on("change", function() {
             validaCampoData("#dataPregao");
         });
@@ -872,6 +876,28 @@ include "inc/scripts.php";
 
         return true;
     }
+
+    function validaDataConclusao() {
+        var dataFinal = $('#dataFinal').val();
+        var dataConclusao = $('#dataConclusao').val();
+
+        var diferencaEmDias = comparaDataComDiaHoje(dataConclusao);
+
+        if (diferencaEmDias < 0) {
+            smartAlert("Erro", "Atenção, a Data Conclusão não pode ser maior do que a data de hoje", "error");
+            $('#dataConclusao').val(" ");
+            return false;
+        }
+
+        if (dataFinal === '') {
+            smartAlert("Erro", "Informe a Data Final!", "error");
+            return false;
+        }
+
+        return true;
+    }
+
+    
 
     function addTarefa() {
 
