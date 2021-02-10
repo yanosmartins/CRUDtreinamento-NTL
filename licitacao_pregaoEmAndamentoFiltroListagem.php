@@ -176,7 +176,7 @@ include "js/repositorio.php";
                         $grupo = $row['grupoResponsavel'];
                         $responsavelPregao = $row['responsavelPregao'];
 
-                        $condicao = +$row['condicao'];
+                        $condicao = (int)$row['condicao'];
 
 
                         switch ($condicao) {
@@ -198,6 +198,8 @@ include "js/repositorio.php";
                             case 6:
                                 $condicao = 'Concluído';
                                 break;
+                            default:
+                                $condicao = '';
                         }
 
                         if ($prioridade == "1") {
