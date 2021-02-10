@@ -48,7 +48,7 @@ function grava()
     $arrayTarefa = json_decode($strArrayTarefa, true);
     $xmlTarefa = "";
     $nomeXml = "ArrayOfTarefa";
-    $nomeTabela = "garimpaPregaoDetalhe";
+    $nomeTabela = "pregaoDetalhe";
     if (sizeof($arrayTarefa) > 0) {
         $xmlTarefa = '<?xml version="1.0"?>';
         $xmlTarefa = $xmlTarefa . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
@@ -96,7 +96,7 @@ function grava()
     }
     $xmlTarefa = "'" . $xmlTarefa . "'";
 
-    $sql = "ntl.pregaoEmAndamento_Atualiza( 
+    $sql = "ntl.pregaoEmAndamento_Atualiza 
         $codigo,
         $observacao, 
         $usuario, 
@@ -110,7 +110,7 @@ function grava()
         $condicao,
         $observacaoCondicao,
         $xmlTarefa
-        )";
+        ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
