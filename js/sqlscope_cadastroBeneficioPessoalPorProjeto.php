@@ -170,8 +170,7 @@ function gravaBeneficio()
     $tipoDiaUtilVAVR = validaNumero($beneficio['tipoDiaUtilVAVR']);
 
     // $valorTotalFuncionarioVT = $beneficio['valorTotalFuncionarioVT'];
-    $valorTotalFuncionarioVT = str_replace(',', '.', $beneficio['valorTotalFuncionarioVT']);
-
+    $valorTotalFuncionarioVT = (float)(str_replace(',', '.', $beneficio['valorTotalFuncionarioVT']));
     //Dias Uteis VT
     $diaUtilJaneiroVT        = validaNumero($beneficio['diaUtilJaneiroVT']);
     $diaUtilFevereiroVT    = validaNumero($beneficio['diaUtilFevereiroVT']);
@@ -1870,7 +1869,7 @@ function verificaFuncionarioProjeto()
     $funcionario = $_POST['funcionario'];
     $projeto = $_POST['projeto'];
 
-    $sql = "SELECT codigo, funcionario, projeto FROM Ntl.beneficioProjeto WHERE (0=0) AND funcionario = " . $funcionario . " AND projeto = " . $projeto;
+    $sql = "SELECT codigo, funcionario, projeto FROM Ntl.beneficioProjeto WHERE (0=0) AND funcionario = " . $funcionario . " AND projeto = " . $projeto . " AND ativo = 1";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
