@@ -74,7 +74,7 @@ include "js/repositorio.php";
                 }
 
                 if ($_POST['condicao'] != "") {
-                    $condicao = +$_POST["condicao"];
+                    $condicao = (int)$_POST["condicao"];
                     $where = $where . " AND GP.condicao = $condicao";
                 }
 
@@ -116,7 +116,7 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
+                foreach ($result as $row) {
 
                     //testando a hora do alerta
                     $dataAlerta = $row['dataAlerta'];
@@ -290,12 +290,12 @@ include "js/repositorio.php";
                 }
 
                 if ($_POST['condicao'] != "") {
-                    $condicao = +$_POST["condicao"];
+                    $condicao = (int)$_POST["condicao"];
                     $where = $where . " AND GP.condicao = $condicao";
                 }
 
                 if ($_POST["situacao"] != "") {
-                    $situacao = +$_POST["situacao"];
+                    $situacao = (int)$_POST["situacao"];
                     $where = $where . " AND S.codigo = " . $situacao;
                 }
 
@@ -311,12 +311,12 @@ include "js/repositorio.php";
                 }
 
                 if ($_POST["grupo"] != "") {
-                    $grupo = +$_POST["grupo"];
+                    $grupo = (int)$_POST["grupo"];
                     $where = $where . " AND G.codigo = " . $grupo;
                 }
 
                 if ($_POST["responsavelPregao"] != "") {
-                    $responsavelPregao = +$_POST["responsavelPregao"];
+                    $responsavelPregao = (int)$_POST["responsavelPregao"];
                     $where = $where . " AND R.codigo = " . $responsavelPregao;
                 }
 
@@ -404,6 +404,8 @@ include "js/repositorio.php";
                         case 6:
                             $condicao = 'Concluído';
                             break;
+                        default:
+                            $condicao = '';
                     }
 
                     if ($prioridade == "1") {
