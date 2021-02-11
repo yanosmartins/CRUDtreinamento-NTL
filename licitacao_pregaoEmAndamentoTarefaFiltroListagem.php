@@ -15,12 +15,12 @@ include "js/repositorio.php";
                     <th class="text-center" style="min-width:150px;">Tarefa</th>
                     <th class="text-center" style="min-width:100px;">Responsável</th>
                     <th class="text-left" style="min-width:100px;">Grupo do pregão</th>
-                    <th class="text-left" style="min-width:110px;">Responsável do pregão</th> 
+                    <th class="text-left" style="min-width:110px;">Responsável do pregão</th>
                     <th class="text-center" style="min-width:30px;">Tipo Tarefa</th>
                     <th class="text-center" style="min-width:30px;">DataFinal</th>
                     <th class="text-center" style="min-width:30px;">Data/Hora Solicitação</th>
                     <th class="text-center" style="min-width:30px;">Data de Conclusão</th>
-                    
+
 
                 </tr>
             </thead>
@@ -35,13 +35,13 @@ include "js/repositorio.php";
                 $sql = " SELECT GP.codigo, P.descricao,  GP.orgaoLicitante, GP.numeroPregao, T.descricao as tarefa, GPD.tipo, R.nome as responsavel,S.codigo as codigoSituacao, S.descricao as situacao, GP.posicao, GP.dataReabertura, 
                   GP.horaReabertura, GP.prioridade, GP.ativo, GPD.dataFinal, GPD.dataSolicitacao , GPD.dataConclusao,
                   G.descricao AS grupoResponsavel, R.nome AS responsavelPregao
-                  FROM sysgc.dbo.garimpaPregao GP
-                  LEFT JOIN sysgc.dbo.portal P ON P.codigo = GP.portal
-				  LEFT JOIN sysgc.dbo.situacao S ON S.codigo = GP.situacao
-				  LEFT JOIN sysgc.dbo.garimpaPregaoDetalhe GPD ON GPD.garimpaPregao = GP.codigo
-				  LEFT JOIN sysgc.dbo.tarefa T ON T.codigo = GPD.tarefa
-                  LEFT JOIN sysgc.dbo.responsavel R ON R.codigo = GPD.responsavel
-                  LEFT JOIN sysgc.dbo.grupoLicitacao G ON G.codigo = GP.grupoResponsavel";
+                  FROM ntl.pregao GP
+                  LEFT JOIN ntl.portal P ON P.codigo = GP.portal
+				  LEFT JOIN ntl.situacao S ON S.codigo = GP.situacao
+				  LEFT JOIN ntl.pregaoDetalhe GPD ON GPD.pregao = GP.codigo
+				  LEFT JOIN ntl.tarefa T ON T.codigo = GPD.tarefa
+                  LEFT JOIN ntl.responsavel R ON R.codigo = GPD.responsavel
+                  LEFT JOIN ntl.grupoLicitacao G ON G.codigo = GP.grupoResponsavel";
                 $where = " WHERE (0 = 0) AND GP.participaPregao = 1 AND GP.condicao = 2 AND GPD.tipo = 1";
 
                 if ($_POST["portal"] != "") {
@@ -144,7 +144,7 @@ include "js/repositorio.php";
 
                     $tipoTarefa = mb_convert_encoding($row['tipo'], 'UTF-8', 'HTML-ENTITIES');
                     if ($tipoTarefa == "1") {
-                        $link = "pregoesEmAndamentoCadastro.php?id=";
+                        $link = "licitacao_pregaoEmAndamentoCadastro.php?id=";
                         $descricaoTarefa = "Pós-Pregao";
                     }
 
@@ -158,7 +158,7 @@ include "js/repositorio.php";
                     echo '<td class="text-left" hidden></td>';
                     echo '<td class="text-left">' . $portal . '</td>';
                     echo '<td class="text-left">' . $orgaoLicitante . '</td>';
-                    echo '<td class="text-left"><a href="pregoesEmAndamentoCadastro.php?id=' . $id . '">' . $numeroPregao . '</a></td>';
+                    echo '<td class="text-left"><a href="licitacao_pregaoEmAndamentoCadastro.php?id=' . $id . '">' . $numeroPregao . '</a></td>';
                     echo '<td class="text-justify">' . $dataReabertura . '</td>';
                     echo '<td class="text-justify">' . $horaReabertura . '</td>';
                     echo '<td class="text-justify">' . $tarefa . '</td>';
