@@ -55,7 +55,7 @@ include "js/repositorio.php";
 
 
                 if ($_POST["situacao"] != "") {
-                    $situacao = +$_POST["situacao"];
+                    $situacao = (int)$_POST["situacao"];
                     $where = $where . " AND S.codigo = " . $situacao;
                 }
 
@@ -77,22 +77,22 @@ include "js/repositorio.php";
                 }
 
                 if ($_POST["numeroPregao"] != "") {
-                    $numeroPregao = +$_POST["numeroPregao"];
+                    $numeroPregao = (int)$_POST["numeroPregao"];
                     $where = $where . " AND GP.numeroPregao = " . $numeroPregao;
                 }
 
                 if ($_POST["tipoTarefa"] != "") {
-                    $tipoTarefa = +$_POST["tipoTarefa"];
+                    $tipoTarefa = (int)$_POST["tipoTarefa"];
                     $where = $where . " AND T.tipo = " . $tipoTarefa;
                 }
 
                 if ($_POST["grupo"] != "") {
-                    $grupo = +$_POST["grupo"];
+                    $grupo = (int)$_POST["grupo"];
                     $where = $where . " AND G.codigo = " . $grupo;
                 }
 
                 if ($_POST["responsavelPregao"] != "") {
-                    $responsavelPregao = +$_POST["responsavelPregao"];
+                    $responsavelPregao = (int)$_POST["responsavelPregao"];
                     $where = $where . " AND R.codigo = " . $responsavelPregao;
                 }
 
@@ -102,25 +102,25 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                while (($row = odbc_fetch_array($result))) {
+                foreach ($result as $row) {
                     $id = $row['codigo'];
-                    $portal = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                    $orgaoLicitante = mb_convert_encoding($row['orgaoLicitante'], 'UTF-8', 'HTML-ENTITIES');
-                    $numeroPregao = mb_convert_encoding($row['numeroPregao'], 'UTF-8', 'HTML-ENTITIES');
+                    $portal = $row['descricao'];
+                    $orgaoLicitante = $row['orgaoLicitante'];
+                    $numeroPregao = $row['numeroPregao'];
 
                     //A data recuperada foi formatada para D/M/Y
-                    $dataReabertura = mb_convert_encoding($row['dataReabertura'], 'UTF-8', 'HTML-ENTITIES');
+                    $dataReabertura = $row['dataReabertura'];
                     if ($dataReabertura != "") {
                         $dataReabertura = explode("-", $dataReabertura);
                         $dataReabertura = $dataReabertura[2] . "/" . $dataReabertura[1] . "/" . $dataReabertura[0];
-                        $horaReabertura = mb_convert_encoding($row['horaReabertura'], 'UTF-8', 'HTML-ENTITIES');
+                        $horaReabertura = $row['horaReabertura'];
                     }
 
-                    $tarefa = mb_convert_encoding($row['tarefa'], 'UTF-8', 'HTML-ENTITIES');
-                    $responsavel = mb_convert_encoding($row['responsavel'], 'UTF-8', 'HTML-ENTITIES');
-                    $tipoTarefa = mb_convert_encoding($row['tipo'], 'UTF-8', 'HTML-ENTITIES');
+                    $tarefa = $row['tarefa'];
+                    $responsavel = $row['responsavel'];
+                    $tipoTarefa = $row['tipo'];
 
-                    $dataFinal = mb_convert_encoding($row['dataFinal'], 'UTF-8', 'HTML-ENTITIES');
+                    $dataFinal = $row['dataFinal'];
                     if ($dataFinal != "") {
                         $dataFinal = explode(" ", $dataFinal);
                         $dataFinal = $dataFinal[0];
@@ -128,13 +128,13 @@ include "js/repositorio.php";
                         $dataFinal = $dataFinal[2] . "/" . $dataFinal[1] . "/" . $dataFinal[0];
                     }
 
-                    $dataSolicitacao = mb_convert_encoding($row['dataSolicitacao'], 'UTF-8', 'HTML-ENTITIES');
+                    $dataSolicitacao = $row['dataSolicitacao'];
                     $dataSolicitacao = explode(" ", $dataSolicitacao);
                     $dataSolicitacao = $dataSolicitacao[0];
                     $dataSolicitacao = explode("-", $dataSolicitacao);
                     $dataSolicitacao = $dataSolicitacao[2] . "/" . $dataSolicitacao[1] . "/" . $dataSolicitacao[0];
 
-                    $dataConclusao = mb_convert_encoding($row['dataConclusao'], 'UTF-8', 'HTML-ENTITIES');
+                    $dataConclusao = $row['dataConclusao'];
                     if ($dataConclusao != "") {
                         $dataConclusao = explode(" ", $dataConclusao);
                         $dataConclusao = $dataConclusao[0];
@@ -142,14 +142,14 @@ include "js/repositorio.php";
                         $dataConclusao = $dataConclusao[2] . "/" . $dataConclusao[1] . "/" . $dataConclusao[0];
                     }
 
-                    $tipoTarefa = mb_convert_encoding($row['tipo'], 'UTF-8', 'HTML-ENTITIES');
+                    $tipoTarefa = $row['tipo'];
                     if ($tipoTarefa == "1") {
                         $link = "licitacao_pregaoEmAndamentoCadastro.php?id=";
                         $descricaoTarefa = "Pós-Pregao";
                     }
 
-                    $grupo = mb_convert_encoding($row['grupoResponsavel'], 'UTF-8', 'HTML-ENTITIES');
-                    $responsavelPregao = mb_convert_encoding($row['responsavelPregao'], 'UTF-8', 'HTML-ENTITIES');
+                    $grupo = $row['grupoResponsavel'];
+                    $responsavelPregao = $row['responsavelPregao'];
 
 
 
