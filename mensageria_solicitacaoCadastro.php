@@ -97,7 +97,7 @@ include("inc/nav.php");
                                 <label class="label" for="nomeFuncionario">Nome do funcionário</label>
                                 <label class="input">
                                   <input id="nomeFuncionario" name="nomeFuncionario" class="required" readonly>
-                                  </input><i></i>
+                                  </input>
                                 </label>
                               </section>
                               <section class="col col-6">
@@ -114,8 +114,8 @@ include("inc/nav.php");
                                 <input id="sequencialSolicitacao" name="sequencialSolicitacao" type="hidden" value="">
                                 <section class="col col-3">
                                   <label class="label" for="solicitacao">Solicitacao</label>
-                                  <label class="select">
-                                    <input id="solicitacao" name="solicitacao" type="text"><i></i>
+                                  <label class="input">
+                                    <input id="solicitacao" name="solicitacao" type="text">
                                 </section>
 
                               </div>
@@ -206,7 +206,7 @@ include "inc/footer.php";
 include "inc/scripts.php";
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_licitacaoPregaoNaoIniciado.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_mensageriaSolicitacao.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S)
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -234,152 +234,26 @@ include "inc/scripts.php";
 <script language="JavaScript" type="text/javascript">
   $(document).ready(function() {
 
-    $('#formUsuario').validate({
-      // Rules for form validation
-      rules: {
-        'responsavel': {
-          required: true,
-          maxlength: 155
-        }
-      },
-
-    });
-    $('#horaAlerta').mask('99:99', {
-      placeholder: "hh:mm"
-    });
-    $('#horaPregao').mask('99:99', {
-      placeholder: "hh:mm"
-    });
-    $('#horaReaberturaPregao').mask('99:99', {
-      placeholder: "hh:mm"
-    });
-    $('#horaLancamento').mask('99:99', {
-      placeholder: "hh:mm"
-    });
-
     carregaPagina();
-
-    $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
-      _title: function(title) {
-        if (!this.options.title) {
-          title.html("&#160;");
-        } else {
-          title.html(this.options.title);
-        }
-      }
-    }));
-
-    $('#dlgSimpleExcluir').dialog({
-      autoOpen: false,
-      width: 400,
-      resizable: false,
-      modal: true,
-      title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
-      buttons: [{
-        html: "Excluir registro",
-        "class": "btn btn-success",
-        click: function() {
-          $(this).dialog("close");
-          excluir();
-        }
-      }, {
-        html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-        "class": "btn btn-default",
-        click: function() {
-          $(this).dialog("close");
-        }
-      }]
-    });
-
-    $("#btnExcluir").on("click", function() {
-      var id = +$("#codigo").val();
-
-      if (id === 0) {
-        smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-        $("#nome").focus();
-        return;
-      }
-
-      if (id !== 0) {
-        $('#dlgSimpleExcluir').dialog('open');
-      }
-    });
-
-    $("#dataPregao").on("change", function() {
-      var dataAtual = moment().format("DD/MM/YYYY");
-      var dataPregao = $("#dataPregao").val();
-
-      var diferencaEmDias = comparaDataComDiaHoje(dataPregao);
-
-      if (diferencaEmDias > 0) {
-        smartAlert("Atenção", "A data do pregão não pode ser maior do que o dia de hoje !",
-          "error");
-        $("#dataPregao").val(" ");
-        return;
-      }
-
-    });
 
     $("#btnVoltar").on("click", function() {
       voltar();
     });
 
     //Botões de Tarefa
-    $("#btnAddTarefa").on("click", function() {
-      if (validaTarefa())
-        addTarefa();
+    $("#btnAddSolicitacao").on("click", function() {
+      if (validaSolicitacao())
+        addSolicitacao();
     });
 
-    $("#btnRemoverTarefa").on("click", function() {
-      excluirTarefa();
+    $("#btnRemoverSolicitacao").on("click", function() {
+      excluirSolicitacao();
     });
 
-    $("#dataLancamento").on("change", function() {
-      validaCampoData("#dataLancamento");
-    });
-
-    $("#dataConclusao").on("change", function() {
-      validaDataConclusao();
-    });
-    $("#dataPregao").on("change", function() {
-      validaCampoData("#dataPregao");
-    });
-
-    // UPLOADS
-    $("input[name='uploadArquivo[]']").change(function() {
-
-      var files = document.getElementById("uploadArquivo").files;
-      var array = [];
-      var tamanhoTotal = 0;
-      var tamanhoMaximoPorCampo =
-        20971520; // Foi configurado para 20MB como total máximo || 20MB = 20971520 bytes.
-      for (var i = 0; i < files.length; i++) {
-        array.push(files[i].name);
-        tamanhoTotal += files[i].size;
-
-      }
-
-      var arrayString = array.toString();
-      $("#uploadArquivoText").val(arrayString);
-
-      if (tamanhoTotal > tamanhoMaximoPorCampo) {
-        smartAlert("Atenção",
-          "Estes arquivos ultrapassaram o valor máximo permitido! O total de arquivos não pode ser maior do que 20MB",
-          "error");
-        $("#uploadArquivoText").val("");
-        $("#uploadArquivo").val("");
-
-      }
-
-    });
 
   });
 
   function carregaPagina() {
-
-    //Desabilita os campos para aparecerem só na recuperação de pregões.
-    document.getElementById("legenda").style.display = "none";
-    document.getElementById("logUsuario").style.display = "none";
 
     var urlx = window.document.URL.toString();
     var params = urlx.split("?");
@@ -388,14 +262,14 @@ include "inc/scripts.php";
       var idx = id.split("=");
       var idd = idx[1];
       if (idd !== "") {
-        recuperaPregoesNaoIniciados(idd,
+        recupera(idd,
           function(data) {
             if (data.indexOf('failed') > -1) {} else {
               data = data.replace(/failed/g, '');
               var piece = data.split("#");
               var mensagem = piece[0];
               var out = piece[1];
-              var strArrayTarefa = piece[2];
+              var strArraySolicitacao = piece[2];
 
               piece = out.split("^");
               codigo = piece[0];
@@ -403,457 +277,31 @@ include "inc/scripts.php";
               ativo = piece[2];
               orgaoLicitante = piece[3];
               objetoLicitado = piece[4];
-              oportunidadeCompra = piece[5];
-              numeroPregao = piece[6];
-              dataPregao = piece[7];
 
-              //Arrumando o valor de dataPregao
-              dataPregao = dataPregao.split("-");
-              dataPregao = dataPregao[2] + "/" + dataPregao[1] + "/" + dataPregao[0];
-
-              horaPregao = piece[8];
-              usuarioCadastro = piece[9];
-              dataCadastro = piece[10];
-              observacao = piece[11];
-              condicao = piece[12];
-              observacaoCondicao = piece[13];
-              resumoPregao = piece[15];
-              grupoResponsavel = piece[16];
-              responsavelPregao = piece[17];
-              valorEstimado = piece[18];
-
-
-              //Arrumando o valor de dataLancamento e horaLancamento
-              dataCadastro = dataCadastro.split(" ");
-              dataLancamento = dataCadastro[0].split("-");
-              dataLancamento = dataLancamento[2] + "/" + dataLancamento[1] + "/" + dataLancamento[0];
-              horaLancamento = dataCadastro[1].split(":");
-              horaLancamento = horaLancamento[0] + ":" + horaLancamento[1];
-
-              $("#codigo").val(codigo);
-              $("#portal").val(portal);
-              $("#ativo").val(ativo);
-              $("#orgaoLicitante").val(orgaoLicitante);
-              $("#objetoLicitado").val(objetoLicitado);
-              $("#oportunidadeCompra").val(oportunidadeCompra);
-              $("#numeroPregao").val(numeroPregao);
-              $("#dataPregao").val(dataPregao);
-              $("#horaPregao").val(horaPregao);
-              $("#quemLancou").val(usuarioCadastro);
-              $("#dataLancamento").val(dataLancamento);
-              $("#horaLancamento").val(horaLancamento);
-              $("#observacao").val(observacao);
-              $("#condicao").val(condicao);
               $("#observacaoCondicao").val(observacaoCondicao);
-              $("#jsonTarefa").val(strArrayTarefa);
-              $("#resumoPregao").val(resumoPregao);
-              $("#grupo").val(grupoResponsavel);
-              $("#responsavelPregao").val(responsavelPregao);
-              $("#valorEstimado").val(valorEstimado);
+              $("#jsonSolicitacao").val(strArraySolicitacao);
 
-              jsonTarefaArray = JSON.parse($("#jsonTarefa").val());
-              fillTableTarefa();
-
-              document.getElementById("legenda").style.display = "";
-              document.getElementById("logUsuario").style.display = "";
+              jsonSolicitacaoArray = JSON.parse($("#jsonSolicitacao").val());
+              fillTableSolicitacao();
 
             }
           }
         );
-        recuperaUpload(idd,
-          function(data) {
-            if (data.indexOf('failed') > -1) {} else {
-              data = data.replace(/failed/g, '');
-              var piece = data.split("#");
-              var mensagem = piece[0];
-              var arrayDocumentos = JSON.parse(piece[1]);
-              for (var index = 0; index < arrayDocumentos.length; index++) {
-                var nomeArquivo = arrayDocumentos[index].nomeArquivo;
-                var nomeVisualizacao = nomeArquivo.split("_");
-                var tipoArquivo = arrayDocumentos[index].tipoArquivo;
-                var endereco = arrayDocumentos[index].endereco;
-                var nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
-                var idCampo = arrayDocumentos[index].idCampo + "Link";
-                var diretorio = "<?php echo $linkUpload ?>" + endereco + nomeArquivo;
-
-                $("#" + idCampo).append("<a href ='SYSGC/" + diretorio + "' target='_blank'>" +
-                  nomeVisualizacao[1] + "</a><br>");
-
-              }
-
-            }
-          });
       }
     }
-  }
-
-  function voltar() {
-    $(location).attr('href', 'licitacao_pregaoNaoIniciadoFiltro.php');
-  }
-
-  // Inclusão com o whatsapp
-  /* Ao gravar um pregão com tarefas,
-   * caso a tarefa ainda não esteja concluída, a 
-   * o responsável recebe uma mensagem. */
-
-  function gravado() {
-
-  }
-
-  // function recuperaTelefoneResponsavel(codigoPregao, codigoResponsavel){
-  //     recuperaTelefone(codigoPregao, codigoResponsavel, 
-  //                 function(data) {
-  //                     if (data.indexOf('failed') > -1) {} else {
-  //                         data = data.replace(/failed/g, '');
-
-  //                         var piece = data.split("#");
-  //                         var mensagem = piece[0];
-  //                         var out = piece[1];
-
-  //                         piece = out.split("^"); 
-  //                         apiUrlWhatsApp = piece[0];
-  //                         tokenWhatsApp = piece[1];
-  //                         mensagemResponsavel = piece[2];
-  //                         telefone = piece[3]; 
-  //                         pregao = piece[4]; 
-  //                         numeroPregao = piece[5]; 
-  //                         tarefa = piece[6]; 
-
-  //                         var url = apiUrlWhatsApp + 'sendMessage?token=' + tokenWhatsApp; 
-  //                         var body = mensagemResponsavel + "\n" +
-  //                                    "Tarefa:" + tarefa + "\n" +
-  //                                    "Pregão: " + pregao + "\n" +
-  //                                    "Número do Pregão: " + numeroPregao;
-
-  //                         var data = {
-  //                             phone: telefone,
-  //                             body: body
-  //                         };
-
-  //                         $.ajax(url, {
-  //                             data: JSON.stringify(data),
-  //                             contentType: 'application/json',
-  //                             type: 'POST'
-  //                         }); 
-
-  //                     }
-  //                 }
-  //             );  
-  // }
-
-  function excluir() {
-    var codigo = +$("#codigo").val();
-
-    if (codigo === 0) {
-      smartAlert("Atenção", "Selecione um pregão para excluir!", "error");
-      return;
-    }
-
-    excluirPregoesNaoIniciados(codigo);
-  }
-
-  function validaCampoData(campo) {
-    var valor = $(campo).val();
-    var validacao = validaData(valor); //Chama a função validaData dentro do gir_script.js
-    if (validacao === false) {
-      $(campo).val("");
-    }
-  }
-
-  function validaData(valor) {
-
-    if ((valor == undefined) || (valor == " ")) {
-      return;
-    }
-
-    var date = valor;
-    var ardt = new Array;
-    var ExpReg = new RegExp("(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}");
-    ardt = date.split("/");
-    erro = false;
-    if (date.search(ExpReg) == -1) {
-      erro = true;
-    } else if (((ardt[1] == 4) || (ardt[1] == 6) || (ardt[1] == 9) || (ardt[1] == 11)) && (ardt[0] > 30))
-      erro = true;
-    else if (ardt[1] == 2) {
-      if ((ardt[0] > 28) && ((ardt[2] % 4) != 0))
-        erro = true;
-      if ((ardt[0] > 29) && ((ardt[2] % 4) == 0))
-        erro = true;
-    }
-    if (erro) {
-      smartAlert("Erro", "O valor inserido é inválido.", "error");
-      return false;
-    }
-    return true;
-  }
-
-  function fillTableTarefa() {
-    $("#tableTarefa tbody").empty();
-    for (var i = 0; i < jsonTarefaArray.length; i++) {
-      var row = $('<tr />');
-      $("#tableTarefa tbody").append(row);
-      row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTarefaArray[i]
-        .sequencialTarefa + '"><i></i></label></td>'));
-
-      var tarefa = $("#tarefa option[value = '" + jsonTarefaArray[i].tarefa + "']").text();
-      var responsavel = $("#responsavel option[value = '" + jsonTarefaArray[i].responsavel + "']").text();
-      if (jsonTarefaArray[i].dataConclusao == undefined) {
-        jsonTarefaArray[i].dataConclusao = "";
-      }
-
-      row.append($('<td class="text-nowrap" onclick="carregaTarefa(' + jsonTarefaArray[i].sequencialTarefa + ');">' +
-        tarefa + '</td>'));
-      row.append($('<td class="text-nowrap">' + jsonTarefaArray[i].dataFinal + '</td>'));
-      row.append($('<td class="text-nowrap">' + responsavel + '</td>'));
-      row.append($('<td class="text-nowrap">' + jsonTarefaArray[i].dataSolicitacao + '</td>'));
-      row.append($('<td class="text-nowrap">' + jsonTarefaArray[i].dataConclusao + '</td>'));
-    }
-  }
-
-  function validaTarefa() {
-    var dataFinal = $('#dataFinal').val();
-    var dataConclusao = $('#dataConclusao').val();
-
-    //Cria-se uma variável para pegar o momento em que um registro foi criado na lista.
-    var dataSolicitacao = moment().format("DD/MM/YYYY HH:mm");
-    $("#dataSolicitacao").val(dataSolicitacao);
-
-    var diferencaEmDias = comparaDataComDiaHoje(dataConclusao);
-
-    if (diferencaEmDias < 0) {
-      smartAlert("Erro", "Atenção, a Data Conclusão não pode ser maior do que a data de hoje", "error");
-      $('#dataConlusao').val('');
-      return false;
-    }
-
-    if (dataFinal === '') {
-      smartAlert("Erro", "Informe a Data Final!", "error");
-      return false;
-    }
-
-    return true;
-  }
-
-  function validaDataConclusao() {
-    var dataFinal = $('#dataFinal').val();
-    var dataConclusao = $('#dataConclusao').val();
-
-    var diferencaEmDias = comparaDataComDiaHoje(dataConclusao);
-
-    if (diferencaEmDias < 0) {
-      smartAlert("Erro", "Atenção, a Data Conclusão não pode ser maior do que a data de hoje", "error");
-      $('#dataConclusao').val(" ");
-      return false;
-    }
-
-    if (dataFinal === '') {
-      smartAlert("Erro", "Informe a Data Final!", "error");
-      return false;
-    }
-
-    return true;
-  }
-
-
-
-  function addTarefa() {
-
-    var item = $("#formTarefa").toObject({
-      mode: 'combine',
-      skipEmpty: false
-    });
-
-    if (item["sequencialTarefa"] === '') {
-      if (jsonTarefaArray.length === 0) {
-        item["sequencialTarefa"] = 1;
-      } else {
-        item["sequencialTarefa"] = Math.max.apply(Math, jsonTarefaArray.map(function(o) {
-          return o.sequencialTarefa;
-        })) + 1;
-      }
-      item["tarefaId"] = 0;
-    } else {
-      item["sequencialTarefa"] = +item["sequencialTarefa"];
-    }
-
-    var index = -1;
-    $.each(jsonTarefaArray, function(i, obj) {
-      if (+$('#sequencialTarefa').val() === obj.sequencialTarefa) {
-        index = i;
-        return false;
-      }
-    });
-
-    if (index >= 0)
-      jsonTarefaArray.splice(index, 1, item);
-    else
-      jsonTarefaArray.push(item);
-
-    $("#jsonTarefa").val(JSON.stringify(jsonTarefaArray));
-    fillTableTarefa();
-    clearFormTarefa();
-
-  }
-
-  function processDataTarefa(node) {
-    // var fieldId = node.getAttribute ? node.getAttribute('id') : '';
-    // var fieldName = node.getAttribute ? node.getAttribute('name') : '';
-
-
-
-    // if (fieldName !== '' && (fieldId === "dataNascimentoTarefa Pré-Pregão")) {
-
-    //     var dataNascimentoTarefa Pré-Pregão = $('#dataNascimentoTarefa Pré-Pregão').val();
-    //     dataNascimentoTarefa Pré-Pregão = dataNascimentoTarefa Pré-Pregão.split("/");
-    //     dataNascimentoTarefa Pré-Pregão = dataNascimentoTarefa Pré-Pregão[2] + "/" + dataNascimentoTarefa Pré-Pregão[1] + "/" + dataNascimentoTarefa Pré-Pregão[0];
-
-    //     return {
-    //         name: fieldName,
-    //         value: dataNascimentoTarefa Pré-Pregão
-    //     };
-    // }
-
-    // return false;
-  }
-
-  function clearFormTarefa() {
-    $("#tarefa").val('');
-    $("#dataFinal").val('');
-    $("#responsavel").val('');
-    $("#observacaoPrePregao").val('');
-    $("#sequencialTarefa").val('');
-    $("#dataConclusao").val('');
-  }
-
-  function carregaTarefa(sequencialTarefa) {
-    var arr = jQuery.grep(jsonTarefaArray, function(item, i) {
-      return (item.sequencialTarefa === sequencialTarefa);
-    });
-
-    clearFormTarefa();
-
-    if (arr.length > 0) {
-      var item = arr[0];
-      $("#tarefa").val(item.tarefa);
-      $("#dataFinal").val(item.dataFinal);
-      $("#responsavel").val(item.responsavel);
-      $("#observacaoPrePregao").val(item.observacaoPrePregao);
-      $("#tarefaId").val(item.tarefaId);
-      $("#sequencialTarefa").val(item.sequencialTarefa);
-      $("#dataConclusao").val(item.dataConclusao);
-    }
-  }
-
-  function excluirTarefa() {
-    var arrSequencial = [];
-    $('#tableTarefa input[type=checkbox]:checked').each(function() {
-      arrSequencial.push(parseInt($(this).val()));
-    });
-    if (arrSequencial.length > 0) {
-      for (i = jsonTarefaArray.length - 1; i >= 0; i--) {
-        var obj = jsonTarefaArray[i];
-        if (jQuery.inArray(obj.sequencialTarefa, arrSequencial) > -1) {
-          jsonTarefaArray.splice(i, 1);
-        }
-      }
-      $("#jsonTarefa").val(JSON.stringify(jsonTarefaArray));
-      fillTableTarefa();
-    } else
-      smartAlert("Erro", "Selecione pelo menos uma informação para excluir.", "error");
-  }
-
-
-  function excluirPrePregao() {
-    var arrSequencial = [];
-    $('#tablePrePregao input[type=checkbox]:checked').each(function() {
-      arrSequencial.push(parseInt($(this).val()));
-    });
-    if (arrSequencial.length > 0) {
-      for (i = jsonPrePregaoArray.length - 1; i >= 0; i--) {
-        var obj = jsonPrePregaoArray[i];
-        if (jQuery.inArray(obj.sequencialPrePregao, arrSequencial) > -1) {
-          jsonPrePregaoArray.splice(i, 1);
-        }
-      }
-      $("#JsonPrePregao").val(JSON.stringify(jsonPrePregaoArray));
-      fillTablePrePregao();
-    } else
-      smartAlert("Erro", "Selecione pelo menos 1 pré-pregão para excluir.", "error");
   }
 
   function gravar() {
-    var portal = $("#portal").val();
-    var orgaoLicitante = $("#orgaoLicitante").val();
-    var numeroPregao = $("#numeroPregao").val();
-    var dataPregao = $("#dataPregao").val();
-    var horaPregao = $("#horaPregao").val();
-    var oportunidadeCompra = $("#oportunidadeCompra").val();
-    var resumoPregao = $("#resumoPregao").val();
+    gravarSolicitacao(function() {
 
-    if (portal === "") {
-      smartAlert("Atenção", "Selecione um portal !", "error");
-      $("#portal").focus();
-      return;
-    }
-
-    if (orgaoLicitante === "") {
-      smartAlert("Atenção", "Digite o Nome do Orgão Licitante !", "error");
-      $("#orgaoLicitante").focus();
-      return;
-    }
-
-    if (numeroPregao === "") {
-      smartAlert("Atenção", "Digite o Número do Pregão !", "error");
-      $("#numeroPregao").focus();
-      return;
-    }
-
-    if (dataPregao === "") {
-      smartAlert("Atenção", "Digite a Data do Pregão !", "error");
-      $("#dataPregao").focus();
-      return;
-    }
-
-    if (horaPregao === "") {
-      smartAlert("Atenção", "Digite a Hora do Pregão !", "error");
-      $("#horaPregao").focus();
-      return;
-    }
-
-    if (oportunidadeCompra === "") {
-      smartAlert("Atenção", "Digite a Oportunidade de Compra !", "error");
-      $("#oportunidadeCompra").focus();
-      return;
-    }
-
-    if (resumoPregao === "") {
-      smartAlert("Atenção", "Escreva um resumo para o pregão !", "error");
-      $("#resumoPregao").focus();
-      return;
-    }
-
-    var form = $('#formPregoes')[0];
-    var formData = new FormData(form);
-    gravaPregoesNaoIniciados(formData);
-
+    })
   }
 
-  function comparaDataComDiaHoje(dataDesejada) {
-    var dataHoje = moment().format("DD/MM/YYYY");
+  function recupera(callback) {
+    recuperaSolicitacao(callback);
+  }
 
-    //Formata datas(string) para um objeto moment.
-    //Data Hoje
-    dataHoje = dataHoje.split("/");
-    dataHoje[1] = dataHoje[1] - 1;
-    dataHoje = moment([dataHoje[2], dataHoje[1], dataHoje[0]]);
-
-    // Data Desejada
-    dataDesejada = dataDesejada.split("/");
-    dataDesejada[1] = dataDesejada[1] - 1;
-    dataDesejada = moment([dataDesejada[2], dataDesejada[1], dataDesejada[0]]);
-
-    var diferencaEmDias = dataHoje.diff(dataDesejada, 'days');
-    return diferencaEmDias;
+  function voltar() {
+    $(location).attr('href', 'inddex.php');
   }
 </script>
