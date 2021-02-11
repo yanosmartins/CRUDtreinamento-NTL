@@ -372,20 +372,20 @@ function excluir()
 function recuperaUpload()
 {
 
-    $id = +$_POST['id'] ?: 0;
+    $id = (int)$_POST['id'] ?: 0;
     $diretorioAlvo = "../uploads/";
 
-    $sql = " SELECT codigo, nomeArquivo, tipoArquivo, endereco, idCampo, garimpaPregao 
-    FROM dbo.garimpaPregaoDocumento 
-    WHERE (0=0) AND garimpaPregao = " . $id;
+    $sql = " SELECT codigo, nomeArquivo, tipoArquivo, endereco, idCampo, pregao 
+    FROM Ntl.pregaoDocumento 
+    WHERE (0=0) AND pregao = " . $id;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $contadorDocumento = 0;
     $arrayDocumentos = array();
     $out = "";
-    while ($row = odbc_fetch_array($result)) {
-        $row = array_map('utf8_encode', $row);
+    foreach($result as $row) {
+
         $nomeArquivo = $row['nomeArquivo'];
         $tipoArquivo = $row['tipoArquivo'];
         $endereco = $row['endereco'];
