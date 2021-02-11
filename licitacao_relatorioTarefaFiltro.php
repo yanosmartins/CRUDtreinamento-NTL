@@ -88,11 +88,11 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao FROM 
-                                                                        sysgc.dbo.portal WHERE ativo = 1 ORDER BY descricao";
+                                                                        Ntl.portal WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                            $descricao = $row['descricao'];
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -130,13 +130,13 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "select * from dbo.situacao order by codigo";
+                                                                        $sql = "SELECT codigo, descricao FROM 
+                                                                        Ntl.situacao WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-
-                                                                            $codigo = $row['codigo'];
-                                                                            $nomeSituacao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
-                                                                            echo '<option value=' . $codigo . '>' . $nomeSituacao . '</option>';
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = +$row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
@@ -147,17 +147,15 @@ include("inc/nav.php");
                                                                     <select id="responsavel" name="responsavel">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, nome FROM dbo.responsavel  where ativo = 1  
-                                                                        order by nome";
+                                                                        $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
+                                                                        foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $nome = ($row['nome']);
                                                                             echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
                                                                         }
-                                                                ?>
+                                                                        ?>
                                                                     </select><i></i>
                                                             </section>
                                                             <section class="col col-3">
@@ -189,15 +187,14 @@ include("inc/nav.php");
                                                                     <select id="tarefa" name="tarefa">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao  FROM dbo.tarefa  where ativo = 1  
-                                                                             order by descricao;";
                                                                         $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao FROM 
+                                                                        Ntl.tarefa WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
-                                                                            $codigo = $row['codigo'];
-                                                                            $nomeTarefa = ($row['descricao']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $nomeTarefa . '</option>';
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = +$row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
@@ -287,7 +284,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPregoes.php',
+                    url: 'js/sqlscope_cadastroPregaoCadastro.php',
                     cache: false,
                     dataType: "json",
                     data: {
