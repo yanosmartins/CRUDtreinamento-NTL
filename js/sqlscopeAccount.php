@@ -19,12 +19,17 @@ function validaSenha() {
     $reposit = new reposit();
     $result = $reposit->SelectCondTrue("usuario| login='" . $login . "' AND CAST(login as varbinary(100)) = CAST('" . $login . "' as varbinary(100)) and ativo = 1");
     if ($row = $result[0]) {
+        $codigo = $row['codigo'];
+        $funcionario = $row['funcionario'];
         $nome = $row['nome'];
         $senhaBanco = $row['senha'];
         $reposit->FechaConexao();
         if ($senhaCript == $senhaBanco) {
             session_start();
             $_SESSION['login'] = $login;
+            $_SESSION['codigo'] = $codigo;
+            $_SESSION['funcionario'] = $funcionario;
+     
             define("login", $login);
             session_write_close();
             echo('sucess#' . $nome . '#' . $login);

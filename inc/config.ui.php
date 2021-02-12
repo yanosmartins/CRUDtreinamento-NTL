@@ -10,6 +10,7 @@ $breadcrumbs = array(
 include_once "js/repositorio.php";
 session_start();
 $login = $_SESSION['login'];
+$codigoLogin = $_SESSION['codigo'];
 $login = "'" . $login . "'";
 
 $arrayPermissao = array();
@@ -339,8 +340,17 @@ if ($condicaoOperacaoOk) {
         }
     }
 
-    $condicaoEstoqueOk = (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true));
+    $condicaoMensageriaOk = true;
+    if ($condicaoMensageriaOk) {
+        $page_nav['operacao']['sub']['mensageria'] = array("title" => "Mensageria", "icon" => "fa fa-envelope-open-o ");
+        $page_nav['operacao']['sub']['mensageria']['sub'] = array();
+        if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['mensageria']['sub'] += array("relatorioTarefas" => array("title" => "Solicitação", "url" => APP_URL . "/mensageria_solicitacaoCadastro.php"));
+        }
+    }
 
+
+    $condicaoEstoqueOk = (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true));
     if ($condicaoEstoqueOk) {
         $page_nav['operacao']['sub']['estoque'] = array("title" => "Estoque", "icon" => "fa fa-cubes");
         $page_nav['operacao']['sub']['estoque']['sub'] = array();
