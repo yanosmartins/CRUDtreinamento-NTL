@@ -89,66 +89,83 @@ include("inc/nav.php");
                         <div class="panel-body no-padding">
                           <fieldset>
                             <div class="row">
-
                               <input id="codigoFuncionario" name="codigoFuncionario" type="text" class="hidden">
                             </div>
                             <div class="row">
-                              <section class="col col-6">
-                                <label class="label" for="nomeFuncionario">Nome do funcionário</label>
+                              <section class="col col-3">
+                                <label class="label">Funcionário</label>
                                 <label class="input">
-                                  <input id="nomeFuncionario" name="nomeFuncionario" class="required" readonly>
-                                  </input>
+                                  <?php
+                                  session_start();
+                                  $login = $_SESSION['login'];
+                                  $login = "'" . $login . "'";
+                                  echo "<input id='funcionario' maxlength='255' name='funcionario' class='readonly' type='select' value=" . $login . " readonly>"
+                                  ?>
                                 </label>
                               </section>
-                              <section class="col col-6">
-                                <label class="label">Projeto</label>
+                              <section class="col col-3">
+                                <label class="label">Data</label>
                                 <label class="input">
-                                  <input id="projeto" name="projeto" class="required text-right" type="text" autocomplete="off" readonly>
+                                <i class="icon-append fa fa-calendar"></i>
+                                  <?php
+                                  $hoje = date("d/m/Y");
+                                  $hoje = "'" . $hoje . "'";
+                                  echo "<input id='data' name='data' type='text' data-dateformat='dd/mm/yy' class='readonly' style='text-align: center' value="
+                                    . $hoje . " data-mask='99/99/9999' data-mask-placeholder='-' autocompvare='new-password' readonly>"
+                                  ?>
+
+                                </label>
+                              </section>
+                              <section class="col col-3">
+                                <label class="label">Hora</label>
+                                <label class="input">
+                                <i class="icon-append fa fa-clock-o"></i>
+                                  <?php
+                                  $hora = date("h:i");
+                                  $hora = "'" . $hora . "'";
+                                  echo "<input id='hora' name='hora' class='readonly' type='text' autocompvare='new-password' value=".$hora." readonly>"
+                                  ?>
+                                </label>
+                              </section>
+                              <section class="col col-3">
+                                <label class="label">Data Limite</label>
+                                <label class="input">
+                                <i class="icon-append fa fa-calendar"></i>
+                                  <input id="dataLimite" name="dataLimite" autocompvare="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocompvare="new-password">
                                 </label>
                               </section>
                             </div>
-                            <input id="json" name="json" type="hidden" value="[]">
-                            <div id="formSolicitacao">
-                              <div class="row">
-                                <input id="solicitacaoId" name="solicitacaoId" type="hidden" value="">
-                                <input id="sequencialSolicitacao" name="sequencialSolicitacao" type="hidden" value="">
-                                <section class="col col-3">
-                                  <label class="label" for="solicitacao">Solicitacao</label>
-                                  <label class="input">
-                                    <input id="solicitacao" name="solicitacao" type="text">
-                                </section>
-
-                              </div>
-
-                              <div class="row">
-                                <section class="col col-4">
-                                  <button id="btnAddSolicitacao" type="button" class="btn btn-primary" title="Adicionar Solicitacao">
-                                    <i class="fa fa-plus"></i>
-                                  </button>
-                                  <button id="btnRemoverSolicitacao" type="button" class="btn btn-danger" title="Remover Solicitacao">
-                                    <i class="fa fa-minus"></i>
-                                  </button>
-                                </section>
-                              </div>
-                              <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                <table id="tableSolicitacao" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                  <thead>
-                                    <tr role="row">
-                                      <th></th>
-                                      <th class="text-left" style="min-width: 10px;">
-                                        Solicitação</th>
-                                      <th class="text-left" style="min-width: 10px;">
-                                        Responsável</th>
-                                      <th class="text-left" style="min-width: 10px;">
-                                        Data e Hora da Solicitação</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                  </tbody>
-                                </table>
-                              </div>
+                            <div class="row">
+                              <section class="col col-6">
+                                <label class="label" for="projeto">Projeto</label>
+                                <label class="select">
+                                  <select id="projeto" name="projeto" class="required">
+                                    <option></option>
+                                    <?php
+                                    $sql =  "SELECT codigo, descricao FROM Ntl.projeto where ativo = 1 order by descricao";
+                                    $reposit = new reposit();
+                                    $result = $reposit->RunQuery($sql);
+                                    foreach ($result as $row) {
+                                      $codigo = $row['codigo'];
+                                      $descricao = ($row['descricao']);
+                                      echo '<option value=' . $codigo . '>  ' . $descricao . ' </option>';
+                                    }
+                                    ?>
+                                  </select><i></i>
+                              </section>
+                              <section class="col col-6">
+                                <label class="label">Local</label>
+                                <label class="input">
+                                  <input id="Local" maxlength="255" autocompvare="off" name="Local" class="required" type="select" value="">
+                                </label>
+                              </section>
                             </div>
-
+                            <div class="row">
+                              <section class="col col-12">
+                                <label class="label">Observação</label>
+                                <textarea id="observacao" name="observacao" class="form-control" rows="3" style="resize:vertical" autocompvare="off"></textarea>
+                              </section>
+                            </div>
                           </fieldset>
                         </div>
                       </div>
