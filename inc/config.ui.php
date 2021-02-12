@@ -336,11 +336,17 @@ if ($condicaoOperacaoOk) {
         }
 
         if (in_array('RELATORIOTAREFA_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['licitacao']['sub'] += array("pregoesExtraProcesso" => array("title" => "Pregões Extra Processo", "url" => APP_URL . "/licitacao_pregaoExtraProcessoFiltro.php"));
+        }
+
+        if (in_array('RELATORIOTAREFA_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/licitacao_relatorioTarefaFiltro.php"));
         }
+
+
     }
 
-    $condicaoMensageriaOk = true;
+    $condicaoMensageriaOk = false;
     if ($condicaoMensageriaOk) {
         $page_nav['operacao']['sub']['mensageria'] = array("title" => "Mensageria", "icon" => "fa fa-envelope-open-o ");
         $page_nav['operacao']['sub']['mensageria']['sub'] = array();

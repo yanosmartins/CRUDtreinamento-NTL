@@ -40,7 +40,7 @@ function grava()
     $horaReaberturaPregao = validaString($_POST['horaReaberturaPregao']);
     $dataAlerta = validaData($_POST['dataAlerta']);
     $horaAlerta = validaString($_POST['horaAlerta']);
-    $prioridade = validaString($_POST['prioridade']);
+    $prioridade = (int)$_POST['prioridade'];
     $condicao = (int) ($_POST['condicao']);
     $observacaoCondicao = validaString($_POST['observacaoCondicao']);
 
@@ -163,7 +163,7 @@ function recupera()
     $horaReaberturaPregao = $row['horaReabertura'];
     $dataAlerta = $row['dataAlerta'];
     $horaAlerta = $row['horaAlerta'];
-    $prioridade = $row['prioridade'];
+    $prioridade = (int)$row['prioridade'];
     $resumoPregao = $row['resumoPregao'];
     $condicao = $row['condicao'];
     $observacaoCondicao = $row['observacaoCondicao'];
