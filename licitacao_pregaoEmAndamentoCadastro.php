@@ -238,11 +238,12 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3">
+                                                                <label class="label" for="condicao">Prioridade</label>
                                                                 <label class="select">
-                                                                    <select id="prioridade" name="prioridade" class="hidden">
+                                                                    <select id="prioridade" name="prioridade" class="">
                                                                         <option value="0" selected>Não</option>
                                                                         <option value="1">Sim</option>
-                                                                    </select>
+                                                                    </select><i></i>
                                                             </section>
                                                         </div>
                                                         <div class="row">
