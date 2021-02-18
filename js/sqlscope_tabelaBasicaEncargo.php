@@ -38,6 +38,7 @@ function grava()
     $descricao = $_POST['descricao'];
     $percentual = $_POST['percentual'];
     $ativo = 1;
+    $percentual = str_replace(",", ".", $percentual);
 
     $sql = "Ntl.encargo_Atualiza
         $codigo,
@@ -80,6 +81,7 @@ function recupera()
     $descricao = $row['descricao'];
     $percentual = $row['percentual'];
     $ativo = $row['ativo'];
+    $percentual = str_replace(".", ",", $percentual);
 
     $out =   $id . "^" .
         $descricao . "^" .

@@ -39,6 +39,8 @@ function grava()
     $valor = $_POST['valor'];
     $ativo = 1;
 
+    $valor = str_replace(",", ".", $valor);
+
     $sql = "Ntl.insumo_Atualiza
         $codigo,
         $descricao,
@@ -80,6 +82,7 @@ function recupera()
     $descricao = $row['descricao'];
     $valor = $row['valor'];
     $ativo = $row['ativo'];
+    $valor = str_replace(".", ",", $valor);
 
     $out =   $id . "^" .
         $descricao . "^" .
