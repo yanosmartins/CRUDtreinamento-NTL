@@ -95,7 +95,6 @@ include("inc/nav.php");
                               <section class="col col-6">
                                 <label class="label">Funcionário</label>
                                 <label class="input">
-                                <input id="funcionarioId" type="hidden" value="">
                                   <?php
                                   session_start();
                                   $id = $_SESSION['funcionario'];
@@ -103,11 +102,9 @@ include("inc/nav.php");
                                   $result = $reposit->RunQuery($sql);
                                   if ($row = $result[0]) {
                                     $nome = "'" . $row['nome'] . "'";
-                                    echo "<input id='funcionario' maxlength='255' name='funcionarioFiltro' class='readonly' type='select' value=" . $nome . " readonly>";
+                                    echo "<input id='funcionario' maxlength='255' name='funcionario' class='readonly' type='select' value=" . $nome . " readonly>";
                                   }
                                   ?>
-                                  
-                                  <i class="icon-append fa fa-filter"></i>
                                 </label>
                               </section>
                               <section class="col col-3">
@@ -178,22 +175,13 @@ include("inc/nav.php");
                                   <input id="local" maxlength="255" autocompvare="off" name="local" type="text" value="">
                                 </label>
                               </section>
-                              <section class="col col-3" id="sectionResponsavel" hidden>
-                                <label class="label" for="responsavelPregao"> Responsável</label>
-                                <label class="select">
-                                  <select id="responsavel" name="responsavel">
-                                    <option></option>
-                                    <?php
-                                    $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
-                                    $reposit = new reposit();
-                                    $result = $reposit->RunQuery($sql);
-                                    foreach ($result as $row) {
-                                      $codigo = $row['codigo'];
-                                      $nome = ($row['nome']);
-                                      echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
-                                    }
-                                    ?>
-                                  </select><i></i>
+                              <section class="col col-6" id="sectionResponsavel" hidden>
+                                <label class="label">Responsável</label>
+                                <label class="input">
+                                  <input id="responsavelId" name="responsavelId" type="hidden" value="">
+                                  <input id='responsavel' maxlength='255' name='responsavelFiltro' class='' type='select'>
+                                  <i class="icon-append fa fa-filter"></i>
+                                </label>
                               </section>
                             </div>
                             <div class="row">
@@ -207,7 +195,7 @@ include("inc/nav.php");
                                 <legend><strong></strong></legend>
                               </section>
                               <section class="col col-6">
-                                <label class="label">Funcionário</label>
+                                <label class="label">Quem Lancou</label>
                                 <label class="input">
                                   <input id='funcionarioSolicitacao' maxlength='255' name='funcionarioSolicitacao' class='readonly' type='select' value='' readonly>
                                 </label>
@@ -329,48 +317,48 @@ include "inc/scripts.php";
       excluirSolicitacao();
     });
 
-    $("#funcionario").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'js/sqlscope_mensageriaSolicitacao.php',
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        maxRows: 12,
-                        funcao: "listaNomeFuncionario",
-                        descricaoIniciaCom: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                id: item.id,
-                                label: item.nome,
-                                value: item.nome
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 3,
-            select: function(event, ui) {
-                $("#funcionarioId").val(ui.item.id);
-                $("#funcionarioFiltro").val(ui.item.nome);
-                var funcionarioId = $("#funcionarioId").val();
-                $("#funcionario").val(funcionarioId)
-                $("#funcionarioFiltro").val('');
-            },
-            change: function(event, ui) {
-                if (ui.item === null) {
-                    $("#funcionarioId").val('');
-                    $("#funcionarioFiltro").val('');
-                }
-            }
-        }).data("ui-autocomplete")._renderItem = function(ul, item) {
-            return $("<li>")
-                .append("<a>" + highlight(item.label, this.term) + "</a>")
-                .appendTo(ul);
-        };
+    $("#responsavel").autocomplete({
+      source: function(request, response) {
+        $.ajax({
+          type: 'POST',
+          url: 'js/sqlscope_mensageriaSolicitacao.php',
+          cache: false,
+          dataType: "json",
+          data: {
+            maxRows: 12,
+            funcao: "listaNomeFuncionario",
+            descricaoIniciaCom: request.term
+          },
+          success: function(data) {
+            response($.map(data, function(item) {
+              return {
+                id: item.id,
+                label: item.nome,
+                value: item.nome
+              };
+            }));
+          }
+        });
+      },
+      minLength: 3,
+      select: function(event, ui) {
+        $("#responsavelId").val(ui.item.id);
+        $("#responsavelFiltro").val(ui.item.nome);
+        var responsavelId = $("#responsavelId").val();
+        $("#responsavel").val(responsavelId)
+        $("#responsavelFiltro").val('');
+      },
+      change: function(event, ui) {
+        if (ui.item === null) {
+          $("#responsavelId").val('');
+          $("#responsavelFiltro").val('');
+        }
+      }
+    }).data("ui-autocomplete")._renderItem = function(ul, item) {
+      return $("<li>")
+        .append("<a>" + highlight(item.label, this.term) + "</a>")
+        .appendTo(ul);
+    };
 
 
 
@@ -403,13 +391,12 @@ include "inc/scripts.php";
               projeto = piece[6];
               local = piece[7];
               responsavel = piece[8];
-              observacao = piece[9];
+              nomeResponsavel = piece[9];
+              observacao = piece[10];
 
               $("#sectionResponsavel").removeAttr("hidden");
               $("#divSolicitacao").removeAttr("hidden");
               $("#divSolicitacao").removeAttr("readonly");
-              $("#funcionario").removeClass("readonly");
-              $("#funcionario").prop("readonly", false);
 
               $("#codigo").val(codigo);
               $("#funcionarioSolicitacao").val(funcionario);
@@ -419,7 +406,8 @@ include "inc/scripts.php";
               $("#urgente").val(urgente);
               $("#projeto").val(projeto);
               $("#local").val(local);
-              $("#responsavel").val(responsavel);
+              $("#responsavelId").val(responsavelId);
+              $("#responsavel").val(nomeResponsavel);
               $("#observacao").val(observacao);
 
 
