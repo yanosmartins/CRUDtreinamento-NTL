@@ -21,60 +21,37 @@ return;
 function grava()
 {
   session_start();
-  $usuario = "'" . $_SESSION['login'] . "'";
-  $solicitacao = $_POST['solicitacao'];
-  $codigoFuncionario = (int)$solicitacao[''];
-  $nomeFuncionario = $solicitacao['nomeFuncionario'];
-  $projeto = (int)$solicitacao[''];
+  $codigoFuncionario = "'" . $_SESSION['funcionario'] . "'";
+  $codigo = validaString($_POST['codigo']);
+  $data = validaData($_POST['data']);
+  $hora = validaString($_POST['hora']);
+  $projeto = (int)$_POST['projeto'];
+  $dataLimite = validaData($_POST['dataLimite']);
+  $urgente = (int)$_POST['urgente'];
+  $local = validaString($_POST['local']);
+  $responsavel = validaNumero($_POST['responsavel']);
+  $observacao = validaString($_POST['observacao']);
 
-  //Inicio do Json
-  $strJson = $solicitacao[''];
-  $arrayJson = json_decode($strJson, true);
-  $xmlJson = "";
-  $nomeXml = "ArrayOf";
-  $nomeTabela = "";
-  if (sizeof($arrayJson) > 0) {
-    $xmlJson = '<?xml version="1.0"?>';
-    $xmlJson = $xmlJson . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-    foreach ($arrayJson as $chave) {
-      $xmlJson = $xmlJson . "<" . $nomeTabela . ">";
-      foreach ($chave as $campo => $valor) {
-        if (($campo === "sequencial")) {
-          continue;
-        }
-        if ($valor == 'Selecione') {
-          $valor = NULL;
-        }
-        $xmlJson = $xmlJson . "<" . $campo . ">" . $valor . "</" . $campo . ">";
-      }
-      $xmlJson = $xmlJson . "</" . $nomeTabela . ">";
-    }
-    $xmlJson = $xmlJson . "</" . $nomeXml . ">";
-  } else {
-    $xmlJson = '<?xml version="1.0"?>';
-    $xmlJson = $xmlJson . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-    $xmlJson = $xmlJson . "</" . $nomeXml . ">";
-  }
-  $xml = simplexml_load_string($xmlJson);
-  if ($xml === false) {
-    $mensagem = "Erro na criação do XML de ";
-    echo "failed#" . $mensagem . ' ';
-    return;
-  }
-  $xmlJson = "'" . $xmlJson . "'";
 
-  //Fim do Json 
-
-  $sql = "Ntl.solicitacao_Atualiza          
+  $sql = "Mensageria.solicitacao_Atualiza  
+                $codigo,        
                 $codigoFuncionario,
+                $data,
+                $hora,
                 $projeto,
-                $xmlJson)";
+                $dataLimite,
+                $urgente,
+                $local,
+                $responsavel,
+                $observacao
+                ";
 
   $reposit = new reposit();
   $result = $reposit->Execprocedure($sql);
-  $ret = 'sucess#';
+
+  $ret = 'success';
   if ($result < 1) {
-    $ret = 'failed#';
+    $ret = 'failed';
   }
   echo $ret;
   return;
@@ -83,48 +60,55 @@ function grava()
 function recupera()
 {
 
-  $reposit = new reposit();
-  $usuario = $_SESSION['login'];
-  $sql = "SELECT F.codigo AS 'codigoFuncionario' FROM ntl.funcionario F INNER JOIN ntl.usuario U ON F.codigo = U.funcionario WHERE U.usuario = $usuario";
+  if ((empty($_POST["codigo"])) || (!isset($_POST["codigo"])) || (is_null($_POST["codigo"]))) {
+    $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+    echo "failed#" . $mensagem . ' ';
+    return;
+  } else {
+    $codigo = (int)$_POST["codigo"];
+  }
 
+  $sql = "SELECT S.codigo, S.funcionario, F.nome, S.dataSolicitacao, S.horaSolicitacao, S.dataLimite,
+    S.urgente, S.projeto, S.endereco, S.responsavel, S.observacao FROM Mensageria.solicitacao S
+    LEFT JOIN Ntl.funcionario F ON F.codigo = S.funcionario
+    WHERE (0=0) AND
+    S.codigo = " . $codigo;
+
+  $reposit = new reposit();
   $result = $reposit->RunQuery($sql);
 
   $out = "";
-  $row = $result[0];
-  $codigoFuncionario = (int)$row['codigoFuncionaro'];
-  $nomeFuncionario = (int)$row[''];
-  $projeto = (int)$row['projeto'];
-
-  $sql = "SELECT  FROM  INNER JOIN  ON  WHERE ";
-
-  $result = $reposit->RunQuery($sql);
-
-  $contador = 0;
-  $array = array();
-  foreach ($result as $row) {
-    $variavel = (string)$row[''];
-
-    $contador = $contador + 1;
-    $array[] = array(
-      "sequencial" => $contador,
-      "variavel" => $variavel
-    );
+  if ($row = $result[0]) {
+    $codigo = (int)$row['codigo'];
+    $funcionario = $row['nome'];
+    $dataSolicitacao = validaDataRecupera($row['dataSolicitacao']);
+    $horaSolicitacao = $row['horaSolicitacao'];
+    $dataLimite = validaDataRecupera($row['dataLimite']);
+    $urgente = $row['urgente'];
+    $projeto = $row['projeto'];
+    $local = $row['endereco'];
+    $responsavel = $row['responsavel'];
+    $observacao = $row['observacao'];
   }
 
-  $strArray = json_encode($array);
-  //------------------------Fim do Array 
-
   $out =
-    $codigoFuncionario . "^" .
-    $nomeFuncionario . "^" .
-    $projeto;
+    $codigo . "^" .
+    $funcionario . "^" .
+    $dataSolicitacao . "^" .
+    $horaSolicitacao . "^" .
+    $dataLimite . "^" .
+    $urgente . "^" .
+    $projeto . "^" .
+    $local . "^" .
+    $responsavel . "^" .
+    $observacao;
 
   if ($out == "") {
     echo "failed#";
     return;
   }
 
-  echo "sucess#" . $out . "#" . $strArray;
+  echo "sucess#" . $out;
   return;
 }
 
@@ -154,4 +138,42 @@ function excluir()
   }
   echo 'sucess#' . $result;
   return;
+}
+
+function validaString($value)
+{
+    $null = 'NULL';
+    if ($value == '')
+        return $null;
+    return '\'' . $value . '\'';
+}
+
+function validaData($value)
+{
+    if ($value == "") {
+        $value = 'NULL';
+        return $value;
+    }
+    $value = str_replace('/', '-', $value);
+    $value = date("Y-m-d", strtotime($value));
+    $value = "'" . $value . "'";
+    return $value;
+}
+
+function validaDataRecupera($value)
+{
+    if ($value == "") {
+        $value = '';
+        return $value;
+    }
+    $value = date('d/m/Y', strtotime($value));
+    return $value;
+}
+
+function validaNumero($value)
+{
+    if ($value == "") {
+        $value = 'NULL';
+    }
+    return $value;
 }

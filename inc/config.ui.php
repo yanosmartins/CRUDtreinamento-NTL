@@ -351,7 +351,10 @@ if ($condicaoOperacaoOk) {
         $page_nav['operacao']['sub']['mensageria'] = array("title" => "Mensageria", "icon" => "fa fa-envelope-open-o ");
         $page_nav['operacao']['sub']['mensageria']['sub'] = array();
         if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['mensageria']['sub'] += array("relatorioTarefas" => array("title" => "Solicitação", "url" => APP_URL . "/mensageria_solicitacaoCadastro.php"));
+            $page_nav['operacao']['sub']['mensageria']['sub'] += array("solicitacao" => array("title" => "Solicitação", "url" => APP_URL . "/mensageria_solicitacaoCadastro.php"));
+        }
+        if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['mensageria']['sub'] += array("solicitacaoEmAndamento" => array("title" => "Solicitação Em Andamento", "url" => APP_URL . "/mensageria_solicitacaoEmAndamentoFiltro.php"));
         }
     }
 
