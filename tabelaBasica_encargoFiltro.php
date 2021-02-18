@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('INSUMO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('INSUMO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('ENCARGO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('ENCARGO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Insumo";
+$page_title = "Encargo";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -37,7 +37,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['insumo']["active"] = true;
+$page_nav['tabelaBasica']['sub']['encargo']["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -67,11 +67,11 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Insumo</h2>
+                            <h2>Encargo</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formInsumo" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formEncargo" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -96,10 +96,9 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Valor</label>
+                                                                <label class="label">Percentual</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="valor" name="valor" style="text-align: right;" type="text" placeholder="00,00" autocomplete="off">
-
+                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
                                                                 </label>
                                                             </section>
 
@@ -165,13 +164,13 @@ include("inc/scripts.php");
 
 <script>
     $(document).ready(function() {
-        $('#valor').focusout(function() {
-            var valor, element;
+        $('#percentual').focusout(function() {
+            var percentual, element;
             element = $(this);
             element.unmask();
-            valor = element.val().replace(/\D/g, '');
-            if (valor.length > 3) {
-                element.mask("99.9?9");
+            percentual = element.val().replace(/\D/g, '');
+            if (percentual.length > 3) {
+                element.mask("99.99");
             } else {
                 element.mask("9.99?9");
             }
@@ -181,18 +180,18 @@ include("inc/scripts.php");
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_insumoCadastro.php');
+            $(location).attr('href', 'tabelaBasica_encargoCadastro.php');
         });
     });
 
     function listarFiltro() {
         var descricao = $('#descricao').val();
-        var valor = $('#valor').val();
+        var percentual = $('#percentual').val();
         var ativo = $('#ativo').val();
 
         var parametrosUrl = '&descricao=' + descricao;
-        var parametrosUrl = '&valor=' + valor;
+        var parametrosUrl = '&percentual=' + percentual;
         parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_insumoFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('tabelaBasica_encargoFiltroListagem.php?' + parametrosUrl);
     }
 </script>

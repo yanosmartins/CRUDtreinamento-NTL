@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de perminssão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('INSUMO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('INSUMO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('INSUMO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('ENCARGO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('ENCARGO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('ENCARGO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
   unset($_SESSION['login']);
@@ -27,7 +27,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Insumo";
+$page_title = "Encargo";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -38,7 +38,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['insumo']["active"] = true;
+$page_nav['tabelaBasica']['sub']['encargo']["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -68,7 +68,7 @@ include("inc/nav.php");
           <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
             <header>
               <span class="widget-icon"><i class="fa fa-cog"></i></span>
-              <h2>Insumo
+              <h2>Encargo
               </h2>
             </header>
             <div>
@@ -100,9 +100,9 @@ include("inc/nav.php");
                               </section>
 
                               <section class="col col-2">
-                                <label class="label">Valor</label>
-                                <label class="input">
-                                  <input id="valor" name="valor" style="text-align: right;" type="text" class="required" placeholder="00,00" autocomplete="off" required>
+                                <label class="label">Percentual</label>
+                                <label class="input"><i class="icon-append fa fa-percent"></i>
+                                  <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
 
@@ -167,7 +167,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaInsumo.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaEncargo.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -190,15 +190,15 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
   $(document).ready(function() {
 
-    $('#valor').focusout(function() {
-      var valor, element;
+    $('#percentual').focusout(function() {
+      var percentual, element;
       element = $(this);
       element.unmask();
-      valor = element.val().replace(/\D/g, '');
-      if (valor.length > 3) {
-        element.mask("99,9?9");
+      percentual = element.val().replace(/\D/g, '');
+      if (percentual.length > 3) {
+        element.mask("99.9?9");
       } else {
-        element.mask("9,99?9");
+        element.mask("9.99?9");
       }
     }).trigger('focusout');
 
@@ -239,10 +239,8 @@ include("inc/scripts.php");
       }
     });
 
-
-
     $('#btnNovo').on("click", function() {
-      $(location).attr('href', 'tabelaBasica_insumoCadastro.php');
+      $(location).attr('href', 'tabelaBasica_encargoCadastro.php');
     });
     $("#btnGravar").on("click", function() {
       gravar();
@@ -251,13 +249,13 @@ include("inc/scripts.php");
       voltar();
     });
 
-    carregaInss();
+    carregaEncargo();
 
 
   });
 
   function voltar() {
-    $(location).attr('href', 'tabelaBasica_insumoFiltro.php');
+    $(location).attr('href', 'tabelaBasica_encargoFiltro.php');
 
   }
 
@@ -266,17 +264,17 @@ include("inc/scripts.php");
     //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
     $("#btnGravar").prop('disabled', true);
 
-    var codigo = +$("#codigo").val();
+    var codigo = parseInt($("#codigo").val());
     var descricao = $("#descricao").val();
-    var valor = $("#valor").val();
+    var percentual = $("#percentual").val();
 
     // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-    if (!valor) {
-      smartAlert("Erro", "Informe o valor.", "error");
+    if (!percentual) {
+      smartAlert("Erro", "Informe o percentual.", "error");
       return;
     }
 
-    gravaInsumo(codigo, descricao, valor,
+    gravaEncargo(codigo, descricao, percentual,
       function(data) {
 
         if (data.indexOf('sucess') < 0) {
@@ -307,7 +305,7 @@ include("inc/scripts.php");
       return;
     }
 
-    excluirInsumo(id, function(data) {
+    excluirEncargo(id, function(data) {
       if (data.indexOf('failed') > -1) {
         var piece = data.split("#");
         var mensagem = piece[1];
@@ -327,7 +325,7 @@ include("inc/scripts.php");
 
 
 
-  function carregaInsumo() {
+  function carregaEncargo() {
     var urlx = window.document.URL.toString();
     var params = urlx.split("?");
     if (params.length === 2) {
@@ -335,7 +333,7 @@ include("inc/scripts.php");
       var idx = id.split("=");
       var idd = idx[1];
       if (idd !== "") {
-        recuperaInsumo(idd,
+        recuperaEncargo(idd,
           function(data) {
             data = data.replace(/failed/g, '');
             var piece = data.split("#");
@@ -350,12 +348,12 @@ include("inc/scripts.php");
             debugger;
             var codigo = parseInt(piece[0]);
             var descricao = piece[1];
-            var valor = piece[2];
+            var percentual = piece[2];
 
             //Atributos de cliente        
             $("#codigo").val(codigo);
             $("#descricao").val(descricao);
-            $("#valor").val(valor);
+            $("#percentual").val(percentual);
 
           }
 
