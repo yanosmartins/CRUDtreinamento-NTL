@@ -45,7 +45,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["mensageria"]["sub"]["solicitacao"]["active"] = true;
+$page_nav["operacao"]["sub"]["mensageria"]["sub"]["solicitacao"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -73,7 +73,7 @@ include("inc/nav.php");
             </header>
             <div>
               <div class="widget-body no-padding">
-                <form action="javascript:gravar()" class="smart-form client-form" id="formPregoes" method="post">
+                <form action="javascript:gravar()" class="smart-form client-form" id="formSolicitacao" method="post">
                   <div class="panel-group smart-accordion-default" id="accordion">
                     <div class="panel panel-default">
                       <div class="panel-heading">
@@ -89,29 +89,33 @@ include("inc/nav.php");
                         <div class="panel-body no-padding">
                           <fieldset>
                             <div class="row">
-                              <input id="codigoFuncionario" name="codigoFuncionario" type="text" class="hidden">
+                              <input id="codigo" name="codigo" type="text" class="hidden" value="0">
                             </div>
                             <div class="row">
-                              <section class="col col-3">
+                              <section class="col col-6">
                                 <label class="label">Funcionário</label>
                                 <label class="input">
                                   <?php
                                   session_start();
-                                  $login = $_SESSION['login'];
-                                  $login = "'" . $login . "'";
-                                  echo "<input id='funcionario' maxlength='255' name='funcionario' class='readonly' type='select' value=" . $login . " readonly>"
+                                  $id = $_SESSION['funcionario'];
+                                  $sql = "SELECT nome FROM Ntl.funcionario WHERE codigo = " . $id;
+                                  $result = $reposit->RunQuery($sql);
+                                  if ($row = $result[0]) {
+                                    $nome = "'" . $row['nome'] . "'";
+                                    echo "<input id='funcionario' maxlength='255' name='funcionario' class='readonly' type='select' value=" . $nome . " readonly>";
+                                  }
                                   ?>
                                 </label>
                               </section>
                               <section class="col col-3">
                                 <label class="label">Data</label>
                                 <label class="input">
-                                <i class="icon-append fa fa-calendar"></i>
+                                  <i class="icon-append fa fa-calendar"></i>
                                   <?php
                                   $hoje = date("d/m/Y");
                                   $hoje = "'" . $hoje . "'";
                                   echo "<input id='data' name='data' type='text' data-dateformat='dd/mm/yy' class='readonly' style='text-align: center' value="
-                                    . $hoje . " data-mask='99/99/9999' data-mask-placeholder='-' autocompvare='new-password' readonly>"
+                                    . $hoje . " data-mask='99/99/9999' data-mask-placeholder='-' autocompvare='new-password' readonly>";
                                   ?>
 
                                 </label>
@@ -119,21 +123,15 @@ include("inc/nav.php");
                               <section class="col col-3">
                                 <label class="label">Hora</label>
                                 <label class="input">
-                                <i class="icon-append fa fa-clock-o"></i>
+                                  <i class="icon-append fa fa-clock-o"></i>
                                   <?php
                                   $hora = date("h:i");
                                   $hora = "'" . $hora . "'";
-                                  echo "<input id='hora' name='hora' class='readonly' type='text' autocompvare='new-password' value=".$hora." readonly>"
+                                  echo "<input id='hora' name='hora' class='readonly' type='text' autocompvare='new-password' value=" . $hora . " readonly>"
                                   ?>
                                 </label>
                               </section>
-                              <section class="col col-3">
-                                <label class="label">Data Limite</label>
-                                <label class="input">
-                                <i class="icon-append fa fa-calendar"></i>
-                                  <input id="dataLimite" name="dataLimite" autocompvare="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocompvare="new-password">
-                                </label>
-                              </section>
+
                             </div>
                             <div class="row">
                               <section class="col col-6">
@@ -153,11 +151,46 @@ include("inc/nav.php");
                                     ?>
                                   </select><i></i>
                               </section>
+                              <section class="col col-3">
+                                <label class="label">Data Limite</label>
+                                <label class="input">
+                                  <i class="icon-append fa fa-calendar"></i>
+                                  <input id="dataLimite" name="dataLimite" autocompvare="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocompvare="new-password">
+                                </label>
+                              </section>
+                              <section class="col col-3">
+                                <label class="label" for="condicao">Urgente</label>
+                                <label class="select">
+                                  <select id="urgente" name="urgente" class="required">
+                                    <option></option>
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
+                                  </select><i></i>
+                              </section>
+                            </div>
+                            <div class="row">
                               <section class="col col-6">
                                 <label class="label">Local</label>
                                 <label class="input">
-                                  <input id="Local" maxlength="255" autocompvare="off" name="Local" class="required" type="select" value="">
+                                  <input id="local" maxlength="255" autocompvare="off" name="local" type="text" value="">
                                 </label>
+                              </section>
+                              <section class="col col-3" id="sectionResponsavel" hidden>
+                                <label class="label" for="responsavelPregao"> Responsável</label>
+                                <label class="select">
+                                  <select id="responsavel" name="responsavel">
+                                    <option></option>
+                                    <?php
+                                    $sql =  "SELECT codigo, nome FROM Ntl.responsavel where ativo = 1 order by codigo";
+                                    $reposit = new reposit();
+                                    $result = $reposit->RunQuery($sql);
+                                    foreach ($result as $row) {
+                                      $codigo = $row['codigo'];
+                                      $nome = ($row['nome']);
+                                      echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
+                                    }
+                                    ?>
+                                  </select><i></i>
                               </section>
                             </div>
                             <div class="row">
@@ -166,6 +199,32 @@ include("inc/nav.php");
                                 <textarea id="observacao" name="observacao" class="form-control" rows="3" style="resize:vertical" autocompvare="off"></textarea>
                               </section>
                             </div>
+                            <div class="row" id="divSolicitacao" hidden>
+                              <section class="col col-12">
+                                <legend><strong></strong></legend>
+                              </section>
+                              <section class="col col-6">
+                                <label class="label">Funcionário</label>
+                                <label class="input">
+                                  <input id='funcionarioSolicitacao' maxlength='255' name='funcionarioSolicitacao' class='readonly' type='select' value='' readonly>
+                                </label>
+                              </section>
+                              <section class="col col-3">
+                                <label class="label">Data Solicitação</label>
+                                <label class="input">
+                                  <i class="icon-append fa fa-calendar"></i>
+                                  <input id="dataSolicitacao" name="dataSolicitacao" autocompvare="off" type="text" data-dateformat="dd/mm/yy" class="datepicker readonly" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocompvare="new-password" readonly>
+                                </label>
+                              </section>
+                              <section class="col col-3">
+                                <label class="label" for="hora">Hora Solicitacao</label>
+                                <label class="input">
+                                  <i class="icon-append fa fa-clock-o"></i>
+                                  <input id="horaSolicitacao" name="horaSolicitacao" class="readonly" type="text" autocomplete="off" placeholder="hh:mm" readonly>
+                                </label>
+                              </section>
+                            </div>
+
                           </fieldset>
                         </div>
                       </div>
@@ -279,27 +338,40 @@ include "inc/scripts.php";
       var idx = id.split("=");
       var idd = idx[1];
       if (idd !== "") {
-        recupera(idd,
+        recuperaSolicitacao(idd,
           function(data) {
             if (data.indexOf('failed') > -1) {} else {
               data = data.replace(/failed/g, '');
               var piece = data.split("#");
               var mensagem = piece[0];
               var out = piece[1];
-              var strArraySolicitacao = piece[2];
 
               piece = out.split("^");
               codigo = piece[0];
-              portal = piece[1];
-              ativo = piece[2];
-              orgaoLicitante = piece[3];
-              objetoLicitado = piece[4];
+              funcionario = piece[1];
+              dataSolicitacao = piece[2];
+              horaSolicitacao = piece[3];
+              dataLimite = piece[4];
+              urgente = piece[5];
+              projeto = piece[6];
+              local = piece[7];
+              responsavel = piece[8];
+              observacao = piece[9];
 
-              $("#observacaoCondicao").val(observacaoCondicao);
-              $("#jsonSolicitacao").val(strArraySolicitacao);
+              $("#sectionResponsavel").removeAttr("hidden");
+              $("#divSolicitacao").removeAttr("hidden");
 
-              jsonSolicitacaoArray = JSON.parse($("#jsonSolicitacao").val());
-              fillTableSolicitacao();
+              $("#codigo").val(codigo);
+              $("#funcionarioSolicitacao").val(funcionario);
+              $("#dataSolicitacao").val(dataSolicitacao);
+              $("#horaSolicitacao").val(horaSolicitacao);
+              $("#dataLimite").val(dataLimite);
+              $("#urgente").val(urgente);
+              $("#projeto").val(projeto);
+              $("#local").val(local);
+              $("#responsavel").val(responsavel);
+              $("#observacao").val(observacao);
+
 
             }
           }
@@ -309,9 +381,32 @@ include "inc/scripts.php";
   }
 
   function gravar() {
-    gravarSolicitacao(function() {
+    var projeto = $("#projeto").val();
+    var dataLimite = $("#dataLimite").val();
+    var urgente = $("#urgente").val();
 
-    })
+    if (projeto === "") {
+      smartAlert("Atenção", "Selecione um Projeto !", "error");
+      $("#projeto").focus();
+      return;
+    }
+
+    if (dataLimite === "") {
+      smartAlert("Atenção", "Digite a Data Limite !", "error");
+      $("#dataLimite").focus();
+      return;
+    }
+
+    if (urgente === "") {
+      smartAlert("Atenção", "Selecione se é Urgente !", "error");
+      $("#urgente").focus();
+      return;
+    }
+
+    var form = $('#formSolicitacao')[0];
+    var formData = new FormData(form);
+    gravaSolicitacao(formData);
+
   }
 
   function recupera(callback) {
@@ -319,6 +414,6 @@ include "inc/scripts.php";
   }
 
   function voltar() {
-    $(location).attr('href', 'inddex.php');
+    $(location).attr('href', 'mensageria_solicitacaoCadastro.php');
   }
 </script>
