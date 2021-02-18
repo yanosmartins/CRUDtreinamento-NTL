@@ -179,7 +179,7 @@ include("inc/nav.php");
                                 <label class="label">Responsável</label>
                                 <label class="input">
                                   <input id="responsavelId" name="responsavelId" type="hidden" value="">
-                                  <input id='responsavel' maxlength='255' name='responsavelFiltro' class='' type='select'>
+                                  <input id='responsavel' maxlength='255' name='responsavelFiltro' class='required' type='select'>
                                   <i class="icon-append fa fa-filter"></i>
                                 </label>
                               </section>
@@ -393,6 +393,7 @@ include "inc/scripts.php";
               responsavel = piece[8];
               nomeResponsavel = piece[9];
               observacao = piece[10];
+              funcionarioId = piece[11];
 
               $("#sectionResponsavel").removeAttr("hidden");
               $("#divSolicitacao").removeAttr("hidden");
@@ -406,10 +407,19 @@ include "inc/scripts.php";
               $("#urgente").val(urgente);
               $("#projeto").val(projeto);
               $("#local").val(local);
-              $("#responsavelId").val(responsavelId);
-              $("#responsavel").val(nomeResponsavel);
               $("#observacao").val(observacao);
 
+              if (responsavel == '') {
+                $("#responsavelId").val(funcionarioId);
+              } else {
+                $("#responsavelId").val(responsavel);
+              }
+
+              if (nomeResponsavel == '') {
+                $("#responsavel").val(funcionario);
+              } else {
+                $("#responsavel").val(nomeResponsavel);
+              }
 
             }
           }
@@ -419,7 +429,9 @@ include "inc/scripts.php";
   }
 
   function gravar() {
+    var codigo = $("#codigo").val();
     var projeto = $("#projeto").val();
+    var responsavel = $("#responsavel").val();
     var dataLimite = $("#dataLimite").val();
     var urgente = $("#urgente").val();
 
@@ -438,6 +450,12 @@ include "inc/scripts.php";
     if (urgente === "") {
       smartAlert("Atenção", "Selecione se é Urgente !", "error");
       $("#urgente").focus();
+      return;
+    }
+
+    if ((responsavel === "") && (codigo != 0 )) {
+      smartAlert("Atenção", "Selecione um Responsavel !", "error");
+      $("#responsavel").focus();
       return;
     }
 

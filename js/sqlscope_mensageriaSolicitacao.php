@@ -95,6 +95,7 @@ function recupera()
     $responsavel = $row['responsavel'];
     $nomeResponsavel = $row['nomeResponsavel'];
     $observacao = $row['observacao'];
+    $funcionarioId = $row['funcionario'];
   }
 
   $out =
@@ -108,7 +109,8 @@ function recupera()
     $local . "^" .
     $responsavel . "^" .
     $nomeResponsavel . "^" .
-    $observacao;
+    $observacao . "^" .
+    $funcionarioId;
 
   if ($out == "") {
     echo "failed#";
