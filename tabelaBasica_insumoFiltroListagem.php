@@ -19,7 +19,7 @@ include "js/repositorio.php";
                 $ativo = $_GET["ativo"];
 
 
-                if ($descricao !== "") {
+                if ($descricao != "") {
 
                     $where = $where . " AND descricao = $descricao ";
                 }
@@ -28,7 +28,7 @@ include "js/repositorio.php";
 
                     $where = $where . " AND valor = " . "'" . $valor . "'";
                 }
-                if ($ativo !== "") {
+                if ($ativo != "") {
 
                     $where = $where . " AND ativo = $ativo ";
                 }
@@ -44,8 +44,9 @@ include "js/repositorio.php";
                 foreach ($result as $row) {
                     $codigo = (int) $row['codigo'];
                     $descricao = (string) $row['descricao'];
-                    $valor = (float) $row['valor'];
+                    $valor = number_format($row['valor'], 2);
                     $ativo = (int) $row['ativo'];
+                    $valor = str_replace(".", ",", $valor);
 
                     echo '<tr>';
                     echo '<td class="text-left"><a href="tabelaBasica_insumoCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';

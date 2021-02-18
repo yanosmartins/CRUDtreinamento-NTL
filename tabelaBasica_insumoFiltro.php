@@ -102,7 +102,15 @@ include("inc/nav.php");
 
                                                                 </label>
                                                             </section>
-
+                                                            <section class="col col-1">
+                                                                <label class="label">Ativo</label>
+                                                                <label class="select">
+                                                                    <select name="ativo" id="ativo">
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>

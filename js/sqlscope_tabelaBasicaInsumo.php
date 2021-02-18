@@ -37,6 +37,7 @@ function grava()
     $codigo = $_POST['codigo'];
     $descricao = $_POST['descricao'];
     $valor = $_POST['valor'];
+    $valor = number_format($valor, 2, ",", "");
     $ativo = 1;
 
     $valor = str_replace(",", ".", $valor);
@@ -82,6 +83,7 @@ function recupera()
     $descricao = $row['descricao'];
     $valor = $row['valor'];
     $ativo = $row['ativo'];
+    $valor = number_format($valor, 2, ".", "");
     $valor = str_replace(".", ",", $valor);
 
     $out =   $id . "^" .
