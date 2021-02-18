@@ -346,7 +346,7 @@ if ($condicaoOperacaoOk) {
 
     }
 
-    $condicaoMensageriaOk = false;
+    $condicaoMensageriaOk = true;
     if ($condicaoMensageriaOk) {
         $page_nav['operacao']['sub']['mensageria'] = array("title" => "Mensageria", "icon" => "fa fa-envelope-open-o ");
         $page_nav['operacao']['sub']['mensageria']['sub'] = array();

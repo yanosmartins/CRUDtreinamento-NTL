@@ -33,7 +33,7 @@ if ($condicaoExcluirOK === false) {
 YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
 E.G. $page_title = "Custom Title" */
 
-$page_title = "Pregões Não Iniciados";
+$page_title = "Solicitação";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -95,6 +95,7 @@ include("inc/nav.php");
                               <section class="col col-6">
                                 <label class="label">Funcionário</label>
                                 <label class="input">
+                                <input id="funcionarioId" type="hidden" value="">
                                   <?php
                                   session_start();
                                   $id = $_SESSION['funcionario'];
@@ -102,9 +103,11 @@ include("inc/nav.php");
                                   $result = $reposit->RunQuery($sql);
                                   if ($row = $result[0]) {
                                     $nome = "'" . $row['nome'] . "'";
-                                    echo "<input id='funcionario' maxlength='255' name='funcionario' class='readonly' type='select' value=" . $nome . " readonly>";
+                                    echo "<input id='funcionario' maxlength='255' name='funcionarioFiltro' class='readonly' type='select' value=" . $nome . " readonly>";
                                   }
                                   ?>
+                                  
+                                  <i class="icon-append fa fa-filter"></i>
                                 </label>
                               </section>
                               <section class="col col-3">
@@ -213,7 +216,7 @@ include("inc/nav.php");
                                 <label class="label">Data Solicitação</label>
                                 <label class="input">
                                   <i class="icon-append fa fa-calendar"></i>
-                                  <input id="dataSolicitacao" name="dataSolicitacao" autocompvare="off" type="text" data-dateformat="dd/mm/yy" class="datepicker readonly" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocompvare="new-password" readonly>
+                                  <input id="dataSolicitacao" name="dataSolicitacao" type="text" data-dateformat="dd/mm/yy" class="readonly " style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocompvare="new-password" onchange="validaCampoData('#dataLancamento')" readonly>
                                 </label>
                               </section>
                               <section class="col col-3">
@@ -326,6 +329,50 @@ include "inc/scripts.php";
       excluirSolicitacao();
     });
 
+    $("#funcionario").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'js/sqlscope_mensageriaSolicitacao.php',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        maxRows: 12,
+                        funcao: "listaNomeFuncionario",
+                        descricaoIniciaCom: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                id: item.id,
+                                label: item.nome,
+                                value: item.nome
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 3,
+            select: function(event, ui) {
+                $("#funcionarioId").val(ui.item.id);
+                $("#funcionarioFiltro").val(ui.item.nome);
+                var funcionarioId = $("#funcionarioId").val();
+                $("#funcionario").val(funcionarioId)
+                $("#funcionarioFiltro").val('');
+            },
+            change: function(event, ui) {
+                if (ui.item === null) {
+                    $("#funcionarioId").val('');
+                    $("#funcionarioFiltro").val('');
+                }
+            }
+        }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+        };
+
+
 
   });
 
@@ -360,6 +407,9 @@ include "inc/scripts.php";
 
               $("#sectionResponsavel").removeAttr("hidden");
               $("#divSolicitacao").removeAttr("hidden");
+              $("#divSolicitacao").removeAttr("readonly");
+              $("#funcionario").removeClass("readonly");
+              $("#funcionario").prop("readonly", false);
 
               $("#codigo").val(codigo);
               $("#funcionarioSolicitacao").val(funcionario);

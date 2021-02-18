@@ -16,6 +16,10 @@ if ($funcao == 'excluir') {
   call_user_func($funcao);
 }
 
+if ($funcao == 'listaNomeFuncionario') {
+  call_user_func($funcao);
+}
+
 return;
 
 function grava()
@@ -138,6 +142,41 @@ function excluir()
   }
   echo 'sucess#' . $result;
   return;
+}
+
+function listaNomeFuncionario()
+{
+    $condicaoDescricao = !((empty($_POST["descricaoIniciaCom"])) || (!isset($_POST["descricaoIniciaCom"])) || (is_null($_POST["descricaoIniciaCom"])));
+
+    if ($condicaoDescricao === false) {
+        return;
+    }
+
+    if ($condicaoDescricao) {
+        $descricaoPesquisa = $_POST["descricaoIniciaCom"];
+    }
+
+    if ($condicaoDescricao == "") {
+        $id = 0;
+    }
+
+    $reposit = new reposit();
+    $sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE (0=0) AND ativo = 1 AND nome LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY nome";
+    $result = $reposit->RunQuery($sql);
+    $contador = 0;
+    $array = array();
+    foreach($result as $row) {
+        $id = $row['codigo'];
+        $nome = $row["nome"];
+        $contador = $contador + 1;
+        $array[] = array("id" => $id, "nome" => $nome);
+    }
+
+    $strArray = json_encode($array);
+
+    echo $strArray;
+
+    return;
 }
 
 function validaString($value)
