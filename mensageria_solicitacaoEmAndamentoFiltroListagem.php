@@ -23,11 +23,11 @@ include "js/repositorio.php";
                 
 
                 $sql = " SELECT S.codigo, S.funcionario, F.nome, S.dataSolicitacao, S.horaSolicitacao, S.dataLimite, 
-                S.urgente, S.projeto, P.descricao AS nomeProjeto, S.endereco, S.responsavel, R.nome AS nomeResponsavel, S.ativo
+                S.urgente, S.projeto, P.descricao AS nomeProjeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.ativo
                 FROM mensageria.solicitacao S 
                 LEFT JOIN Ntl.funcionario F ON F.codigo = S.funcionario
                 LEFT JOIN Ntl.projeto P ON P.codigo = S.projeto
-                LEFT JOIN Ntl.responsavel R ON R.codigo = S.responsavel";
+                LEFT JOIN Ntl.funcionario FR ON FR.codigo = S.responsavel";
                 $where = " WHERE (0 = 0)";
 
                 if ($_POST["funcionario"] != "") {
