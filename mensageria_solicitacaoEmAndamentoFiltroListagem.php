@@ -102,6 +102,20 @@ include "js/repositorio.php";
                     $dataSolicitacao = explode("-", $dataSolicitacao);
                     $dataSolicitacao = $dataSolicitacao[2] . "/" . $dataSolicitacao[1] . "/" . $dataSolicitacao[0];
 
+                    $descricaoUrgente = "";
+                    if($urgente == 1){
+                        $descricaoUrgente = "Sim";
+                    }else{
+                        $descricaoUrgente = "Não";
+                    }
+
+                    $descricaoAtivo = "";
+                    if($ativo == 1){
+                        $descricaoAtivo = "Sim";
+                    }else{
+                        $descricaoAtivo = "Não";
+                    }
+
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="mensageria_solicitacaoCadastro.php?id=' . $id . '">' . $id . '</a></td>';
@@ -110,8 +124,8 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $horaSolicitacao . '</td>';
                     echo '<td class="text-left">' . $nomeProjeto . '</td>';
                     echo '<td class="text-justify">' . $dataLimite . '</td>';
-                    echo '<td class="text-justify">' . $urgente . '</td>';
-                    echo '<td class="text-justify">' . $ativo . '</td>';
+                    echo '<td class="text-justify">' . $descricaoUrgente . '</td>';
+                    echo '<td class="text-justify">' . $descricaoAtivo . '</td>';
                     echo '<td class="text-justify">' . $endereco . '</td>';
                     echo '<td class="text-justify">' . $nomeResponsavel . '</td>';
                     echo '</tr>';
