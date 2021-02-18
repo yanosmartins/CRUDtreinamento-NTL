@@ -111,6 +111,12 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
     }
+    if (in_array('INSUMO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("insumo" => array("title" => "Insumo", "url" => APP_URL . "/tabelaBasica_insumoFiltro.php"));
+    }
+    if (in_array('ENCARGO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("encargo" => array("title" => "Encargo", "url" => APP_URL . "/tabelaBasica_encargoFiltro.php"));
+    }
     if (in_array('MOTIVOAFASTAMENTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/tabelaBasica_motivoAfastamentoFiltro.php")); //SYSCB
     }
@@ -342,8 +348,6 @@ if ($condicaoOperacaoOk) {
         if (in_array('RELATORIOTAREFA_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/licitacao_relatorioTarefaFiltro.php"));
         }
-
-
     }
 
     $condicaoMensageriaOk = true;
