@@ -128,9 +128,9 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Salário</label>
+                                                                <label class="label">Remuneração</label>
                                                                 <label class="input"><i class="icon-append fa fa-money"></i>
-                                                                    <input id="salario" name="salario" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                    <input id="salario" name="salario" style="text-align: right;" type="text" autocomplete="off" maxlength="100" class="readonly">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -140,11 +140,64 @@ include("inc/nav.php");
                                                                     Recupera Encargo
                                                                 </button>
                                                             </section>
-                                                            <section class="col col-1">
+                                                            <section class="col col-2">
                                                                 <button type="button" id="btnRecuperaInsumo" class="btn btn-info" aria-hidden="true" title="btn">
                                                                     Recupera Insumo
                                                                 </button>
                                                             </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend>Composição da remuneração</legend>
+                                                            </section>
+                                                        </div>
+                                                        <input id="jsonRemuneracao" name="jsonRemuneracao" type="hidden" value="[]">
+                                                        <div id="formRemuneracao" class="col-sm-12">
+                                                            <input id="remuneracaoId" name="remuneracaoId" type="hidden" value="">
+                                                            <input id="sequencialRemuneracao" name="sequencialRemuneracao" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-md-4">
+                                                                        <label class="label">Remuneracao</label>
+                                                                        <label class="select">
+                                                                            <select id="remuneracao">
+                                                                                <option> </option>
+                                                                                <option>Salário</option>
+                                                                                <option>Bonus</option>
+                                                                                <option>Beneficio do cargo</option>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label class="label">Valor</label>
+                                                                        <label class="input"><i class="icon-append fa fa-money"></i>
+                                                                            <input id="remuneracaoValor" name="remuneracaoValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddRemuneracao" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverRemuneracao" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableRemuneracao" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th style="width: 2px"></th>
+                                                                            <th class="text-center" style="min-width: 500%;">Descrição</th>
+                                                                            <th class="text-center">Valor</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-12">
@@ -499,6 +552,7 @@ include("inc/scripts.php");
         jsonEncargoPercentualArray = JSON.parse($("#jsonEncargoPercentual").val());
         jsonInsumosArray = JSON.parse($("#jsonInsumos").val());
         jsonBdiArray = JSON.parse($("#jsonBdi").val());
+        jsonRemuneracaoArray = JSON.parse($("#jsonRemuneracao").val());
 
 
         $('#dlgSimpleExcluir').dialog({
@@ -569,6 +623,10 @@ include("inc/scripts.php");
         $("#btnAddBdi").on("click", function() {
             addBdi();
         });
+        
+        $("#btnAddRemuneracao").on("click", function() {
+            addRemuneracao();
+        });
 
 
         $("#btnRecuperaEncargo").on("click", function() {
@@ -577,6 +635,7 @@ include("inc/scripts.php");
         $("#btnRecuperaInsumo").on("click", function() {
             $("#tableInsumos tbody").css("display", "")
         });
+        
 
         carregaPagina();
     });
@@ -780,13 +839,6 @@ include("inc/scripts.php");
         return false;
     }
 
-    function clearFormEncargoPercentual() {
-        $("#encargo").val('');
-        $("#encargoPercentualId").val('');
-        $("#sequencialEncargoPercentual").val('');
-        $('#percentual').val('');
-    }
-
     function carregaEncargoPercentual(sequencialEncargoPercentual) {
         var arr = jQuery.grep(jsonEncargoPercentualArray, function(item, i) {
             return (item.sequencialEncargoPercentual === sequencialEncargoPercentual);
@@ -987,4 +1039,91 @@ include("inc/scripts.php");
 
         return false;
     }
+
+    // remuneracao
+    function clearFormRemuneracao() {
+        $("#remuneracao").val('');
+        $("#remuneracaoId").val('');
+        $("#sequencialRemuneracao").val('');
+        $('#remuneracaoValor').val('');
+    }
+
+    function addRemuneracao() {
+        var item = $("#formRemuneracao").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataRemuneracao
+        });
+
+        if (item["sequencialRemuneracao"] === '') {
+            if (jsonRemuneracaoArray.length === 0) {
+                item["sequencialRemuneracao"] = 1;
+            } else {
+                item["sequencialRemuneracao"] = Math.max.apply(Math, jsonRemuneracaoArray.map(function(o) {
+                    return o.sequencialRemuneracao;
+                })) + 1;
+            }
+            item["encargoPercentualId"] = 0;
+        } else {
+            item["sequencialRemuneracao"] = +item["sequencialRemuneracao"];
+        }
+
+        var index = -1;
+        $.each(jsonRemuneracaoArray, function(i, obj) {
+            if (+$('#sequencialRemuneracao').val() === obj.sequencialRemuneracao) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonRemuneracaoArray.splice(index, 1, item);
+        else
+            jsonRemuneracaoArray.push(item);
+
+        $("#jsonRemuneracao").val(JSON.stringify(jsonRemuneracaoArray));
+        fillTableRemuneracao();
+        clearFormRemuneracao();
+
+    }
+
+    function fillTableRemuneracao() {
+        $("#tableRemuneracao tbody").empty();
+        for (var i = 0; i < jsonRemuneracaoArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableRemuneracao tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoArray[i].sequencialRemuneracao + '"><i></i></label></td>'));
+            row.append($('<td class="text-center" onclick="carregaRemuneracao(' + jsonRemuneracaoArray[i].sequencialRemuneracao + ');">' + jsonRemuneracaoArray[i].remuneracao + '</td>'));
+            row.append($('<td class="text-center">' + 'R$ '+ + jsonRemuneracaoArray[i].remuneracaoValor + '</td>'));
+        }
+    }
+
+
+    function processDataRemuneracao(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "remuneracao")) {
+            var remuneracao = $("#remuneracao").val();
+            if (remuneracao !== '') {
+                fieldName = "remuneracao";
+            }
+            return {
+                name: fieldName,
+                value: remuneracao
+            };
+        }
+        if (fieldName !== '' && (fieldId === "remuneracaoValor")) {
+            var remuneracaoValor = $("#remuneracaoValor").val();
+            if (remuneracaoValor !== '') {
+                fieldName = "remuneracaoValor";
+            }
+            return {
+                name: fieldName,
+                value: remuneracaoValor
+            };
+        }
+        return false;
+    }
+
 </script>
