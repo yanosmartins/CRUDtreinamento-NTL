@@ -5,7 +5,7 @@ require_once("inc/init.php");
 //Requer a configuração de UI (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-//colocar o tratamento de perminssão sempre abaixo de require_once("inc/config.ui.php");
+//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('INSUMO_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('INSUMO_GRAVAR', $arrayPermissao, true));
 $condicaoExcluirOK = (in_array('INSUMO_EXCLUIR', $arrayPermissao, true));
@@ -59,7 +59,7 @@ include("inc/nav.php");
     <section id="widget-grid" class="">
       <!-- <div class="row" style="margin: 0 0 13px 0;">
                 <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroInss.php" style="float:right"></a>
+                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>
                 <?php } ?>
             </div> -->
 
@@ -73,7 +73,7 @@ include("inc/nav.php");
             </header>
             <div>
               <div class="widget-body no-padding">
-                <form action="javascript:gravar()" class="smart-form client-form" id="formInss" method="post">
+                <form action="javascript:gravar()" class="smart-form client-form" id="formInsumo" method="post">
                   <div class="panel-group smart-accordion-default" id="accordion">
                     <div class="panel panel-default">
                       <div class="panel-heading">
@@ -101,7 +101,7 @@ include("inc/nav.php");
 
                               <section class="col col-2">
                                 <label class="label">Valor</label>
-                                <label class="input">
+                                <label class="input"><i class="icon-append fa fa-dollar"></i>
                                   <input id="valor" name="valor" style="text-align: right;" type="text" class="required" placeholder="00,00" autocomplete="off" required>
                                 </label>
                               </section>
@@ -251,7 +251,7 @@ include("inc/scripts.php");
       voltar();
     });
 
-    carregaInss();
+    carregaInsumo();
 
 
   });
