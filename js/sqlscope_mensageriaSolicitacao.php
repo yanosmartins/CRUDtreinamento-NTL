@@ -35,7 +35,8 @@ function grava()
   $local = validaString($_POST['local']);
   $responsavel = validaNumero($_POST['responsavelId']);
   $observacao = validaString($_POST['observacao']);
-
+  $concluido = $_POST['concluido'];
+  $usuario = "'" . $_SESSION['login'] . "'";
 
   $sql = "Mensageria.solicitacao_Atualiza  
                 $codigo,        
@@ -47,8 +48,9 @@ function grava()
                 $urgente,
                 $local,
                 $responsavel,
-                $observacao
-                ";
+                $observacao,
+                $concluido,
+                $usuario";
 
   $reposit = new reposit();
   $result = $reposit->Execprocedure($sql);
@@ -73,7 +75,7 @@ function recupera()
   }
 
   $sql = "SELECT S.codigo, S.funcionario, F.nome, S.dataSolicitacao, S.horaSolicitacao, S.dataLimite,
-  S.urgente, S.projeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.observacao FROM Mensageria.solicitacao S
+  S.urgente, S.projeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.observacao,S.concluido FROM Mensageria.solicitacao S
   LEFT JOIN Ntl.funcionario F ON F.codigo = S.funcionario
   LEFT JOIN Ntl.funcionario FR ON FR.codigo = S.responsavel
     WHERE (0=0) AND
@@ -96,6 +98,7 @@ function recupera()
     $nomeResponsavel = $row['nomeResponsavel'];
     $observacao = $row['observacao'];
     $funcionarioId = $row['funcionario'];
+    $concluido = $row['concluido'];
   }
 
   $out =
@@ -110,7 +113,8 @@ function recupera()
     $responsavel . "^" .
     $nomeResponsavel . "^" .
     $observacao . "^" .
-    $funcionarioId;
+    $funcionarioId . "^" .
+    $concluido;
 
   if ($out == "") {
     echo "failed#";

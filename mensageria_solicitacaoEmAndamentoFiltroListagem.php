@@ -16,6 +16,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Ativo</th>
                     <th class="text-left" style="min-width:30px;">Destino</th>
                     <th class="text-left" style="min-width:110px;">Responsável</th>
+                    <th class="text-left" style="min-width:110px;">Concluido</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,7 +24,7 @@ include "js/repositorio.php";
                 
 
                 $sql = " SELECT S.codigo, S.funcionario, F.nome, S.dataSolicitacao, S.horaSolicitacao, S.dataLimite, 
-                S.urgente, S.projeto, P.descricao AS nomeProjeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.ativo
+                S.urgente, S.projeto, P.descricao AS nomeProjeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.ativo, S.concluido
                 FROM mensageria.solicitacao S 
                 LEFT JOIN Ntl.funcionario F ON F.codigo = S.funcionario
                 LEFT JOIN Ntl.projeto P ON P.codigo = S.projeto
@@ -64,7 +65,7 @@ include "js/repositorio.php";
                     $where = $where . " AND S.projeto = " . $projeto;
                 }
 
-                if ($_POST["responsavel"] != "") {
+                if ($_POST["resconcluidoel"] != "") {
                     $responsavel = (int)$_POST["responsavel"];
                     $where = $where . " AND S.responsavel = " . $responsavel;
                 }
@@ -72,6 +73,11 @@ include "js/repositorio.php";
                 if ($_POST["ativo"] != "") {
                     $ativo = (int)$_POST["ativo"];
                     $where = $where . " AND S.ativo = " . $ativo;
+                }
+
+                if ($_POST["concluido"] != "") {
+                    $concluido = (int)$_POST["concluido"];
+                    $where = $where . " AND S.concluido = " . $concluido;
                 }
 
                 $sql .= $where . " ORDER BY S.urgente DESC, S.dataSolicitacao, S.horaSolicitacao";
@@ -88,6 +94,7 @@ include "js/repositorio.php";
                     $endereco = $row['endereco'];
                     $nomeResponsavel = $row['nomeResponsavel'];
                     $ativo = $row['ativo'];
+                    $concluido = $row['concluido'];
 
                     //A data recuperada foi formatada para D/M/Y
                     $dataLimite = $row['dataLimite'];
@@ -116,6 +123,13 @@ include "js/repositorio.php";
                         $descricaoAtivo = "Não";
                     }
 
+                    $descricaoConcluido = "";
+                    if($concluido == 1){
+                        $descricaoConcluido = "Sim";
+                    }else{
+                        $descricaoConcluido = "Não";
+                    }
+
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="mensageria_solicitacaoCadastro.php?id=' . $id . '">' . $id . '</a></td>';
@@ -128,6 +142,7 @@ include "js/repositorio.php";
                     echo '<td class="text-justify">' . $descricaoAtivo . '</td>';
                     echo '<td class="text-justify">' . $endereco . '</td>';
                     echo '<td class="text-justify">' . $nomeResponsavel . '</td>';
+                    echo '<td class="text-justify">' . $descricaoConcluido . '</td>';
                     echo '</tr>';
                 }
                 ?>

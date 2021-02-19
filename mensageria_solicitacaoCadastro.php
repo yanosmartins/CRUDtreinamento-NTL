@@ -200,19 +200,28 @@ include("inc/nav.php");
                                   <input id='funcionarioSolicitacao' maxlength='255' name='funcionarioSolicitacao' class='readonly' type='select' value='' readonly>
                                 </label>
                               </section>
-                              <section class="col col-3">
+                              <section class="col col-2">
                                 <label class="label">Data Solicitação</label>
                                 <label class="input">
                                   <i class="icon-append fa fa-calendar"></i>
                                   <input id="dataSolicitacao" name="dataSolicitacao" type="text" data-dateformat="dd/mm/yy" class="readonly " style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocompvare="new-password" onchange="validaCampoData('#dataLancamento')" readonly>
                                 </label>
                               </section>
-                              <section class="col col-3">
+                              <section class="col col-2">
                                 <label class="label" for="hora">Hora Solicitacao</label>
                                 <label class="input">
                                   <i class="icon-append fa fa-clock-o"></i>
                                   <input id="horaSolicitacao" name="horaSolicitacao" class="readonly" type="text" autocomplete="off" placeholder="hh:mm" readonly>
                                 </label>
+                              </section>
+                              <section class="col col-2">
+                                <label class="label" for="concluido">Concluido</label>
+                                <label class="select">
+                                  <select id="concluido" name="concluido" class="">
+                                    <option></option>
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
+                                  </select><i></i>
                               </section>
                             </div>
 
@@ -301,8 +310,6 @@ include "inc/scripts.php";
 <script language="JavaScript" type="text/javascript">
   $(document).ready(function() {
 
-    carregaPagina();
-
     $("#btnVoltar").on("click", function() {
       voltar();
     });
@@ -359,9 +366,7 @@ include "inc/scripts.php";
         .append("<a>" + highlight(item.label, this.term) + "</a>")
         .appendTo(ul);
     };
-
-
-
+    carregaPagina();
   });
 
   function carregaPagina() {
@@ -394,6 +399,8 @@ include "inc/scripts.php";
               nomeResponsavel = piece[9];
               observacao = piece[10];
               funcionarioId = piece[11];
+              concluido = piece[12];
+
 
               $("#sectionResponsavel").removeAttr("hidden");
               $("#divSolicitacao").removeAttr("hidden");
@@ -408,7 +415,7 @@ include "inc/scripts.php";
               $("#projeto").val(projeto);
               $("#local").val(local);
               $("#observacao").val(observacao);
-
+              $("#concluido").val(concluido);
               if (responsavel == '') {
                 $("#responsavelId").val(funcionarioId);
               } else {
@@ -421,6 +428,7 @@ include "inc/scripts.php";
                 $("#responsavel").val(nomeResponsavel);
               }
 
+          
             }
           }
         );
