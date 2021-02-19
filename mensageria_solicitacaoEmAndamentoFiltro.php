@@ -151,7 +151,7 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <div class="row">
-                                                            <section class="col col-3" >
+                                                            <section class="col col-3">
                                                                 <label class="label" for="responsavelPregao"> Responsável</label>
                                                                 <label class="select">
                                                                     <select id="responsavel" name="responsavel">
@@ -166,6 +166,15 @@ include("inc/nav.php");
                                                                             echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
                                                                         }
                                                                         ?>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="concluido">Concluido</label>
+                                                                <label class="select">
+                                                                    <select id="concluido" name="concluido" class="">
+                                                                        <option></option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
                                                                     </select><i></i>
                                                             </section>
                                                             <section class="col col-3">
@@ -258,6 +267,7 @@ include("inc/scripts.php");
         var urgente = $('#urgente').val();
         var responsavel = $('#responsavel').val();
         var ativo = $('#ativo').val();
+        var concluido = $('#concluido').val();
 
         $('#resultadoBusca').load('mensageria_solicitacaoEmAndamentoFiltroListagem.php?', {
             funcionario: funcionario,
@@ -267,7 +277,8 @@ include("inc/scripts.php");
             dataLimite: dataLimite,
             urgente: urgente,
             responsavel: responsavel,
-            ativo: ativo
+            ativo: ativo,
+            concluido: concluido
         });
 
     }
