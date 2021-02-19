@@ -81,6 +81,9 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('BANCO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("banco" => array("title" => "Banco", "url" => APP_URL . "/tabelaBasica_bancoFiltro.php")); //SYSCC   
     }
+    if (in_array('BDI_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("bdi" => array("title" => "BDI", "url" => APP_URL . "/tabelaBasica_bdiFiltro.php")); //SYSCB 
+    }
     if (in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("beneficioIndireto" => array("title" => "Benefício Indireto", "url" => APP_URL . "/tabelaBasica_beneficioIndiretoFiltro.php")); //SYSCB 
     }
