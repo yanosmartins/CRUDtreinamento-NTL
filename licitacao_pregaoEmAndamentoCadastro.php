@@ -111,7 +111,7 @@ include("inc/nav.php");
                                                                     <select id="grupo" name="grupo" class="readonly" disabled='true'>
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM ntl.grupoLicitacao where ativo = 1 order by codigo";
+                                                                        $sql =  "SELECT codigo, descricao FROM ntl.grupo where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {

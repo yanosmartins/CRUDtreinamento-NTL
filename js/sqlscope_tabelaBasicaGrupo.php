@@ -25,7 +25,7 @@ function grava()
     $reposit = new reposit(); //Abre a conexão.
 
     // Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("GRUPOLICITACAO_ACESSAR|GRUPOLICITACAO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("GRUPO_ACESSAR|GRUPO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -38,12 +38,14 @@ function grava()
     $codigo = (int)$_POST['id'];
     $descricao = "'" . $_POST['descricao'] . "'";
     $ativo = (int)$_POST['ativo'];
+    $tipo = "'" . $_POST['tipo'] . "'";
 
-    $sql = "Ntl.grupoLicitacao_Atualiza
+    $sql = "Ntl.grupo_Atualiza
             $codigo,
             $ativo,
             $descricao,
-            $usuario";
+            $usuario,
+            $tipo";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -80,7 +82,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo,descricao,ativo FROM Ntl.grupoLicitacao WHERE (0 = 0)";
+    $sql = "SELECT codigo,descricao,ativo,tipo FROM Ntl.grupo WHERE (0 = 0)";
 
     if ($condicaoId) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -96,8 +98,9 @@ function recupera()
         $id = (int)$row['codigo'];
         $descricao = (string)$row['descricao'];
         $ativo = (int)$row['ativo'];
+        $tipo = (string)$row['tipo'];
 
-        $out = $id . "^" . $descricao . "^" . $ativo;
+        $out = $id . "^" . $descricao . "^" . $ativo. "^" . $tipo;
 
         if ($out == "") {
             echo "failed#";
@@ -113,7 +116,7 @@ function excluir()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("GRUPOLICITACAO_ACESSAR|GRUPOLICITACAO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("GRUPO_ACESSAR|GRUPO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -129,7 +132,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('Ntl.grupoLicitacao' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Ntl.grupo' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
