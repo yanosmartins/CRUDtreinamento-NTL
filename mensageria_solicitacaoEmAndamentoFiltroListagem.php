@@ -14,7 +14,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Data Limite</th>
                     <th class="text-left" style="min-width:30px;">Urgente</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
-                    <th class="text-left" style="min-width:30px;">Endereço</th>
+                    <th class="text-left" style="min-width:30px;">Destino</th>
                     <th class="text-left" style="min-width:110px;">Responsável</th>
                 </tr>
             </thead>
@@ -31,7 +31,7 @@ include "js/repositorio.php";
                 $where = " WHERE (0 = 0)";
 
                 if ($_POST["funcionario"] != "") {
-                    $funcionario = +$_POST["funcionario"];
+                    $funcionario = (int)$_POST["funcionario"];
                     $where = $where . " AND ( S.funcionario = $funcionario)";
                 }
                 

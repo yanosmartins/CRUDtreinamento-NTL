@@ -170,7 +170,7 @@ include("inc/nav.php");
                             </div>
                             <div class="row">
                               <section class="col col-6">
-                                <label class="label">Local</label>
+                                <label class="label">Destino</label>
                                 <label class="input">
                                   <input id="local" maxlength="255" autocompvare="off" name="local" type="text" value="">
                                 </label>
