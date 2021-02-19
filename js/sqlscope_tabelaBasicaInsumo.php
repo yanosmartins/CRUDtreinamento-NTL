@@ -37,10 +37,11 @@ function grava()
     $codigo = $_POST['codigo'];
     $descricao = $_POST['descricao'];
     $valor = $_POST['valor'];
-    $valor = number_format($valor, 2, ",", "");
-    $ativo = 1;
-
     $valor = str_replace(",", ".", $valor);
+    $valor = number_format($valor, 2, ",", " ");
+    $ativo = 1;
+    $valor = str_replace(",", ".", $valor);
+
 
     $sql = "Ntl.insumo_Atualiza
         $codigo,

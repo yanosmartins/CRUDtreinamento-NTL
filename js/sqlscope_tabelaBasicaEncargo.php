@@ -79,9 +79,9 @@ function recupera()
 
     $id = $row['codigo'];
     $descricao = $row['descricao'];
-    $percentual = $row['percentual'];
+    $percentual = +$row['percentual'];
     $ativo = $row['ativo'];
-    $percentual = str_replace(".", ",", $percentual);
+    // $percentual = str_replace(".", ",", $percentual);
 
     $out =   $id . "^" .
         $descricao . "^" .

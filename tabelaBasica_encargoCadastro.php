@@ -88,7 +88,7 @@ include("inc/nav.php");
                       <div id="collapseFiltro" class="panel-collapse collapse in">
                         <div class="panel-body no-padding">
                           <fieldset>
-                            <input id="codigo" name="codigo" type="text" class="hidden">
+                            <input id="codigo" name="codigo" type="text" class="hidden" value="0">
 
                             <div class="row ">
 
@@ -201,6 +201,7 @@ include("inc/scripts.php");
         element.mask("9.99?9");
       }
     }).trigger('focusout');
+
 
     $('#dlgSimpleExcluir').dialog({
       autoOpen: false,
@@ -349,6 +350,7 @@ include("inc/scripts.php");
             var codigo = parseInt(piece[0]);
             var descricao = piece[1];
             var percentual = piece[2];
+
 
             //Atributos de cliente        
             $("#codigo").val(codigo);

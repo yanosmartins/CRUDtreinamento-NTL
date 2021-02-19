@@ -13,31 +13,29 @@ include "js/repositorio.php";
             </thead>
             <tbody>
                 <?php
-                $where = " WHERE (0=0) ";
-                $descricao = $_GET["descricao"];
-                $percentual = $_GET["percentual"];
-                $ativo = $_GET["ativo"];
-
-
-                if ($descricao !== "") {
-
-                    $where = $where . " AND descricao = $descricao ";
-                }
-                if ($percentual != "") {
-                    $percentual = str_replace(",", ".", $percentual);
-
-                    $where = $where . " AND percentual = " . "'" . $valor . "'";
-                }
-                if ($ativo !== "") {
-
-                    $where = $where . " AND ativo = $ativo ";
-                }
 
                 $reposit = new reposit();
                 $sql = "SELECT codigo, descricao, percentual, ativo
-                FROM Ntl.insumo  ";
-                $sql = $sql . $where;
+                FROM Ntl.encargo  ";
+                $where = " WHERE (0=0) ";
+                // $descricao = $_GET["descricao"];
+                // $percentual = $_GET["percentual"];
+                // $ativo = $_GET["ativo"];
 
+                if ($_POST["descricao"] != "") {
+                    $descricao = $_POST["descricao"];
+                    $where = $where . " AND ( descricao = $descricao)";
+                }
+                if ($_POST["percentual"] != "") {
+                    $percentual = $_POST["percentual"];
+                    $where = $where . " AND ( percentual = $percentual)";
+                }
+                if ($_POST["ativo"] != "") {
+                    $ativo = (int)$_POST["ativo"];
+                    $where = $where . " AND ( ativo = $ativo)";
+                }
+
+                $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
 
 
