@@ -1,33 +1,35 @@
 <?php
-//Inicializa a página
+//initilize the page
 require_once("inc/init.php");
 
-//Requer a configuração de UI (nav, ribbon, etc.)
+//require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-//colocar o tratamento de permgrupoão sempre abaixo de require_once("inc/config.ui.php");
-// $condicaoAcessarOK = (in_array('INSS_ACESSAR', $arrayPermissao, true));
-// $condicaoGravarOK = (in_array('INSS_GRAVAR', $arrayPermissao, true));
-// $condicaoExcluirOK = (in_array('INSS_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('GRUPO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('GRUPO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('GRUPO_EXCLUIR', $arrayPermissao, true));
 
-// if ($condicaoAcessarOK == false) {
-//     unset($_SESSION['login']);
-//     header("Location:login.php");
-// }
-// $esconderBtnGravar = "";
-// if ($condicaoGravarOK === false) {
-//     $esconderBtnGravar = "none";
-// }
-// $esconderBtnExcluir = "";
-// if ($condicaoExcluirOK === false) {
-//     $esconderBtnExcluir = "none";
-// }
+if ($condicaoAcessarOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
+
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
+
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
 $page_title = "Grupo";
+
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -38,10 +40,10 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]['prototipoValorPosto']['sub']["grupo"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["grupo"]["active"] = true;
+
 include("inc/nav.php");
 ?>
-
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
@@ -54,61 +56,59 @@ include("inc/nav.php");
 
     <!-- MAIN CONTENT -->
     <div id="content">
-
         <!-- widget grid -->
         <section id="widget-grid" class="">
-            <!-- <div class="row" style="margin: 0 0 13px 0;">
-                <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroGrupo.php" style="float:right"></a>
-                <?php } ?>
-            </div> -->
-
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Grupo
-                            </h2>
+                            <h2>Grupo</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formGrupo" method="post">
+                                <form class="smart-form client-form" id="formCliente" method="post" enctype="multipart/form-data">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseCadastro" class="" id="accordionCadastro">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
                                                         Cadastro
                                                     </a>
                                                 </h4>
                                             </div>
-                                            <div id="collapseFiltro" class="panel-collapse collapse in">
+                                            <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <input id="codigo" name="codigo" type="text" class="hidden">
-
-                                                        <div class="row ">
-
-                                                        <section class="col col-4">
-                                                                <label class="label">Descrição</label>
+                                                        <div class="row">
+                                                            <input id="codigo" name="codigo" type="text" class="hidden" value="">
+                                                            <section class="col col-5 col-auto">
+                                                                <label class="label" for="descricao">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" maxlength="255" name="descricao" class="required" type="text" value="" required>
+                                                                    <input id="descricao" name="descricao" type="text" class="required" maxlength="200" required autocomplete="off">
                                                                 </label>
                                                             </section>
-
-                                                            <section class="col col-2">
-                                                                <label class="label">Ativo</label>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="tipo">Tipo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" required>
-                                                                        <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
+                                                                    <select id="tipo" name="tipo" class="" required>
+                                                                        <option></option>
+                                                                        <option value='L'>Licitação</option>
+                                                                        <option value='F'>Faturamento</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
+                                                            <section class="col col-2 col-auto">
+                                                                <!-- <label class="label" for="ativo">Ativo</label> -->
+                                                                <label class="select">
+                                                                    <select id="ativo" name="ativo" class="hidden" required>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0'>Não</option>
+                                                                    </select>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -138,23 +138,22 @@ include("inc/nav.php");
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file-o"></span>
                                         </button>
-
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward"></span>
+                                            <span class="fa fa-backward "></span>
                                         </button>
-
                                     </footer>
                                 </form>
                             </div>
-
                         </div>
                     </div>
                 </article>
             </div>
         </section>
         <!-- end widget grid -->
+
     </div>
     <!-- END MAIN CONTENT -->
+
 </div>
 <!-- END MAIN PANEL -->
 
@@ -170,7 +169,9 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
+
 <script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaGrupo.js" type="text/javascript"></script>
+
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -178,119 +179,75 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.time.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.tooltip.min.js"></script>
-
 <!-- Vector Maps Plugin: Vectormap engine, Vectormap language -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/vectormap/jquery-jvectormap-1.2.2.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/vectormap/jquery-jvectormap-world-mill-en.js"></script>
-
 <!-- Full Calendar -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/moment/moment.min.js"></script>
 <!--<script src="/js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
+<!--<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>-->
+<!-- Validador de CPF -->
+<script src="js/plugin/cpfcnpj/jquery.cpfcnpj.js"></script>
 
+<!-- Form to json -->
+<script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
 
-        $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_grupoCadastro.php');
+        $("#btnExcluir").on("click", function() {
+            var id = $("#codigo").val();
+
+            if (id === 0) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#nome").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
+            }
         });
+
+        $("#btnNovo").on("click", function() {
+            novo();
+        });
+
         $("#btnGravar").on("click", function() {
-            gravar();
+            gravar()
         });
+
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-        $("#btnExcluir").on("click", function() {
-            excluir();
-        });
-        carregaGrupo();
 
-
+        carregaPagina();
     });
 
-    function voltar() {
-        $(location).attr('href', 'tabelaBasica_grupoFiltro.php');
-
-    }
-
-    function gravar() {
-
-        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
-        $("#btnGravar").prop('disabled', true);
-
-        var codigo = +$("#codigo").val();
-        var ativo = $("#ativo").val();
-        var percentual = $("#percentual").val();
-
-        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        if (!percentual) {
-            smartAlert("Erro", "Informe o Grupo.", "error");
-            return;
-        }
-
-
-        gravaGrupo(codigo, ativo, percentual,
-            function(data) {
-
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        return false;
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                        return false;
-                    }
-                } else {
-                    var piece = data.split("#");
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    voltar();
-                }
-            }
-        );
-    }
-
-
-    $('#dlgSimpleExcluir').dialog({
-        autoOpen: false,
-        width: 400,
-        resizable: false,
-        modal: true,
-        title: "Atenção",
-        buttons: [{
-            html: "Excluir registro",
-            "class": "btn btn-success",
-            click: function() {
-                $(this).dialog("close");
-                excluir();
-            }
-        }, {
-            html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-            "class": "btn btn-default",
-            click: function() {
-                $(this).dialog("close");
-            }
-        }]
-    });
-    $("#btnExcluir").on("click", function() {
-        var id = $("#codigo").val();
-
-        if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-            $("#nome").focus();
-            return;
-        }
-
-        if (id !== 0) {
-            $('#dlgSimpleExcluir').dialog('open');
-        }
-    });
-
-
-    function carregaGrupo() {
+    function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
         if (params.length === 2) {
@@ -300,32 +257,111 @@ include("inc/scripts.php");
             if (idd !== "") {
                 recuperaGrupo(idd,
                     function(data) {
-                        data = data.replace(/failed/g, '');
-                        var piece = data.split("#");
+                        if (data.indexOf('failed') > -1) {
+                            return;
+                        } else {
+                            data = data.replace(/failed/g, '');
+                            var piece = data.split("#");
+                            var mensagem = piece[0];
+                            var out = piece[1];
+                            piece = out.split("^");
 
-                        //Atributos de Cliente
-                        var mensagem = piece[0];
-                        var out = piece[1];
+                            // Atributos de vale transporte unitário que serão recuperados: 
+                            var codigo = piece[0];
+                            var descricao = piece[1];
+                            var ativo = piece[2];
+                            var tipo = piece[3];
 
-                        piece = out.split("^");
-                        console.table(piece);
-                        //Atributos de cliente 
-                        debugger;
-                        var codigo = +piece[0];
-                        var percentual = piece[1];
+                            //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
+                            $("#codigo").val(codigo);
+                            $("#descricao").val(descricao);
+                            $("#ativo").val(ativo);
+                            $("#tipo").val(tipo);
 
-                        //Atributos de cliente        
-                        $("#codigo").val(codigo);
-                        $("#percentual").val(percentual);
+                            return;
 
-
-
+                        }
                     }
-
                 );
             }
         }
+        $("#descricao").focus();
+    }
 
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_grupoCadastro.php');
+    }
 
+    function voltar() {
+        $(location).attr('href', 'tabelaBasica_grupoFiltro.php');
+    }
+
+    function excluir() {
+        var id = $("#codigo").val();
+
+        if (id === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+            return;
+        }
+
+        excluirGrupo(id,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
+                    voltar();
+                } else {
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
+                }
+            }
+        );
+    }
+
+    function gravar() {
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
+        // $("#btnGravar").prop('disabled', true);
+        // Variáveis que vão ser gravadas no banco:
+        var id = +$('#codigo').val();
+        var descricao = $('#descricao').val().trim().replace(/'/g, " ");
+        var ativo = +$('#ativo').val();
+        var tipo = $('#tipo').val();
+
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+        if (!descricao) {
+            smartAlert("Atenção", "Informe a descrição", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        ativo = 1;
+
+        //Chama a função de gravar do business de convênio de saúde.
+        gravaGrupo(id, ativo, descricao,tipo,
+            function(data) {
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnGravar").prop('disabled', false);
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                        $("#btnGravar").prop('disabled', false);
+                    }
+                    return '';
+                } else {
+                    var verificaRecuperacao = +$("#verificaRecuperacao").val();
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    novo();
+                }
+            }
+        );
     }
 </script>

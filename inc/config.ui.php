@@ -99,8 +99,8 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('FUNCAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("funcao" => array("title" => "Função", "url" => APP_URL . "/tabelaBasica_funcaoFiltro.php"));
     }
-    if (in_array('GRUPOLICITACAO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("grupoLicitacao" => array("title" => "Grupo Licitação", "url" => APP_URL . "/tabelaBasica_grupoLicitacaoFiltro.php")); //SYSGC 
+    if (in_array('GRUPO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/tabelaBasica_grupoFiltro.php")); //SYSGC 
     }
     if (in_array('INDICEREAJUSTE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("indiceReajuste" => array("title" => "Índice de Reajuste", "url" => APP_URL . "/tabelaBasica_indiceReajusteFiltro.php")); //SYSGEF  

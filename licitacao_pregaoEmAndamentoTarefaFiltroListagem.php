@@ -41,7 +41,7 @@ include "js/repositorio.php";
 				  LEFT JOIN ntl.pregaoDetalhe GPD ON GPD.pregao = GP.codigo
 				  LEFT JOIN ntl.tarefa T ON T.codigo = GPD.tarefa
                   LEFT JOIN ntl.responsavel R ON R.codigo = GPD.responsavel
-                  LEFT JOIN ntl.grupoLicitacao G ON G.codigo = GP.grupoResponsavel";
+                  LEFT JOIN ntl.grupo G ON G.codigo = GP.grupoResponsavel";
                 $where = " WHERE (0 = 0) AND GP.participaPregao = 1 AND GP.condicao = 2 AND GPD.tipo = 1";
 
                 if ($_POST["portal"] != "") {

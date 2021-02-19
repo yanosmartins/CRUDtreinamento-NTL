@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('INSS_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('INSS_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('GRUPO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('GRUPO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,7 +20,6 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
-
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
@@ -34,10 +33,9 @@ $page_title = "Grupo";
 $page_css[] = "your_style.css";
 include("inc/header.php");
 
-
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]['faturamento']['sub']["grupo"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["grupo"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -56,11 +54,6 @@ include("inc/nav.php");
 
         <!-- widget grid -->
         <section id="widget-grid" class="">
-            <!-- <div class="row" style="margin: 0 0 13px 0;">
-                <?php if ($condicaoGravarOK) { ?>
-                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastro.php" style="float:right"></a>
-                <?php } ?>    
-            </div>                     -->
 
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -71,7 +64,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formRetencaoTributariaFiltro" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formUsuarioFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -86,24 +79,33 @@ include("inc/nav.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row ">
-                                                            <section class="col col-4">
-                                                                <label class="label">Descrição</label>
+                                                        <div class="row">
+                                                            <section class="col col-5 col-auto">
+                                                                <label class="label" for="descricao">Descriçao</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" maxlength="255" name="descricao"  type="text" value="" >
+                                                                    <input id="descricao" maxlength="50" name="descricao" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Ativo</label>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="tipo">Tipo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" class="" autocomplete="off" class="form-control" autocomplete="new-password">
-                                                                        <option value=""></option>
-                                                                        <option value="1" selected>Sim</option>
-                                                                        <option value="0">Não</option>
+                                                                    <select id="tipo" name="tipo" class="" required>
+                                                                        <option></option>
+                                                                        <option value='L'>Licitação</option>
+                                                                        <option value='F'>Faturamento</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="ativo">Ativo</label>
+                                                                <label class="select">
+                                                                    <select id="ativo" name="ativo">
+                                                                        <option></option>
+                                                                        <option value='1' selected>Sim</option>
+                                                                        <option value='0'>Não</option>
+                                                                    </select><i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -111,45 +113,16 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar" >
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
                                 </form>
                             </div>
                             <div id="resultadoBusca"></div>
-                            <div class="table-container">
-                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                    <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                        <thead>
-                                            <tr role="row">
-                                                <th class="text-left" style="min-width:30px;">Descrição</th>
-                                               
-                                                <th class="text-left" style="min-width:35px;">Ativo</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            echo '<tr >';
-                                            echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Grupo A</a></td>';
-                                            echo '<td class="text-left">Sim</td>';
-                                            echo '</tr >';
-                                            echo '<tr >';
-                                            echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Grupo B</a></td>';
-                                            echo '<td class="text-left">Sim</td>';
-                                            echo '</tr >';
-                                            echo '<tr >';
-                                            echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Grupo C</a></td>';
-                                            echo '<td class="text-left">Sim</td>';
-                                            echo '</tr >';
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
                         </div>
                     </div>
                 </article>
@@ -192,35 +165,32 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
-
 <script>
     $(document).ready(function() {
-        $('#percentual').focusout(function() {
-            var percentual, element;
-            element = $(this);
-            element.unmask();
-            percentual = element.val().replace(/\D/g, '');
-            if (percentual.length > 3) {
-                element.mask("99.99?9");
-            } else {
-                element.mask("9.99?9");
-            }
-        }).trigger('focusout');
-
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_grupoCadastro.php');
+            novo();
         });
     });
 
     function listarFiltro() {
-        var descricao = $('#descricao').val();
-        var ativo = $('#ativo').val();
 
-        var parametrosUrl = '&descricao=' + descricao;
-        parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_grupoListagem.php?' + parametrosUrl);
+        var descricaoFiltro = $('#descricao').val();
+        var tipoFiltro = $('#tipo').val();
+        var ativoFiltro = $('#ativo').val();
+
+        if (descricaoFiltro !== "") {
+            descricaoFiltro = descricaoFiltro.replace(/^\s+|\s+$/g, "");
+            descricaoFiltro = encodeURIComponent(descricaoFiltro);
+        }
+
+        var parametrosUrl = '&descricaoFiltro=' + descricaoFiltro + '&ativoFiltro=' + ativoFiltro + '&tipoFiltro=' + tipoFiltro;
+        $('#resultadoBusca').load('tabelaBasica_grupoFiltroListagem.php?' + parametrosUrl);
+    }
+
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_grupoCadastro.php');
     }
 </script>

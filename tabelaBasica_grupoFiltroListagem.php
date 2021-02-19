@@ -7,6 +7,7 @@
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Grupo Licitação</th>
+                    <th class="text-left" style="min-width:30px;">Tipo</th>
                      <th class="text-left" style="min-width:35px;">Ativo</th>
                    
                 </tr>
@@ -15,7 +16,7 @@
                 <?php 
                 
                     $descricaoFiltro = "";
-
+                    $tipoFiltro = "";
                     $ativoFiltro = "";
                     $where = " WHERE (0 = 0)";
                      
@@ -29,7 +30,13 @@
                         $where = $where." AND ativo = $ativoFiltro";
                     } 
                     
-                    $sql = "SELECT codigo,descricao,ativo FROM Ntl.grupoLicitacao";
+                    if ($_GET["tipoFiltro"] != "") {
+                        $tipoFiltro = $_GET["tipoFiltro"];
+                        $where = $where." AND tipo = $tipoFiltro";
+                    } 
+                    
+                    
+                    $sql = "SELECT codigo,descricao,ativo,tipo FROM Ntl.grupo";
                     $sql = $sql.$where;
                     
                     $reposit = new reposit();                                       
@@ -38,7 +45,8 @@
                     foreach($result as $row) {
                         $id = (int) $row['codigo'];
                         $descricao = $row['descricao'];
-                        $ativo = (int) $row['ativo'];
+                        $tipo = $row['tipo'];
+                        $ativo = (int)$row['ativo'];
                         
                         //Modifica os valores booleanos por Sim e Não. 
                         //Ativo
@@ -48,9 +56,19 @@
                         else{
                             $descricaoAtivo = "Não";                            
                         }
+
+                        $descricaoTipo = "";
+                        if ($tipo=="F"){
+                            $descricaoTipo = "Faturamento";
+                        }
+                        if ($tipo=="L"){
+                            $descricaoTipo = "Licitação";
+                        }
+
                          
                         echo '<tr >'; 
-                        echo '<td class="text-left"><a href="tabelaBasica_grupoLicitacaoCadastro.php?codigo='.$id.'">'.$descricao.'</a></td>';
+                        echo '<td class="text-left"><a href="tabelaBasica_grupoCadastro.php?codigo='.$id.'">'.$descricao.'</a></td>';
+                        echo '<td class="text-left">'.$descricaoTipo.'</td>';
                         echo '<td class="text-left">'.$descricaoAtivo.'</td>';
                         echo '</tr >';
                     }

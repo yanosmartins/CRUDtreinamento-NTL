@@ -38,7 +38,7 @@ include "js/repositorio.php";
                     FROM ntl.pregao GP
                     LEFT JOIN ntl.portal P ON P.codigo = GP.portal
                     LEFT JOIN ntl.situacao S ON S.codigo = GP.situacao
-                    INNER JOIN ntl.grupoLicitacao G ON G.codigo = GP.grupoResponsavel
+                    INNER JOIN ntl.grupo G ON G.codigo = GP.grupoResponsavel
                     INNER JOIN ntl.responsavel R ON R.codigo = GP.responsavel";
                 $where = " WHERE (0 = 0) AND GP.participaPregao = 1 AND GP.condicao = 2 AND GP.dataAlerta <= " . $hoje;
 
@@ -251,7 +251,7 @@ include "js/repositorio.php";
                 FROM ntl.pregao GP
                 LEFT JOIN ntl.portal P ON P.codigo = GP.portal
                 LEFT JOIN ntl.situacao S ON S.codigo = GP.situacao
-                INNER JOIN ntl.grupoLicitacao G ON G.codigo = GP.grupoResponsavel
+                INNER JOIN ntl.grupo G ON G.codigo = GP.grupoResponsavel
                 INNER JOIN ntl.responsavel R ON R.codigo = GP.responsavel";
                 $where = " WHERE (0 = 0) AND GP.participaPregao = 1 ";
 
