@@ -62,7 +62,7 @@ include("inc/nav.php");
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
                             <h2>Escala</h2>
@@ -84,31 +84,31 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                    <div class="row">
+                                                        <div class="row">
                                                             <input id="codigo" name="codigo" type="text" class="hidden">
                                                         </div>
-                                                    <div class="row ">
+                                                        <div class="row ">
                                                             <section class="col col-6">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                     <input id="descricao" name="descricao" autocomplete="off" type="text" class="form-control required" value= "">
-                                                                </label>
-                                                            </section>   
-                                                            <section class="col col-2"> 
-                                                                <label class="label">Código SCI</label>
-                                                                <label class="input"> 
-                                                                     <input id="codigoSCI" name="codigoSCI" autocomplete="off" type="text" class="form-control required" value= "">
+                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="form-control required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                            <label class="label">Ativo</label>
+                                                                <label class="label">Código SCI</label>
+                                                                <label class="input">
+                                                                    <input id="codigoSCI" name="codigoSCI" autocomplete="off" type="text" class="form-control required" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
                                                                     <select name="ativo" id="ativo" class="required" autocomplete="off" class="form-control required">
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                            </section>                                                                                                     
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -328,8 +328,8 @@ include("inc/scripts.php");
                         smartAlert("Atenção", mensagem, "error");
                     } else {
                         smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                    } 
-                    
+                    }
+
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     voltar();
@@ -359,7 +359,7 @@ include("inc/scripts.php");
             $("#btnGravar").prop('disabled', false);
             return;
         }
- 
+
         gravaEscala(codigo, descricao, codigoSCI, ativo,
             function(data) {
 

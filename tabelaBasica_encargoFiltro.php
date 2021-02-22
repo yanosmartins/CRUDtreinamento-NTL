@@ -98,7 +98,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Percentual</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" data-mask="99.999" required>
+                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1">
@@ -172,14 +172,33 @@ include("inc/scripts.php");
 
 <script>
     $(document).ready(function() {
-        $('#percentual').focusout(function() {
-            var percentual, element;
-            element = $(this);
-            element.unmask();
-            percentual = element.val().replace(/\D/g, '');
-            if (percentual.length333 > 3) {
-                element.mask("9.999");
+        $('#percentual').focusout(function(evet) {
+            var theEvent = evet || window.event;
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+            //var regex = /^[0-9.,]+$/;
+            var regex = /^[0-9.]+$/;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
             }
+
+            let value = $('#percentual').val();
+            let percent
+            if (value == '') {
+                return $('#percentual').val('')
+            } else {
+                if (value.indexOf('.') >= 0) {
+                    percent = parseFloat(value)
+                    percent = percent.toFixed(3)
+                    return $('#percentual').val(percent)
+                } else {
+                    percent = value / 100;
+                    percent = percent.toFixed(3)
+                    $('#percentual').val(percent)
+                }
+            }
+
         }).trigger('focusout');
 
         $('#btnSearch').on("click", function() {

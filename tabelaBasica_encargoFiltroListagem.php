@@ -14,17 +14,7 @@ include "js/repositorio.php";
             <tbody>
                 <?php
 
-<<<<<<< HEAD
                 if ($descricao != "") {
-=======
-                $reposit = new reposit();
-                $sql = "SELECT codigo, descricao, percentual, ativo
-                FROM Ntl.encargo  ";
-                $where = " WHERE (0=0) ";
-                // $descricao = $_GET["descricao"];
-                // $percentual = $_GET["percentual"];
-                // $ativo = $_GET["ativo"];
->>>>>>> origin
 
                 if ($_POST["descricao"] != "") {
                     $descricao = $_POST["descricao"];
@@ -39,12 +29,9 @@ include "js/repositorio.php";
                     $where = $where . " AND ( ativo = $ativo)";
                 }
 
-<<<<<<< HEAD
                 $reposit = new reposit();
                 $sql = "SELECT codigo, descricao, percentual, ativo
                 FROM Ntl.encargo  ";
-=======
->>>>>>> origin
                 $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
 
@@ -87,7 +74,7 @@ include "js/repositorio.php";
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.print.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
         var responsiveHelper_datatable_tabletools = undefined;
 
         var breakpointDefinition = {
