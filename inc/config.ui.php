@@ -81,6 +81,9 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('BANCO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("banco" => array("title" => "Banco", "url" => APP_URL . "/tabelaBasica_bancoFiltro.php")); //SYSCC   
     }
+    if (in_array('BDI_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("bdi" => array("title" => "BDI", "url" => APP_URL . "/tabelaBasica_bdiFiltro.php")); //SYSCB 
+    }
     if (in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("beneficioIndireto" => array("title" => "Benefício Indireto", "url" => APP_URL . "/tabelaBasica_beneficioIndiretoFiltro.php")); //SYSCB 
     }
@@ -96,8 +99,8 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('FUNCAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("funcao" => array("title" => "Função", "url" => APP_URL . "/tabelaBasica_funcaoFiltro.php"));
     }
-    if (in_array('GRUPOLICITACAO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("grupoLicitacao" => array("title" => "Grupo Licitação", "url" => APP_URL . "/tabelaBasica_grupoLicitacaoFiltro.php")); //SYSGC 
+    if (in_array('GRUPO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/tabelaBasica_grupoFiltro.php")); //SYSGC 
     }
     if (in_array('INDICEREAJUSTE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("indiceReajuste" => array("title" => "Índice de Reajuste", "url" => APP_URL . "/tabelaBasica_indiceReajusteFiltro.php")); //SYSGEF  
@@ -273,27 +276,46 @@ if ($condicaoOperacaoOk) {
         }
     }
 
-    $condicaoContratacaoOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
+    $condicaoRHOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
+    $condicaoContratacaoOk = false;
+    if ($condicaoRHOk) {
+        $page_nav['operacao']['sub']['recursoshumanos'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
+        $page_nav['operacao']['sub']['recursoshumanos']['sub'] = array();
+        $condicaoContratacaoOk = true;
+        if ($condicaoContratacaoOk) { // a pedido do marcio no dia 18/02/21 foi pedido para colocar tudo referente a contratacao dentro de rh em um "novo modulo"
+            $page_nav['operacao']['sub']['recursoshumanos']['sub']['contratacao'] = array("title" => "Contratação", "icon" => "fa fa-fax");
+            $page_nav['operacao']['sub']['recursoshumanos']['sub']['contratacao']['sub'] = array();
 
-    if ($condicaoContratacaoOk) {
-        $page_nav['operacao']['sub']['contratacao'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
-        $page_nav['operacao']['sub']['contratacao']['sub'] = array();
+            if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
+                $page_nav['operacao']['sub']['recursoshumanos']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Triagem", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
+            }
+            if (!in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {
+                $page_nav['operacao']['sub']['recursoshumanos']['sub']['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/contratacao_gestorFiltro.php"));
+            }
 
-        if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Triagem", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
+            if (!in_array('RECURSOSHUMANOS_ACESSAR', $arrayPermissao, true)) {
+                $page_nav['operacao']['sub']['recursoshumanos']['sub']['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/contratacao_rhFiltro.php"));
+            }
+
+            if (!in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
+                $page_nav['operacao']['sub']['recursoshumanos']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
+            }
         }
+        // if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
+        //     $page_nav['operacao']['sub']['recursoshumanos']['sub'] += array("candidato" => array("title" => "Triagem", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
+        // }
 
-        if (!in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/contratacao_gestorFiltro.php"));
-        }
+        // if (!in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {
+        //     $page_nav['operacao']['sub']['recursoshumanos']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/contratacao_gestorFiltro.php"));
+        // }
 
-        if (!in_array('RECURSOSHUMANOS_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/contratacao_rhFiltro.php"));
-        }
+        // if (!in_array('RECURSOSHUMANOS_ACESSAR', $arrayPermissao, true)) {
+        //     $page_nav['operacao']['sub']['recursoshumanos']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/contratacao_rhFiltro.php"));
+        // }
 
-        if (!in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
-        }
+        // if (!in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
+        //     $page_nav['operacao']['sub']['recursoshumanos']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
+        // }
     } else if ($tipoUsuario == 'T') {
         $page_nav['operacao']['sub']['candidato'] = array("title" => "Contratação", "icon" => "fa fa-folder-open");
         $page_nav['operacao']['sub']['candidato']['sub'] = array();

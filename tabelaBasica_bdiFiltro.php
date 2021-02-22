@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('GRUPOLICITACAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('GRUPOLICITACAO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('BDI_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('BDI_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,10 +20,11 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
+
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Grupo Licitação";
+$page_title = "BDI";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -33,9 +34,10 @@ $page_title = "Grupo Licitação";
 $page_css[] = "your_style.css";
 include("inc/header.php");
 
+
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["grupoLicitacao"]["active"] = true;
+$page_nav['tabelaBasica']['sub']['bdi']["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -54,17 +56,22 @@ include("inc/nav.php");
 
         <!-- widget grid -->
         <section id="widget-grid" class="">
+            <!-- <div class="row" style="margin: 0 0 13px 0;">
+                <?php if ($condicaoGravarOK) { ?>
+                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastro.php" style="float:right"></a>
+                <?php } ?>    
+            </div>                     -->
 
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Grupo Licitação</h2>
+                            <h2>BDI</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formUsuarioFiltro" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formEncargo" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -79,21 +86,29 @@ include("inc/nav.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">
-                                                            <section class="col col-5 col-auto">
-                                                                <label class="label" for="descricao">Descriçao</label>
+                                                        <div class="row ">
+
+                                                            <section class="col col-2">
+                                                                <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" maxlength="50" name="descricao" type="text" autocomplete="off">
+                                                                    <input id="descricao" name="descricao" style="text-align: right;" type="text" autocomplete="off">
+
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="ativo">Ativo</label>
+                                                            <section class="col col-2">
+                                                                <label class="label">Percentual</label>
+                                                                <label class="input"><i class="icon-append fa fa-percent"></i>
+                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo">
+                                                                    <select name="ativo" id="ativo">
                                                                         <option></option>
-                                                                        <option value='1' selected>Sim</option>
-                                                                        <option value='0'>Não</option>
-                                                                    </select><i>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -103,10 +118,10 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar" >
+                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?= $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -155,31 +170,51 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
+
 <script>
     $(document).ready(function() {
+        $('#percentual').focusout(function() {
+            var percentual, element;
+            element = $(this);
+            element.unmask();
+            percentual = element.val().replace(/\D/g, '');
+            if (percentual.length > 3) {
+                element.mask("99.99");
+            } else {
+                element.mask("9.99?9");
+            }
+        }).trigger('focusout');
+
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            novo();
+            $(location).attr('href', 'tabelaBasica_bdiCadastro.php');
         });
     });
 
-    function listarFiltro() {
+    // function listarFiltro() {
+    //     var descricao = $('#descricao').val();
+    //     var percentual = $('#percentual').val();
+    //     var ativo = $('#ativo').val();
 
-        var descricaoFiltro = $('#descricao').val();
-        var ativoFiltro = $('#ativo').val();
+    //     var parametrosUrl = '&descricao=' + descricao;
+    //     var parametrosUrl = '&percentual=' + percentual;
+    //     var parametrosUrl = '&ativo=' + ativo;
+    //     $('#resultadoBusca').load('tabelaBasica_bdiFiltroListagem.php?' + parametrosUrl);
+    // }
 
-        if (descricaoFiltro !== "") {
-            descricaoFiltro = descricaoFiltro.replace(/^\s+|\s+$/g, "");
-            descricaoFiltro = encodeURIComponent(descricaoFiltro);
-        }
+    function listarFiltro() { 
+        
+        var descricao = $('#descricao').val();
+        var percentual = $('#percentual').val();
+        var ativo = $('#ativo').val();   
 
-        var parametrosUrl = '&descricaoFiltro=' + descricaoFiltro + '&ativoFiltro=' + ativoFiltro;
-        $('#resultadoBusca').load('tabelaBasica_grupoLicitacaoFiltroListagem.php?' + parametrosUrl);
-    }
+        $('#resultadoBusca').load('tabelaBasica_bdiFiltroListagem.php?', {
+            descricao: descricao,
+            percentual:percentual, 
+            ativo:ativo
+        });
 
-    function novo() {
-        $(location).attr('href', 'tabelaBasica_grupoLicitacaoCadastro.php');
     }
 </script>

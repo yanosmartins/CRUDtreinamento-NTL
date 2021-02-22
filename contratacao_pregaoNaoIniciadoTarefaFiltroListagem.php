@@ -46,7 +46,7 @@ include "js/repositorio.php";
                 LEFT JOIN Ntl.situacao S ON S.codigo = GP.situacao
                 LEFT JOIN Ntl.pregaoDetalhe GPD ON GPD.pregao = GP.codigo
                 LEFT JOIN Ntl.tarefa T ON T.codigo = GPD.tarefa
-                LEFT JOIN Ntl.grupoLicitacao G ON G.codigo = GP.grupoResponsavel
+                LEFT JOIN Ntl.grupo G ON G.codigo = GP.grupoResponsavel
                 LEFT JOIN Ntl.responsavel R ON R.codigo = GPD.responsavel";
                 $where = " WHERE (0 = 0) AND GP.participaPregao = 1";
 

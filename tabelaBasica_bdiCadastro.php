@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de perminssão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('ENCARGO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('ENCARGO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('ENCARGO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('BDI_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('BDI_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('BDI_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
   unset($_SESSION['login']);
@@ -27,7 +27,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Encargo";
+$page_title = "BDI";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -38,7 +38,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['encargo']["active"] = true;
+$page_nav['tabelaBasica']['sub']['bdi']["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -68,7 +68,7 @@ include("inc/nav.php");
           <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
             <header>
               <span class="widget-icon"><i class="fa fa-cog"></i></span>
-              <h2>Encargo
+              <h2>BDI
               </h2>
             </header>
             <div>
@@ -167,7 +167,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaEncargo.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaBdi.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -201,6 +201,8 @@ include("inc/scripts.php");
         element.mask("9.99?9");
       }
     }).trigger('focusout');
+
+    
 
 
     $('#dlgSimpleExcluir').dialog({
@@ -241,7 +243,7 @@ include("inc/scripts.php");
     });
 
     $('#btnNovo').on("click", function() {
-      $(location).attr('href', 'tabelaBasica_encargoCadastro.php');
+      $(location).attr('href', 'tabelaBasica_bdiCadastro.php');
     });
     $("#btnGravar").on("click", function() {
       gravar();
@@ -250,13 +252,13 @@ include("inc/scripts.php");
       voltar();
     });
 
-    carregaEncargo();
+    carregaBdi();
 
 
   });
 
   function voltar() {
-    $(location).attr('href', 'tabelaBasica_encargoFiltro.php');
+    $(location).attr('href', 'tabelaBasica_bdiFiltro.php');
 
   }
 
@@ -275,7 +277,7 @@ include("inc/scripts.php");
       return;
     }
 
-    gravaEncargo(codigo, descricao, percentual,
+    gravaBdi(codigo, descricao, percentual,
       function(data) {
 
         if (data.indexOf('sucess') < 0) {
@@ -306,7 +308,7 @@ include("inc/scripts.php");
       return;
     }
 
-    excluirEncargo(id, function(data) {
+    excluirBdi(id, function(data) {
       if (data.indexOf('failed') > -1) {
         var piece = data.split("#");
         var mensagem = piece[1];
@@ -326,7 +328,7 @@ include("inc/scripts.php");
 
 
 
-  function carregaEncargo() {
+  function carregaBdi() {
     var urlx = window.document.URL.toString();
     var params = urlx.split("?");
     if (params.length === 2) {
@@ -334,7 +336,7 @@ include("inc/scripts.php");
       var idx = id.split("=");
       var idd = idx[1];
       if (idd !== "") {
-        recuperaEncargo(idd,
+        recuperaBdi(idd,
           function(data) {
             data = data.replace(/failed/g, '');
             var piece = data.split("#");

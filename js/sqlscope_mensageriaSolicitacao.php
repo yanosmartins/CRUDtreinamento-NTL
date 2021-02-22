@@ -33,9 +33,10 @@ function grava()
   $dataLimite = validaData($_POST['dataLimite']);
   $urgente = (int)$_POST['urgente'];
   $local = validaString($_POST['local']);
-  $responsavel = validaNumero($_POST['responsavel']);
+  $responsavel = validaNumero($_POST['responsavelId']);
   $observacao = validaString($_POST['observacao']);
-
+  $concluido = $_POST['concluido'];
+  $usuario = "'" . $_SESSION['login'] . "'";
 
   $sql = "Mensageria.solicitacao_Atualiza  
                 $codigo,        
@@ -47,8 +48,9 @@ function grava()
                 $urgente,
                 $local,
                 $responsavel,
-                $observacao
-                ";
+                $observacao,
+                $concluido,
+                $usuario";
 
   $reposit = new reposit();
   $result = $reposit->Execprocedure($sql);
@@ -73,8 +75,9 @@ function recupera()
   }
 
   $sql = "SELECT S.codigo, S.funcionario, F.nome, S.dataSolicitacao, S.horaSolicitacao, S.dataLimite,
-    S.urgente, S.projeto, S.endereco, S.responsavel, S.observacao FROM Mensageria.solicitacao S
-    LEFT JOIN Ntl.funcionario F ON F.codigo = S.funcionario
+  S.urgente, S.projeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.observacao,S.concluido FROM Mensageria.solicitacao S
+  LEFT JOIN Ntl.funcionario F ON F.codigo = S.funcionario
+  LEFT JOIN Ntl.funcionario FR ON FR.codigo = S.responsavel
     WHERE (0=0) AND
     S.codigo = " . $codigo;
 
@@ -92,7 +95,10 @@ function recupera()
     $projeto = $row['projeto'];
     $local = $row['endereco'];
     $responsavel = $row['responsavel'];
+    $nomeResponsavel = $row['nomeResponsavel'];
     $observacao = $row['observacao'];
+    $funcionarioId = $row['funcionario'];
+    $concluido = $row['concluido'];
   }
 
   $out =
@@ -105,7 +111,10 @@ function recupera()
     $projeto . "^" .
     $local . "^" .
     $responsavel . "^" .
-    $observacao;
+    $nomeResponsavel . "^" .
+    $observacao . "^" .
+    $funcionarioId . "^" .
+    $concluido;
 
   if ($out == "") {
     echo "failed#";
@@ -146,73 +155,73 @@ function excluir()
 
 function listaNomeFuncionario()
 {
-    $condicaoDescricao = !((empty($_POST["descricaoIniciaCom"])) || (!isset($_POST["descricaoIniciaCom"])) || (is_null($_POST["descricaoIniciaCom"])));
+  $condicaoDescricao = !((empty($_POST["descricaoIniciaCom"])) || (!isset($_POST["descricaoIniciaCom"])) || (is_null($_POST["descricaoIniciaCom"])));
 
-    if ($condicaoDescricao === false) {
-        return;
-    }
-
-    if ($condicaoDescricao) {
-        $descricaoPesquisa = $_POST["descricaoIniciaCom"];
-    }
-
-    if ($condicaoDescricao == "") {
-        $id = 0;
-    }
-
-    $reposit = new reposit();
-    $sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE (0=0) AND ativo = 1 AND nome LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY nome";
-    $result = $reposit->RunQuery($sql);
-    $contador = 0;
-    $array = array();
-    foreach($result as $row) {
-        $id = $row['codigo'];
-        $nome = $row["nome"];
-        $contador = $contador + 1;
-        $array[] = array("id" => $id, "nome" => $nome);
-    }
-
-    $strArray = json_encode($array);
-
-    echo $strArray;
-
+  if ($condicaoDescricao === false) {
     return;
+  }
+
+  if ($condicaoDescricao) {
+    $descricaoPesquisa = $_POST["descricaoIniciaCom"];
+  }
+
+  if ($condicaoDescricao == "") {
+    $id = 0;
+  }
+
+  $reposit = new reposit();
+  $sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE (0=0) AND ativo = 1 AND nome LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY nome";
+  $result = $reposit->RunQuery($sql);
+  $contador = 0;
+  $array = array();
+  foreach ($result as $row) {
+    $id = $row['codigo'];
+    $nome = $row["nome"];
+    $contador = $contador + 1;
+    $array[] = array("id" => $id, "nome" => $nome);
+  }
+
+  $strArray = json_encode($array);
+
+  echo $strArray;
+
+  return;
 }
 
 function validaString($value)
 {
-    $null = 'NULL';
-    if ($value == '')
-        return $null;
-    return '\'' . $value . '\'';
+  $null = 'NULL';
+  if ($value == '')
+    return $null;
+  return '\'' . $value . '\'';
 }
 
 function validaData($value)
 {
-    if ($value == "") {
-        $value = 'NULL';
-        return $value;
-    }
-    $value = str_replace('/', '-', $value);
-    $value = date("Y-m-d", strtotime($value));
-    $value = "'" . $value . "'";
+  if ($value == "") {
+    $value = 'NULL';
     return $value;
+  }
+  $value = str_replace('/', '-', $value);
+  $value = date("Y-m-d", strtotime($value));
+  $value = "'" . $value . "'";
+  return $value;
 }
 
 function validaDataRecupera($value)
 {
-    if ($value == "") {
-        $value = '';
-        return $value;
-    }
-    $value = date('d/m/Y', strtotime($value));
+  if ($value == "") {
+    $value = '';
     return $value;
+  }
+  $value = date('d/m/Y', strtotime($value));
+  return $value;
 }
 
 function validaNumero($value)
 {
-    if ($value == "") {
-        $value = 'NULL';
-    }
-    return $value;
+  if ($value == "") {
+    $value = 'NULL';
+  }
+  return $value;
 }

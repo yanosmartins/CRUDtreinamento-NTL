@@ -23,7 +23,7 @@ function grava()
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("INSUMO_ACESSAR|INSUMO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("ENCARGO_ACESSAR|ENCARGO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -36,17 +36,14 @@ function grava()
 
     $codigo = $_POST['codigo'];
     $descricao = $_POST['descricao'];
-    $valor = $_POST['valor'];
-    $valor = str_replace(",", ".", $valor);
-    $valor = number_format($valor, 2, ",", " ");
+    $percentual = $_POST['percentual'];
     $ativo = 1;
-    $valor = str_replace(",", ".", $valor);
+    $percentual = str_replace(",", ".", $percentual);
 
-
-    $sql = "Ntl.insumo_Atualiza
+    $sql = "Ntl.Bdi_Atualiza
         $codigo,
         $descricao,
-        $valor,
+        $percentual,
         $ativo ,
         $usuario
         ";
@@ -72,7 +69,7 @@ function recupera()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT codigo, descricao, valor,ativo FROM Ntl.insumo WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, descricao, percentual,ativo FROM Ntl.bdi WHERE (0=0) AND codigo = " . $id;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -82,14 +79,13 @@ function recupera()
 
     $id = $row['codigo'];
     $descricao = $row['descricao'];
-    $valor = $row['valor'];
+    $percentual = +$row['percentual'];
     $ativo = $row['ativo'];
-    $valor = number_format($valor, 2, ".", "");
-    $valor = str_replace(".", ",", $valor);
+    // $percentual = str_replace(".", ",", $percentual);
 
     $out =   $id . "^" .
         $descricao . "^" .
-        $valor . "^" .
+        $percentual . "^" .
         $ativo;
 
 
@@ -106,7 +102,7 @@ function excluir()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("INSUMO_ACESSAR|INSUMO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("ENCARGO_ACESSAR|ENCARGO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -115,14 +111,14 @@ function excluir()
     }
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Insumo.";
+        $mensagem = "Selecione um Encargo.";
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
         $id = (int) $_POST["id"];
     }
 
-    $result = $reposit->update('Ntl.insumo' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Ntl.bdi' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

@@ -117,7 +117,7 @@ include("inc/nav.php");
                                                                     <select id="grupo" name="grupo" class="required">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.grupoLicitacao where ativo = 1 order by codigo";
+                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.grupo where ativo = 1 order by codigo";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
@@ -273,12 +273,12 @@ include("inc/nav.php");
                                                                         <select id="grupoResponsavel" name="grupoResponsavel">
                                                                             <option></option>
                                                                             <?php
-                                                                            $sql =  "SELECT codigo, descricao as nome  FROM Ntl.grupoLicitacao  where ativo = 1 order by nome;";
+                                                                            $sql =  "SELECT codigo, descricao FROM Ntl.grupo where ativo = 1 AND tipo ='L' order by codigo";
                                                                             $reposit = new reposit();
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = $row['codigo'];
-                                                                                $nome = ($row['nome']);
+                                                                                $nome = ($row['descricao']);
                                                                                 echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
                                                                             }
                                                                             ?>

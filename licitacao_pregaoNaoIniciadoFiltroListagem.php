@@ -36,7 +36,7 @@ include "js/repositorio.php";
                 GP.horaPregao, GP.resumoPregao, GP.condicao, GP.ativo,GP.dataCadastro, G.descricao AS grupoResponsavel, R.nome AS responsavelPregao, GP.valorEstimado
                 FROM Ntl.pregao GP 
                 LEFT JOIN Ntl.portal P ON P.codigo = GP.portal
-                LEFT JOIN Ntl.grupoLicitacao G ON G.codigo = GP.grupoResponsavel
+                LEFT JOIN Ntl.grupo G ON G.codigo = GP.grupoResponsavel
                 LEFT JOIN Ntl.responsavel R ON R.codigo = GP.responsavel";
                 $where = " WHERE (0 = 0) AND GP.participaPregao = 1";
 
