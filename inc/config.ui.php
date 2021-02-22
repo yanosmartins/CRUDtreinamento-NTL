@@ -123,6 +123,9 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('ENCARGO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("encargo" => array("title" => "Encargo", "url" => APP_URL . "/tabelaBasica_encargoFiltro.php"));
     }
+    if (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("estoque" => array("title" => "Estoque", "url" => APP_URL . "/tabelaBasica_estoqueFiltro.php")); //SYSGC 
+    }
     if (in_array('MOTIVOAFASTAMENTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/tabelaBasica_motivoAfastamentoFiltro.php")); //SYSCB
     }
