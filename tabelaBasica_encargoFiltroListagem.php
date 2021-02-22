@@ -19,7 +19,7 @@ include "js/repositorio.php";
                 $ativo = $_GET["ativo"];
 
 
-                if ($descricao !== "") {
+                if ($descricao != "") {
 
                     $where = $where . " AND descricao = $descricao ";
                 }
@@ -35,7 +35,7 @@ include "js/repositorio.php";
 
                 $reposit = new reposit();
                 $sql = "SELECT codigo, descricao, percentual, ativo
-                FROM Ntl.insumo  ";
+                FROM Ntl.encargo  ";
                 $sql = $sql . $where;
 
                 $result = $reposit->RunQuery($sql);
@@ -44,12 +44,12 @@ include "js/repositorio.php";
                 foreach ($result as $row) {
                     $codigo = (int) $row['codigo'];
                     $descricao = (string) $row['descricao'];
-                    $percentual = (float) $row['percentual'];
+                    $percentual = number_format($row['percentual'], 3);
                     $ativo = (int) $row['ativo'];
 
                     echo '<tr>';
                     echo '<td class="text-left"><a href="tabelaBasica_encargoCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $percentual . '</td>';
+                    echo '<td class="text-left">' . $percentual . '%' . '</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {

@@ -98,10 +98,18 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Percentual</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" data-mask="99.999" required>
                                                                 </label>
                                                             </section>
-
+                                                            <section class="col col-1">
+                                                                <label class="label">Ativo</label>
+                                                                <label class="select">
+                                                                    <select name="ativo" id="ativo">
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -169,10 +177,8 @@ include("inc/scripts.php");
             element = $(this);
             element.unmask();
             percentual = element.val().replace(/\D/g, '');
-            if (percentual.length > 3) {
-                element.mask("99.99");
-            } else {
-                element.mask("9.99?9");
+            if (percentual.length333 > 3) {
+                element.mask("9.999");
             }
         }).trigger('focusout');
 
