@@ -14,7 +14,13 @@ include "js/repositorio.php";
             <tbody>
                 <?php
 
-                if ($descricao != "") {
+                $reposit = new reposit();
+                $sql = "SELECT codigo, descricao, percentual, ativo
+                FROM Ntl.encargo  ";
+                $where = " WHERE (0=0) ";
+                // $descricao = $_GET["descricao"];
+                // $percentual = $_GET["percentual"];
+                // $ativo = $_GET["ativo"];
 
                 if ($_POST["descricao"] != "") {
                     $descricao = $_POST["descricao"];
@@ -29,9 +35,6 @@ include "js/repositorio.php";
                     $where = $where . " AND ( ativo = $ativo)";
                 }
 
-                $reposit = new reposit();
-                $sql = "SELECT codigo, descricao, percentual, ativo
-                FROM Ntl.encargo  ";
                 $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
 
@@ -39,12 +42,12 @@ include "js/repositorio.php";
                 foreach ($result as $row) {
                     $codigo = (int) $row['codigo'];
                     $descricao = (string) $row['descricao'];
-                    $percentual = number_format($row['percentual'], 3);
+                    $percentual = (float) $row['percentual'];
                     $ativo = (int) $row['ativo'];
 
                     echo '<tr>';
                     echo '<td class="text-left"><a href="tabelaBasica_encargoCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $percentual . '%' . '</td>';
+                    echo '<td class="text-left">' . $percentual . '</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {
@@ -74,7 +77,7 @@ include "js/repositorio.php";
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.print.min.js"></script>
 
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
         var responsiveHelper_datatable_tabletools = undefined;
 
         var breakpointDefinition = {
