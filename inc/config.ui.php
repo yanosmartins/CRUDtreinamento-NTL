@@ -93,6 +93,9 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('CLASSE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("classe" => array("title" => "Classe", "url" => APP_URL . "/tabelaBasica_classeFiltro.php")); //SYSGEF
     }
+    if (in_array('DEPARTAMENTO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("departamento" => array("title" => "Departamento", "url" => APP_URL . "/tabelaBasica_departamentoFiltro.php")); //SYSGEF
+    }
     if (in_array('ESCALA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("escala" => array("title" => "Escala", "url" => APP_URL . "/tabelaBasica_escalaFiltro.php")); //SYSCC  
     }
