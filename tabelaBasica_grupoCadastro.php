@@ -93,7 +93,7 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="tipo">Tipo</label>
                                                                 <label class="select">
-                                                                    <select id="tipo" name="tipo" class="" required>
+                                                                    <select id="tipo" name="tipo" class="required" required>
                                                                         <option></option>
                                                                         <option value='L'>Licitação</option>
                                                                         <option value='F'>Faturamento</option>
@@ -336,6 +336,12 @@ include("inc/scripts.php");
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
             smartAlert("Atenção", "Informe a descrição", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!tipo) {
+            smartAlert("Atenção", "Informe o tipo", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
