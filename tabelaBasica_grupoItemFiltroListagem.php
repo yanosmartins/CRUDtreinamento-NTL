@@ -6,8 +6,8 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
+                    <th class="text-left" style="min-width:30px;">Estoque</th>
                     <th class="text-left" style="min-width:30px;">Descrição</th>
-                    <th class="text-left" style="min-width:30px;">Percentual</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
@@ -15,24 +15,23 @@ include "js/repositorio.php";
                 <?php
 
                 $reposit = new reposit();
-                $sql = "SELECT codigo, descricao, percentual, ativo
-                FROM Ntl.encargo  ";
+                $sql = "SELECT GI.codigo, E.descricao as 'descricaoEstoque', GI.descricao, GI.ativo
+                FROM Ntl.grupoItem GI INNER JOIN Ntl.estoque E ON GI.estoque = E.codigo ";
                 $where = " WHERE (0=0) ";
-                // $descricao = $_GET["descricao"];
-                // $percentual = $_GET["percentual"];
-                // $ativo = $_GET["ativo"];
+
+                if ($_POST["estoque"] != "") {
+                    $estoque = $_POST["estoque"];
+                    $where = $where . " AND ( GI.estoque = $estoque)";
+                }
 
                 if ($_POST["descricao"] != "") {
                     $descricao = $_POST["descricao"];
-                    $where = $where . " AND ( descricao = $descricao)";
+                    $where = $where . " AND ( GI.descricao = $descricao)";
                 }
-                if ($_POST["percentual"] != "") {
-                    $percentual = $_POST["percentual"];
-                    $where = $where . " AND ( percentual = $percentual)";
-                }
+
                 if ($_POST["ativo"] != "") {
                     $ativo = (int)$_POST["ativo"];
-                    $where = $where . " AND ( ativo = $ativo)";
+                    $where = $where . " AND ( GI.ativo = $ativo)";
                 }
 
                 $sql = $sql . $where;
@@ -41,13 +40,13 @@ include "js/repositorio.php";
 
                 foreach ($result as $row) {
                     $codigo = (int) $row['codigo'];
+                    $estoqueDescricao = (string) $row['descricaoEstoque'];
                     $descricao = (string) $row['descricao'];
-                    $percentual = (float) $row['percentual'];
                     $ativo = (int) $row['ativo'];
 
                     echo '<tr>';
-                    echo '<td class="text-left"><a href="tabelaBasica_encargoCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $percentual . '</td>';
+                    echo '<td class="text-left"><a href="tabelaBasica_grupoItemCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';
+                    echo '<td class="text-left">' . $estoqueDescricao . '</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {
