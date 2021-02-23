@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de perminssão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('ENCARGO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('ENCARGO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('ENCARGO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('GRUPOITEM_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('GRUPOITEM_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('GRUPOITEM_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
   unset($_SESSION['login']);
@@ -27,7 +27,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Encargo";
+$page_title = "Grupo de item";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -38,7 +38,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['encargo']["active"] = true;
+$page_nav['tabelaBasica']['sub']['grupoItem']["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -68,12 +68,12 @@ include("inc/nav.php");
           <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
             <header>
               <span class="widget-icon"><i class="fa fa-cog"></i></span>
-              <h2>Encargo
+              <h2>Grupo de Item
               </h2>
             </header>
             <div>
               <div class="widget-body no-padding">
-                <form action="javascript:gravar()" class="smart-form client-form" id="formInss" method="post">
+                <form action="javascript:gravar()" class="smart-form grupo-item-form" id="formGrupoItem" method="post">
                   <div class="panel-group smart-accordion-default" id="accordion">
                     <div class="panel panel-default">
                       <div class="panel-heading">
@@ -93,16 +93,31 @@ include("inc/nav.php");
                             <div class="row ">
 
                               <section class="col col-2">
-                                <label class="label">Descrição</label>
-                                <label class="input">
-                                  <input id="descricao" name="descricao" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+                                <label class="label">Estoque</label>
+                                <label class="select">
+                                  <select id="estoque" name="estoque" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+                                    <option value=""></option>
+                                    <?php
+                                    $reposit = new reposit();
+
+                                    $sql = "SELECT codigo, descricao FROM Ntl.estoque WHERE ativo = 1";
+
+                                    $result = $reposit->RunQuery($sql);
+
+                                    foreach ($result as $row) {
+                                      $codigoEstoque = $row["codigo"];
+                                      $descricaoEstoque = $row["descricao"];
+                                      echo "<option value=\"$codigoEstoque\">$descricaoEstoque</option>";
+                                    }
+                                    ?>
+                                  </select><i></i>
                                 </label>
                               </section>
 
                               <section class="col col-2">
-                                <label class="label">Percentual</label>
-                                <label class="input"><i class="icon-append fa fa-percent"></i>
-                                  <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+                                <label class="label">Descrição</label>
+                                <label class="input">
+                                  <input id="descricao" name="descricao" style="text-align: right;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
 
@@ -167,7 +182,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaEncargo.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaGrupoItem.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -189,36 +204,6 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
   $(document).ready(function() {
-
-    $('#percentual').focusout(function(evet) {
-      var theEvent = evet || window.event;
-      var key = theEvent.keyCode || theEvent.which;
-      key = String.fromCharCode(key);
-      //var regex = /^[0-9.,]+$/;
-      var regex = /^[0-9.]+$/;
-      if (!regex.test(key)) {
-        theEvent.returnValue = false;
-        if (theEvent.preventDefault) theEvent.preventDefault();
-      }
-
-      let value = $('#percentual').val();
-      let percent
-      if (value == '') {
-        return $('#percentual').val('')
-      } else {
-        if (value.indexOf('.') >= 0) {
-          percent = parseFloat(value)
-          percent = percent.toFixed(3)
-          return $('#percentual').val(percent)
-        } else {
-          percent = value / 100;
-          percent = percent.toFixed(3)
-          $('#percentual').val(percent)
-        }
-      }
-
-    }).trigger('focusout');
-
 
     $('#dlgSimpleExcluir').dialog({
       autoOpen: false,
@@ -258,7 +243,7 @@ include("inc/scripts.php");
     });
 
     $('#btnNovo').on("click", function() {
-      $(location).attr('href', 'tabelaBasica_encargoCadastro.php');
+      $(location).attr('href', 'tabelaBasica_grupoItemCadastro.php');
     });
     $("#btnGravar").on("click", function() {
       gravar();
@@ -267,13 +252,13 @@ include("inc/scripts.php");
       voltar();
     });
 
-    carregaEncargo();
+    carregaGrupoItem();
 
 
   });
 
   function voltar() {
-    $(location).attr('href', 'tabelaBasica_encargoFiltro.php');
+    $(location).attr('href', 'tabelaBasica_grupoItemFiltro.php');
 
   }
 
@@ -284,15 +269,15 @@ include("inc/scripts.php");
 
     var codigo = parseInt($("#codigo").val());
     var descricao = $("#descricao").val();
-    var percentual = $("#percentual").val();
+    var estoque = $("#estoque").val();
 
     // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-    if (!percentual) {
-      smartAlert("Erro", "Informe o percentual.", "error");
+    if (!estoque) {
+      smartAlert("Erro", "Informe o estoque.", "error");
       return;
     }
 
-    gravaEncargo(codigo, descricao, percentual,
+    gravaGrupoItem(codigo, estoque, descricao,
       function(data) {
 
         if (data.indexOf('sucess') < 0) {
@@ -315,7 +300,6 @@ include("inc/scripts.php");
   }
 
   function excluir() {
-    debugger;
     var id = parseInt($("#codigo").val());
 
     if (id === 0) {
@@ -323,7 +307,7 @@ include("inc/scripts.php");
       return;
     }
 
-    excluirEncargo(id, function(data) {
+    excluirGrupoItem(id, function(data) {
       if (data.indexOf('failed') > -1) {
         var piece = data.split("#");
         var mensagem = piece[1];
@@ -343,7 +327,7 @@ include("inc/scripts.php");
 
 
 
-  function carregaEncargo() {
+  function carregaGrupoItem() {
     var urlx = window.document.URL.toString();
     var params = urlx.split("?");
     if (params.length === 2) {
@@ -351,7 +335,7 @@ include("inc/scripts.php");
       var idx = id.split("=");
       var idd = idx[1];
       if (idd !== "") {
-        recuperaEncargo(idd,
+        recuperaGrupoItem(idd,
           function(data) {
             data = data.replace(/failed/g, '');
             var piece = data.split("#");
@@ -362,17 +346,15 @@ include("inc/scripts.php");
 
             piece = out.split("^");
             console.table(piece);
-            //Atributos de cliente 
-            debugger;
+            //
             var codigo = parseInt(piece[0]);
             var descricao = piece[1];
-            var percentual = piece[2];
-
+            var estoque = piece[2];
 
             //Atributos de cliente        
             $("#codigo").val(codigo);
+            $("#estoque").val(estoque);
             $("#descricao").val(descricao);
-            $("#percentual").val(percentual);
 
           }
 

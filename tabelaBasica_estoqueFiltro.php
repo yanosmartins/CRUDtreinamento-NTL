@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('ENCARGO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('ENCARGO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('ESTOQUE_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,11 +20,10 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
-
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Encargo";
+$page_title = "Estoque";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -34,10 +33,9 @@ $page_title = "Encargo";
 $page_css[] = "your_style.css";
 include("inc/header.php");
 
-
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['encargo']["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["estoque"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -67,11 +65,11 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Encargo</h2>
+                            <h2>Estoque</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formEncargo" method="post">
+                                <form action="javascript:gravar()" class="smart-form estoque-form" id="formEstoqueFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -87,25 +85,19 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row ">
-
-                                                            <section class="col col-2">
+                                                            <section class="col col-6">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" style="text-align: right;" type="text" autocomplete="off">
+                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="form-control" value="">
+                                                                </label>
+                                                            </section>
 
-                                                                </label>
-                                                            </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Percentual</label>
-                                                                <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-1">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo">
-                                                                        <option value="1">Sim</option>
+                                                                    <select name="ativo" id="ativo" class="" class="form-control" autocomplete="off">
+                                                                        <option value=""></option>
+                                                                        <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
@@ -120,7 +112,7 @@ include("inc/nav.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?= $esconderBtnGravar ?>">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -172,51 +164,22 @@ include("inc/scripts.php");
 
 <script>
     $(document).ready(function() {
-        $('#percentual').focusout(function(evet) {
-            var theEvent = evet || window.event;
-            var key = theEvent.keyCode || theEvent.which;
-            key = String.fromCharCode(key);
-            //var regex = /^[0-9.,]+$/;
-            var regex = /^[0-9.]+$/;
-            if (!regex.test(key)) {
-                theEvent.returnValue = false;
-                if (theEvent.preventDefault) theEvent.preventDefault();
-            }
-
-            let value = $('#percentual').val();
-            let percent
-            if (value == '') {
-                return $('#percentual').val('')
-            } else {
-                if (value.indexOf('.') >= 0) {
-                    percent = parseFloat(value)
-                    percent = percent.toFixed(3)
-                    return $('#percentual').val(percent)
-                } else {
-                    percent = value / 100;
-                    percent = percent.toFixed(3)
-                    $('#percentual').val(percent)
-                }
-            }
-
-        }).trigger('focusout');
 
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_encargoCadastro.php');
+            $(location).attr('href', 'tabelaBasica_estoqueCadastro.php');
         });
     });
 
     function listarFiltro() {
+        debugger;
         var descricao = $('#descricao').val();
-        var percentual = $('#percentual').val();
         var ativo = $('#ativo').val();
 
-        var parametrosUrl = '&descricao=' + descricao;
-        var parametrosUrl = '&percentual=' + percentual;
-        parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_encargoFiltroListagem.php?' + parametrosUrl);
+        var parametrosUrl = '&descricao=' + descricao + '&ativo=' + ativo;
+
+        $('#resultadoBusca').load('tabelaBasica_estoqueFiltroListagem.php?' + parametrosUrl);
     }
 </script>

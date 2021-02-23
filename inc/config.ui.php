@@ -96,14 +96,23 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('DEPARTAMENTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("departamento" => array("title" => "Departamento", "url" => APP_URL . "/tabelaBasica_departamentoFiltro.php")); //SYSGEF
     }
+    if (in_array('ENCARGO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("encargo" => array("title" => "Encargo", "url" => APP_URL . "/tabelaBasica_encargoFiltro.php"));
+    }
     if (in_array('ESCALA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("escala" => array("title" => "Escala", "url" => APP_URL . "/tabelaBasica_escalaFiltro.php")); //SYSCC  
+    }
+    if (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("estoque" => array("title" => "Estoque", "url" => APP_URL . "/tabelaBasica_estoqueFiltro.php")); //SYSGC 
     }
     if (in_array('FUNCAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("funcao" => array("title" => "Função", "url" => APP_URL . "/tabelaBasica_funcaoFiltro.php"));
     }
     if (in_array('GRUPO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/tabelaBasica_grupoFiltro.php")); //SYSGC 
+    }
+    if (in_array('GRUPOITEM_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("grupoItem" => array("title" => "Grupo de item", "url" => APP_URL . "/tabelaBasica_grupoItemFiltro.php")); //SYSGC 
     }
     if (in_array('INDICEREAJUSTE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("indiceReajuste" => array("title" => "Índice de Reajuste", "url" => APP_URL . "/tabelaBasica_indiceReajusteFiltro.php")); //SYSGEF  
@@ -119,9 +128,6 @@ if ($condicaoTabelaBasicaOk) {
     }
     if (in_array('INSUMO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("insumo" => array("title" => "Insumo", "url" => APP_URL . "/tabelaBasica_insumoFiltro.php"));
-    }
-    if (in_array('ENCARGO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("encargo" => array("title" => "Encargo", "url" => APP_URL . "/tabelaBasica_encargoFiltro.php"));
     }
     if (in_array('MOTIVOAFASTAMENTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/tabelaBasica_motivoAfastamentoFiltro.php")); //SYSCB
