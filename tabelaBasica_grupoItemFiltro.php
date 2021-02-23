@@ -118,7 +118,7 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Estoque</label>
+                                                                <label class="label">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo" style="text-align: right;" type="text" autocomplete="off">
                                                                         <option value="1">Sim</option>

@@ -29,7 +29,7 @@ include "js/repositorio.php";
                     $where = $where . " AND ( GI.descricao = $descricao)";
                 }
 
-                if ($_POST["ativo"] != "") {
+                if ($_POST["ativo"] !== "") {
                     $ativo = (int)$_POST["ativo"];
                     $where = $where . " AND ( GI.ativo = $ativo)";
                 }
