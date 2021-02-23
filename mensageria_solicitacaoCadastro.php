@@ -181,7 +181,7 @@ include("inc/nav.php");
                               <section class="col col-3">
                                 <label class="label" for="departamento">Departamento</label>
                                 <label class="select">
-                                  <select id="departamento" name="departamento" class="required">
+                                  <select id="departamento" name="departamento" class="readonly" disabled>
                                     <option></option>
                                     <?php
                                     $sql =  "SELECT departamento FROM Ntl.beneficioProjeto where ativo = 1 AND funcionario = " . $id;
@@ -430,6 +430,7 @@ include "inc/scripts.php";
               observacao = piece[10];
               funcionarioId = piece[11];
               concluido = piece[12];
+              departamento = piece[13];
 
 
               $("#sectionResponsavel").removeAttr("hidden");
@@ -446,6 +447,8 @@ include "inc/scripts.php";
               $("#local").val(local);
               $("#observacao").val(observacao);
               $("#concluido").val(concluido);
+              $("#departamento").val(departamento);
+
               if (responsavel == '') {
                 $("#responsavelId").val(funcionarioId);
               } else {
