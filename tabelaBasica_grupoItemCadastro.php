@@ -348,9 +348,8 @@ include("inc/scripts.php");
             console.table(piece);
             //
             var codigo = parseInt(piece[0]);
-            var estoque = piece[1];
-            var descricao = piece[2];
-
+            var descricao = piece[1];
+            var estoque = piece[2];
 
             //Atributos de cliente        
             $("#codigo").val(codigo);

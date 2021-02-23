@@ -24,7 +24,7 @@ function grava()
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("ESTOQUE_ACESSAR|ESTOQUE_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("GRUPOITEM_ACESSAR|GRUPOITEM_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -35,13 +35,15 @@ function grava()
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $codigo =  (int) $_POST['codigo'];
+    $estoque =  (int) $_POST['estoque'];
     $descricao = "'" . $_POST['descricao'] . "'";
-    $ativo = (int) $_POST['ativo'];
+    // $ativo = (int) $_POST['ativo'];
 
-    $sql = "Ntl.estoque_Atualiza
+    $sql = "Ntl.grupoItem_Atualiza
             $codigo, 
+            $estoque,
             $descricao, 
-            $ativo, 
+            1, 
             $usuario
             ";
 
@@ -80,7 +82,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo, descricao, ativo FROM Ntl.estoque WHERE (0 = 0)";
+    $sql = "SELECT codigo, estoque, descricao, ativo FROM Ntl.grupoItem WHERE (0 = 0) ";
 
     if ($condicaoCodigo) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -94,12 +96,12 @@ function recupera()
     if ($row = $result[0]) {
 
         $codigo = (int)$row['codigo'];
+        $estoque = (int)$row['estoque'];
         $descricao = $row['descricao'];
-        $ativo = (int)$row['ativo'];
 
         $out = $codigo . "^" .
             $descricao . "^" .
-            $ativo;
+            $estoque;
 
         if ($out == "") {
             echo "failed#";
@@ -114,7 +116,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("ESTOQUE_ACESSAR|ESTOQUE_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("GRUPOITEM_ACESSAR|GRUPOITEM_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -130,7 +132,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('Ntl.estoque' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Ntl.grupoItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
