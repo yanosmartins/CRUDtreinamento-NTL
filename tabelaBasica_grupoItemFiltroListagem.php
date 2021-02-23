@@ -19,18 +19,19 @@ include "js/repositorio.php";
                 FROM Ntl.grupoItem GI INNER JOIN Ntl.estoque E ON GI.estoque = E.codigo ";
                 $where = " WHERE (0=0) ";
 
-                if ($_POST["estoque"] != "") {
-                    $estoque = $_POST["estoque"];
+
+                if ($_GET["estoque"] != "") {
+                    $estoque = $_GET["estoque"];
                     $where = $where . " AND ( GI.estoque = $estoque)";
                 }
 
-                if ($_POST["descricao"] != "") {
-                    $descricao = $_POST["descricao"];
+                if ($_GET["descricao"] != "") {
+                    $descricao = $_GET["descricao"];
                     $where = $where . " AND ( GI.descricao = $descricao)";
                 }
 
-                if ($_POST["ativo"] !== "") {
-                    $ativo = (int)$_POST["ativo"];
+                if ($_GET["ativo"] !== "") {
+                    $ativo = (int)$_GET["ativo"];
                     $where = $where . " AND ( GI.ativo = $ativo)";
                 }
 
