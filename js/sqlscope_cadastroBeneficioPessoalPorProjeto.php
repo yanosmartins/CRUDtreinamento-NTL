@@ -210,6 +210,12 @@ function gravaBeneficio()
         $posto = 'NULL';
     }
 
+    $horaEntrada = "'" .$beneficio['horaEntrada']. "'" ;
+    $horaInicio = "'" .$beneficio['horaInicio']. "'" ;
+    $horaFim = "'" .$beneficio['horaFim']. "'" ;
+    $horaSaida = "'" .$beneficio['horaSaida']. "'" ;
+
+
     //############################# INICIO DO XML DE VT ##############################//
     $strArrayValeTransporte = $beneficio['jsonValeTransporte'];
     $arrayValeTransporte = json_decode($strArrayValeTransporte, true);
@@ -526,7 +532,11 @@ function gravaBeneficio()
         $escalaFeriasVAVR,
         $localizacao,
         $posto,
-        $usuario";
+        $usuario,
+        $horaEntrada,
+        $horaFim,
+        $horaInicio,
+        $horaSaida";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -654,6 +664,12 @@ function recuperaBeneficio()
         $diaUtilNovembroVT = validaNumeroRecupera($row['diaUtilNovembroVT']);
         $diaUtilDezembroVT = validaNumeroRecupera($row['diaUtilDezembroVT']);
         $tipoDiaUtilVT = validaNumeroRecupera($row['tipoDiaUtilVT']);
+
+        $horaEntrada = $row['horaEntrada'];
+        $horaInicio = $row['horaInicio'];
+        $horaFim = $row['horaFim'];
+        $horaSaida = $row['horaSaida'];
+
 
 
         $saldoDisponivel = validaNumeroRecupera($row['saldoDisponivel']);
@@ -1061,7 +1077,11 @@ function recuperaBeneficio()
             $escalaFerias . "^" .
             $escalaFeriasVAVR . "^" .
             $localizacao . "^" .
-            $posto;
+            $posto . "^" .
+            $horaEntrada . "^" .
+            $horaInicio . "^" .
+            $horaFim . "^" .
+            $horaSaida;
 
         if ($out == "") {
             echo "failed#";
