@@ -27,6 +27,11 @@ if ($condicaoExcluirOK === false) {
   $esconderBtnExcluir = "none";
 }
 
+session_start();
+$id = $_SESSION['funcionario'];
+
+
+
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -96,8 +101,6 @@ include("inc/nav.php");
                                 <label class="label">Funcionário</label>
                                 <label class="input">
                                   <?php
-                                  session_start();
-                                  $id = $_SESSION['funcionario'];
                                   $sql = "SELECT nome FROM Ntl.funcionario WHERE codigo = " . $id;
                                   $result = $reposit->RunQuery($sql);
                                   if ($row = $result[0]) {
@@ -174,6 +177,33 @@ include("inc/nav.php");
                                 <label class="input">
                                   <input id="local" maxlength="255" autocompvare="off" name="local" type="text" value="">
                                 </label>
+                              </section>
+                              <section class="col col-3">
+                                <label class="label" for="departamento">Departamento</label>
+                                <label class="select">
+                                  <select id="departamento" name="departamento" class="required">
+                                    <option></option>
+                                    <?php
+                                    $sql =  "SELECT departamento FROM Ntl.beneficioProjeto where ativo = 1 AND funcionario = " . $id;
+                                    $result = $reposit->RunQuery($sql);
+                                    if ($row = $result[0]) {
+                                      $departamento = $row['departamento'];
+                                    }
+
+                                    $sql =  "SELECT codigo, descricao FROM Ntl.departamento where ativo = 1 order by descricao";
+                                    $reposit = new reposit();
+                                    $result = $reposit->RunQuery($sql);
+                                    foreach ($result as $row) {
+                                      $codigo = $row['codigo'];
+                                      $descricao = ($row['descricao']);
+                                      if ($codigo == $departamento) {
+                                        echo '<option selected value=' . $codigo . '>  ' . $descricao . ' </option>';
+                                      } else {
+                                        echo '<option value=' . $codigo . '>  ' . $descricao . ' </option>';
+                                      }
+                                    }
+                                    ?>
+                                  </select><i></i>
                               </section>
                               <section class="col col-6" id="sectionResponsavel" hidden>
                                 <label class="label">Responsável</label>
@@ -428,7 +458,7 @@ include "inc/scripts.php";
                 $("#responsavel").val(nomeResponsavel);
               }
 
-          
+
             }
           }
         );
@@ -461,7 +491,7 @@ include "inc/scripts.php";
       return;
     }
 
-    if ((responsavel === "") && (codigo != 0 )) {
+    if ((responsavel === "") && (codigo != 0)) {
       smartAlert("Atenção", "Selecione um Responsavel !", "error");
       $("#responsavel").focus();
       return;
