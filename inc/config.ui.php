@@ -342,6 +342,9 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['faturamento']['sub'] += array("encargo" => array("title" => "Encargo", "url" => APP_URL . "/prototipoValorPosto_encargoFiltro.php"));
         }
         if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("remuneracao" => array("title" => "Remuneração", "url" => APP_URL . "/prototipoValorPosto_tabelaBasicaRemuneracaoFiltro.php"));
+        }
+        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['faturamento']['sub'] += array("insumos" => array("title" => "Insumos", "url" => APP_URL . "/prototipoValorPosto_insumoFiltro.php"));
         }
         if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
