@@ -213,32 +213,49 @@ include("inc/nav.php");
 														</div>
 														<div class="row">
 															<section class="col col-1">
-																	<label id="labelHora" class="label">Hora Entrada</label>
-																	<div class="input-group" data-align="top" data-autoclose="true">
-																		<input id="horaEntrada" name="horaEntrada" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
-																		<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-																	</div>
+																<label id="labelHora" class="label">Hora Entrada</label>
+																<div class="input-group" data-align="top" data-autoclose="true">
+																	<input id="horaEntrada" name="horaEntrada" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
+																	<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+																</div>
 															</section>
 															<section class="col col-1">
-																	<label id="labelHora" class="label">Inicio/Almoço</label>
-																	<div class="input-group" data-align="top" data-autoclose="true">
-																		<input id="horaInicio" name="horaInicio" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
-																		<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-																	</div>
+																<label id="labelHora" class="label">Inicio/Almoço</label>
+																<div class="input-group" data-align="top" data-autoclose="true">
+																	<input id="horaInicio" name="horaInicio" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
+																	<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+																</div>
 															</section>
 															<section class="col col-1">
-																	<label id="labelHora" class="label">Fim/ALmoço</label>
-																	<div class="input-group" data-align="top" data-autoclose="true">
-																		<input id="horaFim" name="horaFim" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
-																		<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-																	</div>
+																<label id="labelHora" class="label">Fim/ALmoço</label>
+																<div class="input-group" data-align="top" data-autoclose="true">
+																	<input id="horaFim" name="horaFim" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
+																	<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+																</div>
 															</section>
 															<section class="col col-1">
-																	<label id="labelHora" class="label">Saída</label>
-																	<div class="input-group" data-align="top" data-autoclose="true">
-																		<input id="horaSaida" name="horaSaida" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
-																		<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-																	</div>
+																<label id="labelHora" class="label">Saída</label>
+																<div class="input-group" data-align="top" data-autoclose="true">
+																	<input id="horaSaida" name="horaSaida" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
+																	<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+																</div>
+															</section>
+															<section class="col col-3">
+																<label class="label" for="departamento">Departamento</label>
+																<label class="select">
+																	<select id="departamento" name="departamento" class="">
+																		<option></option>
+																		<?php
+																		$sql =  "SELECT codigo, descricao FROM Ntl.departamento where ativo = 1 order by descricao";
+																		$reposit = new reposit();
+																		$result = $reposit->RunQuery($sql);
+																		foreach ($result as $row) {
+																			$codigo = $row['codigo'];
+																			$descricao = ($row['descricao']);
+																			echo '<option value=' . $codigo . '>  ' . $descricao . ' </option>';
+																		}
+																		?>
+																	</select><i></i>
 															</section>
 														</div>
 													</fieldset>
@@ -2162,28 +2179,28 @@ include("inc/scripts.php");
 		$("#horaEntrada").mask("99:99");
 
 		$('#horaEntrada').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
+			donetext: 'Done',
+			default: 'now',
+			use24hours: true,
 		}).val(moment().format('HH:mm'));
-		
+
 		$('#horaInicio').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
+			donetext: 'Done',
+			default: 'now',
+			use24hours: true,
 		}).val(moment().format('HH:mm'));
-		
+
 		$('#horaFim').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
+			donetext: 'Done',
+			default: 'now',
+			use24hours: true,
 		}).val(moment().format('HH:mm'));
-		
+
 		$('#horaSaida').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
-        }).val(moment().format('HH:mm'));
+			donetext: 'Done',
+			default: 'now',
+			use24hours: true,
+		}).val(moment().format('HH:mm'));
 
 
 
@@ -2850,6 +2867,7 @@ include("inc/scripts.php");
 							var horaInicio = piece[81];
 							var horaFim = piece[82];
 							var horaSaida = piece[83];
+							var departamento = piece[84];
 
 
 							$("#codigo").val(codigo);
@@ -2952,6 +2970,8 @@ include("inc/scripts.php");
 							$("#horaInicio").val(horaInicio);
 							$("#horaFim").val(horaFim);
 							$("#horaSaida").val(horaSaida);
+
+							$("#departamento").val(departamento);
 
 							jsonValeTransporteArray = JSON.parse($("#jsonValeTransporte").val());
 							jsonPlanoSaudeArray = JSON.parse($("#jsonPlanoSaude").val());

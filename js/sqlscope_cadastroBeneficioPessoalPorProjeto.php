@@ -210,6 +210,8 @@ function gravaBeneficio()
         $posto = 'NULL';
     }
 
+    $departamento = validaNumero($beneficio['departamento']);
+
     $horaEntrada = "'" .$beneficio['horaEntrada']. "'" ;
     $horaInicio = "'" .$beneficio['horaInicio']. "'" ;
     $horaFim = "'" .$beneficio['horaFim']. "'" ;
@@ -536,7 +538,8 @@ function gravaBeneficio()
         $horaEntrada,
         $horaFim,
         $horaInicio,
-        $horaSaida";
+        $horaSaida,
+        $departamento";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -664,6 +667,8 @@ function recuperaBeneficio()
         $diaUtilNovembroVT = validaNumeroRecupera($row['diaUtilNovembroVT']);
         $diaUtilDezembroVT = validaNumeroRecupera($row['diaUtilDezembroVT']);
         $tipoDiaUtilVT = validaNumeroRecupera($row['tipoDiaUtilVT']);
+
+        $departamento = validaNumeroRecupera($row['departamento']);
 
         $horaEntrada = $row['horaEntrada'];
         $horaInicio = $row['horaInicio'];
@@ -1081,7 +1086,8 @@ function recuperaBeneficio()
             $horaEntrada . "^" .
             $horaInicio . "^" .
             $horaFim . "^" .
-            $horaSaida;
+            $horaSaida . "^" .
+            $departamento;
 
         if ($out == "") {
             echo "failed#";
