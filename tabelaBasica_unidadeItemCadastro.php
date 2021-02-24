@@ -42,7 +42,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["unidadeitem"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["unidadeItem"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -272,9 +272,10 @@ include("inc/scripts.php");
             return false;
         }
 
-        let formUnidade = document.getElementById('formUnidadeItem');
-
-        let form = new FormData(formUnidade)
+        let form = $('#formUnidadeItem').serializeArray().reduce(function(obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
 
         gravaUnidadeItem(form,
             function(data) {
