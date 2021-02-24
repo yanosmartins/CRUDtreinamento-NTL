@@ -154,9 +154,6 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('RESPONSAVEL_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("responsavel" => array("title" => "Responsável", "url" => APP_URL . "/tabelaBasica_responsavelFiltro.php")); //SYSGC 
     }
-    if (in_array('REMUNERACAO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("remuneracao" => array("title" => "Remuneração", "url" => APP_URL . "/tabelaBasica_RemuneracaoFiltro.php"));
-    }
 
     //SUBMENU RETENÇÃO CONTA VINCULADA - SYSGEF
     if (in_array('RETENCAOCONTAVINCULADA_ACESSAR', $arrayPermissao, true)) {
@@ -404,7 +401,7 @@ if ($condicaoOperacaoOk) {
         }
     }
 
-    $condicaoFuncionarioOk = true;  
+    $condicaoFuncionarioOk = true;
     if ($condicaoFuncionarioOk) {
         $page_nav['operacao']['sub']['funcionario'] = array("title" => "Área do Funcionário", "icon" => "fa fa-user");
         $page_nav['operacao']['sub']['funcionario']['sub'] = array();
