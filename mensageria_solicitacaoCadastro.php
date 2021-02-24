@@ -179,9 +179,9 @@ include("inc/nav.php");
                                 </label>
                               </section>
                               <section class="col col-3">
-                                <label class="label" for="departamento">Departamento</label>
+                                <label class="label" >Departamento</label>
                                 <label class="select">
-                                  <select id="departamento" name="departamento" class="readonly" disabled>
+                                  <select id="departamento" name="departamento" class="readonly" readonly>
                                     <option></option>
                                     <?php
                                     $sql =  "SELECT departamento FROM Ntl.beneficioProjeto where ativo = 1 AND funcionario = " . $id;
@@ -344,15 +344,53 @@ include "inc/scripts.php";
       voltar();
     });
 
-    //Botões de Tarefa
-    $("#btnAddSolicitacao").on("click", function() {
-      if (validaSolicitacao())
-        addSolicitacao();
+    $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+      _title: function(title) {
+        if (!this.options.title) {
+          title.html("&#160;");
+        } else {
+          title.html(this.options.title);
+        }
+      }
+    }));
+
+
+    $('#dlgSimpleExcluir').dialog({
+      autoOpen: false,
+      width: 400,
+      resizable: false,
+      modal: true,
+      title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+      buttons: [{
+        html: "Excluir registro",
+        "class": "btn btn-success",
+        click: function() {
+          $(this).dialog("close");
+          excluir();
+        }
+      }, {
+        html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+        "class": "btn btn-default",
+        click: function() {
+          $(this).dialog("close");
+        }
+      }]
     });
 
-    $("#btnRemoverSolicitacao").on("click", function() {
-      excluirSolicitacao();
+    $("#btnExcluir").on("click", function() {
+      var id = +$("#codigo").val();
+
+      if (id === 0) {
+        smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+        $("#nome").focus();
+        return;
+      }
+
+      if (id !== 0) {
+        $('#dlgSimpleExcluir').dialog('open');
+      }
     });
+
 
     $("#responsavel").autocomplete({
       source: function(request, response) {
@@ -504,6 +542,17 @@ include "inc/scripts.php";
     var formData = new FormData(form);
     gravaSolicitacao(formData);
 
+  }
+
+  function excluir() {
+    var codigo = +$("#codigo").val();
+
+    if (codigo === 0) {
+      smartAlert("Atenção", "Selecione uma solicitacao para excluir!", "error");
+      return;
+    }
+
+    excluirSolicitacao(codigo);
   }
 
   function recupera(callback) {

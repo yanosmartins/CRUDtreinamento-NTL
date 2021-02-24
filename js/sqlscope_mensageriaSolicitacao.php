@@ -139,8 +139,8 @@ function excluir()
     echo "failed#" . $mensagem . ' ';
     return;
   }
-  $id = $_POST["id"];
-  if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
+  $id = $_POST["codigo"];
+  if ((empty($_POST['codigo']) || (!isset($_POST['codigo'])) || (is_null($_POST['codigo'])))) {
     $mensagem = "Selecione um contrato para ser excluído";
     echo "failed#" . $mensagem . ' ';
     return;
@@ -148,7 +148,7 @@ function excluir()
 
   $reposit = new reposit();
 
-  $result = $reposit->update('Ntl.solicitacao' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+  $result = $reposit->update('Mensageria.solicitacao' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
   if ($result < 1) {
     echo ('failed#');
