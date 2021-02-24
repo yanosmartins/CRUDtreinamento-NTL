@@ -341,7 +341,7 @@ include("inc/scripts.php");
         }
 
         //Chama a função de gravar do business de convênio de saúde.
-        gravaRemuneracao(id, ativo, descricao, corFonte, corFundo,
+        gravaRemuneracao(id, ativo, descricao,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
