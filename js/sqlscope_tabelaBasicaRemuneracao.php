@@ -25,7 +25,7 @@ function grava()
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("SITUACAO_ACESSAR|SITUACAO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("REMUNERACAO_ACESSAR|REMUNERACAO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -39,7 +39,7 @@ function grava()
     $descricao = "'" . $_POST['descricao'] . "'";
     $ativo = $_POST['ativo'];
 
-    $sql = "Ntl.situacao_Atualiza
+    $sql = "Ntl.remuneracao_Atualiza
             $codigo,
             $descricao,
             $ativo,
@@ -124,7 +124,7 @@ function excluir()
     $id = $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione uma situação";
+        $mensagem = "Selecione uma remuneração";
         echo "failed#" . $mensagem . ' ';
         return;
     }
