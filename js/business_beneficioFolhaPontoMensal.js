@@ -1,18 +1,18 @@
-function gravaLancamento(lancamentoTabela,callback) {
+function gravaFolhaPontoMensal(folhaPontoMensalTabela,callback) {
     $.ajax({
-        url: 'js/sqlscope_beneficioLancamento.php',
+        url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", lancamentoTabela:lancamentoTabela}, //valores enviados ao script     
+        data: {funcao: "grava", folhaPontoMensalTabela:folhaPontoMensalTabela}, //valores enviados ao script     
         success: function (data) {
             callback(data);
         }
     });
   }
   
-  function recuperaLancamento(id, callback) {
+  function recuperaFolhaPontoMensal(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_beneficioLancamento.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_beneficioFolhaPontoMensal.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'recupera', id: id}, //valores enviados ao script     
@@ -26,9 +26,9 @@ function gravaLancamento(lancamentoTabela,callback) {
     return;
   }
   
-  function  excluirLancamento(id, callback) {
+  function  excluirFolhaPontoMensal(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_beneficioLancamento.php', //caminho do arqivo a ser executado
+        url: 'js/sqlscope_beneficioFolhaPontoMensal.php', //caminho do arqivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'excluir', id: id}, //valores enviados ao script     

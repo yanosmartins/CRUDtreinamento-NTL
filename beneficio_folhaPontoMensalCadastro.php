@@ -29,7 +29,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Lançamento";
+$page_title = "Controle de Ponto";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -40,7 +40,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]["lancamento"]["active"] = true;
+$page_nav["operacao"]["sub"]["controlePonto"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -64,39 +64,40 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Lançamento
+                            <h2>Controle de Ponto
                             </h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formLancamentoCadastro" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formFolhaPontoMensalCadastro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseLancamento" class="collapsed" id="accordionLancamento">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFolhaPontoMensal" class="collapsed" id="accordionFolhaPontoMensal">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Lançamento Folha de Ponto
+                                                        Ponto Mensal
                                                     </a>
                                                 </h4>
                                             </div>
-                                            <div id="collapseLancamento" class="panel-collapse collapse in">
+                                            <div id="collapseFolhaPontoMensal" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
 
-                                                        <input id="JsonLancamento" name="JsonLancamento" type="hidden" value="[]">
-                                                        <div id="formLancamento" class="col-sm-12">
+                                                        <input id="JsonFolhaPontoMensal" name="JsonFolhaPontoMensal" type="hidden" value="[]">
+                                                        <div id="formFolhaPontoMensal" class="col-sm-12">
                                                             <input id="lancamentoId" name="lancamentoId" type="hidden" value="">
-                                                            <input id="sequencialLancamento" name="sequencialLancamento" type="hidden" value="">
+                                                            <input id="sequencialFolhaPontoMensal" name="sequencialFolhaPontoMensal" type="hidden" value="">
                                                             <div class="form-group">
+
                                                                 <div class="row">
 
-                                                                    <section class="col col-5">
+                                                                    <section class="col col-4">
                                                                         <label class="label " for="funcionario">Funcionário</label>
                                                                         <label class="select">
                                                                             <select id="funcionario" name="funcionario" class="readonly" readonly>
-                                                                                <option ></option>
+                                                                                <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
                                                                                 $sql = "select codigo, nome from Ntl.funcionario where dataDemissaoFuncionario IS NULL AND ativo = 1 order by nome";
@@ -111,7 +112,7 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
 
-                                                                    <section class="col col-3">
+                                                                    <section class="col col-4">
                                                                         <label class="label" for="projeto">Projeto</label>
                                                                         <label class="select">
                                                                             <select id="projeto" name="projeto" class="readonly" readonly>
@@ -129,62 +130,130 @@ include("inc/nav.php");
                                                                             </select>
                                                                         </label>
                                                                     </section>
-
-                                                                    <section class="col col-3">
-                                                                        <label class="label" for="lancamento">Lançamento</label>
-                                                                        <label class="select">
-                                                                            <select id="lancamento" name="lancamento" class="required">
-                                                                                <option></option>
-                                                                                <?php
-                                                                                $reposit = new reposit();
-                                                                                $sql = "select codigo, sigla, descricao from Ntl.lancamento where ativo = 1 order by descricao";
-                                                                                $result = $reposit->RunQuery($sql);
-                                                                                foreach ($result as $row) {
-                                                                                    $codigo = (int) $row['codigo'];
-                                                                                    $descricao = $row['descricao'];
-                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
-                                                                                }
-                                                                                ?>
-                                                                            </select><i></i>
-                                                                        </label>
-                                                                    </section>
                                                                     <section class="col col-2">
-                                                                        <label class="label" for="mesAnoFolhaPonto">Mês/Ano</label>
+                                                                        <label class="label" for="mesAnoFolhaPonto">Mês Atual</label>
                                                                         <label class="input">
                                                                             <i class="icon-append fa fa-calendar"></i>
-                                                                            <input id="mesAnoFolhaPonto" name="mesAnoFolhaPonto" style="text-align: center;" autocomplete="off" data-mask="99/9999" data-mask-placeholder="mm/aaaa" data-dateformat="mm/yy" placeholder="mm/aaaa" type="text" class= "readonly" readonly value="">
+                                                                            <input id="mesAnoFolhaPonto" name="mesAnoFolhaPonto" style="text-align: center;" autocomplete="off" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" type="text" class="readonly" readonly value="">
                                                                         </label>
+                                                                    </section>
+
+
+
+                                                                </div>
+
+
+                                                                <div class="row">
+                                                                    <section class="col col-12">
+                                                                        <legend><strong></strong></legend>
                                                                     </section>
                                                                 </div>
                                                                 <div class="row">
                                                                     <section class="col col-md-4">
-                                                                        <label class="label"> </label>
-                                                                        <button id="btnAddLancamento" type="button" class="btn btn-primary">
-                                                                            <i class="fa fa-plus"></i>
-                                                                        </button>
-                                                                        <button id="btnRemoverLancamento" type="button" class="btn btn-danger">
-                                                                            <i class="fa fa-minus"></i>
-                                                                        </button>
+                                                                        <label class="label"> </label>
+                                                                        <input id="horaAtual" name="horaAtual" type="text" class="text-center form-control hidden" hidden data-autoclose="true" value="">
+
+                                                                    </section>
+
+
+
+                                                                </div>
+
+                                                                <?php
+                                                                $i = 0;
+                                                                $days = date("t");
+                                                                while ($i  < $days) {
+                                                                    $i = $i + 1;
+                                                                    echo "<div class=\"row\">
+
+                                                                    <section class=\"col col-1\">
+                                                                        <div class=\"form-group\">
+                                                                            <label class=\"label\">Dia</label>
+                                                                            <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
+                                                                                <input id=\"dia\" name=\"dia\" type=\"text\" class=\"text-center form-control readonly\" readonly data-autoclose=\"true\" value=\"" . $i . "\">
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class=\"col col-2\">
+                                                                        <div class=\"form-group\">
+                                                                            <label id=\"labelHora\" class=\"label\">Entrada</label>
+                                                                            <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
+                                                                                <input id=\"horaEntrada\" name=\"horaEntrada\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class=\"col col-1\">
+                                                                        <div class=\"form-group\">
+                                                                            <label class=\"label\">Inicio/Almoço</label>
+                                                                            <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
+                                                                                <input id=\"inicioAlmoco\" name=\"inicioAlmoco\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class=\"col col-1\">
+                                                                        <div class=\"form-group\">
+                                                                            <label class=\"label\">Fim/Almoço</label>
+                                                                            <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
+                                                                                <input id=\"fimAlmoco\" name=\"fimAlmoco\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class=\"col col-2\">
+                                                                        <div class=\"form-group\">
+                                                                            <label id=\"labelHora\" class=\"label\">Saída</label>
+                                                                            <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
+                                                                                <input id=\"horaSaida\" name=\"horaSaida\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class=\"col col-1\">
+                                                                        <div class=\"form-group\">
+                                                                            <label id=\"labelHora\" class=\"label\">H.Extra</label>
+                                                                            <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
+                                                                                <input id=\"horaExtra\" name=\"horaExtra\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class=\"col col-2\">
+                                                                        <label class=\"label\" for=\"lancamento\">Lançamento/Ocorrência</label>
+                                                                        <label class=\"select\">
+                                                                            <select id=\"lancamento\" name=\"lancamento\" class=\"\">
+                                                                                <option></option>";
+
+                                                                    $reposit = new reposit();
+                                                                    $sql = "select codigo, sigla, descricao from Ntl.lancamento where ativo = 1 order by descricao";
+                                                                    $result = $reposit->RunQuery($sql);
+                                                                    foreach ($result as $row) {
+                                                                        $codigo = (int) $row['codigo'];
+                                                                        $descricao = $row['descricao'];
+                                                                        echo "<option value=' . $codigo . '>' . $descricao . '</option>'";
+                                                                    }
+                                                                    echo " </select><i></i>
+                                                                        </label>
+                                                                    </section>
+                                                                </div>
+                                                                ";
+                                                                }
+                                                                ?>
+
+                                                                <div class="row">
+                                                                    <section class="col col-12">
+                                                                        <label class="label">Observações</label>
+                                                                        <textarea maxlength="500" id="observacoes" name="observacoes" class="form-control" rows="3" style="resize:vertical"></textarea>
                                                                     </section>
                                                                 </div>
                                                             </div>
-
-                                                            <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                <table id="tableLancamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                    <thead>
-                                                                        <tr role="row">
-                                                                            <th style="width: 2px"></th>
-                                                                            <th class="text-left" style="min-width: 500%;">Funcionário</th>
-                                                                            <th class="text-left">Projeto</th>
-                                                                            <th class="text-left">Mês/Ano</th>
-                                                                            <th class="text-left">Lançamento</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
                                                     </fieldset>
                                                 </div>
 
@@ -245,7 +314,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_beneficioLancamento.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_beneficioFolhaPontoMensal.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -260,18 +329,70 @@ include("inc/scripts.php");
 
 <!-- Full Calendar -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/moment/moment.min.js"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/plugin/moment/momentjs-business.js"></script>
+
 <!--<script src="/js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
+<!--<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>-->
 
 <!-- Form to json -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
 
+<script src="js/plugin/clockpicker/clockpicker.min.js"></script>
+
+
 <script language="JavaScript" type="text/javascript">
-    var jsonLancamentoArray = [];
+    var jsonFolhaPontoMensalArray = [];
     $(document).ready(function() {
 
+        $("#horaEntrada").mask("99:99:99");
+
+        $('#horaEntrada').clockpicker({
+            donetext: 'Done',
+            default: 'now',
+            use24hours: true,
+        }).val(moment().format('HH:mm:ss'));
+
+        $("#horaSaida").mask("99:99:99");
+
+        $('#horaSaida').clockpicker({
+            donetext: 'Done',
+            default: 'now',
+            use24hours: true,
+        }).val(moment().format('HH:mm:ss'));
+
+        $("#horaEntradaAlmoco").mask("99:99");
+
+        $('#horaEntradaAlmoco').clockpicker({
+            donetext: 'Done',
+            default: 'now',
+            use24hours: true,
+        }).val(moment().format('HH:mm'));
+
+        $("#horaSaidaAlmoco").mask("99:99");
+
+        $('#horaSaidaAlmoco').clockpicker({
+            donetext: 'Done',
+            default: 'now',
+            use24hours: true,
+        }).val(moment().format('HH:mm'));
+
+        $("#horaEntradaHoraExtra").mask("99:99");
+
+        $('#horaEntradaHoraExtra').clockpicker({
+            donetext: 'Done',
+            default: 'now',
+            use24hours: true,
+        }).val(moment().format('HH:mm'));
+
+        $("#horaSaidaHoraExtra").mask("99:99");
+
+        $('#horaSaidaHoraExtra').clockpicker({
+            donetext: 'Done',
+            default: 'now',
+            use24hours: true,
+        }).val(moment().format('HH:mm'));
 
 
         $('#btnNovo').on("click", function() {
@@ -286,46 +407,46 @@ include("inc/scripts.php");
         $("#btnExcluir").on("click", function() {
             excluir();
         });
-        $('#btnAddLancamento').on("click", function() {
-            if (validaLancamento()) {
-                addLancamento();
+        $('#btnAddFolhaPontoMensal').on("click", function() {
+            if (validaFolhaPontoMensal()) {
+                addFolhaPontoMensal();
             }
         });
-        $('#btnRemoverLancamento').on("click", function() {
-            excluirLancamento();
+        $('#btnRemoverFolhaPontoMensal').on("click", function() {
+            excluirFolhaPontoMensal();
         });
-        fillTableLancamento();
-        carregaLancamento();
+        fillTableFolhaPontoMensal();
+        carregaFolhaPontoMensal();
 
 
     });
 
-    function clearFormLancamento() {
-        $("#lancamentoId, #sequencialLancamento, #funcionario, #mesAnoFolhaPonto ,#projeto").val('');
+    function clearFormFolhaPontoMensal() {
+        $("#lancamentoId, #sequencialFolhaPontoMensal, #funcionario, #mesAnoFolhaPonto ,#projeto").val('');
         $("#lancamento").val('Selecione');
 
     }
 
-    function fillTableLancamento() {
-        $("#tableLancamento tbody").empty();
-        if (typeof(jsonLancamentoArray) != 'undefined') {
-            for (var i = 0; i < jsonLancamentoArray.length; i++) {
+    function fillTableFolhaPontoMensal() {
+        $("#tableFolhaPontoMensal tbody").empty();
+        if (typeof(jsonFolhaPontoMensalArray) != 'undefined') {
+            for (var i = 0; i < jsonFolhaPontoMensalArray.length; i++) {
                 var row = $('<tr />');
-                $("#tableLancamento tbody").append(row);
-                row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonLancamentoArray[i].sequencialLancamento + '"><i></i></label></td>'));
-                row.append($('<td class="text-nowrap" onclick="carregaLancamento(' + jsonLancamentoArray[i].sequencialLancamento + ');">' + jsonLancamentoArray[i].funcionarioText + '</td>'));
-                row.append($('<td class="text-nowrap" (' + jsonLancamentoArray[i].sequencialLancamento + ');">' + jsonLancamentoArray[i].projetoText + '</td>'));
-                row.append($('<td class="text-nowrap" (' + jsonLancamentoArray[i].sequencialLancamento + ');">' + jsonLancamentoArray[i].mesAnoFolhaPonto + '</td>'));
-                row.append($('<td class="" (' + jsonLancamentoArray[i].sequencialLancamento + ');">' + jsonLancamentoArray[i].lancamentoText + '</td>'));
+                $("#tableFolhaPontoMensal tbody").append(row);
+                row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + '"><i></i></label></td>'));
+                row.append($('<td class="text-nowrap" onclick="carregaFolhaPontoMensal(' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + ');">' + jsonFolhaPontoMensalArray[i].funcionarioText + '</td>'));
+                row.append($('<td class="text-nowrap" (' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + ');">' + jsonFolhaPontoMensalArray[i].projetoText + '</td>'));
+                row.append($('<td class="text-nowrap" (' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + ');">' + jsonFolhaPontoMensalArray[i].mesAnoFolhaPonto + '</td>'));
+                row.append($('<td class="" (' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + ');">' + jsonFolhaPontoMensalArray[i].lancamentoText + '</td>'));
 
 
             }
-            clearFormLancamento();
+            clearFormFolhaPontoMensal();
         }
     }
 
 
-    function validaLancamento() {
+    function validaFolhaPontoMensal() {
         var existe = false;
         var achou = false;
         var funcionario = $('#funcionario').val();
@@ -334,7 +455,7 @@ include("inc/scripts.php");
         var lancamento = $('#lancamento').val();
 
 
-        var sequencial = +$('#sequencialLancamento').val();
+        var sequencial = +$('#sequencialFolhaPontoMensal').val();
         var correspondenciaMarcado = 1;
 
         if (!funcionario) {
@@ -359,15 +480,15 @@ include("inc/scripts.php");
 
 
 
-        for (i = jsonLancamentoArray.length - 1; i >= 0; i--) {
+        for (i = jsonFolhaPontoMensalArray.length - 1; i >= 0; i--) {
             if (correspondenciaMarcado === 1) {
-                if ((jsonLancamentoArray[i].correspondencia == 1) && (jsonLancamentoArray[i].sequencialLancamento !== sequencial)) {
+                if ((jsonFolhaPontoMensalArray[i].correspondencia == 1) && (jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal !== sequencial)) {
                     achou = true;
                     break;
                 }
             }
             if (!funcionario) {
-                if ((jsonLancamentoArray[i].lancamento === funcionario) && (jsonLancamentoArray[i].sequencialLancamento !== sequencial)) {
+                if ((jsonFolhaPontoMensalArray[i].lancamento === funcionario) && (jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal !== sequencial)) {
                     existe = true;
                     break;
                 }
@@ -375,7 +496,7 @@ include("inc/scripts.php");
 
         }
         if (existe === true) {
-            smartAlert("Erro", "Lancamento já cadastrado.", "error");
+            smartAlert("Erro", "FolhaPontoMensal já cadastrado.", "error");
             return false;
         }
         if ((achou === true) && (correspondenciaMarcado === 1)) {
@@ -385,7 +506,7 @@ include("inc/scripts.php");
         return true;
     }
 
-    function processDataLancamento(node) {
+    function processDataFolhaPontoMensal(node) {
 
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
         var fieldName = node.getAttribute ? node.getAttribute('name') : '';
@@ -405,24 +526,24 @@ include("inc/scripts.php");
         return false;
     }
 
-    function addLancamento() {
-        var item = $("#formLancamento").toObject({
+    function addFolhaPontoMensal() {
+        var item = $("#formFolhaPontoMensal").toObject({
             mode: 'combine',
             skipEmpty: false,
-            nodeCallback: processDataLancamento
+            nodeCallback: processDataFolhaPontoMensal
         });
 
-        if (item["sequencialLancamento"] === '') {
-            if (jsonLancamentoArray.length === 0) {
-                item["sequencialLancamento"] = 1;
+        if (item["sequencialFolhaPontoMensal"] === '') {
+            if (jsonFolhaPontoMensalArray.length === 0) {
+                item["sequencialFolhaPontoMensal"] = 1;
             } else {
-                item["sequencialLancamento"] = Math.max.apply(Math, jsonLancamentoArray.map(function(o) {
-                    return o.sequencialLancamento;
+                item["sequencialFolhaPontoMensal"] = Math.max.apply(Math, jsonFolhaPontoMensalArray.map(function(o) {
+                    return o.sequencialFolhaPontoMensal;
                 })) + 1;
             }
             item["encargoPercentualId"] = 0;
         } else {
-            item["sequencialLancamento"] = +item["sequencialLancamento"];
+            item["sequencialFolhaPontoMensal"] = +item["sequencialFolhaPontoMensal"];
         }
 
         item.funcionarioText = $('#funcionario option:selected').text().trim();
@@ -430,54 +551,54 @@ include("inc/scripts.php");
         item.lancamentoText = $('#lancamento option:selected').text().trim();
 
         var index = -1;
-        $.each(jsonLancamentoArray, function(i, obj) {
-            if (+$('#sequencialLancamento').val() === obj.sequencialLancamento) {
+        $.each(jsonFolhaPontoMensalArray, function(i, obj) {
+            if (+$('#sequencialFolhaPontoMensal').val() === obj.sequencialFolhaPontoMensal) {
                 index = i;
                 return false;
             }
         });
 
         if (index >= 0)
-            jsonLancamentoArray.splice(index, 1, item);
+            jsonFolhaPontoMensalArray.splice(index, 1, item);
         else
-            jsonLancamentoArray.push(item);
+            jsonFolhaPontoMensalArray.push(item);
 
-        $("#jsonLancamento").val(JSON.stringify(jsonLancamentoArray));
-        fillTableLancamento();
-        clearFormLancamento();
+        $("#jsonFolhaPontoMensal").val(JSON.stringify(jsonFolhaPontoMensalArray));
+        fillTableFolhaPontoMensal();
+        clearFormFolhaPontoMensal();
 
     }
 
-    function excluirLancamento() {
+    function excluirFolhaPontoMensal() {
         var arrSequencial = [];
-        $('#tableLancamento input[type=checkbox]:checked').each(function() {
+        $('#tableFolhaPontoMensal input[type=checkbox]:checked').each(function() {
             arrSequencial.push(parseInt($(this).val()));
         });
         if (arrSequencial.length > 0) {
-            for (i = jsonLancamentoArray.length - 1; i >= 0; i--) {
-                var obj = jsonLancamentoArray[i];
-                if (jQuery.inArray(obj.sequencialLancamento, arrSequencial) > -1) {
-                    jsonLancamentoArray.splice(i, 1);
+            for (i = jsonFolhaPontoMensalArray.length - 1; i >= 0; i--) {
+                var obj = jsonFolhaPontoMensalArray[i];
+                if (jQuery.inArray(obj.sequencialFolhaPontoMensal, arrSequencial) > -1) {
+                    jsonFolhaPontoMensalArray.splice(i, 1);
                 }
             }
-            $("#JsonLancamento").val(JSON.stringify(jsonLancamentoArray));
-            fillTableLancamento();
+            $("#JsonFolhaPontoMensal").val(JSON.stringify(jsonFolhaPontoMensalArray));
+            fillTableFolhaPontoMensal();
         } else {
-            smartAlert("Erro", "Selecione pelo menos um Lancamento para excluir.", "error");
+            smartAlert("Erro", "Selecione pelo menos um FolhaPontoMensal para excluir.", "error");
         }
     }
 
-    function carregaLancamento(sequencialLancamento) {
-        var arr = jQuery.grep(jsonLancamentoArray, function(item, i) {
-            return (item.sequencialLancamento === sequencialLancamento);
+    function carregaFolhaPontoMensal(sequencialFolhaPontoMensal) {
+        var arr = jQuery.grep(jsonFolhaPontoMensalArray, function(item, i) {
+            return (item.sequencialFolhaPontoMensal === sequencialFolhaPontoMensal);
         });
 
-        clearFormLancamento();
+        clearFormFolhaPontoMensal();
 
         if (arr.length > 0) {
             var item = arr[0];
             $("#lancamentoId").val(item.lancamentoId);
-            $("#sequencialLancamento").val(item.sequencialLancamento);
+            $("#sequencialFolhaPontoMensal").val(item.sequencialFolhaPontoMensal);
             $("#funcionario").val(item.funcionario);
             $("#projeto").val(item.projeto);
             $("#mesAnoFolhaPonto").val(item.mesAnoFolhaPonto);
@@ -495,12 +616,12 @@ include("inc/scripts.php");
 
 
     function voltar() {
-        $(location).attr('href', 'beneficio_lancamentoFiltro.php');
+        $(location).attr('href', 'beneficio_folhaPontoMensalFiltro.php');
 
     }
 
     function novo() {
-        $(location).attr('href', 'beneficio_lancamentoCadastro.php');
+        $(location).attr('href', 'beneficio_folhaPontoCadastro.php');
 
     }
 
@@ -508,21 +629,51 @@ include("inc/scripts.php");
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
+        var arrayFolha = $("input[name='dia']")  
+        var arrayDia = new Array()
+        arrayFolha.forEach(folha =>{
+           return arrayDia.push({dia:folha.value})
+        })
 
+        var arrayFolha = $("input[name='horaEntrada']")
+        var arrayHoraEntrada = new Array()
+        arrayFolha.forEach(folha =>{
+           return arrayHoraEntrada.push({horaEntrada:folha.value})
+        })
+
+        var arrayFolha = $("input[name='inicioAlmoco']")
+        var arrayInicioAlmoco = new Array()
+        arrayFolha.forEach(folha =>{
+           return arrayInicioAlmoco.push({inicioAlmoco:folha.value})
+        }) 
+
+        var arrayFolha = $("input[name='fimAlmoco']")
+        var arrayFimAlmoco = new Array()
+        arrayFolha.forEach(folha =>{
+           return arrayFimAlmoco.push({fimAlmoco:folha.value})
+        })
+        
+        var arrayFolha = $("input[name='horaEntrada']")
+        var arrayHoraEntrada = new Array()
+        arrayFolha.forEach(folha =>{
+           return arrayHoraEntrada.push({horaEntrada:folha.value})
+        })
+
+       
         var codigo = +$("#codigo").val();
         var ativo = $("#ativo").val();
         var funcionario = $("#funcionario").val();
         var mesAnoFolhaPonto = $("#mesAnoFolhaPonto").val();
-        var observacaoLancamento = $("#observacaoLancamento").val();
+        var observacaoFolhaPontoMensal = $("#observacaoFolhaPontoMensal").val();
 
-        let lancamentoTabela = $('#formLancamentoCadastro').serializeArray().reduce(function(obj, item) {
+        let lancamentoTabela = $('#formFolhaPontoMensalCadastro').serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
             return obj;
         }, {});
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        
 
-        gravaLancamento(lancamentoTabela,
+
+        gravaFolhaPontoMensal(FolhaPontoMensalTabela,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {
@@ -556,7 +707,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirLancamento(id, function(data) {
+        excluirFolhaPontoMensal(id, function(data) {
             if (data.indexOf('failed') > -1) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -574,7 +725,7 @@ include("inc/scripts.php");
     }
 
 
-    function carregaLancamento() {
+    function carregaFolhaPontoMensal() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
         if (params.length === 2) {
@@ -582,7 +733,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaLancamento(idd,
+                recuperaFolhaPontoMensal(idd,
                     function(data) {
                         data = data.replace(/failed/g, '');
                         var piece = data.split("#");
