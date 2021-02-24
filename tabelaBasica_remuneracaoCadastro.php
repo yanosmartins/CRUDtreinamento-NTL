@@ -258,7 +258,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaSituacao(idd,
+                recuperaRemuneracao(idd,
                     function(data) {
                         if (data.indexOf('failed') > -1) {
                             return;
@@ -305,7 +305,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirSituacao(id,
+        excluirRemuneracao(id,
             function(data) {
                 if (data.indexOf('failed') > -1) {
                     var piece = data.split("#");
@@ -341,7 +341,7 @@ include("inc/scripts.php");
         }
 
         //Chama a função de gravar do business de convênio de saúde.
-        gravaSituacao(id, ativo, descricao, corFonte, corFundo,
+        gravaRemuneracao(id, ativo, descricao, corFonte, corFundo,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
