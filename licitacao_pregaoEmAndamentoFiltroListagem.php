@@ -40,7 +40,7 @@ include "js/repositorio.php";
                     LEFT JOIN ntl.situacao S ON S.codigo = GP.situacao
                     INNER JOIN ntl.grupo G ON G.codigo = GP.grupoResponsavel
                     INNER JOIN ntl.responsavel R ON R.codigo = GP.responsavel";
-                $where = " WHERE (0 = 0) AND GP.participaPregao = 1 AND GP.condicao = 2 AND GP.dataAlerta <= " . $hoje;
+                $where = " WHERE (0 = 0) AND GP.participaPregao = 1 AND GP.condicao = 2 AND GP.dataReabertura <= " . $hoje;
 
                 if ($_POST["numeroPregao"] != "") {
                     $numeroPregao = $_POST["numeroPregao"];
@@ -121,123 +121,114 @@ include "js/repositorio.php";
                     //testando a hora do alerta
                     $dataAlerta = $row['dataAlerta'];
                     $hojeAlerta =  date("Y-m-d");
-                    if ($dataAlerta == $hojeAlerta) {
-                        $horaAlerta = strtotime($row['horaAlerta']);
-                        $hora = strtotime(date("h:i", time()));
+                    $horaAlerta = strtotime($row['horaAlerta']);
+                    $hora = strtotime(date("h:i", time()));
 
-                        if ($horaAlerta <= $hora) {
-                            $id = $row['codigo'];
-                            $portal = $row['descricao'];
-                            $orgaoLicitante = $row['orgaoLicitante'];
-                            $numeroPregao = $row['numeroPregao'];
+                    $id = $row['codigo'];
+                    $portal = $row['descricao'];
+                    $orgaoLicitante = $row['orgaoLicitante'];
+                    $numeroPregao = $row['numeroPregao'];
 
-                            //A data recuperada foi formatada para D/M/Y
-                            $dataReabertura = $row['dataReabertura'];
-                            if ($dataReabertura != "") {
-                                $dataReabertura = explode("-", $dataReabertura);
-                                $dataReabertura = $dataReabertura[2] . "/" . $dataReabertura[1] . "/" . $dataReabertura[0];
-                            }
-                        }
-
-                        //Arrumando a data e a hora em que foi ATUALIZADO no sistema.
-                        $dataAlteracao = $row['dataAlteracao'];
-                        $descricaoData = explode(" ", $dataAlteracao);
-                        $descricaoData = explode("-", $descricaoData[0]);
-                        $descricaoHora = explode(" ", $dataAlteracao);
-                        $descricaoHora = $descricaoHora[1];
-                        $descricaoHora = explode(":", $descricaoHora);
-                        $descricaoHora = $descricaoHora[0] . ":" . $descricaoHora[1];
-                        $descricaoData =  $descricaoData[2] . "/" . $descricaoData[1] . "/" . $descricaoData[0];
-
-                        $id = $row['codigo'];
-                        $portal = $row['descricao'];
-                        $enderecoPortal = $row['endereco'];
-                        $orgaoLicitante = $row['orgaoLicitante'];
-                        $usuarioAlteracao = $row['usuarioAlteracao'];
-                        $numeroPregao = $row['numeroPregao'];
-                        $horaReabertura = $row['horaReabertura'];
-                        $oportunidadeCompra = $row['oportunidadeCompra'];
-                        $ativo = $row['ativo'];
-                        $ativo == 1 ? $descricaoAtivo = 'Sim' : $descricaoAtivo = 'Não';
-                        $situacao = $row['situacao'];
-                        $posicao = $row['posicao'];
-                        $campoPrioridade = '';
-                        $prioridade = $row['prioridade'];
-                        $resumoPregao = $row['resumoPregao'];
-                        $dataLancamento = $row['dataCadastro'];
-                        $dataLancamento = explode(" ", $dataLancamento);
-                        $dataLancamento = $dataLancamento[0];
-                        $dataLancamento = explode("-", $dataLancamento);
-                        $dataLancamento = "$dataLancamento[2]/$dataLancamento[1]/$dataLancamento[0]";
-                        $corFundo = '';
-                        $corFonte = '';
-                        $corLink = '';
-
-                        $grupo = $row['grupoResponsavel'];
-                        $responsavelPregao = $row['responsavelPregao'];
-
-                        $condicao = (int)$row['condicao'];
-
-
-                        switch ($condicao) {
-                            case 1:
-                                $condicao = 'Adiado';
-                                break;
-                            case 2:
-                                $condicao = 'Em Andamento';
-                                break;
-                            case 3:
-                                $condicao = 'Cancelado';
-                                break;
-                            case 4:
-                                $condicao = 'Fracassado';
-                                break;
-                            case 5:
-                                $condicao = 'Desistência';
-                                break;
-                            case 6:
-                                $condicao = 'Concluído';
-                                break;
-                            default:
-                                $condicao = '';
-                        }
-
-                        if ($prioridade == "1") {
-                            $campoPrioridade = '<i class="fa fa-check-circle-o" aria-hidden="true"></i>';
-                            $corFundo = "#bf2724";
-                            $corFonte = "#fff5f5";
-                            $corLink = "#ffffff";
-                        }
-
-
-                        echo '<tr style="background:' . $corFundo . '; color:' . $corFonte . ';">';
-                        echo '<td class="text-center" hidden></td>';
-                        if ($prioridade == "1") {
-                            echo '<td class="text-left"><a style="color:' . $corLink . ';" target="_blank" rel="noopener noreferrer" href="' . $enderecoPortal . '"><strong>' . $portal . '</strong></a></td>';
-                        } else {
-                            echo '<td class="text-left"><a style="color:' . $corLink . ';" target="_blank" rel="noopener noreferrer" href="' . $enderecoPortal . '">' . $portal . '</a></td>';
-                        }
-                        echo '<td class="text-justify">' . $orgaoLicitante . '</td>';
-                        if ($prioridade == "1") {
-                            echo '<td class="text-center"><a style="color:' . $corLink . ';" href="licitacao_pregaoEmAndamentoCadastro.php?id=' . $id . '"><strong>' . $numeroPregao . '</strong></a></td>';
-                        } else {
-                            echo '<td class="text-center"><a style="color:' . $corLink . ';" href="licitacao_pregaoEmAndamentoCadastro.php?id=' . $id . '">' . $numeroPregao . '</a></td>';
-                        }
-                        echo '<td class="text-center">' . $oportunidadeCompra . '</td>';
-                        echo '<td class="text-center">' . $situacao . '</td>';
-                        echo '<td class="text-center">' . $condicao . '</td>';
-                        echo '<td class="text-center">' . $posicao . '</td>';
-                        echo '<td class="text-center">' . $dataReabertura . '</td>';
-                        echo '<td class="text-center">' . $horaReabertura . '</td>';
-                        echo '<td class="text-center">' . $campoPrioridade . '</td>';
-                        echo '<td class="text-justify">' . $resumoPregao . '</td>';
-                        echo '<td class="text-justify">' . $grupo . '</td>';
-                        echo '<td class="text-justify">' . $responsavelPregao . '</td>';
-                        echo '<td class="text-justify">' . $usuarioAlteracao . '</td>';
-                        echo '<td class="text-left">' . $descricaoData . '</td>';
-                        echo '<td class="text-left">' . $descricaoHora . '</td>';
-                        echo '<td class="text-left">' . $dataLancamento . '</td>';
+                    //A data recuperada foi formatada para D/M/Y
+                    $dataReabertura = $row['dataReabertura'];
+                    if ($dataReabertura != "") {
+                        $dataReabertura = explode("-", $dataReabertura);
+                        $dataReabertura = $dataReabertura[2] . "/" . $dataReabertura[1] . "/" . $dataReabertura[0];
                     }
+
+                    //Arrumando a data e a hora em que foi ATUALIZADO no sistema.
+                    $dataAlteracao = $row['dataAlteracao'];
+                    $descricaoData = explode(" ", $dataAlteracao);
+                    $descricaoData = explode("-", $descricaoData[0]);
+                    $descricaoHora = explode(" ", $dataAlteracao);
+                    $descricaoHora = $descricaoHora[1];
+                    $descricaoHora = explode(":", $descricaoHora);
+                    $descricaoHora = $descricaoHora[0] . ":" . $descricaoHora[1];
+                    $descricaoData =  $descricaoData[2] . "/" . $descricaoData[1] . "/" . $descricaoData[0];
+
+                    $id = $row['codigo'];
+                    $portal = $row['descricao'];
+                    $enderecoPortal = $row['endereco'];
+                    $orgaoLicitante = $row['orgaoLicitante'];
+                    $usuarioAlteracao = $row['usuarioAlteracao'];
+                    $numeroPregao = $row['numeroPregao'];
+                    $horaReabertura = $row['horaReabertura'];
+                    $oportunidadeCompra = $row['oportunidadeCompra'];
+                    $ativo = $row['ativo'];
+                    $ativo == 1 ? $descricaoAtivo = 'Sim' : $descricaoAtivo = 'Não';
+                    $situacao = $row['situacao'];
+                    $posicao = $row['posicao'];
+                    $campoPrioridade = '';
+                    $prioridade = $row['prioridade'];
+                    $resumoPregao = $row['resumoPregao'];
+                    $dataLancamento = $row['dataCadastro'];
+                    $dataLancamento = explode(" ", $dataLancamento);
+                    $dataLancamento = $dataLancamento[0];
+                    $dataLancamento = explode("-", $dataLancamento);
+                    $dataLancamento = "$dataLancamento[2]/$dataLancamento[1]/$dataLancamento[0]";
+                    $corFundo = '';
+                    $corFonte = '';
+                    $corLink = '';
+
+                    $grupo = $row['grupoResponsavel'];
+                    $responsavelPregao = $row['responsavelPregao'];
+
+                    $condicao = (int)$row['condicao'];
+
+
+                    switch ($condicao) {
+                        case 1:
+                            $condicao = 'Adiado';
+                            break;
+                        case 2:
+                            $condicao = 'Em Andamento';
+                            break;
+                        case 3:
+                            $condicao = 'Cancelado';
+                            break;
+                        case 4:
+                            $condicao = 'Fracassado';
+                            break;
+                        case 5:
+                            $condicao = 'Desistência';
+                            break;
+                        case 6:
+                            $condicao = 'Concluído';
+                            break;
+                        default:
+                            $condicao = '';
+                    }
+
+                    $corFundo = "#bf2724";
+
+
+                    echo '<tr style="background:' . $corFundo . '; color:' . $corFonte . ';">';
+                    echo '<td class="text-center" hidden></td>';
+                    if ($prioridade == "1") {
+                        echo '<td class="text-left"><a style="color:' . $corLink . ';" target="_blank" rel="noopener noreferrer" href="' . $enderecoPortal . '"><strong>' . $portal . '</strong></a></td>';
+                    } else {
+                        echo '<td class="text-left"><a style="color:' . $corLink . ';" target="_blank" rel="noopener noreferrer" href="' . $enderecoPortal . '">' . $portal . '</a></td>';
+                    }
+                    echo '<td class="text-justify">' . $orgaoLicitante . '</td>';
+                    if ($prioridade == "1") {
+                        echo '<td class="text-center"><a style="color:' . $corLink . ';" href="licitacao_pregaoEmAndamentoCadastro.php?id=' . $id . '"><strong>' . $numeroPregao . '</strong></a></td>';
+                    } else {
+                        echo '<td class="text-center"><a style="color:' . $corLink . ';" href="licitacao_pregaoEmAndamentoCadastro.php?id=' . $id . '">' . $numeroPregao . '</a></td>';
+                    }
+                    echo '<td class="text-center">' . $oportunidadeCompra . '</td>';
+                    echo '<td class="text-center">' . $situacao . '</td>';
+                    echo '<td class="text-center">' . $condicao . '</td>';
+                    echo '<td class="text-center">' . $posicao . '</td>';
+                    echo '<td class="text-center">' . $dataReabertura . '</td>';
+                    echo '<td class="text-center">' . $horaReabertura . '</td>';
+                    echo '<td class="text-center">' . $campoPrioridade . '</td>';
+                    echo '<td class="text-justify">' . $resumoPregao . '</td>';
+                    echo '<td class="text-justify">' . $grupo . '</td>';
+                    echo '<td class="text-justify">' . $responsavelPregao . '</td>';
+                    echo '<td class="text-justify">' . $usuarioAlteracao . '</td>';
+                    echo '<td class="text-left">' . $descricaoData . '</td>';
+                    echo '<td class="text-left">' . $descricaoHora . '</td>';
+                    echo '<td class="text-left">' . $dataLancamento . '</td>';
                 }
 
 
@@ -253,7 +244,7 @@ include "js/repositorio.php";
                 LEFT JOIN ntl.situacao S ON S.codigo = GP.situacao
                 INNER JOIN ntl.grupo G ON G.codigo = GP.grupoResponsavel
                 INNER JOIN ntl.responsavel R ON R.codigo = GP.responsavel";
-                $where = " WHERE (0 = 0) AND GP.participaPregao = 1 ";
+                $where = " WHERE (0 = 0) AND GP.participaPregao = 1 AND GP.dataReabertura IS NULL OR GP.dataReabertura > " . $hoje;
 
                 if ($_POST["numeroPregao"] != "") {
                     $numeroPregao = $_POST["numeroPregao"];
