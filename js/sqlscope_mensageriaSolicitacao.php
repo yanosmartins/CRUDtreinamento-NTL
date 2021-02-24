@@ -33,9 +33,10 @@ function grava()
   $dataLimite = validaData($_POST['dataLimite']);
   $urgente = (int)$_POST['urgente'];
   $local = validaString($_POST['local']);
+  $departamento = validaNumero($_POST['departamento']);
   $responsavel = validaNumero($_POST['responsavelId']);
   $observacao = validaString($_POST['observacao']);
-  $concluido = $_POST['concluido'];
+  $concluido = validaString($_POST['concluido']);
   $usuario = "'" . $_SESSION['login'] . "'";
 
   $sql = "Mensageria.solicitacao_Atualiza  
@@ -50,7 +51,8 @@ function grava()
                 $responsavel,
                 $observacao,
                 $concluido,
-                $usuario";
+                $usuario,
+                $departamento";
 
   $reposit = new reposit();
   $result = $reposit->Execprocedure($sql);
@@ -75,7 +77,8 @@ function recupera()
   }
 
   $sql = "SELECT S.codigo, S.funcionario, F.nome, S.dataSolicitacao, S.horaSolicitacao, S.dataLimite,
-  S.urgente, S.projeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.observacao,S.concluido FROM Mensageria.solicitacao S
+  S.urgente, S.projeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.observacao,S.concluido,
+  S.departamento FROM Mensageria.solicitacao S
   LEFT JOIN Ntl.funcionario F ON F.codigo = S.funcionario
   LEFT JOIN Ntl.funcionario FR ON FR.codigo = S.responsavel
     WHERE (0=0) AND
@@ -99,6 +102,7 @@ function recupera()
     $observacao = $row['observacao'];
     $funcionarioId = $row['funcionario'];
     $concluido = $row['concluido'];
+    $departamento = $row['departamento'];
   }
 
   $out =
@@ -114,7 +118,8 @@ function recupera()
     $nomeResponsavel . "^" .
     $observacao . "^" .
     $funcionarioId . "^" .
-    $concluido;
+    $concluido . "^" .
+    $departamento;
 
   if ($out == "") {
     echo "failed#";
@@ -134,8 +139,8 @@ function excluir()
     echo "failed#" . $mensagem . ' ';
     return;
   }
-  $id = $_POST["id"];
-  if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
+  $id = $_POST["codigo"];
+  if ((empty($_POST['codigo']) || (!isset($_POST['codigo'])) || (is_null($_POST['codigo'])))) {
     $mensagem = "Selecione um contrato para ser excluído";
     echo "failed#" . $mensagem . ' ';
     return;
@@ -143,7 +148,7 @@ function excluir()
 
   $reposit = new reposit();
 
-  $result = $reposit->update('Ntl.solicitacao' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+  $result = $reposit->update('Mensageria.solicitacao' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
   if ($result < 1) {
     echo ('failed#');

@@ -27,6 +27,11 @@ if ($condicaoExcluirOK === false) {
   $esconderBtnExcluir = "none";
 }
 
+session_start();
+$id = $_SESSION['funcionario'];
+
+
+
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -96,8 +101,6 @@ include("inc/nav.php");
                                 <label class="label">Funcionário</label>
                                 <label class="input">
                                   <?php
-                                  session_start();
-                                  $id = $_SESSION['funcionario'];
                                   $sql = "SELECT nome FROM Ntl.funcionario WHERE codigo = " . $id;
                                   $result = $reposit->RunQuery($sql);
                                   if ($row = $result[0]) {
@@ -174,6 +177,33 @@ include("inc/nav.php");
                                 <label class="input">
                                   <input id="local" maxlength="255" autocompvare="off" name="local" type="text" value="">
                                 </label>
+                              </section>
+                              <section class="col col-3">
+                                <label class="label" >Departamento</label>
+                                <label class="select">
+                                  <select id="departamento" name="departamento" class="readonly" readonly>
+                                    <option></option>
+                                    <?php
+                                    $sql =  "SELECT departamento FROM Ntl.beneficioProjeto where ativo = 1 AND funcionario = " . $id;
+                                    $result = $reposit->RunQuery($sql);
+                                    if ($row = $result[0]) {
+                                      $departamento = $row['departamento'];
+                                    }
+
+                                    $sql =  "SELECT codigo, descricao FROM Ntl.departamento where ativo = 1 order by descricao";
+                                    $reposit = new reposit();
+                                    $result = $reposit->RunQuery($sql);
+                                    foreach ($result as $row) {
+                                      $codigo = $row['codigo'];
+                                      $descricao = ($row['descricao']);
+                                      if ($codigo == $departamento) {
+                                        echo '<option selected value=' . $codigo . '>  ' . $descricao . ' </option>';
+                                      } else {
+                                        echo '<option value=' . $codigo . '>  ' . $descricao . ' </option>';
+                                      }
+                                    }
+                                    ?>
+                                  </select><i></i>
                               </section>
                               <section class="col col-6" id="sectionResponsavel" hidden>
                                 <label class="label">Responsável</label>
@@ -314,15 +344,53 @@ include "inc/scripts.php";
       voltar();
     });
 
-    //Botões de Tarefa
-    $("#btnAddSolicitacao").on("click", function() {
-      if (validaSolicitacao())
-        addSolicitacao();
+    $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+      _title: function(title) {
+        if (!this.options.title) {
+          title.html("&#160;");
+        } else {
+          title.html(this.options.title);
+        }
+      }
+    }));
+
+
+    $('#dlgSimpleExcluir').dialog({
+      autoOpen: false,
+      width: 400,
+      resizable: false,
+      modal: true,
+      title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+      buttons: [{
+        html: "Excluir registro",
+        "class": "btn btn-success",
+        click: function() {
+          $(this).dialog("close");
+          excluir();
+        }
+      }, {
+        html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+        "class": "btn btn-default",
+        click: function() {
+          $(this).dialog("close");
+        }
+      }]
     });
 
-    $("#btnRemoverSolicitacao").on("click", function() {
-      excluirSolicitacao();
+    $("#btnExcluir").on("click", function() {
+      var id = +$("#codigo").val();
+
+      if (id === 0) {
+        smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+        $("#nome").focus();
+        return;
+      }
+
+      if (id !== 0) {
+        $('#dlgSimpleExcluir').dialog('open');
+      }
     });
+
 
     $("#responsavel").autocomplete({
       source: function(request, response) {
@@ -400,6 +468,7 @@ include "inc/scripts.php";
               observacao = piece[10];
               funcionarioId = piece[11];
               concluido = piece[12];
+              departamento = piece[13];
 
 
               $("#sectionResponsavel").removeAttr("hidden");
@@ -416,6 +485,8 @@ include "inc/scripts.php";
               $("#local").val(local);
               $("#observacao").val(observacao);
               $("#concluido").val(concluido);
+              $("#departamento").val(departamento);
+
               if (responsavel == '') {
                 $("#responsavelId").val(funcionarioId);
               } else {
@@ -428,7 +499,7 @@ include "inc/scripts.php";
                 $("#responsavel").val(nomeResponsavel);
               }
 
-          
+
             }
           }
         );
@@ -461,7 +532,7 @@ include "inc/scripts.php";
       return;
     }
 
-    if ((responsavel === "") && (codigo != 0 )) {
+    if ((responsavel === "") && (codigo != 0)) {
       smartAlert("Atenção", "Selecione um Responsavel !", "error");
       $("#responsavel").focus();
       return;
@@ -471,6 +542,17 @@ include "inc/scripts.php";
     var formData = new FormData(form);
     gravaSolicitacao(formData);
 
+  }
+
+  function excluir() {
+    var codigo = +$("#codigo").val();
+
+    if (codigo === 0) {
+      smartAlert("Atenção", "Selecione uma solicitacao para excluir!", "error");
+      return;
+    }
+
+    excluirSolicitacao(codigo);
   }
 
   function recupera(callback) {

@@ -98,7 +98,7 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
 																		$result = $reposit->RunQuery($sql);
-																		foreach($result as $row) {
+																		foreach ($result as $row) {
 																			$id = $row['codigo'];
 																			$descricao = $row['nome'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
@@ -116,7 +116,7 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, descricao FROM Ntl.projeto WHERE ativo = 1 ORDER BY descricao";
 																		$result = $reposit->RunQuery($sql);
-																		foreach($result as $row) {
+																		foreach ($result as $row) {
 																			$id = $row['codigo'];
 																			$descricao = $row['descricao'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
@@ -142,7 +142,7 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, apelido FROM Ntl.sindicato WHERE situacao = 1 ORDER BY apelido";
 																		$result = $reposit->RunQuery($sql);
-																		foreach($result as $row) {
+																		foreach ($result as $row) {
 																			$id = $row['codigo'];
 																			$apelido = $row['apelido'];
 																			echo '<option value=' . $id . '>' . $apelido . '</option>';
@@ -159,57 +159,104 @@ include("inc/nav.php");
 															</section>
 														</div>
 														<div class="row">
-														<section class="col col-2">
-                                                                <label class="label">Localização</label>
-                                                                <label class="select">
-                                                                    <select id="localizacao" name="localizacao" class="form-control">
-                                                                        <option style="display:none;">Selecione</option>
-                                                                        <option></option>
-                                                                        <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.localizacao  where ativo = 1  order by codigo";
-                                                                        $reposit = new reposit();
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+															<section class="col col-2">
+																<label class="label">Localização</label>
+																<label class="select">
+																	<select id="localizacao" name="localizacao" class="form-control">
+																		<option style="display:none;">Selecione</option>
+																		<option></option>
+																		<?php
+																		$sql =  "SELECT codigo, descricao FROM Ntl.localizacao  where ativo = 1  order by codigo";
+																		$reposit = new reposit();
+																		$result = $reposit->RunQuery($sql);
+																		foreach ($result as $row) {
 
-                                                                            $row = array_map('mb_strtoupper', $row);
-                                                                            $codigo = $row['codigo'];
-                                                                            $descricao = ($row['descricao']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
+																			$row = array_map('mb_strtoupper', $row);
+																			$codigo = $row['codigo'];
+																			$descricao = ($row['descricao']);
+																			echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
+																		}
+																		?>
+																	</select><i></i>
+																</label>
 															</section>
 															<section class="col col-3">
-                                                                <label class="label">Descrição do Posto</label>
-                                                                <label class="select">
-                                                                    <select id="descricaoPosto" name="descricaoPosto" class="form-control">
-                                                                        <option style="display:none;">Selecione</option>
-                                                                        <option></option>
-                                                                        <?php
-                                                                        $sql =  "SELECT VP.codigo, VP.descricaoPosto,P.descricao AS nomePosto
+																<label class="label">Descrição do Posto</label>
+																<label class="select">
+																	<select id="descricaoPosto" name="descricaoPosto" class="form-control">
+																		<option style="display:none;">Selecione</option>
+																		<option></option>
+																		<?php
+																		$sql =  "SELECT VP.codigo, VP.descricaoPosto,P.descricao AS nomePosto
 																						FROM Ntl.valorPosto VP 
 																						LEFT JOIN Ntl.posto P on P.codigo = VP.descricaoPosto
 																						where VP.ativo = 1 order by nomePosto";
-                                                                        $reposit = new reposit();
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+																		$reposit = new reposit();
+																		$result = $reposit->RunQuery($sql);
+																		foreach ($result as $row) {
 
-                                                                            $row = array_map('mb_strtoupper', $row);
-                                                                            $codigo = $row['codigo'];
-                                                                            $descricao = ($row['nomePosto']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
+																			$row = array_map('mb_strtoupper', $row);
+																			$codigo = $row['codigo'];
+																			$descricao = ($row['nomePosto']);
+																			echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
+																		}
+																		?>
+																	</select><i></i>
+																</label>
 															</section>
 															<section class="col col-2 col-auto">
-                                                                <label class="label">Valor do Posto</label>
-                                                                <label class="input"><i class="icon-append fa fa-money"></i>
-                                                                    <input type="text" placeholder="0,00" style="text-align: right;" id="valorPosto" name="valorPosto" class="readonly decimal-2-casas" readonly disabled/>
-                                                                </label>
-                                                            </section>
+																<label class="label">Valor do Posto</label>
+																<label class="input"><i class="icon-append fa fa-money"></i>
+																	<input type="text" placeholder="0,00" style="text-align: right;" id="valorPosto" name="valorPosto" class="readonly decimal-2-casas" readonly disabled />
+																</label>
+															</section>
+														</div>
+														<div class="row">
+															<section class="col col-1">
+																<label id="labelHora" class="label">Hora Entrada</label>
+																<div class="input-group" data-align="top" data-autoclose="true">
+																	<input id="horaEntrada" name="horaEntrada" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
+																	<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+																</div>
+															</section>
+															<section class="col col-1">
+																<label id="labelHora" class="label">Inicio/Almoço</label>
+																<div class="input-group" data-align="top" data-autoclose="true">
+																	<input id="horaInicio" name="horaInicio" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
+																	<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+																</div>
+															</section>
+															<section class="col col-1">
+																<label id="labelHora" class="label">Fim/ALmoço</label>
+																<div class="input-group" data-align="top" data-autoclose="true">
+																	<input id="horaFim" name="horaFim" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
+																	<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+																</div>
+															</section>
+															<section class="col col-1">
+																<label id="labelHora" class="label">Saída</label>
+																<div class="input-group" data-align="top" data-autoclose="true">
+																	<input id="horaSaida" name="horaSaida" type="text" class="text-center form-control required" placeholder="  00:00" data-autoclose="true" value="">
+																	<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+																</div>
+															</section>
+															<section class="col col-3">
+																<label class="label" for="departamento">Departamento</label>
+																<label class="select">
+																	<select id="departamento" name="departamento" class="">
+																		<option></option>
+																		<?php
+																		$sql =  "SELECT codigo, descricao FROM Ntl.departamento where ativo = 1 order by descricao";
+																		$reposit = new reposit();
+																		$result = $reposit->RunQuery($sql);
+																		foreach ($result as $row) {
+																			$codigo = $row['codigo'];
+																			$descricao = ($row['descricao']);
+																			echo '<option value=' . $codigo . '>  ' . $descricao . ' </option>';
+																		}
+																		?>
+																	</select><i></i>
+															</section>
 														</div>
 													</fieldset>
 												</div>
@@ -258,7 +305,7 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
 																		$result = $reposit->RunQuery($sql);
-																		foreach($result as $row) {
+																		foreach ($result as $row) {
 																			$id = $row['codigo'];
 																			$descricao = $row['nome'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
@@ -292,7 +339,7 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, apelido FROM Ntl.convenioSaude WHERE ativo = 1 ORDER BY apelido";
 																		$result = $reposit->RunQuery($sql);
-																		foreach($result as $row) {
+																		foreach ($result as $row) {
 																			$id = $row['codigo'];
 																			$apelido = $row['apelido'];
 																			echo '<option value=' . $id . '>' . $apelido . '</option>';
@@ -311,7 +358,7 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, produto FROM Ntl.produto WHERE ativo = 1 ORDER BY produto";
 																		$result = $reposit->RunQuery($sql);
-																		foreach($result as $row) {
+																		foreach ($result as $row) {
 																			$id = $row['codigo'];
 																			$descricao = $row['produto'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
@@ -476,7 +523,7 @@ include("inc/nav.php");
 																			$sql = "SELECT codigo, funcionario, nomeDependente FROM Ntl.funcionarioDependente ORDER BY nomeDependente";
 																			$result = $reposit->RunQuery($sql);
 
-																			foreach($result as $row) {
+																			foreach ($result as $row) {
 																				$id = $row['codigo'];
 																				$descricao = $row['nomeDependente'];
 																				echo '<option value=' . $id . '>' . $descricao . '</option>';
@@ -505,7 +552,7 @@ include("inc/nav.php");
 																			$reposit = new reposit();
 																			$sql = "SELECT codigo, apelido FROM Ntl.convenioSaude WHERE ativo = 1 ORDER BY apelido";
 																			$result = $reposit->RunQuery($sql);
-																			foreach($result as $row) {
+																			foreach ($result as $row) {
 																				$id = $row['codigo'];
 																				$apelido = $row['apelido'];
 																				echo '<option value=' . $id . '>' . $apelido . '</option>';
@@ -524,7 +571,7 @@ include("inc/nav.php");
 																			$reposit = new reposit();
 																			$sql = "SELECT codigo, produto FROM Ntl.produto WHERE ativo = 1 ORDER BY produto";
 																			$result = $reposit->RunQuery($sql);
-																			foreach($result as $row) {
+																			foreach ($result as $row) {
 																				$id = $row['codigo'];
 																				$descricao = $row['produto'];
 																				echo '<option value=' . $id . '>' . $descricao . '</option>';
@@ -930,7 +977,7 @@ include("inc/nav.php");
 																		$reposit = new reposit();
 																		$sql = "SELECT codigo, descricao, valorUnitario FROM Ntl.valeTransporteUnitario WHERE ativo = 1 ORDER BY descricao";
 																		$result = $reposit->RunQuery($sql);
-																		foreach($result as $row) {
+																		foreach ($result as $row) {
 																			$id = $row['codigo'];
 																			$descricao = $row['descricao'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
@@ -1199,7 +1246,7 @@ include("inc/nav.php");
 																		$sql = "SELECT codigo, descricao FROM Ntl.municipio WHERE ativo = 1 ORDER BY descricao";
 																		$result = $reposit->RunQuery($sql);
 
-																		foreach($result as $row) {
+																		foreach ($result as $row) {
 																			$id = (int) $row['codigo'];
 																			$descricao = $row['descricao'];
 																			echo '<option value=' . $id . '>' . $descricao . '</option>';
@@ -1465,7 +1512,7 @@ include("inc/nav.php");
 																			$sql = "SELECT codigo, descricao FROM Ntl.municipio WHERE ativo = 1 ORDER BY descricao";
 																			$result = $reposit->RunQuery($sql);
 
-																			foreach($result as $row) {
+																			foreach ($result as $row) {
 																				$id = (int) $row['codigo'];
 																				$descricao = $row['descricao'];
 
@@ -1723,7 +1770,7 @@ include("inc/nav.php");
 																			$sql = "SELECT codigo, descricao FROM Ntl.municipio WHERE ativo = 1 ORDER BY descricao";
 																			$result = $reposit->RunQuery($sql);
 
-																			foreach($result as $row) {
+																			foreach ($result as $row) {
 																				$id = (int) $row['codigo'];
 																				$descricao = $row['descricao'];
 
@@ -1827,6 +1874,8 @@ include("inc/scripts.php");
 <!-- Form to json -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
+
+<script src="js/plugin/clockpicker/clockpicker.min.js"></script>
 
 
 <script language="JavaScript" type="text/javascript">
@@ -2123,6 +2172,35 @@ include("inc/scripts.php");
 		$("#funcionario").on("change", function() {
 			populaFuncionarioRecupera();
 		});
+
+		$("#horaEntrada").mask("99:99");
+		$("#horaEntrada").mask("99:99");
+		$("#horaEntrada").mask("99:99");
+		$("#horaEntrada").mask("99:99");
+
+		$('#horaEntrada').clockpicker({
+			donetext: 'Done',
+			default: 'now',
+			use24hours: true,
+		}).val(moment().format('HH:mm'));
+
+		$('#horaInicio').clockpicker({
+			donetext: 'Done',
+			default: 'now',
+			use24hours: true,
+		}).val(moment().format('HH:mm'));
+
+		$('#horaFim').clockpicker({
+			donetext: 'Done',
+			default: 'now',
+			use24hours: true,
+		}).val(moment().format('HH:mm'));
+
+		$('#horaSaida').clockpicker({
+			donetext: 'Done',
+			default: 'now',
+			use24hours: true,
+		}).val(moment().format('HH:mm'));
 
 
 
@@ -2785,6 +2863,11 @@ include("inc/scripts.php");
 							var escalaFeriasVAVR = piece[77];
 							var localizacao = piece[78];
 							var descricaoPosto = piece[79];
+							var horaEntrada = piece[80];
+							var horaInicio = piece[81];
+							var horaFim = piece[82];
+							var horaSaida = piece[83];
+							var departamento = piece[84];
 
 
 							$("#codigo").val(codigo);
@@ -2883,6 +2966,13 @@ include("inc/scripts.php");
 							$("#localizacao").val(localizacao);
 							$("#descricaoPosto").val(descricaoPosto);
 
+							$("#horaEntrada").val(horaEntrada);
+							$("#horaInicio").val(horaInicio);
+							$("#horaFim").val(horaFim);
+							$("#horaSaida").val(horaSaida);
+
+							$("#departamento").val(departamento);
+
 							jsonValeTransporteArray = JSON.parse($("#jsonValeTransporte").val());
 							jsonPlanoSaudeArray = JSON.parse($("#jsonPlanoSaude").val());
 							jsonPlanoSaudeDependenteArray = JSON.parse($("#jsonPlanoSaudeDependente").val());
@@ -2918,7 +3008,7 @@ include("inc/scripts.php");
 
 							recuperaValorBolsaBeneficioSindicato(sindicato);
 							buscaValorPosto(descricaoPosto);
-							 
+
 						}
 					}
 				);
@@ -5773,67 +5863,67 @@ include("inc/scripts.php");
 	}
 
 	function buscaValorPosto() {
-        var posto = $("#descricaoPosto").val();
-        preencheValorPosto(posto,
-            function(data) {
-                if (data.indexOf('failed') > -1) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        $("#btnGravar").prop('disabled', false);
-                    } else {
-                        smartAlert("Atenção", "Erro ao calcular os dias úiteis!", "error");
-                        $("#btnGravar").prop('disabled', false);
-                    }
-                } else {
-                        data = data.replace(/failed/g, '');
-                        var piece = data.split("#");
-                        var mensagem = piece[0];
-                        var out = piece[1];
+		var posto = $("#descricaoPosto").val();
+		preencheValorPosto(posto,
+			function(data) {
+				if (data.indexOf('failed') > -1) {
+					var piece = data.split("#");
+					var mensagem = piece[1];
+					if (mensagem !== "") {
+						smartAlert("Atenção", mensagem, "error");
+						$("#btnGravar").prop('disabled', false);
+					} else {
+						smartAlert("Atenção", "Erro ao calcular os dias úiteis!", "error");
+						$("#btnGravar").prop('disabled', false);
+					}
+				} else {
+					data = data.replace(/failed/g, '');
+					var piece = data.split("#");
+					var mensagem = piece[0];
+					var out = piece[1];
 
-						piece = out.split("^");
-						var valorPosto = +piece[0];
-                        $("#valorPosto").val(valorPosto);
-                }
-            }
-        );
+					piece = out.split("^");
+					var valorPosto = +piece[0];
+					$("#valorPosto").val(valorPosto);
+				}
+			}
+		);
 	}
 
 	function popularComboDescricaoPosto() {
-        var projeto = $("#projeto").val()
-        if (projeto != 0) {
-            populaComboDescricaoPosto(projeto,
-                function(data) {
-                    var atributoId = '#' + 'descricaoPosto';
-                    if (data.indexOf('failed') > -1) {
-                        smartAlert("Aviso", "O Projeto informado não possui postos com valor atribuido!", "info");
-                        $("#projeto").focus()
-                        $("#descricaoPosto").val("")
-                        $("#descricaoPosto").prop("disabled", true)
-                        $("#descricaoPosto").addClass("readonly")
-                        return;
-                    } else {
-                        $("#descricaoPosto").prop("disabled", false)
-                        $("#descricaoPosto").removeClass("readonly")
-                        data = data.replace(/failed/g, '');
-                        var piece = data.split("#");
+		var projeto = $("#projeto").val()
+		if (projeto != 0) {
+			populaComboDescricaoPosto(projeto,
+				function(data) {
+					var atributoId = '#' + 'descricaoPosto';
+					if (data.indexOf('failed') > -1) {
+						smartAlert("Aviso", "O Projeto informado não possui postos com valor atribuido!", "info");
+						$("#projeto").focus()
+						$("#descricaoPosto").val("")
+						$("#descricaoPosto").prop("disabled", true)
+						$("#descricaoPosto").addClass("readonly")
+						return;
+					} else {
+						$("#descricaoPosto").prop("disabled", false)
+						$("#descricaoPosto").removeClass("readonly")
+						data = data.replace(/failed/g, '');
+						var piece = data.split("#");
 
-                        var mensagem = piece[0];
-                        var qtdRegs = piece[1];
-                        var arrayRegistros = piece[2].split("|");
-                        var registro = "";
+						var mensagem = piece[0];
+						var qtdRegs = piece[1];
+						var arrayRegistros = piece[2].split("|");
+						var registro = "";
 
-                        $(atributoId).html('');
-                        $(atributoId).append('<option></option>');
+						$(atributoId).html('');
+						$(atributoId).append('<option></option>');
 
-                        for (var i = 0; i < qtdRegs; i++) {
-                            registro = arrayRegistros[i].split("^");
-                            $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
-                        }
-                    }
-                }
-            );
-        }
-    }
+						for (var i = 0; i < qtdRegs; i++) {
+							registro = arrayRegistros[i].split("^");
+							$(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
+						}
+					}
+				}
+			);
+		}
+	}
 </script>
