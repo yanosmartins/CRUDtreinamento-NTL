@@ -47,7 +47,7 @@ include "js/repositorio.php";
                     }
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_situacaoCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left"><a href="tabelaBasica_remuneracaoCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
                     echo '<td class="text-left">' . $descricaoAtivo . '</td>';
                     echo '</tr >';
                 }

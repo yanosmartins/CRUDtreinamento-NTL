@@ -329,7 +329,7 @@ include("inc/scripts.php");
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
         // Variáveis que vão ser gravadas no banco:
-        var id = parseInt($('#codigo').val());
+        var id = $('#codigo').val();
         var descricao = $('#descricao').val().trim().replace(/'/g, " ");
         var ativo = parseInt($('#ativo').val());
 

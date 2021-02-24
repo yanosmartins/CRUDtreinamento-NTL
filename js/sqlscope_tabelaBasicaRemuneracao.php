@@ -35,7 +35,7 @@ function grava()
 
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-    $codigo = $_POST['id'];
+    $codigo = (int)$_POST['id'];
     $descricao = "'" . $_POST['descricao'] . "'";
     $ativo = $_POST['ativo'];
 
