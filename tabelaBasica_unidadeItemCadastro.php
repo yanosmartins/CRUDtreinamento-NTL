@@ -272,9 +272,10 @@ include("inc/scripts.php");
             return false;
         }
 
-        let formUnidade = document.getElementById('formUnidadeItem');
-
-        let form = new FormData(formUnidade)
+        let form = $('#formUnidadeItem').serializeArray().reduce(function(obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
 
         gravaUnidadeItem(form,
             function(data) {

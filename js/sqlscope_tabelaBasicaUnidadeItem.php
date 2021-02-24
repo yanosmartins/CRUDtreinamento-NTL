@@ -35,20 +35,21 @@ function grava()
     session_start();
     $usuario = $_SESSION['login'];
     $usuario =  "'$usuario'";
-    $classe = $_POST['classe'];
-    $codigo =  +$classe['codigo'];
-    $descricao = $classe['descricao'];
+    $form = $_POST['form'];
+    $codigo =  (int)$form['codigo'];
+    $descricao = (string)$form['descricao'];
     $descricao = "'$descricao'";
-    $reducaoBaseIR = $classe['reducaoBaseIR'];
-    $ativo = $classe['ativo'];
+    $sigla = (string)$form['sigla'];
+    $sigla = "'$sigla'";
+    $ativo = $form['ativo'];
 
 
-    $sql = "Ntl.classe_Atualiza
+    $sql = "Ntl.unidadeItem_Atualiza
         $codigo,
         $descricao,	
-        $reducaoBaseIR,
-        $usuario,
-        $ativo
+        $ativo,
+        $sigla,
+        $usuario
         ";
 
     $result = $reposit->Execprocedure($sql);
@@ -72,7 +73,7 @@ function recupera()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT codigo, descricao, reducaoBaseIR, ativo FROM Ntl.classe WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, descricao, sigla, ativo FROM Ntl.unidadeItem WHERE (0=0) AND codigo = " . $id;
 
 
     $reposit = new reposit();
@@ -81,15 +82,15 @@ function recupera()
     $out = "";
     if ($row = $result[0]) {
 
-        $codigo = +$row['codigo'];
-        $descricao = $row['descricao'];
-        $reducaoBaseIR = +$row['reducaoBaseIR'];
-        $ativo = +$row['ativo'];
+        $codigo = (int)$row['codigo'];
+        $descricao = (string)$row['descricao'];
+        $sigla = (string)$row['sigla'];
+        $ativo = (int)$row['ativo'];
     }
 
     $out =   $codigo . "^" .
+        $sigla . "^" .
         $descricao . "^" .
-        $reducaoBaseIR . "^" .
         $ativo;
 
     if ($out == "") {
@@ -105,7 +106,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("CLASSE_ACESSAR|CLASSE_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("UNIDADEITEM_ACESSAR|UNIDADEITEM_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -116,12 +117,12 @@ function excluir()
     $id = $_POST["id"];
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um classe.";
+        $mensagem = "Selecione uma unidade.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    $result = $reposit->update('Ntl.classe' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Ntl.unidadeItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
