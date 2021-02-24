@@ -11,6 +11,7 @@ include_once "js/repositorio.php";
 session_start();
 $login = $_SESSION['login'];
 $codigoLogin = $_SESSION['codigo'];
+$funcionario = $_SESSION['funcionario'];
 $login = "'" . $login . "'";
 
 $arrayPermissao = array();
@@ -146,6 +147,9 @@ if ($condicaoTabelaBasicaOk) {
     }
     if (in_array('POSTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("posto" => array("title" => "Posto", "url" => APP_URL . "/tabelaBasica_postoFiltro.php"));
+    }
+    if (in_array('REMUNERACAO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("remuneracao" => array("title" => "Remuneração", "url" => APP_URL . "/tabelaBasica_remuneracaoFiltro.php"));
     }
     if (in_array('RESPONSAVEL_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("responsavel" => array("title" => "Responsável", "url" => APP_URL . "/tabelaBasica_responsavelFiltro.php")); //SYSGC 
@@ -387,7 +391,7 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/licitacao_relatorioTarefaFiltro.php"));
         }
     }
-
+    // Mensageria
     $condicaoMensageriaOk = true;
     if ($condicaoMensageriaOk) {
         $page_nav['operacao']['sub']['mensageria'] = array("title" => "Mensageria", "icon" => "fa fa-envelope-open-o ");
@@ -397,6 +401,21 @@ if ($condicaoOperacaoOk) {
         }
         if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['mensageria']['sub'] += array("solicitacaoEmAndamento" => array("title" => "Solicitação Em Andamento", "url" => APP_URL . "/mensageria_solicitacaoEmAndamentoFiltro.php"));
+        }
+    }
+
+    $condicaoFuncionarioOk = true;  
+    if ($condicaoFuncionarioOk) {
+        $page_nav['operacao']['sub']['funcionario'] = array("title" => "Área do Funcionário", "icon" => "fa fa-user");
+        $page_nav['operacao']['sub']['funcionario']['sub'] = array();
+        if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['funcionario']['sub'] += array("contraChequeWeb" => array("title" => "Contra Cheque Web", "url" => "http://www.contrachequeweb.com.br/ntl/"));
+        }
+        if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['funcionario']['sub'] += array("emitirFolhaPonto" => array("title" => "Folha Mensal", "url" => APP_URL . "/funcionario_folhaDePontoPdf.php?id=" . $funcionario));
+        }
+        if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['funcionario']['sub'] += array("emitirFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));
         }
     }
 
