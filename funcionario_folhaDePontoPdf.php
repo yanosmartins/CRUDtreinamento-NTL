@@ -8,7 +8,7 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 require('./fpdf/mc_table.php');
-
+$usuario = $_SESSION['login'];
 if ((empty($_GET["id"])) || (!isset($_GET["id"])) || (is_null($_GET["id"]))) {
     $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
     echo "failed#" . $mensagem . ' ';
@@ -17,7 +17,7 @@ if ((empty($_GET["id"])) || (!isset($_GET["id"])) || (is_null($_GET["id"]))) {
     $id = +$_GET["id"];
 }
 
-$sql = "SELECT codigo,ativo,nomeCompleto,cpf 
+$sql = "SELECT codigo,nome,cpf,logradouro
 FROM ntl.funcionario WHERE (0=0) AND codigo =" . $id;
 
 $reposit = new reposit();
@@ -26,20 +26,63 @@ $out = "";
 $row = $result[0];
 if ($row) {
     
-    $codigo = $row['codigo'];
-    $ativo = $row['ativo'];
-    $nomeCompleto = $row['nomeCompleto'];
-    $cpf = $row['cpf'];
-
-    
+    $funcionario = $row['codigo'];
+    $nome = $row['nome'];
+    $cpf = $row ['cpf'];
+    $logradouro = $row['logradouro'];
 }
-
+setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese'); date_default_timezone_set('America/Sao_Paulo');
 
 require_once('fpdf/fpdf.php');
 
+$mesatual = strftime('%B', strtotime('today'));
+$mes = date("m");//02
+$days = date("t");//28
+$ano = date("Y");//2021
+$reposit = new reposit();
+
+
+// $feriados = array();
+// $sql = "SELECT codigo,data,descricao,unidadeFederacao,municipio,tipoFeriado FROM ntl.feriado WHERE data BETWEEN DATEFROMPARTS($ano, $mes,01) AND DATEFROMPARTS($ano, $mes,$days) ORDER BY data";
+
+// $result = $reposit->RunQuery($sql);
+
+// foreach($result as $row){   
+//     array_push($feriados,$row);
+// }
+
+$sql = "SELECT BP.codigo,BP.funcionario,BP.projeto,P.apelido,P.estado,P.cidade,P.municipioFerias
+    FROM Ntl.beneficioProjeto BP
+    LEFT JOIN Ntl.projeto P ON P.codigo = BP.projeto WHERE BP.funcionario = $funcionario AND BP.ativo = 1";
+$result = $reposit->RunQuery($sql);
+$row = $result[0];
+if ($row) {
+    $estado = "'" . $row['estado'] . "'";
+    $municipioFerias = $row['municipioFerias'];
+}
+
+$dataInicio = "$ano/$mes/01";
+$dataFim = "$ano/$mes/$days";
+
+$sql2 = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
+FROM Ntl.feriado F 
+LEFT JOIN Ntl.municipio M ON M.codigo = F.municipio
+WHERE F.ativo = 1 AND data BETWEEN '$dataInicio' AND '$dataFim'
+AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = $estado)) OR F.tipoFeriado = 2 and M.codigo = $municipioFerias) 
+AND DATENAME(weekday,F.data) NOT IN ('Saturday', 'Sunday')";
+$result2 = $reposit->RunQuery($sql2);
+$row2 = $result2[0];
+// if ($row2) {
+//     $dataferiado = "'" . $row2['data'] . "'";
+// }
+
+$feriados = array();
+foreach($result2 as $row2){   
+   array_push($feriados,$row2);
+}
 class PDF extends FPDF
 {
-
+   
     function Header()
     {
         global $codigo;
@@ -65,8 +108,11 @@ class PDF extends FPDF
     }
 }
 
+
+
+
 $pdf = new PDF('P', 'mm', 'A4'); #Crio o PDF padrão RETRATO, Medida em Milímetro e papel A$
-$pdf->SetMargins(5, 5, 5); #Seta a Margin Esquerda com 20 milímetro, superrior com 20 milímetro e esquerda com 20 milímetros
+$pdf->SetMargins(0, 0, 0); #Seta a Margin Esquerda com 20 milímetro, superrior com 20 milímetro e esquerda com 20 milímetros
 $pdf->SetDisplayMode('default', 'continuous'); #Digo que o PDF abrirá em tamanho PADRÃO e as páginas na exibição serão contínuas
 $pdf->AddPage();
 
@@ -84,7 +130,6 @@ $pdf->Line(5, 17, 205, 17);
 $pdf->setX(6);
 $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "NTL Nova Tecnologia Ltda"), 0, 0, "L", 0);
 $pdf->SetFont('Arial', '', 8);
-$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $nomeCompleto), 0, 0, "L", 0);
 $pdf->Line(5, 21, 205, 21);
 
 $pdf->setY(21);
@@ -93,8 +138,15 @@ $pdf->Line(5, 17, 205, 17);
 $pdf->setX(6);
 $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Expediente: 08:00H AS 17:00H"), 0, 0, "L", 0);
 $pdf->SetFont('Arial', '', 8);
-$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $nomeCompleto), 0, 0, "L", 0);
+
 $pdf->Line(5, 25, 205, 25);
+
+
+$pdf->setY(17);
+$pdf->setX(67);
+$pdf->SetFont('Arial', 'B', 8);
+$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "CNPJ: 32185480/0001-07"), 0, 0, "L", 0);
+$pdf->SetFont('Arial', '', 8);
 
 $pdf->setY(25);
 $pdf->SetFont('Arial', 'B', 8);
@@ -102,186 +154,273 @@ $pdf->Line(5, 17, 205, 17);
 $pdf->setX(6);
 $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "CPF:"), 0, 0, "L", 0);
 $pdf->SetFont('Arial', '', 8);
+$pdf->setX(13);
+$pdf->SetFont('Arial', 'B', 8);
 $pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $cpf), 0, 0, "L", 0);
 $pdf->Line(5, 29, 205, 29);
 
 $pdf->setY(21);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->Line(5, 17, 205, 17);
-$pdf->setX(57);
+$pdf->setX(67);
 $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Cliente:NTL"), 0, 0, "L", 0);
-$pdf->SetFont('Arial', '', 8);
-$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $nomeCompleto), 0, 0, "L", 0);
 
 
 
 $pdf->setY(25);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->Line(5, 17, 205, 17);
-$pdf->setX(57);
+$pdf->setX(67);
 $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Nome:"), 0, 0, "L", 0);
 $pdf->SetFont('Arial', '', 8);
-$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $nomeCompleto), 0, 0, "L", 0);
-$pdf->Line(100, 25, 100, 17);
+$pdf->setX(77);
+$pdf->SetFont('Arial', 'B', 8);
+$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $nome), 0, 0, "L", 0);
+$pdf->Line(106, 25, 106, 17);
 
 $pdf->setY(21);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->Line(5, 17, 205, 17);
-$pdf->setX(100);
+$pdf->setX(106);
 $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Mês:"), 0, 0, "L", 0);
 $pdf->SetFont('Arial', '', 8);
-$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $nomeCompleto), 0, 0, "L", 0);
-$pdf->Line(160, 25, 160, 21);
-
+$pdf->Line(169, 25, 169, 21);
 $pdf->setY(21);
+$pdf->setX(113);
 $pdf->SetFont('Arial', 'B', 8);
+$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $mesatual ) , 0, 0, "L", 0);
+
 $pdf->Line(5, 17, 205, 17);
-$pdf->setX(160);
+$pdf->setX(170);
 $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Ano:"), 0, 0, "L", 0);
+$pdf->setX(177);
+$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', $ano), 0, 0, "L", 0);
 $pdf->SetFont('Arial', '', 8);
-$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $nomeCompleto), 0, 0, "L", 0);
+
 
 
 // DIAS // 
 
-$pdf->Line(5, 47, 14, 47);
-$pdf->Line(14, 47, 14, 41);
-$pdf->Cell(5, 18, iconv('UTF-8', 'windows-1252', "1"), 0, 0, "L", 0);
+// $pdf->Line(5, 41, 14, 41);
+// $pdf->Line(40, 41, 40, 41);
+// $pdf->Cell(5, 18, iconv('UTF-8', 'windows-1252', "1"), 0, 0, "L", 0);
 
-$pdf->Line(5, 53, 14, 53);
-$pdf->Line(14, 53, 14, 41);
-
-
-$pdf->Line(5, 59, 14, 59);
-$pdf->Line(14, 59, 14, 41);
+// $pdf->Line(5, 48, 14, 48);
+// $pdf->Line(14, 48, 14, 41);
 
 
-$pdf->Line(5, 65, 14, 65);
-$pdf->Line(14, 65, 14, 41);
+$pdf -> setY(32);
+$pdf->setX(5);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "DIAS"), 0, 0, "L", 0);
+
+$pdf -> setY(32);
+$pdf->setX(16);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ENTRADA"), 0, 0, "L", 0);
+
+$pdf -> setY(35);
+$pdf->setX(35);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "Saida"), 0, 0, "L", 0);
+
+$pdf -> setY(35);
+$pdf->setX(51);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "Retorno"), 0, 0, "L", 0);
+
+$pdf -> setY(30);
+$pdf->setX(42);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ALMOÇO"), 0, 0, "L", 0);
 
 
-$pdf->Line(5, 71, 14, 71);
-$pdf->Line(14, 71, 14, 41);
+$pdf -> setY(31);
+$pdf->setX(71);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "SAIDA"), 0, 0, "L", 0);
+
+$pdf -> setY(30);
+$pdf->setX(99);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "EXTRAS"), 0, 0, "L", 0);
 
 
-$pdf->Line(5, 77, 14, 77);
-$pdf->Line(14, 77, 14, 41);
+$pdf -> setY(35);
+$pdf->setX(89);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "Entrada"), 0, 0, "L", 0);
 
-$pdf->Line(5, 83, 14, 83);
-$pdf->Line(14, 83, 14, 41);
+$pdf -> setY(35);
+$pdf->setX(111);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "Saida"), 0, 0, "L", 0);
 
-$pdf->Line(5, 89, 14, 89);
-$pdf->Line(14, 89, 14, 41);
+$pdf -> setY(32);
+$pdf->setX(136);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "OBSERVAÇÃO"), 0, 0, "L", 0);
 
-$pdf->Line(5, 96, 14, 96);
-$pdf->Line(14, 96, 14, 41);
-
-$pdf->Line(5, 102, 14, 102);
-$pdf->Line(14, 102, 14, 41);
-
-$pdf->Line(5, 108, 14, 108);
-$pdf->Line(14, 108, 14, 41);
-
-$pdf->Line(5, 114, 14, 114);
-$pdf->Line(14, 114, 14, 41);
-
-
-$pdf->Line(5, 120, 14, 120);
-$pdf->Line(14, 120, 14, 41);
-
-
-$pdf->Line(5, 126, 14, 126);
-$pdf->Line(14, 126, 14, 41);
-
-
-$pdf->Line(5, 132, 14, 132);
-$pdf->Line(14, 132, 14, 41);
-
-
-$pdf->Line(5, 138, 14, 138);
-$pdf->Line(14, 138, 14, 41);
-
-$pdf->Line(5, 144, 14, 144);
-$pdf->Line(14, 144, 14, 41);
-
-$pdf->Line(5, 150, 14, 150);
-$pdf->Line(14, 150, 14, 41);
-
-$pdf->Line(5, 156, 14, 156);
-$pdf->Line(14, 156, 14, 41);
-
-$pdf->Line(5, 162, 14, 162);
-$pdf->Line(14, 162, 14, 41);
-
-
-$pdf->Line(5, 168, 14, 168);
-$pdf->Line(14, 168, 14, 41);
-
-
-// CÉLULAS // 
-$pdf->Line(5, 41, 205, 41);
-$pdf->Line(14, 47, 205, 47);
-$pdf->Line(5, 53, 205, 53);
-$pdf->Line(5, 59, 205, 59);
-$pdf->Line(5, 65, 205, 65);
-$pdf->Line(5, 71, 205, 71);
-$pdf->Line(5, 77, 205, 77);
-$pdf->Line(5, 83, 205, 83);
-$pdf->Line(5, 89, 205, 89);
-$pdf->Line(5, 96, 205, 96);
-$pdf->Line(5, 102, 205, 102);
-
-
-$pdf->Line(5, 108, 205, 108);
-$pdf->Line(14, 114, 205, 114);
-$pdf->Line(5, 120, 205, 120);
-$pdf->Line(5, 126, 205, 126);
-$pdf->Line(5, 132, 205, 132);
-$pdf->Line(5, 138, 205, 138);
-$pdf->Line(5, 144, 205, 144);
-$pdf->Line(5, 150, 205, 150);
-$pdf->Line(5, 156, 205, 156);
-$pdf->Line(5, 162, 205, 162);
-$pdf->Line(5, 168, 205, 168);
+$pdf -> setY(32);
+$pdf->setX(181);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "VISTO"), 0, 0, "L", 0);
 
 
 
 
+$pdf->Line(5, 39, 205, 39);
+$linhavertical = 41;
+$linhahorizontalteste = 46;
+$linhaverticalteste = 46;
+$days = (int)$days;
+for ($i =1;$i<= $days;$i++) {
+    $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
+    $pdf->Line(32, $linhaverticalteste, 32, 29); // 1 
+    $pdf->Line(49, $linhaverticalteste, 49, 35); // 2 
+    $pdf->Line(67, $linhaverticalteste, 67, 17); // 3 
+    $pdf->Line(86, $linhaverticalteste, 86, 29); // 4 
+    $pdf->Line(106, $linhaverticalteste, 106, 35); // 5
+    $pdf->Line(126, $linhaverticalteste, 126, 29); // 6
+    $pdf->Line(169, $linhaverticalteste, 169, 29); // 7
+    $pdf->Line(205, $linhaverticalteste, 205, 17); // 8 
+    $pdf->Line(16, $linhaverticalteste, 16, 39); // 9 
+    $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
+    $pdf->setY($linhavertical);
+    $pdf->setX(5);     
+    $pdf->SetFont('Arial', 'B', 7);
+    $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "$i"), 0, 0, "L", 0);
+    $pdf->setX(14);
+    $diadasemana = strftime('%u', strtotime("$ano-$mes-$i"));
+$diaferiado ="'$ano-$mes-$i 00:00:00.000'";
 
-// VERTICAL//
-$pdf->Line(5, 1000, 5, 17);
-$pdf->Line(205, 1000, 205, 17);
-$pdf->Line(56, 1000, 56, 17);
-$pdf->Line(160, 1000, 160, 29);
-$pdf->Line(100, 1000, 100, 25);
+    if ($dataferiado == $diaferiado ) {
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->setX(15);
+        $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', " FERIADO"), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 9);
 
+    }
+
+// 2021 - 02 - 01 
+// 2021 - 02 - 16
+
+    //"$ano-$mes-$i" = "2021-02-??"
+    //diasdasemana = [janeiro,...]
+
+
+    if($diadasemana == 1) {
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->setX(7);
+        $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 8);
+    }
+
+
+    if($diadasemana == 2) {
+        $pdf->setX(7);
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
+    }
+
+
+    if($diadasemana == 3) {
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->setX(7);
+        $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 7);
+    }
+
+    
+    if($diadasemana == 4) {
+        $pdf->setX(7);
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
+    }
+
+        if($diadasemana == 5) {
+            $pdf->SetFont('Arial', 'B', 7);
+            $pdf->setX(7);
+            $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
+            $pdf->SetFont('Arial', 'B', 7);
+        }
+
+
+
+
+
+
+
+
+    if($diadasemana == 6) {
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->setX(7);
+        $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 7);
+    }
+
+    if($diadasemana == 7) {
+        $pdf->setX(7);
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0);
+        
+    }
+    if ($diadasemana != 6 && $diadasemana !=7) {
+    foreach($feriados as $feriado) {
+        if (mb_ereg("-$mes-".str_pad($i,2,0,STR_PAD_LEFT),$feriado["data"])) {
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->setX(16);
+            $pdf->SetTextColor(90,90,90);
+            $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "FERIADO"), 0, 0, "L", 0);
+            
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->SetTextColor(0,0,0);
+         }
+    }
+}
+     
+    $linhavertical += 6.9;
+    $linhahorizontalteste+= 6.9;
+    $linhaverticalteste+= 6.9;
+  
+}
+
+$pdf -> setY($linhaverticalteste - 5);
+$pdf->setX(95);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ASSINATURA"), 0, 0, "L", 0);
+
+$pdf -> setY($linhaverticalteste+2);
+$pdf->setX(5);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "SUPERVISOR"), 0, 0, "L", 0);
+
+$pdf -> setY($linhaverticalteste+11);
+$pdf->setX(5);
+$pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "FUNCIONARIO"), 0, 0, "L", 0);
+
+
+$pdf->Line(32, 35, 67, 35);
+$pdf->Line(86, 35, 126, 35);
+
+
+$i = 0;
+while ($i != 3) {
+$pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
+$pdf->Line(5, $linhaverticalteste, 5, 17);
+$pdf->Line(205, $linhaverticalteste, 205, 17); // 8 
+ // 6
+$i++;
+$linhahorizontalteste+=7;
+$linhaverticalteste+=7;
+}
+
+// VERTICAL -CABEÇALHO
+$pdf->Line(5, 41, 5, 17); // 0 
+$pdf->Line(32, 41, 32, 29); // 1 
+$pdf->Line(49, 41, 49, 35); // 2 
+$pdf->Line(67, 41, 67, 17); // 3 
+$pdf->Line(86, 41, 86, 29); // 4 
+$pdf->Line(106, 41, 106, 35); // 5
+$pdf->Line(126, 41, 126, 29); // 6
+$pdf->Line(169, 41, 169, 29); // 7
+$pdf->Line(205, 41, 205, 17); // 8 
+$pdf->Line(16, 39, 16, 29); // 9 
 
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->setY(17);
-$pdf->setX(57);
-$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "CNPJ: 32185480/0001-07"), 0, 0, "L", 0);
+$pdf->setX(106);
+$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Rua: Visconde de Inhaúma, 38 - 701 - Centro - RJ"), 0, 0, "L", 0);
 $pdf->SetFont('Arial', '', 8);
-// $pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252',  .  "."), 0, 0, "L", 0);
-// $pdf->SetFont('Arial', 'B', 8);
-
-$pdf->SetFont('Arial', 'B', 8);
-$pdf->setY(17);
-$pdf->setX(100);
-$pdf->Line(100, 21, 100, 17);
-$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Rua:"), 0, 0, "L", 0);
-$pdf->SetFont('Arial', '', 8);
-$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $rua .  "."), 0, 0, "L", 0);
 $pdf->SetFont('Arial', 'B', 8);
 
-// $pdf->setY(17);
-// $pdf->SetFont('Arial', 'B', 8);
-// $pdf->Line(5, 17, 205, 17);
-// $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Nome :"), 0, 0, "L", 0);
-// $pdf->SetFont('Arial', '', 8);
-// $pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $nomeCompleto), 0, 0, "L", 0);
-// $pdf->Line(5, 21, 205, 21);
-// $pdf->SetFont('Arial', 'B', 8);
-// $pdf->Ln(5);
 
 $pdf->SetFont('Arial', '', 8);
 $contador = 0;
