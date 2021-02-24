@@ -150,6 +150,9 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('RESPONSAVEL_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("responsavel" => array("title" => "Responsável", "url" => APP_URL . "/tabelaBasica_responsavelFiltro.php")); //SYSGC 
     }
+    if (in_array('REMUNERACAO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("remuneracao" => array("title" => "Remuneração", "url" => APP_URL . "/tabelaBasica_RemuneracaoFiltro.php"));
+    }
 
     //SUBMENU RETENÇÃO CONTA VINCULADA - SYSGEF
     if (in_array('RETENCAOCONTAVINCULADA_ACESSAR', $arrayPermissao, true)) {
@@ -347,9 +350,7 @@ if ($condicaoOperacaoOk) {
         if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['faturamento']['sub'] += array("encargo" => array("title" => "Encargo", "url" => APP_URL . "/prototipoValorPosto_encargoFiltro.php"));
         }
-        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['faturamento']['sub'] += array("remuneracao" => array("title" => "Remuneração", "url" => APP_URL . "/prototipoValorPosto_tabelaBasicaRemuneracaoFiltro.php"));
-        }
+
         if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['faturamento']['sub'] += array("insumos" => array("title" => "Insumos", "url" => APP_URL . "/prototipoValorPosto_insumoFiltro.php"));
         }
