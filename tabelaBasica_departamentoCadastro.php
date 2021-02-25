@@ -27,7 +27,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "BDI";
+$page_title = "Departamento";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -68,7 +68,7 @@ include("inc/nav.php");
           <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
             <header>
               <span class="widget-icon"><i class="fa fa-cog"></i></span>
-              <h2>BDI
+              <h2>Departamento
               </h2>
             </header>
             <div>
@@ -93,7 +93,7 @@ include("inc/nav.php");
                               <section class="col col-2">
                                 <label class="label">Descrição</label>
                                 <label class="input">
-                                  <input id="descricao" name="descricao" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+                                  <input id="descricao" name="descricao" style="text-align: left;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
                             </div>

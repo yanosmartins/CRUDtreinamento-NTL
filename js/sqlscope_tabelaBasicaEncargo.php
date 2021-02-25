@@ -33,9 +33,10 @@ function grava()
 
     session_start();
     $usuario = $_SESSION['login'];
+    $usuario = "'$usuario'";
 
     $codigo = (int) $_POST['codigo'];
-    $descricao = $_POST['descricao'];
+    $descricao = "'" . $_POST['descricao'] . "'";
     $percentual = $_POST['percentual'];
     $ativo = 1;
     $percentual = str_replace(",", ".", $percentual);
@@ -79,12 +80,8 @@ function recupera()
 
     $id = $row['codigo'];
     $descricao = $row['descricao'];
-    $percentual = +$row['percentual'];
+    $percentual = (float)$row['percentual'];
     $ativo = $row['ativo'];
-<<<<<<< HEAD
-=======
-    // $percentual = str_replace(".", ",", $percentual);
->>>>>>> origin
 
     $out =   $id . "^" .
         $descricao . "^" .
