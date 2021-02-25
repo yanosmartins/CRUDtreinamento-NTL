@@ -91,7 +91,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" style="text-align: right;" type="text" autocomplete="off">
+                                                                    <input id="descricao" name="descricao" style="text-align: left;" type="text" autocomplete="off">
 
                                                                 </label>
                                                             </section>
@@ -198,14 +198,14 @@ include("inc/scripts.php");
     //     $('#resultadoBusca').load('tabelaBasica_bdiFiltroListagem.php?' + parametrosUrl);
     // }
 
-    function listarFiltro() { 
-        
+    function listarFiltro() {
+
         var descricao = $('#descricao').val();
-        var ativo = $('#ativo').val();   
+        var ativo = $('#ativo').val();
 
         $('#resultadoBusca').load('tabelaBasica_departamentoFiltroListagem.php?', {
             descricao: descricao,
-            ativo:ativo
+            ativo: ativo
         });
 
     }
