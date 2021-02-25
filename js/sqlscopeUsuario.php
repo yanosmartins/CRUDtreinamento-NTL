@@ -50,7 +50,10 @@ function grava()
     $tipoUsuario = "'" . $tipoUsuario . "'";
     $nome = "'" . $nome . "'";
 
-    $funcionario = (int) $_POST['funcionario'];
+    $funcionario = (int)$_POST['funcionario'];
+    if($funcionario == 0){
+        $funcionario = 'NULL';
+    }
 
     $login = $_POST["login"];
     if ((empty($_POST['login'])) || (!isset($_POST['login'])) || (is_null($_POST['login']))) {
