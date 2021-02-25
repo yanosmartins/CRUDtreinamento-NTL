@@ -411,9 +411,9 @@ if ($condicaoOperacaoOk) {
         if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['funcionario']['sub'] += array("emitirFolhaPonto" => array("title" => "Folha Mensal", "url" => APP_URL . "/funcionario_folhaDePontoPdf.php?id=" . $funcionario));
         }
-        if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['funcionario']['sub'] += array("emitirFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));
-        }
+        // if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
+        //     $page_nav['operacao']['sub']['funcionario']['sub'] += array("emitirFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));
+        // }
     }
 
 
