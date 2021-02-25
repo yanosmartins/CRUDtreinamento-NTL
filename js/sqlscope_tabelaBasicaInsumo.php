@@ -32,10 +32,10 @@ function grava()
     }
 
     session_start();
-    $usuario = $_SESSION['login'];
+    $usuario = "'" . (string)$_SESSION['login'] . "'";
 
     $codigo = $_POST['codigo'];
-    $descricao = $_POST['descricao'];
+    $descricao = "'" . (string)$_POST['descricao'] . "'";
     $valor = $_POST['valor'];
     $valor = str_replace(",", ".", $valor);
     $valor = number_format($valor, 2, ",", " ");
@@ -48,10 +48,9 @@ function grava()
         $descricao,
         $valor,
         $ativo ,
-        $usuario
-        ";
+        $usuario";
 
-    $reposit = new reposit();
+      $reposit = new reposit();
 
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
