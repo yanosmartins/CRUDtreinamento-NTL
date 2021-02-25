@@ -32,10 +32,10 @@ function grava()
     }
 
     session_start();
-    $usuario = $_SESSION['login'];
+    $usuario =  "'" . $_SESSION['login'] . "'";
 
     $codigo = $_POST['codigo'];
-    $descricao = $_POST['descricao'];
+    $descricao =  "'" . $_POST['descricao'] . "'";
     $percentual = $_POST['percentual'];
     $ativo = 1;
     $percentual = str_replace(",", ".", $percentual);
@@ -45,8 +45,7 @@ function grava()
         $descricao,
         $percentual,
         $ativo ,
-        $usuario
-        ";
+        $usuario";
 
     $reposit = new reposit();
 

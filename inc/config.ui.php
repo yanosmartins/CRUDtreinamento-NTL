@@ -390,10 +390,10 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['licitacao']['sub'] += array("relatorioTarefas" => array("title" => "Relatório de Tarefas", "url" => APP_URL . "/licitacao_relatorioTarefaFiltro.php"));
         }
     }
-    // Mensageria
+    // Mensageria // a pedido do guinancio 24/02/21 colocar servico externo no nome
     $condicaoMensageriaOk = true;
     if ($condicaoMensageriaOk) {
-        $page_nav['operacao']['sub']['mensageria'] = array("title" => "Mensageria", "icon" => "fa fa-envelope-open-o ");
+        $page_nav['operacao']['sub']['mensageria'] = array("title" => "Serviço Externo", "icon" => "fa fa-envelope-open-o ");
         $page_nav['operacao']['sub']['mensageria']['sub'] = array();
         if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['mensageria']['sub'] += array("solicitacao" => array("title" => "Solicitação", "url" => APP_URL . "/mensageria_solicitacaoCadastro.php"));
