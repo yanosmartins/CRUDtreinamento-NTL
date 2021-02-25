@@ -210,7 +210,11 @@ function gravaBeneficio()
         $posto = 'NULL';
     }
 
-    $departamento = validaNumero($beneficio['departamento']);
+    $departamento = (int)$beneficio['departamento'];
+    if($departamento == 0){
+        $departamento = 'NULL';
+    }
+ 
 
     $horaEntrada = "'" .$beneficio['horaEntrada']. "'" ;
     $horaInicio = "'" .$beneficio['horaInicio']. "'" ;
