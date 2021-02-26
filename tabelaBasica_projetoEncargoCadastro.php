@@ -130,7 +130,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Remuneração</label>
                                                                 <label class="input"><i class="icon-append fa fa-money"></i>
-                                                                    <input id="salario" name="salario" style="text-align: right;" type="text" autocomplete="off" maxlength="100" class="readonly">
+                                                                    <input id="remuneracaoTotal" name="remuneracaoTotal" placeholder="0,00" style="text-align: right;" type="text" autocomplete="off" maxlength="100" class="readonly">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -171,7 +171,7 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label">Valor</label>
                                                                         <label class="input"><i class="icon-append fa fa-money"></i>
-                                                                            <input id="remuneracaoValor" name="remuneracaoValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                            <input id="remuneracaoValor" name="remuneracaoValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100" placeholder="0,00">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-2">
@@ -626,6 +626,7 @@ include("inc/scripts.php");
         
         $("#btnAddRemuneracao").on("click", function() {
             addRemuneracao();
+            calculaValorRemuneracao()
         });
 
 
@@ -1094,7 +1095,7 @@ include("inc/scripts.php");
             $("#tableRemuneracao tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoArray[i].sequencialRemuneracao + '"><i></i></label></td>'));
             row.append($('<td class="text-center" onclick="carregaRemuneracao(' + jsonRemuneracaoArray[i].sequencialRemuneracao + ');">' + jsonRemuneracaoArray[i].remuneracao + '</td>'));
-            row.append($('<td class="text-center">' + 'R$ '+ + jsonRemuneracaoArray[i].remuneracaoValor + '</td>'));
+            row.append($('<td class="text-center">' + 'R$ '+ jsonRemuneracaoArray[i].remuneracaoValor + '</td>'));
         }
     }
 
@@ -1124,6 +1125,14 @@ include("inc/scripts.php");
             };
         }
         return false;
+    }
+
+    function calculaValorRemuneracao(){
+        var valorTotalRemuneracao = 0
+        for (var i = 0; i < jsonRemuneracaoArray.length; i++){
+            valorTotalRemuneracao += +jsonRemuneracaoArray[i].remuneracaoValor.replace(",", ".")
+        }
+        $('#remuneracaoTotal').val(valorTotalRemuneracao.toFixed(2).replace(".", ","));
     }
 
 </script>
