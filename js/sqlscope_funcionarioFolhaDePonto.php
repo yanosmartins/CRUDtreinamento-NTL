@@ -25,7 +25,9 @@ function recupera()
     //Montando array de tarefas  
     $reposit = "";
     $result = "";
-    $sql = "SELECT funcionario FROM ntl.beneficioProjeto WHERE (0=0) AND projeto =" . $projeto;
+    $sql = "SELECT B.funcionario FROM ntl.beneficioProjeto AS B 
+    LEFT JOIN ntl.funcionario F ON F.codigo =  B.funcionario
+    WHERE (0=0) AND B.ativo = 1 AND F.ativo = 1 AND B.projeto =" . $projeto;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
@@ -37,7 +39,7 @@ function recupera()
 
         $contadorProjeto = $contadorProjeto + 1;
         $arrayProjeto[] = array(
-            "funcionario" => $funcionario
+            $funcionario
         );
     }
 

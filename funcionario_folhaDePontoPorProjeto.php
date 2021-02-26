@@ -195,13 +195,11 @@ include("inc/scripts.php");
                     data = data.replace(/failed/g, '');
                     var piece = data.split("#");
                     var mensagem = piece[0];
-                    var strArrayProjeto = JSON.parse(piece[1]);
-                    let funcionario = "";
+                    var strArrayProjeto = piece[1];
 
-                    for (let index = 0; index < strArrayProjeto.length; index++) {
-                        const funcionario = strArrayProjeto[index].funcionario;
-                        // window.open("funcionario_folhaDePontoPdf.php?id=" + funcionario);
-                    }
+                    $mesAno =  $("#mesAno").val();
+
+                    window.open("funcionario_folhaDePontoPorProjetoPdf.php?strArrayProjeto=" + strArrayProjeto + "&data=" + $mesAno);
 
                 }
             }
