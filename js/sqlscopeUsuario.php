@@ -52,7 +52,7 @@ function grava()
 
     $funcionario = (int)$_POST['funcionario'];
     if($funcionario == 0){
-        $funcionario = 'NULL';\
+        $funcionario = 'NULL';
     }
 
     $login = $_POST["login"];
