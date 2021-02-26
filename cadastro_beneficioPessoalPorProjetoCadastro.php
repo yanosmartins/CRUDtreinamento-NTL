@@ -2174,9 +2174,9 @@ include("inc/scripts.php");
 		});
 
 		$("#horaEntrada").mask("99:99");
-		$("#horaEntrada").mask("99:99");
-		$("#horaEntrada").mask("99:99");
-		$("#horaEntrada").mask("99:99");
+		$("#horaInicio").mask("99:99");
+		$("#horaFim").mask("99:99");
+		$("#horaSaida").mask("99:99");
 
 		$('#horaEntrada').clockpicker({
 			donetext: 'Done',
