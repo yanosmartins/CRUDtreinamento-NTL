@@ -174,7 +174,7 @@ include("inc/nav.php");
                                                                     <select id="concluido" name="concluido" class="">
                                                                         <option></option>
                                                                         <option value="1">Sim</option>
-                                                                        <option value="0">Não</option>
+                                                                        <option value="0" selected>Não</option>
                                                                     </select><i></i>
                                                             </section>
                                                             <section class="col col-3">
