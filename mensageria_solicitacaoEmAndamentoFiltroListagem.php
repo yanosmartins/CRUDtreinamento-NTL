@@ -74,10 +74,13 @@ include "js/repositorio.php";
                     $ativo = (int)$_POST["ativo"];
                     $where = $where . " AND S.ativo = " . $ativo;
                 }
-
-                if ($_POST["concluido"] != "") {
-                    $concluido = (int)$_POST["concluido"];
-                    $where = $where . " AND S.concluido = " . $concluido;
+                $concluido = $_POST["concluido"];
+                if ($concluido != "") {
+                    if ($concluido == 1){
+                        $where = $where . " AND S.concluido = " . $concluido;
+                    }else{
+                        $where = $where . " AND S.concluido = 0 OR S.concluido IS NULL";    
+                    }
                 }
 
                 $sql .= $where . " ORDER BY S.urgente DESC, S.dataSolicitacao, S.horaSolicitacao";
