@@ -917,10 +917,10 @@ include("inc/scripts.php");
                 success: function(data) {
                     var status = data.split('#');
                     var piece = status[1].split('^');
-                    $("#logradouro").val(piece[0] + " " + piece[1]);
-                    $("#bairro").val(piece[2]);
-                    $("#cidade").val(piece[3]);
-                    $("#ufLogradouro").val(piece[4]);
+                    $("#logradouro").val(piece[0]);
+                    $("#bairro").val(piece[1]);
+                    $("#cidade").val(piece[2]);
+                    $("#ufLogradouro").val(piece[3]);
                     return;
                 }
             });
