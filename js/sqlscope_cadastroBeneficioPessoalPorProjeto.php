@@ -188,7 +188,9 @@ function gravaBeneficio()
 
 
     $totalValorAcrescimoBeneficioIndireto = str_replace(',', '.', $beneficio['totalValorAcrescimoBeneficioIndireto']);
+    $totalValorAcrescimoBeneficioIndireto =  (float)$totalValorAcrescimoBeneficioIndireto;
     $totalValorAbaterBeneficioIndireto = str_replace(',', '.', $beneficio['totalValorAbaterBeneficioIndireto']);
+    $totalValorAbaterBeneficioIndireto = (float)$totalValorAbaterBeneficioIndireto;
 
     $ativo = 1;
 
@@ -201,8 +203,8 @@ function gravaBeneficio()
     $escalaFerias = +$beneficio['escalaFerias'];
     $escalaFeriasVAVR = +$beneficio['escalaFeriasVAVR'];
 
-    $localizacao = +$beneficio['localizacao'];
-    $posto = +$beneficio['descricaoPosto'];
+    $localizacao = (int)$beneficio['localizacao'];
+    $posto = (int)$beneficio['descricaoPosto'];
     if ($localizacao == 0) {
         $localizacao = 'NULL';
     }
