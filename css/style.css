@@ -1,0 +1,61 @@
+body{
+  background-color: black;
+}
+
+.funcionario {
+  height: 150px;
+  background: #c4c4c4;
+  border-radius: 10px;
+/* box-shadow: 0px 0px 30px 10px rgba(0, 0, 0,1); */
+   align-items: center;
+   box-sizing: border-box;
+/* filter: drop-shadow(7px 7px 7px rgba(0, 0, 0, 0.3)); */
+}
+
+
+.inicioalmoco {
+ /* background: #C4C4C4; */
+ border-radius: 5px;
+  height:80px;
+  margin-top: 15px;
+}
+
+.fimalmoco{
+/* background: #C4C4C4; */
+ border-radius: 5px;
+  height:80px;
+  margin-top: 15px;
+}
+
+@media(max-width:1000px){
+.primeirasessao{
+      display: flex;
+  flex-direction: column;
+
+}
+.funcionario{
+    height: 130px;
+    order: 2;
+    margin-top: 10px;
+}
+}
+.botaoentrada{
+    background: #72ad57;
+    border-radius: 5px; height:50px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.botaosaida{
+ height: 50px;
+ background: #bd5454;
+ border-radius: 5px;
+ color: white;
+ font-size: 16px;
+ font-weight: bold;
+}
+
+.form-control{
+border-radius: 7px !important;
+}
