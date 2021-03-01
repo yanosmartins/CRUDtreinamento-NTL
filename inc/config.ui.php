@@ -127,6 +127,9 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
     }
+    if (in_array('LOCALIZACAOITEM_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("localizacaoItem" => array("title" => "Localização do Item", "url" => APP_URL . "/tabelaBasica_localizacaoItemFiltro.php"));
+    }
     if (in_array('INSUMO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("insumo" => array("title" => "Insumo", "url" => APP_URL . "/tabelaBasica_insumoFiltro.php"));
     }
@@ -414,9 +417,9 @@ if ($condicaoOperacaoOk) {
         if (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['funcionario']['sub'] += array("geradorFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));
         }
-         if (in_array('FOLHAPONTOPROJETO_ACESSAR', $arrayPermissao, true)) {
+        if (in_array('FOLHAPONTOPROJETO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['funcionario']['sub'] += array("emitirFolhaPorProjeto" => array("title" => "Gerador Folha de Ponto por Projeto", "url" => APP_URL . "/funcionario_folhaDePontoPorProjeto.php"));
-         }
+        }
     }
 
 
