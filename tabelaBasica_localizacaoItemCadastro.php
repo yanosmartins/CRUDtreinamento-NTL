@@ -27,7 +27,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Localização do item";
+$page_title = "Localização do Item";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header

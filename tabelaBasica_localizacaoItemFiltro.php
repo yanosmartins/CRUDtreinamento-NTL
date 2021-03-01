@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Localização do item";
+$page_title = "Localização do Item";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -67,7 +67,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Localização do item</h2>
+                            <h2>Localização do Item</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -111,7 +111,7 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Localização do item</label>
+                                                                <label class="label">Localização do Item</label>
                                                                 <label class="input">
                                                                     <input id="localizacaoItem" name="localizacaoItem" style="text-align: right;" type="text" autocomplete="off">
                                                                 </label>

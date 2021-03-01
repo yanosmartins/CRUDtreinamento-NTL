@@ -15,24 +15,24 @@ include "js/repositorio.php";
                 <?php
 
                 $reposit = new reposit();
-                $sql = "SELECT GI.codigo, E.descricao as 'descricaoEstoque', GI.descricao, GI.ativo
-                FROM Ntl.grupoItem GI INNER JOIN Ntl.estoque E ON GI.estoque = E.codigo ";
+                $sql = "SELECT LI.codigo, E.descricao as 'descricaoEstoque', LI.localizacaoItem, LI.ativo
+                FROM Ntl.localizacaoItem LI INNER JOIN Ntl.estoque E ON LI.estoque = E.codigo ";
                 $where = " WHERE (0=0) ";
 
 
                 if ($_GET["estoque"] != "") {
                     $estoque = $_GET["estoque"];
-                    $where = $where . " AND ( GI.estoque = $estoque)";
+                    $where = $where . " AND ( LI.estoque = $estoque)";
                 }
 
                 if ($_GET["localizacaoItem"] != "") {
                     $localizacaoItem = $_GET["localizacaoItem"];
-                    $where = $where . " AND ( GI.localizacaoItem LIKE '%$localizacaoItem%')";
+                    $where = $where . " AND ( LI.localizacaoItem LIKE '%$localizacaoItem%')";
                 }
 
                 if ($_GET["ativo"] !== "") {
                     $ativo = (int)$_GET["ativo"];
-                    $where = $where . " AND ( GI.ativo = $ativo)";
+                    $where = $where . " AND ( LI.ativo = $ativo)";
                 }
 
                 $sql = $sql . $where;
@@ -46,8 +46,8 @@ include "js/repositorio.php";
                     $ativo = (int) $row['ativo'];
 
                     echo '<tr>';
-                    echo '<td class="text-left"><a href="tabelaBasica_localizacaoItemCadastro.php?codigo=' . $codigo . '">'  . $localizacaoItem . '</a></td>';
                     echo '<td class="text-left">' . $estoqueDescricao . '</td>';
+                    echo '<td class="text-left"><a href="tabelaBasica_localizacaoItemCadastro.php?codigo=' . $codigo . '">'  . $localizacaoItem . '</a></td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {
