@@ -7,26 +7,12 @@ require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('GERADORFOLHAPONTO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('GERADORFOLHAPONTO_EXCLUIR', $arrayPermissao, true));
 
 $condicaoAcessarOK = true;
-$condicaoGravarrOK = true;
-$condicaoExcluirOK = true;
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
-}
-
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
-}
-
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
 }
 
 /* ---------------- PHP Custom Scripts ---------
@@ -46,7 +32,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['funcionario']['sub']["emitirFolha"]["active"] = true;
+$page_nav['operacao']['sub']['funcionario']['sub']["geradorFolha"]["active"] = true;
 
 include("inc/nav.php");
 ?>
