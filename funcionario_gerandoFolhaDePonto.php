@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('SOLICITACAO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('SOLICITACAO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('GERADORFOLHAPONTO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('GERADORFOLHAPONTO_EXCLUIR', $arrayPermissao, true));
 
 $condicaoAcessarOK = true;
 $condicaoGravarrOK = true;
@@ -46,7 +46,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['contratacao']['sub']["gestor"]["active"] = true;
+$page_nav['operacao']['sub']['funcionario']['sub']["emitirFolha"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -119,14 +119,19 @@ include("inc/nav.php");
                                                                     <i class="icon-append fa fa-calendar"></i>
                                                                     <input id="data" name="data" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker required" value="">
                                                                     <!-- <input id="data" name="data" autocomplete="off"  type="month" class="required" value=""> -->
+
+                                                            </section>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label"> </label>
+                                                                <label class="input">
+                                                                    <button type="button" id="btnGeraPdf" class="btn btn-info" aria-hidden="true" title="Gerar Pdf">
+                                                                        Gerar folha de ponto
+                                                                    </button>
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                        <div class="row text-right">
-                                                            <button type="button" id="btnGeraPdf" class="btn btn-info" aria-hidden="true" title="Gerar Pdf">
-                                                                Gerar folha de ponto
-                                                            </button>
-                                                        </div>
+
+
                                                     </fieldset>
                                                 </div>
                                             </div>

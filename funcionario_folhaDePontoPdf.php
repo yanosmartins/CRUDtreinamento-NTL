@@ -48,10 +48,10 @@ if ($mesAno != "") {
     // $ano = date("Y"); //2021
 } else {
      $mes = date("m"); //02
-     $numero = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
-     $ano = date("d"); //2021
+     $ano = date("Y"); //2021
+     $days = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
      
-     $mesExtenso = strftime('%B', strtotime("today"));
+     $mesExtenso = ucfirst( mb_convert_encoding(strftime('%B', strtotime("today")),'UTF-8', 'HTML-ENTITIES'));
     
 }
 $reposit = new reposit();
