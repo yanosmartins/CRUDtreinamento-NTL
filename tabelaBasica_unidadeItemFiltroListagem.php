@@ -21,26 +21,19 @@ include "js/repositorio.php";
                 $sigla = $_GET["sigla"];
                 $ativo = $_GET["ativo"];
 
-
-
                 if ($descricao != "") {
-
-
-                    $where = $where . " AND descricao = " . "'" . $descricao . "'";
+                     $where = $where . " and (descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
                 if ($sigla !== "") {
-
-                    $where = $where . " AND sigla = $sigla ";
+                    $where = $where . " and (descricao like '%' + " . "replace('" . $sigla . "',' ','%') + " . "'%')";
                 }
                 if ($ativo !== "") {
-
                     $where = $where . " AND ativo = $ativo ";
                 }
 
-                $sql = " SELECT codigo,descricao, sigla, ativo FROM Ntl.unidadeItem ";
+                $sql = "SELECT codigo,descricao, sigla, ativo FROM Ntl.unidadeItem ";
 
-
-                $sql .= $where . $order;
+                $sql .= $where;
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
