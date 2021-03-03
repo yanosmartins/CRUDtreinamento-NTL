@@ -80,7 +80,7 @@ include "js/repositorio.php";
                     $descricaoProjeto = $row['projeto'];
                     $descricaoSindicato = $row['sindicato'];
                     $cargo = $row['cargo'];
-                    $salarioBase = $row['salarioBase'];
+                    $salarioBase = (float)$row['salarioBase'];
                     $verificado = $row['verificadoPeloGestor'];
 
                     if ($descricaoProjeto == "") {
