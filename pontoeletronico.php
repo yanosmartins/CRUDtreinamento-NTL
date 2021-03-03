@@ -19,6 +19,7 @@ $page_title = "Usuário";
 //you can add your custom css in $page_css array.
 //Note: all css files are inside css/ folder
 $page_css[] = "your_style.css";
+$page_css[] = "style.css";
 include("inc/header.php");
 
 //include left panel (navigation)
@@ -27,92 +28,178 @@ $page_nav["controle"]["sub"]["usuarios"]["active"] = true;
 
 include("inc/nav.php");
 ?>
-<!-- ==========================CONTENT STARTS HERE ========================== -->
-<!-- MAIN PANEL -->
 <div id="main" role="main">
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Controle de Permissão"] = "";
+    $breadcrumbs["Tabela Básica"] = "";
     include("inc/ribbon.php");
     ?>
-    <div id="content">
-        <div class=" row text-center" style="margin-bottom: 10px;">
-            <h2 style="font-weight:bold;">Ponto Eletornico</h2>
-            <h5>
-                <?php
-                setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese.utf-8');
-                date_default_timezone_set('America/Sao_Paulo');
-                echo utf8_encode(ucwords(strftime('%A, ', $var_DateTime->sec)));
-                echo strftime('%d de %B de %Y.', strtotime('today'));
-                ?>
-            </h5>
-            Horário de Brasília
-            <?php
-            $hora = date('H:i:s.');
-            echo $hora
-            ?>
-        </div>
-        <div class="primeirasessao">
-            <div class="col-md-7 funcionario " style=" height: 170px; background-color:#3A3633; color: #c4c4c4;">
-                <h3>Matricula: <span id="#"></span></h3>
-                <h3>Funcionario: <span id="#">Fillipy José Pessoa Ferreira Monteiro</span></h3>
-                <h3>Projeto: <span id="#">NTL - Nova Tecnologia</span></h3>
-            </div>
-            <div class="col-md-5 marcacao">
-                <div class="col-xs-6">
-                    <button type="button" class="btn  btn-block botaoentrada" style="height: 80px; background-color:#4F8D4A;">
-                        <i class="fa fa-sign-in"></i><br>Entrada
-                    </button>
-                </div>
-                <div class="col-xs-6">
-                    <button type="button" class="btn  btn-block botaopausa" style=" background: #2386A6;border-radius: 5px; height:80px;color: white;font-size: 16px;font-weight: bold;">
-                        <i class="fa fa-cutlery"></i><br> Inicio almoço
-                    </button>
-                </div>
-                <div class="col-xs-6">
-                    <button type="button" class="btn  btn-block botaoretornopausa" style="background: #FDD033;border-radius: 5px; height:80px; color: white; font-size: 16px; font-weight: bold; margin-top:10px;">
-                        <i class="fa fa-cutlery"></i><br> Fim almoço
-                    </button>
-                </div>
-                <div class=" col-xs-6">
-                    <button type="button" class="btn  btn-block botaosaida" style="height: 80px;  margin-top:10px; background-color:#C32E2E;">
-                        <i class="fa fa-sign-out"></i><br>Saida
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-7" style="margin-top:30px">
-                <p><i class="fa fa-address-book"></i> Ocorrências</p>
-                <select class="form-control" id="#" style="height: 40px;">
-                    <option>Ocorrencias</option>
-                    <option>Home office</option>
-                    <option>Atestado médico</option>
-                </select>
-            </div>
-            <div class="col-md-5" style="margin-top: 30px;">
-                <p><i class="fa fa-clock-o"></i> Atraso:</p>
-                <input class="form-control text-center" id="#" style="height: 40px;" type="text" placeholder="00:20:36" readonly>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-7" style="margin-top:30px">
-                <p><i class="fa fa-address-book"></i> Calendario</p>
-                <input class="datepicker form-control" data-dateformat="dd/mm/yy" data-mask="99/99/9999" placeholder="XX/XX/XXXX">
-            </div>
-            <div class="col-md-5" style="margin-top: 30px;">
-                <p><i class="fa fa-clock-o"></i> Hora extra:</p>
-                <input class="form-control text-center" id="#" style="height: 40px;" type="text" placeholder="00:20:36" readonly>
-            </div>
-        </div>
 
+    <!-- MAIN CONTENT -->
+    <div id="content">
+
+        <!-- widget grid -->
+        <section id="widget-grid" class="">
+            <!-- <div class="row" style="margin: 0 0 13px 0;">
+                <?php if ($condicaoGravarOK) { ?>
+                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/cadastroLocalizacao.php" style="float:right"></a>
+                <?php } ?>
+            </div> -->
+
+            <div class="row">
+                <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
+                        <header>
+                            <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                            <h2>Funcionário
+                            </h2>
+                        </header>
+                        <div>
+                            <div class="widget-body no-padding">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formLocalizacao" method="post">
+                                    <div class="panel-group smart-accordion-default" id="accordion">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseCadastro" class="">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Ponto Eletrônico
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseCadastro" class="panel-collapse collapse in">
+                                                <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <input id="codigo" name="codigo" type="text" class="hidden">
+                                                        <div class="row ">
+                                                            <section class=" row text-center" style="margin-bottom: 10px;">
+                                                                <h2 style="font-weight:bold;">Ponto Eletrônico</h2>
+                                                                <h5>
+                                                                    <?php
+                                                                    setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese.utf-8');
+                                                                    date_default_timezone_set('America/Sao_Paulo');
+                                                                    echo utf8_encode(ucwords(strftime('%A, ', $var_DateTime->sec)));
+                                                                    echo strftime('%d de %B de %Y.', strtotime('today'));
+                                                                    ?>
+                                                                </h5>
+                                                                Horário de Brasília
+                                                                <?php
+                                                                $hora = date('H:i:s.');
+                                                                echo $hora
+                                                                ?>
+                                                            </section>
+                                                        </div>
+
+                                                        <div class="primeirasessao">
+                                                            <div class="col col-md-6" style=" height: 185px; background-color:#3A3633; color: #c4c4c4;"><br>
+                                                                <h3>Login: <span id="#">NTL_FILLIPYMONTEIRO</span></h3><br>
+                                                                <h3>Matricula: <span id="#">25936</span></h3><br>
+                                                                <h3>Funcionario: <span id="#">Fillipy José Pessoa Ferreira Monteiro</span></h3><br>
+                                                                <h3>Projeto: <span id="#">NTL - Nova Tecnologia</span></h3>
+                                                            </div>
+                                                            <div class="marcacao">
+                                                                <section class="col col-1">
+                                                                    <label class="input">
+                                                                        <input class="hidden">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col-xs-2">
+                                                                    <button type="button" class="btn  btn-block botaoentrada" style="height: 80px; background-color:#4F8D4A;">
+                                                                        <i class="fa fa-sign-in"></i><br>Entrada
+                                                                    </button>
+
+
+                                                                    <button type="button" class="btn  btn-block botaosaida" style="height: 85px;  margin-top:10px; background-color:#C32E2E;">
+                                                                        <i class="fa fa-sign-out"></i><br>Saida
+                                                                    </button>
+                                                                </section>
+
+                                                                <section class="col col-0">
+                                                                    <label class="input">
+                                                                        <input class="hidden">
+                                                                    </label>
+                                                                </section>
+
+                                                                <section class="col-xs-2">
+                                                                    <button type="button" class="btn  btn-block botaopausa" style=" background: #2386A6;border-radius: 5px; height:80px;color: white;font-size: 16px;font-weight: bold;">
+                                                                        <i class="fa fa-cutlery"></i><br> Inicio almoço
+                                                                    </button>
+
+                                                                    <button type="button" class="btn  btn-block botaoretornopausa" style="background: #FDD033;border-radius: 5px; height:85px; color: white; font-size: 16px; font-weight: bold; margin-top:10px;">
+                                                                        <i class="fa fa-cutlery"></i><br> Fim almoço
+                                                                    </button>
+                                                                </section>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6"><br>
+                                                                <label class="label" for="lancamento">Ocorrência/Lançamento</label>
+                                                                <label class="select">
+                                                                    <select id="lancamento" name="lancamento" style="height: 40px;" class="" readonly>
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="input">
+                                                                    <input class="hidden">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col-md-2"><br>
+                                                                <div class="form-group">
+                                                                    <label id="labelHora" class="label">Atraso</label>
+                                                                    <div class="input-group" data-align="top" data-autoclose="true">
+                                                                        <input id="horaAtraso" name="horaAtraso" type="text" class="text-center form-control" style="height: 40px;" placeholder="00:20:38" data-autoclose="true" value="" readonly>
+                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                            </section>
+
+                                                            <section class="col col-0">
+                                                                <label class="input">
+                                                                    <input class="hidden">
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col-md-2"><br>
+                                                                <div class="form-group">
+                                                                    <label id="labelHora" class="label">Hora Extra</label>
+                                                                    <div class="input-group" data-align="top" data-autoclose="true">
+                                                                        <input id="horaHoraExtra" name="horaHoraExtra" type="text" class="text-center form-control" style="height: 40px;" placeholder="00:20:38" data-autoclose="true" value="" readonly>
+                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                            </section>
+                                                        </div>
+
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
         <!-- end widget grid -->
     </div>
-    <!-- end widget grid -->
-
-</div>
-
+    <!-- END MAIN CONTENT -->
 </div>
 <!-- END MAIN PANEL -->
 
