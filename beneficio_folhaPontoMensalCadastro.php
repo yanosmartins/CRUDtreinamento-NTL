@@ -131,10 +131,17 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
-                                                                        <label class="label" for="mesAnoFolhaPonto">Mês Atual</label>
+                                                                        <label class="label" for="mesAnoFolhaPonto">Mês</label>
                                                                         <label class="input">
                                                                             <i class="icon-append fa fa-calendar"></i>
                                                                             <input id="mesAnoFolhaPonto" name="mesAnoFolhaPonto" style="text-align: center;" autocomplete="off" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" type="text" class="readonly" readonly value="">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-1">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <label id="labelCheckAlmoco" class="checkbox">
+                                                                            <input id="checkAlmoco" name="checkAlmoco" type="checkbox" value="true"><i></i>
+                                                                            Habilitar Almoço
                                                                         </label>
                                                                     </section>
 
@@ -155,9 +162,97 @@ include("inc/nav.php");
 
                                                                     </section>
 
-
-
                                                                 </div>
+
+                                                                <div class="row">
+
+                                                                    <section class="col col-1">
+                                                                        <div class="form-group">
+                                                                            <label class="label">Dia</label>
+                                                                            <div class="input-group" data-align="top" data-autoclose="true">
+                                                                                <input id="dia" name="dia" type="text" class="text-center form-control " data-autoclose="true" value="">
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class="col col-2">
+                                                                        <div class="form-group">
+                                                                            <label id="labelHora" class="label">Entrada</label>
+                                                                            <div class="input-group" data-align="top" data-autoclose="true">
+                                                                                <input id="horaEntrada" name="horaEntrada" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class="col col-1 sectionAlmoco" style="display: none">
+                                                                        <div class="form-group">
+                                                                            <label class="label">Inicio/Almoço</label>
+                                                                            <div class="input-group" data-align="top" data-autoclose="true">
+                                                                                <input id="inicioAlmoco" name="inicioAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class="col col-1 sectionAlmoco" style="display: none">
+                                                                        <div class="form-group">
+                                                                            <label class="label">Fim/Almoço</label>
+                                                                            <div class="input-group" data-align="top" data-autoclose="true">
+                                                                                <input id="fimAlmoco" name="fimAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class="col col-2">
+                                                                        <div class="form-group">
+                                                                            <label id="labelHora" class="label">Saída</label>
+                                                                            <div class="input-group" data-align="top" data-autoclose="true">
+                                                                                <input id="horaSaida" name="horaSaida" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class="col col-1">
+                                                                        <div class="form-group">
+                                                                            <label id="labelHora" class="label">H.Extra</label>
+                                                                            <div class="input-group" data-align="top" data-autoclose="true">
+                                                                                <input id="horaExtra" name="horaExtra" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class="col col-2">
+                                                                        <label class="label" for="lancamento">Lançamento/Ocorrência</label>
+                                                                        <label class="select">
+                                                                            <select id="lancamento" name="lancamento">
+                                                                                <option></option>
+                                                                                <?php
+                                                                                $reposit = new reposit();
+                                                                                $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = (int) $row['codigo'];
+                                                                                    $descricao = $row['descricao'];
+                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                }
+                                                                                ?>
+                                                                            </select>
+                                                                        </label>
+                                                                    </section>
+
+                                                                    <section class="col col-md-1">
+                                                                        <label class="label"> </label>
+                                                                        <button id="btnAddPonto" type="button" class="btn btn-primary">
+                                                                            <i class="">Lançar Ponto</i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                               
+                                                                <hr><br>
 
                                                                 <?php
                                                                 $i = 0;
@@ -170,7 +265,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Dia</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"dia\" name=\"dia\" type=\"text\" class=\"text-center form-control readonly\" readonly data-autoclose=\"true\" value=\"" . $i . "\">
+                                                                                <input id=\"dia-$i\" name=\"dia-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly data-autoclose=\"true\" value=\"" . $i . "\">
                                                                             </div>
                                                                         </div>
                                                                     </section>
@@ -179,27 +274,27 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">Entrada</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaEntrada\" name=\"horaEntrada\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaEntrada-$i\" name=\"horaEntrada-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
                                                                     </section>
 
-                                                                    <section class=\"col col-1\">
+                                                                    <section class=\"col col-1 sectionAlmoco\" style=\" display:none\">
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Inicio/Almoço</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"inicioAlmoco\" name=\"inicioAlmoco\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"inicioAlmoco-$i\" name=\"inicioAlmoco-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
                                                                     </section>
 
-                                                                    <section class=\"col col-1\">
+                                                                    <section class=\"col col-1 sectionAlmoco\" style=\"display:none\">
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Fim/Almoço</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"fimAlmoco\" name=\"fimAlmoco\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"fimAlmoco-$i\" name=\"fimAlmoco-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -209,7 +304,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">Saída</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaSaida\" name=\"horaSaida\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaSaida-$i\" name=\"horaSaida-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -219,7 +314,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">H.Extra</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaExtra\" name=\"horaExtra\" type=\"text\" class=\"text-center form-control\" placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaExtra-$i\" name=\"horaExtra-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -228,7 +323,7 @@ include("inc/nav.php");
                                                                     <section class=\"col col-2\">
                                                                         <label class=\"label\" for=\"lancamento\">Lançamento/Ocorrência</label>
                                                                         <label class=\"select\">
-                                                                            <select id=\"lancamento\" name=\"lancamento\" class=\"\">
+                                                                            <select id=\"lancamento-$i\" name=\"lancamento-$i\" class=\" readonly\" readonly style= \"pointer-events: none; touch-action: none\" tabindex=\"-1\">
                                                                                 <option></option>";
 
                                                                     $reposit = new reposit();
@@ -237,7 +332,7 @@ include("inc/nav.php");
                                                                     foreach ($result as $row) {
                                                                         $codigo = (int) $row['codigo'];
                                                                         $descricao = $row['descricao'];
-                                                                        echo "<option value=' . $codigo . '>' . $descricao . '</option>'";
+                                                                        echo "<option value=' . $codigo . '> $descricao </option>'";
                                                                     }
                                                                     echo " </select><i></i>
                                                                         </label>
@@ -362,37 +457,44 @@ include("inc/scripts.php");
             use24hours: true,
         }).val(moment().format('HH:mm:ss'));
 
-        $("#horaEntradaAlmoco").mask("99:99");
+        $("#inicioAlmoco").mask("99:99");
 
-        $('#horaEntradaAlmoco').clockpicker({
+        $('#inicioAlmoco').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
-        $("#horaSaidaAlmoco").mask("99:99");
+        $("#fimAlmoco").mask("99:99");
 
-        $('#horaSaidaAlmoco').clockpicker({
+        $('#fimAlmoco').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
-        $("#horaEntradaHoraExtra").mask("99:99");
+        $("#horaExtra").mask("99:99");
 
-        $('#horaEntradaHoraExtra').clockpicker({
+        $('#horaExtra').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
-        $("#horaSaidaHoraExtra").mask("99:99");
 
-        $('#horaSaidaHoraExtra').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
-        }).val(moment().format('HH:mm'));
+
+        $("#btnAddPonto").on("click", function() {
+
+            var dia = $("#dia").val()
+
+
+            $("#horaEntrada-" + dia).val($("#horaEntrada").val())
+            $("#inicioAlmoco-" + dia).val($("#inicioAlmoco").val())
+            $("#fimAlmoco-" + dia).val($("#fimAlmoco").val())
+            $("#horaSaida-" + dia).val($("#horaSaida").val())
+            $("#horaExtra-" + dia).val($("#horaExtra").val())
+            $("#lancamento-" + dia).val($("#lancamento").val())
+        });
 
 
         $('#btnNovo').on("click", function() {
@@ -407,213 +509,25 @@ include("inc/scripts.php");
         $("#btnExcluir").on("click", function() {
             excluir();
         });
-        $('#btnAddFolhaPontoMensal').on("click", function() {
-            if (validaFolhaPontoMensal()) {
-                addFolhaPontoMensal();
-            }
+        $("#checkAlmoco").on("click", function() {
+            var check = $(".sectionAlmoco")
+            check.each((index, el) => {
+                console.log(typeof el)
+                console.log($(el))
+
+                if ($(el).css('display') != 'block') {
+
+                    $(el).css('display', 'block')
+                } else {
+                    $(el).css('display', 'none')
+                }
+            })
         });
-        $('#btnRemoverFolhaPontoMensal').on("click", function() {
-            excluirFolhaPontoMensal();
-        });
-        fillTableFolhaPontoMensal();
+
         carregaFolhaPontoMensal();
 
 
     });
-
-    function clearFormFolhaPontoMensal() {
-        $("#lancamentoId, #sequencialFolhaPontoMensal, #funcionario, #mesAnoFolhaPonto ,#projeto").val('');
-        $("#lancamento").val('Selecione');
-
-    }
-
-    function fillTableFolhaPontoMensal() {
-        $("#tableFolhaPontoMensal tbody").empty();
-        if (typeof(jsonFolhaPontoMensalArray) != 'undefined') {
-            for (var i = 0; i < jsonFolhaPontoMensalArray.length; i++) {
-                var row = $('<tr />');
-                $("#tableFolhaPontoMensal tbody").append(row);
-                row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + '"><i></i></label></td>'));
-                row.append($('<td class="text-nowrap" onclick="carregaFolhaPontoMensal(' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + ');">' + jsonFolhaPontoMensalArray[i].funcionarioText + '</td>'));
-                row.append($('<td class="text-nowrap" (' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + ');">' + jsonFolhaPontoMensalArray[i].projetoText + '</td>'));
-                row.append($('<td class="text-nowrap" (' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + ');">' + jsonFolhaPontoMensalArray[i].mesAnoFolhaPonto + '</td>'));
-                row.append($('<td class="" (' + jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal + ');">' + jsonFolhaPontoMensalArray[i].lancamentoText + '</td>'));
-
-
-            }
-            clearFormFolhaPontoMensal();
-        }
-    }
-
-
-    function validaFolhaPontoMensal() {
-        var existe = false;
-        var achou = false;
-        var funcionario = $('#funcionario').val();
-        var projeto = $("#projeto").val();
-        var mesAnoFolhaPonto = $('#mesAnoFolhaPonto').val();
-        var lancamento = $('#lancamento').val();
-
-
-        var sequencial = +$('#sequencialFolhaPontoMensal').val();
-        var correspondenciaMarcado = 1;
-
-        if (!funcionario) {
-            smartAlert("Erro", "Informe o Funcionário.", "error");
-            return false;
-        }
-
-        if (!mesAnoFolhaPonto) {
-            smartAlert("Erro", "Informe o Mês/Ano.", "error");
-            return false;
-        }
-
-        if (!projeto) {
-            smartAlert("Erro", "Informe o Projeto", "error");
-            return false;
-        }
-
-        if (!lancamento) {
-            smartAlert("Erro", "Informe o Lançamento.", "error");
-            return false;
-        }
-
-
-
-        for (i = jsonFolhaPontoMensalArray.length - 1; i >= 0; i--) {
-            if (correspondenciaMarcado === 1) {
-                if ((jsonFolhaPontoMensalArray[i].correspondencia == 1) && (jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal !== sequencial)) {
-                    achou = true;
-                    break;
-                }
-            }
-            if (!funcionario) {
-                if ((jsonFolhaPontoMensalArray[i].lancamento === funcionario) && (jsonFolhaPontoMensalArray[i].sequencialFolhaPontoMensal !== sequencial)) {
-                    existe = true;
-                    break;
-                }
-            }
-
-        }
-        if (existe === true) {
-            smartAlert("Erro", "FolhaPontoMensal já cadastrado.", "error");
-            return false;
-        }
-        if ((achou === true) && (correspondenciaMarcado === 1)) {
-            smartAlert("Erro", "Você já marcou pra receber Correspondencia.", "error");
-            return false;
-        }
-        return true;
-    }
-
-    function processDataFolhaPontoMensal(node) {
-
-        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
-        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
-        var value;
-
-        if (fieldName !== '' && (fieldId === "funcionario")) {
-            var valorTel = $("#funcionario").val().trim();
-            if (valorTel !== '') {
-                fieldName = "funcionario";
-            }
-            return {
-                name: fieldName,
-                value: valorTel
-            };
-        }
-
-        return false;
-    }
-
-    function addFolhaPontoMensal() {
-        var item = $("#formFolhaPontoMensal").toObject({
-            mode: 'combine',
-            skipEmpty: false,
-            nodeCallback: processDataFolhaPontoMensal
-        });
-
-        if (item["sequencialFolhaPontoMensal"] === '') {
-            if (jsonFolhaPontoMensalArray.length === 0) {
-                item["sequencialFolhaPontoMensal"] = 1;
-            } else {
-                item["sequencialFolhaPontoMensal"] = Math.max.apply(Math, jsonFolhaPontoMensalArray.map(function(o) {
-                    return o.sequencialFolhaPontoMensal;
-                })) + 1;
-            }
-            item["encargoPercentualId"] = 0;
-        } else {
-            item["sequencialFolhaPontoMensal"] = +item["sequencialFolhaPontoMensal"];
-        }
-
-        item.funcionarioText = $('#funcionario option:selected').text().trim();
-        item.projetoText = $('#projeto option:selected').text().trim();
-        item.lancamentoText = $('#lancamento option:selected').text().trim();
-
-        var index = -1;
-        $.each(jsonFolhaPontoMensalArray, function(i, obj) {
-            if (+$('#sequencialFolhaPontoMensal').val() === obj.sequencialFolhaPontoMensal) {
-                index = i;
-                return false;
-            }
-        });
-
-        if (index >= 0)
-            jsonFolhaPontoMensalArray.splice(index, 1, item);
-        else
-            jsonFolhaPontoMensalArray.push(item);
-
-        $("#jsonFolhaPontoMensal").val(JSON.stringify(jsonFolhaPontoMensalArray));
-        fillTableFolhaPontoMensal();
-        clearFormFolhaPontoMensal();
-
-    }
-
-    function excluirFolhaPontoMensal() {
-        var arrSequencial = [];
-        $('#tableFolhaPontoMensal input[type=checkbox]:checked').each(function() {
-            arrSequencial.push(parseInt($(this).val()));
-        });
-        if (arrSequencial.length > 0) {
-            for (i = jsonFolhaPontoMensalArray.length - 1; i >= 0; i--) {
-                var obj = jsonFolhaPontoMensalArray[i];
-                if (jQuery.inArray(obj.sequencialFolhaPontoMensal, arrSequencial) > -1) {
-                    jsonFolhaPontoMensalArray.splice(i, 1);
-                }
-            }
-            $("#JsonFolhaPontoMensal").val(JSON.stringify(jsonFolhaPontoMensalArray));
-            fillTableFolhaPontoMensal();
-        } else {
-            smartAlert("Erro", "Selecione pelo menos um FolhaPontoMensal para excluir.", "error");
-        }
-    }
-
-    function carregaFolhaPontoMensal(sequencialFolhaPontoMensal) {
-        var arr = jQuery.grep(jsonFolhaPontoMensalArray, function(item, i) {
-            return (item.sequencialFolhaPontoMensal === sequencialFolhaPontoMensal);
-        });
-
-        clearFormFolhaPontoMensal();
-
-        if (arr.length > 0) {
-            var item = arr[0];
-            $("#lancamentoId").val(item.lancamentoId);
-            $("#sequencialFolhaPontoMensal").val(item.sequencialFolhaPontoMensal);
-            $("#funcionario").val(item.funcionario);
-            $("#projeto").val(item.projeto);
-            $("#mesAnoFolhaPonto").val(item.mesAnoFolhaPonto);
-            $("#lancamento").val(item.lancamento);
-
-
-
-        }
-    }
-
-
-
-
-
-
 
     function voltar() {
         $(location).attr('href', 'beneficio_folhaPontoMensalFiltro.php');
@@ -629,37 +543,47 @@ include("inc/scripts.php");
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
-        var arrayFolha = $("input[name='dia']")  
+        var arrayFolha = $("input[name='dia']")
         var arrayDia = new Array()
-        arrayFolha.forEach(folha =>{
-           return arrayDia.push({dia:folha.value})
+        arrayFolha.forEach(folha => {
+            return arrayDia.push({
+                dia: folha.value
+            })
         })
 
         var arrayFolha = $("input[name='horaEntrada']")
         var arrayHoraEntrada = new Array()
-        arrayFolha.forEach(folha =>{
-           return arrayHoraEntrada.push({horaEntrada:folha.value})
+        arrayFolha.forEach(folha => {
+            return arrayHoraEntrada.push({
+                horaEntrada: folha.value
+            })
         })
 
         var arrayFolha = $("input[name='inicioAlmoco']")
         var arrayInicioAlmoco = new Array()
-        arrayFolha.forEach(folha =>{
-           return arrayInicioAlmoco.push({inicioAlmoco:folha.value})
-        }) 
+        arrayFolha.forEach(folha => {
+            return arrayInicioAlmoco.push({
+                inicioAlmoco: folha.value
+            })
+        })
 
         var arrayFolha = $("input[name='fimAlmoco']")
         var arrayFimAlmoco = new Array()
-        arrayFolha.forEach(folha =>{
-           return arrayFimAlmoco.push({fimAlmoco:folha.value})
-        })
-        
-        var arrayFolha = $("input[name='horaEntrada']")
-        var arrayHoraEntrada = new Array()
-        arrayFolha.forEach(folha =>{
-           return arrayHoraEntrada.push({horaEntrada:folha.value})
+        arrayFolha.forEach(folha => {
+            return arrayFimAlmoco.push({
+                fimAlmoco: folha.value
+            })
         })
 
-       
+        var arrayFolha = $("input[name='horaEntrada']")
+        var arrayHoraEntrada = new Array()
+        arrayFolha.forEach(folha => {
+            return arrayHoraEntrada.push({
+                horaEntrada: folha.value
+            })
+        })
+
+
         var codigo = +$("#codigo").val();
         var ativo = $("#ativo").val();
         var funcionario = $("#funcionario").val();
