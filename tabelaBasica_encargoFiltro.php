@@ -98,7 +98,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Percentual</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" autocomplete="off" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1">

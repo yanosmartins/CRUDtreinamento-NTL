@@ -193,22 +193,55 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
 
-
-
         $('#btnNovo').on("click", function() {
             novo();
         });
+
         $("#btnGravar").on("click", function() {
             gravar();
         });
+
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-        $("#btnExcluir").on("click", function() {
-            excluir();
+        
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
         });
-        carregaIndiceReajuste();
 
+        $("#btnExcluir").on("click", function() {
+            var id = $("#codigo").val();
+
+            if (id === 0) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+                $("#nome").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
+            }
+        });
+
+        carregaIndiceReajuste();
 
     });
 

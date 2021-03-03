@@ -19,8 +19,8 @@ include "js/repositorio.php";
 
                     $where = $where . " AND descricao = " . "'" . $descricao . "'";
                 }
-                if (($_GET['ativo'] === 1) || ($_GET['ativo'] === 0)) {
-                    $where .=  " AND situacao = " . $ativo;
+                if (($ativo == 1) || ($ativo == 0)) {
+                    $where .=  " AND ativo = " . $ativo;
                 }
 
                 $reposit = new reposit();

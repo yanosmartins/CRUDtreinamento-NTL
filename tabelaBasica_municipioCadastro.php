@@ -98,7 +98,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo,sigla FROM Ntl.unidadeFederacao ORDER BY sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
                                                                         }
@@ -252,12 +252,7 @@ include("inc/scripts.php");
         });
 
         $("#btnGravar").on("click", function() {
-            var verificaRecuperacao = $("#verificaRecuperacao").val();
-            if (verificaRecuperacao == 1) {
-                gravar()
-            } else {
-                verificaMunicipioDuplicado();
-            }
+            gravar()
         });
 
         $("#btnVoltar").on("click", function() {
@@ -344,22 +339,22 @@ include("inc/scripts.php");
         );
     }
 
-    function verificaMunicipioDuplicado() {
-        var descricao = $("#descricao").val();
-        verificaMunicipio(descricao,
-            function(data) {
-                if (data.indexOf('failed') > -1) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    gravar()
-                } else {
-                    smartAlert("Atenção", "Já existe um Município com essa Descrição no sistema!", "error");
-                    $("#descricao").focus();
+    // function verificaMunicipioDuplicado() {
+    //     var descricao = $("#descricao").val();
+    //     verificaMunicipio(descricao,
+    //         function(data) {
+    //             if (data.indexOf('failed') > -1) {
+    //                 var piece = data.split("#");
+    //                 var mensagem = piece[1];
+    //                 gravar()
+    //             } else {
+    //                 smartAlert("Atenção", "Já existe um Município com essa Descrição no sistema!", "error");
+    //                 $("#descricao").focus();
 
-                }
-            }
-        );
-    }
+    //             }
+    //         }
+    //     );
+    // } NAO TEM O RESTO DA FUNCAO NO SQL SCOPE 03/03/21 , ESTA TRAVANDO A TELA NO PHP 8
 
     function gravar() {
 

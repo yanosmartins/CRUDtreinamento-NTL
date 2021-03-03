@@ -35,12 +35,10 @@ include "js/repositorio.php";
                     $tipo = $_POST["tipo"];
                     $where = $where . " AND tarefa.tipo = $tipo ";
                 }
-
-                if (isset($_POST["ativo"])) {
-                    $ativo = $_POST["ativo"];
-                    if ($ativo != "default") {
-                        $where = $where . " AND tarefa.ativo = $ativo ";
-                    }
+                
+                $ativo = $_POST["ativo"];
+                if ($ativo == 1 || $ativo == 0) {
+                    $where = $where . " AND tarefa.ativo = $ativo ";
                 }
 
                 $sql .= $where . $order;

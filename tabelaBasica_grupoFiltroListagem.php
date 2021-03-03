@@ -31,7 +31,7 @@
                     } 
                     
                     if ($_GET["tipoFiltro"] != "") {
-                        $tipoFiltro = $_GET["tipoFiltro"];
+                        $tipoFiltro = "'" . $_GET["tipoFiltro"] . "'";
                         $where = $where." AND tipo = $tipoFiltro";
                     } 
                     
