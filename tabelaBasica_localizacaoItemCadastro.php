@@ -354,7 +354,7 @@ include("inc/scripts.php");
             //
             var codigo = parseInt(piece[0]);
             var localizacaoItem = piece[1];
-            var estoque = piece[2];
+            var estoque = parseInt(piece[2]);
 
             //Atributos de cliente        
             $("#codigo").val(codigo);

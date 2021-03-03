@@ -20,7 +20,7 @@ function recuperaLocalizacaoItem(id, callback) {
     url: 'js/sqlscope_tabelaBasicaLocalizacaoItem.php', //caminho do arquivo a ser executado
     dataType: 'html', //tipo do retorno
     type: 'post', //metodo de envio
-    data: { funcao: 'recupera', id: id }, //valores enviados ao script
+    data: { funcao: 'recupera', codigo: id }, //valores enviados ao script
 
     success: function (data) {
       callback(data)
