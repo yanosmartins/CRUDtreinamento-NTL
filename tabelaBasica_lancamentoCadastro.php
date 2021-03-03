@@ -93,7 +93,7 @@ include("inc/nav.php");
                                                             <section class="col col-1 col-auto">
                                                                 <label class="label" for="descricao">Sigla</label>
                                                                 <label class="input">
-                                                                    <input id="sigla" name="sigla" type="text" class="required" maxlength="2" required autocomplete="off">
+                                                                    <input id="sigla" name="sigla" type="text" class="required" maxlength="5" required autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
@@ -103,6 +103,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <option value='F'>Falta</option>
                                                                         <option value='A'>Ausência</option>
+                                                                        <option value='VT'>VT</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -367,6 +368,13 @@ include("inc/scripts.php");
             $("#btnGravar").prop('disabled', false);
             return;
         }
+
+        if (!faltaAusencia) {
+            smartAlert("Atenção", "Informe o tipo desconto", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
 
         //Chama a função de gravar do business de convênio de saúde.
         gravaLancamento(id, ativo, descricao, sigla, faltaAusencia,

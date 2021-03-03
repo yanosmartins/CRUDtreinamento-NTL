@@ -88,7 +88,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo,descricao,sigla,ativo,faltaAusencia FROM Ntl.lancamento WHERE (0 = 0)";
+    $sql = "SELECT codigo,descricao,sigla,ativo,tipoDesconto FROM Ntl.lancamento WHERE (0 = 0)";
 
     if ($condicaoId) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -105,7 +105,7 @@ function recupera()
         $descricao = $row['descricao'];
         $sigla = $row['sigla'];
         $ativo = +$row['ativo'];
-        $faltaAusencia = $row['faltaAusencia'];
+        $faltaAusencia = $row['tipoDesconto'];
 
         $out = $id . "^" . $descricao . "^" . $sigla .  "^" . $ativo .  "^" . $faltaAusencia;
 

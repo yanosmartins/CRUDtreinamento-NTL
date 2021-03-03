@@ -93,19 +93,19 @@ include("inc/nav.php");
                                                             <section class="col col-6">
                                                                 <label class="label" for="nome">Responsável</label>
                                                                 <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" class="required" type="text" value="" autocomplete="off" required>
+                                                                    <input id="nome" maxlength="255" name="nome" class="required" type="text" value="" autocomplete="off" >
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3">
                                                                 <label class="label" for="telefone">Telefone com DD</label>
                                                                 <label class="input">
-                                                                    <input id="telefone" maxlength="255" name="telefone" class="required" type="text" autocomplete="off" data-mask-placeholder="X" data-mask="99999999999" value="" required>
+                                                                    <input id="telefone" maxlength="255" name="telefone" class="required" type="text" autocomplete="off" data-mask-placeholder="X" data-mask="99999999999" value="" >
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required" required>
+                                                                    <select id="ativo" name="ativo" class="required" >
                                                                         <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
@@ -342,12 +342,14 @@ include("inc/scripts.php");
             smartAlert("Atenção", "Informe o responsável !", "error");
             $("#btnGravar").prop('disabled', false);
             $("#nome").focus();
+            return;
         }
 
         if (telefone === "") {
             smartAlert("Atenção", "Informe o telefone do responsável !", "error");
             $("#btnGravar").prop('disabled', false);
             $("#telefone").focus();
+            return;
         }
 
         gravaResponsavel(codigo, nome, telefone, ativo,
