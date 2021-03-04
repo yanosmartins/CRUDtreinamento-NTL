@@ -29,10 +29,10 @@ $mesAno = $_GET["data"];
 if ($mesAno != "") {
     $mesteste = explode("/", $mesAno);
     $mes = $mesteste[0];
-    if ($pag = 0 && $mes = 01) {
+    if ($pag == 0 && $mes == 01) {
         $mes = 12;
     } 
-    if($pag = 0 && $mes != 01) {
+    if($pag == 0 && $mes != 01) {
         $mes = $mes - 1;
     }
     $ano = $mesteste[1];
@@ -43,10 +43,10 @@ if ($mesAno != "") {
 } else {
 
     $mes = date("m"); //02
-    if ($pag = 0 && $mes = 01) {
+    if ($pag == 0 && $mes == 01) {
         $mes = 12;
     }  
-    if($pag = 0 && $mes != 01) {
+    if($pag == 0 && $mes != 01) {
         $mes = $mes - 1;
     }
     $ano = date("Y"); //2021
