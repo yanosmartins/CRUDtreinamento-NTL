@@ -94,8 +94,8 @@ include("inc/nav.php");
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo" class="required" required>
-                                                                        <option value="1">Ativo</option>
-                                                                        <option value="0">Inativo</option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -270,9 +270,9 @@ include("inc/scripts.php");
                             piece = out.split("^");
 
                             // Atributos de vale transporte unitário que serão recuperados: 
-                            var codigo = parseInt(piece[0]);
+                            var codigo = +piece[0];
                             var descricao = piece[1];
-                            var ativo = piece[2];
+                            var ativo = +piece[2];
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);

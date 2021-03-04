@@ -280,7 +280,8 @@ include("inc/scripts.php");
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!percentual) {
-            smartAlert("Erro", "Informe o 13º Salário.", "error");
+            smartAlert("Erro", "Informe o percentual.", "error");
+            $("#btnGravar").prop('disabled', false);
             return;
         }
         ativo = 1;
