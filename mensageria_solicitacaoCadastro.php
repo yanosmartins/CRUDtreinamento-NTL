@@ -128,7 +128,10 @@ include("inc/nav.php");
                                 <label class="input">
                                   <i class="icon-append fa fa-clock-o"></i>
                                   <?php
-                                  $hora = date("h:i");
+                                  // DEFINE O FUSO HORARIO COMO O HORARIO DE BRASILIA
+                                  date_default_timezone_set('America/Sao_Paulo');
+                                  // CRIA UMA VARIAVEL E ARMAZENA A HORA ATUAL DO FUSO-HORÀRIO DEFINIDO (BRASÍLIA)
+                                  $hora = date('H:i', time());
                                   $hora = "'" . $hora . "'";
                                   echo "<input id='hora' name='hora' class='readonly' type='text' autocompvare='new-password' value=" . $hora . " readonly>"
                                   ?>
@@ -179,7 +182,7 @@ include("inc/nav.php");
                                 </label>
                               </section>
                               <section class="col col-3">
-                                <label class="label" >Departamento</label>
+                                <label class="label">Departamento</label>
                                 <label class="select">
                                   <select id="departamento" name="departamento" class="readonly" readonly>
                                     <option></option>
@@ -204,6 +207,12 @@ include("inc/nav.php");
                                     }
                                     ?>
                                   </select><i></i>
+                              </section>
+                              <section class="col col-3" id="sectionRecurso" >
+                                <label class="label">Recursos Necessários</label>
+                                <label class="input">
+                                  <input id='recurso' maxlength='255' name='recurso' class='required text-center' type='text' data-mask="9">
+                                </label>
                               </section>
                               <section class="col col-6" id="sectionResponsavel" hidden>
                                 <label class="label">Responsável</label>
@@ -469,6 +478,7 @@ include "inc/scripts.php";
               funcionarioId = piece[11];
               concluido = piece[12];
               departamento = piece[13];
+              recurso = +piece[14];
 
 
               $("#sectionResponsavel").removeAttr("hidden");
@@ -486,6 +496,7 @@ include "inc/scripts.php";
               $("#observacao").val(observacao);
               $("#concluido").val(concluido);
               $("#departamento").val(departamento);
+              $("#recurso").val(recurso);
 
               if (responsavel == '') {
                 $("#responsavelId").val(funcionarioId);

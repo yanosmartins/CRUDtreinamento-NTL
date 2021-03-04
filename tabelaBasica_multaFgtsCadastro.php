@@ -195,7 +195,6 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
 
-
         $('#percentual').focusout(function() {
             var percentual, element;
             element = $(this);
@@ -229,7 +228,6 @@ include("inc/scripts.php");
             }]
         });
 
-
         $("#btnExcluir").on("click", function() {
             var id = $("#codigo").val();
 
@@ -244,7 +242,6 @@ include("inc/scripts.php");
             }
         });
 
-
         $('#btnNovo').on("click", function() {
             $(location).attr('href', 'tabelaBasica_multaFgtsCadastro.php');
         });
@@ -256,8 +253,6 @@ include("inc/scripts.php");
         });
 
         carregaMultaFgts();
-
-
     });
 
     function voltar() {
@@ -276,7 +271,8 @@ include("inc/scripts.php");
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!percentual) {
-            smartAlert("Erro", "Informe o 13º Salário.", "error");
+            smartAlert("Erro", "Informe o Percentual.", "error");
+            $("#btnGravar").prop('disabled', false);
             return;
         }
         ativo = 1;
@@ -330,8 +326,6 @@ include("inc/scripts.php");
         );
     }
 
-
-
     function carregaMultaFgts() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
@@ -360,14 +354,9 @@ include("inc/scripts.php");
                         $("#codigo").val(codigo);
                         $("#percentual").val(percentual);
 
-
-
                     }
-
                 );
             }
         }
-
-
     }
 </script>
