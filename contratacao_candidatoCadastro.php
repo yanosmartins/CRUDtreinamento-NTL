@@ -33,9 +33,11 @@ $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 $row = $result[0];
 if ($row) {
-    
+
     $linkUpload = $row['linkUpload'];
 }
+
+
 
 
 /* ---------------- PHP Custom Scripts ---------
@@ -1384,7 +1386,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -1835,7 +1837,7 @@ include("inc/scripts.php");
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/gir_script.js" type="text/javascript"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script> 
+<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script>
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
@@ -2808,20 +2810,21 @@ include("inc/scripts.php");
 
         }
 
-        
-    
-       
+
+
+
     });
 
     $("#linkPdfTransporte").on("click", function() {
-            abrePdfTransporte();
-        });
+        abrePdfTransporte();
+    });
 
-    $('#possuiContaBancaria').on('change',function() {
-            verificaBanco();
-        });
-    function verificaBanco(){
-        
+    $('#possuiContaBancaria').on('change', function() {
+        verificaBanco();
+    });
+
+    function verificaBanco() {
+
         var possuiContaBancaria = +$('#possuiContaBancaria').val();
         if (possuiContaBancaria == 1) {
             $("#tipoConta").removeClass('readonly');
@@ -3146,6 +3149,10 @@ include("inc/scripts.php");
                             let valor = $("#paisNascimento").val();
                             $("#numeroPais").val(valor);
 
+                            if (!carteiraTrabalho) {
+                                smartAlert("Atenção", "Preencha o campo carteira de trabalho", "error");
+                            }
+
                             if (valor) {
                                 if (valor != 105) { //Código do Brasil
 
@@ -3283,17 +3290,17 @@ include("inc/scripts.php");
                             var mensagem = piece[0];
                             var arrayDocumentos = JSON.parse(piece[1]);
                             for (var index = 0; index < arrayDocumentos.length; index++) {
- 
+
                                 var nomeArquivo = arrayDocumentos[index].nomeArquivo;
                                 var nomeVisualizacao = nomeArquivo.split("_");
-                                var tipoArquivo = arrayDocumentos[index].tipoArquivo; 
+                                var tipoArquivo = arrayDocumentos[index].tipoArquivo;
                                 var nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
                                 var idCampo = arrayDocumentos[index].idCampo + "Link";
-                                var endereco = arrayDocumentos[index].enderecoDocumento; 
+                                var endereco = arrayDocumentos[index].enderecoDocumento;
                                 var diretorio = "<?php echo $linkUpload ?>" + endereco + nomeArquivo;
 
                                 $("#" + idCampo).append("<a href ='" + diretorio + "' target='_blank'>" + nomeVisualizacao[1] + "</a><br>");
- 
+
                             }
 
                         }
@@ -3872,7 +3879,7 @@ include("inc/scripts.php");
 
 
     function gravar() {
- 
+
         let form = $('#formFuncionario')[0];
         let formData = new FormData(form);
         formData.append('funcao', 'gravaFuncionario');
@@ -3886,6 +3893,14 @@ include("inc/scripts.php");
         let dataNascimento = $("#dataNascimento").val();
         if (!dataNascimento) {
             smartAlert("Atenção", "Selecione a Data de Nascimento", "error");
+            return;
+        }
+        let hoje = new Date();
+        dataNascimento = dataNascimento.split("/");
+        dataNascimento = new Date(`${dataNascimento[2]}-${dataNascimento[1]}-${dataNascimento[0]}`);
+
+        if (dataNascimento > hoje) {
+            smartAlert("Atenção", "Data de Nascimento maior ou igual a atual", "error");
             return;
         }
 
@@ -3961,6 +3976,28 @@ include("inc/scripts.php");
             smartAlert("Atenção", "Selecione se possui PIS ou não", "error");
             return;
         }
+
+        let carteiraTrabalho = $("#carteiraTrabalho").val();
+
+        if (!carteiraTrabalho) {
+            smartAlert("Atenção", "Digite a Carteira de Trabalho", "error");
+            return;
+        }
+
+        let carteiraTrabalhoSerie = $("#carteiraTrabalhoSerie").val();
+
+        if (!carteiraTrabalhoSerie) {
+            smartAlert("Atenção", "Digite o campo Serie", "error");
+            return;
+        }
+
+        let projeto = $("#projeto").val();
+        if (projeto == "") {
+            smartAlert("Atenção", "Escolha um Projeto", "error");
+            return;
+        }
+
+
 
         let rg = $("#rg").val();
         if (!rg) {
@@ -4087,12 +4124,12 @@ include("inc/scripts.php");
 
         gravaFuncionario(formData);
     }
-   
+
 
     function verificaNome(campo) {
-        var texto = $(campo).val(); 
+        var texto = $(campo).val();
         for (letra of texto) {
-            if (!isNaN(texto)) { 
+            if (!isNaN(texto)) {
                 smartAlert("Erro", "Não digite caracteres que não sejam letras ou espaço", "error");
                 $(campo).val("");
                 return;
