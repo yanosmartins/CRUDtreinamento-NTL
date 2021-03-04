@@ -33,7 +33,7 @@ $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 $row = $result[0];
 if ($row) {
-    
+
     $linkUpload = $row['linkUpload'];
 }
 
@@ -142,7 +142,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Data Nascimento</label>
                                                                 <label class="input">
-                                                                    <input id="dataNascimento" name="dataNascimento" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataNascimento')">
+                                                                    <input id="dataNascimento" name="dataNascimento" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -721,7 +721,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Data Nascimento</label>
                                                                 <label class="input">
-                                                                    <input id="dataNascimentoConjuge" name="dataNascimentoConjuge" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataNascimentoConjuge')">
+                                                                    <input id="dataNascimentoConjuge" name="dataNascimentoConjuge" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" >
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -877,7 +877,7 @@ include("inc/nav.php");
                                                                     <label class="label" for="dataNascimentoFilho">Nascimento</label>
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="dataNascimentoFilho" name="dataNascimentoFilho" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" onchange="validaCampoData('#dataNascimentoFilho')">
+                                                                        <input id="dataNascimentoFilho" name="dataNascimentoFilho" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" >
                                                                     </label>
                                                                 </section>
                                                             </div>
@@ -946,7 +946,7 @@ include("inc/nav.php");
                                                                     <label class="label" for="dataNascimentoDependente">Nascimento</label>
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" onchange="validaCampoData('#dataNascimentoDependente')">
+                                                                        <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" >
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
@@ -1384,7 +1384,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            
+
                                                                             $row = array_map('mb_strtoupper', $row);
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = ($row['descricao']);
@@ -1835,7 +1835,7 @@ include("inc/scripts.php");
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/gir_script.js" type="text/javascript"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script> 
+<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script>
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
@@ -2808,20 +2808,39 @@ include("inc/scripts.php");
 
         }
 
-        
-    
-       
+
+
+
     });
 
     $("#linkPdfTransporte").on("click", function() {
-            abrePdfTransporte();
-        });
+        abrePdfTransporte();
+    });
 
-    $('#possuiContaBancaria').on('change',function() {
-            verificaBanco();
-        });
-    function verificaBanco(){
-        
+    $('#possuiContaBancaria').on('change', function() {
+        verificaBanco();
+    });
+
+    $("#dataNascimento").on("change", function() {
+        validaCampoData("#dataNascimento");
+        comparaDataHoje("#dataNascimento");
+    });
+    $("#dataNascimentoConjuge").on("change", function() {
+        validaCampoData("#dataNascimentoConjuge");
+        comparaDataHoje("#dataNascimentoConjuge");
+    });
+    $("#dataNascimentoFilho").on("change", function() {
+        validaCampoData("#dataNascimentoFilho");
+        comparaDataHoje("#dataNascimentoFilho");
+    });
+    $("#dataNascimentoDependente").on("change", function() {
+        validaCampoData("#dataNascimentoDependente");
+        comparaDataHoje("#dataNascimentoDependente");
+    });
+
+
+    function verificaBanco() {
+
         var possuiContaBancaria = +$('#possuiContaBancaria').val();
         if (possuiContaBancaria == 1) {
             $("#tipoConta").removeClass('readonly');
@@ -3283,17 +3302,17 @@ include("inc/scripts.php");
                             var mensagem = piece[0];
                             var arrayDocumentos = JSON.parse(piece[1]);
                             for (var index = 0; index < arrayDocumentos.length; index++) {
- 
+
                                 var nomeArquivo = arrayDocumentos[index].nomeArquivo;
                                 var nomeVisualizacao = nomeArquivo.split("_");
-                                var tipoArquivo = arrayDocumentos[index].tipoArquivo; 
+                                var tipoArquivo = arrayDocumentos[index].tipoArquivo;
                                 var nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
                                 var idCampo = arrayDocumentos[index].idCampo + "Link";
-                                var endereco = arrayDocumentos[index].enderecoDocumento; 
+                                var endereco = arrayDocumentos[index].enderecoDocumento;
                                 var diretorio = "<?php echo $linkUpload ?>" + endereco + nomeArquivo;
 
                                 $("#" + idCampo).append("<a href ='" + diretorio + "' target='_blank'>" + nomeVisualizacao[1] + "</a><br>");
- 
+
                             }
 
                         }
@@ -3322,6 +3341,26 @@ include("inc/scripts.php");
         }
 
         excluirUsuario(id);
+    }
+
+    function comparaDataHoje(primeiraData) {
+
+        var nomeCampoPrimeiraData = primeiraData;
+        var valorPrimeiraData = $(primeiraData).val();
+        var valorSegundaData = new Date().toLocaleDateString();
+
+        if ((valorPrimeiraData != "") && (valorSegundaData != "")) {
+
+            valorPrimeiraData = moment(valorPrimeiraData, "DD-MM-YYYY");
+            valorSegundaData = moment(valorSegundaData, "DD-MM-YYYY");
+
+            var diferencaEntreDatas = valorPrimeiraData.diff(valorSegundaData, 'days');
+
+            if (diferencaEntreDatas > 0) {
+                smartAlert("Erro", "Data maior que hoje", "error");
+                $(nomeCampoPrimeiraData).val("");
+            }
+        }
     }
     //############################################################################## DOCUMENTOS ####################################################################################################################
 
@@ -3872,7 +3911,7 @@ include("inc/scripts.php");
 
 
     function gravar() {
- 
+
         let form = $('#formFuncionario')[0];
         let formData = new FormData(form);
         formData.append('funcao', 'gravaFuncionario');
@@ -4087,12 +4126,12 @@ include("inc/scripts.php");
 
         gravaFuncionario(formData);
     }
-   
+
 
     function verificaNome(campo) {
-        var texto = $(campo).val(); 
+        var texto = $(campo).val();
         for (letra of texto) {
-            if (!isNaN(texto)) { 
+            if (!isNaN(texto)) {
                 smartAlert("Erro", "Não digite caracteres que não sejam letras ou espaço", "error");
                 $(campo).val("");
                 return;
