@@ -190,15 +190,28 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
   $(document).ready(function() {
 
-    $('#valor').focusout(function() {
-      var valor, element;
-      element = $(this);
-      element.unmask();
-      valor = element.val().replace(/\D/g, '');
-      if (valor.length > 3) {
-        element.mask("99,9?9");
+    $('#valor').focusout(function(el) {
+      let value = $(el.target).val().replace(/[^\d]+/g, '');
+      let validate = /\D/
+      if (validate.test(value) || value == "") {
+        return $('#valor').val('');
       } else {
-        element.mask("9,99?9");
+        const centavos = value.substr(-2)
+        let reais = value.substr(0, value.length - 2)
+
+        value = parseFloat(reais + '.' + centavos)
+
+        value = value.toLocaleString('pt-BR', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+
+        if (value.length < 5) {
+          const recorte = value.slice(-4)
+          value = (0000) + recorte
+        }
+
+        return $('#valor').val(value);
       }
     }).trigger('focusout');
 

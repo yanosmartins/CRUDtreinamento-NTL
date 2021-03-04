@@ -37,10 +37,12 @@ function grava()
     $codigo = $_POST['codigo'];
     $descricao = "'" . (string)$_POST['descricao'] . "'";
     $valor = $_POST['valor'];
-    $valor = str_replace(",", ".", $valor);
-    $valor = number_format($valor, 2, ",", " ");
+    $pattern = "/[.]/i";
+    $valor = preg_replace($pattern, "", $valor);
+    $pattern = "/[,]/i";
+    $valor = (float)preg_replace($pattern, ".", $valor);
+    $valor = number_format($valor, 2, ".", "");
     $ativo = 1;
-    $valor = str_replace(",", ".", $valor);
 
 
     $sql = "Ntl.insumo_Atualiza
@@ -50,7 +52,7 @@ function grava()
         $ativo ,
         $usuario";
 
-      $reposit = new reposit();
+    $reposit = new reposit();
 
     $result = $reposit->Execprocedure($sql);
     $ret = 'sucess#';
@@ -83,8 +85,7 @@ function recupera()
     $descricao = $row['descricao'];
     $valor = $row['valor'];
     $ativo = $row['ativo'];
-    $valor = number_format($valor, 2, ".", "");
-    $valor = str_replace(".", ",", $valor);
+    $valor = number_format($valor, 2, ",", ".");
 
     $out =   $id . "^" .
         $descricao . "^" .

@@ -113,7 +113,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Localização do Item</label>
                                                                 <label class="input">
-                                                                    <input id="localizacaoItem" name="localizacaoItem" style="text-align: right;" type="text" autocomplete="off">
+                                                                    <input id="localizacaoItem" name="localizacaoItem" style="text-align: left;" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
 
