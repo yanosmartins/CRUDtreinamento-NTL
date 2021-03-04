@@ -42,6 +42,9 @@ if ($row) {
     $linkUpload = $row['linkUpload'];
 }
 
+
+
+
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
@@ -4007,7 +4010,7 @@ include("inc/scripts.php");
         let rg = $("#rg").val();
         let emissorRg = $("#emissorRg").val();
         let cep = $("#cep").val();
-        let endereco = $("#endereco").val();
+        let endereco = $("#endereco").val();    
         let bairro = $("#bairro").val();
         let cidade = $("#cidade").val();
         let numero = $("#numero").val();
@@ -4028,6 +4031,15 @@ include("inc/scripts.php");
 
         if (!dataNascimento) {
             smartAlert("Atenção", "Selecione a Data de Nascimento", "error");
+            return;
+        }
+
+        let hoje = new Date();
+        dataNascimento = dataNascimento.split("/");
+        dataNascimento = new Date(`${dataNascimento[2]}-${dataNascimento[1]}-${dataNascimento[0]}`);
+
+        if (dataNascimento > hoje) {
+            smartAlert("Atenção", "Data de Nascimento maior ou igual a atual", "error");
             return;
         }
 
@@ -4090,6 +4102,27 @@ include("inc/scripts.php");
 
         } else if (!possuiPIS) {
             smartAlert("Atenção", "Selecione se possui PIS ou não", "error");
+            return;
+        }
+
+        
+        let carteiraTrabalho = $("#carteiraTrabalho").val();
+
+        if (!carteiraTrabalho) {
+            smartAlert("Atenção", "Digite a Carteira de Trabalho", "error");
+            return;    
+        }
+
+        let carteiraTrabalhoSerie = $("#carteiraTrabalhoSerie").val();
+
+        if (!carteiraTrabalhoSerie) {
+            smartAlert("Atenção", "Digite o campo Serie", "error");
+        return;
+}
+
+        let projeto = $("#projeto").val();
+        if (projeto == "") {
+            smartAlert("Atenção", "Escolha um Projeto", "error");
             return;
         }
 

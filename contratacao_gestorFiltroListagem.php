@@ -39,8 +39,8 @@ include "js/repositorio.php";
                     $where = $where . " AND (P.descricao like '%' + " . "replace('" . $projeto . "',' ','%') + " . "'%')";
                 }
 
-                if ($_POST["candidato"] != "") {
-                    $candidato = $_POST["candidato"];
+                if ($_POST["funcionario"] != "") {
+                    $candidato = $_POST["funcionario"];
                     $where = $where . " AND (F.nomeCompleto like '%' + " . "replace('" . $candidato . "',' ','%') + " . "'%')";
                 }
 

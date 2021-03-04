@@ -167,6 +167,6 @@ include("inc/scripts.php");
 
     function novo() {
         $funcionario = <?php echo json_encode($funcionario); ?>;
-        $(location).attr('href', 'funcionario_folhaDePontoPdf.php?id=' + $funcionario);
+        $(location).attr('href', 'funcionario_folhaDePontoPdf.php?id=' + $funcionario + "&pag=0");
     }
 </script>

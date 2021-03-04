@@ -200,7 +200,7 @@ include("inc/scripts.php");
 
         var funcionario = $('#funcionario').val();
         var data = $('#data').val();
-        var parametrosUrl = '&id=' + funcionario + '&data=' + data;
+        var parametrosUrl = '&id=' + funcionario + '&data=' + data + "&pag=1";
         $(location).attr('href', 'funcionario_folhaDePontoPdf.php?' + parametrosUrl);
     }
 </script>

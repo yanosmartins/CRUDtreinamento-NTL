@@ -409,7 +409,7 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['funcionario']['sub'] += array("contraChequeWeb" => array("title" => "Contra Cheque Web", "url" => "http://www.contrachequeweb.com.br/ntl/"));
         }
         if (in_array('FOLHAPONTOMENSAL_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['funcionario']['sub'] += array("emitirFolhaPonto" => array("title" => "Folha Mensal", "url" => APP_URL . "/funcionario_folhaDePontoPdf.php?id=" . $funcionario));
+            $page_nav['operacao']['sub']['funcionario']['sub'] += array("emitirFolhaPonto" => array("title" => "Folha Mensal", "url" => APP_URL . "/funcionario_folhaDePontoPdf.php?id=" . $funcionario . "&pag=0"));
         }
         if (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['funcionario']['sub'] += array("geradorFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));
