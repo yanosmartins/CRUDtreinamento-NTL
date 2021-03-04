@@ -112,7 +112,7 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
 
-                                                                    <section class="col col-4">
+                                                                    <!-- <section class="col col-4">
                                                                         <label class="label" for="projeto">Projeto</label>
                                                                         <label class="select">
                                                                             <select id="projeto" name="projeto" class="readonly" readonly>
@@ -129,9 +129,21 @@ include("inc/nav.php");
                                                                                 ?>
                                                                             </select>
                                                                         </label>
-                                                                    </section>
+                                                                    </section> -->
+
                                                                     <section class="col col-2">
-                                                                        <label class="label" for="mesAnoFolhaPonto">Mês</label>
+                                                                        <label class="label" for="Expediente">Expediente</label>
+                                                                        <label class="select">
+                                                                            <select id="Expediente" name="Expediente"  class="readonly" readonly>
+                                                                                <option>08:00 às 17:00</option>
+                                                                                <option>10:00 às 16:00</option>
+                                                                               
+                                                                            </select>
+                                                                        </label>
+                                                                    </section>
+
+                                                                    <section class="col col-2">
+                                                                        <label class="label" for="mesAnoFolhaPonto">Mês Corrente</label>
                                                                         <label class="input">
                                                                             <i class="icon-append fa fa-calendar"></i>
                                                                             <input id="mesAnoFolhaPonto" name="mesAnoFolhaPonto" style="text-align: center;" autocomplete="off" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" type="text" class="readonly" readonly value="">
@@ -225,6 +237,16 @@ include("inc/nav.php");
                                                                         </div>
                                                                     </section>
 
+                                                                    <section class="col col-1">
+                                                                        <div class="form-group">
+                                                                            <label id="labelHora" class="label">Atraso</label>
+                                                                            <div class="input-group" data-align="top" data-autoclose="true">
+                                                                                <input id="atraso" name="atraso" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
                                                                     <section class="col col-2">
                                                                         <label class="label" for="lancamento">Lançamento/Ocorrência</label>
                                                                         <label class="select">
@@ -251,8 +273,8 @@ include("inc/nav.php");
                                                                         </button>
                                                                     </section>
                                                                 </div>
-                                                               
-                                                                <hr><br>
+
+                                                                <hr><br><br>
 
                                                                 <?php
                                                                 $i = 0;
@@ -315,6 +337,16 @@ include("inc/nav.php");
                                                                             <label id=\"labelHora\" class=\"label\">H.Extra</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
                                                                                 <input id=\"horaExtra-$i\" name=\"horaExtra-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section class=\"col col-1\">
+                                                                        <div class=\"form-group\">
+                                                                            <label id=\"labelHora\" class=\"label\">Atraso</label>
+                                                                            <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
+                                                                                <input id=\"atraso-$i\" name=\"atraso-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -481,6 +513,14 @@ include("inc/scripts.php");
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
+        $("#atraso").mask("99:99");
+
+        $('#atraso').clockpicker({
+            donetext: 'Done',
+            default: 'now',
+            use24hours: true,
+        }).val(moment().format('HH:mm'));
+
 
 
         $("#btnAddPonto").on("click", function() {
@@ -493,6 +533,7 @@ include("inc/scripts.php");
             $("#fimAlmoco-" + dia).val($("#fimAlmoco").val())
             $("#horaSaida-" + dia).val($("#horaSaida").val())
             $("#horaExtra-" + dia).val($("#horaExtra").val())
+            $("#atraso-" + dia).val($("#atraso").val())
             $("#lancamento-" + dia).val($("#lancamento").val())
         });
 

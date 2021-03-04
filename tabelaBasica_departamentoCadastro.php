@@ -90,12 +90,32 @@ include("inc/nav.php");
                           <fieldset>
                             <input id="codigo" name="codigo" type="text" class="hidden" value="0">
                             <div class="row ">
+                              <section class="col col-4">
+                                <label class="label" for="projeto">Projeto</label>
+                                <label class="select">
+                                  <select id="projeto" name="projeto" class="required">
+                                    <option></option>
+                                    <?php
+                                    $reposit = new reposit();
+                                    $sql = "select codigo, descricao from Ntl.projeto where ativo = 1 order by descricao";
+                                    $result = $reposit->RunQuery($sql);
+                                    foreach ($result as $row) {
+                                      $codigo = (int) $row['codigo'];
+                                      $descricao = $row['descricao'];
+                                      echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                    }
+                                    ?>
+                                  </select>
+                                </label>
+                              </section>
+
                               <section class="col col-2">
                                 <label class="label">Descrição</label>
                                 <label class="input">
                                   <input id="descricao" name="descricao" style="text-align: left;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
+
                             </div>
                           </fieldset>
                         </div>
@@ -244,14 +264,19 @@ include("inc/scripts.php");
 
     var codigo = parseInt($("#codigo").val());
     var descricao = $("#descricao").val();
+    var projeto = $("#projeto").val();
 
     // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
     if (!descricao) {
       smartAlert("Erro", "Informe o departamento.", "error");
       return;
     }
+    if (!projeto) {
+      smartAlert("Erro", "Informe o projeto.", "error");
+      return;
+    }
 
-    gravaDepartamento(codigo, descricao,
+    gravaDepartamento(codigo, descricao, projeto,
       function(data) {
 
         if (data.indexOf('sucess') < 0) {
@@ -325,10 +350,14 @@ include("inc/scripts.php");
             debugger;
             var codigo = parseInt(piece[0]);
             var descricao = piece[1];
+            var projeto = piece[2];
+
 
             //Atributos de cliente        
             $("#codigo").val(codigo);
             $("#descricao").val(descricao);
+            $("#projeto").val(projeto);
+
 
           }
 

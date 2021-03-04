@@ -71,7 +71,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formEncargo" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formDepartamento" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -87,6 +87,25 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row ">
+
+                                                            <section class="col col-4">
+                                                                <label class="label" for="projeto">Projeto</label>
+                                                                <label class="select">
+                                                                    <select id="projeto" name="projeto" class="">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "select codigo, descricao from Ntl.projeto where ativo = 1 order by descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </label>
+                                                            </section>
 
                                                             <section class="col col-2">
                                                                 <label class="label">Descrição</label>
@@ -201,10 +220,12 @@ include("inc/scripts.php");
     function listarFiltro() {
 
         var descricao = $('#descricao').val();
+        var projeto = $('#projeto').val();
         var ativo = $('#ativo').val();
 
         $('#resultadoBusca').load('tabelaBasica_departamentoFiltroListagem.php?', {
             descricao: descricao,
+            projeto: projeto,
             ativo: ativo
         });
 

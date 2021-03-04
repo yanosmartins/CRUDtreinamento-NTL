@@ -1,4 +1,4 @@
-function gravaDepartamento(codigo, descricao, callback) {
+function gravaDepartamento(codigo, descricao,projeto, callback) {
   $.ajax({
     url: 'js/sqlscope_tabelaBasicaDepartamento.php',
     dataType: 'html', //tipo do retorno
@@ -7,6 +7,7 @@ function gravaDepartamento(codigo, descricao, callback) {
       funcao: 'grava',
       codigo: codigo,
       descricao: descricao,
+      projeto: projeto
     }, //valores enviados ao script
     success: function (data) {
       callback(data)

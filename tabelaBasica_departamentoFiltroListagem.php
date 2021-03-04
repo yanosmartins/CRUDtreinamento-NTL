@@ -6,6 +6,7 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
+                    <th class="text-left" style="min-width:30px;">Projeto</th>
                     <th class="text-left" style="min-width:30px;">Descrição</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
@@ -14,8 +15,10 @@ include "js/repositorio.php";
                 <?php
 
                 $reposit = new reposit();
-                $sql = "SELECT codigo, descricao, ativo
-                FROM Ntl.departamento  ";
+                $sql = "SELECT C.codigo as departamentoCodigo, C.descricao, C.projeto, C.ativo,P.codigo as projetoCodigo, P.descricao as descricaoProjeto, P.apelido
+                FROM Ntl.departamento C
+                LEFT JOIN Ntl.projeto P ON P.codigo = C.projeto";
+
                 $where = " WHERE (0=0) ";
                 // $descricao = $_GET["descricao"];
                 // $percentual = $_GET["percentual"];
@@ -24,6 +27,10 @@ include "js/repositorio.php";
                 if ($_POST["descricao"] != "") {
                     $descricao = $_POST["descricao"];
                     $where = $where . " AND ( descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
+                }
+                if ($_POST["projeto"] != "") {
+                    $projeto = (int)$_POST["projeto"];
+                    $where = $where . " AND ( projeto = $ativo)";
                 }
                 if ($_POST["ativo"] != "") {
                     $ativo = (int)$_POST["ativo"];
@@ -35,12 +42,16 @@ include "js/repositorio.php";
 
 
                 foreach ($result as $row) {
-                    $codigo = (int) $row['codigo'];
+                    $codigo = (int) $row['departamentoCodigo'];
                     $descricao = (string) $row['descricao'];
                     $ativo = (int) $row['ativo'];
+                    $projeto = (string) $row['apelido'];
+                    $descricaoProjeto = (string) $row['descricaoProjeto'];
 
                     echo '<tr>';
-                    echo '<td class="text-left"><a href="tabelaBasica_departamentoCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';
+                    echo '<td class="text-left"><a href="tabelaBasica_departamentoCadastro.php?codigo=' . $codigo . '">' . $projeto . ' - ' . $descricaoProjeto . '</a></td>';
+                    echo '<td class="text-left">' . $descricao . '</td>';
+
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {

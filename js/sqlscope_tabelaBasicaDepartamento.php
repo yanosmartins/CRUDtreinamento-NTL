@@ -23,7 +23,7 @@ function grava()
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("ENCARGO_ACESSAR|ENCARGO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("DEPARTAMENTO_ACESSAR|DEPARTAMENTO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -35,12 +35,14 @@ function grava()
     $usuario = $_SESSION['login'];
 
     $codigo = $_POST['codigo'];
+    $projeto = $_POST['projeto'];
     $descricao ="'".$_POST['descricao']."'";
     $ativo = 1;
 
     $sql = "Ntl.Departamento_Atualiza
         $codigo,
         $descricao,
+        $projeto,
         $ativo ,
         $usuario
         ";
@@ -66,7 +68,7 @@ function recupera()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT codigo, descricao,ativo FROM Ntl.departamento WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, descricao,projeto,ativo FROM Ntl.departamento WHERE (0=0) AND codigo = " . $id;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -76,11 +78,13 @@ function recupera()
 
     $id = $row['codigo'];
     $descricao = $row['descricao'];
+    $projeto = $row['projeto'];
     $ativo = $row['ativo'];
     // $percentual = str_replace(".", ",", $percentual);
 
     $out =   $id . "^" .
         $descricao . "^" .
+        $projeto . "^" .
         $ativo;
 
 
@@ -97,7 +101,7 @@ function excluir()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("ENCARGO_ACESSAR|ENCARGO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("DEPARTAMENTO_ACESSAR|DEPARTAMENTO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -106,7 +110,7 @@ function excluir()
     }
 
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Encargo.";
+        $mensagem = "Selecione um DEPARTAMENTO.";
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
