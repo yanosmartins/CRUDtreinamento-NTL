@@ -275,6 +275,7 @@ include("inc/scripts.php");
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!percentual) {
             smartAlert("Erro", "Informe o Inss.", "error");
+            $("#btnGravar").prop('disabled', false);
             return;
         }
         ativo = 1;
@@ -302,7 +303,6 @@ include("inc/scripts.php");
     }
 
     function excluir() {
-        debugger;
         var id = +$("#codigo").val();
 
         if (id === 0) {
@@ -310,7 +310,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirIss(id, function(data) {
+        excluirInss(id, function(data) {
             if (data.indexOf('failed') > -1) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -327,8 +327,6 @@ include("inc/scripts.php");
             }
         });
     }
-
-
 
     function carregaInss() {
         var urlx = window.document.URL.toString();
@@ -358,14 +356,9 @@ include("inc/scripts.php");
                         $("#codigo").val(codigo);
                         $("#percentual").val(percentual);
 
-
-
                     }
-
                 );
             }
         }
-
-
     }
 </script>

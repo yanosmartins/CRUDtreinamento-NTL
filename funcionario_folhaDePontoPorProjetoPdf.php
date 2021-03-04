@@ -372,18 +372,19 @@ for ($k = 0; $k < $length; $k++) {
             $pdf->SetFont('Arial', 'B', 7);
         }
 
-
-
-
-
-
-
-
+        
         if ($diadasemana == 6) {
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->setX(7);
             $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
-            $pdf->Cell(189, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(16.1);
+            $pdf->Cell(15.75, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(67.1);
+            $pdf->Cell(18.8, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(126.15);
+            $pdf->Cell(42.75, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(169.15);
+            $pdf->Cell(35.8, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
             $pdf->SetFont('Arial', 'B', 7);
         }
 
@@ -391,15 +392,28 @@ for ($k = 0; $k < $length; $k++) {
             $pdf->setX(7);
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0);
-            $pdf->Cell(189, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(16.1);
+            $pdf->Cell(15.75, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(67.1);
+            $pdf->Cell(18.8, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(126.15);
+            $pdf->Cell(42.75, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(169.15);
+            $pdf->Cell(35.8, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->SetFont('Arial', 'B', 7);
+
         }
 
         //campos de almoco cinza
-        $pdf->setX(32);
-        $pdf->Cell(35,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+        $pdf->setX(32.1);
+        $pdf->Cell(16.75,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, 0, 1);
+        $pdf->setX(49.1);
+        $pdf->Cell(17.75,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, 0, 1);
         //campos de hora extra cinza
-        $pdf->setX(86);
-        $pdf->Cell(40,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+        $pdf->setX(86.1);
+        $pdf->Cell(19.75,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+        $pdf->setX(106.1);
+        $pdf->Cell(19.8,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
 
         if ($diadasemana != 6 && $diadasemana != 7) {
             foreach ($feriados as $feriado) {
@@ -449,6 +463,7 @@ for ($k = 0; $k < $length; $k++) {
         $linhaverticalteste += 7;
     }
 
+    
     // VERTICAL -CABEÇALHO
     // $pdf->Line(5, 45, 5, 21); // 0 
     // // $pdf->Line(32, 45, 32, 33); // 1 

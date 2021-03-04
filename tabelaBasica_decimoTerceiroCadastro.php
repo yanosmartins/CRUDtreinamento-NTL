@@ -253,7 +253,6 @@ include("inc/scripts.php");
 
         carregaDecimoTerceiro();
 
-
     });
 
     function voltar() {
@@ -278,6 +277,7 @@ include("inc/scripts.php");
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!percentual) {
             smartAlert("Erro", "Informe o 13º Salário.", "error");
+            $("#btnGravar").prop('disabled', false);
             return;
         }
         ativo = 1;
@@ -331,11 +331,6 @@ include("inc/scripts.php");
         );
     }
 
-
-
-
-
-
     function carregaDecimoTerceiro() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
@@ -349,31 +344,23 @@ include("inc/scripts.php");
                         data = data.replace(/failed/g, '');
                         var piece = data.split("#");
 
-                        //Atributos de Cliente
                         var mensagem = piece[0];
                         var out = piece[1];
 
                         piece = out.split("^");
                         console.table(piece);
-                        //Atributos de cliente 
 
                         var codigo = +piece[0];
                         var percentual = piece[1];
                         var ativo = piece[2];
-
-                        //Atributos de cliente        
+     
                         $("#codigo").val(codigo);
                         $("#percentual").val(percentual);
                         $("#ativo").val(ativo);
 
-
-
                     }
-
                 );
             }
         }
-
-
     }
 </script>
