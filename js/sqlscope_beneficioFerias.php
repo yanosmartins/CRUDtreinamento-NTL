@@ -171,24 +171,24 @@ function recupera()
     if($row = $result[0]) {
 
         //Accordion Dados
-        $id = +$row['codigo'];
-        $ativo = +$row['ativo'];
-        $abono =  +$row['abono'];
-        $funcionario = +$row['funcionario'];
+        $id = (int)$row['codigo'];
+        $ativo = (int)$row['ativo'];
+        $abono =  (int)$row['abono'];
+        $funcionario = (int)$row['funcionario'];
         $mesAno = $row['mesAno'];
         $dataInicio = $row['dataInicio'];
         $dataFim = $row['dataFim'];
         $quantidadeDias = $row['quantidadeDias'];
-        $adiantaDecimoTerceiro = +$row['adiantaDecimoTerceiro'];
+        $adiantaDecimoTerceiro = (int)$row['adiantaDecimoTerceiro'];
 
         $dataInicio = formataData($dataInicio);
         $dataFim = formataData($dataFim);
         $mesAno = explode("-", $mesAno);
         $mesAno = $mesAno[1] . "/" . $mesAno[0];
 
-        $diaUtil = +$row['diaUtil'];
-        $projeto = +$row['projeto'];
-        $diaFeriado = +$row['diaFeriado'];
+        $diaUtil = (int)$row['diaUtil'];
+        $projeto = (int)$row['projeto'];
+        $diaFeriado = (int)$row['diaFeriado'];
 
         $out = $id . "^" .
             $ativo . "^" .
@@ -287,7 +287,7 @@ function contaFeriado()
     if($row = $resultProjeto[0]) {
 
         $estado = "'" . $row['estado'] . "'";
-        $municipioFerias =  +$row['municipioFerias'];
+        $municipioFerias =  (int)$row['municipioFerias'];
     }
     $sql = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
             FROM Ntl.feriado F 

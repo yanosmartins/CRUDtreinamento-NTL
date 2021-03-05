@@ -5,9 +5,9 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-$condicaoAcessarOK = (in_array('LANCAMENTO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('LANCAMENTO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('LANCAMENTO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('CODIGOITEM_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('CODIGOITEM_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('CODIGOITEM_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -99,7 +99,7 @@ include("inc/nav.php");
                                                             <section class="col col-3 col-auto">
                                                                 <label class="label" for="descricaoItem">Descrição do item</label>
                                                                 <label class="input">
-                                                                    <input id="descricaoItem" name="descricaoItem" type="text" class="required" maxlength="50" required autocomplete="off">
+                                                                    <input id="descricaoItem" name="descricaoItem" type="text" class="required" maxlength="255" required autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2 col-auto">
@@ -113,7 +113,7 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <div class="row">
-                                                        <section class="col col-3">
+                                                            <section class="col col-3">
                                                                 <label class="label" for="estoque">Estoque</label>
                                                                 <label class="select">
                                                                     <select id="estoque" name="estoque" class="required" required>
@@ -255,7 +255,7 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-     
+
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -319,7 +319,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaLancamento(idd,
+                recuperaCodigoItem(idd,
                     function(data) {
                         if (data.indexOf('failed') > -1) {
                             return;
@@ -332,20 +332,25 @@ include("inc/scripts.php");
 
                             // Atributos de vale transporte unitário que serão recuperados: 
                             var codigo = +piece[0];
-                            var descricao = piece[1];
-                            var sigla = piece[2];
-                            var ativo = +piece[3];
-                            var faltaAusencia = piece[4]
+                            var codigoItem = piece[1];
+                            var codigoFabricante = piece[2];
+                            var descricaoItem = piece[3];
+                            var estoque = piece[4]
+                            var grupoItem = piece[5]
+                            var localizacaoItem = piece[6]
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
-                            $("#descricao").val(descricao);
-                            $("#sigla").val(sigla);
-                            $("#ativo").val(ativo);
-                            $("#faltaAusencia").val(faltaAusencia);
+                            $("#codigoItem").val(codigoItem);
+                            $("#codigoFabricante").val(codigoFabricante);
+                            $("#descricaoItem").val(descricaoItem);
+                         
+                            $("#estoque").val(estoque);
+                            popularComboGrupoItem(); 
+                            $("#grupoItem").val(grupoItem);
+                            $("#localizacaoItem").val(localizacaoItem);
 
                             return;
-
                         }
                     }
                 );
@@ -354,11 +359,11 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_lancamentoCadastro.php');
+        $(location).attr('href', 'cadastro_codigoItemCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_lancamentoFiltro.php');
+        $(location).attr('href', 'cadastro_codigoItemFiltro.php');
     }
 
     function excluir() {
@@ -369,7 +374,7 @@ include("inc/scripts.php");
             return;
         }
 
-        excluirLancamento(id,
+        excluirCodigoItem(id,
             function(data) {
                 if (data.indexOf('failed') > -1) {
                     var piece = data.split("#");
@@ -401,7 +406,7 @@ include("inc/scripts.php");
         var grupoItem = $('#grupoItem').val();
         var localizacaoItem = $('#localizacaoItem').val();
         var ativo = +$('#ativo').val();
-      
+
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!codigoItem) {
