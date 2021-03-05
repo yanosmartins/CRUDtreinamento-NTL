@@ -1,5 +1,5 @@
 
-function gravaGrupoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo, callback) {
+function gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo, callback) {
     $.ajax({
         url: 'js/sqlscope_cadastroCodigoItem.php',
         dataType: 'html', //tipo do retorno
@@ -14,7 +14,7 @@ function gravaGrupoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque
     });
 }
 
-function recuperaGrupoItem(id, callback) {
+function recuperaCodigoItem(id, callback) {
     $.ajax({
         url: 'js/sqlscope_cadastroCodigoItem.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
@@ -28,7 +28,7 @@ function recuperaGrupoItem(id, callback) {
     return;
 }
 
-function excluirGrupoItem(id, callback) {
+function excluirCodigoItem(id, callback) {
     $.ajax({
         url: 'js/sqlscope_cadastroCodigoItem.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno

@@ -26,7 +26,7 @@ return;
 function grava()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("FERIAS_ACESSAR|FERIAS_GRAVAR"); // Checa permissões
+    $possuiPermissao = $reposit->PossuiPermissao("CODIGOITEM_ACESSAR|CODIGOITEM_GRAVAR"); // Checa permissões
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -51,7 +51,7 @@ function grava()
             $codigoFabricante,
             $descricaoItem,
             $estoque,
-            $grupoItem
+            $grupoItem,
             $localizacaoItem,
             $ativo,
             $usuario";
@@ -77,7 +77,8 @@ function recupera()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT * FROM Beneficio.funcionarioFerias WHERE codigo = " . $id;
+    $sql = "SELECT CI.codigo,CI.codigoItem,CI.codigoFabricante,CI.descricaoItem,CI.estoque,CI.grupoItem,CI.localizacaoItem,CI.ativo
+            FROM Ntl.codigoItem AS CI WHERE codigo = $id";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -87,37 +88,23 @@ function recupera()
     if ($row = $result[0]) {
 
         //Accordion Dados
-        $id = +$row['codigo'];
-        $ativo = +$row['ativo'];
-        $abono =  +$row['abono'];
-        $funcionario = +$row['funcionario'];
-        $mesAno = $row['mesAno'];
-        $dataInicio = $row['dataInicio'];
-        $dataFim = $row['dataFim'];
-        $quantidadeDias = $row['quantidadeDias'];
-        $adiantaDecimoTerceiro = +$row['adiantaDecimoTerceiro'];
-
-        $dataInicio = formataData($dataInicio);
-        $dataFim = formataData($dataFim);
-        $mesAno = explode("-", $mesAno);
-        $mesAno = $mesAno[1] . "/" . $mesAno[0];
-
-        $diaUtil = +$row['diaUtil'];
-        $projeto = +$row['projeto'];
-        $diaFeriado = +$row['diaFeriado'];
-
+        $id = (int)$row['codigo'];
+        $codigoItem = $row['codigoItem'];
+        $codigoFabricante = $row['codigoFabricante'];
+        $descricaoItem = $row['descricaoItem'];
+        $estoque = $row['estoque'];
+        $grupoItem = $row['grupoItem'];
+        $localizacaoItem = $row['localizacaoItem'];
+        $ativo = (int)$row['ativo'];
+      
         $out = $id . "^" .
-            $ativo . "^" .
-            $abono . "^" .
-            $funcionario . "^" .
-            $mesAno . "^" .
-            $dataInicio . "^" .
-            $dataFim . "^" .
-            $quantidadeDias . "^" .
-            $adiantaDecimoTerceiro . "^" .
-            $diaUtil . "^" .
-            $projeto . "^" .
-            $diaFeriado;
+            $codigoItem . "^" .
+            $codigoFabricante . "^" .
+            $descricaoItem . "^" .
+            $estoque . "^" .
+            $grupoItem . "^" .
+            $localizacaoItem . "^" .
+            $ativo;
 
         if ($out == "") {
             echo "failed#";
@@ -132,7 +119,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("FERIAS_ACESSAR|FERIAS_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("CODIGOITEM_ACESSAR|CODIGOITEM_EXCLUIR");
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
         echo "failed#" . $mensagem . ' ';
@@ -145,7 +132,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('Beneficio.funcionarioFerias' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('ntl.codigoItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
