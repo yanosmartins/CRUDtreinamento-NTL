@@ -42,7 +42,7 @@ class PDF extends FPDF
 $pdf = new PDF('P', 'mm', 'A4'); #Crio o PDF padrão RETRATO, Medida em Milímetro e papel A$
 $pdf->SetMargins(0, 0, 0); #Seta a Margin Esquerda com 20 milímetro, superrior com 20 milímetro e esquerda com 20 milímetros
 $pdf->SetDisplayMode('default', 'continuous'); #Digo que o PDF abrirá em tamanho PADRÃO e as páginas na exibição serão contínuas
-$pdf->SetFillColor(165,165,165);
+$pdf->SetFillColor(220, 220, 220);
 
 $strArrayProjeto = json_decode($_GET["strArrayProjeto"]);
 $length = count($strArrayProjeto);
@@ -313,107 +313,108 @@ for ($k = 0; $k < $length; $k++) {
         $pdf->Line(169, $linhaverticalteste, 169, 33); // 8
         $pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
         $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
-        $pdf->setY($linhavertical-2.8);
+    
+        $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
+        $pdf->Line(16, $linhaverticalteste, 16, 33.1); // 1
+        $pdf->Line(32.1, $linhaverticalteste, 32.1, 33); // 2
+        $pdf->Line(49.1, $linhaverticalteste, 49.1, 39.1); // 3 
+        $pdf->Line(67.1, $linhaverticalteste, 67.1, 17); // 4 
+        $pdf->Line(86.1, $linhaverticalteste, 86.1, 33); // 5 
+        $pdf->Line(106.1, $linhaverticalteste, 106.1, 39.1); // 6
+        $pdf->Line(126.1, $linhaverticalteste, 126.1, 33); // 7
+        $pdf->Line(169.1, $linhaverticalteste, 169.1, 33); // 8
+        $pdf->Line(205.1, $linhaverticalteste, 205.1, 17); // 9 
+        $pdf->Line(5, $linhahorizontalteste+0.1, 205, $linhahorizontalteste+0.1);
+        $pdf->setY($linhavertical - 2.7);
         $pdf->setX(5);
         $pdf->SetFont('Arial', 'B', 7);
         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "$i"), 0, 0, "L", 0);
         $pdf->setX(14);
         $diadasemana = strftime('%u', strtotime("$ano-$mes-$i"));
         $diaferiado = "'$ano-$mes-$i 00:00:00.000'";
-
+    
         if ($dataferiado == $diaferiado) {
             $pdf->SetFont('Arial', 'B', 9);
             $pdf->setX(15);
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " FERIADO"), 0, 0, "L", 0);
-            $pdf->Cell(189, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
             $pdf->SetFont('Arial', 'B', 9);
         }
-
-        // 2021 - 02 - 01 
-        // 2021 - 02 - 16
-
-        //"$ano-$mes-$i" = "2021-02-??"
-        //diasdasemana = [janeiro,...]
-
-
+    
         if ($diadasemana == 1) {
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->setX(7);
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
             $pdf->SetFont('Arial', 'B', 8);
         }
-
-
+    
+    
         if ($diadasemana == 2) {
             $pdf->setX(7);
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
         }
-
-
+    
+    
         if ($diadasemana == 3) {
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->setX(7);
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
             $pdf->SetFont('Arial', 'B', 7);
         }
-
-
+    
+    
         if ($diadasemana == 4) {
             $pdf->setX(7);
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
         }
-
+    
         if ($diadasemana == 5) {
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->setX(7);
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
             $pdf->SetFont('Arial', 'B', 7);
         }
-
-        
+    
         if ($diadasemana == 6) {
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->setX(7);
             $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
-            $pdf->setX(16.1);
-            $pdf->Cell(15.75, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-            $pdf->setX(67.1);
-            $pdf->Cell(18.8, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-            $pdf->setX(126.15);
-            $pdf->Cell(42.75, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-            $pdf->setX(169.15);
-            $pdf->Cell(35.8, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(16.2);
+            $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(67.2);
+            $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(126.35);
+            $pdf->Cell(42.75, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(169.35);
+            $pdf->Cell(35.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
             $pdf->SetFont('Arial', 'B', 7);
         }
-
+    
         if ($diadasemana == 7) {
             $pdf->setX(7);
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0);
-            $pdf->setX(16.1);
-            $pdf->Cell(15.75, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-            $pdf->setX(67.1);
-            $pdf->Cell(18.8, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-            $pdf->setX(126.15);
-            $pdf->Cell(42.75, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-            $pdf->setX(169.15);
-            $pdf->Cell(35.8, 6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(16.2);
+            $pdf->Cell(15.65, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(67.21);
+            $pdf->Cell(18.69, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(126.35);
+            $pdf->Cell(42.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(169.35);
+            $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
             $pdf->SetFont('Arial', 'B', 7);
-
         }
-
         //campos de almoco cinza
-        $pdf->setX(32.1);
-        $pdf->Cell(16.75,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, 0, 1);
-        $pdf->setX(49.1);
-        $pdf->Cell(17.75,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, 0, 1);
+        $pdf->setX(32.2);
+        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, 0, 1);
+        $pdf->setX(49.2);
+        $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, 0, 1);
         //campos de hora extra cinza
-        $pdf->setX(86.1);
-        $pdf->Cell(19.75,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-        $pdf->setX(106.1);
-        $pdf->Cell(19.8,  6.7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+        $pdf->setX(86.3);
+        $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+        $pdf->setX(106.3);
+        $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
 
         if ($diadasemana != 6 && $diadasemana != 7) {
             foreach ($feriados as $feriado) {
