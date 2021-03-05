@@ -215,8 +215,12 @@ if ($condicaoCadastroOk) {
     $page_nav['cadastro'] = array("title" => "Cadastro", "icon" => "fa-pencil-square-o");
     $page_nav['cadastro']['sub'] = array();
 
+  
     if (in_array('CARGO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("cargo" => array("title" => "Cargo", "url" => APP_URL . "/cadastro_cargoFiltro.php")); //SYSCB   
+    }
+    if (in_array('CODIGOITEM_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("codigoItem" => array("title" => "Código Item", "url" => APP_URL . "/cadastro_codigoItemFiltro.php")); //SYSCB   
     }
     if (in_array('CONTRATO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("contrato" => array("title" => "Contrato", "url" => APP_URL . "/cadastro_contratoFiltro.php"));
