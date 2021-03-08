@@ -84,7 +84,7 @@ include("inc/nav.php");
                                                                     echo strftime('%d de %B de %Y.', strtotime('today'));
                                                                     ?>
                                                                 </h5>
-                                                                <!-- <script>
+                                                                <script>
                                                                     var myVar = setInterval(myTimer, 1000);
 
                                                                     function myTimer() {
@@ -100,7 +100,7 @@ include("inc/nav.php");
                                                                         document.getElementById("hora").innerHTML = displayDate;
                                                                     }
                                                                 </script>
-                                                                <div id="hora"></div> -->
+                                                                <div id="hora"></div>
 
                                                             </div>
                                                         </div>
