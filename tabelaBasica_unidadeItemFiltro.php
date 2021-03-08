@@ -85,13 +85,13 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-4">
+                                                            <section class="col col-2">
                                                                 <label class="label">Sigla</label>
                                                                 <label class="input">
                                                                     <input id="sigla" name="sigla" type="text" maxlength="5">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
+                                                            <section class="col col-3">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
                                                                     <input name="descricao" id="descricao" autocomplete="off" class="form-control">
