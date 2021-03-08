@@ -208,7 +208,7 @@ include("inc/nav.php");
                                     ?>
                                   </select><i></i>
                               </section>
-                              <section class="col col-3" id="sectionRecurso" >
+                              <section class="col col-3" id="sectionRecurso">
                                 <label class="label">Recursos Necessários</label>
                                 <label class="input">
                                   <input id='recurso' maxlength='255' name='recurso' class='required text-center' type='text' data-mask="9">
@@ -479,16 +479,25 @@ include "inc/scripts.php";
               concluido = piece[12];
               departamento = piece[13];
               recurso = +piece[14];
+              usuarioCadastro = piece[15];
+              dataCadastro = piece[16];
 
+
+              //Arrumando o valor de dataLancamento e horaLancamento
+              dataCadastro = dataCadastro.split(" ");
+              dataLancamento = dataCadastro[0].split("-");
+              dataLancamento = dataLancamento[2] + "/" + dataLancamento[1] + "/" + dataLancamento[0];
+              horaLancamento = dataCadastro[1].split(":");
+              horaLancamento = horaLancamento[0] + ":" + horaLancamento[1];
 
               $("#sectionResponsavel").removeAttr("hidden");
               $("#divSolicitacao").removeAttr("hidden");
               $("#divSolicitacao").removeAttr("readonly");
 
               $("#codigo").val(codigo);
-              $("#funcionarioSolicitacao").val(funcionario);
-              $("#dataSolicitacao").val(dataSolicitacao);
-              $("#horaSolicitacao").val(horaSolicitacao);
+              $("#funcionarioSolicitacao").val(usuarioCadastro);
+              $("#dataSolicitacao").val(dataLancamento);
+              $("#horaSolicitacao").val(horaLancamento);
               $("#dataLimite").val(dataLimite);
               $("#urgente").val(urgente);
               $("#projeto").val(projeto);
