@@ -100,39 +100,43 @@ include("inc/nav.php");
                                                                         document.getElementById("hora").innerHTML = displayDate;
                                                                     }
                                                                 </script>
-                                                                <div id="hora"></div>
+                                                                <div id="hora" style="font-size: 17px;"></div>
+                                                                <div class="text-center"><br>
+                                                                <h4>Funcionario: <span id="#">Fillipy José Pessoa Ferreira Monteiro</span></h4>
+                                                                <h4>Expediente: <span id="#">10:00 ás 16:00</span></h4>
+                                                            </div>
 
                                                             </div>
                                                         </div>
 
                                                         <div class="primeirasessao">
-                                                            <div class="col col-md-7" style=" height: 185px; background-color:#FCFCFC; color: #3A3633; border-radius:5px; border:1px solid #c4c4c4"><br>
+                                                            <!-- <div class="col col-md-7" style=" height: 185px; background-color:#FCFCFC; color: #3A3633; border-radius:5px; border:1px solid #c4c4c4"><br>
                                                                 <h3>Login: <span id="#">NTL_FILLIPYMONTEIRO</span></h3><br>
                                                                 <h3>Funcionario: <span id="#">Fillipy José Pessoa Ferreira Monteiro</span></h3><br>
                                                                 <h3>Projeto: <span id="#">NTL - Nova Tecnologia</span></h3>
-                                                            </div>
-                                                            <div class="col col-xs-5" style="margin-top: 10px;">
+                                                            </div> -->
+                                                            <div class="col col-xs-12" style="margin-top: 10px; ">
                                                                 <div class="col col-xs-6">
-                                                                    <button type="button" class="btn  btn-block botaoentrada" style="height: 80px; background-color:#4F8D4A;">
+                                                                    <button type="button" class="btn  btn-block botaoentrada" style="height: 100px; background-color:#4F8D4A;">
                                                                         <i class="fa fa-sign-in"></i><br>Entrada
                                                                     </button>
-                                                                    <button type="button" class="btn  btn-block botaopausa" style=" background: #2386A6;border-radius: 5px; height:80px;color: white;font-size: 16px;font-weight: bold;">
+                                                                    <button type="button" class="btn  btn-block botaopausa" style=" background: #2386A6;border-radius: 5px; height:100px;color: white;font-size: 16px;font-weight: bold;">
                                                                         <i class="fa fa-cutlery "></i><br> Inicio almoço
                                                                     </button>
-                                                                </div>                                                          
+                                                                </div>
                                                                 <div class="col col-xs-6">
-                                                                    <button type="button" class="btn  btn-block botaoretornopausa" style="background: #FDD033;border-radius: 5px; height:80px; color: white; font-size: 16px; font-weight: bold;">
+                                                                    <button type="button" class="btn  btn-block botaoretornopausa" style="background: #FDD033;border-radius: 5px; height:100px; color: white; font-size: 16px; font-weight: bold;">
                                                                         <i class="fa fa-cutlery"></i><br> Fim almoço
                                                                     </button>
-                                                                    <button type="button" class="btn  btn-block botaosaida" style="height: 80px;  background-color:#C32E2E;">
+                                                                    <button type="button" class="btn  btn-block botaosaida" style="height: 100px;  background-color:#C32E2E;">
                                                                         <i class="fa fa-sign-out"></i><br>Saida
                                                                     </button>
                                                                 </div>
-                                        
+
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col col-md-7"><br>
+                                                        <div class="">
+                                                            <div class="col col-md-6"><br>
                                                                 <label class="label" for="lancamento">Ocorrência/Lançamento</label>
                                                                 <label class="select">
                                                                     <select id="lancamento" name="lancamento" style="height: 40px;" class="" readonly>
@@ -150,7 +154,7 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </div>
-                                                            <div class="col col-md-5">
+                                                            <div class="col col-md-6">
                                                                 <div class="col col-md-6"><br>
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Atraso</label>
