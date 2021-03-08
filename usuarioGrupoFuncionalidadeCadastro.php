@@ -226,7 +226,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/businessPermissao.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/businessGrupoPermissao.js" type="text/javascript"></script>
 
 <script>
     jsonFuncionalidadeArray = JSON.parse($("#JsonFuncionalidade").val());
@@ -376,7 +376,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var iddUsuario = idx[1];
             if (iddUsuario !== "") {
-                $('#usuario').val(iddUsuario);
+                $('#grupo').val(iddUsuario);
                 carregarFuncionalidade();
             }
         }
@@ -497,13 +497,6 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'usuarioFuncionalidadeCadastro.php');
+        $(location).attr('href', 'usuarioGrupoFuncionalidadeCadastro.php');
     }
 </script>
-
-
-//<?php
-    //	//include footer
-    //	include("inc/google-analytics.php"); 
-    //
-    ?>
