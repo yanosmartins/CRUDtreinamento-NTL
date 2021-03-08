@@ -31,7 +31,7 @@ include "js/repositorio.php";
                     $where = $where . " AND ativo = $ativo ";
                 }
 
-                $sql = "SELECT codigo,descricao, sigla, ativo FROM Ntl.unidadeItem ";
+                $sql = "SELECT codigo,descricao, sigla, ativo FROM Estoque.unidadeItem ";
 
                 $sql .= $where;
                 $reposit = new reposit();

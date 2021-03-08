@@ -96,7 +96,7 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
 
-                                                                        $sql = "SELECT codigo, descricao FROM Ntl.estoque WHERE ativo = 1";
+                                                                        $sql = "SELECT codigo, descricao FROM Estoque.estoque WHERE ativo = 1";
 
                                                                         $result = $reposit->RunQuery($sql);
 

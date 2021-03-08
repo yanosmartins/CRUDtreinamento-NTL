@@ -44,7 +44,7 @@ function grava()
     $ativo = $form['ativo'];
 
 
-    $sql = "Ntl.unidadeItem_Atualiza
+    $sql = "Estoque.unidadeItem_Atualiza
         $codigo,
         $descricao,	
         $ativo,
@@ -73,7 +73,7 @@ function recupera()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT codigo, descricao, sigla, ativo FROM Ntl.unidadeItem WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, descricao, sigla, ativo FROM Estoque.unidadeItem WHERE (0=0) AND codigo = " . $id;
 
 
     $reposit = new reposit();
@@ -122,7 +122,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('Ntl.unidadeItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Estoque.unidadeItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

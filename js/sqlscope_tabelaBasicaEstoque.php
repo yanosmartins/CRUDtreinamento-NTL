@@ -38,7 +38,7 @@ function grava()
     $descricao = "'" . $_POST['descricao'] . "'";
     $ativo = (int) $_POST['ativo'];
 
-    $sql = "Ntl.estoque_Atualiza
+    $sql = "Estoque.estoque_Atualiza
             $codigo, 
             $descricao, 
             $ativo, 
@@ -80,7 +80,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo, descricao, ativo FROM Ntl.estoque WHERE (0 = 0)";
+    $sql = "SELECT codigo, descricao, ativo FROM Estoque.estoque WHERE (0 = 0)";
 
     if ($condicaoCodigo) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -130,7 +130,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('Ntl.estoque' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Estoque.estoque' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

@@ -39,7 +39,7 @@ function grava()
     $localizacaoItem = "'" . $_POST['localizacaoItem'] . "'";
     // $ativo = (int) $_POST['ativo'];
 
-    $sql = "Ntl.localizacaoItem_Atualiza
+    $sql = "Estoque.localizacaoItem_Atualiza
             $codigo, 
             $estoque,
             $localizacaoItem, 
@@ -82,7 +82,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo, estoque, localizacaoItem, ativo FROM Ntl.localizacaoItem WHERE (0 = 0) ";
+    $sql = "SELECT codigo, estoque, localizacaoItem, ativo FROM Estoque.localizacaoItem WHERE (0 = 0) ";
 
     if ($condicaoCodigo) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -132,7 +132,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('Ntl.localizacaoItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Estoque.localizacaoItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

@@ -26,7 +26,7 @@ include "js/repositorio.php";
                     $where = $where . " and ativo = " . $ativo;
                 }
 
-                $sql = " SELECT codigo, descricao, ativo FROM Ntl.estoque  ";
+                $sql = " SELECT codigo, descricao, ativo FROM Estoque.estoque  ";
 
                 $sql = $sql . $where;
                 $sql .= " order by descricao ";
