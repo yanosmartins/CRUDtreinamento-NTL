@@ -71,60 +71,28 @@ include("inc/nav.php");
 
                                                             <input id="codigo" name="codigo" type="text" readonly class="hidden" value="">
 
-                                                            <section class="col col-4 col-auto">
-                                                                <label class="label" for="descricao">Descrição</label>
-                                                                <label class="input">
-                                                                    <input id="descricao" maxlength="45" name="descricao" class="required" value="" autocomplete="off">
-                                                                </label>
-                                                            </section>
-
-                                                            <section class="col col-2">
+                                                            <section class="col col-3">
                                                                 <label class="label">CNPJ</label>
                                                                 <label class="input">
-                                                                    <input id="cnpj" name="cnpj" autocomplete="off" placeholder="XX.XXX.XXX/XXXX-XX" type="text" class=" required" >
-                                                                </label>
-                                                            </section>
-                                                         
-                                                            <section class="col col-1 col-auto">
-                                                                <label class="label" for="unidadeFederacao">UF</label>
-                                                                <label class="select">
-                                                                    <select id="unidadeFederacao" name="unidadeFederacao" class="required">
-                                                                        <option></option>
-                                                                        <?php
-                                                                        $reposit = new reposit();
-                                                                        $sql = "SELECT * FROM Ntl.unidadeFederacao order by sigla";
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
-
-                                                                            $sigla = $row['sigla'];
-                                                                            echo '<option value=' . $sigla . '>' . $sigla . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
+                                                                    <input id="cnpj" name="cnpj" autocomplete="off" placeholder="XX.XXX.XXX/XXXX-XX" type="text" class=" required">
                                                                 </label>
                                                             </section>
 
-                                                            <section class="col col-3 col-auto">
-                                                                <label class="label" for="municipio">Município</label>
-                                                                <label class="select">
-                                                                    <select id="municipio" name="municipio" required class="required" >
-                                                                        <option></option> 
-                                                                        <?php
-                                                                        $reposit = new reposit();
-                                                                        $sql = " SELECT * FROM Ntl.municipio WHERE ativo = 1 order by descricao";
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
-                                                                            $codigo = (int) $row['codigo'];
-                                                                            $municipio = $row['descricao'];
-                                                                            
-                                                                            echo '<option value=' . $codigo . '>' . $municipio . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>            
+                                                            <section class="col col-3">
+                                                                <label class="label">Razão Social</label>
+                                                                <label class="input">
+                                                                    <input id="razaoSocial" maxlength="70" name="razaoSocial" autocomplete="off" placeholder="Digite a Razao Social" type="text" class=" required">
+                                                                </label>
                                                             </section>
 
-                                                            <section class="col col-2 col-auto">
+                                                            <section class="col col-4">
+                                                                <label class="label">Apelido</label>
+                                                                <label class="input">
+                                                                    <input id="apelido" maxlength="70" name="apelido" autocomplete="off" type="text" class=" required">
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col col-2 ">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo" class="required">
@@ -134,36 +102,101 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
 
+                                                            <section class="col col-2">
+                                                                <label class="label">CEP</label>
+                                                                <label class="input">
+                                                                    <input id="cep" name="cep" type="text"  autocomplete="off" maxlength="100">
+
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label">Logradouro</label>
+                                                                <label class="input">
+                                                                    <input id="logradouro" name="logradouro" type="text" readonly class="readonly" autocomplete="off" maxlength="100">
+
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label">Número</label>
+                                                                <label class="input">
+                                                                    <input id="numero" name="numero" type="text" autocomplete="off" maxlength="100">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label">Complemento</label>
+                                                                <label class="input">
+                                                                    <input id="complemento" name="complemento" type="text"  autocomplete="off" maxlength="100">
+
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col col-2">
+                                                                <label class="label">Bairro</label>
+                                                                <label class="input">
+                                                                    <input id="bairro" name="bairro" type="text" autocomplete="off" readonly class="readonly" maxlength="100">
+
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Cidade</label>
+                                                                <label class="input">
+                                                                    <input id="cidade" name="cidade" type="text" autocomplete="off" readonly class="readonly" maxlength="100">
+
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col col-1">
+                                                                <label class="label">UF</label>
+                                                                <label class="input">
+                                                                    <input id="uf" name="uf" type="text" autocomplete="off" readonly class="readonly" cmaxlength="100">
+
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col col-1">
+                                                                <label class="label">NF</label>
+                                                                <label class="select">
+                                                                    <select id="notaFiscal" name="notaFiscal" class="required">
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+
                                                         </div>
-                                                    </fieldset>
+
+
+
                                                 </div>
-                                                <footer>
-                                                    <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
-                                                        <span class="fa fa-trash"></span>
-                                                    </button>
-                                                    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
-                                                        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                            <span id="ui-id-2" class="ui-dialog-title">
-                                                            </span>
-                                                        </div>
-                                                        <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                            <p>CONFIRMA A EXCLUSÃO ? </p>
-                                                        </div>
-                                                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                                            <div class="ui-dialog-buttonset">
-                                                            </div>
+                                                </fieldset>
+                                            </div>
+                                            <footer>
+                                                <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                                    <span class="fa fa-trash"></span>
+                                                </button>
+                                                <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                                    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                        <span id="ui-id-2" class="ui-dialog-title">
+                                                        </span>
+                                                    </div>
+                                                    <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                        <p>CONFIRMA A EXCLUSÃO ? </p>
+                                                    </div>
+                                                    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                        <div class="ui-dialog-buttonset">
                                                         </div>
                                                     </div>
-                                                    <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                                        <span class="fa fa-floppy-o"></span>
-                                                    </button>
-                                                    <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                                        <span class="fa fa-file-o"></span>
-                                                    </button>
-                                                    <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                                        <span class="fa fa-backward "></span>
-                                                    </button>
-                                                </footer>
+                                                </div>
+                                                <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                                    <span class="fa fa-floppy-o"></span>
+                                                </button>
+                                                <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                                    <span class="fa fa-file-o"></span>
+                                                </button>
+                                                <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                                    <span class="fa fa-backward "></span>
+                                                </button>
+                                            </footer>
                                 </form>
                             </div>
                         </div>
@@ -233,6 +266,10 @@ include("inc/scripts.php");
             placeholder: "X"
         });
 
+        $("#cep").mask("99999-999", {
+            placeholder: 'X'
+        });
+
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -282,7 +319,7 @@ include("inc/scripts.php");
             voltar();
         });
 
-        $("#cnpj").on("focusout", function() { 
+        $("#cnpj").on("focusout", function() {
             var cnpj = $("#cnpj").val();
             if (!validacao_cnpj(cnpj)) {
                 smartAlert("Atenção", "CNPJ inválido!", "error");
@@ -330,9 +367,36 @@ include("inc/scripts.php");
 
         });
 
+        $("#cep").on("change", function() {
+            var cep = $("#cep").val().replace(/\D/g, '');
+            buscaCep(cep);
+        });
+
         carregaPagina();
 
     });
+
+    function buscaCep(cep) {
+        if (cep != "") {
+            var validacep = /^[0-9]{8}$/;
+            if (validacep.test(cep)) {
+                $.getJSON("//viacep.com.br/ws/" + cep + "/json/?callback=?", function(dados) {
+                    if (!("erro" in dados)) {
+
+                        $("#logradouro").val(dados.logradouro);
+                        $("#bairro").val(dados.bairro);
+                        $("#cidade").val(dados.localidade);
+                        $("#uf").val(dados.uf);
+                    } else {
+
+                        smartAlert("Erro", "CEP não encontrado.", "error");
+                    }
+                });
+            } else {
+                smartAlert("Erro", "Formato do CEP inválido.", "error");
+            }
+        }
+    }
 
     function carregaPagina() {
         var urlx = window.document.URL.toString();
@@ -365,8 +429,8 @@ include("inc/scripts.php");
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
                             $("#ativo").val(ativo);
-                            $("#unidadeFederacao").val(unidadeFederacao); 
-                            $("#municipio").append('<option value="' + municipio + '">'+ nomeMunicipio +'</option>');
+                            $("#unidadeFederacao").val(unidadeFederacao);
+                            $("#municipio").append('<option value="' + municipio + '">' + nomeMunicipio + '</option>');
                             $("#municipio").val(municipio);
                             $("#descricao").val(descricao);
                             $("#cnpj").val(cnpj);
@@ -423,40 +487,53 @@ include("inc/scripts.php");
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
- 
-        var id = +$("#codigo").val();
-        var ativo = +$("#ativo").val();
-        var descricao = $("#descricao").val().trim().replace(/'/g, " ");  
-        var unidadeFederacao = $("#unidadeFederacao").val().trim();
-        var cnpj = $("#cnpj").val();
-        var municipio = +$("#municipio").val();
-      
-        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        if (!descricao) {
-            smartAlert("Atenção", "Informe a Descrição", "error");
-            $("#btnGravar").prop('disabled', false);
-            return;
-        }
 
+        var id = +$("#codigo").val();
+        var cnpj = $("#cnpj").val();
+        var razaoSocial = $("#razaoSocial").val();
+        var apelido = $("#apelido").val();
+        var ativo = $("#ativo").val();
+        var cep = $("#cep").val();
+        var logradouro = $("#logradouro").val();
+        var numero = $("#numero").val();
+        var complemento = $("#complemento").val();
+        var bairro = $("#bairro").val();
+        var cidade = $("#cidade").val();
+        var uf = $("#uf").val();
+        var notaFiscal = $("#notaFiscal").val();
+
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!cnpj) {
             smartAlert("Atenção", "Informe o CNPJ", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
 
-        if (!unidadeFederacao) {
-            smartAlert("Atenção", "Informe a UF", "error");
+        if (!razaoSocial) {
+            smartAlert("Atenção", "Informe o Razao Social", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
 
-        if (!municipio) {
-            smartAlert("Atenção", "Informe o Município", "error");
+        if (!apelido) {
+            smartAlert("Atenção", "Informe o Apelido", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
- 
-        gravaFornecedor(id, ativo, descricao, cnpj, unidadeFederacao, municipio,
+
+        if (!cep) {
+            smartAlert("Atenção", "Informe o Cep", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!numero) {
+            smartAlert("Atenção", "Informe o numero", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        gravaFornecedor(id, cnpj,razaoSocial,apelido,ativo,logradouro,numero,complemento,bairro,cidade,uf,notaFiscal,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");

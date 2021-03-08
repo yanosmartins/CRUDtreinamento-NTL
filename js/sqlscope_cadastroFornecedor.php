@@ -37,23 +37,33 @@ function grava() {
     $reposit = new reposit();
 
     //Variáveis
-    $id =  (int) $_POST['id'];
-    $ativo = formatarNumero($_POST['ativo']);
     session_start();
-    $usuario = formatarString($_SESSION['login']);  //Pegando o nome do usuário mantido pela sessão.
-    $descricao = formatarString($_POST['descricao']);  
-    $cnpj = formatarString($_POST['cnpj']);  
-    $unidadeFederacao = formatarString($_POST['unidadeFederacao']); 
-    $municipio = formatarNumero($_POST['municipio']); 
+    $id =  $_POST['id'];
+    $cnpj = $_POST['cnpj'];
+    $razaoSocial =$_POST['razaoSocial'];  
+    $apelido =$_POST['apelido'];  
+    $ativo =$_POST['ativo'];  
+    $logradouro =$_POST['logradouro'];  
+    $numero =$_POST['numero'];  
+    $complemento =$_POST['complemento'];  
+    $bairro =$_POST['bairro']; 
+    $cidade =$_POST['cidade'];  
+    $uf =$_POST['uf'];   
+    $notaFiscal =$_POST['notaFiscal'];  
 
     $sql = "Ntl.fornecedor_Atualiza ".
      $id . ",".
-     $ativo . "," .
-     $descricao . "," .
      $cnpj . "," .
-     $unidadeFederacao . "," .
-     $municipio  . "," .
-     $usuario ." ";
+     $razaoSocial . "," .
+     $apelido . "," .
+     $ativo . "," .
+     $logradouro . "," .
+     $numero  . "," .
+     $complemento ." " . 
+     $bairro ." " .
+     $cidade ." " . 
+     $uf ." " .
+     $notaFiscal ." ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -92,7 +102,6 @@ function recupera() {
 
     $sql = "SELECT FO.[codigo], FO.[ativo], FO.[unidadeFederacao], FO.[municipio], FO.[descricao], FO.[cnpj], M.[descricao] AS nomeMunicipio
     FROM Ntl.fornecedor FO
-    INNER JOIN Ntl.municipio M ON M.codigo = FO.municipio
     WHERE (0=0)";
 
     if ($condicaoId) {

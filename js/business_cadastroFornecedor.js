@@ -1,9 +1,10 @@
-function gravaFornecedor(id, ativo, descricao, cnpj, unidadeFederacao, municipio, callback) {
+function gravaFornecedor(id,cnpj,razaoSocial,apelido,ativo,logradouro,numero,complemento,bairro,cidade,uf,notaFiscal, callback) {
+    debugger
     $.ajax({
         url: 'js/sqlscope_cadastroFornecedor.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", id:id, ativo:ativo, cnpj:cnpj, descricao:descricao, unidadeFederacao:unidadeFederacao, municipio:municipio}, //valores enviados ao script     
+        data: {funcao: "grava", id:id,cnpj:cnpj,razaoSocial:razaoSocial,apelido:apelido,ativo:ativo,logradouro:logradouro,numero:numero,complemento:complemento,bairro:bairro,cidade:cidade,uf:uf,notaFiscal:notaFiscal}, //valores enviados ao script     
         success: function (data) {
             callback(data);
         }
@@ -37,17 +38,5 @@ function  excluirFornecedor(id, callback) {
             callback(data); 
         }
         
-    });
-}
-
-function populaComboMunicipio(codigo, callback){
-    $.ajax({
-        url: 'js/sqlscope_tabelaBasicaDiasUteisPorMunicipio.php', //caminho do arquivo a ser executado
-        dataType: 'html', //tipo do retorno
-        type: 'post', //metodo de envio
-        data: {funcao: 'listaComboMunicipio', codigo: codigo}, //valores enviados ao script     
-        success: function (data) {
-            callback(data);
-        }
     });
 }
