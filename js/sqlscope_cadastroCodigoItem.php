@@ -45,7 +45,7 @@ function grava()
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
 
-    $sql = "Ntl.codigoItem_Atualiza
+    $sql = "Estoque.codigoItem_Atualiza
             $id,
             $codigoItem,
             $codigoFabricante,
@@ -78,7 +78,7 @@ function recupera()
     }
 
     $sql = "SELECT CI.codigo,CI.codigoItem,CI.codigoFabricante,CI.descricaoItem,CI.estoque,CI.grupoItem,CI.localizacaoItem,CI.ativo
-            FROM Ntl.codigoItem AS CI WHERE codigo = $id";
+            FROM Estoque.codigoItem AS CI WHERE codigo = $id";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -132,7 +132,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('ntl.codigoItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Estoque.codigoItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
@@ -146,7 +146,7 @@ function populaComboGrupoItem()
 {
     $estoque = $_POST["estoque"];
     if ($estoque > 0) {
-        $sql = "SELECT codigo, descricao, estoque FROM Ntl.grupoItem 
+        $sql = "SELECT codigo, descricao, estoque FROM Estoque.grupoItem 
                 WHERE ativo = 1 AND estoque = $estoque ORDER BY descricao";
 
         $reposit = new reposit();

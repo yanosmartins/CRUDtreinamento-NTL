@@ -120,7 +120,7 @@ include("inc/nav.php");
                                                                         <option value=""></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, descricao FROM Ntl.estoque WHERE ativo = 1 ORDER BY descricao";
+                                                                        $sql = "SELECT codigo, descricao FROM Estoque.estoque WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $id = $row['codigo'];
@@ -138,7 +138,7 @@ include("inc/nav.php");
                                                                         <option value=""></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, descricao FROM Ntl.grupoItem WHERE ativo = 1 ORDER BY descricao";
+                                                                        $sql = "SELECT codigo, descricao FROM Estoque.grupoItem WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $id = $row['codigo'];
@@ -156,7 +156,7 @@ include("inc/nav.php");
                                                                         <option value=""></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, localizacaoItem FROM Ntl.localizacaoItem WHERE ativo = 1 ORDER BY localizacaoItem";
+                                                                        $sql = "SELECT codigo, localizacaoItem FROM Estoque.localizacaoItem WHERE ativo = 1 ORDER BY localizacaoItem";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $id = $row['codigo'];
@@ -385,7 +385,6 @@ include("inc/scripts.php");
                     } else {
                         smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                     }
-                    voltar();
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     voltar();
@@ -446,7 +445,7 @@ include("inc/scripts.php");
         }
 
         //Chama a função de gravar do business de convênio de saúde.
-        gravaGrupoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo,
+        gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");

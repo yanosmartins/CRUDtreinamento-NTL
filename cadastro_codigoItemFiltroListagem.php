@@ -55,10 +55,10 @@ include "js/repositorio.php";
                 $reposit = new reposit();
                 $sql = "SELECT CI.codigo,CI.codigoItem,CI.codigoFabricante,CI.descricaoItem,CI.estoque,E.descricao AS descricaoEstoque ,
                                 CI.grupoItem,GI.descricao as grupoItemDescricao,CI.localizacaoItem,LI.localizacaoItem as descricaoLocalizacaoItem,CI.ativo
-                            FROM Ntl.codigoItem AS CI
-                            LEFT JOIN Ntl.estoque E ON CI.estoque = E.codigo 
-                            LEFT JOIN Ntl.grupoItem GI ON CI.grupoItem = GI.codigo
-                            LEFT JOIN Ntl.localizacaoItem LI ON CI.localizacaoItem = LI.codigo";
+                            FROM Estoque.codigoItem AS CI
+                            LEFT JOIN Estoque.estoque E ON CI.estoque = E.codigo 
+                            LEFT JOIN Estoque.grupoItem GI ON CI.grupoItem = GI.codigo
+                            LEFT JOIN Estoque.localizacaoItem LI ON CI.localizacaoItem = LI.codigo";
 
                 $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
