@@ -90,13 +90,13 @@ include("inc/nav.php");
                                                             <section class="col col-4">
                                                                 <label class="label">Sigla</label>
                                                                 <label class="input">
-                                                                    <input id="sigla" name="sigla" type="text" maxlength="5" placeholder="Kg" class="required" required>
+                                                                    <input id="sigla" name="sigla" type="text" maxlength="5" class="required" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input name="descricao" id="descricao" autocomplete="off" class="form-control required" placeholder="Quilo" required>
+                                                                    <input name="descricao" id="descricao" autocomplete="off" class="form-control required" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
