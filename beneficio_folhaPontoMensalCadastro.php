@@ -286,7 +286,7 @@ include("inc/nav.php");
                                                                         <label class="label" for="lancamento">Lançamento/Ocorrência</label>
                                                                         <label class="select">
                                                                             <select id="inputLancamento" name="inputLancamento">
-                                                                                <option></option>
+                                                                                <option value="0"></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
                                                                                 $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
@@ -304,13 +304,13 @@ include("inc/nav.php");
 
                                                                 </div>
                                                                 <div class="row">
-                                                                    <section class="col col-md-1">
+                                                                    <section class="col col-md-2">
                                                                         <label class="label"> </label>
                                                                         <button id="btnAddPonto" type="button" class="btn btn-primary">
                                                                             <i class="">Lançar Ponto</i>
                                                                         </button>
                                                                     </section>
-                                                                    <section class="col col-md-1">
+                                                                    <section class="col col-md-2">
                                                                         <label class="label"> </label>
                                                                         <button id="btnGravar" type="button" class="btn btn-success" style="display:<?php echo $esconderBtnGravar ?>">
                                                                             <i class="">Confirmar Alterações</i>
@@ -401,7 +401,7 @@ include("inc/nav.php");
                                                                         <label class=\"label\" for=\"lancamento\">Lançamento/Ocorrência</label>
                                                                         <label class=\"select\">
                                                                             <select id=\"lancamento-$i\" name=\"lancamento\" class=\" readonly\" readonly style= \"pointer-events: none; touch-action: none\" tabindex=\"-1\">
-                                                                                <option></option>";
+                                                                                <option value=\"0\"></option>";
 
                                                                     $reposit = new reposit();
                                                                     $sql = "select codigo, sigla, descricao from Ntl.lancamento where ativo = 1 order by descricao";
@@ -409,7 +409,7 @@ include("inc/nav.php");
                                                                     foreach ($result as $row) {
                                                                         $codigo = (int) $row['codigo'];
                                                                         $descricao = $row['descricao'];
-                                                                        echo "<option value=' . $codigo . '> $descricao </option>'";
+                                                                        echo "<option value='$codigo'>$descricao</option>";
                                                                     }
                                                                     echo " </select><i></i>
                                                                         </label>
@@ -422,7 +422,7 @@ include("inc/nav.php");
                                                                 <div class="row">
                                                                     <section class="col col-12">
                                                                         <label class="label">Observações</label>
-                                                                        <textarea maxlength="500" id="observacoes" name="observacoes" class="form-control" rows="3" style="resize:vertical"></textarea>
+                                                                        <textarea maxlength="500" id="observacaoFolhaPontoMensal" name="observacaoFolhaPontoMensal" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
                                                                     </section>
                                                                 </div>
                                                             </div>
@@ -515,49 +515,50 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
 
-        $("#horaEntrada").mask("99:99:99");
+        $("#inputHoraEntrada").mask("99:99:99");
+        
 
-        $('#horaEntrada').clockpicker({
+        $('#inputHoraEntrada').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm:ss'));
 
-        $("#horaSaida").mask("99:99:99");
+        $("#inputHoraSaida").mask("99:99:99");
 
-        $('#horaSaida').clockpicker({
+        $('#inputHoraSaida').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm:ss'));
 
-        $("#inicioAlmoco").mask("99:99");
+        $("#inputInicioAlmoco").mask("99:99");
 
-        $('#inicioAlmoco').clockpicker({
+        $('#inputInicioAlmoco').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
-        $("#fimAlmoco").mask("99:99");
+        $("#inputFimAlmoco").mask("99:99");
 
-        $('#fimAlmoco').clockpicker({
+        $('#inputFimAlmoco').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
-        $("#horaExtra").mask("99:99");
+        $("#inputHoraExtra").mask("99:99");
 
-        $('#horaExtra').clockpicker({
+        $('#inputHoraExtra').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
-        $("#atraso").mask("99:99");
+        $("#inputAtraso").mask("99:99");
 
-        $('#atraso').clockpicker({
+        $('#inputAtraso').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
@@ -569,14 +570,35 @@ include("inc/scripts.php");
 
             var dia = $("#inputDia").val()
 
+            var entrada = $("#horaEntrada-" + dia)
+            var inputEntrada = $("#inputHoraEntrada").val()
 
-            $("#horaEntrada-" + dia).val($("#inputHoraEntrada").val())
-            $("#inicioAlmoco-" + dia).val($("#inputInicioAlmoco").val())
-            $("#fimAlmoco-" + dia).val($("#inputFimAlmoco").val())
-            $("#horaSaida-" + dia).val($("#inputHoraSaida").val())
-            $("#horaExtra-" + dia).val($("#inputHoraExtra").val())
-            $("#atraso-" + dia).val($("#inputAtraso").val())
-            $("#lancamento-" + dia).val($("#inputLancamento").val())
+            var inicioAlmoco = $("#inicioAlmoco-" + dia)
+            var inputInicioAlmoco = $("#inputInicioAlmoco").val()
+
+            var fimAlmoco = $("#fimAlmoco-" + dia)
+            var inputFimAlmoco = $("#inputFimAlmoco").val()
+
+            var saida = $("#horaSaida-" + dia)
+            var inputSaida = $("#inputHoraSaida").val()
+
+            var extra = $("#horaExtra-" + dia)
+            var inputExtra = $("#inputHoraExtra").val()
+
+            var atraso = $("#atraso-" + dia)
+            var inputAtraso = $("#inputAtraso").val()
+            
+            var lancamento = $("#lancamento-" + dia)
+            var inputLancamento = $("#inputLancamento").val()
+
+            entrada.val(inputEntrada)
+            inicioAlmoco.val(inputInicioAlmoco)
+            fimAlmoco.val(inputFimAlmoco)
+            saida.val(inputSaida)
+            extra.val(inputExtra)
+            atraso.val(inputAtraso)
+            lancamento.val(inputLancamento)
+
         });
 
 
@@ -628,51 +650,36 @@ include("inc/scripts.php");
         $("#btnGravar").prop('disabled', true);
 
         var arrayFolha = $("input[name='dia']").serializeArray()
-        console.log(typeof arrayFolha)
-        var arrayDia = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayDia.push({
-                dia: folha.value
-            })
+
+        var arrayDia = arrayFolha.map(folha => {
+            return { dia: folha.value }
         })
 
-        var arrayFolha = $("input[name='horaEntrada']").serializeArray()
-        var arrayHoraEntrada = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayHoraEntrada.push({
-                horaEntrada: folha.value
-            })
+        arrayFolha = $("input[name='horaEntrada']").serializeArray()
+        var arrayHoraEntrada = arrayFolha.map(folha => {
+            return { horaEntrada: folha.value }
         })
 
-        var arrayFolha = $("input[name='inicioAlmoco']").serializeArray()
-        var arrayInicioAlmoco = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayInicioAlmoco.push({
-                inicioAlmoco: folha.value
-            })
+        arrayFolha = $("input[name='inicioAlmoco']").serializeArray()
+        var arrayInicioAlmoco = arrayFolha.map(folha => {
+            return { inicioAlmoco: folha.value }
         })
 
-        var arrayFolha = $("input[name='fimAlmoco']").serializeArray()
-        var arrayFimAlmoco = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayFimAlmoco.push({
-                fimAlmoco: folha.value
-            })
+        arrayFolha = $("input[name='fimAlmoco']").serializeArray()
+        var arrayFimAlmoco = arrayFolha.map(folha => {
+            return { fimAlmoco: folha.value }
         })
 
-        var arrayFolha = $("input[name='horaSaida']").serializeArray()
-        var arrayHoraSaida = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayHoraSaida.push({
-                horaSaida: folha.value
-            })
+        arrayFolha = $("input[name='horaSaida']").serializeArray()
+        var arrayHoraSaida = arrayFolha.map(folha => {
+            return { horaSaida: folha.value }
         })
-        var arrayFolha = $("input[name='lancamento']").serializeArray()
+
+        arrayFolha = $("select[name='lancamento'] option:selected")
         var arrayLancamento = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayLancamento.push({
-                lancamento: folha.value
-            })
+        arrayFolha.each((index,el)=>{
+            let value = $(el).val()
+            arrayLancamento.push({lancamento:value})
         })
 
         var codigo = parseInt($("#codigo").val())
@@ -683,27 +690,32 @@ include("inc/scripts.php");
         var ano = mesAnoFolhaPonto[2]
         var observacaoFolhaPontoMensal = $("#observacaoFolhaPontoMensal").val();
 
-        var data = new Date().getMonth
+        var data = new Date().getMonth()
 
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        var folhaPontoMensalTabela = new Array()
-        arrayDia.forEach((el, index) => {
-            console.log(el)
-            folhaPontoMensalTabela[index].dia = ''
-            folhaPontoMensalTabela[index].horaEntrada = arrayHoraEntrada[index]
-            folhaPontoMensalTabela[index].horaSaida = arrayHoraSaida[index]
-            folhaPontoMensalTabela[index].inicioAlmoco = arrayInicioAlmoco[index]
-            folhaPontoMensalTabela[index].fimAlmoco = arrayFimAlmoco[index]
-            folhaPontoMensalTabela[index].lancamento = arrayLancamento[index]
+        var folhaPontoMensalTabela = arrayDia.map((array, index) => {
+            return {
+                dia: array.dia,
+                horaEntrada: arrayHoraEntrada[index].horaEntrada,
+                horaSaida: arrayHoraSaida[index].horaSaida,
+                inicioAlmoco: arrayInicioAlmoco[index].inicioAlmoco,
+                fimAlmoco : arrayFimAlmoco[index].fimAlmoco,
+                lancamento: arrayLancamento[index].lancamento
+
+            }
 
         })
 
-        folhaPontoMensalTabela.mes = mes
-        folhaPontoMensalTabela.ano = ano
-        folhaPontoMensalTabela.observacao = observacaoFolhaPontoMensal
+        var folhaPontoInfo = {
+            codigo: codigo,
+            funcionario: funcionario,
+            mes: mes,
+            ano: ano,
+            observacao: observacaoFolhaPontoMensal
+        }
 
-            gravaFolhaPontoMensal(folhaPontoMensalTabela,
+            gravaFolhaPontoMensal(folhaPontoInfo,folhaPontoMensalTabela,
                 function(data) {
 
                     if (data.indexOf('sucess') < 0) {

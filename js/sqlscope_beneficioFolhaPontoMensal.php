@@ -33,50 +33,49 @@ function grava()
     session_start();
     $usuario = $_SESSION['login'];
     
+    /* Objeto com os arrays de objetos com dias,horas e etc para montar o XML */
+    $arrayFolhaPontoMensal = $_POST['folhaPontoMensalTabela'];
 
-    //Inici do Json Lançamento
-    $strJsonFolhaPontoMensal = $_POST['folhaPontoMensalTabela'];
-    $arrayJsonFolhaPontoMensal = json_decode($strJsonFolhaPontoMensal, true);
-    $xmlJsonFolhaPontoMensal = "";
+    /* Objeto com o informações que não pertencem ao array do XML */
+    $folhaPontoInfo = $_POST['folhaPontoInfo'];
+
+    $codigo = (int) $folhaPontoInfo;
+    $funcionarioFolha = (int) $folhaPontoInfo; 
+    $mesFolha = (int) $folhaPontoInfo;
+    $anoFolha = (int) $folhaPontoInfo;
+    $observacaoFolha = (string)$folhaPontoInfo;
+
+    /* Verificar como os dados estão sendo passados e então montar o XML */
+
+    $xmlFolhaPontoMensal = "";
     $nomeXml = "ArrayOfPonto";
     $nomeTabela = "ponto";
-    if (sizeof($arrayJsonFolhaPontoMensal) > 0) {
-        $xmlJsonFolhaPontoMensal = '<?xml version="1.0"?>';
-        $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-        foreach ($arrayJsonFolhaPontoMensal as $chave) {
-            $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "<" . $nomeTabela . ">";
-            foreach ($chave as $campo => $valor) {
-                if (($campo === "sequencialFolhaPontoMensal")) {
-                    continue;
-                }
-                if ($valor == 'Selecione') {
-                    $valor = NULL;
-                }
-                $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "<" . $campo . ">" . $valor . "</" . $campo . ">";
-            }
-            $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "</" . $nomeTabela . ">";
+    $xmlFolhaPontoMensal = "<?xml version=\"1.0\"?>";
+    $xmlFolhaPontoMensal .= "<$nomeXml xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">";
+    foreach($arrayFolhaPontoMensal as $folha){
+        $xmlFolhaPontoMensal .= "<$nomeTabela>";
+        foreach($folha as $key => $value){
+            $xmlFolhaPontoMensal .= "<$key>$value</$key>";
         }
-        $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "</" . $nomeXml . ">";
-    } else {
-        $xmlJsonFolhaPontoMensal = '<?xml version="1.0"?>';
-        $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-        $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "</" . $nomeXml . ">";
+        $xmlFolhaPontoMensal .= "<$nomeTabela>";
     }
-    $xml = simplexml_load_string($xmlJsonFolhaPontoMensal);
+    $xmlFolhaPontoMensal .= "</\"$nomeXml\">";
+    $xml = simplexml_load_string($xmlFolhaPontoMensal);
     if ($xml === false) {
         $mensagem = "Erro na criação do XML de Lançamento";
         echo "failed#" . $mensagem . ' ';
         return;
     }
-    $xmlJsonFolhaPontoMensal = "'" . $xmlJsonFolhaPontoMensal . "'";
-
-
-    //Fim do Json  Lancamento
+    $xmlFolhaPontoMensal = "'" . $xmlFolhaPontoMensal . "'";
    
-    $sql = "Ntl.folhaPontoMensal_Atualiza
-        $folhaPontoMensalTabela ,
-        $usuario 
-        ";
+    $sql = 
+        "Ntl.folhaPontoMensal_Atualiza 
+        $codigo,
+        $funcionarioFolha,
+        $observacaoFolha,
+        $usuario,
+        $xmlFolhaPontoMensal
+    ";
 
 
     $result = $reposit->Execprocedure($sql);
@@ -101,13 +100,12 @@ function recupera()
 
  
 
-    $sql = "SELECT F.codigo, F.funcionario, FU.nome as nomeFuncionario, F.projeto, P.descricao as projetoDescricao, F.mesAnoFolhaPonto,F.ativo 
-    FROM Beneficio.folhaPonto F
-
-    LEFT JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
-    LEFT JOIN Ntl.projeto P ON P.codigo = F.projeto
-    WHERE (0=0) AND F.codigo = " . $id;
-
+    $sql = 
+        "SELECT F.codigo, F.funcionario, F.observacao,
+        FROM Ntl.folhaPontoMensal F
+        INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
+        WHERE (0=0) AND F.codigo = " . $id
+    ;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -115,37 +113,51 @@ function recupera()
     $out = "";
     if($row = $result[0])
 
-
     $id = $row['codigo'];
-    $projeto = $row['projeto'];
     $funcionario = $row['funcionario'];
-    $mesAnoFolhaPonto = $row['mesAnoFolhaPonto'];
+    $observacao = $row['observacao'];
 
-    $mesAnoFolhaPonto = ($row['mesAnoFolhaPonto']);
-    if ($row['mesAnoFolhaPonto'] != "") {
-        $aux = explode(' ', $row['mesAnoFolhaPonto']);
-        $data = $aux[1] . ' ' . $aux[0];
-        $data = $aux[0];
-        $data =  trim($data);
-        $aux = explode('-', $data);
-        $data =  $aux[1] . '/' . $aux[0];
-        $data =  trim($data);
-        $mesAnoFolhaPonto = $data;
-    } else {
-        $mesAnoFolhaPonto = '';
-    }
-
-    $out =   $id . "^" .
-    $funcionario . "^" .
-        $projeto . "^" .
-        $mesAnoFolhaPonto;
+    $out =   
+        $id . "^" .
+        $funcionario . "^" .
+        $observacao
+    ;
 
     if ($out == "") {
         echo "failed#";
         return;
     }
 
-    echo "sucess#" . $out;
+    $sql = 
+        "SELECT P.dia,P.mes,P.ano,P.horaEntrada,P.horaSaida,
+        P.inicioAlmoco,P.fimAlmoco,P.lancamento
+        FROM Ntl.ponto P 
+        INNER JOIN Ntl.folhaPontoMensal F 
+        ON F.codigo = P.folhaPontoMensal 
+        WHERE (0=0) AND F.codigo = " . $id
+    ;
+
+    $result = $reposit->RunQuery($sql);
+
+    $arrayPonto = array();
+
+    foreach($result as $row){
+
+        $arrayRow = array(
+            "dia"           =>  $row[""],
+            "entrada"       =>  $row[""],
+            "inicioAlmoco"  =>  $row[""],
+            "fimAlmoco"     =>  $row[""],
+            "saida"         =>  $row[""],
+            "horaExtra"     =>  $row[""],
+            "atraso"        =>  $row[""],
+            "lancamento"    =>  $row[""]
+        );
+
+        array_push($arrayPonto,$arrayRow);
+    }
+
+    echo "sucess#" . $out . $arrayPonto;
     return;
 }
 
