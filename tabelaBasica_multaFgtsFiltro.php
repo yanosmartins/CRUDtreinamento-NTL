@@ -194,7 +194,7 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
 
         var parametrosUrl = '&percentual=' + percentual;
-         parametrosUrl = '&ativo=' + ativo;
+         parametrosUrl = parametrosUrl + '&ativo=' + ativo;
         $('#resultadoBusca').load('tabelaBasica_multaFgtsListagem.php?' + parametrosUrl);
     }
 

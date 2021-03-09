@@ -98,7 +98,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Percentual</label>
                                                                 <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" autocomplete="off" required>
+                                                                    <input id="percentual" name="percentual" style="text-align: right;" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1">
@@ -172,33 +172,16 @@ include("inc/scripts.php");
 
 <script>
     $(document).ready(function() {
-        $('#percentual').focusout(function(evet) {
-            var theEvent = evet || window.event;
-            var key = theEvent.keyCode || theEvent.which;
-            key = String.fromCharCode(key);
-            //var regex = /^[0-9.,]+$/;
-            var regex = /^[0-9.]+$/;
-            if (!regex.test(key)) {
-                theEvent.returnValue = false;
-                if (theEvent.preventDefault) theEvent.preventDefault();
-            }
-
-            let value = $('#percentual').val();
-            let percent
-            if (value == '') {
-                return $('#percentual').val('')
+        $('#percentual').focusout(function() {
+            var percentual, element;
+            element = $(this);
+            element.unmask();
+            percentual = element.val().replace(/\D/g, '');
+            if (percentual.length > 5) {
+                element.mask("99.9999?9");
             } else {
-                if (value.indexOf('.') >= 0) {
-                    percent = parseFloat(value)
-                    percent = percent.toFixed(3)
-                    return $('#percentual').val(percent)
-                } else {
-                    percent = value / 100;
-                    percent = percent.toFixed(3)
-                    $('#percentual').val(percent)
-                }
+                element.mask("9.9999?9");
             }
-
         }).trigger('focusout');
 
         $('#btnSearch').on("click", function() {
@@ -215,8 +198,8 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
 
         var parametrosUrl = '&descricao=' + descricao;
-        var parametrosUrl = '&percentual=' + percentual;
-        parametrosUrl = '&ativo=' + ativo;
+        parametrosUrl = parametrosUrl + '&percentual=' + percentual;
+        parametrosUrl = parametrosUrl + '&ativo=' + ativo;
         $('#resultadoBusca').load('tabelaBasica_encargoFiltroListagem.php?' + parametrosUrl);
     }
 </script>

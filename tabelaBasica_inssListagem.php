@@ -18,12 +18,9 @@ include "js/repositorio.php";
 
                 
                 if ($percentual != "") {
-                    
-
                     $where = $where . " AND percentual = " . "'" . $percentual . "'";
                 }
                 if ($ativo !== "") {
-
                     $where = $where . " AND ativo = $ativo " ;
                 }
 

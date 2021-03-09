@@ -35,6 +35,10 @@ include "js/repositorio.php";
                     $tipo = $_POST["tipo"];
                     $where = $where . " AND tarefa.tipo = $tipo ";
                 }
+                if ($_POST["visivel"] != "") {
+                    $visivel = $_POST["visivel"];
+                    $where = $where . " AND tarefa.visivel = $visivel ";
+                }
                 
                 $ativo = $_POST["ativo"];
                 if ($ativo == 1 || $ativo == 0) {

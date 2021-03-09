@@ -28,8 +28,8 @@ include "js/repositorio.php";
                     $where = $where . " AND (posto.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
 
-                if ($_GET["ativo"] != "") {
-                    $ativo = $_GET["ativo"];
+                if ($_POST["ativo"] != "") {
+                    $ativo = $_POST["ativo"];
                     $where = $where." AND ativo = $ativo";
                 } 
 

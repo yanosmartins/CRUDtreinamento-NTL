@@ -96,9 +96,9 @@ include("inc/ribbon.php");
                                                                 </label>
                                                             </section>
 
-                                                            <section class="col col-1">
+                                                            <!-- <section class="col col-1">
                                                                
-                                                               </section> 
+                                                               </section>  -->
                                                                 
                                                             <section class="col col-2">
                                                             <label class="label">Ativo</label>
@@ -194,13 +194,11 @@ include("inc/scripts.php");
     });
 
     function listarFiltro() {
-        var descricao = $('#descricao').val();
         var percentual = $('#percentual').val();
         var ativo = $('#ativo').val();
 
-        var parametrosUrl = '&descricao=' + descricao;
-        var parametrosUrl = '&percentual=' + percentual;
-         parametrosUrl = '&ativo=' + ativo;
+        var parametrosUrl =  '&percentual=' + percentual;
+         parametrosUrl = parametrosUrl + '&ativo=' + ativo;
         $('#resultadoBusca').load('tabelaBasica_feriasTercoConstitucionalListagem.php?' + parametrosUrl);
     }
 
