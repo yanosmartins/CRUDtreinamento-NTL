@@ -22,61 +22,60 @@ return;
 function grava()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_GRAVAR");
+    // $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_GRAVAR");
 
-    if ($possuiPermissao === 0) {
-        $mensagem = "O usuário não tem permissão para gravar!";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    }
+    // if ($possuiPermissao === 0) {
+    //     $mensagem = "O usuário não tem permissão para gravar!";
+    //     echo "failed#" . $mensagem . ' ';
+    //     return;
+    // }
 
     session_start();
     $usuario = $_SESSION['login'];
-    $lancamentoTabela = $_POST['lancamentoTabela'];
-    $codigo =  (int) $lancamentoTabela['codigo'];
+    
 
     //Inici do Json Lançamento
-    $strJsonLancamento = $lancamentoTabela["JsonLancamento"];
-    $arrayJsonLancamento = json_decode($strJsonLancamento, true);
-    $xmlJsonLancamento = "";
-    $nomeXml = "ArrayOfContratoLancamento";
-    $nomeTabela = "contratoLancamento";
-    if (sizeof($arrayJsonLancamento) > 0) {
-        $xmlJsonLancamento = '<?xml version="1.0"?>';
-        $xmlJsonLancamento = $xmlJsonLancamento . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-        foreach ($arrayJsonLancamento as $chave) {
-            $xmlJsonLancamento = $xmlJsonLancamento . "<" . $nomeTabela . ">";
+    $strJsonFolhaPontoMensal = $_POST['folhaPontoMensalTabela'];
+    $arrayJsonFolhaPontoMensal = json_decode($strJsonFolhaPontoMensal, true);
+    $xmlJsonFolhaPontoMensal = "";
+    $nomeXml = "ArrayOfPonto";
+    $nomeTabela = "ponto";
+    if (sizeof($arrayJsonFolhaPontoMensal) > 0) {
+        $xmlJsonFolhaPontoMensal = '<?xml version="1.0"?>';
+        $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        foreach ($arrayJsonFolhaPontoMensal as $chave) {
+            $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "<" . $nomeTabela . ">";
             foreach ($chave as $campo => $valor) {
-                if (($campo === "sequencialLancamento")) {
+                if (($campo === "sequencialFolhaPontoMensal")) {
                     continue;
                 }
                 if ($valor == 'Selecione') {
                     $valor = NULL;
                 }
-                $xmlJsonLancamento = $xmlJsonLancamento . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+                $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "<" . $campo . ">" . $valor . "</" . $campo . ">";
             }
-            $xmlJsonLancamento = $xmlJsonLancamento . "</" . $nomeTabela . ">";
+            $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "</" . $nomeTabela . ">";
         }
-        $xmlJsonLancamento = $xmlJsonLancamento . "</" . $nomeXml . ">";
+        $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "</" . $nomeXml . ">";
     } else {
-        $xmlJsonLancamento = '<?xml version="1.0"?>';
-        $xmlJsonLancamento = $xmlJsonLancamento . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-        $xmlJsonLancamento = $xmlJsonLancamento . "</" . $nomeXml . ">";
+        $xmlJsonFolhaPontoMensal = '<?xml version="1.0"?>';
+        $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlJsonFolhaPontoMensal = $xmlJsonFolhaPontoMensal . "</" . $nomeXml . ">";
     }
-    $xml = simplexml_load_string($xmlJsonLancamento);
+    $xml = simplexml_load_string($xmlJsonFolhaPontoMensal);
     if ($xml === false) {
         $mensagem = "Erro na criação do XML de Lançamento";
         echo "failed#" . $mensagem . ' ';
         return;
     }
-    $xmlJsonLancamento = "'" . $xmlJsonLancamento . "'";
+    $xmlJsonFolhaPontoMensal = "'" . $xmlJsonFolhaPontoMensal . "'";
 
 
     //Fim do Json  Lancamento
    
-    $sql = "Ntl.lancamentoFolhaPonto_Atualiza
-        $codigo ,
-        $xmlJsonLancamento 
+    $sql = "Ntl.folhaPontoMensal_Atualiza
+        $folhaPontoMensalTabela ,
+        $usuario 
         ";
 
 

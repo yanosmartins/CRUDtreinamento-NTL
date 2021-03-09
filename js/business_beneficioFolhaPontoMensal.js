@@ -1,4 +1,5 @@
 function gravaFolhaPontoMensal(folhaPontoMensalTabela,callback) {
+    debugger
     $.ajax({
         url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
         dataType: 'html', //tipo do retorno

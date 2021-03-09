@@ -103,7 +103,7 @@ include("inc/nav.php");
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
-                                                                    </select>
+                                                                    </select><i></i>
                                                                 </label>
                                                             </section>
 
