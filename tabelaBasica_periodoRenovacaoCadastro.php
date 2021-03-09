@@ -196,9 +196,7 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-        $("#btnExcluir").on("click", function() {
-            excluir();
-        });
+
         carregaPeriodoRenovacao();
     });
 
@@ -245,6 +243,43 @@ include("inc/scripts.php");
             }
         );
     }
+
+    $('#dlgSimpleExcluir').dialog({
+        autoOpen: false,
+        width: 400,
+        resizable: false,
+        modal: true,
+        title: "Atenção",
+        buttons: [{
+            html: "Excluir registro",
+            "class": "btn btn-success",
+            click: function() {
+                $(this).dialog("close");
+                excluir();
+            }
+        }, {
+            html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+            "class": "btn btn-default",
+            click: function() {
+                $(this).dialog("close");
+            }
+        }]
+    });
+
+    $("#btnExcluir").on("click", function() {
+        var id = $("#codigo").val();
+
+        if (id === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+            $("#nome").focus();
+            return;
+        }
+
+        if (id !== 0) {
+            $('#dlgSimpleExcluir').dialog('open');
+        }
+    });
+
 
     function excluir() {
         debugger;

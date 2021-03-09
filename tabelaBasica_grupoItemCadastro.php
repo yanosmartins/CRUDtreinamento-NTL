@@ -264,9 +264,6 @@ include("inc/scripts.php");
 
   function gravar() {
 
-    //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
-    $("#btnGravar").prop('disabled', true);
-
     var codigo = parseInt($("#codigo").val());
     var descricao = $("#descricao").val();
     var estoque = $("#estoque").val();

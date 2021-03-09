@@ -18,20 +18,18 @@ include "js/repositorio.php";
                 $sql = "SELECT codigo, descricao, percentual, ativo
                 FROM Ntl.encargo  ";
                 $where = " WHERE (0=0) ";
-                // $descricao = $_GET["descricao"];
-                // $percentual = $_GET["percentual"];
-                // $ativo = $_GET["ativo"];
+            
 
-                if ($_POST["descricao"] != "") {
-                    $descricao = $_POST["descricao"];
-                    $where = $where . " AND ( descricao = $descricao)";
+                if ($_GET["descricao"] != "") {
+                    $descricao = $_GET["descricao"];
+                    $where = $where . " AND ( descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
-                if ($_POST["percentual"] != "") {
-                    $percentual = $_POST["percentual"];
+                if ($_GET["percentual"] != "") {
+                    $percentual = $_GET["percentual"];
                     $where = $where . " AND ( percentual = $percentual)";
                 }
-                if ($_POST["ativo"] != "") {
-                    $ativo = (int)$_POST["ativo"];
+                if ($_GET["ativo"] != "") {
+                    $ativo = (int)$_GET["ativo"];
                     $where = $where . " AND ( ativo = $ativo)";
                 }
 

@@ -14,22 +14,37 @@ include "js/repositorio.php";
             <tbody>
                 <?php
                 $where = " WHERE (0=0) ";
-                $descricaoCodigo = $_GET["descricaoCodigo"];
-                $descricaoServico = $_GET["descricaoServico"];
-                $ativo = $_GET["ativo"];
+                // $descricaoCodigo = $_GET["descricaoCodigo"];
+                // $descricaoServico = $_GET["descricaoServico"];
+                // $ativo = +$_GET["ativo"];
 
-                if ($descricaoCodigo != "") {
+                // if ($descricaoCodigo != "") {
 
-                    $where = $where . " AND descricaoCodigo = " . "'" . $descricaoCodigo . "'";
+                //     $where = $where . " AND descricaoCodigo = " . "'" . $descricaoCodigo . "'";
+                // }
+                // if ($descricaoServico != "") {
+
+                //     $where = $where . " AND descricaoServico = " . "'" . $descricaoServico . "'";
+                // }
+                // if ($ativo !== "") {
+
+                //     $where = $where . " AND ativo = $ativo " ;
+                // }
+
+                if ($_POST["descricaoCodigo"] != "") {
+                    $descricaoCodigo = $_POST["descricaoCodigo"];
+                    $where = $where . " AND (descricaoCodigo like '%' + " . "replace('" . $descricaoCodigo . "',' ','%') + " . "'%')";
                 }
-                if ($descricaoServico != "") {
-
-                    $where = $where . " AND descricaoServico = " . "'" . $descricaoServico . "'";
+                if ($_POST["descricaoServico"] != "") {
+                    $descricaoServico = $_POST["descricaoServico"];
+                    $where = $where . " AND (descricaoServico like '%' + " . "replace('" . $descricaoServico . "',' ','%') + " . "'%')";
                 }
-                if ($ativo !== "") {
-
-                    $where = $where . " AND ativo = $ativo " ;
+                
+                $ativo = $_POST["ativo"];
+                if ($ativo == 1 || $ativo == 0) {
+                    $where = $where . " AND ativo = $ativo ";
                 }
+
                 $reposit = new reposit();
                 $sql = "SELECT codigo, descricaoCodigo, descricaoServico, ativo
                 FROM Ntl.servico  ";

@@ -109,7 +109,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
 
-                                                            <section class="col col-1">
+                                                            <section class="col col-2">
                                                                 <label class="label">Cargo</label>
                                                                 <label class="input">
                                                                     <input id="cargo" maxlength="255" name="cargo" type="text" value="">

@@ -172,12 +172,15 @@ include("inc/scripts.php");
         });
     });
 
-    function listarFiltro() {
-        var descricao = $('#descricao').val();
-        var ativo = $('#ativo').val();
 
-        var parametrosUrl = '&descricao=' + descricao;
-        parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_postoFiltroListagem.php?' + parametrosUrl);
+    function listarFiltro() {
+        let descricao = $('#descricao').val();
+        let ativo = $("#ativo").val();   
+ 
+        $('#resultadoBusca').load('tabelaBasica_postoFiltroListagem.php?', {
+            descricao: descricao,
+            ativo: ativo
+        });
     }
+
 </script>
