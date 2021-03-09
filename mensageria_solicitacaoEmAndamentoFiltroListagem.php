@@ -23,12 +23,14 @@ include "js/repositorio.php";
                 <?php
                 
 
-                $sql = " SELECT S.codigo, S.funcionario, F.nome, S.dataSolicitacao, S.horaSolicitacao, S.dataLimite, 
-                S.urgente, S.projeto, P.descricao AS nomeProjeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.ativo, S.concluido
+                $sql = "  SELECT S.codigo, S.funcionario, F.nome, S.dataSolicitacao, S.horaSolicitacao, S.dataLimite, 
+                S.urgente, S.projeto, P.descricao AS nomeProjeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.ativo, S.concluido ,
+                FU.nome AS nomeFuncionarioCadastro,S.dataCadastro
                 FROM mensageria.solicitacao S 
                 LEFT JOIN Ntl.funcionario F ON F.codigo = S.funcionario
                 LEFT JOIN Ntl.projeto P ON P.codigo = S.projeto
-                LEFT JOIN Ntl.funcionario FR ON FR.codigo = S.responsavel";
+                LEFT JOIN Ntl.funcionario FR ON FR.codigo = S.responsavel 
+				LEFT JOIN ntl.funcionario FU ON FU.codigo = S.usuarioCadastro";
                 $where = " WHERE (0 = 0)";
 
                 if ($_POST["funcionario"] != "") {
@@ -89,9 +91,10 @@ include "js/repositorio.php";
 
                 foreach ($result as $row) {
                     $id = (int)$row['codigo'];
+                    $nomeFuncionarioCadastro = $row['nomeFuncionarioCadastro'];
                     $funcionario = $row['funcionario'];
                     $nomeFuncionario = $row['nome'];
-                    $horaSolicitacao = $row['horaSolicitacao'];
+                    // $horaSolicitacao = $row['horaSolicitacao'];
                     $urgente = $row['urgente'];
                     $nomeProjeto = $row['nomeProjeto'];
                     $endereco = $row['endereco'];
@@ -106,8 +109,13 @@ include "js/repositorio.php";
                     $dataLimite = explode("-", $dataLimite);
                     $dataLimite = $dataLimite[2] . "/" . $dataLimite[1] . "/" . $dataLimite[0];
 
-                    $dataSolicitacao = $row['dataSolicitacao'];
+                    $dataSolicitacao = $row['dataCadastro'];
                     $dataSolicitacao = explode(" ", $dataSolicitacao);
+
+                    $horaSolicitacao = $dataSolicitacao[1];// pegando por data e hora cadastro para saber a hora que foi feit a solicitação.
+                    $horaSolicitacao = explode(":", $horaSolicitacao);
+                    $horaSolicitacao = $horaSolicitacao[0] . ":" . $horaSolicitacao[1];
+
                     $dataSolicitacao = $dataSolicitacao[0];
                     $dataSolicitacao = explode("-", $dataSolicitacao);
                     $dataSolicitacao = $dataSolicitacao[2] . "/" . $dataSolicitacao[1] . "/" . $dataSolicitacao[0];
@@ -136,16 +144,16 @@ include "js/repositorio.php";
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="mensageria_solicitacaoCadastro.php?id=' . $id . '">' . $id . '</a></td>';
-                    echo '<td class="text-justify">' . $nomeFuncionario . '</td>';
-                    echo '<td class="text-left">' . $dataSolicitacao . '</td>';
-                    echo '<td class="text-left">' . $horaSolicitacao . '</td>';
+                    echo '<td class="text-left">' . $nomeFuncionarioCadastro . '</td>';
+                    echo '<td class="text-center">' . $dataSolicitacao . '</td>';
+                    echo '<td class="text-center">' . $horaSolicitacao . '</td>';
                     echo '<td class="text-left">' . $nomeProjeto . '</td>';
                     echo '<td class="text-justify">' . $dataLimite . '</td>';
                     echo '<td class="text-justify">' . $descricaoUrgente . '</td>';
                     echo '<td class="text-justify">' . $descricaoAtivo . '</td>';
                     echo '<td class="text-justify">' . $endereco . '</td>';
-                    echo '<td class="text-justify">' . $nomeResponsavel . '</td>';
-                    echo '<td class="text-justify">' . $descricaoConcluido . '</td>';
+                    echo '<td class="text-left">' . $nomeResponsavel . '</td>';
+                    echo '<td class="text-left">' . $descricaoConcluido . '</td>';
                     echo '</tr>';
                 }
                 ?>
