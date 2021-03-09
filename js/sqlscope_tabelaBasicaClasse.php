@@ -36,7 +36,7 @@ function gravaClasse()
     $usuario = $_SESSION['login'];
     $usuario =  "'$usuario'";
     $classe = $_POST['classe'];
-    $codigo =  +$classe['codigo'];
+    $codigo =  (int)$classe['codigo'];
     $descricao = $classe['descricao'];
     $descricao = "'$descricao'";
     $reducaoBaseIR = $classe['reducaoBaseIR'];

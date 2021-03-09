@@ -26,7 +26,7 @@ include "js/repositorio.php";
                 if ($descricao != "") {
 
 
-                    $where = $where . " AND descricao = " . "'" . $descricao . "'";
+                    $where = $where . " AND descricao like '%' + "."replace('".$descricao."',' ','%') + "."'%'";
                 }
                 if ($reducaoBaseIR !== "") {
 
