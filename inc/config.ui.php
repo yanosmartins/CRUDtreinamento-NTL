@@ -203,6 +203,9 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('TAREFA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("tarefa" => array("title" => "Tarefa", "url" => APP_URL . "/tabelaBasica_tarefaFiltro.php")); //SYSGC    
     }
+    if (in_array('UNIDADE_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("unidade" => array("title" => "Unidade", "url" => APP_URL . "/tabelaBasica_unidadeFiltro.php")); //SYSGC 
+    }
     if (in_array('UNIDADEITEM_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("unidadeItem" => array("title" => "Unidade do item", "url" => APP_URL . "/tabelaBasica_unidadeItemFiltro.php"));
     }
