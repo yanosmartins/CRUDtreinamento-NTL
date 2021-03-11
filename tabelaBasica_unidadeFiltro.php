@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('ESTOQUE_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('UNIDADE_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('UNIDADE_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
