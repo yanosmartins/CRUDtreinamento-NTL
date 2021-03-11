@@ -359,27 +359,8 @@ include("inc/nav.php");
                                                                             <th class="text-center">Descrição</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody style="display:none">
-                                                                        <?php
-                                                                        echo '<tr >';
-                                                                        echo '<td class="text-left"><a></a></td>';
-                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Uniforme</a></td>';
-                                                                        echo '<td class="text-left">R$ 251,98</td>';
-                                                                        echo '<td class="text-left"> </td>';
-                                                                        echo '</tr >';
-                                                                        echo '<tr >';
-                                                                        echo '<td class="text-left"><a></a></td>';
-                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Capacete</a></td>';
-                                                                        echo '<td class="text-left">R$ 198,88</td>';
-                                                                        echo '<td class="text-left"> </td>';
-                                                                        echo '</tr >';
-                                                                        echo '<tr >';
-                                                                        echo '<td class="text-left"><a></a></td>';
-                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Benefício Social Familiar - Cláusula 26º, parágrafo 2º da CCT</a></td>';
-                                                                        echo '<td class="text-left">R$ 5,00</td>';
-                                                                        echo '<td class="text-left"> </td>';
-                                                                        echo '</tr >';
-                                                                        ?>
+                                                                    <tbody>
+                                                                      
                                                                     </tbody>
                                                                 </table>
                                                             </div>
