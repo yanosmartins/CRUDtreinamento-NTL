@@ -6,43 +6,40 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Estoque</th>
-                    <th class="text-left" style="min-width:30px;">Ativo</th>
+                    <th class="text-left" style="min-width:30px;">Login</th>
+                    <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $descricao = "";
-                $ativo = "";
-                $where = "WHERE (0 = 0)";
+                $nomeFiltro = "";
+                $where = "WHERE (0 = 0) ";
 
-                if ($_GET["descricao"] != "") {
-                    $descricao = $_GET["descricao"];
-                    $where = $where . " AND ([descricao] like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
+                $nomeFiltro = "";
+                if ($_GET["nomeFiltro"] != "") {
+                    $nomeFiltro = $_GET["nomeFiltro"];
+                    $where = $where . " and (USU.[grupo] like '%' + " . "replace('" . $nomeFiltro . "',' ','%') + " . "'%')";
                 }
 
-                if ($_GET["ativo"] != "") {
-                    $ativo = (int) $_GET["ativo"];
-                    $where = $where . " and ativo = " . $ativo;
-                }
-
-                $sql = " SELECT codigo, descricao, ativo FROM Estoque.estoque  ";
-
+                $sql = "SELECT USU.codigo,USU.grupo,USU.ativo FROM Ntl.usuarioGrupo USU ";
                 $sql = $sql . $where;
-                $sql .= " order by descricao ";
+
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                foreach ($result as $row) {
-                    $codigo = (int) $row['codigo'];
-                    $descricao = $row['descricao'];
-                    $ativo = $row['ativo'];
-
-                    $ativo == 1 ? $ativo = 'Sim' : $ativo = 'Não';
+                foreach($result as $row) {
+                    $id = (int) $row['codigo'];
+                    $login = $row['grupo'];
+                    $ativo = (int) $row['ativo'];
+                    if ($ativo == 1) {
+                        $descricaoAtivo = "Sim";
+                    } else {
+                        $descricaoAtivo = "Não";
+                    }
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_estoqueCadastro.php?id=' . $codigo . '">' . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $ativo . '</td>';
+                    echo '<td class="text-left"><a href="usuarioGrupoFuncionalidadeCadastro.php?codigoGrupoUsuario=' . $id . '">' . $login . '</a></td>';
+                    echo '<td class="text-left">' . $descricaoAtivo . '</td>';
                     echo '</tr >';
                 }
                 ?>

@@ -16,7 +16,7 @@ include "js/repositorio.php";
 
                 $reposit = new reposit();
                 $sql = "SELECT LI.codigo, E.descricao as 'descricaoEstoque', LI.localizacaoItem, LI.ativo
-                FROM Ntl.localizacaoItem LI INNER JOIN Ntl.estoque E ON LI.estoque = E.codigo ";
+                FROM Estoque.localizacaoItem LI INNER JOIN Estoque.estoque E ON LI.estoque = E.codigo ";
                 $where = " WHERE (0=0) ";
 
 

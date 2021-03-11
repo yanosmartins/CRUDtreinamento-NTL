@@ -12,7 +12,7 @@ $login = $_SESSION['login'];
 <div class="page-footer">
     <div class="row">``
         <div class="col-xs-12 col-sm-6">
-            <span class="txt-color-white">NTL<span class="hidden-xs"></span> | VERSÃO: 1.4.3 | LOGIN: <?php echo strtoupper($login) ?> | BASE DADOS: <?php echo strtoupper(BANCO) ?> | DATA: <?php echo $datahoje ?> </span>
+            <span class="txt-color-white">NTL<span class="hidden-xs"></span> | VERSÃO: 1.4.6 | LOGIN: <?php echo strtoupper($login) ?> | BASE DADOS: <?php echo strtoupper(BANCO) ?> | DATA: <?php echo $datahoje ?> </span>
         </div>
     </div>
 </div>

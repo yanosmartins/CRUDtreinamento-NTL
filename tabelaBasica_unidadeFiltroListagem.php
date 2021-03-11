@@ -26,7 +26,7 @@ include "js/repositorio.php";
                     $where = $where . " and ativo = " . $ativo;
                 }
 
-                $sql = " SELECT codigo, descricao, ativo FROM Estoque.estoque  ";
+                $sql = " SELECT codigo, descricao, ativo FROM Ntl.unidade  ";
 
                 $sql = $sql . $where;
                 $sql .= " order by descricao ";
@@ -41,7 +41,7 @@ include "js/repositorio.php";
                     $ativo == 1 ? $ativo = 'Sim' : $ativo = 'Não';
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_estoqueCadastro.php?id=' . $codigo . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left"><a href="tabelaBasica_unidadeCadastro.php?id=' . $codigo . '">' . $descricao . '</a></td>';
                     echo '<td class="text-left">' . $ativo . '</td>';
                     echo '</tr >';
                 }

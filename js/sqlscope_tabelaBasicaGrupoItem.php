@@ -39,7 +39,7 @@ function grava()
     $descricao = "'" . $_POST['descricao'] . "'";
     // $ativo = (int) $_POST['ativo'];
 
-    $sql = "Ntl.grupoItem_Atualiza
+    $sql = "Estoque.grupoItem_Atualiza
             $codigo, 
             $estoque,
             $descricao, 
@@ -59,7 +59,7 @@ function grava()
 
 function recupera()
 {
-    $condicaoCodigo = !((empty($_POST["codigo"])) || (!isset($_POST["codigo"])) || (is_null($_POST["codigo"])));
+    $condicaoCodigo = !((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"])));
     $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
 
     if (($condicaoCodigo === false) && ($condicaoLogin === false)) {
@@ -75,14 +75,14 @@ function recupera()
     }
 
     if ($condicaoCodigo) {
-        $codigo = $_POST["codigo"];
+        $codigo = $_POST["id"];
     }
 
     if ($condicaoLogin) {
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo, estoque, descricao, ativo FROM Ntl.grupoItem WHERE (0 = 0) ";
+    $sql = "SELECT codigo, estoque, descricao, ativo FROM Estoque.grupoItem WHERE (0 = 0) ";
 
     if ($condicaoCodigo) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -132,7 +132,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('Ntl.grupoItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Estoque.grupoItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

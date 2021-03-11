@@ -86,7 +86,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <option value='1' selected>Sim</option>
                                                                         <option value='0'>Não</option>
-                                                                    </select><i>
+                                                                    </select><i></i>
                                                                 </label>
                                                             </section>
                                                         </div>

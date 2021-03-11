@@ -105,7 +105,7 @@ include("inc/nav.php");
                                       echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                     }
                                     ?>
-                                  </select>
+                                  </select><i></i>
                                 </label>
                               </section>
 
@@ -267,14 +267,17 @@ include("inc/scripts.php");
     var projeto = $("#projeto").val();
 
     // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-    if (!descricao) {
-      smartAlert("Erro", "Informe o departamento.", "error");
-      return;
-    }
     if (!projeto) {
       smartAlert("Erro", "Informe o projeto.", "error");
+      $("#btnGravar").prop('disabled', false);
       return;
     }
+    if (!descricao) {
+      smartAlert("Erro", "Informe a descrição.", "error");
+      $("#btnGravar").prop('disabled', false);
+      return;
+    }
+   
 
     gravaDepartamento(codigo, descricao, projeto,
       function(data) {

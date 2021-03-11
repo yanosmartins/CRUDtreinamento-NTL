@@ -6,57 +6,98 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
+                    <th class="text-left" style="min-width:30px;">Codigo Item</th>
+                    <th class="text-left" style="min-width:30px;">Codigo Fabricante</th>
+                    <th class="text-left" style="min-width:30px;">Descricao</th>
                     <th class="text-left" style="min-width:30px;">Estoque</th>
+                    <th class="text-left" style="min-width:30px;">Grupo </th>
+                    <th class="text-left" style="min-width:30px;">Localizacao </th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $descricao = "";
-                $ativo = "";
-                $where = "WHERE (0 = 0)";
+                $where = " WHERE (0=0) ";
+                $codigoItem = $_GET["codigoItem"];
+                $codigoFabricante = $_GET["codigoFabricante"];
+                $descricaoItem = $_GET["descricaoItem"];
+                $estoque = $_GET["estoque"];
+                $grupoItem = $_GET["grupoItem"];
+                $localizacaoItem = $_GET["localizacaoItem"];
+                $ativo = $_GET["ativo"];
 
-                if ($_GET["descricao"] != "") {
-                    $descricao = $_GET["descricao"];
-                    $where = $where . " AND ([descricao] like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
+                if ($codigoItem != "") {
+                    $where = $where . " and (CI.codigoItem like '%' + " . "replace('" . $codigoItem . "',' ','%') + " . "'%')";
+                }
+                if ($codigoFabricante != "") {
+                    $where = $where . " and (CI.codigoFabricante like '%' + " . "replace('" . $codigoFabricante . "',' ','%') + " . "'%')";
+                }
+                if ($descricaoItem != "") {
+                    $where = $where . " and (CI.descricaoItem like '%' + " . "replace('" . $descricaoItem . "',' ','%') + " . "'%')";
                 }
 
-                if ($_GET["ativo"] != "") {
-                    $ativo = (int) $_GET["ativo"];
-                    $where = $where . " and ativo = " . $ativo;
+                if ($estoque != "") {
+                    $where = $where . " AND CI.estoque = $estoque ";
+                }
+                if ($grupoItem != "") {
+
+                    $where = $where . " AND CI.grupoItem = $grupoItem ";
+                }
+                if ($localizacaoItem != "") {
+
+                    $where = $where . " AND CI.localizacaoItem = $localizacaoItem ";
+                }
+                if ($ativo != "") {
+
+                    $where = $where . " AND CI.ativo = $ativo ";
                 }
 
-                $sql = " SELECT codigo, descricao, ativo FROM Estoque.estoque  ";
+                $reposit = new reposit();
+                $sql = "SELECT CI.codigo,CI.codigoItem,CI.codigoFabricante,CI.descricaoItem,CI.estoque,E.descricao AS descricaoEstoque ,
+                                CI.grupoItem,GI.descricao as grupoItemDescricao,CI.localizacaoItem,LI.localizacaoItem as descricaoLocalizacaoItem,CI.ativo
+                            FROM Estoque.codigoItem AS CI
+                            LEFT JOIN Estoque.estoque E ON CI.estoque = E.codigo 
+                            LEFT JOIN Estoque.grupoItem GI ON CI.grupoItem = GI.codigo
+                            LEFT JOIN Estoque.localizacaoItem LI ON CI.localizacaoItem = LI.codigo";
 
                 $sql = $sql . $where;
-                $sql .= " order by descricao ";
-                $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
                 foreach ($result as $row) {
-                    $codigo = (int) $row['codigo'];
-                    $descricao = $row['descricao'];
+                    $codigo = $row['codigo'];
+                    $codigoItem = $row['codigoItem'];
+                    $codigoFabricante = $row['codigoFabricante'];
+                    $descricaoItem = $row['descricaoItem'];
+                    $estoque = $row['descricaoEstoque'];
+                    $grupoItem = $row['grupoItemDescricao'];
+                    $localizacaoItem = $row['descricaoLocalizacaoItem'];
                     $ativo = $row['ativo'];
 
-                    $ativo == 1 ? $ativo = 'Sim' : $ativo = 'Não';
-
-                    echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_estoqueCadastro.php?id=' . $codigo . '">' . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $ativo . '</td>';
-                    echo '</tr >';
+                    echo '<tr>';
+                    echo '<td class="text-left"><a href="cadastro_codigoItemCadastro.php?codigo=' . $codigo . '">'  . $codigoItem . '</a></td>';
+                    echo '<td class="text-left">' . $codigoFabricante . '</td>';
+                    echo '<td class="text-left">' . $descricaoItem . '</td>';
+                    echo '<td class="text-left">' . $estoque . '</td>';
+                    echo '<td class="text-left">' . $grupoItem . '</td>';
+                    echo '<td class="text-left">' . $localizacaoItem . '</td>';
+                    if ($ativo == 1) {
+                        echo '<td class="text-left">' . 'Sim' . '</td>';
+                    } else {
+                        echo '<td class="text-left">' . 'Não' . '</td>';
+                    }
+                    echo '</tr>';
                 }
                 ?>
             </tbody>
         </table>
     </div>
 </div>
-<!-- PAGE RELATED PLUGIN(S) -->
+<!-- PAGE RELATED PLUIN(S) -->
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
-<!--script src="js/plugin/datatables/dataTables.tableTools.min.js"></script-->
+<script src="js/plugin/datatables/dataTables.tableTools.min.js"></script>
 <script src="js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
-
 <link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css" />
 
 <script type="text/javascript" src="js/plugin/JSZip-2.5.0/jszip.min.js"></script>
@@ -66,7 +107,6 @@ include "js/repositorio.php";
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.flash.min.js"></script>
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.print.min.js"></script>
-
 
 <script>
     $(document).ready(function() {
@@ -126,7 +166,8 @@ include "js/repositorio.php";
             "preDrawCallback": function() {
                 // Initialize the responsive datatables helper once.
                 if (!responsiveHelper_datatable_tabletools) {
-                    responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#tableSearchResult'), breakpointDefinition);
+                    responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($(
+                        '#tableSearchResult'), breakpointDefinition);
                 }
             },
             "rowCallback": function(nRow) {

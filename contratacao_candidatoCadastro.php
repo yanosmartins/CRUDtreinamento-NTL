@@ -144,7 +144,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Data Nascimento</label>
                                                                 <label class="input">
-                                                                    <input id="dataNascimento" name="dataNascimento" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataNascimento')">
+                                                                    <input id="dataNascimento" name="dataNascimento" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -723,7 +723,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Data Nascimento</label>
                                                                 <label class="input">
-                                                                    <input id="dataNascimentoConjuge" name="dataNascimentoConjuge" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataNascimentoConjuge')">
+                                                                    <input id="dataNascimentoConjuge" name="dataNascimentoConjuge" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" >
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -879,7 +879,7 @@ include("inc/nav.php");
                                                                     <label class="label" for="dataNascimentoFilho">Nascimento</label>
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="dataNascimentoFilho" name="dataNascimentoFilho" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" onchange="validaCampoData('#dataNascimentoFilho')">
+                                                                        <input id="dataNascimentoFilho" name="dataNascimentoFilho" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" >
                                                                     </label>
                                                                 </section>
                                                             </div>
@@ -948,7 +948,7 @@ include("inc/nav.php");
                                                                     <label class="label" for="dataNascimentoDependente">Nascimento</label>
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" onchange="validaCampoData('#dataNascimentoDependente')">
+                                                                        <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" >
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
@@ -2823,6 +2823,24 @@ include("inc/scripts.php");
         verificaBanco();
     });
 
+    $("#dataNascimento").on("change", function() {
+        validaCampoData("#dataNascimento");
+        comparaDataHoje("#dataNascimento");
+    });
+    $("#dataNascimentoConjuge").on("change", function() {
+        validaCampoData("#dataNascimentoConjuge");
+        comparaDataHoje("#dataNascimentoConjuge");
+    });
+    $("#dataNascimentoFilho").on("change", function() {
+        validaCampoData("#dataNascimentoFilho");
+        comparaDataHoje("#dataNascimentoFilho");
+    });
+    $("#dataNascimentoDependente").on("change", function() {
+        validaCampoData("#dataNascimentoDependente");
+        comparaDataHoje("#dataNascimentoDependente");
+    });
+
+
     function verificaBanco() {
 
         var possuiContaBancaria = +$('#possuiContaBancaria').val();
@@ -3329,6 +3347,26 @@ include("inc/scripts.php");
         }
 
         excluirUsuario(id);
+    }
+
+    function comparaDataHoje(primeiraData) {
+
+        var nomeCampoPrimeiraData = primeiraData;
+        var valorPrimeiraData = $(primeiraData).val();
+        var valorSegundaData = new Date().toLocaleDateString();
+
+        if ((valorPrimeiraData != "") && (valorSegundaData != "")) {
+
+            valorPrimeiraData = moment(valorPrimeiraData, "DD-MM-YYYY");
+            valorSegundaData = moment(valorSegundaData, "DD-MM-YYYY");
+
+            var diferencaEntreDatas = valorPrimeiraData.diff(valorSegundaData, 'days');
+
+            if (diferencaEntreDatas > 0) {
+                smartAlert("Erro", "Data maior que hoje", "error");
+                $(nomeCampoPrimeiraData).val("");
+            }
+        }
     }
     //############################################################################## DOCUMENTOS ####################################################################################################################
 

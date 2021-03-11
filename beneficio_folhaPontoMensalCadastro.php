@@ -85,10 +85,10 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
 
-                                                        <input id="JsonFolhaPontoMensal" name="JsonFolhaPontoMensal" type="hidden" value="[]">
+
                                                         <div id="formFolhaPontoMensal" class="col-sm-12">
-                                                            <input id="lancamentoId" name="lancamentoId" type="hidden" value="">
-                                                            <input id="sequencialFolhaPontoMensal" name="sequencialFolhaPontoMensal" type="hidden" value="">
+                                                            <input id="codigo" name="codigo" type="hidden" value="0">
+                                                            
                                                             <div class="form-group">
 
                                                                 <div class="row">
@@ -100,15 +100,25 @@ include("inc/nav.php");
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
-                                                                                $sql = "select codigo, nome from Ntl.funcionario where dataDemissaoFuncionario IS NULL AND ativo = 1 order by nome";
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F LEFT JOIN Ntl.usuario U ON F.codigo = U.funcionario where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND U.login != '" . $_SESSION['login'] . "' order by nome";
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 foreach ($result as $row) {
                                                                                     $codigo = (int) $row['codigo'];
                                                                                     $nome = $row['nome'];
                                                                                     echo '<option value= ' . $codigo . '>' . $nome . '</option>';
                                                                                 }
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F INNER JOIN Ntl.usuario U ON F.codigo = U.funcionario where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND U.login = '" . $_SESSION['login'] . "' AND F.codigo = U.funcionario";
+
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                if ($row = $result) {
+
+                                                                                    $codigo = (int) $row['codigo'];
+                                                                                    $nome = $row['nome'];
+                                                                                    echo '<option value= ' . $codigo . ' selected>' . $nome . '</option>';
+                                                                                }
                                                                                 ?>
                                                                             </select>
+
                                                                         </label>
                                                                     </section>
 
@@ -131,29 +141,32 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section> -->
 
-                                                                    <section class="col col-2">
-                                                                        <label class="label" for="Expediente">Expediente</label>
-                                                                        <label class="select">
-                                                                            <select id="Expediente" name="Expediente"  class="readonly" readonly>
-                                                                                <option>08:00 às 17:00</option>
-                                                                                <option>10:00 às 16:00</option>
-                                                                               
-                                                                            </select>
-                                                                        </label>
-                                                                    </section>
 
+                                                                    <?php
+                                                                    setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+                                                                    date_default_timezone_set('America/Sao_Paulo');
+                                                                    $dataAtual = strftime('%d/%m/%Y', strtotime('today'));
+                                                                    ?>
                                                                     <section class="col col-2">
                                                                         <label class="label" for="mesAnoFolhaPonto">Mês Corrente</label>
                                                                         <label class="input">
                                                                             <i class="icon-append fa fa-calendar"></i>
-                                                                            <input id="mesAnoFolhaPonto" name="mesAnoFolhaPonto" style="text-align: center;" autocomplete="off" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" type="text" class="readonly" readonly value="">
+                                                                            <input id="mesAnoFolhaPonto" name="mesAnoFolhaPonto" style="text-align: center;" autocomplete="off" type="text" class="readonly" readonly value="<?= $dataAtual  ?>">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-1">
                                                                         <label class="label">&nbsp;</label>
-                                                                        <label id="labelCheckAlmoco" class="checkbox">
-                                                                            <input id="checkAlmoco" name="checkAlmoco" type="checkbox" value="true"><i></i>
+                                                                        <label id="labelCheckAlmoco" class="checkbox hidden">
+                                                                            <input id="checkAlmoco" name="checkAlmoco" type="checkbox" value="true">
                                                                             Habilitar Almoço
+                                                                        </label>
+                                                                    </section>
+
+                                                                    <section class="col col-2">
+                                                                        <label class="select">
+                                                                            <select id="ativo" name="ativo" class="hidden" required>
+                                                                                <option value='1' selected>Sim</option>
+                                                                            </select>
                                                                         </label>
                                                                     </section>
 
@@ -175,6 +188,28 @@ include("inc/nav.php");
                                                                     </section>
 
                                                                 </div>
+                                                                <div class="row">
+                                                                    <section class="col col-2">
+                                                                        <label class="label" for="expediente">Expediente</label>
+                                                                        <label class="select">
+                                                                            <select id="expediente" name="expediente" class="readonly" readonly>
+                                                                                <option>08:00 às 17:00</option>
+                                                                                <option>10:00 às 16:00</option>
+
+                                                                            </select>
+                                                                        </label>
+                                                                    </section>
+
+                                                                    <section class="col col-2">
+                                                                        <label class="label" for="almoco">Almoço</label>
+                                                                        <label class="select">
+                                                                            <select id="almoco" name="almoco" class="readonly" readonly>
+                                                                                <option>01:00:00</option>
+                                                                                <option>00:15:00</option>
+                                                                            </select>
+                                                                        </label>
+                                                                    </section>
+                                                                </div>
 
                                                                 <div class="row">
 
@@ -182,7 +217,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label class="label">Dia</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="dia" name="dia" type="text" class="text-center form-control " data-autoclose="true" value="">
+                                                                                <input id="inputDia" name="inputDia" type="text" class="text-center form-control " data-autoclose="true" value="">
                                                                             </div>
                                                                         </div>
                                                                     </section>
@@ -191,27 +226,27 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label id="labelHora" class="label">Entrada</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="horaEntrada" name="horaEntrada" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                                <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
                                                                     </section>
 
-                                                                    <section class="col col-1 sectionAlmoco" style="display: none">
+                                                                    <section class="col col-1 sectionAlmoco" style="display: block">
                                                                         <div class="form-group">
                                                                             <label class="label">Inicio/Almoço</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inicioAlmoco" name="inicioAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
                                                                     </section>
 
-                                                                    <section class="col col-1 sectionAlmoco" style="display: none">
+                                                                    <section class="col col-1 sectionAlmoco" style="display: block">
                                                                         <div class="form-group">
                                                                             <label class="label">Fim/Almoço</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="fimAlmoco" name="fimAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -221,7 +256,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label id="labelHora" class="label">Saída</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="horaSaida" name="horaSaida" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                                <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -231,7 +266,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label id="labelHora" class="label">H.Extra</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="horaExtra" name="horaExtra" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -241,7 +276,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label id="labelHora" class="label">Atraso</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="atraso" name="atraso" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -250,8 +285,8 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label" for="lancamento">Lançamento/Ocorrência</label>
                                                                         <label class="select">
-                                                                            <select id="lancamento" name="lancamento">
-                                                                                <option></option>
+                                                                            <select id="inputLancamento" name="inputLancamento">
+                                                                                <option value="0"></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
                                                                                 $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
@@ -266,12 +301,22 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
 
-                                                                    <section class="col col-md-1">
+
+                                                                </div>
+                                                                <div class="row">
+                                                                    <section class="col col-md-2">
                                                                         <label class="label"> </label>
                                                                         <button id="btnAddPonto" type="button" class="btn btn-primary">
                                                                             <i class="">Lançar Ponto</i>
                                                                         </button>
                                                                     </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label"> </label>
+                                                                        <button id="btnGravar" type="button" class="btn btn-success" style="display:<?php echo $esconderBtnGravar ?>">
+                                                                            <i class="">Confirmar Alterações</i>
+                                                                        </button>
+                                                                    </section>
+
                                                                 </div>
 
                                                                 <hr><br><br>
@@ -287,7 +332,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Dia</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"dia-$i\" name=\"dia-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly data-autoclose=\"true\" value=\"" . $i . "\">
+                                                                                <input id=\"dia-$i\" name=\"dia\" type=\"text\" class=\"text-center form-control readonly\" readonly data-autoclose=\"true\" value=\"" . $i . "\">
                                                                             </div>
                                                                         </div>
                                                                     </section>
@@ -296,27 +341,27 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">Entrada</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaEntrada-$i\" name=\"horaEntrada-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaEntrada-$i\" name=\"horaEntrada\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
                                                                     </section>
 
-                                                                    <section class=\"col col-1 sectionAlmoco\" style=\" display:none\">
+                                                                    <section class=\"col col-1 sectionAlmoco\" style=\" display:block\">
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Inicio/Almoço</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"inicioAlmoco-$i\" name=\"inicioAlmoco-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"inicioAlmoco-$i\" name=\"inicioAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
                                                                     </section>
 
-                                                                    <section class=\"col col-1 sectionAlmoco\" style=\"display:none\">
+                                                                    <section class=\"col col-1 sectionAlmoco\" style=\"display:block\">
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Fim/Almoço</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"fimAlmoco-$i\" name=\"fimAlmoco-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"fimAlmoco-$i\" name=\"fimAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -326,7 +371,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">Saída</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaSaida-$i\" name=\"horaSaida-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaSaida-$i\" name=\"horaSaida\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -336,7 +381,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">H.Extra</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaExtra-$i\" name=\"horaExtra-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaExtra-$i\" name=\"horaExtra\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -346,7 +391,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">Atraso</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"atraso-$i\" name=\"atraso-$i\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"atraso-$i\" name=\"atraso\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -355,8 +400,8 @@ include("inc/nav.php");
                                                                     <section class=\"col col-2\">
                                                                         <label class=\"label\" for=\"lancamento\">Lançamento/Ocorrência</label>
                                                                         <label class=\"select\">
-                                                                            <select id=\"lancamento-$i\" name=\"lancamento-$i\" class=\" readonly\" readonly style= \"pointer-events: none; touch-action: none\" tabindex=\"-1\">
-                                                                                <option></option>";
+                                                                            <select id=\"lancamento-$i\" name=\"lancamento\" class=\" readonly\" readonly style= \"pointer-events: none; touch-action: none\" tabindex=\"-1\">
+                                                                                <option value=\"0\"></option>";
 
                                                                     $reposit = new reposit();
                                                                     $sql = "select codigo, sigla, descricao from Ntl.lancamento where ativo = 1 order by descricao";
@@ -364,7 +409,7 @@ include("inc/nav.php");
                                                                     foreach ($result as $row) {
                                                                         $codigo = (int) $row['codigo'];
                                                                         $descricao = $row['descricao'];
-                                                                        echo "<option value=' . $codigo . '> $descricao </option>'";
+                                                                        echo "<option value='$codigo'>$descricao</option>";
                                                                     }
                                                                     echo " </select><i></i>
                                                                         </label>
@@ -377,7 +422,7 @@ include("inc/nav.php");
                                                                 <div class="row">
                                                                     <section class="col col-12">
                                                                         <label class="label">Observações</label>
-                                                                        <textarea maxlength="500" id="observacoes" name="observacoes" class="form-control" rows="3" style="resize:vertical"></textarea>
+                                                                        <textarea maxlength="500" id="observacaoFolhaPontoMensal" name="observacaoFolhaPontoMensal" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
                                                                     </section>
                                                                 </div>
                                                             </div>
@@ -403,9 +448,7 @@ include("inc/nav.php");
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                                <span class="fa fa-floppy-o"></span>
-                                            </button>
+
                                             <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                                 <span class="fa fa-file-o"></span>
                                             </button>
@@ -470,52 +513,52 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
-    var jsonFolhaPontoMensalArray = [];
     $(document).ready(function() {
 
-        $("#horaEntrada").mask("99:99:99");
+        $("#inputHoraEntrada").mask("99:99:99");
+        
 
-        $('#horaEntrada').clockpicker({
+        $('#inputHoraEntrada').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm:ss'));
 
-        $("#horaSaida").mask("99:99:99");
+        $("#inputHoraSaida").mask("99:99:99");
 
-        $('#horaSaida').clockpicker({
+        $('#inputHoraSaida').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm:ss'));
 
-        $("#inicioAlmoco").mask("99:99");
+        $("#inputInicioAlmoco").mask("99:99");
 
-        $('#inicioAlmoco').clockpicker({
+        $('#inputInicioAlmoco').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
-        $("#fimAlmoco").mask("99:99");
+        $("#inputFimAlmoco").mask("99:99");
 
-        $('#fimAlmoco').clockpicker({
+        $('#inputFimAlmoco').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
-        $("#horaExtra").mask("99:99");
+        $("#inputHoraExtra").mask("99:99");
 
-        $('#horaExtra').clockpicker({
+        $('#inputHoraExtra').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
-        $("#atraso").mask("99:99");
+        $("#inputAtraso").mask("99:99");
 
-        $('#atraso').clockpicker({
+        $('#inputAtraso').clockpicker({
             donetext: 'Done',
             default: 'now',
             use24hours: true,
@@ -525,16 +568,37 @@ include("inc/scripts.php");
 
         $("#btnAddPonto").on("click", function() {
 
-            var dia = $("#dia").val()
+            var dia = $("#inputDia").val()
 
+            var entrada = $("#horaEntrada-" + dia)
+            var inputEntrada = $("#inputHoraEntrada").val()
 
-            $("#horaEntrada-" + dia).val($("#horaEntrada").val())
-            $("#inicioAlmoco-" + dia).val($("#inicioAlmoco").val())
-            $("#fimAlmoco-" + dia).val($("#fimAlmoco").val())
-            $("#horaSaida-" + dia).val($("#horaSaida").val())
-            $("#horaExtra-" + dia).val($("#horaExtra").val())
-            $("#atraso-" + dia).val($("#atraso").val())
-            $("#lancamento-" + dia).val($("#lancamento").val())
+            var inicioAlmoco = $("#inicioAlmoco-" + dia)
+            var inputInicioAlmoco = $("#inputInicioAlmoco").val()
+
+            var fimAlmoco = $("#fimAlmoco-" + dia)
+            var inputFimAlmoco = $("#inputFimAlmoco").val()
+
+            var saida = $("#horaSaida-" + dia)
+            var inputSaida = $("#inputHoraSaida").val()
+
+            var extra = $("#horaExtra-" + dia)
+            var inputExtra = $("#inputHoraExtra").val()
+
+            var atraso = $("#atraso-" + dia)
+            var inputAtraso = $("#inputAtraso").val()
+            
+            var lancamento = $("#lancamento-" + dia)
+            var inputLancamento = $("#inputLancamento").val()
+
+            entrada.val(inputEntrada)
+            inicioAlmoco.val(inputInicioAlmoco)
+            fimAlmoco.val(inputFimAlmoco)
+            saida.val(inputSaida)
+            extra.val(inputExtra)
+            atraso.val(inputAtraso)
+            lancamento.val(inputLancamento)
+
         });
 
 
@@ -584,82 +648,95 @@ include("inc/scripts.php");
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
-        var arrayFolha = $("input[name='dia']")
-        var arrayDia = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayDia.push({
-                dia: folha.value
-            })
+
+        var arrayFolha = $("input[name='dia']").serializeArray()
+
+        var arrayDia = arrayFolha.map(folha => {
+            return { dia: folha.value }
         })
 
-        var arrayFolha = $("input[name='horaEntrada']")
-        var arrayHoraEntrada = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayHoraEntrada.push({
-                horaEntrada: folha.value
-            })
+        arrayFolha = $("input[name='horaEntrada']").serializeArray()
+        var arrayHoraEntrada = arrayFolha.map(folha => {
+            return { horaEntrada: folha.value }
         })
 
-        var arrayFolha = $("input[name='inicioAlmoco']")
-        var arrayInicioAlmoco = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayInicioAlmoco.push({
-                inicioAlmoco: folha.value
-            })
+        arrayFolha = $("input[name='inicioAlmoco']").serializeArray()
+        var arrayInicioAlmoco = arrayFolha.map(folha => {
+            return { inicioAlmoco: folha.value }
         })
 
-        var arrayFolha = $("input[name='fimAlmoco']")
-        var arrayFimAlmoco = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayFimAlmoco.push({
-                fimAlmoco: folha.value
-            })
+        arrayFolha = $("input[name='fimAlmoco']").serializeArray()
+        var arrayFimAlmoco = arrayFolha.map(folha => {
+            return { fimAlmoco: folha.value }
         })
 
-        var arrayFolha = $("input[name='horaEntrada']")
-        var arrayHoraEntrada = new Array()
-        arrayFolha.forEach(folha => {
-            return arrayHoraEntrada.push({
-                horaEntrada: folha.value
-            })
+        arrayFolha = $("input[name='horaSaida']").serializeArray()
+        var arrayHoraSaida = arrayFolha.map(folha => {
+            return { horaSaida: folha.value }
         })
 
+        arrayFolha = $("select[name='lancamento'] option:selected")
+        var arrayLancamento = new Array()
+        arrayFolha.each((index,el)=>{
+            let value = $(el).val()
+            arrayLancamento.push({lancamento:value})
+        })
 
-        var codigo = +$("#codigo").val();
-        var ativo = $("#ativo").val();
+        var codigo = parseInt($("#codigo").val())
+        var ativo = parseInt($("#ativo").val())
         var funcionario = $("#funcionario").val();
-        var mesAnoFolhaPonto = $("#mesAnoFolhaPonto").val();
+        var mesAnoFolhaPonto = $("#mesAnoFolhaPonto").val().split('/')
+        var mes = mesAnoFolhaPonto[1]
+        var ano = mesAnoFolhaPonto[2]
         var observacaoFolhaPontoMensal = $("#observacaoFolhaPontoMensal").val();
 
-        let lancamentoTabela = $('#formFolhaPontoMensalCadastro').serializeArray().reduce(function(obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
+        var data = new Date().getMonth()
+
+
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+        var folhaPontoMensalTabela = arrayDia.map((array, index) => {
+            return {
+                dia: array.dia,
+                horaEntrada: arrayHoraEntrada[index].horaEntrada,
+                horaSaida: arrayHoraSaida[index].horaSaida,
+                inicioAlmoco: arrayInicioAlmoco[index].inicioAlmoco,
+                fimAlmoco : arrayFimAlmoco[index].fimAlmoco,
+                lancamento: arrayLancamento[index].lancamento
 
-
-        gravaFolhaPontoMensal(FolhaPontoMensalTabela,
-            function(data) {
-
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        $("#btnGravar").prop('disabled', false);
-                        return false;
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                        $("#btnGravar").prop('disabled', false);
-                        return false;
-                    }
-                } else {
-                    var piece = data.split("#");
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
-                }
             }
-        );
+
+        })
+
+        var folhaPontoInfo = {
+            codigo: codigo,
+            funcionario: funcionario,
+            mes: mes,
+            ano: ano,
+            observacao: observacaoFolhaPontoMensal
+        }
+
+            gravaFolhaPontoMensal(folhaPontoInfo,folhaPontoMensalTabela,
+                function(data) {
+
+                    if (data.indexOf('sucess') < 0) {
+                        var piece = data.split("#");
+                        var mensagem = piece[1];
+                        if (mensagem !== "") {
+                            smartAlert("Atenção", mensagem, "error");
+                            $("#btnGravar").prop('disabled', false);
+                            return false;
+                        } else {
+                            smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                            $("#btnGravar").prop('disabled', false);
+                            return false;
+                        }
+                    } else {
+                        var piece = data.split("#");
+                        smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                        novo();
+                    }
+                }
+            );
     }
 
 

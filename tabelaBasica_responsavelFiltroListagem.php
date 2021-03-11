@@ -20,8 +20,8 @@ include "js/repositorio.php";
                 $sql = " SELECT codigo, nome, ativo  FROM Ntl.responsavel ";
                 $where = "WHERE (0 = 0)";
 
-                if ($_POST["nome"] != "") {
-                    $nomeResponsavel = $_POST["nome"];
+                if ($_POST["nomeResponsavel"] != "") {
+                    $nomeResponsavel = $_POST["nomeResponsavel"];
                     $where = $where . " and ( nome like '%' + " . "replace('" . $nomeResponsavel . "',' ','%') + " . "'%')";
                 }
                 if ($_POST["ativo"] != "") {

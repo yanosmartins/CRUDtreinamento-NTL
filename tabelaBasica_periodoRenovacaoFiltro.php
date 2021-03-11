@@ -180,7 +180,7 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
 
         var parametrosUrl = '&descricao=' + descricao;
-         parametrosUrl = '&ativo=' + ativo;
+         parametrosUrl =  parametrosUrl + '&ativo=' + ativo;
         $('#resultadoBusca').load('tabelaBasica_periodoRenovacaoListagem.php?' + parametrosUrl);
     }
 

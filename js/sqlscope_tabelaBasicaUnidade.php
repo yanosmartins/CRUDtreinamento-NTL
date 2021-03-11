@@ -24,7 +24,7 @@ function grava()
     $reposit = new reposit(); //Abre a conexão.
 
     //Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("LOCALIZACAOITEM_ACESSAR|LOCALIZACAOITEM_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("UNIDADE_ACESSAR|UNIDADE_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -35,15 +35,13 @@ function grava()
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $codigo =  (int) $_POST['codigo'];
-    $estoque =  (int) $_POST['estoque'];
-    $localizacaoItem = "'" . $_POST['localizacaoItem'] . "'";
-    // $ativo = (int) $_POST['ativo'];
+    $descricao = "'" . $_POST['descricao'] . "'";
+    $ativo = 1;
 
-    $sql = "Estoque.localizacaoItem_Atualiza
+    $sql = "Ntl.unidade_Atualiza
             $codigo, 
-            $estoque,
-            $localizacaoItem, 
-            1, 
+            $descricao, 
+            $ativo, 
             $usuario
             ";
 
@@ -82,7 +80,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo, estoque, localizacaoItem, ativo FROM Estoque.localizacaoItem WHERE (0 = 0) ";
+    $sql = "SELECT codigo, descricao, ativo FROM Ntl.unidade WHERE (0 = 0)";
 
     if ($condicaoCodigo) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -96,12 +94,12 @@ function recupera()
     if ($row = $result[0]) {
 
         $codigo = (int)$row['codigo'];
-        $estoque = (int)$row['estoque'];
-        $localizacaoItem = $row['localizacaoItem'];
+        $descricao = $row['descricao'];
+        $ativo = (int)$row['ativo'];
 
         $out = $codigo . "^" .
-            $localizacaoItem . "^" .
-            $estoque;
+            $descricao . "^" .
+            $ativo;
 
         if ($out == "") {
             echo "failed#";
@@ -116,7 +114,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LOCALIZACAOITEM_ACESSAR|LOCALIZACAOITEM_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("UNIDADE_ACESSAR|UNIDADE_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -132,7 +130,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('Estoque.localizacaoItem' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Ntl.unidade' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');

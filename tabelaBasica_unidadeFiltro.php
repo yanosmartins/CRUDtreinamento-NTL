@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('GRUPOITEM_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('GRUPOITEM_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('UNIDADE_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('UNIDADE_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,11 +20,10 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
-
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Grupo de item";
+$page_title = "";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -34,10 +33,9 @@ $page_title = "Grupo de item";
 $page_css[] = "your_style.css";
 include("inc/header.php");
 
-
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['grupoItem']["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["unidade"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -67,11 +65,11 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Grupo de item</h2>
+                            <h2>Unidade</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form grupo-item-form" id="formGrupoItem" method="post">
+                                <form action="javascript:gravar()" class="smart-form estoque-form" id="formUnidadeFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -87,46 +85,23 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row ">
-
-                                                            <section class="col col-2">
-                                                                <label class="label">Estoque</label>
-                                                                <label class="select">
-                                                                    <select id="estoque" name="estoque" style="text-align: right;" type="text" autocomplete="off">
-                                                                        <option value=""></option>
-                                                                        <?php
-                                                                        $reposit = new reposit();
-
-                                                                        $sql = "SELECT codigo, descricao FROM Estoque.estoque WHERE ativo = 1";
-
-                                                                        $result = $reposit->RunQuery($sql);
-
-                                                                        foreach ($result as $row) {
-                                                                            $codigoEstoque = $row["codigo"];
-                                                                            $descricaoEstoque = $row["descricao"];
-                                                                            echo "<option value=\"$codigoEstoque\">$descricaoEstoque</option>";
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
-
-                                                            <section class="col col-2">
+                                                            <section class="col col-6">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" style="text-align: right;" type="text" autocomplete="off">
+                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="form-control" value="">
                                                                 </label>
                                                             </section>
 
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" style="text-align: right;" type="text" autocomplete="off">
-                                                                        <option value="1">Sim</option>
+                                                                    <select name="ativo" id="ativo" class="" class="form-control" autocomplete="off">
+                                                                        <option value=""></option>
+                                                                        <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -137,7 +112,7 @@ include("inc/nav.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?= $esconderBtnGravar ?>">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -194,18 +169,17 @@ include("inc/scripts.php");
             listarFiltro();
         });
         $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'tabelaBasica_grupoItemCadastro.php');
+            $(location).attr('href', 'tabelaBasica_unidadeCadastro.php');
         });
     });
 
     function listarFiltro() {
-        var estoque = $('#estoque').val();
+        debugger;
         var descricao = $('#descricao').val();
         var ativo = $('#ativo').val();
 
-        var parametrosUrl = '&estoque=' + estoque;
-        var parametrosUrl = '&descricao=' + descricao;
-        parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_grupoItemFiltroListagem.php?' + parametrosUrl);
+        var parametrosUrl = '&descricao=' + descricao + '&ativo=' + ativo;
+
+        $('#resultadoBusca').load('tabelaBasica_unidadeFiltroListagem.php?' + parametrosUrl);
     }
 </script>

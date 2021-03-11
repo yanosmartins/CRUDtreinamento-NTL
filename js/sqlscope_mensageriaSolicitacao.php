@@ -37,7 +37,7 @@ function grava()
   $responsavel = validaNumero($_POST['responsavelId']);
   $observacao = validaString($_POST['observacao']);
   $concluido = validaString($_POST['concluido']);
-  $usuario = "'" . $_SESSION['login'] . "'";
+  $usuario =  "'" . $_SESSION['funcionario'] . "'";
   $recurso = (int)$_POST['recurso'];
 
   $sql = "Mensageria.solicitacao_Atualiza  
@@ -80,7 +80,7 @@ function recupera()
 
   $sql = "SELECT S.codigo, S.funcionario, F.nome, S.dataSolicitacao, S.horaSolicitacao, S.dataLimite,
   S.urgente, S.projeto, S.endereco, S.responsavel, FR.nome AS nomeResponsavel, S.observacao,S.concluido,S.recurso,
-  S.departamento FROM Mensageria.solicitacao S
+  S.departamento , S.usuarioCadastro , S.dataCadastro FROM Mensageria.solicitacao S
   LEFT JOIN Ntl.funcionario F ON F.codigo = S.funcionario
   LEFT JOIN Ntl.funcionario FR ON FR.codigo = S.responsavel
     WHERE (0=0) AND
@@ -106,6 +106,20 @@ function recupera()
     $concluido = $row['concluido'];
     $departamento = $row['departamento'];
     $recurso = (int)$row['recurso'];
+    $usuarioCadastro = $row['usuarioCadastro'];
+    $dataCadastro = $row['dataCadastro'];
+
+  }
+
+  
+  $sql = "SELECT codigo, nome FROM Ntl.funcionario WHERE codigo = " . $usuarioCadastro;
+
+  $reposit = new reposit();
+  $result = $reposit->RunQuery($sql);
+
+  $out = "";
+  if ($row = $result[0]) {
+    $usuarioCadastro = $row['nome'];
   }
 
   $out =
@@ -123,7 +137,9 @@ function recupera()
     $funcionarioId . "^" .
     $concluido . "^" .
     $departamento . "^" .
-    $recurso;
+    $recurso . "^" .
+    $usuarioCadastro . "^" .
+    $dataCadastro;
 
   if ($out == "") {
     echo "failed#";

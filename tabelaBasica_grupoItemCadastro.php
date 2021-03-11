@@ -100,14 +100,14 @@ include("inc/nav.php");
                                     <?php
                                     $reposit = new reposit();
 
-                                    $sql = "SELECT codigo, descricao FROM Ntl.estoque WHERE ativo = 1";
+                                    $sql = "SELECT codigo, descricao FROM Estoque.estoque WHERE ativo = 1";
 
                                     $result = $reposit->RunQuery($sql);
 
                                     foreach ($result as $row) {
                                       $codigoEstoque = $row["codigo"];
                                       $descricaoEstoque = $row["descricao"];
-                                      echo "<option value=\"$codigoEstoque\">$descricaoEstoque</option>";
+                                      echo '<option value=' . $codigoEstoque . '>' . $descricaoEstoque . '</option>';
                                     }
                                     ?>
                                   </select><i></i>
@@ -264,9 +264,6 @@ include("inc/scripts.php");
 
   function gravar() {
 
-    //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
-    $("#btnGravar").prop('disabled', true);
-
     var codigo = parseInt($("#codigo").val());
     var descricao = $("#descricao").val();
     var estoque = $("#estoque").val();
@@ -349,7 +346,7 @@ include("inc/scripts.php");
             //
             var codigo = parseInt(piece[0]);
             var descricao = piece[1];
-            var estoque = piece[2];
+            var estoque = +piece[2];
 
             //Atributos de cliente        
             $("#codigo").val(codigo);

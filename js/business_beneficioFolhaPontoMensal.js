@@ -1,9 +1,10 @@
-function gravaFolhaPontoMensal(folhaPontoMensalTabela,callback) {
+function gravaFolhaPontoMensal(folhaPontoInfo,folhaPontoMensalTabela,callback) {
+    debugger
     $.ajax({
         url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", folhaPontoMensalTabela:folhaPontoMensalTabela}, //valores enviados ao script     
+        data: {funcao: "grava", folhaPontoInfo:folhaPontoInfo,folhaPontoMensalTabela:folhaPontoMensalTabela}, //valores enviados ao script     
         success: function (data) {
             callback(data);
         }

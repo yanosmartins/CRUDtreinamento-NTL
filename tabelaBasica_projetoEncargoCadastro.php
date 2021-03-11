@@ -134,7 +134,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                        <div class="row">
+                                                        <!-- <div class="row">
                                                             <section class="col col-1">
                                                                 <button type="button" id="btnRecuperaEncargo" class="btn btn-info" aria-hidden="true" title="btn">
                                                                     Recupera Encargo
@@ -145,7 +145,7 @@ include("inc/nav.php");
                                                                     Recupera Insumo
                                                                 </button>
                                                             </section>
-                                                        </div>
+                                                        </div> -->
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend>Composição da remuneração</legend>
@@ -157,14 +157,21 @@ include("inc/nav.php");
                                                             <input id="sequencialRemuneracao" name="sequencialRemuneracao" type="hidden" value="">
                                                             <div class="form-group">
                                                                 <div class="row">
-                                                                    <section class="col col-md-4">
-                                                                        <label class="label">Remuneracao</label>
+                                                                    <section class="col col-4">
+                                                                        <label class="label">Remuneração</label>
                                                                         <label class="select">
-                                                                            <select id="remuneracao">
-                                                                                <option> </option>
-                                                                                <option>Salário</option>
-                                                                                <option>Bonus</option>
-                                                                                <option>Beneficio do cargo</option>
+                                                                            <select id="remuneracao" name="remuneracao" >
+                                                                                <option></option>
+                                                                                <?php
+                                                                                $sql =  "SELECT codigo, descricao FROM Ntl.remuneracao where ativo = 1 order by codigo";
+                                                                                $reposit = new reposit();
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = $row['codigo'];
+                                                                                    $descricao = ($row['descricao']);
+                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                }
+                                                                                ?>
                                                                             </select><i></i>
                                                                         </label>
                                                                     </section>
@@ -262,27 +269,28 @@ include("inc/nav.php");
                                                                             <th class="text-center">Descrição</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody style="display:none">
-                                                                        <?php
-                                                                        echo '<tr >';
-                                                                        echo '<td class="text-left"><a></a></td>';
-                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SENAC</a></td>';
-                                                                        echo '<td class="text-left">2,0000%</td>';
-                                                                        echo '<td class="text-left"> </td>';
-                                                                        echo '</tr >';
-                                                                        echo '<tr >';
-                                                                        echo '<td class="text-left"><a></a></td>';
-                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">INSS</a></td>';
-                                                                        echo '<td class="text-left">7,799%</td>';
-                                                                        echo '<td class="text-left"> </td>';
-                                                                        echo '</tr >';
-                                                                        echo '<tr >';
-                                                                        echo '<td class="text-left"><a></a></td>';
-                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SESC</a></td>';
-                                                                        echo '<td class="text-left">5,0000%</td>';
-                                                                        echo '<td class="text-left"> </td>';
-                                                                        echo '</tr >';
-                                                                        ?>
+                                                                    <tbody>
+                                                                        <!-- <tbody style="display:none"> -->
+                                                                        <!-- <?php
+                                                                                echo '<tr >';
+                                                                                echo '<td class="text-left"><a></a></td>';
+                                                                                echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SENAC</a></td>';
+                                                                                echo '<td class="text-left">2,0000%</td>';
+                                                                                echo '<td class="text-left"> </td>';
+                                                                                echo '</tr >';
+                                                                                echo '<tr >';
+                                                                                echo '<td class="text-left"><a></a></td>';
+                                                                                echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">INSS</a></td>';
+                                                                                echo '<td class="text-left">7,799%</td>';
+                                                                                echo '<td class="text-left"> </td>';
+                                                                                echo '</tr >';
+                                                                                echo '<tr >';
+                                                                                echo '<td class="text-left"><a></a></td>';
+                                                                                echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SESC</a></td>';
+                                                                                echo '<td class="text-left">5,0000%</td>';
+                                                                                echo '<td class="text-left"> </td>';
+                                                                                echo '</tr >';
+                                                                                ?> -->
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -351,27 +359,8 @@ include("inc/nav.php");
                                                                             <th class="text-center">Descrição</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody style="display:none">
-                                                                        <?php
-                                                                        echo '<tr >';
-                                                                        echo '<td class="text-left"><a></a></td>';
-                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Uniforme</a></td>';
-                                                                        echo '<td class="text-left">R$ 251,98</td>';
-                                                                        echo '<td class="text-left"> </td>';
-                                                                        echo '</tr >';
-                                                                        echo '<tr >';
-                                                                        echo '<td class="text-left"><a></a></td>';
-                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Capacete</a></td>';
-                                                                        echo '<td class="text-left">R$ 198,88</td>';
-                                                                        echo '<td class="text-left"> </td>';
-                                                                        echo '</tr >';
-                                                                        echo '<tr >';
-                                                                        echo '<td class="text-left"><a></a></td>';
-                                                                        echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">Benefício Social Familiar - Cláusula 26º, parágrafo 2º da CCT</a></td>';
-                                                                        echo '<td class="text-left">R$ 5,00</td>';
-                                                                        echo '<td class="text-left"> </td>';
-                                                                        echo '</tr >';
-                                                                        ?>
+                                                                    <tbody>
+                                                                      
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -623,7 +612,7 @@ include("inc/scripts.php");
         $("#btnAddBdi").on("click", function() {
             addBdi();
         });
-        
+
         $("#btnAddRemuneracao").on("click", function() {
             addRemuneracao();
             calculaValorRemuneracao()
@@ -636,7 +625,7 @@ include("inc/scripts.php");
         $("#btnRecuperaInsumo").on("click", function() {
             $("#tableInsumos tbody").css("display", "")
         });
-        
+
 
         carregaPagina();
     });
@@ -1095,7 +1084,7 @@ include("inc/scripts.php");
             $("#tableRemuneracao tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoArray[i].sequencialRemuneracao + '"><i></i></label></td>'));
             row.append($('<td class="text-center" onclick="carregaRemuneracao(' + jsonRemuneracaoArray[i].sequencialRemuneracao + ');">' + jsonRemuneracaoArray[i].remuneracao + '</td>'));
-            row.append($('<td class="text-center">' + 'R$ '+ jsonRemuneracaoArray[i].remuneracaoValor + '</td>'));
+            row.append($('<td class="text-center">' + 'R$ ' + jsonRemuneracaoArray[i].remuneracaoValor + '</td>'));
         }
     }
 
@@ -1127,12 +1116,11 @@ include("inc/scripts.php");
         return false;
     }
 
-    function calculaValorRemuneracao(){
+    function calculaValorRemuneracao() {
         var valorTotalRemuneracao = 0
-        for (var i = 0; i < jsonRemuneracaoArray.length; i++){
+        for (var i = 0; i < jsonRemuneracaoArray.length; i++) {
             valorTotalRemuneracao += +jsonRemuneracaoArray[i].remuneracaoValor.replace(",", ".")
         }
         $('#remuneracaoTotal').val(valorTotalRemuneracao.toFixed(2).replace(".", ","));
     }
-
 </script>

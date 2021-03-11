@@ -5,10 +5,10 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('UNIDADEITEM_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('UNIDADEITEM_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('UNIDADEITEM_EXCLUIR', $arrayPermissao, true));
+// //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
+$condicaoAcessarOK = (in_array('UNIDADE_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('UNIDADE_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('UNIDADE_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -26,11 +26,10 @@ if ($condicaoExcluirOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
-
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Unidade do item";
+$page_title = "Unidade";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -42,7 +41,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["unidadeItem"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["unidade"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -56,6 +55,7 @@ include("inc/nav.php");
     include("inc/ribbon.php");
     ?>
 
+
     <!-- MAIN CONTENT -->
     <div id="content">
         <!-- widget grid -->
@@ -65,11 +65,11 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Unidade do item</h2>
+                            <h2>Unidade</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formUnidadeItem" name="formUnidadeItem" method="post">
+                                <form action="javascript:gravar()" class="smart-form estoque-form" id="formUnidade" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -84,28 +84,24 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <input id="codigo" name="codigo" type="text" class="hidden">
-
                                                         <div class="row">
-                                                            <section class="col col-2">
-                                                                <label class="label">Sigla</label>
-                                                                <label class="input">
-                                                                    <input id="sigla" name="sigla" type="text" maxlength="5" class="required" required>
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-3">
+                                                            <input id="codigo" name="codigo" type="text" class="hidden">
+                                                        </div>
+                                                        <div class="row ">
+                                                            <section class="col col-6">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input name="descricao" id="descricao" autocomplete="off" class="form-control required" required>
+                                                                    <input id="descricao" name="descricao" autocomplete="off" type="text" class="form-control required" value="">
                                                                 </label>
                                                             </section>
+
                                                             <section class="col col-2">
-                                                                <label class="label">Ativo</label>
+                                                                <label class="label hidden">Ativo</label>
                                                                 <label class="select">
-                                                                    <select name="ativo" id="ativo" autocomplete="off" class="form-control required" required>
+                                                                    <select name="ativo" id="ativo" class="required hidden" autocomplete="off" class="form-control required">
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
-                                                                    </select><i></i>
+                                                                    </select>
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -115,10 +111,6 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                        <!-- <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
-                                            <span class="fa fa-trash"></span>
-                                        </button> -->
-
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
@@ -135,7 +127,7 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <button type="submited" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
@@ -173,7 +165,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaUnidadeItem.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaUnidade.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -201,15 +193,25 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
+
         carregaPagina();
 
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function(title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
 
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
             resizable: false,
             modal: true,
-            title: "Atenção",
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
             buttons: [{
                 html: "Excluir registro",
                 "class": "btn btn-success",
@@ -227,11 +229,11 @@ include("inc/scripts.php");
         });
 
         $("#btnExcluir").on("click", function() {
-            var id = $("#codigo").val();
+            var id = +$("#codigo").val();
 
             if (id === 0) {
                 smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-                $("#nome").focus();
+                $("#descricao").focus();
                 return;
             }
 
@@ -240,9 +242,6 @@ include("inc/scripts.php");
             }
         });
 
-        $("#btnGravar").on("click", function() {
-            gravar();
-        });
         $("#btnNovo").on("click", function() {
             novo();
         });
@@ -250,89 +249,7 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-
     });
-
-
-
-
-    function gravar() {
-
-        var sigla = $("#sigla").val();
-        var descricao = $("#descricao").val();
-        var descricao = $("#ativo").val();
-
-        if (sigla == "" || sigla === " ") {
-            smartAlert("Atenção", "Insira a Sigla", "error")
-            return false;
-        }
-
-        if (descricao == "" || descricao === " ") {
-            smartAlert("Atenção", "Insira a Descrição", "error")
-            return false;
-        }
-
-        let form = $('#formUnidadeItem').serializeArray().reduce(function(obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
-
-        gravaUnidadeItem(form,
-            function(data) {
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        return false;
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                        return false;
-                        //                                                            return;
-                    }
-                } else {
-                    var piece = data.split("#");
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
-                }
-            }
-        );
-    }
-
-
-    function novo() {
-        $(location).attr('href', 'tabelaBasica_unidadeItemCadastro.php');
-    }
-
-    function voltar() {
-        $(location).attr('href', 'tabelaBasica_unidadeItemFiltro.php');
-    }
-
-    function excluir() {
-        var id = +$("#codigo").val();
-
-        if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
-            return;
-        }
-
-        excluirUnidadeItem(id, function(data) {
-            if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
-
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                }
-                voltar();
-            } else {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                voltar();
-            }
-        });
-    }
 
     function carregaPagina() {
         var urlx = window.document.URL.toString();
@@ -340,10 +257,9 @@ include("inc/scripts.php");
         if (params.length === 2) {
             var id = params[1];
             var idx = id.split("=");
-            var idd = idx[1];
-
-            if (idd !== "") {
-                recuperaUnidadeItem(idd,
+            var codigo = idx[1];
+            if (codigo !== "") {
+                recuperaUnidade(codigo,
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
@@ -352,20 +268,94 @@ include("inc/scripts.php");
                             var out = piece[1];
 
                             piece = out.split("^");
-                            var codigo = piece[0];
-                            var sigla = piece[1];
-                            var descricao = piece[2];
-                            var ativo = piece[3];
+                            codigo = piece[0];
+                            descricao = piece[1];
+                            ativo = +piece[2];
 
                             $("#codigo").val(codigo);
-                            $("#sigla").val(sigla);
                             $("#descricao").val(descricao);
                             $("#ativo").val(ativo);
 
+                            return;
                         }
                     }
                 );
             }
         }
+    }
+
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_unidadeCadastro.php');
+    }
+
+    function voltar() {
+        $(location).attr('href', 'tabelaBasica_unidadeFiltro.php');
+    }
+
+    function excluir() {
+        var codigo = $("#codigo").val();
+
+        if (codigo === 0) {
+            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+            return;
+        }
+
+        excluirUnidade(codigo,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    }
+
+                } else {
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    voltar();
+                }
+            }
+        );
+    }
+
+    function gravar() {
+
+        $("#btnGravar").prop('disabled', true);
+
+        var codigo = parseInt($("#codigo").val());
+        var descricao = $("#descricao").val().trim().replace(/'/g, " ");
+        var ativo = parseInt($("#ativo").val());
+
+        if (descricao === "") {
+            smartAlert("Atenção", "Informe o nome da unidade !", "error");
+            $("#descricao").focus();
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        gravaUnidade(codigo, descricao, ativo,
+            function(data) {
+
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnGravar").prop('disabled', false);
+                        return false;
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                        $("#btnGravar").prop('disabled', false);
+                        return false;
+                    }
+                } else {
+                    var piece = data.split("#");
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    novo();
+                }
+            }
+        );
     }
 </script>

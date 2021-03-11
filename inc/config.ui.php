@@ -203,6 +203,9 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('TAREFA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("tarefa" => array("title" => "Tarefa", "url" => APP_URL . "/tabelaBasica_tarefaFiltro.php")); //SYSGC    
     }
+    if (in_array('UNIDADE_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("unidade" => array("title" => "Unidade", "url" => APP_URL . "/tabelaBasica_unidadeFiltro.php")); //SYSGC 
+    }
     if (in_array('UNIDADEITEM_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("unidadeItem" => array("title" => "Unidade do item", "url" => APP_URL . "/tabelaBasica_unidadeItemFiltro.php"));
     }
@@ -215,8 +218,12 @@ if ($condicaoCadastroOk) {
     $page_nav['cadastro'] = array("title" => "Cadastro", "icon" => "fa-pencil-square-o");
     $page_nav['cadastro']['sub'] = array();
 
+
     if (in_array('CARGO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("cargo" => array("title" => "Cargo", "url" => APP_URL . "/cadastro_cargoFiltro.php")); //SYSCB   
+    }
+    if (in_array('CODIGOITEM_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("codigoItem" => array("title" => "Código Item", "url" => APP_URL . "/cadastro_codigoItemFiltro.php")); //SYSCB   
     }
     if (in_array('CONTRATO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("contrato" => array("title" => "Contrato", "url" => APP_URL . "/cadastro_contratoFiltro.php"));
@@ -427,6 +434,9 @@ if ($condicaoOperacaoOk) {
     if ($condicaoEstoqueOk) {
         $page_nav['operacao']['sub']['estoque'] = array("title" => "Estoque", "icon" => "fa fa-cubes");
         $page_nav['operacao']['sub']['estoque']['sub'] = array();
+        // if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
+        //     $page_nav['operacao']['sub']['estoque']['sub'] += array("entradaItem" => array("title" => "Entrada Item", "url" => APP_URL . "/estoque_entradaItemCadastro.php"));
+        // }
     }
 }
 

@@ -183,15 +183,17 @@ include("inc/scripts.php");
         });
     });
 
-    function listarFiltro() {
-        var descricaoCodigo = $('#descricaoCodigo').val();
-        var descricaoServico = $('#descricaoServico').val();
-        var ativo = $('#ativo').val();
 
-        var parametrosUrl = '&descricaoCodigo=' + descricaoCodigo;
-        var parametrosUrl = '&descricaoServico=' + descricaoServico;
-         parametrosUrl = '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_servicoListagem.php?' + parametrosUrl);
+    function listarFiltro() {
+        let descricaoCodigo = $('#descricaoCodigo').val();
+        let descricaoServico = $('#descricaoServico').val(); 
+        let ativo = $("#ativo").val();   
+ 
+        $('#resultadoBusca').load('tabelaBasica_servicoListagem.php?', {
+            descricaoCodigo: descricaoCodigo,
+            descricaoServico: descricaoServico,
+            ativo: ativo
+        });
     }
  
 </script>    

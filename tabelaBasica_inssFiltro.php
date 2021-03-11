@@ -189,13 +189,11 @@ include("inc/scripts.php");
     });
 
     function listarFiltro() {
-        var descricao = $('#descricao').val();
         var percentual = $('#percentual').val();
         var ativo = $('#ativo').val();
 
-        var parametrosUrl = '&descricao=' + descricao;
         var parametrosUrl = '&percentual=' + percentual;
-        parametrosUrl = '&ativo=' + ativo;
+        parametrosUrl = parametrosUrl + '&ativo=' + ativo;
         $('#resultadoBusca').load('tabelaBasica_inssListagem.php?' + parametrosUrl);
     }
 </script>
