@@ -31,35 +31,59 @@ function grava()
     // }
 
     session_start();
-    $usuario = $_SESSION['login'];
-    
+    $usuario = "'" .  $_SESSION['login'] . "'";
+
     /* Objeto com os arrays de objetos com dias,horas e etc para montar o XML */
-    $arrayFolhaPontoMensal = $_POST['folhaPontoMensalTabela'];
+
 
     /* Objeto com o informações que não pertencem ao array do XML */
     $folhaPontoInfo = $_POST['folhaPontoInfo'];
 
-    $codigo = (int) $folhaPontoInfo;
-    $funcionarioFolha = (int) $folhaPontoInfo; 
-    $mesFolha = (int) $folhaPontoInfo;
-    $anoFolha = (int) $folhaPontoInfo;
-    $observacaoFolha = (string)$folhaPontoInfo;
+    $codigo = (int) $folhaPontoInfo['codigo'];
+    $funcionario = (int) $folhaPontoInfo['funcionario'];
+    $observacao = "'" . (string)$folhaPontoInfo['observacao'] . "'";
+    $ativo = (int) $folhaPontoInfo['ativo'];
+
+
+
+
 
     /* Verificar como os dados estão sendo passados e então montar o XML */
-
+    $strArrayFolhaPontoMensal = $_POST['folhaPontoMensalTabela'];
+    $arrayFolhaPontoMensal = $strArrayFolhaPontoMensal;
     $xmlFolhaPontoMensal = "";
     $nomeXml = "ArrayOfPonto";
     $nomeTabela = "ponto";
     $xmlFolhaPontoMensal = "<?xml version=\"1.0\"?>";
     $xmlFolhaPontoMensal .= "<$nomeXml xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">";
-    foreach($arrayFolhaPontoMensal as $folha){
+    foreach ($arrayFolhaPontoMensal as $folha) {
         $xmlFolhaPontoMensal .= "<$nomeTabela>";
-        foreach($folha as $key => $value){
+        foreach ($folha as $key => $value) {
+            if (in_array($key, ['horaEntrada', 'horaSaida', 'horaExtra', 'atraso'])) {
+                if ($value == '') {
+                    $xmlFolhaPontoMensal .= "<$key>00:00:00</$key>";
+                } else {
+                    $xmlFolhaPontoMensal .= "<$key>$value</$key>";
+                }
+                continue;
+            }
+            if (in_array($key, ['inicioAlmoco', 'fimAlmoco'])) {
+                if ($value == '') {
+                    $xmlFolhaPontoMensal .= "<$key>00:00</$key>";
+                } else {
+                    $xmlFolhaPontoMensal .= "<$key>$value</$key>";
+                }
+                continue;
+            }
+            if ($key == 'mes') {
+                $xmlFolhaPontoMensal .= "<$key>" . (int)$value . "</$key>";
+                continue;
+            }
             $xmlFolhaPontoMensal .= "<$key>$value</$key>";
         }
-        $xmlFolhaPontoMensal .= "<$nomeTabela>";
+        $xmlFolhaPontoMensal .= "</$nomeTabela>";
     }
-    $xmlFolhaPontoMensal .= "</\"$nomeXml\">";
+    $xmlFolhaPontoMensal .= "</$nomeXml>";
     $xml = simplexml_load_string($xmlFolhaPontoMensal);
     if ($xml === false) {
         $mensagem = "Erro na criação do XML de Lançamento";
@@ -67,12 +91,13 @@ function grava()
         return;
     }
     $xmlFolhaPontoMensal = "'" . $xmlFolhaPontoMensal . "'";
-   
-    $sql = 
+
+    $sql =
         "Ntl.folhaPontoMensal_Atualiza 
         $codigo,
-        $funcionarioFolha,
-        $observacaoFolha,
+        $ativo,
+        $funcionario,
+        $observacao,
         $usuario,
         $xmlFolhaPontoMensal
     ";
@@ -98,50 +123,47 @@ function recupera()
         $id = (int) $_POST["id"];
     }
 
- 
 
-    $sql = 
+
+    $sql =
         "SELECT F.codigo, F.funcionario, F.observacao,
         FROM Ntl.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
-        WHERE (0=0) AND F.codigo = " . $id
-    ;
+        WHERE (0=0) AND F.codigo = " . $id;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0])
+    if ($row = $result[0])
 
-    $id = $row['codigo'];
+        $id = $row['codigo'];
     $funcionario = $row['funcionario'];
     $observacao = $row['observacao'];
 
-    $out =   
+    $out =
         $id . "^" .
         $funcionario . "^" .
-        $observacao
-    ;
+        $observacao;
 
     if ($out == "") {
         echo "failed#";
         return;
     }
 
-    $sql = 
+    $sql =
         "SELECT P.dia,P.mes,P.ano,P.horaEntrada,P.horaSaida,
         P.inicioAlmoco,P.fimAlmoco,P.lancamento
         FROM Ntl.ponto P 
         INNER JOIN Ntl.folhaPontoMensal F 
         ON F.codigo = P.folhaPontoMensal 
-        WHERE (0=0) AND F.codigo = " . $id
-    ;
+        WHERE (0=0) AND F.codigo = " . $id;
 
     $result = $reposit->RunQuery($sql);
 
     $arrayPonto = array();
 
-    foreach($result as $row){
+    foreach ($result as $row) {
 
         $arrayRow = array(
             "dia"           =>  $row[""],
@@ -154,7 +176,7 @@ function recupera()
             "lancamento"    =>  $row[""]
         );
 
-        array_push($arrayPonto,$arrayRow);
+        array_push($arrayPonto, $arrayRow);
     }
 
     echo "sucess#" . $out . $arrayPonto;
