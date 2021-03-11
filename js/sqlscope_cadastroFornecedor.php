@@ -38,11 +38,12 @@ function grava() {
 
     //Variáveis
     session_start();
+    $usuario = $_SESSION['login'];
     $id =  $_POST['id'];
     $cnpj = $_POST['cnpj'];
     $razaoSocial =$_POST['razaoSocial'];  
     $apelido =$_POST['apelido'];  
-    $ativo =$_POST['ativo'];  
+    $ativo =$_POST['ativo'];
     $logradouro =$_POST['logradouro'];  
     $numero =$_POST['numero'];  
     $complemento =$_POST['complemento'];  
@@ -50,20 +51,65 @@ function grava() {
     $cidade =$_POST['cidade'];  
     $uf =$_POST['uf'];   
     $notaFiscal =$_POST['notaFiscal'];  
+    $cep =$_POST['cep'];
+    $endereco =$_POST['endereco'];
+
+    $strArrayGrupoItem = $_POST['jsonGrupoItemArray'];
+    $arrayGrupoItem =$strArrayGrupoItem;
+    $xmlGrupoItem = "";
+    $nomeXml = "ArrayOfGrupoItem";
+    $nomeTabela = "fornecedorGrupoItem";
+    if (sizeof($arrayGrupoItem) > 0) {
+        $xmlGrupoItem = '<?xml version="1.0"?>';
+        $xmlGrupoItem = $xmlGrupoItem . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+
+        foreach ($arrayGrupoItem as $chave) {
+            $xmlGrupoItem = $xmlGrupoItem . "<" . $nomeTabela . ">";
+            foreach ($chave as $campo => $valor) {
+
+                if (($campo === "sequencialGrupoDeItem")) {
+                    continue;
+                }
+               
+
+                $xmlGrupoItem = $xmlGrupoItem . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+            }
+            $xmlGrupoItem = $xmlGrupoItem . "</" . $nomeTabela . ">";
+        }
+        $xmlGrupoItem = $xmlGrupoItem . "</" . $nomeXml . ">";
+    } else {
+        $xmlGrupoItem = '<?xml version="1.0"?>';
+        $xmlGrupoItem = $xmlGrupoItem . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlGrupoItem = $xmlGrupoItem . "</" . $nomeXml . ">";
+    }
+
+    $xml = simplexml_load_string($xmlGrupoItem);
+
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML de Vale Transporte";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+    $xmlGrupoItem = "'" . $xmlGrupoItem . "'";
+
 
     $sql = "Ntl.fornecedor_Atualiza ".
-     $id . ",".
-     $cnpj . "," .
-     $razaoSocial . "," .
-     $apelido . "," .
+      $id . ",".
+     "'" . $cnpj ."'" ."," .
+     "'" . $razaoSocial . "'" . "," .
+     "'" . $apelido."'"  . "," .
      $ativo . "," .
-     $logradouro . "," .
+     "'" . $logradouro."'"  . "," .
      $numero  . "," .
-     $complemento ." " . 
-     $bairro ." " .
-     $cidade ." " . 
-     $uf ." " .
-     $notaFiscal ." ";
+     "'" . $complemento . "'"  ."," . 
+     "'" . $bairro . "'"  ."," .
+     "'" . $cidade . "'"  ."," . 
+     "'" . $uf . "'" ."," .
+    $notaFiscal. "," .
+    "'" .   $cep ."'" . "," .
+    "'" .   $endereco ."'"  . "," .
+    "'" .   $usuario ."'"  . "," .
+    $xmlGrupoItem; 
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -100,7 +146,7 @@ function recupera() {
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT FO.[codigo], FO.[ativo], FO.[unidadeFederacao], FO.[municipio], FO.[descricao], FO.[cnpj], M.[descricao] AS nomeMunicipio
+    $sql = "SELECT FO.[codigo], FO.[cnpj], FO.[razaoSocial], FO.[apelido], FO.[ativo], FO.[cep],FO.[logradouro], FO.[numero], FO.[complemento], FO.[bairro], FO.[cidade], FO.[uf], FO.[notaFiscal], FO.[endereco]
     FROM Ntl.fornecedor FO
     WHERE (0=0)";
 
@@ -115,28 +161,74 @@ function recupera() {
     
     if($row = $result[0]) {
         $id = +$row['codigo'];
-        $ativo = +$row['ativo']; 
-        $unidadeFederacao = $row['unidadeFederacao'];
-        $municipio = +$row['municipio']; 
-        $descricao = $row['descricao'];
-        $cnpj =  $row['cnpj'];
-        $nomeMunicipio = $row['nomeMunicipio'];
-        
+        $cnpj = $row['cnpj']; 
+        $razaoSocial = $row['razaoSocial'];
+        $apelido = $row['apelido']; 
+        $ativo = $row['ativo'];
+        $logradouro = $row['logradouro'];
+        $numero = $row['numero'];
+        $complemento =  $row['complemento'];
+        $bairro = $row['bairro'];
+        $cidade = $row['cidade'];
+        $uf =  $row['uf'];
+        $notaFiscal = $row['notaFiscal'];
+        $cep =  $row['cep'];
+        $endereco =  $row['endereco'];
+
+        $reposit = "";
+        $result = "";
+        $sql = "SELECT  F.codigo,FGI.codigo,FGI.estoque,FGI.grupoItem,FGI.observacao,E.codigo,E.descricao AS estoqueText,GI.codigo,GI.descricao AS grupoItemText FROM ntl.fornecedor F
+        INNER JOIN ntl.fornecedorGrupoItem FGI ON F.codigo = FGI.fornecedor 
+        INNER JOIN estoque.estoque E ON FGI.estoque = E.codigo
+		INNER JOIN estoque.grupoItem GI ON FGI.estoque = GI.codigo
+        WHERE F.codigo = $id";
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+
+        $contadorGrupoItem = 0;
+        $arrayGrupoItem = array();
+        foreach($result as $row) {
+            $estoque = (string)$row['estoqueText'];
+            $grupoItem = (string)$row['grupoItemText'];
+            $observacao = (string)$row['observacao'];
+            $estoqueId = (int) $row['estoque'];
+            $grupoItemId = (int) $row['grupoItem'];
+
+            $contadorGrupoItem = $contadorGrupoItem + 1;
+            $arrayGrupoItem[] = array(
+                "sequencialGrupoDeItem" => $contadorGrupoItem,
+                "estoqueText" => $estoque,
+                "grupoItemText" => $grupoItem,
+                "observacao" => $observacao,
+                "estoque" => $estoqueId,
+                "grupoItem" => $grupoItemId
+            );
+        }
+
+        $strArrayGrupoItem = json_encode($arrayGrupoItem);
+
         $out = $id . "^" . 
-        $ativo . "^" . 
-        $unidadeFederacao . "^" .
-        $municipio  . "^" .
-        $descricao . "^" .
-        $cnpj. "^" .
-        $nomeMunicipio
-        ;
+        $cnpj . "^" . 
+        $razaoSocial . "^" .
+        $apelido  . "^" .
+        $ativo . "^" .
+        $logradouro . "^" . 
+        $numero . "^" .
+        $complemento  . "^" .
+        $bairro . "^" .
+        $cidade. "^" .
+        $uf . "^" .
+        $notaFiscal. "^" .
+        $cep. "^" .
+        $endereco;
 
         if ($out == "") {
             echo "failed#";
         }
         if ($out != '') {
-            echo "sucess#" . $out . " ";
+            echo "sucess#" . $out . "#" . $strArrayGrupoItem;
         }
+
         return;
     }
 } 

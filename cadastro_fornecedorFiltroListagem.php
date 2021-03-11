@@ -7,52 +7,55 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Fornecedor</th>
-                    <th class="text-left" style="min-width:30px;">UF</th>
-                    <th class="text-left" style="min-width:30px;">Município</th>
-                    <th class="text-left" style="min-width:35px;">Ativo</th>
+                    <th class="text-left" style="min-width:30px;">CNPJ</th>
+                    <th class="text-left" style="min-width:30px;">Ativo</th>
+                    <th class="text-left" style="min-width:35px;">NF</th>
 
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $descricao = "";
+                $apelido = "";
+                $cnpj = "";
+                $ativo = "";
+                $notaFiscal = "";
                
                 $where = "where (0 = 0)";
 
-                $sql = "SELECT FO.[codigo],FO.[ativo],FO.[unidadeFederacao], FO.[municipio],M.[descricao] AS descricaoMunicipio, FO.[descricao]
-                        FROM Ntl.fornecedor FO  
-                        INNER JOIN Ntl.municipio M ON FO.[municipio] = M.[codigo] ";
+                $sql = "SELECT codigo,cnpj,apelido, ativo, notaFiscal
+                        FROM Ntl.fornecedor ";
                  
-                if ($_GET["descricao"] != "") {
-                    $descricao = $_GET["descricao"];
-                    $where = $where . " AND (FO.[descricao] LIKE '%' + " . "REPLACE('" . $descricao . "',' ','%') + " . "'%')";
-                }
-                
-                if ($_GET["unidadeFederacao"] != "") {
-                    $unidadeFederacao = $_GET["unidadeFederacao"];
-                    $where = $where . " AND (FO.[unidadeFederacao] LIKE '%' + " . "REPLACE('" . $unidadeFederacao . "',' ','%') + " . "'%')";
-                }
-                
-                if (($_GET["municipio"] != "" )&& ($_GET["municipio"] != 0)  ) {
-                    $municipio = $_GET["municipio"];
-                    $where = $where . " AND FO.[municipio] =" . $municipio . "";
-                }
-                
-                if ($_GET["ativo"] != "") {
-                    $ativo = $_GET["ativo"];
-                    $where = $where . " AND FO.[ativo] =" . $ativo . "";
+              
+                if ($_GET["apelido"] != "") {
+                    $apelido = $_GET["apelido"];
+                    $where = $where . " AND(apelido like '%' + " . "replace('" . $apelido . "',' ','%') + " . "'%')";
                 }
 
-                $sql = $sql . $where;
+                if ($_GET["cnpj"] != "") {
+                    $cnpj = $_GET["cnpj"];
+                    $where = $where . " AND (cnpj like '%' + " . "replace('" . $cnpj . "',' ','%') + " . "'%')";
+                }
+
+    
+                if ($_GET["ativo"] != "") {
+                    $ativo = $_GET["ativo"];
+                    $where = $where . " AND [ativo] = " . $ativo;
+                }
+
+                if ($_GET["notaFiscal"] != "") {
+                    $notaFiscal = $_GET["notaFiscal"];
+                    $where = $where . " AND [notaFiscal] = " . $notaFiscal;
+                }
+                $sql .=$where;
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
                 foreach($result as $row) {
                     $id = (int) $row['codigo'];
-                    $descricao = $row['descricao'];
-                    $unidadeFederacao = $row['unidadeFederacao'];
-                    $municipio = $row['descricaoMunicipio'];
-                    $ativo = (int) $row['ativo'];
+                    $cnpj = (string)$row['cnpj'];
+                    $apelido = (string)$row['apelido'];
+                    $ativo = $row['ativo'];
+                    $notaFiscal = $row['notaFiscal'];
      
                     if ($ativo == 1) {
                         $ativo = "Sim";
@@ -60,11 +63,17 @@ include "js/repositorio.php";
                         $ativo = "Não";
                     }
 
+                    if ($notaFiscal == 1) {
+                        $notaFiscal = "Sim";
+                    } else {
+                        $notaFiscal = "Não";
+                    }
+
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="cadastro_fornecedorCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $unidadeFederacao . '</td>';
-                    echo '<td class="text-left">' . $municipio . '</td>';
+                    echo '<td class="text-left"><a href="cadastro_fornecedorCadastro.php?codigo=' . $id . '">' . $apelido . '</a></td>';
+                    echo '<td class="text-left">' . $cnpj . '</td>';
                     echo '<td class="text-left">' . $ativo . '</td>';
+                    echo '<td class="text-left">' . $notaFiscal . '</td>';
                     echo '</tr >';
                 }
                 ?>               

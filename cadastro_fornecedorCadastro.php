@@ -105,27 +105,36 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">CEP</label>
                                                                 <label class="input">
-                                                                    <input id="cep" name="cep" type="text"  autocomplete="off" maxlength="100">
+                                                                    <input id="cep" name="cep" type="text" autocomplete="off" maxlength="100">
 
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3">
+                                                            <section class="col col-1">
                                                                 <label class="label">Logradouro</label>
                                                                 <label class="input">
-                                                                    <input id="logradouro" name="logradouro" type="text" readonly class="readonly" autocomplete="off" maxlength="100">
+                                                                    <input id="logradouro" name="logradouro" type="text" autocomplete="off" maxlength="100">
 
                                                                 </label>
                                                             </section>
+
+                                                            <section class="col col-4">
+                                                                <label class="label">Endereço</label>
+                                                                <label class="input">
+                                                                    <input id="endereco" name="endereco" type="text" autocomplete="off" maxlength="100">
+
+                                                                </label>
+                                                            </section>
+
                                                             <section class="col col-1">
                                                                 <label class="label">Número</label>
                                                                 <label class="input">
                                                                     <input id="numero" name="numero" type="text" autocomplete="off" maxlength="100">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3">
+                                                            <section class="col col-4">
                                                                 <label class="label">Complemento</label>
                                                                 <label class="input">
-                                                                    <input id="complemento" name="complemento" type="text"  autocomplete="off" maxlength="100">
+                                                                    <input id="complemento" name="complemento" type="text" autocomplete="off" maxlength="100">
 
                                                                 </label>
                                                             </section>
@@ -133,14 +142,14 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Bairro</label>
                                                                 <label class="input">
-                                                                    <input id="bairro" name="bairro" type="text" autocomplete="off" readonly class="readonly" maxlength="100">
+                                                                    <input id="bairro" name="bairro" type="text" autocomplete="off" maxlength="100">
 
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Cidade</label>
                                                                 <label class="input">
-                                                                    <input id="cidade" name="cidade" type="text" autocomplete="off" readonly class="readonly" maxlength="100">
+                                                                    <input id="cidade" name="cidade" type="text" autocomplete="off" maxlength="100">
 
                                                                 </label>
                                                             </section>
@@ -148,7 +157,7 @@ include("inc/nav.php");
                                                             <section class="col col-1">
                                                                 <label class="label">UF</label>
                                                                 <label class="input">
-                                                                    <input id="uf" name="uf" type="text" autocomplete="off" readonly class="readonly" cmaxlength="100">
+                                                                    <input id="uf" name="uf" type="text" autocomplete="off" cmaxlength="100">
 
                                                                 </label>
                                                             </section>
@@ -170,33 +179,132 @@ include("inc/nav.php");
                                                 </div>
                                                 </fieldset>
                                             </div>
-                                            <footer>
-                                                <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
-                                                    <span class="fa fa-trash"></span>
-                                                </button>
-                                                <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
-                                                    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                        <span id="ui-id-2" class="ui-dialog-title">
-                                                        </span>
-                                                    </div>
-                                                    <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                        <p>CONFIRMA A EXCLUSÃO ? </p>
-                                                    </div>
-                                                    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                                        <div class="ui-dialog-buttonset">
-                                                        </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseGrupoDeItem" class="collapsed" id="accordionDadosContrato">
+                                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                           Grupo de Item
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapseGrupoDeItem" class="panel-collapse collapse">
+                                                    <div class="panel-body no-padding">
+                                                    <input id="jsonGrupoItem" name="jsonGrupoItem" type="hidden" value="[]">
+                                                        <fieldset id="formGrupoDeItem">
+                                                        <input id="sequencialGrupoDeItem" name="sequencialGrupoDeItem" type="hidden" value="">
+														
+                                                        <br>
+                                                            <div class="row">
+                                                                <section class="col col-3">
+                                                                    <label class="label">Estoque</label>
+                                                                    <label class="select">
+                                                                        <select id="estoque" name="estoque" class="form-control">
+                                                                            <option style="display:none;" value="">Selecione</option>
+                                                                            <?php
+                                                                            $sql =  "SELECT codigo, descricao FROM estoque.estoque  where ativo = 1  order by codigo";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+
+                                                                                $row = array_map('mb_strtoupper', $row);
+                                                                                $codigo = $row['codigo'];
+                                                                                $descricao = $row['descricao'];
+                                                                                echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                    </label>
+                                                                </section>
+
+                                                                <section class="col col-3">
+                                                                    <label class="label">Grupo Item</label>
+                                                                    <label class="select">
+                                                                        <select id="grupoItem" name="grupoItem" class="form-control">
+                                                                            <option style="display:none;" value="">Selecione</option>
+                                                                            <?php
+                                                                            $sql =  "SELECT codigo, descricao FROM estoque.grupoItem  where ativo = 1  order by codigo";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+
+                                                                                $row = array_map('mb_strtoupper', $row);
+                                                                                $codigo = $row['codigo'];
+                                                                                $descricao =$row['descricao'];
+                                                                                echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                    </label>
+                                                                </section>
+
+                                                                <section class="col col-5">
+                                                                    <label class="label">Observação</label>
+                                                                    <label class="input">
+                                                                        <input id="observacao" name="observacao" type="text" autocomplete="off" maxlength="100">
+
+                                                                    </label>
+                                                                </section>
+                                                                
+                                                                <div class="row">
+															<section class="col col-4">
+
+																<button id="btnAddGrupoDeItem" type="button" class="btn btn-primary" title="Adicionar Item">
+																	<i class="fa fa-plus"></i>
+																</button>
+																<button id="btnRemoverGrupoDeItem" type="button" class="btn btn-danger" title="Remover Item">
+																	<i class="fa fa-minus"></i>
+																</button>
+															</section>
+														</div>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+															<table id="tableGrupoDeItem" class="table table-bordered table-striped table-condensed table-hover dataTable">
+																<thead>
+																	<tr role="row">
+
+																		<th class="text-left" style="min-width: 10px;"></th>
+																		<th class="text-left" style="min-width: 10px;">Estoque</th>
+																		<th class="text-left" style="min-width: 10px;">Grupo de Item</th>
+																		<th class="text-left" style="min-width: 30px;">Observacao</th>
+																	</tr>
+																</thead>
+																<tbody>
+																</tbody>
+															</table>
+														</div>
+
+                                                        </fieldset>
                                                     </div>
                                                 </div>
-                                                <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                                    <span class="fa fa-floppy-o"></span>
-                                                </button>
-                                                <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                                    <span class="fa fa-file-o"></span>
-                                                </button>
-                                                <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                                    <span class="fa fa-backward "></span>
-                                                </button>
-                                            </footer>
+                                                <footer>
+                                                    <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                                        <span class="fa fa-trash"></span>
+                                                    </button>
+                                                    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                                        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                            <span id="ui-id-2" class="ui-dialog-title">
+                                                            </span>
+                                                        </div>
+                                                        <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                            <p>CONFIRMA A EXCLUSÃO ? </p>
+                                                        </div>
+                                                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                            <div class="ui-dialog-buttonset">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                                        <span class="fa fa-floppy-o"></span>
+                                                    </button>
+                                                    <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                                        <span class="fa fa-file-o"></span>
+                                                    </button>
+                                                    <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                                        <span class="fa fa-backward "></span>
+                                                    </button>
+                                                </footer>
                                 </form>
                             </div>
                         </div>
@@ -260,6 +368,7 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
+jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
     $(document).ready(function() {
 
         $("#cnpj").mask("99.999.999/9999-99", {
@@ -319,6 +428,14 @@ include("inc/scripts.php");
             voltar();
         });
 
+        $("#btnRemoverGrupoDeItem").on("click", function() {
+            excluirGrupoDeItem();
+        });
+
+        $("#btnAddGrupoDeItem").on("click", function() {
+				addGrupoDeItem();
+        });
+
         $("#cnpj").on("focusout", function() {
             var cnpj = $("#cnpj").val();
             if (!validacao_cnpj(cnpj)) {
@@ -327,45 +444,6 @@ include("inc/scripts.php");
             }
         });
 
-        $("#unidadeFederacao").on("focusout", function() {
-
-            var id = $("#unidadeFederacao").val();
-
-            populaComboMunicipio(id,
-                function(data) {
-                    var atributoId = '#' + 'municipio';
-                    if (data.indexOf('failed') > -1) {
-
-                        // Código que limpa que limpa um elemento. 
-                        var select = document.getElementById("municipio");
-                        var length = select.options.length;
-                        for (i = length - 1; i >= 0; i--) {
-                            select.options[i] = null;
-                        }
-
-                        $(atributoId).append('<option></option>');
-
-                    } else {
-                        data = data.replace(/failed/g, '');
-                        var piece = data.split("#");
-
-                        var mensagem = piece[0];
-                        var qtdRegs = piece[1];
-                        var arrayRegistros = piece[2].split("|");
-                        var registro = "";
-
-                        $(atributoId).html('');
-                        $(atributoId).append('<option></option>');
-
-                        for (var i = 0; i < qtdRegs; i++) {
-                            registro = arrayRegistros[i].split("^");
-                            $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
-                        }
-                    }
-                }
-            );
-
-        });
 
         $("#cep").on("change", function() {
             var cep = $("#cep").val().replace(/\D/g, '');
@@ -376,14 +454,206 @@ include("inc/scripts.php");
 
     });
 
+    // ############## COMEÇO LISTA ESTOQUE ###################
+
+    function addGrupoDeItem() {
+        var item = $("#formGrupoDeItem").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataGrupoDeItem
+        });
+
+        if (item["sequencialGrupoDeItem"] === '') {
+            if (jsonGrupoItemArray.length === 0) {
+                item["sequencialGrupoDeItem"] = 1;
+            } else {
+                item["sequencialGrupoDeItem"] = Math.max.apply(Math, jsonGrupoItemArray.map(function(o) {
+                    return o.sequencialGrupoDeItem;
+                })) + 1;
+            }
+            
+        } else {
+            item["sequencialGrupoDeItem"] = +item["sequencialGrupoDeItem"];
+        }
+
+        item.estoqueText = $('#estoque option:selected').text().trim();
+        item.grupoItemText = $('#grupoItem option:selected').text().trim();
+
+        var index = -1;
+        $.each(jsonGrupoItemArray, function(i, obj) {
+            if (+$('#sequencialGrupoDeItem').val() === obj.sequencialGrupoDeItem) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonGrupoItemArray.splice(index, 1, item);
+        else
+            jsonGrupoItemArray.push(item);
+
+        $("#jsonGrupoItem").val(JSON.stringify(jsonGrupoItemArray));
+        fillTableGrupoDeItem();
+
+    }
+
+    function processDataGrupoDeItem(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "Estoque")) {
+            return {
+                name: fieldName,
+                value: $("#estoque option:selected").val()
+            };
+        }
+
+
+        if (fieldName !== '' && (fieldId === "GrupoItem")) {
+            return {
+                name: fieldName,
+                value: $("#grupoItem option:selected").val()
+            };
+        }
+
+
+        if (fieldName !== '' && (fieldId === "observacao")) {
+            return {
+                name: fieldName,
+                value: $("#observacao").val()
+            };
+        }
+
+
+        return false;
+    }
+
+    function fillTableGrupoDeItem() {
+        $("#tableGrupoDeItem tbody").empty();
+        if (typeof(jsonGrupoItemArray) != 'undefined') {
+            for (var i = 0; i < jsonGrupoItemArray.length; i++) {
+                var row = $('<tr />');
+                $("#tableGrupoDeItem tbody").append(row);
+                row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonGrupoItemArray[i].sequencialGrupoDeItem + '"><i></i></label></td>'));
+                row.append($('<td class="text-nowrap" onclick="carregaGrupoDeItem(' + jsonGrupoItemArray[i].sequencialGrupoDeItem + ');">' + jsonGrupoItemArray[i].estoqueText + '</td>'));
+                row.append($('<td class="text-nowrap" (' + jsonGrupoItemArray[i].sequencialGrupoDeItem + ');">' + jsonGrupoItemArray[i].grupoItemText + '</td>'));
+                row.append($('<td class="text-nowrap" (' + jsonGrupoItemArray[i].sequencialGrupoDeItem + ');">' + jsonGrupoItemArray[i].observacao + '</td>'));
+
+
+            }
+            clearFormGrupoDeItem();
+        }
+    }
+
+    // function validaGrupoDeItem
+    //     // var existeFuncionario = false;
+    //     // var existeConvenio = false;
+    //     // var existeProduto = false;
+    //     // var achou = false;
+    //     // var funcionarioTitular = +$('#funcionarioTitular').val();
+    //     // var convenio = +$('#convenioTitular').val();
+    //     // var produto = +$('#produtoTitular').val();
+    //     // var sequencial = +$('#sequencialPlanoSaude').val();
+
+
+    //     // if (funcionarioTitular == 0) {
+    //     //     smartAlert("Erro", "Informe um Funcionario.", "error");
+    //     //     return false;
+    //     // }
+
+    //     // if (convenio == 0) {
+    //     //     smartAlert("Erro", "Informe um Convenio.", "error");
+    //     //     return false;
+    //     // }
+
+    //     // if (produto == 0) {
+    //     //     smartAlert("Erro", "Informe um Produto.", "error");
+    //     //     return false;
+    //     // }
+
+    //     // for (i = jsonPlanoSaudeArray.length - 1; i >= 0; i--) {
+    //     //     if ((jsonPlanoSaudeArray[i].descricaoFuncionarioTitular == funcionarioTitular) && (jsonPlanoSaudeArray[i].sequencialPlanoSaude !== sequencial)) {
+    //     //         existeFuncionario = true;
+
+    //     //     }
+    //     //     if ((jsonPlanoSaudeArray[i].descricaoConvenioTitular == convenio) && (jsonPlanoSaudeArray[i].sequencialPlanoSaude !== sequencial)) {
+    //     //         existeConvenio = true;
+
+    //     //     }
+    //     //     if ((jsonPlanoSaudeArray[i].descricaoProdutoTitular == produto) && (jsonPlanoSaudeArray[i].sequencialPlanoSaude !== sequencial)) {
+    //     //         existeProduto = true;
+
+    //     //     }
+    //     //     break;
+    //     // }
+    //     // if (existeFuncionario === true && existeConvenio == true && existeProduto == true) {
+    //     //     smartAlert("Erro", "Funcionário não pode ter o mesmo Produto e Convênio.", "error");
+    //     //     return false;
+    //     // }
+
+    //     // return true;
+    // }
+
+    function clearFormGrupoDeItem() {
+        $('#estoque').val("");
+        $('#grupoItem').val("");
+        $('#observacao').val('');
+    }
+
+    function carregaGrupoDeItem(sequencialGrupoDeItem) {
+        // habilitaTodoCampoGrupoDeItem()
+        var arr = jQuery.grep(jsonGrupoItemArray, function(item, i) {
+            return (item.sequencialGrupoDeItem === sequencialGrupoDeItem);
+        });
+
+
+
+        clearFormGrupoDeItem();
+        if (arr.length > 0) {
+            var item = arr[0];
+            $('#sequencialGrupoDeItem').val(item.sequencialGrupoDeItem);
+            $('#estoque').val(item.estoque);
+            $('#grupoItem').val(item.grupoItem);
+            $('#observacao').val(item.observacao);
+        }        
+    }
+
+    function excluirGrupoDeItem() {
+        var arrSequencial = [];
+        $('#tableGrupoDeItem input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+
+        if (arrSequencial.length > 0) {
+            for (i = jsonGrupoItemArray.length - 1; i >= 0; i--) {
+                var obj = jsonGrupoItemArray[i];
+                if (jQuery.inArray(obj.sequencialGrupoDeItem, arrSequencial) > -1) {
+                    jsonGrupoItemArray.splice(i, 1);
+                }
+            }
+
+            $("#jsonGrupoItem").val(JSON.stringify(jsonGrupoItemArray));
+            fillTableGrupoDeItem();
+        } else {
+            smartAlert("Erro", "Selecione pelo menos 1 grupo de item para excluir.", "error");
+    }
+}
+
+    
+
+
+
     function buscaCep(cep) {
         if (cep != "") {
             var validacep = /^[0-9]{8}$/;
             if (validacep.test(cep)) {
                 $.getJSON("//viacep.com.br/ws/" + cep + "/json/?callback=?", function(dados) {
                     if (!("erro" in dados)) {
-
-                        $("#logradouro").val(dados.logradouro);
+                        var ocorrencia = dados.logradouro.indexOf(" ")
+                        var recorte = dados.logradouro.slice(0, ocorrencia)
+                        var endereco = dados.logradouro.slice((dados.logradouro.length * (-1)) + ocorrencia).trim()
+                        $("#endereco").val(endereco);
+                        $("#logradouro").val(recorte);
                         $("#bairro").val(dados.bairro);
                         $("#cidade").val(dados.localidade);
                         $("#uf").val(dados.uf);
@@ -415,26 +685,45 @@ include("inc/scripts.php");
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var out = piece[1];
+                            var $strArrayGrupoItem = piece[2];
                             piece = out.split("^");
 
-                            // Atributos de vale transporte unitário que serão recuperados: 
                             var codigo = +piece[0];
-                            var ativo = +piece[1];
-                            var unidadeFederacao = piece[2];
-                            var municipio = +piece[3];
-                            var descricao = piece[4];
-                            var cnpj = piece[5];
-                            var nomeMunicipio = piece[6];
+                            var cnpj = piece[1];
+                            var razaoSocial = piece[2];
+                            var apelido = piece[3];
+                            var ativo = piece[4];
+                            var logradouro = piece[5];
+                            var numero = piece[6];
+                            var complemento = piece[7];
+                            var bairro = piece[8];
+                            var cidade = piece[9];
+                            var uf = piece[10];
+                            var notaFiscal = piece[11];
+                            var cep = piece[12];
+                            var endereco = piece[13];
+                            
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
+
                             $("#codigo").val(codigo);
-                            $("#ativo").val(ativo);
-                            $("#unidadeFederacao").val(unidadeFederacao);
-                            $("#municipio").append('<option value="' + municipio + '">' + nomeMunicipio + '</option>');
-                            $("#municipio").val(municipio);
-                            $("#descricao").val(descricao);
                             $("#cnpj").val(cnpj);
-                            $("#verificaRecuperacao").val(1);
+                            $("#razaoSocial").val(razaoSocial);
+                            $("#apelido").val(apelido);
+                            $("#ativo").val(ativo);
+                            $("#logradouro").val(logradouro);
+                            $("#numero").val(numero);
+                            $("#complemento").val(complemento);
+                            $("#bairro").val(bairro);
+                            $("#cidade").val(cidade);
+                            $("#uf").val(uf);
+                            $("#notaFiscal").val(notaFiscal);
+                            $("#cep").val(cep);
+                            $("#endereco").val(endereco);
+                            $("#jsonGrupoItem").val($strArrayGrupoItem);
+
+                            jsonGrupoItemArray =  JSON.parse($("#jsonGrupoItem").val());
+                            fillTableGrupoDeItem();
 
                             return;
 
@@ -487,13 +776,11 @@ include("inc/scripts.php");
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
-
         var id = +$("#codigo").val();
         var cnpj = $("#cnpj").val();
         var razaoSocial = $("#razaoSocial").val();
         var apelido = $("#apelido").val();
         var ativo = $("#ativo").val();
-        var cep = $("#cep").val();
         var logradouro = $("#logradouro").val();
         var numero = $("#numero").val();
         var complemento = $("#complemento").val();
@@ -501,6 +788,9 @@ include("inc/scripts.php");
         var cidade = $("#cidade").val();
         var uf = $("#uf").val();
         var notaFiscal = $("#notaFiscal").val();
+        var cep = $("#cep").val();
+        var endereco = $("#endereco").val();
+        var jsonGrupoItemArray = JSON.parse($("#jsonGrupoItem").val());
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!cnpj) {
@@ -533,7 +823,9 @@ include("inc/scripts.php");
             return;
         }
 
-        gravaFornecedor(id, cnpj,razaoSocial,apelido,ativo,logradouro,numero,complemento,bairro,cidade,uf,notaFiscal,
+        ativo = 1;
+
+        gravaFornecedor(id, cnpj, razaoSocial, apelido, ativo, logradouro, numero, complemento, bairro, cidade, uf, notaFiscal, cep, endereco,jsonGrupoItemArray,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -558,7 +850,7 @@ include("inc/scripts.php");
                     }
                 }
             }
-        );
-
+            
+            );
     }
 </script>

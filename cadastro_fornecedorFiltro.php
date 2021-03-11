@@ -81,57 +81,36 @@ include("inc/ribbon.php");
                                                     <fieldset>
                                                         
                                                         <div class="row">  
-                                                             
-                                                            <section class="col col-4 col-auto">
-                                                                <label class="label" for="descricao">Fornecedor</label>
+ 
+                                                            <section class="col col-3 col-auto">
+                                                                <label class="label" for="apelido">Fornecedor</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" type="text" autocomplete="off">
+                                                                    <input id="apelido" name="apelido" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                              
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="unidadeFederacao">UF</label>
-                                                                <label class="select">
-                                                                    <select id="unidadeFederacao" name="unidadeFederacao" >
-                                                                        <option></option> 
-                                                                        <?php
-                                                                        $reposit = new reposit();
-                                                                        $sql = "select * from Ntl.unidadeFederacao order by sigla";
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
 
-                                                                            $sigla = $row['sigla'];
-                                                                            echo '<option value=' . $sigla . '>' . $sigla . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>            
-                                                            </section>  
-                                                            
                                                             <section class="col col-3 col-auto">
-                                                                <label class="label" for="municipio">Município</label>
-                                                                <label class="select">
-                                                                    <select id="municipio" name="municipio" >
-                                                                        <option></option> 
-                                                                        <?php
-                                                                        $reposit = new reposit();
-                                                                        $sql = " SELECT * FROM Ntl.municipio WHERE ativo = 1 order by descricao";
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
-                                                                            $codigo = (int) $row['codigo'];
-                                                                            $municipio = $row['descricao'];
-                                                                            
-                                                                            echo '<option value=' . $codigo . '>' . $municipio . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>            
+                                                                <label class="label" for="cnpj">CNPJ</label>
+                                                                <label class="input">
+                                                                    <input id="cnpj" name="cnpj" type="text" autocomplete="off">
+                                                                </label>
                                                             </section>
                                                             
                                                                <section class="col col-2 col-auto">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
+                                                                        <option></option>
+                                                                        <option value="1" selected>Sim</option> 
+                                                                        <option value="0">Não</option> 
+                                                                    </select><i></i> 
+                                                                </label> 
+                                                            </section> 
+
+                                                            <section class="col col-1 col-auto">
+                                                                <label class="label">NF</label>
+                                                                <label class="select">
+                                                                    <select id="notaFiscal" name="notaFiscal">
                                                                         <option></option>
                                                                         <option value="1" selected>Sim</option> 
                                                                         <option value="0">Não</option> 
@@ -216,24 +195,13 @@ include("inc/scripts.php");
     }
    
     function listarFiltro() {
-        var descricao = $('#descricao').val();
-        var unidadeFederacao = $('#unidadeFederacao').val();
-        var municipio = +$('#municipio').val();
+        var cnpj = $('#cnpj').val();
+        var apelido = $('#apelido').val();
         var ativo = $('#ativo').val();
-       
-        if (descricao !== "") {
-            descricao = descricao.replace(/^\s+|\s+$/g, "");
-            descricao = encodeURIComponent(descricao);
-        }
-        
-        if (unidadeFederacao !== "") {
-            unidadeFederacao = unidadeFederacao.replace(/^\s+|\s+$/g, "");
-            unidadeFederacao = encodeURIComponent(unidadeFederacao);
-        }
-        
-        
+        var notaFiscal = $('#notaFiscal').val();
+           
          
-        var parametrosUrl = '&descricao=' + descricao + '&unidadeFederacao=' + unidadeFederacao + '&municipio=' + municipio + '&ativo=' + ativo;
+        var parametrosUrl = '&cnpj=' + cnpj + '&apelido=' + apelido + '&ativo=' + ativo + '&notaFiscal=' + notaFiscal;
         $('#resultadoBusca').load('cadastro_fornecedorFiltroListagem.php?' + parametrosUrl);
     }
     

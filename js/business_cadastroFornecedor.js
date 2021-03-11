@@ -1,10 +1,9 @@
-function gravaFornecedor(id,cnpj,razaoSocial,apelido,ativo,logradouro,numero,complemento,bairro,cidade,uf,notaFiscal, callback) {
-    debugger
-    $.ajax({
+function gravaFornecedor(id,cnpj,razaoSocial,apelido,ativo,logradouro,numero,complemento,bairro,cidade,uf,notaFiscal,cep,endereco,jsonGrupoItemArray, callback) {
+    $.ajax({    
         url: 'js/sqlscope_cadastroFornecedor.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", id:id,cnpj:cnpj,razaoSocial:razaoSocial,apelido:apelido,ativo:ativo,logradouro:logradouro,numero:numero,complemento:complemento,bairro:bairro,cidade:cidade,uf:uf,notaFiscal:notaFiscal}, //valores enviados ao script     
+        data: {funcao: "grava", id:id,cnpj:cnpj,razaoSocial:razaoSocial,apelido:apelido,ativo:ativo,logradouro:logradouro,numero:numero,complemento:complemento,bairro:bairro,cidade:cidade,uf:uf,notaFiscal:notaFiscal,cep:cep,endereco:endereco,jsonGrupoItemArray:jsonGrupoItemArray}, //valores enviados ao script     
         success: function (data) {
             callback(data);
         }
