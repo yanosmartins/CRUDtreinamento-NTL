@@ -88,13 +88,30 @@ include("inc/nav.php");
                                                             <input id="codigo" name="codigo" type="text" class="hidden">
                                                         </div>
                                                         <div class="row ">
+                                                            <section class="col col-3">
+                                                                <label class="label" for="localizacaoItem">Unidade</label>
+                                                                <label class="select">
+                                                                    <select id="unidade" name="unidade" class="required">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao FROM Ntl.unidade WHERE ativo = 1 ORDER BY descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $id = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                             <section class="col col-6">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
                                                                     <input id="descricao" name="descricao" autocomplete="off" type="text" class="form-control required" value="">
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
@@ -271,10 +288,12 @@ include("inc/scripts.php");
                             codigo = piece[0];
                             descricao = piece[1];
                             ativo = +piece[2];
+                            unidade = +piece[3];
 
                             $("#codigo").val(codigo);
                             $("#descricao").val(descricao);
                             $("#ativo").val(ativo);
+                            $("#unidade").val(unidade);
 
                             return;
                         }
@@ -326,8 +345,15 @@ include("inc/scripts.php");
 
         var codigo = parseInt($("#codigo").val());
         var descricao = $("#descricao").val().trim().replace(/'/g, " ");
+        var unidade = +$("#unidade").val();
         var ativo = parseInt($("#ativo").val());
 
+        if (unidade == "" || unidade == 0) {
+            smartAlert("Atenção", "Informe a unidade do estoque !", "error");
+            $("#descricao").focus();
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
         if (descricao === "") {
             smartAlert("Atenção", "Informe o nome do estoque !", "error");
             $("#descricao").focus();
@@ -335,7 +361,8 @@ include("inc/scripts.php");
             return;
         }
 
-        gravaEstoque(codigo, descricao, ativo,
+
+        gravaEstoque(codigo, descricao, ativo, unidade,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {
