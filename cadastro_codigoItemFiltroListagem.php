@@ -9,6 +9,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Codigo Item</th>
                     <th class="text-left" style="min-width:30px;">Codigo Fabricante</th>
                     <th class="text-left" style="min-width:30px;">Descricao</th>
+                    <th class="text-left" style="min-width:30px;">Unidade</th>
                     <th class="text-left" style="min-width:30px;">Estoque</th>
                     <th class="text-left" style="min-width:30px;">Grupo </th>
                     <th class="text-left" style="min-width:30px;">Localizacao </th>
@@ -22,6 +23,7 @@ include "js/repositorio.php";
                 $codigoFabricante = $_GET["codigoFabricante"];
                 $descricaoItem = $_GET["descricaoItem"];
                 $estoque = $_GET["estoque"];
+                $unidade = $_GET["unidade"];
                 $grupoItem = $_GET["grupoItem"];
                 $localizacaoItem = $_GET["localizacaoItem"];
                 $ativo = $_GET["ativo"];
@@ -52,10 +54,16 @@ include "js/repositorio.php";
                     $where = $where . " AND CI.ativo = $ativo ";
                 }
 
+                if ($unidade != "") {
+                    $where = $where . " AND CI.unidade = $unidade ";
+                }
+
                 $reposit = new reposit();
                 $sql = "SELECT CI.codigo,CI.codigoItem,CI.codigoFabricante,CI.descricaoItem,CI.estoque,E.descricao AS descricaoEstoque ,
-                                CI.grupoItem,GI.descricao as grupoItemDescricao,CI.localizacaoItem,LI.localizacaoItem as descricaoLocalizacaoItem,CI.ativo
+                                CI.grupoItem,GI.descricao as grupoItemDescricao,CI.localizacaoItem,LI.localizacaoItem as descricaoLocalizacaoItem,CI.ativo,
+                                CI.unidade,U.descricao AS unidadeDescricao
                             FROM Estoque.codigoItem AS CI
+                            LEFT JOIN Ntl.unidade U ON U.codigo = CI.unidade 
                             LEFT JOIN Estoque.estoque E ON CI.estoque = E.codigo 
                             LEFT JOIN Estoque.grupoItem GI ON CI.grupoItem = GI.codigo
                             LEFT JOIN Estoque.localizacaoItem LI ON CI.localizacaoItem = LI.codigo";
@@ -72,11 +80,13 @@ include "js/repositorio.php";
                     $grupoItem = $row['grupoItemDescricao'];
                     $localizacaoItem = $row['descricaoLocalizacaoItem'];
                     $ativo = $row['ativo'];
+                    $unidade = $row['unidadeDescricao'];
 
                     echo '<tr>';
                     echo '<td class="text-left"><a href="cadastro_codigoItemCadastro.php?codigo=' . $codigo . '">'  . $codigoItem . '</a></td>';
                     echo '<td class="text-left">' . $codigoFabricante . '</td>';
                     echo '<td class="text-left">' . $descricaoItem . '</td>';
+                    echo '<td class="text-left">' . $unidade . '</td>';
                     echo '<td class="text-left">' . $estoque . '</td>';
                     echo '<td class="text-left">' . $grupoItem . '</td>';
                     echo '<td class="text-left">' . $localizacaoItem . '</td>';

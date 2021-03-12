@@ -111,6 +111,24 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                         <section class="col col-3">
+                                                                <label class="label" for="localizacaoItem">Unidade</label>
+                                                                <label class="select">
+                                                                    <select id="unidade" name="unidade" class="">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao FROM Ntl.unidade WHERE ativo = 1 ORDER BY descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $id = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        <section class="col col-3">
                                                                 <label class="label" for="estoque">Estoque</label>
                                                                 <label class="select">
                                                                     <select id="estoque" name="estoque" class="" >
@@ -242,9 +260,10 @@ include("inc/scripts.php");
         var grupoItem = $('#grupoItem').val();
         var localizacaoItem = $('#localizacaoItem').val();
         var ativo = $('#ativo').val();
+        var unidade = $('#unidade').val();
 
         var parametrosUrl = '&codigoItem=' + codigoItem + '&codigoFabricante=' + codigoFabricante + '&descricaoItem=' + descricaoItem + '&estoque=' + estoque + 
-                            '&grupoItem=' + grupoItem + '&localizacaoItem=' + localizacaoItem + '&ativo=' + ativo;
+                            '&grupoItem=' + grupoItem + '&localizacaoItem=' + localizacaoItem + '&ativo=' + ativo + '&unidade=' + unidade;
 
         $('#resultadoBusca').load('cadastro_codigoItemFiltroListagem.php?' + parametrosUrl);
     }
