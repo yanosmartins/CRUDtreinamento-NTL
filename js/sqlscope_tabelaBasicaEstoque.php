@@ -37,13 +37,14 @@ function grava()
     $codigo =  (int) $_POST['codigo'];
     $descricao = "'" . $_POST['descricao'] . "'";
     $ativo = (int) $_POST['ativo'];
+    $unidade = (int) $_POST['unidade'];
 
     $sql = "Estoque.estoque_Atualiza
             $codigo, 
             $descricao, 
             $ativo, 
-            $usuario
-            ";
+            $usuario,
+            $unidade";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -80,7 +81,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo, descricao, ativo FROM Estoque.estoque WHERE (0 = 0)";
+    $sql = "SELECT codigo, descricao, ativo, unidade FROM Estoque.estoque WHERE (0 = 0)";
 
     if ($condicaoCodigo) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -96,10 +97,12 @@ function recupera()
         $codigo = (int)$row['codigo'];
         $descricao = $row['descricao'];
         $ativo = (int)$row['ativo'];
+        $unidade = (int)$row['unidade'];
 
         $out = $codigo . "^" .
             $descricao . "^" .
-            $ativo;
+            $ativo . "^" .
+            $unidade;
 
         if ($out == "") {
             echo "failed#";
