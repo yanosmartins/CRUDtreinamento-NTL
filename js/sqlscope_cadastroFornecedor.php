@@ -53,9 +53,10 @@ function grava() {
     $notaFiscal =$_POST['notaFiscal'];  
     $cep =$_POST['cep'];
     $endereco =$_POST['endereco'];
-
-    $strArrayGrupoItem = $_POST['jsonGrupoItemArray'];
+    
+    $strArrayGrupoItem = $_POST['jsonGrupoItemArray'];  
     $arrayGrupoItem =$strArrayGrupoItem;
+    if (!is_null($strArrayGrupoItem)) {
     $xmlGrupoItem = "";
     $nomeXml = "ArrayOfGrupoItem";
     $nomeTabela = "fornecedorGrupoItem";
@@ -91,7 +92,12 @@ function grava() {
         return;
     }
     $xmlGrupoItem = "'" . $xmlGrupoItem . "'";
+} else {
 
+    $xmlGrupoItem = "'" . '<?xml version="1.0"?>' . '<' . "ArrayOfGrupoItem" . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'. "</ArrayOfGrupoItem>" ."'";
+}
+
+$ativo =1;
 
     $sql = "Ntl.fornecedor_Atualiza ".
       $id . ",".

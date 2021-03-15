@@ -105,7 +105,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">CEP</label>
                                                                 <label class="input">
-                                                                    <input id="cep" name="cep" type="text" autocomplete="off" maxlength="100">
+                                                        <input id="cep" name="cep" type="text" autocomplete="off" maxlength="100" class="required">
 
                                                                 </label>
                                                             </section>
@@ -128,7 +128,7 @@ include("inc/nav.php");
                                                             <section class="col col-1">
                                                                 <label class="label">Número</label>
                                                                 <label class="input">
-                                                                    <input id="numero" name="numero" type="text" autocomplete="off" maxlength="100">
+                                             <input id="numero" name="numero" type="text" autocomplete="off" maxlength="100" class="required">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-4">
@@ -185,17 +185,17 @@ include("inc/nav.php");
                                                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseGrupoDeItem" class="collapsed" id="accordionDadosContrato">
                                                             <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                             <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                           Grupo de Item
+                                                            Grupo de Item
                                                         </a>
                                                     </h4>
                                                 </div>
                                                 <div id="collapseGrupoDeItem" class="panel-collapse collapse">
                                                     <div class="panel-body no-padding">
-                                                    <input id="jsonGrupoItem" name="jsonGrupoItem" type="hidden" value="[]">
+                                                        <input id="jsonGrupoItem" name="jsonGrupoItem" type="hidden" value="[]">
                                                         <fieldset id="formGrupoDeItem">
-                                                        <input id="sequencialGrupoDeItem" name="sequencialGrupoDeItem" type="hidden" value="">
-														
-                                                        <br>
+                                                            <input id="sequencialGrupoDeItem" name="sequencialGrupoDeItem" type="hidden" value="">
+
+                                                            <br>
                                                             <div class="row">
                                                                 <section class="col col-3">
                                                                     <label class="label">Estoque</label>
@@ -231,7 +231,7 @@ include("inc/nav.php");
 
                                                                                 $row = array_map('mb_strtoupper', $row);
                                                                                 $codigo = $row['codigo'];
-                                                                                $descricao =$row['descricao'];
+                                                                                $descricao = $row['descricao'];
                                                                                 echo '<option value=' . $codigo . '>  ' . $descricao . '</option>';
                                                                             }
                                                                             ?>
@@ -246,34 +246,34 @@ include("inc/nav.php");
 
                                                                     </label>
                                                                 </section>
-                                                                
-                                                                <div class="row">
-															<section class="col col-4">
 
-																<button id="btnAddGrupoDeItem" type="button" class="btn btn-primary" title="Adicionar Item">
-																	<i class="fa fa-plus"></i>
-																</button>
-																<button id="btnRemoverGrupoDeItem" type="button" class="btn btn-danger" title="Remover Item">
-																	<i class="fa fa-minus"></i>
-																</button>
-															</section>
-														</div>
+                                                                <div class="row">
+                                                                    <section class="col col-4">
+
+                                                                        <button id="btnAddGrupoDeItem" type="button" class="btn btn-primary" title="Adicionar Item">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverGrupoDeItem" type="button" class="btn btn-danger" title="Remover Item">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
                                                             </div>
                                                             <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-															<table id="tableGrupoDeItem" class="table table-bordered table-striped table-condensed table-hover dataTable">
-																<thead>
-																	<tr role="row">
+                                                                <table id="tableGrupoDeItem" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
 
-																		<th class="text-left" style="min-width: 10px;"></th>
-																		<th class="text-left" style="min-width: 10px;">Estoque</th>
-																		<th class="text-left" style="min-width: 10px;">Grupo de Item</th>
-																		<th class="text-left" style="min-width: 30px;">Observacao</th>
-																	</tr>
-																</thead>
-																<tbody>
-																</tbody>
-															</table>
-														</div>
+                                                                            <th class="text-left" style="min-width: 10px;"></th>
+                                                                            <th class="text-left" style="min-width: 10px;">Estoque</th>
+                                                                            <th class="text-left" style="min-width: 10px;">Grupo de Item</th>
+                                                                            <th class="text-left" style="min-width: 30px;">Observacao</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
 
                                                         </fieldset>
                                                     </div>
@@ -368,7 +368,7 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
-jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
+    jsonGrupoItemArray = JSON.parse($("#jsonGrupoItem").val());
     $(document).ready(function() {
 
         $("#cnpj").mask("99.999.999/9999-99", {
@@ -421,7 +421,9 @@ jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
         });
 
         $("#btnGravar").on("click", function() {
+            $ativo = 1;
             gravar();
+
         });
 
         $("#btnVoltar").on("click", function() {
@@ -433,7 +435,7 @@ jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
         });
 
         $("#btnAddGrupoDeItem").on("click", function() {
-				addGrupoDeItem();
+            addGrupoDeItem();
         });
 
         $("#cnpj").on("focusout", function() {
@@ -471,7 +473,7 @@ jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
                     return o.sequencialGrupoDeItem;
                 })) + 1;
             }
-            
+
         } else {
             item["sequencialGrupoDeItem"] = +item["sequencialGrupoDeItem"];
         }
@@ -615,7 +617,7 @@ jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
             $('#estoque').val(item.estoque);
             $('#grupoItem').val(item.grupoItem);
             $('#observacao').val(item.observacao);
-        }        
+        }
     }
 
     function excluirGrupoDeItem() {
@@ -636,10 +638,10 @@ jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
             fillTableGrupoDeItem();
         } else {
             smartAlert("Erro", "Selecione pelo menos 1 grupo de item para excluir.", "error");
+        }
     }
-}
 
-    
+
 
 
 
@@ -702,7 +704,7 @@ jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
                             var notaFiscal = piece[11];
                             var cep = piece[12];
                             var endereco = piece[13];
-                            
+
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
 
@@ -722,7 +724,7 @@ jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
                             $("#endereco").val(endereco);
                             $("#jsonGrupoItem").val($strArrayGrupoItem);
 
-                            jsonGrupoItemArray =  JSON.parse($("#jsonGrupoItem").val());
+                            jsonGrupoItemArray = JSON.parse($("#jsonGrupoItem").val());
                             fillTableGrupoDeItem();
 
                             return;
@@ -823,9 +825,7 @@ jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
             return;
         }
 
-        ativo = 1;
-
-        gravaFornecedor(id, cnpj, razaoSocial, apelido, ativo, logradouro, numero, complemento, bairro, cidade, uf, notaFiscal, cep, endereco,jsonGrupoItemArray,
+        gravaFornecedor(id, cnpj, razaoSocial, apelido, ativo, logradouro, numero, complemento, bairro, cidade, uf, notaFiscal, cep, endereco, jsonGrupoItemArray,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -850,7 +850,7 @@ jsonGrupoItemArray =JSON.parse($("#jsonGrupoItem").val());
                     }
                 }
             }
-            
-            );
+
+        );
     }
 </script>
