@@ -88,7 +88,7 @@ include("inc/nav.php");
 
                                                         <div id="formFolhaPontoMensal" class="col-sm-12">
                                                             <input id="codigo" name="codigo" type="hidden" value="0">
-                                                            
+
                                                             <div class="form-group">
 
                                                                 <div class="row">
@@ -145,10 +145,10 @@ include("inc/nav.php");
                                                                     <?php
                                                                     setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
                                                                     date_default_timezone_set('America/Sao_Paulo');
-                                                                    $dataAtual = strftime('%d/%m/%Y', strtotime('today'));
+                                                                    $dataAtual = strftime('%m/%Y', strtotime('today'));
                                                                     ?>
                                                                     <section class="col col-2">
-                                                                        <label class="label" for="mesAnoFolhaPonto">Mês Corrente</label>
+                                                                        <label class="label" for="mesAnoFolhaPonto">Mês/Ano</label>
                                                                         <label class="input">
                                                                             <i class="icon-append fa fa-calendar"></i>
                                                                             <input id="mesAnoFolhaPonto" name="mesAnoFolhaPonto" style="text-align: center;" autocomplete="off" type="text" class="readonly" readonly value="<?= $dataAtual  ?>">
@@ -312,7 +312,7 @@ include("inc/nav.php");
                                                                     </section>
                                                                     <section class="col col-md-2">
                                                                         <label class="label"> </label>
-                                                                        <button id="btnGravar" type="button" class="btn btn-success" style="display:<?php echo $esconderBtnGravar ?>">
+                                                                        <button id="btnGravar" type="button" class="btn btn-success">
                                                                             <i class="">Confirmar Alterações</i>
                                                                         </button>
                                                                     </section>
@@ -516,7 +516,7 @@ include("inc/scripts.php");
     $(document).ready(function() {
 
         $("#inputHoraEntrada").mask("99:99:99");
-        
+
 
         $('#inputHoraEntrada').clockpicker({
             donetext: 'Done',
@@ -587,7 +587,7 @@ include("inc/scripts.php");
 
             var atraso = $("#atraso-" + dia)
             var inputAtraso = $("#inputAtraso").val()
-            
+
             var lancamento = $("#lancamento-" + dia)
             var inputLancamento = $("#inputLancamento").val()
 
@@ -652,42 +652,68 @@ include("inc/scripts.php");
         var arrayFolha = $("input[name='dia']").serializeArray()
 
         var arrayDia = arrayFolha.map(folha => {
-            return { dia: folha.value }
+            return {
+                dia: folha.value
+            }
         })
 
         arrayFolha = $("input[name='horaEntrada']").serializeArray()
         var arrayHoraEntrada = arrayFolha.map(folha => {
-            return { horaEntrada: folha.value }
+            return {
+                horaEntrada: folha.value
+            }
         })
 
         arrayFolha = $("input[name='inicioAlmoco']").serializeArray()
         var arrayInicioAlmoco = arrayFolha.map(folha => {
-            return { inicioAlmoco: folha.value }
+            return {
+                inicioAlmoco: folha.value
+            }
         })
 
         arrayFolha = $("input[name='fimAlmoco']").serializeArray()
         var arrayFimAlmoco = arrayFolha.map(folha => {
-            return { fimAlmoco: folha.value }
+            return {
+                fimAlmoco: folha.value
+            }
         })
 
         arrayFolha = $("input[name='horaSaida']").serializeArray()
         var arrayHoraSaida = arrayFolha.map(folha => {
-            return { horaSaida: folha.value }
+            return {
+                horaSaida: folha.value
+            }
+        })
+
+        arrayFolha = $("input[name='horaExtra']").serializeArray()
+        var arrayHoraExtra = arrayFolha.map(folha => {
+            return {
+                horaExtra: folha.value
+            }
+        })
+
+        arrayFolha = $("input[name='atraso']").serializeArray()
+        var arrayAtraso = arrayFolha.map(folha => {
+            return {
+                atraso: folha.value
+            }
         })
 
         arrayFolha = $("select[name='lancamento'] option:selected")
         var arrayLancamento = new Array()
-        arrayFolha.each((index,el)=>{
+        arrayFolha.each((index, el) => {
             let value = $(el).val()
-            arrayLancamento.push({lancamento:value})
+            arrayLancamento.push({
+                lancamento: value
+            })
         })
 
         var codigo = parseInt($("#codigo").val())
         var ativo = parseInt($("#ativo").val())
         var funcionario = $("#funcionario").val();
         var mesAnoFolhaPonto = $("#mesAnoFolhaPonto").val().split('/')
-        var mes = mesAnoFolhaPonto[1]
-        var ano = mesAnoFolhaPonto[2]
+        var mes = mesAnoFolhaPonto[0]
+        var ano = mesAnoFolhaPonto[1]
         var observacaoFolhaPontoMensal = $("#observacaoFolhaPontoMensal").val();
 
         var data = new Date().getMonth()
@@ -700,8 +726,12 @@ include("inc/scripts.php");
                 horaEntrada: arrayHoraEntrada[index].horaEntrada,
                 horaSaida: arrayHoraSaida[index].horaSaida,
                 inicioAlmoco: arrayInicioAlmoco[index].inicioAlmoco,
-                fimAlmoco : arrayFimAlmoco[index].fimAlmoco,
-                lancamento: arrayLancamento[index].lancamento
+                fimAlmoco: arrayFimAlmoco[index].fimAlmoco,
+                horaExtra: arrayHoraExtra[index].horaExtra,
+                atraso: arrayAtraso[index].atraso,
+                lancamento: arrayLancamento[index].lancamento,
+                mes: mes,
+                ano: ano
 
             }
 
@@ -709,34 +739,33 @@ include("inc/scripts.php");
 
         var folhaPontoInfo = {
             codigo: codigo,
+            ativo: ativo,   
             funcionario: funcionario,
-            mes: mes,
-            ano: ano,
             observacao: observacaoFolhaPontoMensal
         }
 
-            gravaFolhaPontoMensal(folhaPontoInfo,folhaPontoMensalTabela,
-                function(data) {
+        gravaFolhaPontoMensal(folhaPontoInfo, folhaPontoMensalTabela,
+            function(data) {
 
-                    if (data.indexOf('sucess') < 0) {
-                        var piece = data.split("#");
-                        var mensagem = piece[1];
-                        if (mensagem !== "") {
-                            smartAlert("Atenção", mensagem, "error");
-                            $("#btnGravar").prop('disabled', false);
-                            return false;
-                        } else {
-                            smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                            $("#btnGravar").prop('disabled', false);
-                            return false;
-                        }
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnGravar").prop('disabled', false);
+                        return false;
                     } else {
-                        var piece = data.split("#");
-                        smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                        novo();
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                        $("#btnGravar").prop('disabled', false);
+                        return false;
                     }
+                } else {
+                    var piece = data.split("#");
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    novo();
                 }
-            );
+            }
+        );
     }
 
 

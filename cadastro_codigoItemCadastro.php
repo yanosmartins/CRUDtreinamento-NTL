@@ -96,27 +96,43 @@ include("inc/nav.php");
                                                                     <input id="codigoFabricante" name="codigoFabricante" type="text" class="required" maxlength="50" required autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3 col-auto">
+                                                            <section class="col col-5 col-auto">
                                                                 <label class="label" for="descricaoItem">Descrição do item</label>
                                                                 <label class="input">
                                                                     <input id="descricaoItem" name="descricaoItem" type="text" class="required" maxlength="255" required autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="ativo">Ativo</label>
-                                                                <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required" required>
-                                                                        <option value='1'>Sim</option>
-                                                                        <option value='0'>Não</option>
-                                                                    </select><i></i>
+                                                            <section class="col col-1 col-auto">
+                                                                <label class="label" for="indicador">Indicador</label>
+                                                                <label class="input">
+                                                                    <input id="indicador" name="indicador" type="text" class="" maxlength="5"  autocomplete="off">
                                                                 </label>
                                                             </section>
+
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-3">
+                                                                <label class="label" for="localizacaoItem">Unidade</label>
+                                                                <label class="select">
+                                                                    <select id="unidade" name="unidade" class="required">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao FROM Ntl.unidade WHERE ativo = 1 ORDER BY descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $id = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
                                                                 <label class="label" for="estoque">Estoque</label>
                                                                 <label class="select">
-                                                                    <select id="estoque" name="estoque" class="required" required>
+                                                                    <select id="estoque" name="estoque" class="required readonly" required disabled>
                                                                         <option value=""></option>
                                                                         <?php
                                                                         $reposit = new reposit();
@@ -164,6 +180,17 @@ include("inc/nav.php");
                                                                             echo '<option value=' . $id . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="ativo">Ativo</label>
+                                                                <label class="select">
+                                                                    <select id="ativo" name="ativo" class="required" required>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0'>Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -307,6 +334,9 @@ include("inc/scripts.php");
         $("#estoque").on("change", function() {
             popularComboGrupoItem()
         });
+        $("#unidade").on("change", function() {
+            popularComboEstoque()
+        });
 
         carregaPagina();
     });
@@ -338,17 +368,23 @@ include("inc/scripts.php");
                             var estoque = piece[4]
                             var grupoItem = piece[5]
                             var localizacaoItem = piece[6]
+                            var unidade = piece[7]
+                            var indicador = piece[8]
+                            var ativo = piece[9]
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
                             $("#codigoItem").val(codigoItem);
                             $("#codigoFabricante").val(codigoFabricante);
                             $("#descricaoItem").val(descricaoItem);
-                         
+
                             $("#estoque").val(estoque);
-                            popularComboGrupoItem(); 
+                            popularComboGrupoItem();
                             $("#grupoItem").val(grupoItem);
                             $("#localizacaoItem").val(localizacaoItem);
+                            $("#unidade").val(unidade);
+                            $("#indicador").val(indicador);
+                            $("#ativo").val(ativo);
 
                             return;
                         }
@@ -405,6 +441,8 @@ include("inc/scripts.php");
         var grupoItem = $('#grupoItem').val();
         var localizacaoItem = $('#localizacaoItem').val();
         var ativo = +$('#ativo').val();
+        var unidade = +$('#unidade').val();
+        var indicador = $('#indicador').val();
 
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
@@ -422,6 +460,12 @@ include("inc/scripts.php");
 
         if (!descricaoItem) {
             smartAlert("Atenção", "Informe a descricao do item", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!unidade) {
+            smartAlert("Atenção", "Informe a unidade", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
@@ -445,7 +489,7 @@ include("inc/scripts.php");
         }
 
         //Chama a função de gravar do business de convênio de saúde.
-        gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo,
+        gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo, unidade, indicador,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -483,6 +527,46 @@ include("inc/scripts.php");
                     } else {
                         $("#grupoItem").prop("disabled", false)
                         $("#grupoItem").removeClass("readonly")
+                        data = data.replace(/failed/g, '');
+                        var piece = data.split("#");
+
+                        var mensagem = piece[0];
+                        var qtdRegs = piece[1];
+                        var arrayRegistros = piece[2].split("|");
+                        var registro = "";
+
+                        $(atributoId).html('');
+                        $(atributoId).append('<option></option>');
+
+                        for (var i = 0; i < qtdRegs; i++) {
+                            registro = arrayRegistros[i].split("^");
+                            $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
+                        }
+                    }
+                }
+            );
+        }
+    }
+
+    function popularComboEstoque() {
+        var unidade = +$("#unidade").val()
+        $("#grupoItem").val("")
+        $("#grupoItem").prop("disabled", true)
+        $("#grupoItem").addClass("readonly")
+        if (unidade != 0) {
+            populaComboEstoque(unidade,
+                function(data) {
+                    var atributoId = '#' + 'estoque';
+                    if (data.indexOf('failed') > -1) {
+                        smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
+                        $("#unidade").focus()
+                        $("#estoque").val("")
+                        $("#estoque").prop("disabled", true)
+                        $("#estoque").addClass("readonly")
+                        return;
+                    } else {
+                        $("#estoque").prop("disabled", false)
+                        $("#estoque").removeClass("readonly")
                         data = data.replace(/failed/g, '');
                         var piece = data.split("#");
 

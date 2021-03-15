@@ -1,12 +1,13 @@
 
-function gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo, callback) {
+function gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo, unidade, indicador,callback) {
     $.ajax({
         url: 'js/sqlscope_cadastroCodigoItem.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {
             funcao: "grava", id: id, codigoItem: codigoItem, codigoFabricante: codigoFabricante, 
-            descricaoItem: descricaoItem, estoque: estoque, grupoItem: grupoItem, localizacaoItem: localizacaoItem,ativo: ativo
+            descricaoItem: descricaoItem, estoque: estoque, grupoItem: grupoItem, localizacaoItem: localizacaoItem, 
+            ativo: ativo, unidade: unidade, indicador: indicador
         },
         success: function (data) {
             callback(data);
@@ -51,6 +52,21 @@ function populaComboGrupoItem(estoque, callback) {
             callback(data);
         }
 
+    });
+
+    return;
+}
+
+function populaComboEstoque(unidade, callback) {
+    $.ajax({
+        url: 'js/sqlscope_cadastroCodigoItem.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: 'populaComboEstoque', unidade: unidade }, //valores enviados ao script     
+        async: false,
+        success: function (data) {
+            callback(data);
+        }
     });
 
     return;

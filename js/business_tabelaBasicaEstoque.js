@@ -1,4 +1,4 @@
-function gravaEstoque(codigo, descricao, ativo, callback) {
+function gravaEstoque(codigo, descricao, ativo, unidade, callback) {
   $.ajax({
     url: 'js/sqlscope_tabelaBasicaEstoque.php',
     dataType: 'html', //tipo do retorno
@@ -8,6 +8,7 @@ function gravaEstoque(codigo, descricao, ativo, callback) {
       codigo: codigo,
       descricao: descricao,
       ativo: ativo,
+      unidade : unidade,
     },
     success: function (data) {
       callback(data)

@@ -21,6 +21,10 @@ if ($funcao == 'populaComboGrupoItem') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'populaComboEstoque') {
+    call_user_func($funcao);
+}
+
 return;
 
 function grava()
@@ -42,8 +46,10 @@ function grava()
     $grupoItem = (int)$_POST['grupoItem'];
     $localizacaoItem = (int)$_POST['localizacaoItem'];
     $ativo = (int)$_POST['ativo'];
+    $unidade = (int)$_POST['unidade'];
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
+    $indicador = (string)"'" . $_POST['indicador'] . "'";
 
     $sql = "Estoque.codigoItem_Atualiza
             $id,
@@ -54,7 +60,9 @@ function grava()
             $grupoItem,
             $localizacaoItem,
             $ativo,
-            $usuario";
+            $usuario,
+            $unidade,
+            $indicador";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -77,7 +85,8 @@ function recupera()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT CI.codigo,CI.codigoItem,CI.codigoFabricante,CI.descricaoItem,CI.estoque,CI.grupoItem,CI.localizacaoItem,CI.ativo
+    $sql = "SELECT CI.codigo, CI.codigoItem, CI.codigoFabricante, CI.descricaoItem, CI.estoque, 
+                    CI.grupoItem, CI.localizacaoItem, CI.ativo, CI.unidade, CI.indicador
             FROM Estoque.codigoItem AS CI WHERE codigo = $id";
 
     $reposit = new reposit();
@@ -96,6 +105,8 @@ function recupera()
         $grupoItem = $row['grupoItem'];
         $localizacaoItem = $row['localizacaoItem'];
         $ativo = (int)$row['ativo'];
+        $unidade = (int)$row['unidade'];
+        $indicador = $row['indicador'];
       
         $out = $id . "^" .
             $codigoItem . "^" .
@@ -104,6 +115,8 @@ function recupera()
             $estoque . "^" .
             $grupoItem . "^" .
             $localizacaoItem . "^" .
+            $unidade . "^" .
+            $indicador  . "^" .
             $ativo;
 
         if ($out == "") {
@@ -148,6 +161,35 @@ function populaComboGrupoItem()
     if ($estoque > 0) {
         $sql = "SELECT codigo, descricao, estoque FROM Estoque.grupoItem 
                 WHERE ativo = 1 AND estoque = $estoque ORDER BY descricao";
+
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+        $contador = 0;
+        $out = "";
+        foreach ($result as $row) {
+            $id = $row['codigo'];
+            $descricao = $row['descricao'];
+
+            $out = $out . $id . "^" . $descricao . "|";
+
+            $contador = $contador + 1;
+        }
+        if ($out != "") {
+            echo "sucess#" . $contador . "#" . $out;
+            return;
+        }
+        echo "failed#";
+        return;
+    }
+}
+
+
+function populaComboEstoque()
+{
+    $unidade = $_POST["unidade"];
+    if ($unidade > 0) {
+        $sql = "SELECT codigo, descricao, unidade FROM Estoque.estoque 
+                WHERE ativo = 1 AND unidade = $unidade ORDER BY descricao";
 
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);

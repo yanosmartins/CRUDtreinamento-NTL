@@ -7,6 +7,7 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Estoque</th>
+                    <th class="text-left" style="min-width:30px;">Unidade</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
@@ -18,15 +19,22 @@ include "js/repositorio.php";
 
                 if ($_GET["descricao"] != "") {
                     $descricao = $_GET["descricao"];
-                    $where = $where . " AND ([descricao] like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (E.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
 
                 if ($_GET["ativo"] != "") {
                     $ativo = (int) $_GET["ativo"];
-                    $where = $where . " and ativo = " . $ativo;
+                    $where = $where . " and E.ativo = " . $ativo;
                 }
 
-                $sql = " SELECT codigo, descricao, ativo FROM Estoque.estoque  ";
+                $unidade = $_GET["unidade"];
+                if ($unidade != "") {
+                    $where = $where . " and E.unidade = " . (int)$unidade;
+                }
+    
+
+                $sql = "SELECT E.codigo, E.descricao, E.unidade, U.descricao AS unidadeDescricao, E.ativo FROM Estoque.estoque AS E
+                        LEFT JOIN Ntl.unidade U ON U.codigo = E.unidade ";
 
                 $sql = $sql . $where;
                 $sql .= " order by descricao ";
@@ -37,11 +45,12 @@ include "js/repositorio.php";
                     $codigo = (int) $row['codigo'];
                     $descricao = $row['descricao'];
                     $ativo = $row['ativo'];
-
+                    $unidade = $row['unidadeDescricao'];
                     $ativo == 1 ? $ativo = 'Sim' : $ativo = 'Não';
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="tabelaBasica_estoqueCadastro.php?id=' . $codigo . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left">' . $unidade . '</td>';
                     echo '<td class="text-left">' . $ativo . '</td>';
                     echo '</tr >';
                 }
