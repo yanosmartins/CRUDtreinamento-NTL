@@ -11,12 +11,12 @@ function gravaFolhaPontoMensal(folhaPontoInfo,folhaPontoMensalTabela,callback) {
     });
   }
   
-  function recuperaFolhaPontoMensal(callback) {
+  function recuperaFolhaPontoMensal(funcionario = 0,callback) {
     $.ajax({
         url: 'js/sqlscope_beneficioFolhaPontoMensal.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: 'recupera'}, //valores enviados ao script     
+        data: {funcao: 'recupera',funcionario:funcionario}, //valores enviados ao script     
               
         success: function (data) {
             callback(data); 

@@ -111,19 +111,26 @@ function grava()
 function recupera()
 {
 
-    $funcionario = "";
+    $funcionario = $_POST["funcionario"];
     $folha = "";
 
-    $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
+    if($funcionario != 0 ){
+        $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
+        INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
+        INNER JOIN Ntl.usuario U ON U.funcionario = FU.codigo
+        WHERE FU.codigo = " . $funcionario . " AND F.mesAno = '2021-03-02'";
+    }else{
+        $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
             INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
             INNER JOIN Ntl.usuario U ON U.funcionario = FU.codigo
-            WHERE U.login = '" . $_SESSION['login'] . "'";
-
+            WHERE U.login = '" . $_SESSION['login'] . "' AND F.mesAno = '2021-03-02'";
+    }
+    
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     if($row = $result[0]){
-        $funcionario = $row['folha'];
+        $folha = $row['folha'];
         $funcionario = $row['funcionario'];
     }
 
@@ -180,7 +187,9 @@ function recupera()
         array_push($arrayPonto, $arrayRow);
     }
 
-    echo "sucess#" . $out . $arrayPonto;
+    $jsonFolha = json_encode($arrayPonto);
+
+    echo "sucess#" . $out . $jsonFolha;
     return;
 }
 

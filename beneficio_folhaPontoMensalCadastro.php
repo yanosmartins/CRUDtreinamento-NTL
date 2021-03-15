@@ -605,6 +605,10 @@ include("inc/scripts.php");
 
         });
 
+        $('#funcionario').on('change',function(){
+            selecionaFolha();
+        });
+
 
         $('#btnNovo').on("click", function() {
             novo()
@@ -799,9 +803,8 @@ include("inc/scripts.php");
         });
     }
 
-
     function carregaFolhaPontoMensal() {
-        recuperaFolhaPontoMensal(
+        recuperaFolhaPontoMensal(0,
             function(data) {
                 data = data.replace(/failed/g, '');
                 var piece = data.split("#");
@@ -818,7 +821,34 @@ include("inc/scripts.php");
                 var observacao = piece[2];
                 var mesAnoFolhaPonto = piece[3];
 
+                //Atributos de cliente        
+                $("#codigo").val(codigo);
+                $("#funcionario").val(funcionario);
+                $("#obvercao").val(observacao);
+                $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
 
+            }
+        );
+    }
+
+    function selecionaFolha(){
+        const funcionario = $("#funcionario option:selected").val();
+        recuperaFolhaPontoMensal(funcionario,
+            function(data) {
+                data = data.replace(/failed/g, '');
+                var piece = data.split("#");
+
+                //Atributos de Cliente
+                var mensagem = piece[0];
+                var out = piece[1];
+
+                piece = out.split("^");
+                console.table(piece);
+                //Atributos de cliente 
+                var codigo = +piece[0];
+                var funcionario = piece[1];
+                var observacao = piece[2];
+                var mesAnoFolhaPonto = piece[3];
 
                 //Atributos de cliente        
                 $("#codigo").val(codigo);
