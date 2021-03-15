@@ -739,7 +739,7 @@ include("inc/scripts.php");
 
         var folhaPontoInfo = {
             codigo: codigo,
-            ativo: ativo,   
+            ativo: ativo,
             funcionario: funcionario,
             observacao: observacaoFolhaPontoMensal
         }
@@ -797,38 +797,36 @@ include("inc/scripts.php");
 
 
     function carregaFolhaPontoMensal() {
-                recuperaFolhaPontoMensal(
-                    function(data) {
-                        data = data.replace(/failed/g, '');
-                        var piece = data.split("#");
+        recuperaFolhaPontoMensal(
+            function(data) {
+                data = data.replace(/failed/g, '');
+                var piece = data.split("#");
 
-                        //Atributos de Cliente
-                        var mensagem = piece[0];
-                        var out = piece[1];
+                //Atributos de Cliente
+                var mensagem = piece[0];
+                var out = piece[1];
 
-                        piece = out.split("^");
-                        console.table(piece);
-                        //Atributos de cliente 
-                        var codigo = +piece[0];
-                        var funcionario = piece[1];
-                        var observacao = piece[2];
-                        var mesAnoFolhaPonto = piece[3];
-
-
-
-                        //Atributos de cliente        
-                        $("#codigo").val(codigo);
-                        $("#funcionario").val(funcionario);
-                        $("#projeto").val(projeto);
-                        $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
+                piece = out.split("^");
+                console.table(piece);
+                //Atributos de cliente 
+                var codigo = +piece[0];
+                var funcionario = piece[1];
+                var observacao = piece[2];
+                var mesAnoFolhaPonto = piece[3];
 
 
 
+                //Atributos de cliente        
+                $("#codigo").val(codigo);
+                $("#funcionario").val(funcionario);
+                $("#projeto").val(projeto);
+                $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
 
 
-                    }
-                );
+
+
+
             }
-        }
+        );
     }
 </script>
