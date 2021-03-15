@@ -22,13 +22,13 @@ return;
 function grava()
 {
     $reposit = new reposit();
-    // $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("FOLHAPONTO_ACESSAR|FOLHAPONTO_GRAVAR");
 
-    // if ($possuiPermissao === 0) {
-    //     $mensagem = "O usuário não tem permissão para gravar!";
-    //     echo "failed#" . $mensagem . ' ';
-    //     return;
-    // }
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para gravar!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
 
     session_start();
     $usuario = "'" .  $_SESSION['login'] . "'";
@@ -44,13 +44,9 @@ function grava()
     $observacao = "'" . (string)$folhaPontoInfo['observacao'] . "'";
     $ativo = (int) $folhaPontoInfo['ativo'];
 
-
-
-
-
-    /* Verificar como os dados estão sendo passados e então montar o XML */
-    $strArrayFolhaPontoMensal = $_POST['folhaPontoMensalTabela'];
-    $arrayFolhaPontoMensal = $strArrayFolhaPontoMensal;
+    /* Objeto com o informações pertencentes ao array do XML */
+    $folhaPontoMensal = $_POST['folhaPontoMensalTabela'];
+    $arrayFolhaPontoMensal = $folhaPontoMensal;
     $xmlFolhaPontoMensal = "";
     $nomeXml = "ArrayOfPonto";
     $nomeTabela = "ponto";
@@ -93,7 +89,7 @@ function grava()
     $xmlFolhaPontoMensal = "'" . $xmlFolhaPontoMensal . "'";
 
     $sql =
-        "Ntl.folhaPontoMensal_Atualiza 
+        "Funcionario.folhaPontoMensal_Atualiza 
         $codigo,
         $ativo,
         $funcionario,
@@ -126,8 +122,8 @@ function recupera()
 
 
     $sql =
-        "SELECT F.codigo, F.funcionario, F.observacao,
-        FROM Ntl.folhaPontoMensal F
+        "SELECT F.codigo, FU.codigo AS 'funcionario', F.mesAno, F.observacao
+        FROM Funcionario.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
         WHERE (0=0) AND F.codigo = " . $id;
 
@@ -135,29 +131,28 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if ($row = $result[0])
+    if ($row = $result[0]) {
 
         $id = $row['codigo'];
-    $funcionario = $row['funcionario'];
-    $observacao = $row['observacao'];
+        $funcionario = $row['funcionario'];
+        $mesAno = $row['mesAno'];
+        $observacao = $row['observacao'];
 
-    $out =
-        $id . "^" .
-        $funcionario . "^" .
-        $observacao;
+        $out =
+            $id . "^" .
+            $funcionario . "^" .
+            $observacao;
+    }
 
     if ($out == "") {
         echo "failed#";
         return;
     }
 
-    $sql =
-        "SELECT P.dia,P.mes,P.ano,P.horaEntrada,P.horaSaida,
-        P.inicioAlmoco,P.fimAlmoco,P.lancamento
-        FROM Ntl.ponto P 
-        INNER JOIN Ntl.folhaPontoMensal F 
-        ON F.codigo = P.folhaPontoMensal 
-        WHERE (0=0) AND F.codigo = " . $id;
+    $sql =  "SELECT FD.dia,FD.horaEntrada,FD.horaSaida,FD.inicioAlmoco,FD.fimAlmoco,FD.horaExtra,FD.atraso,FD.lancamento 
+    FROM Funcionario.folhaPontoMensalDetalheDiario FD 
+    INNER JOIN Funcionario.folhaPontoMensal F ON F.codigo = FD.folhaPontoMensal
+    WHERE (0=0) AND F.codigo = " . $id;
 
     $result = $reposit->RunQuery($sql);
 
@@ -166,14 +161,14 @@ function recupera()
     foreach ($result as $row) {
 
         $arrayRow = array(
-            "dia"           =>  $row[""],
-            "entrada"       =>  $row[""],
-            "inicioAlmoco"  =>  $row[""],
-            "fimAlmoco"     =>  $row[""],
-            "saida"         =>  $row[""],
-            "horaExtra"     =>  $row[""],
-            "atraso"        =>  $row[""],
-            "lancamento"    =>  $row[""]
+            "dia"           =>  $row["dia"],
+            "entrada"       =>  $row["horaEntrada"],
+            "inicioAlmoco"  =>  $row["inicioAlmoco"],
+            "fimAlmoco"     =>  $row["fimAlmoco"],
+            "saida"         =>  $row["horaSaida"],
+            "horaExtra"     =>  $row["horaExtra"],
+            "atraso"        =>  $row["atraso"],
+            "lancamento"    =>  $row["lancamento"]
         );
 
         array_push($arrayPonto, $arrayRow);
@@ -186,7 +181,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("LANCAMENTO_ACESSAR|LANCAMENTO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("FOLHAPONTO_ACESSAR|FOLHAPONTO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -202,7 +197,7 @@ function excluir()
         $id = (int) $_POST["id"];
     }
 
-    $result = $reposit->update('Ntl.LANCAMENTO' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Funcionario.FOLHAPONTO' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
