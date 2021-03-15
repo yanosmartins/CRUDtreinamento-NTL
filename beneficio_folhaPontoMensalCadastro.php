@@ -310,8 +310,12 @@ include("inc/nav.php");
                                                                             <i class="">Lançar Ponto</i>
                                                                         </button>
                                                                     </section>
-                                                                    <section class="col col-md-2">
+                                                                    <section class="col col-8">
                                                                         <label class="label"> </label>
+                                                                        </button>
+                                                                    </section>
+                                                                    <section class="col col-md-1">
+                                                                        <label class=" label"> </label>
                                                                         <button id="btnGravar" type="button" class="btn btn-success">
                                                                             <i class="">Confirmar Alterações</i>
                                                                         </button>
