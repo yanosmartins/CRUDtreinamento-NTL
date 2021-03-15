@@ -111,37 +111,43 @@ function grava()
 function recupera()
 {
 
-    if ((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"]))) {
-        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    } else {
-        $id = (int) $_POST["id"];
+    $funcionario = "";
+    $folha = "";
+
+    $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
+            INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
+            INNER JOIN Ntl.usuario U ON U.funcionario = FU.codigo
+            WHERE U.login = '" . $_SESSION['login'] . "'";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if($row = $result[0]){
+        $funcionario = $row['folha'];
+        $funcionario = $row['funcionario'];
     }
-
-
 
     $sql =
         "SELECT F.codigo, FU.codigo AS 'funcionario', F.mesAno, F.observacao
         FROM Funcionario.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
-        WHERE (0=0) AND F.codigo = " . $id;
+        WHERE (0=0) AND F.codigo = " . $folha;
 
-    $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
     if ($row = $result[0]) {
 
-        $id = $row['codigo'];
+        $folha = $row['codigo'];
         $funcionario = $row['funcionario'];
         $mesAno = $row['mesAno'];
         $observacao = $row['observacao'];
 
         $out =
-            $id . "^" .
+            $folha . "^" .
             $funcionario . "^" .
-            $observacao;
+            $observacao ."^".
+            $mesAno;
     }
 
     if ($out == "") {
@@ -152,7 +158,7 @@ function recupera()
     $sql =  "SELECT FD.dia,FD.horaEntrada,FD.horaSaida,FD.inicioAlmoco,FD.fimAlmoco,FD.horaExtra,FD.atraso,FD.lancamento 
     FROM Funcionario.folhaPontoMensalDetalheDiario FD 
     INNER JOIN Funcionario.folhaPontoMensal F ON F.codigo = FD.folhaPontoMensal
-    WHERE (0=0) AND F.codigo = " . $id;
+    WHERE (0=0) AND F.codigo = " . $folha;
 
     $result = $reposit->RunQuery($sql);
 

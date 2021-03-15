@@ -797,14 +797,7 @@ include("inc/scripts.php");
 
 
     function carregaFolhaPontoMensal() {
-        var urlx = window.document.URL.toString();
-        var params = urlx.split("?");
-        if (params.length === 2) {
-            var id = params[1];
-            var idx = id.split("=");
-            var idd = idx[1];
-            if (idd !== "") {
-                recuperaFolhaPontoMensal(idd,
+                recuperaFolhaPontoMensal(
                     function(data) {
                         data = data.replace(/failed/g, '');
                         var piece = data.split("#");
@@ -818,7 +811,7 @@ include("inc/scripts.php");
                         //Atributos de cliente 
                         var codigo = +piece[0];
                         var funcionario = piece[1];
-                        var projeto = piece[2];
+                        var observacao = piece[2];
                         var mesAnoFolhaPonto = piece[3];
 
 
