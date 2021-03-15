@@ -823,12 +823,8 @@ include("inc/scripts.php");
                 //Atributos de cliente        
                 $("#codigo").val(codigo);
                 $("#funcionario").val(funcionario);
-                $("#projeto").val(projeto);
+                $("#obvercao").val(observacao);
                 $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
-
-
-
-
 
             }
         );
