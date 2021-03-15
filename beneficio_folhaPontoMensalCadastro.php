@@ -605,7 +605,7 @@ include("inc/scripts.php");
 
         });
 
-        $('#funcionario').on('change',function(){
+        $('#funcionario').on('change', function() {
             selecionaFolha();
         });
 
@@ -648,7 +648,7 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'beneficio_folhaPontoCadastro.php');
+        $(location).attr('href', 'beneficio_folhaPontoMensalCadastro.php');
 
     }
 
@@ -804,15 +804,16 @@ include("inc/scripts.php");
     }
 
     function carregaFolhaPontoMensal() {
-        recuperaFolhaPontoMensal(0,
+        const mesAno = $("#mesAnoFolhaponto").val();
+        recuperaFolhaPontoMensal(0, mesAno,
             function(data) {
                 data = data.replace(/failed/g, '');
                 var piece = data.split("#");
-
+                debugger
                 //Atributos de Cliente
                 var mensagem = piece[0];
                 var out = piece[1];
-
+                var JsonFolha = piece[2];
                 piece = out.split("^");
                 console.table(piece);
                 //Atributos de cliente 
@@ -825,15 +826,18 @@ include("inc/scripts.php");
                 $("#codigo").val(codigo);
                 $("#funcionario").val(funcionario);
                 $("#obvercao").val(observacao);
-                $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
+                if (mesAnoFolhaPonto != "" && mesAnoFolhaPonto != undefined) {
+                    $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
+                }
 
             }
         );
     }
 
-    function selecionaFolha(){
+    function selecionaFolha() {
+        const mesAno = $("#mesAnoFolhaponto").val();
         const funcionario = $("#funcionario option:selected").val();
-        recuperaFolhaPontoMensal(funcionario,
+        recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
                 data = data.replace(/failed/g, '');
                 var piece = data.split("#");
@@ -841,6 +845,7 @@ include("inc/scripts.php");
                 //Atributos de Cliente
                 var mensagem = piece[0];
                 var out = piece[1];
+                var JsonFolha = piece[2];
 
                 piece = out.split("^");
                 console.table(piece);

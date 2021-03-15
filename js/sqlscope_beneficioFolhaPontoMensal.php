@@ -91,7 +91,6 @@ function grava()
     $sql =
         "Funcionario.folhaPontoMensal_Atualiza 
         $codigo,
-        $ativo,
         $funcionario,
         $observacao,
         $usuario,
@@ -112,24 +111,33 @@ function recupera()
 {
 
     $funcionario = $_POST["funcionario"];
+    $mesAno = $_POST["mesAno"];
+    if ($mesAno != "") {
+        $aux = explode('/', $mesAno);
+        $data = $aux[0] . '-' . $aux[1]."-01";
+        $data =  trim($data);
+        $mesAno = $data;
+    } else {
+        $mesAno = '';
+    }
     $folha = "";
 
-    if($funcionario != 0 ){
+    if ($funcionario != 0) {
         $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
         INNER JOIN Ntl.usuario U ON U.funcionario = FU.codigo
-        WHERE FU.codigo = " . $funcionario . " AND F.mesAno = '2021-03-02'";
-    }else{
+        WHERE FU.codigo = " . $funcionario ." AND F.mesAno like '%$mesAno' ";
+    } else {
         $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
             INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
             INNER JOIN Ntl.usuario U ON U.funcionario = FU.codigo
-            WHERE U.login = '" . $_SESSION['login'] . "' AND F.mesAno = '2021-03-02'";
+            WHERE U.login = '" . $_SESSION['login'] . "'" ." AND F.mesAno like '%$mesAno' ";
     }
-    
+
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    if($row = $result[0]){
+    if ($row = $result[0]) {
         $folha = $row['folha'];
         $funcionario = $row['funcionario'];
     }
@@ -147,13 +155,28 @@ function recupera()
 
         $folha = $row['codigo'];
         $funcionario = $row['funcionario'];
+
         $mesAno = $row['mesAno'];
+        
+        if ($mesAno != "") {
+            $aux = explode(' ', $mesAno);
+            $data = $aux[0];
+            $data =  trim($data);
+            $aux = explode('-', $data);
+            $data = $aux[1] . '/' . $aux[0];
+            $data =  trim($data);
+            $mesAno = $data;
+        } else {
+            $mesAno = '';
+        }
+
+
         $observacao = $row['observacao'];
 
         $out =
             $folha . "^" .
             $funcionario . "^" .
-            $observacao ."^".
+            $observacao . "^" .
             $mesAno;
     }
 
@@ -189,7 +212,7 @@ function recupera()
 
     $jsonFolha = json_encode($arrayPonto);
 
-    echo "sucess#" . $out . $jsonFolha;
+    echo "sucess#" . "$out#" . $jsonFolha;
     return;
 }
 
