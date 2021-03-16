@@ -661,71 +661,66 @@ include("inc/scripts.php");
 
         var arrayDia = arrayFolha.map(folha => {
             return {
-                dia: folha.value
+                dia: Number(folha.value)
             }
         })
 
         arrayFolha = $("input[name='horaEntrada']").serializeArray()
         var arrayHoraEntrada = arrayFolha.map(folha => {
             return {
-                horaEntrada: folha.value
+                horaEntrada: String(folha.value)
             }
         })
 
         arrayFolha = $("input[name='inicioAlmoco']").serializeArray()
         var arrayInicioAlmoco = arrayFolha.map(folha => {
             return {
-                inicioAlmoco: folha.value
+                inicioAlmoco: String(folha.value)
             }
         })
 
         arrayFolha = $("input[name='fimAlmoco']").serializeArray()
         var arrayFimAlmoco = arrayFolha.map(folha => {
             return {
-                fimAlmoco: folha.value
+                fimAlmoco: String(folha.value)
             }
         })
 
         arrayFolha = $("input[name='horaSaida']").serializeArray()
         var arrayHoraSaida = arrayFolha.map(folha => {
             return {
-                horaSaida: folha.value
+                horaSaida: String(folha.value)
             }
         })
 
         arrayFolha = $("input[name='horaExtra']").serializeArray()
         var arrayHoraExtra = arrayFolha.map(folha => {
             return {
-                horaExtra: folha.value
+                horaExtra: String(folha.value)
             }
         })
 
         arrayFolha = $("input[name='atraso']").serializeArray()
         var arrayAtraso = arrayFolha.map(folha => {
             return {
-                atraso: folha.value
+                atraso: String(folha.value)
             }
         })
 
         arrayFolha = $("select[name='lancamento'] option:selected")
         var arrayLancamento = new Array()
         arrayFolha.each((index, el) => {
-            let value = $(el).val()
+            let value = Number($(el).val())
             arrayLancamento.push({
-                lancamento: value
+                lancamento: Number(value)
             })
         })
 
-        var codigo = parseInt($("#codigo").val())
-        var ativo = parseInt($("#ativo").val())
-        var funcionario = $("#funcionario").val();
-        var mesAnoFolhaPonto = $("#mesAnoFolhaPonto").val().split('/')
-        var mes = mesAnoFolhaPonto[0]
-        var ano = mesAnoFolhaPonto[1]
-        var observacaoFolhaPontoMensal = $("#observacaoFolhaPontoMensal").val();
-
-        var data = new Date().getMonth()
-
+        var codigo = Number($("#codigo").val())
+        var ativo = Number($("#ativo").val())
+        var funcionario = Number($("#funcionario").val());
+        var mesAno = String($("#mesAnoFolhaPonto").val());
+        var observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         var folhaPontoMensalTabela = arrayDia.map((array, index) => {
@@ -737,19 +732,17 @@ include("inc/scripts.php");
                 fimAlmoco: arrayFimAlmoco[index].fimAlmoco,
                 horaExtra: arrayHoraExtra[index].horaExtra,
                 atraso: arrayAtraso[index].atraso,
-                lancamento: arrayLancamento[index].lancamento,
-                mes: mes,
-                ano: ano
-
+                lancamento: arrayLancamento[index].lancamento
             }
 
         })
 
         var folhaPontoInfo = {
-            codigo: codigo,
-            ativo: ativo,
-            funcionario: funcionario,
-            observacao: observacaoFolhaPontoMensal
+            codigo: Number(codigo),
+            ativo: Number(ativo),
+            funcionario: Number(funcionario),
+            mesAno: String(mesAno),
+            observacao: String(observacaoFolhaPontoMensal)
         }
 
         gravaFolhaPontoMensal(folhaPontoInfo, folhaPontoMensalTabela,
@@ -804,30 +797,45 @@ include("inc/scripts.php");
     }
 
     function carregaFolhaPontoMensal() {
-        const mesAno = $("#mesAnoFolhaponto").val();
+        
+        const data = new Date().toLocaleDateString();
+        const mesAno = data.slice(3,data.length);
+
+        $('#mesAnoFolhaPonto').val(mesAno);
+
         recuperaFolhaPontoMensal(0, mesAno,
             function(data) {
-                data = data.replace(/failed/g, '');
+                data = data.replace(/failed/gi, '');
                 var piece = data.split("#");
-                debugger
-                //Atributos de Cliente
+
                 var mensagem = piece[0];
                 var out = piece[1];
                 var JsonFolha = piece[2];
                 piece = out.split("^");
-                console.table(piece);
-                //Atributos de cliente 
-                var codigo = +piece[0];
-                var funcionario = piece[1];
-                var observacao = piece[2];
-                var mesAnoFolhaPonto = piece[3];
 
-                //Atributos de cliente        
-                $("#codigo").val(codigo);
-                $("#funcionario").val(funcionario);
-                $("#obvercao").val(observacao);
-                if (mesAnoFolhaPonto != "" && mesAnoFolhaPonto != undefined) {
+                //funcionando
+                if (out.length >= 0) {
+                    var codigo = piece[0];
+                    var funcionario = piece[1];
+                    var observacao = piece[2];
+                    var mesAnoFolhaPonto = piece[3];
+
+                    $("#codigo").val(codigo);
+                    $("#funcionario").val(funcionario);
+                    $("#obvercao").val(observacao);
                     $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
+                }else{
+                    $("#codigo").val(0);
+                    $("#obvercao").val("");
+                }
+
+                //funcionando
+                try {
+                    preencherPonto(JsonFolha);
+                } catch (e) {
+                    smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
+                    throw new Error("O usuário não possui uma folha registrada desse mês!");
+                    return
                 }
 
             }
@@ -835,8 +843,10 @@ include("inc/scripts.php");
     }
 
     function selecionaFolha() {
-        const mesAno = $("#mesAnoFolhaponto").val();
+
         const funcionario = $("#funcionario option:selected").val();
+        const mesAno = $("#mesAnoFolhaponto").val();
+
         recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
                 data = data.replace(/failed/g, '');
@@ -848,20 +858,47 @@ include("inc/scripts.php");
                 var JsonFolha = piece[2];
 
                 piece = out.split("^");
-                console.table(piece);
-                //Atributos de cliente 
-                var codigo = +piece[0];
-                var funcionario = piece[1];
-                var observacao = piece[2];
-                var mesAnoFolhaPonto = piece[3];
 
-                //Atributos de cliente        
-                $("#codigo").val(codigo);
-                $("#funcionario").val(funcionario);
-                $("#obvercao").val(observacao);
-                $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
+                if (out.length >= 0) {
+                    var codigo = +piece[0];
+                    var funcionario = piece[1];
+                    var observacao = piece[2];
+                    var mesAnoFolhaPonto = piece[3];
 
+                    $("#codigo").val(codigo);
+                    $("#funcionario").val(funcionario);
+                    $("#obvercao").val(observacao);
+                    $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
+                }else{
+                    $("#codigo").val(0);
+                    $("#obvercao").val("");
+                }
+
+                //funcionando
+                try {
+                    preencherPonto(JsonFolha);
+                } catch (e) {
+                    smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
+                    throw new Error("O usuário não possui uma folha registrada desse mês!");
+                    return
+                }
             }
         );
+    }
+
+    //funcionando
+    function preencherPonto(object) {
+        object = JSON.parse(object);
+        object.forEach((obj, index) => {
+
+            $(`#dia-${Number(index) + 1}`).val(obj.dia);
+            $(`#horaEntrada-${Number(index) + 1}`).val(obj.entrada);
+            $(`#inicioAlmoco-${Number(index)+1}`).val(obj.inicioAlmoco);
+            $(`#fimAlmoco-${Number(index) + 1}`).val(obj.fimAlmoco);
+            $(`#horaSaida-${Number(index) + 1}`).val(obj.saida);
+            $(`#horaExtra-${Number(index) + 1}`).val(obj.horaExtra);
+            $(`#atraso-${Number(index) + 1}`).val(obj.atraso);
+            $(`#lancamento-${Number(index) + 1}`).val(obj.lancamento);
+        })
     }
 </script>

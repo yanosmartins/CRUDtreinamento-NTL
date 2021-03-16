@@ -43,6 +43,27 @@ function grava()
     $funcionario = (int) $folhaPontoInfo['funcionario'];
     $observacao = "'" . (string)$folhaPontoInfo['observacao'] . "'";
     $ativo = (int) $folhaPontoInfo['ativo'];
+    $mesAno = (string) $folhaPontoInfo['mesAno'];
+    $data = explode('/',$mesAno);
+    $mesAno = trim($data[1] . "-" . $data[0] . "-01 00:00:00.000");
+
+    if($funcionario == 0){
+        $sql =  "SELECT F.codigo FROM Ntl.funcionario F INNER JOIN Ntl.usuario U ON F.codigo = U.funcionario WHERE U.login = \'". $_SESSION["login"] ."'";
+        $result = $reposit->RunQuery($sql);
+        if($row = $result[0]){
+            $funcionario = $row["funcionario"];
+        }else{
+            echo "failed#" . "Funcionário não encontrado";
+            return;
+        }
+    }
+    
+    $sql =  "SELECT F.mesAno FROM Funcionario.folhaPontoMensal F INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo WHERE F.mesAno = \'". $mesAno ."' AND F.funcionario = " . $funcionario . "";
+        $result = $reposit->RunQuery($sql);
+        if($row = $result[0]){
+            if(strlen($row['mesAno']) >= 0)
+                $codigo = $row["codigo"];
+        }
 
     /* Objeto com o informações pertencentes ao array do XML */
     $folhaPontoMensal = $_POST['folhaPontoMensalTabela'];
@@ -71,10 +92,6 @@ function grava()
                 }
                 continue;
             }
-            if ($key == 'mes') {
-                $xmlFolhaPontoMensal .= "<$key>" . (int)$value . "</$key>";
-                continue;
-            }
             $xmlFolhaPontoMensal .= "<$key>$value</$key>";
         }
         $xmlFolhaPontoMensal .= "</$nomeTabela>";
@@ -92,6 +109,7 @@ function grava()
         "Funcionario.folhaPontoMensal_Atualiza 
         $codigo,
         $funcionario,
+        $mesAno,
         $observacao,
         $usuario,
         $xmlFolhaPontoMensal
@@ -153,10 +171,10 @@ function recupera()
     $out = "";
     if ($row = $result[0]) {
 
-        $folha = $row['codigo'];
-        $funcionario = $row['funcionario'];
+        $folha = trim($row['codigo']);
+        $funcionario = trim($row['funcionario']);
 
-        $mesAno = $row['mesAno'];
+        $mesAno = trim($row['mesAno']);
         
         if ($mesAno != "") {
             $aux = explode(' ', $mesAno);
@@ -167,11 +185,10 @@ function recupera()
             $data =  trim($data);
             $mesAno = $data;
         } else {
-            $mesAno = '';
+            $mesAno = "";
         }
 
-
-        $observacao = $row['observacao'];
+        $observacao = trim($row['observacao']);
 
         $out =
             $folha . "^" .
@@ -181,7 +198,7 @@ function recupera()
     }
 
     if ($out == "") {
-        echo "failed#";
+        echo "failed#" . "$out#";
         return;
     }
 
@@ -235,7 +252,7 @@ function excluir()
         $id = (int) $_POST["id"];
     }
 
-    $result = $reposit->update('Funcionario.FOLHAPONTO' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Funcionario.folhaPontoMensalDetalheDiario' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
