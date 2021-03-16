@@ -6,23 +6,23 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('LANCAMENTO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('LANCAMENTO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('LANCAMENTO_EXCLUIR', $arrayPermissao, true));
+// $condicaoAcessarOK = (in_array('LANCAMENTO_ACESSAR', $arrayPermissao, true));
+// $condicaoGravarOK = (in_array('LANCAMENTO_GRAVAR', $arrayPermissao, true));
+// $condicaoExcluirOK = (in_array('LANCAMENTO_EXCLUIR', $arrayPermissao, true));
 
-if ($condicaoAcessarOK == false) {
-    unset($_SESSION['login']);
-    header("Location:login.php");
-}
+// if ($condicaoAcessarOK == false) {
+//     unset($_SESSION['login']);
+//     header("Location:login.php");
+// }
 
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
-}
+// $esconderBtnExcluir = "";
+// if ($condicaoExcluirOK === false) {
+//     $esconderBtnExcluir = "none";
+// }
+// $esconderBtnGravar = "";
+// if ($condicaoGravarOK === false) {
+//     $esconderBtnGravar = "none";
+// }
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -236,7 +236,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label class="label">Inicio/Almoço</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:00">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -246,7 +246,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label class="label">Fim/Almoço</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:15">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -538,17 +538,15 @@ include("inc/scripts.php");
 
         $("#inputInicioAlmoco").mask("99:99");
 
-        $('#inputInicioAlmoco').clockpicker({
+        $('#inputInicioAlmoco')({
             donetext: 'Done',
-            default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
         $("#inputFimAlmoco").mask("99:99");
 
-        $('#inputFimAlmoco').clockpicker({
+        $('#inputFimAlmoco')({
             donetext: 'Done',
-            default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
@@ -814,7 +812,7 @@ include("inc/scripts.php");
                 piece = out.split("^");
 
                 //funcionando
-                if (out.length >= 0) {
+                if (out.length >= 0 && out != "") {
                     var codigo = piece[0];
                     var funcionario = piece[1];
                     var observacao = piece[2];
@@ -834,7 +832,7 @@ include("inc/scripts.php");
                     preencherPonto(JsonFolha);
                 } catch (e) {
                     smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
-                    throw new Error("O usuário não possui uma folha registrada desse mês!");
+                    // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
                 }
 
@@ -859,7 +857,7 @@ include("inc/scripts.php");
 
                 piece = out.split("^");
 
-                if (out.length >= 0) {
+                if (out.length >= 0 && out != "") {
                     var codigo = +piece[0];
                     var funcionario = piece[1];
                     var observacao = piece[2];
@@ -879,7 +877,7 @@ include("inc/scripts.php");
                     preencherPonto(JsonFolha);
                 } catch (e) {
                     smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
-                    throw new Error("O usuário não possui uma folha registrada desse mês!");
+                    // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
                 }
             }

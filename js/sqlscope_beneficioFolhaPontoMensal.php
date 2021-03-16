@@ -22,13 +22,13 @@ return;
 function grava()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("FOLHAPONTO_ACESSAR|FOLHAPONTO_GRAVAR");
+    // $possuiPermissao = $reposit->PossuiPermissao("FOLHAPONTO_ACESSAR|FOLHAPONTO_GRAVAR");
 
-    if ($possuiPermissao === 0) {
-        $mensagem = "O usuário não tem permissão para gravar!";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    }
+    // if ($possuiPermissao === 0) {
+    //     $mensagem = "O usuário não tem permissão para gravar!";
+    //     echo "failed#" . $mensagem . ' ';
+    //     return;
+    // }
 
     session_start();
     $usuario = "'" .  $_SESSION['login'] . "'";
@@ -44,26 +44,24 @@ function grava()
     $observacao = "'" . (string)$folhaPontoInfo['observacao'] . "'";
     $ativo = (int) $folhaPontoInfo['ativo'];
     $mesAno = (string) $folhaPontoInfo['mesAno'];
-    $data = explode('/',$mesAno);
-    $mesAno = trim($data[1] . "-" . $data[0] . "-01 00:00:00.000");
+    $data = explode('/', $mesAno);
+    $mesAno ="'". trim($data[1] . "-" . $data[0]."-01")."'";
 
-    if($funcionario == 0){
-        $sql =  "SELECT F.codigo FROM Ntl.funcionario F INNER JOIN Ntl.usuario U ON F.codigo = U.funcionario WHERE U.login = \'". $_SESSION["login"] ."'";
-        $result = $reposit->RunQuery($sql);
-        if($row = $result[0]){
-            $funcionario = $row["funcionario"];
-        }else{
+    if ($funcionario == 0) {
+        $funcionario = (int)$_SESSION["funcionario"];
+        if ($funcionario == 0) {
             echo "failed#" . "Funcionário não encontrado";
             return;
         }
     }
-    
-    $sql =  "SELECT F.mesAno FROM Funcionario.folhaPontoMensal F INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo WHERE F.mesAno = \'". $mesAno ."' AND F.funcionario = " . $funcionario . "";
-        $result = $reposit->RunQuery($sql);
-        if($row = $result[0]){
-            if(strlen($row['mesAno']) >= 0)
-                $codigo = $row["codigo"];
-        }
+
+
+    $sql =  "SELECT F.codigo, F.mesAno FROM Funcionario.folhaPontoMensal F INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo WHERE DATEPART(mm,mesAno) = DATEPART(mm,F.dataCadastro) AND DATEPART(yy,mesAno) = DATEPART(yy,F.dataCadastro) ";
+    $result = $reposit->RunQuery($sql);
+    if ($row = $result[0]) {
+        if (strlen($row['mesAno']) >= 0)
+            $codigo = $row["codigo"];
+    }
 
     /* Objeto com o informações pertencentes ao array do XML */
     $folhaPontoMensal = $_POST['folhaPontoMensalTabela'];
@@ -127,12 +125,13 @@ function grava()
 
 function recupera()
 {
+    session_start();
 
-    $funcionario = $_POST["funcionario"];
+    $funcionario = (int)$_POST["funcionario"];
     $mesAno = $_POST["mesAno"];
     if ($mesAno != "") {
         $aux = explode('/', $mesAno);
-        $data = $aux[0] . '-' . $aux[1]."-01";
+        $data = $aux[1] . '-' . $aux[0];
         $data =  trim($data);
         $mesAno = $data;
     } else {
@@ -143,13 +142,12 @@ function recupera()
     if ($funcionario != 0) {
         $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
-        INNER JOIN Ntl.usuario U ON U.funcionario = FU.codigo
-        WHERE FU.codigo = " . $funcionario ." AND F.mesAno like '%$mesAno' ";
+        WHERE FU.codigo = " . $funcionario . " AND DATEPART(mm,'$mesAno-01') = DATEPART(mm,F.dataCadastro) AND DATEPART(yy,'$mesAno-01') = DATEPART(yy,F.dataCadastro) ";
     } else {
+        $funcionario = (int)$_SESSION["funcionario"];
         $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
             INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
-            INNER JOIN Ntl.usuario U ON U.funcionario = FU.codigo
-            WHERE U.login = '" . $_SESSION['login'] . "'" ." AND F.mesAno like '%$mesAno' ";
+            WHERE FU.codigo = $funcionario  AND DATEPART(mm,'$mesAno-01') = DATEPART(mm,F.dataCadastro) AND DATEPART(yy,'$mesAno-01') = DATEPART(yy,F.dataCadastro) ";
     }
 
     $reposit = new reposit();
@@ -175,7 +173,7 @@ function recupera()
         $funcionario = trim($row['funcionario']);
 
         $mesAno = trim($row['mesAno']);
-        
+
         if ($mesAno != "") {
             $aux = explode(' ', $mesAno);
             $data = $aux[0];
