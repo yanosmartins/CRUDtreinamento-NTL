@@ -538,14 +538,14 @@ include("inc/scripts.php");
 
         $("#inputInicioAlmoco").mask("99:99");
 
-        $('#inputInicioAlmoco')({
+        $('#inputInicioAlmoco').clockpicker({
             donetext: 'Done',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
         $("#inputFimAlmoco").mask("99:99");
 
-        $('#inputFimAlmoco')({
+        $('#inputFimAlmoco').clockpicker({     
             donetext: 'Done',
             use24hours: true,
         }).val(moment().format('HH:mm'));
