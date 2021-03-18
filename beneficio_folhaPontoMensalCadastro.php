@@ -129,10 +129,10 @@ include("inc/nav.php");
                                                                     $dataAtual = strftime('%m/%Y', strtotime('today'));
                                                                     ?>
                                                                     <section class="col col-2">
-                                                                        <label class="label" for="mesAnoFolhaPonto">Mês/Ano</label>
+                                                                        <label class="label" for="mesAno">Mês/Ano</label>
                                                                         <label class="input">
                                                                             <i class="icon-append fa fa-calendar"></i>
-                                                                            <input id="mesAnoFolhaPonto" name="mesAnoFolhaPonto" style="text-align: center;" autocomplete="off" type="text" class="readonly" readonly value="<?= $dataAtual  ?>">
+                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="text" class="readonly" readonly value="<?= $dataAtual  ?>">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-1">
@@ -819,7 +819,7 @@ include("inc/scripts.php");
         var codigo = Number($("#codigo").val())
         var ativo = Number($("#ativo").val())
         var funcionario = Number($("#funcionario").val());
-        var mesAno = String($("#mesAnoFolhaPonto").val());
+        var mesAno = String($("#mesAno").val());
         var observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
@@ -900,7 +900,7 @@ include("inc/scripts.php");
         const data = new Date().toLocaleDateString();
         const mesAno = data.slice(3, data.length);
 
-        $('#mesAnoFolhaPonto').val(mesAno);
+        $('#mesAno').val(mesAno);
 
 
         recuperaFolhaPontoMensal(0, mesAno,
@@ -923,7 +923,7 @@ include("inc/scripts.php");
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
                     $("#obvercao").val(observacao);
-                    $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
+                    $("#mesAno").val(mesAnoFolhaPonto);
                 } else {
                     $("#codigo").val(0);
                     $("#obvercao").val("");
@@ -946,7 +946,7 @@ include("inc/scripts.php");
     function selecionaFolha() {
 
         const funcionario = $("#funcionario option:selected").val();
-        const mesAno = $("#mesAnoFolhaponto").val();
+        const mesAno = $("#mesAno").val();
 
         recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
@@ -969,7 +969,7 @@ include("inc/scripts.php");
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
                     $("#obvercao").val(observacao);
-                    $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
+                    $("#mesAno").val(mesAnoFolhaPonto);
                 } else {
                     $("#codigo").val(0);
                     $("#obvercao").val("");
