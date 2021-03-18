@@ -47,6 +47,7 @@ function grava()
     $localizacaoItem = (int)$_POST['localizacaoItem'];
     $ativo = (int)$_POST['ativo'];
     $unidade = (int)$_POST['unidade'];
+    $unidadeItem = (int)$_POST['unidadeItem'];
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $indicador = (string)"'" . $_POST['indicador'] . "'";
@@ -62,7 +63,8 @@ function grava()
             $ativo,
             $usuario,
             $unidade,
-            $indicador";
+            $indicador,
+            $unidadeItem";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -86,7 +88,7 @@ function recupera()
     }
 
     $sql = "SELECT CI.codigo, CI.codigoItem, CI.codigoFabricante, CI.descricaoItem, CI.estoque, 
-                    CI.grupoItem, CI.localizacaoItem, CI.ativo, CI.unidade, CI.indicador
+                    CI.grupoItem, CI.localizacaoItem, CI.ativo, CI.unidade, CI.indicador,CI.unidadeItem
             FROM Estoque.codigoItem AS CI WHERE codigo = $id";
 
     $reposit = new reposit();
@@ -107,6 +109,7 @@ function recupera()
         $ativo = (int)$row['ativo'];
         $unidade = (int)$row['unidade'];
         $indicador = $row['indicador'];
+        $unidadeItem = $row['unidadeItem'];
       
         $out = $id . "^" .
             $codigoItem . "^" .
@@ -117,7 +120,8 @@ function recupera()
             $localizacaoItem . "^" .
             $unidade . "^" .
             $indicador  . "^" .
-            $ativo;
+            $ativo . "^" .
+            $unidadeItem;
 
         if ($out == "") {
             echo "failed#";
