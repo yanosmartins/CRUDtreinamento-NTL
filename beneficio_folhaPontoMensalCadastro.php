@@ -6,23 +6,23 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('LANCAMENTO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('LANCAMENTO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('LANCAMENTO_EXCLUIR', $arrayPermissao, true));
+// $condicaoAcessarOK = (in_array('LANCAMENTO_ACESSAR', $arrayPermissao, true));
+// $condicaoGravarOK = (in_array('LANCAMENTO_GRAVAR', $arrayPermissao, true));
+// $condicaoExcluirOK = (in_array('LANCAMENTO_EXCLUIR', $arrayPermissao, true));
 
-if ($condicaoAcessarOK == false) {
-    unset($_SESSION['login']);
-    header("Location:login.php");
-}
+// if ($condicaoAcessarOK == false) {
+//     unset($_SESSION['login']);
+//     header("Location:login.php");
+// }
 
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
-}
+// $esconderBtnExcluir = "";
+// if ($condicaoExcluirOK === false) {
+//     $esconderBtnExcluir = "none";
+// }
+// $esconderBtnGravar = "";
+// if ($condicaoGravarOK === false) {
+//     $esconderBtnGravar = "none";
+// }
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -122,25 +122,6 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
 
-                                                                    <!-- <section class="col col-4">
-                                                                        <label class="label" for="projeto">Projeto</label>
-                                                                        <label class="select">
-                                                                            <select id="projeto" name="projeto" class="readonly" readonly>
-                                                                                <option></option>
-                                                                                <?php
-                                                                                $reposit = new reposit();
-                                                                                $sql = "select codigo, descricao from Ntl.projeto where ativo = 1 order by descricao";
-                                                                                $result = $reposit->RunQuery($sql);
-                                                                                foreach ($result as $row) {
-                                                                                    $codigo = (int) $row['codigo'];
-                                                                                    $descricao = $row['descricao'];
-                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
-                                                                                }
-                                                                                ?>
-                                                                            </select>
-                                                                        </label>
-                                                                    </section> -->
-
 
                                                                     <?php
                                                                     setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
@@ -192,10 +173,20 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label" for="expediente">Expediente</label>
                                                                         <label class="select">
-                                                                            <select id="expediente" name="expediente" class="readonly" readonly>
-                                                                                <option>08:00 às 17:00</option>
-                                                                                <option>10:00 às 16:00</option>
-
+                                                                            <select id="expediente" name="expediente" class="readonly" readonly style="pointer-events: none; touch-action: none">
+                                                                                <option></option>
+                                                                                <?php
+                                                                                $reposit = new reposit();
+                                                                                $sql = "SELECT codigo, funcionario,horaEntrada,horaSaida from Ntl.beneficioProjeto where ativo = 1 order by codigo";
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = (int) $row['codigo'];
+                                                                                    $horaEntrada = $row['horaEntrada'];
+                                                                                    $horaSaida = $row['horaSaida'];
+                                                                                    $funcionario = $row['funcionario'];
+                                                                                    echo '<option value=' . $funcionario . '>' . $horaEntrada . " - " . $horaSaida . '</option>';
+                                                                                }
+                                                                                ?>
                                                                             </select>
                                                                         </label>
                                                                     </section>
@@ -203,9 +194,20 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label" for="almoco">Almoço</label>
                                                                         <label class="select">
-                                                                            <select id="almoco" name="almoco" class="readonly" readonly>
-                                                                                <option>01:00:00</option>
-                                                                                <option>00:15:00</option>
+                                                                            <select id="almoco" name="almoco" class="readonly" readonly style="pointer-events: none; touch-action: none">
+                                                                                <option></option>
+                                                                                <?php
+                                                                                $reposit = new reposit();
+                                                                                $sql = "SELECT codigo, funcionario,horaInicio,horaFim from Ntl.beneficioProjeto where ativo = 1 order by codigo";
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = (int) $row['codigo'];
+                                                                                    $horaInicio = $row['horaInicio'];
+                                                                                    $horaFim = $row['horaFim'];
+                                                                                    $funcionario = $row['funcionario'];
+                                                                                    echo '<option value=' . $funcionario . '>' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                }
+                                                                                ?>
                                                                             </select>
                                                                         </label>
                                                                     </section>
@@ -236,7 +238,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label class="label">Inicio/Almoço</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:00">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -246,7 +248,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label class="label">Fim/Almoço</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:15">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -266,7 +268,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label id="labelHora" class="label">H.Extra</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control readonly" readonly disabled placeholder="  00:00" data-autoclose="true" value="">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -276,7 +278,7 @@ include("inc/nav.php");
                                                                         <div class="form-group">
                                                                             <label id="labelHora" class="label">Atraso</label>
                                                                             <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control" placeholder="  00:00" data-autoclose="true" value="">
+                                                                                <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control readonly" placeholder="  00:00" data-autoclose="true" disabled readonly value="">
                                                                                 <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                             </div>
                                                                         </div>
@@ -519,6 +521,7 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
 
+        //TIME INPUT
         $("#inputHoraEntrada").mask("99:99:99");
 
 
@@ -540,7 +543,6 @@ include("inc/scripts.php");
 
         $('#inputInicioAlmoco').clockpicker({
             donetext: 'Done',
-            default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
@@ -548,27 +550,64 @@ include("inc/scripts.php");
 
         $('#inputFimAlmoco').clockpicker({
             donetext: 'Done',
-            default: 'now',
             use24hours: true,
         }).val(moment().format('HH:mm'));
 
         $("#inputHoraExtra").mask("99:99");
 
-        $('#inputHoraExtra').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
-        }).val(moment().format('HH:mm'));
+        // $('#inputHoraExtra').clockpicker({
+        //     donetext: 'Done',
+        //     default: 'now',
+        //     use24hours: true,
+        // }).val(moment().format('HH:mm'));
 
         $("#inputAtraso").mask("99:99");
 
-        $('#inputAtraso').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
-        }).val(moment().format('HH:mm'));
+        // $('#inputAtraso').clockpicker({
+        //     donetext: 'Done',
+        //     default: 'now',
+        //     use24hours: true,
+        // }).val(moment().format('HH:mm'));
 
+        // $("#funcionario").on("change", function() {
+        //     var funcionario = $("#funcionario").val();
+        //     $("#expediente").val(funcionario);
 
+        // });
+
+        $('#inputDia').on('change', function() {
+            var dia = $("#inputDia").val()
+
+            var entrada = $("#horaEntrada-" + dia).val()
+            var inputEntrada = $("#inputHoraEntrada")
+
+            var inicioAlmoco = $("#inicioAlmoco-" + dia).val()
+            var inputInicioAlmoco = $("#inputInicioAlmoco")
+
+            var fimAlmoco = $("#fimAlmoco-" + dia).val()
+            var inputFimAlmoco = $("#inputFimAlmoco")
+
+            var saida = $("#horaSaida-" + dia).val()
+            var inputSaida = $("#inputHoraSaida")
+
+            var extra = $("#horaExtra-" + dia).val()
+            var inputExtra = $("#inputHoraExtra")
+
+            var atraso = $("#atraso-" + dia).val()
+            var inputAtraso = $("#inputAtraso")
+
+            var lancamento = $("#lancamento-" + dia).val()
+            var inputLancamento = $("#inputLancamento")
+
+            inputEntrada.val(entrada)
+            inputInicioAlmoco.val(inicioAlmoco)
+            inputFimAlmoco.val(fimAlmoco)
+            inputSaida.val(saida)
+            inputExtra.val(extra)
+            inputAtraso.val(atraso)
+            inputLancamento.val(lancamento)
+
+        });
 
         $("#btnAddPonto").on("click", function() {
 
@@ -595,14 +634,72 @@ include("inc/scripts.php");
             var lancamento = $("#lancamento-" + dia)
             var inputLancamento = $("#inputLancamento").val()
 
+            const data = new Date();
+            const horaAtual = new Date(); //.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'});
+            const inicioExpediente = new Date(data.getFullYear(), data.getMonth(), data.getDate(), 10, 0, 0, 0);
+            const fimExpediente = new Date(data.getFullYear(), data.getMonth(), data.getDate(), 16, 0, 0, 0);
+
+            let separador = inputEntrada.split(':');
+            const horaEntrada = new Date(data.getFullYear(), data.getMonth(), data.getDate(), separador[0], Number(separador[1]));
+
+            separador = inputSaida.split(':');
+            const horaSaida = new Date(data.getFullYear(), data.getMonth(), data.getDate(), separador[0], Number(separador[1]));
+
+            if (!inputEntrada) {
+                smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
+                return
+            }
+
+            if (!inputSaida && horaAtual.getTime() > fimExpediente.getTime()) {
+                smartAlert("Atenção", "A hora de saída deve ser preenchida", "error");
+                return
+            }
+
+            if (horaEntrada.getTime() < horaSaida.getTime()) {
+                smartAlert("Atenção", "A hora de saída deve ser maior ou igual a hora de entrada", "error");
+                return
+            }
+
+            let horaExtra = (inicioExpediente.getTime() - horaEntrada.getTime()) + (horaSaida.getTime() - fimExpediente.getTime());
+            let horaAtraso = (horaEntrada.getTime() - inicioExpediente.getTime()) + (fimExpediente.getTime() - horaSaida.getTime());
+
+            if (horaExtra < 0) {
+                horaExtra = new Date(data.getFullYear, data.getMonth(), data.getDate(), 0, 0, 0);
+            } else {
+                horaExtra = new Date(horaExtra);
+            }
+            if (horaAtraso < 0) {
+                horaAtraso = new Date(data.getFullYear, data.getMonth(), data.getDate(), 0, 0, 0);
+            } else {
+                horaAtraso = new Date(horaAtraso);
+            }
+
+
+            $("#inputExtra").val(horaExtra.toLocaleTimeString('pt-BR', {
+                timeZone: 'America/Sao_Paulo'
+            }));
+            $("#inputAtraso").val(horaAtraso.toLocaleTimeString('pt-BR', {
+                timeZone: 'America/Sao_Paulo'
+            }));
+
+            if (!inputExtra) {
+                smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
+                return
+            }
+            if (!inputAtraso) {
+                smartAlert("Atenção", "Não foi possível calcular as horas de atraso", "error");
+                return
+            }
+
             entrada.val(inputEntrada)
             inicioAlmoco.val(inputInicioAlmoco)
             fimAlmoco.val(inputFimAlmoco)
             saida.val(inputSaida)
-            extra.val(inputExtra)
-            atraso.val(inputAtraso)
+            extra.val(horaExtra)
+            atraso.val(horaAtraso)
             lancamento.val(inputLancamento)
 
+            return;
         });
 
         $('#funcionario').on('change', function() {
@@ -637,8 +734,9 @@ include("inc/scripts.php");
             })
         });
 
-        carregaFolhaPontoMensal();
+        $("#horaSaida").on("change")
 
+        carregaFolhaPontoMensal();
 
     });
 
@@ -769,7 +867,6 @@ include("inc/scripts.php");
         );
     }
 
-
     function excluir() {
         debugger;
         var id = +$("#codigo").val();
@@ -797,11 +894,12 @@ include("inc/scripts.php");
     }
 
     function carregaFolhaPontoMensal() {
-        
+
         const data = new Date().toLocaleDateString();
-        const mesAno = data.slice(3,data.length);
+        const mesAno = data.slice(3, data.length);
 
         $('#mesAnoFolhaPonto').val(mesAno);
+
 
         recuperaFolhaPontoMensal(0, mesAno,
             function(data) {
@@ -814,7 +912,7 @@ include("inc/scripts.php");
                 piece = out.split("^");
 
                 //funcionando
-                if (out.length >= 0) {
+                if (out.length >= 0 && out != "") {
                     var codigo = piece[0];
                     var funcionario = piece[1];
                     var observacao = piece[2];
@@ -824,22 +922,26 @@ include("inc/scripts.php");
                     $("#funcionario").val(funcionario);
                     $("#obvercao").val(observacao);
                     $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
-                }else{
+                } else {
                     $("#codigo").val(0);
                     $("#obvercao").val("");
                 }
-
+                $("#expediente").val(funcionario);
+                $("#almoco").val(funcionario);
                 //funcionando
                 try {
                     preencherPonto(JsonFolha);
                 } catch (e) {
                     smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
-                    throw new Error("O usuário não possui uma folha registrada desse mês!");
+                    // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
                 }
 
+                
+
             }
         );
+
     }
 
     function selecionaFolha() {
@@ -859,7 +961,7 @@ include("inc/scripts.php");
 
                 piece = out.split("^");
 
-                if (out.length >= 0) {
+                if (out.length >= 0 && out != "") {
                     var codigo = +piece[0];
                     var funcionario = piece[1];
                     var observacao = piece[2];
@@ -869,21 +971,23 @@ include("inc/scripts.php");
                     $("#funcionario").val(funcionario);
                     $("#obvercao").val(observacao);
                     $("#mesAnoFolhaPonto").val(mesAnoFolhaPonto);
-                }else{
+                } else {
                     $("#codigo").val(0);
                     $("#obvercao").val("");
                 }
-
+                $("#expediente").val(funcionario);
+                $("#almoco").val(funcionario);
                 //funcionando
                 try {
                     preencherPonto(JsonFolha);
                 } catch (e) {
                     smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
-                    throw new Error("O usuário não possui uma folha registrada desse mês!");
+                    // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
                 }
             }
         );
+
     }
 
     //funcionando

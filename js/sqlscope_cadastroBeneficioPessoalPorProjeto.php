@@ -542,8 +542,8 @@ function gravaBeneficio()
         $posto,
         $usuario,
         $horaEntrada,
-        $horaFim,
         $horaInicio,
+        $horaFim,
         $horaSaida,
         $departamento";
 
