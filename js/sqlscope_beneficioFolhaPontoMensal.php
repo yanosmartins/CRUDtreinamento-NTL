@@ -115,7 +115,7 @@ function grava()
 
 
     $result = $reposit->Execprocedure($sql);
-    $ret = 'sucess#';
+    $ret = 'sucess#Ponto gravado com sucesso!';
     if ($result < 1) {
         $ret = 'failed#';
     }
