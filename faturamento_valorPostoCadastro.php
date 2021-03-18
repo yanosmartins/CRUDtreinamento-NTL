@@ -69,7 +69,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formPosto" method="post">
+                                <form class="smart-form client-form" id="formValorPosto" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -90,7 +90,7 @@ include("inc/nav.php");
                                                             <section class="col col-5">
                                                                 <label class="label">Projeto</label>
                                                                 <label class="select">
-                                                                    <select id="posto" name="posto" class="required">
+                                                                    <select id="projeto" name="projeto" class="required">
                                                                         <option></option>
                                                                         <?php
                                                                         $sql =  "SELECT codigo, descricao FROM Ntl.projeto where ativo = 1 order by codigo";
@@ -133,6 +133,16 @@ include("inc/nav.php");
                                                                     <input id="remuneracaoTotal" name="remuneracaoTotal" placeholder="0,00" style="text-align: right;" type="text" autocomplete="off" maxlength="100" class="readonly">
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-md-2">
+                                                                <label class="label">Ativo</label>
+                                                                <label class="select">
+                                                                    <select id="ativo" name="ativo" class="required">
+                                                                        <option></option>
+                                                                        <option value="1" selected>Sim</option>
+                                                                        <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                         <!-- <div class="row">
                                                             <section class="col col-1">
@@ -155,12 +165,13 @@ include("inc/nav.php");
                                                         <div id="formRemuneracao" class="col-sm-12">
                                                             <input id="remuneracaoId" name="remuneracaoId" type="hidden" value="">
                                                             <input id="sequencialRemuneracao" name="sequencialRemuneracao" type="hidden" value="">
+                                                            <input id="descricaoRemuneracao" name="descricaoRemuneracao" type="hidden" value="">
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <section class="col col-4">
                                                                         <label class="label">Remuneração</label>
                                                                         <label class="select">
-                                                                            <select id="remuneracao" name="remuneracao" >
+                                                                            <select id="remuneracao" name="remuneracao">
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $sql =  "SELECT codigo, descricao FROM Ntl.remuneracao where ativo = 1 order by codigo";
@@ -190,6 +201,7 @@ include("inc/nav.php");
                                                                             <i class="fa fa-minus"></i>
                                                                         </button>
                                                                     </section>
+
                                                                 </div>
                                                             </div>
                                                             <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
@@ -211,20 +223,29 @@ include("inc/nav.php");
                                                                 <legend>Encargos Percentuais</legend>
                                                             </section>
                                                         </div>
-                                                        <input id="jsonEncargoPercentual" name="jsonEncargoPercentual" type="hidden" value="[]">
-                                                        <div id="formEncargoPercentual" class="col-sm-12">
-                                                            <input id="encargoPercentualId" name="encargoPercentualId" type="hidden" value="">
-                                                            <input id="sequencialEncargoPercentual" name="sequencialEncargoPercentual" type="hidden" value="">
+                                                        <input id="jsonEncargo" name="jsonEncargo" type="hidden" value="[]">
+                                                        <div id="formEncargo" class="col-sm-12">
+                                                            <input id="encargoId" name="encargoId" type="hidden" value="">
+                                                            <input id="sequencialEncargo" name="sequencialEncargo" type="hidden" value="">
+                                                            <input id="encargoDescricao" name="encargoDescricao" type="hidden" value="">
+                                                            <input id="encargoGrupoDescricao" name="encargoGrupoDescricao" type="hidden" value="">
                                                             <div class="form-group">
                                                                 <div class="row">
-                                                                    <section class="col col-md-4">
+                                                                    <section class="col col-4">
                                                                         <label class="label">Encargo</label>
                                                                         <label class="select">
-                                                                            <select id="encargo">
-                                                                                <option> </option>
-                                                                                <option>ISS</option>
-                                                                                <option>FGTS</option>
-                                                                                <option>Encargo governamental</option>
+                                                                            <select id="encargo" name="encargo">
+                                                                                <option></option>
+                                                                                <?php
+                                                                                $sql =  "SELECT codigo, descricao FROM Ntl.encargo where ativo = 1 order by codigo";
+                                                                                $reposit = new reposit();
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = $row['codigo'];
+                                                                                    $descricao = ($row['descricao']);
+                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                }
+                                                                                ?>
                                                                             </select><i></i>
                                                                         </label>
                                                                     </section>
@@ -234,33 +255,37 @@ include("inc/nav.php");
                                                                             <input id="percentual" name="percentual" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                         </label>
                                                                     </section>
-                                                                    <section class="col col-md-4">
+                                                                    <section class="col col-4">
                                                                         <label class="label">Grupo</label>
                                                                         <label class="select">
-                                                                            <select id="encargoGrupo">
+                                                                            <select id="encargoGrupo" name="encargoGrupo">
                                                                                 <option></option>
-                                                                                <option>Grupo A</option>
-                                                                                <option>Grupo B</option>
-                                                                                <option>Grupo C</option>
-                                                                                <option>Grupo E</option>
-                                                                                <option>Grupo F</option>
-                                                                                <option>Grupo G</option>
+                                                                                <?php
+                                                                                $sql = "SELECT codigo, descricao FROM Ntl.grupo where ativo = 1 order by codigo";
+                                                                                $reposit = new reposit();
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = $row['codigo'];
+                                                                                    $descricao = ($row['descricao']);
+                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                }
+                                                                                ?>
                                                                             </select><i></i>
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-2">
                                                                         <label class="label">&nbsp;</label>
-                                                                        <button id="btnAddEncargoPercentual" type="button" class="btn btn-primary">
+                                                                        <button id="btnAddEncargo" type="button" class="btn btn-primary">
                                                                             <i class="fa fa-plus"></i>
                                                                         </button>
-                                                                        <button id="btnRemoverEncargoPercentual" type="button" class="btn btn-danger">
+                                                                        <button id="btnRemoverEncargo" type="button" class="btn btn-danger">
                                                                             <i class="fa fa-minus"></i>
                                                                         </button>
                                                                     </section>
                                                                 </div>
                                                             </div>
                                                             <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                <table id="tableEncargoPercentual" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                <table id="tableEncargo" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                     <thead>
                                                                         <tr role="row">
                                                                             <th style="width: 2px"></th>
@@ -270,27 +295,6 @@ include("inc/nav.php");
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <!-- <tbody style="display:none"> -->
-                                                                        <!-- <?php
-                                                                                echo '<tr >';
-                                                                                echo '<td class="text-left"><a></a></td>';
-                                                                                echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SENAC</a></td>';
-                                                                                echo '<td class="text-left">2,0000%</td>';
-                                                                                echo '<td class="text-left"> </td>';
-                                                                                echo '</tr >';
-                                                                                echo '<tr >';
-                                                                                echo '<td class="text-left"><a></a></td>';
-                                                                                echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">INSS</a></td>';
-                                                                                echo '<td class="text-left">7,799%</td>';
-                                                                                echo '<td class="text-left"> </td>';
-                                                                                echo '</tr >';
-                                                                                echo '<tr >';
-                                                                                echo '<td class="text-left"><a></a></td>';
-                                                                                echo '<td class="text-left"><a href="tabelaBasica_lancamentoCadastro.php?codigo=' . $id . '">SESC</a></td>';
-                                                                                echo '<td class="text-left">5,0000%</td>';
-                                                                                echo '<td class="text-left"> </td>';
-                                                                                echo '</tr >';
-                                                                                ?> -->
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -300,57 +304,69 @@ include("inc/nav.php");
                                                                 <legend>Insumos</legend>
                                                             </section>
                                                         </div>
-                                                        <input id="jsonInsumos" name="jsonInsumos" type="hidden" value="[]">
-                                                        <div id="formInsumos" class="col-sm-12">
-                                                            <input id="insumosId" name="insumosId" type="hidden" value="">
-                                                            <input id="sequencialInsumos" name="sequencialInsumos" type="hidden" value="">
+                                                        <input id="jsonInsumo" name="jsonInsumo" type="hidden" value="[]">
+                                                        <div id="formInsumo" class="col-sm-12">
+                                                            <input id="insumoId" name="insumoId" type="hidden" value="">
+                                                            <input id="sequencialInsumo" name="sequencialInsumo" type="hidden" value="">
+                                                            <input id="insumoDescricao" name="insumoDescricao" type="hidden" value="">
+                                                            <input id="insumoGrupoDescricao" name="insumoGrupoDescricao" type="hidden" value="">
                                                             <div class="form-group">
                                                                 <div class="row">
-                                                                    <section class="col col-md-4">
-                                                                        <label class="label">Insumos</label>
+                                                                    <section class="col col-4">
+                                                                        <label class="label">Insumo</label>
                                                                         <label class="select">
-                                                                            <select id="insumos">
-                                                                                <option> </option>
-                                                                                <option>Uniforme</option>
-                                                                                <option>Capacete</option>
-                                                                                <option>Computadores</option>
-                                                                                <option>Ferramenta</option>
+                                                                            <select id="insumo" name="insumo">
+                                                                                <option></option>
+                                                                                <?php
+                                                                                $sql =  "SELECT codigo, descricao FROM Ntl.insumo where ativo = 1 order by codigo";
+                                                                                $reposit = new reposit();
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = $row['codigo'];
+                                                                                    $descricao = ($row['descricao']);
+                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                }
+                                                                                ?>
                                                                             </select><i></i>
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
                                                                         <label class="label">Valor</label>
                                                                         <label class="input"><i class="icon-append fa fa-money"></i>
-                                                                            <input id="insumosValor" name="insumosValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                            <input id="insumoValor" name="insumoValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                         </label>
                                                                     </section>
-                                                                    <section class="col col-md-4">
+                                                                    <section class="col col-4">
                                                                         <label class="label">Grupo</label>
                                                                         <label class="select">
-                                                                            <select id="insumosGrupo">
+                                                                            <select id="insumoGrupo" name="insumoGrupo">
                                                                                 <option></option>
-                                                                                <option>Grupo A</option>
-                                                                                <option>Grupo B</option>
-                                                                                <option>Grupo C</option>
-                                                                                <option>Grupo E</option>
-                                                                                <option>Grupo F</option>
-                                                                                <option>Grupo G</option>
+                                                                                <?php
+                                                                                $sql = "SELECT codigo, descricao FROM Ntl.grupo where ativo = 1 order by codigo";
+                                                                                $reposit = new reposit();
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = $row['codigo'];
+                                                                                    $descricao = ($row['descricao']);
+                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                }
+                                                                                ?>
                                                                             </select><i></i>
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-2">
                                                                         <label class="label">&nbsp;</label>
-                                                                        <button id="btnAddInsumos" type="button" class="btn btn-primary">
+                                                                        <button id="btnAddInsumo" type="button" class="btn btn-primary">
                                                                             <i class="fa fa-plus"></i>
                                                                         </button>
-                                                                        <button id="btnRemoverInsumos" type="button" class="btn btn-danger">
+                                                                        <button id="btnRemoverInsumo" type="button" class="btn btn-danger">
                                                                             <i class="fa fa-minus"></i>
                                                                         </button>
                                                                     </section>
                                                                 </div>
                                                             </div>
                                                             <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                <table id="tableInsumos" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                <table id="tableInsumo" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                     <thead>
                                                                         <tr role="row">
                                                                             <th style="width: 2px"></th>
@@ -360,7 +376,7 @@ include("inc/nav.php");
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                      
+
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -374,24 +390,31 @@ include("inc/nav.php");
                                                         <div id="formBdi" class="col-sm-12">
                                                             <input id="bdiId" name="bdiId" type="hidden" value="">
                                                             <input id="sequencialBdi" name="sequencialBdi" type="hidden" value="">
+                                                            <input id="bdiDescricao" name="bdiDescricao" type="hidden" value="">
                                                             <div class="form-group">
                                                                 <div class="row">
-                                                                    <section class="col col-md-6">
+                                                                    <section class="col col-4">
                                                                         <label class="label">Bdi</label>
                                                                         <label class="select">
-                                                                            <select id="bdi">
-                                                                                <option> </option>
-                                                                                <option>Despesas Indiretas</option>
-                                                                                <option>Lucro</option>
-                                                                                <option>COFINS</option>
-                                                                                <option>Ferramenta</option>
+                                                                            <select id="bdi" name="bdi">
+                                                                                <option></option>
+                                                                                <?php
+                                                                                $sql = "SELECT codigo, descricao FROM Ntl.bdi where ativo = 1 order by codigo";
+                                                                                $reposit = new reposit();
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = $row['codigo'];
+                                                                                    $descricao = ($row['descricao']);
+                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                }
+                                                                                ?>
                                                                             </select><i></i>
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
                                                                         <label class="label">Percentual</label>
                                                                         <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                            <input id="bdiValor" name="bdiValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                            <input id="bdiPercentual" name="bdiPercentual" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-2">
@@ -423,7 +446,7 @@ include("inc/nav.php");
                                                                     <legend></legend>
                                                                 </section>
                                                             </div>
-                                                            <button type="button" id="btn" class="btn btn-info" aria-hidden="true" title="btn">
+                                                            <button id="calculaGrupoModal" type="button" class="btn btn-info" aria-hidden="true" title="btn">
                                                                 Calcula Grupo
                                                             </button>
                                                             <button type="button" id="btn" class="btn btn-info" aria-hidden="true" title="btn">
@@ -484,6 +507,61 @@ include("inc/nav.php");
                                         </button>
                                     </footer>
                                 </form>
+                                <div class="modal fade" id="parametroLinkModalPanel" data-backdrop="static" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" style="width:75%;">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title">
+                                                    Calculo por grupo
+                                                    <legend> Remuneracao</legend>
+                                                </h4>
+
+                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                    <input id="jsonRemuneracaoModal" name="jsonRemuneracaoModal" type="hidden" value="[]">
+                                                    <table id="tableRemuneracaoModal" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <!-- <th style="width: 2px"></th> -->
+                                                                <th class="text-center" style="width: 750px">Descricao</th>
+                                                                <th class="text-center">Valor</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <td>TOTAL</td>
+                                                            <td class="text-right decimal-2-casas">0,00</td>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <h4 class="modal-title">
+                                                    <legend> Total por Grupo</legend>
+                                                </h4>
+                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                    <input id="jsonGrupoEncargoModal" name="jsonGrupoEncargoModal" type="hidden" value="[]">
+                                                    <table id="tableEncargoGrupoModal" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <!-- <th style="width: 2px"></th> -->
+                                                                <th class="text-center" style="width: 750px">Grupo</th>
+                                                                <th class="text-center">Total: </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- <td></td> -->
+                                                            <td>TOTAL</td>
+                                                            <td class="text-right decimal-2-casas">0,00</td>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- <div id="parametroLinkModalBody" class="modal-body no-padding" style="min-height:290px;">
+                                            </div> -->
+                                            <!-- <div class="modal-footer"></div> -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -511,7 +589,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaPosto.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_faturamentoValorPosto.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -536,12 +614,16 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
 
+<script src="<?php echo ASSETS_URL; ?>/js/plugin/collect.min.js"></script>
+
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-        jsonEncargoPercentualArray = JSON.parse($("#jsonEncargoPercentual").val());
-        jsonInsumosArray = JSON.parse($("#jsonInsumos").val());
+        jsonEncargoArray = JSON.parse($("#jsonEncargo").val());
+        jsonInsumoArray = JSON.parse($("#jsonInsumo").val());
         jsonBdiArray = JSON.parse($("#jsonBdi").val());
         jsonRemuneracaoArray = JSON.parse($("#jsonRemuneracao").val());
+        jsonRemuneracaoModalArray = JSON.parse($("#jsonRemuneracaoModal").val());
+        jsonGrupoEncargoModalArray = JSON.parse($("#jsonGrupoEncargoModal").val());
 
 
         $('#dlgSimpleExcluir').dialog({
@@ -601,31 +683,58 @@ include("inc/scripts.php");
             }
         }).trigger('focusout');
 
-        $("#btnAddEncargoPercentual").on("click", function() {
-            addEncargoPercentual();
+        $("#btnAddEncargo").on("click", function() {
+            addEncargo();
+        });
+        $("#btnRemoverEncargo").on("click", function() {
+            excluirEncargo();
         });
 
-        $("#btnAddInsumos").on("click", function() {
-            addInsumos();
+
+        $("#btnAddInsumo").on("click", function() {
+            addInsumo();
+        });
+        $("#btnRemoverInsumo").on("click", function() {
+            excluirInsumo();
         });
 
         $("#btnAddBdi").on("click", function() {
             addBdi();
+        });
+        $("#btnRemoverBdi").on("click", function() {
+            excluirBdi();
         });
 
         $("#btnAddRemuneracao").on("click", function() {
             addRemuneracao();
             calculaValorRemuneracao()
         });
+        $("#btnRemoverRemuneracao").on("click", function() {
+            excluirRemuneracao();
+        });
 
 
         $("#btnRecuperaEncargo").on("click", function() {
-            $("#tableEncargoPercentual tbody").css("display", "")
+            $("#tableEncargo tbody").css("display", "")
         });
         $("#btnRecuperaInsumo").on("click", function() {
-            $("#tableInsumos tbody").css("display", "")
+            $("#tableInsumo tbody").css("display", "")
         });
 
+        $("#calculaGrupoModal").on("click", function() {
+            var array = collect(jsonEncargoArray).groupBy("encargoGrupo").map(function(item) {
+                var percentualEncargoGrupo = item.sum("percentual");
+                var descricaoGrupoEncargoGrupo = item.first().encargoGrupoDescricao;
+                return {
+                    percentualEncargoGrupo,
+                    descricaoGrupoEncargoGrupo
+                }
+            }).values().sortBy("descricaoGrupoEncargoGrupo");
+
+            fillTableGrupoEncargoModal(array);
+            fillTableRemuneracaoModal();
+            $('#parametroLinkModalPanel').modal();
+        });
 
         carregaPagina();
     });
@@ -639,12 +748,12 @@ include("inc/scripts.php");
             return false;
         }
 
-        let posto = $('#formPosto').serializeArray().reduce(function(obj, item) {
+        let valorPosto = $('#formValorPosto').serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
             return obj;
         }, {});
 
-        gravaPosto(posto,
+        gravaValorPosto(valorPosto,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -660,7 +769,7 @@ include("inc/scripts.php");
                 } else {
                     var piece = data.split("#");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
+                    voltar()
                 }
             }
         );
@@ -672,7 +781,7 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'tabelaBasica_projetoEncargoFiltro.php');
+        $(location).attr('href', 'faturamento_valorPostoFiltro.php');
     }
 
     function excluir() {
@@ -708,22 +817,42 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaPosto(idd,
+                recuperaValorPosto(idd,
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var out = piece[1];
+                            var strArrayRemuneracao = piece[2];
+                            var strArrayEncargo = piece[3];
+                            var strArrayInsumo = piece[4];
+                            var strArrayBdi = piece[5];
 
                             piece = out.split("^");
-                            codigo = piece[0];
-                            descricao = piece[1];
-                            ativo = piece[2];
+                            codigo = +piece[0];
+                            projeto = +piece[1];
+                            posto = +piece[2];
+                            ativo = +piece[3];
 
                             $("#codigo").val(codigo);
-                            $("#descricao").val(descricao);
+                            $("#projeto").val(projeto);
+                            $("#posto").val(posto);
                             $("#ativo").val(ativo);
+
+                            $("#jsonRemuneracao").val(strArrayRemuneracao);
+                            jsonRemuneracaoArray = JSON.parse($("#jsonRemuneracao").val());
+                            fillTableRemuneracao();
+                            $("#jsonEncargo").val(strArrayEncargo);
+                            jsonEncargoArray = JSON.parse($("#jsonEncargo").val());
+                            fillTableEncargo();
+                            $("#jsonInsumo").val(strArrayInsumo);
+                            jsonInsumoArray = JSON.parse($("#jsonInsumo").val());
+                            fillTableInsumo();
+                            $("#jsonBdi").val(strArrayBdi);
+                            jsonBdiArray = JSON.parse($("#jsonBdi").val());
+                            fillTableBdi();
+                            calculaValorRemuneracao();
 
                         }
                     }
@@ -732,66 +861,66 @@ include("inc/scripts.php");
         }
     }
 
-    function addEncargoPercentual() {
-        var item = $("#formEncargoPercentual").toObject({
+    function addEncargo() {
+        var item = $("#formEncargo").toObject({
             mode: 'combine',
             skipEmpty: false,
-            nodeCallback: processDataEncargoPercentual
+            nodeCallback: processDataEncargo
         });
 
-        if (item["sequencialEncargoPercentual"] === '') {
-            if (jsonEncargoPercentualArray.length === 0) {
-                item["sequencialEncargoPercentual"] = 1;
+        if (item["sequencialEncargo"] === '') {
+            if (jsonEncargoArray.length === 0) {
+                item["sequencialEncargo"] = 1;
             } else {
-                item["sequencialEncargoPercentual"] = Math.max.apply(Math, jsonEncargoPercentualArray.map(function(o) {
-                    return o.sequencialEncargoPercentual;
+                item["sequencialEncargo"] = Math.max.apply(Math, jsonEncargoArray.map(function(o) {
+                    return o.sequencialEncargo;
                 })) + 1;
             }
-            item["encargoPercentualId"] = 0;
+            item["encargoId"] = 0;
         } else {
-            item["sequencialEncargoPercentual"] = +item["sequencialEncargoPercentual"];
+            item["sequencialEncargo"] = +item["sequencialEncargo"];
         }
 
         var index = -1;
-        $.each(jsonEncargoPercentualArray, function(i, obj) {
-            if (+$('#sequencialEncargoPercentual').val() === obj.sequencialEncargoPercentual) {
+        $.each(jsonEncargoArray, function(i, obj) {
+            if (+$('#sequencialEncargo').val() === obj.sequencialEncargo) {
                 index = i;
                 return false;
             }
         });
 
         if (index >= 0)
-            jsonEncargoPercentualArray.splice(index, 1, item);
+            jsonEncargoArray.splice(index, 1, item);
         else
-            jsonEncargoPercentualArray.push(item);
+            jsonEncargoArray.push(item);
 
-        $("#jsonEncargoPercentual").val(JSON.stringify(jsonEncargoPercentualArray));
-        fillTableEncargoPercentual();
-        clearFormEncargoPercentual();
+        $("#jsonEncargo").val(JSON.stringify(jsonEncargoArray));
+        fillTableEncargo();
+        clearFormEncargo();
 
     }
 
-    function fillTableEncargoPercentual() {
-        $("#tableEncargoPercentual tbody").empty();
-        for (var i = 0; i < jsonEncargoPercentualArray.length; i++) {
+    function fillTableEncargo() {
+        $("#tableEncargo tbody").empty();
+        for (var i = 0; i < jsonEncargoArray.length; i++) {
             var row = $('<tr />');
-            $("#tableEncargoPercentual tbody").append(row);
-            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonEncargoPercentualArray[i].sequencialEncargoPercentual + '"><i></i></label></td>'));
-            row.append($('<td class="text-center" onclick="carregaEncargoPercentual(' + jsonEncargoPercentualArray[i].sequencialEncargoPercentual + ');">' + jsonEncargoPercentualArray[i].encargo + '</td>'));
-            row.append($('<td class="text-center">' + jsonEncargoPercentualArray[i].percentual + '</td>'));
-            row.append($('<td class="text-center">' + jsonEncargoPercentualArray[i].encargoGrupo + '</td>'));
+            $("#tableEncargo tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonEncargoArray[i].sequencialEncargo + '"><i></i></label></td>'));
+            row.append($('<td class="text-left" onclick="carregaEncargo(' + jsonEncargoArray[i].sequencialEncargo + ');">' + jsonEncargoArray[i].encargoDescricao + '</td>'));
+            row.append($('<td class="text-center">' + jsonEncargoArray[i].percentual + ' %' + '</td>'));
+            row.append($('<td class="text-center">' + jsonEncargoArray[i].encargoGrupoDescricao + '</td>'));
         }
     }
 
-    function clearFormEncargoPercentual() {
+    function clearFormEncargo() {
         $("#encargo").val('');
-        $("#encargoPercentualId").val('');
-        $("#sequencialEncargoPercentual").val('');
+        $("#encargoId").val('');
+        $("#sequencialEncargo").val('');
         $('#percentual').val('');
         $('#encargoGrupo').val('');
     }
 
-    function processDataEncargoPercentual(node) {
+    function processDataEncargo(node) {
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
         var fieldName = node.getAttribute ? node.getAttribute('name') : '';
 
@@ -815,6 +944,21 @@ include("inc/scripts.php");
                 value: percentual
             };
         }
+
+        if (fieldName !== '' && (fieldId === "encargoDescricao")) {
+            return {
+                name: fieldName,
+                value: $("#encargo option:selected").text()
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "encargoGrupoDescricao")) {
+            return {
+                name: fieldName,
+                value: $("#encargoGrupo option:selected").text()
+            };
+        }
+
         if (fieldName !== '' && (fieldId === "encargoGrupo")) {
             var encargoGrupo = $("#encargoGrupo").val();
             if (encargoGrupo !== '') {
@@ -829,94 +973,113 @@ include("inc/scripts.php");
         return false;
     }
 
-    function carregaEncargoPercentual(sequencialEncargoPercentual) {
-        var arr = jQuery.grep(jsonEncargoPercentualArray, function(item, i) {
-            return (item.sequencialEncargoPercentual === sequencialEncargoPercentual);
+    function carregaEncargo(sequencialEncargo) {
+        var arr = jQuery.grep(jsonEncargoArray, function(item, i) {
+            return (item.sequencialEncargo === sequencialEncargo);
         });
 
-        clearFormEncargoPercentual();
+        clearFormEncargo();
 
         if (arr.length > 0) {
             var item = arr[0];
             $("#encargo").val(item.encargo);
             $("#percentual").val(item.percentual);
-            $("#sequencialEncargoPercentual").val(item.sequencialEncargoPercentual);
+            $("#encargoGrupo").val(item.encargoGrupo);
+            $("#sequencialEncargo").val(item.sequencialEncargo);
         }
     }
 
-
-    // insumos
-    function clearFormInsumos() {
-        $("#insumos").val('');
-        $("#insumosId").val('');
-        $("#sequencialInsumos").val('');
-        $('#insumosValor').val('');
+    function excluirEncargo() {
+        var arrSequencial = [];
+        $('#tableEncargo input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonEncargoArray.length - 1; i >= 0; i--) {
+                var obj = jsonEncargoArray[i];
+                if (jQuery.inArray(obj.sequencialEncargo, arrSequencial) > -1) {
+                    jsonEncargoArray.splice(i, 1);
+                }
+            }
+            $("#jsonEncargo").val(JSON.stringify(jsonEncargoArray));
+            fillTableEncargo();
+        } else
+            smartAlert("Erro", "Selecione pelo menos 1 Encargo para excluir.", "error");
     }
 
-    function addInsumos() {
-        var item = $("#formInsumos").toObject({
+
+    // insumo
+    function clearFormInsumo() {
+        $("#insumo").val('');
+        $("#insumoId").val('');
+        $("#sequencialInsumo").val('');
+        $('#insumoValor').val('');
+    }
+
+    function addInsumo() {
+        var item = $("#formInsumo").toObject({
             mode: 'combine',
             skipEmpty: false,
-            nodeCallback: processDataInsumos
+            nodeCallback: processDataInsumo
         });
 
-        if (item["sequencialInsumos"] === '') {
-            if (jsonInsumosArray.length === 0) {
-                item["sequencialInsumos"] = 1;
+        if (item["sequencialInsumo"] === '') {
+            if (jsonInsumoArray.length === 0) {
+                item["sequencialInsumo"] = 1;
             } else {
-                item["sequencialInsumos"] = Math.max.apply(Math, jsonInsumosArray.map(function(o) {
-                    return o.sequencialInsumos;
+                item["sequencialInsumo"] = Math.max.apply(Math, jsonInsumoArray.map(function(o) {
+                    return o.sequencialInsumo;
                 })) + 1;
             }
-            item["encargoPercentualId"] = 0;
+            item["insumoId"] = 0;
         } else {
-            item["sequencialInsumos"] = +item["sequencialInsumos"];
+            item["sequencialInsumo"] = +item["sequencialInsumo"];
         }
 
         var index = -1;
-        $.each(jsonInsumosArray, function(i, obj) {
-            if (+$('#sequencialInsumos').val() === obj.sequencialInsumos) {
+        $.each(jsonInsumoArray, function(i, obj) {
+            if (+$('#sequencialInsumo').val() === obj.sequencialInsumo) {
                 index = i;
                 return false;
             }
         });
 
         if (index >= 0)
-            jsonInsumosArray.splice(index, 1, item);
+            jsonInsumoArray.splice(index, 1, item);
         else
-            jsonInsumosArray.push(item);
+            jsonInsumoArray.push(item);
 
-        $("#jsonInsumos").val(JSON.stringify(jsonInsumosArray));
-        fillTableInsumos();
-        clearFormInsumos();
+        $("#jsonInsumo").val(JSON.stringify(jsonInsumoArray));
+        fillTableInsumo();
+        clearFormInsumo();
 
     }
 
-    function fillTableInsumos() {
-        $("#tableInsumos tbody").empty();
-        for (var i = 0; i < jsonInsumosArray.length; i++) {
+    function fillTableInsumo() {
+        $("#tableInsumo tbody").empty();
+        for (var i = 0; i < jsonInsumoArray.length; i++) {
             var row = $('<tr />');
-            $("#tableInsumos tbody").append(row);
-            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonInsumosArray[i].sequencialInsumos + '"><i></i></label></td>'));
-            row.append($('<td class="text-center" onclick="carregaInsumos(' + jsonInsumosArray[i].sequencialInsumos + ');">' + jsonInsumosArray[i].insumos + '</td>'));
-            row.append($('<td class="text-center">' + jsonInsumosArray[i].insumosValor + '</td>'));
-            row.append($('<td class="text-center">' + jsonInsumosArray[i].insumosGrupo + '</td>'));
+            $("#tableInsumo tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonInsumoArray[i].sequencialInsumo + '"><i></i></label></td>'));
+            row.append($('<td class="text-left" onclick="carregaInsumo(' + jsonInsumoArray[i].sequencialInsumo + ');">' + jsonInsumoArray[i].insumoDescricao + '</td>'));
+            row.append($('<td class="text-center">' + 'R$ ' + jsonInsumoArray[i].insumoValor + '</td>'));
+            row.append($('<td class="text-center">' + jsonInsumoArray[i].insumoGrupoDescricao + '</td>'));
         }
     }
 
 
-    function processDataInsumos(node) {
+    function processDataInsumo(node) {
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
         var fieldName = node.getAttribute ? node.getAttribute('name') : '';
 
-        if (fieldName !== '' && (fieldId === "insumos")) {
-            var insumos = $("#insumos").val();
-            if (insumos !== '') {
-                fieldName = "insumos";
+        if (fieldName !== '' && (fieldId === "insumo")) {
+            var insumo = $("#insumo").val();
+            if (insumo !== '') {
+                fieldName = "insumo";
             }
             return {
                 name: fieldName,
-                value: insumos
+                value: insumo
             };
         }
         if (fieldName !== '' && (fieldId === "insumoValor")) {
@@ -929,18 +1092,70 @@ include("inc/scripts.php");
                 value: insumoValor
             };
         }
-        if (fieldName !== '' && (fieldId === "insumosGrupo")) {
-            var insumosGrupo = $("#insumosGrupo").val();
-            if (insumosGrupo !== '') {
-                fieldName = "insumosGrupo";
+
+        if (fieldName !== '' && (fieldId === "insumoGrupoDescricao")) {
+            return {
+                name: fieldName,
+                value: $("#insumoGrupo option:selected").text()
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "insumoDescricao")) {
+            return {
+                name: fieldName,
+                value: $("#insumo option:selected").text()
+            };
+        }
+
+
+
+        if (fieldName !== '' && (fieldId === "insumoGrupo")) {
+            var insumoGrupo = $("#insumoGrupo").val();
+            if (insumoGrupo !== '') {
+                fieldName = "insumoGrupo";
             }
             return {
                 name: fieldName,
-                value: insumosGrupo
+                value: insumoGrupo
             };
         }
 
         return false;
+    }
+
+    function carregaInsumo(sequencialInsumo) {
+        var arr = jQuery.grep(jsonInsumoArray, function(item, i) {
+            return (item.sequencialInsumo === sequencialInsumo);
+        });
+
+        clearFormInsumo();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#insumo").val(item.insumo);
+            $("#insumoValor").val(item.insumoValor);
+            $("#insumoGrupo").val(item.insumoGrupo);
+            $("#sequencialInsumo").val(item.sequencialInsumo);
+        }
+    }
+
+
+    function excluirInsumo() {
+        var arrSequencial = [];
+        $('#tableInsumo input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonInsumoArray.length - 1; i >= 0; i--) {
+                var obj = jsonInsumoArray[i];
+                if (jQuery.inArray(obj.sequencialInsumo, arrSequencial) > -1) {
+                    jsonInsumoArray.splice(i, 1);
+                }
+            }
+            $("#jsonInsumo").val(JSON.stringify(jsonInsumoArray));
+            fillTableInsumo();
+        } else
+            smartAlert("Erro", "Selecione pelo menos 1 Insumo para excluir.", "error");
     }
 
     // bdi
@@ -948,7 +1163,7 @@ include("inc/scripts.php");
         $("#bdi").val('');
         $("#bdiId").val('');
         $("#sequencialBdi").val('');
-        $('#bdiValor').val('');
+        $('#bdiPercentual').val('');
     }
 
     function addBdi() {
@@ -966,7 +1181,7 @@ include("inc/scripts.php");
                     return o.sequencialBdi;
                 })) + 1;
             }
-            item["encargoPercentualId"] = 0;
+            item["bdiId"] = 0;
         } else {
             item["sequencialBdi"] = +item["sequencialBdi"];
         }
@@ -996,8 +1211,8 @@ include("inc/scripts.php");
             var row = $('<tr />');
             $("#tableBdi tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonBdiArray[i].sequencialBdi + '"><i></i></label></td>'));
-            row.append($('<td class="text-center" onclick="carregaBdi(' + jsonBdiArray[i].sequencialBdi + ');">' + jsonBdiArray[i].bdi + '</td>'));
-            row.append($('<td class="text-center">' + jsonBdiArray[i].bdiValor + '</td>'));
+            row.append($('<td class="text-left" onclick="carregaBdi(' + jsonBdiArray[i].sequencialBdi + ');">' + jsonBdiArray[i].bdiDescricao + '</td>'));
+            row.append($('<td class="text-center">' + jsonBdiArray[i].bdiPercentual + ' %' + '</td>'));
         }
     }
 
@@ -1016,18 +1231,58 @@ include("inc/scripts.php");
                 value: bdi
             };
         }
-        if (fieldName !== '' && (fieldId === "insumoValor")) {
-            var insumoValor = $("#insumoValor").val();
+
+        if (fieldName !== '' && (fieldId === "bdiDescricao")) {
+            return {
+                name: fieldName,
+                value: $("#bdi option:selected").text()
+            };
+        }
+        if (fieldName !== '' && (fieldId === "bdiPercentual")) {
+            var bdiPercentual = $("#bdiPercentual").val();
             if (insumoValor !== '') {
-                fieldName = "insumoValor";
+                fieldName = "bdiPercentual";
             }
             return {
                 name: fieldName,
-                value: insumoValor
+                value: bdiPercentual
             };
         }
 
         return false;
+    }
+
+    function excluirBdi() {
+        var arrSequencial = [];
+        $('#tableBdi input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonBdiArray.length - 1; i >= 0; i--) {
+                var obj = jsonBdiArray[i];
+                if (jQuery.inArray(obj.sequencialBdi, arrSequencial) > -1) {
+                    jsonBdiArray.splice(i, 1);
+                }
+            }
+            $("#jsonBdi").val(JSON.stringify(jsonBdiArray));
+            fillTableBdi();
+        } else
+            smartAlert("Erro", "Selecione pelo menos 1 Bdi para excluir.", "error");
+    }
+
+    function carregaBdi(sequencialBdi) {
+        var arr = jQuery.grep(jsonBdiArray, function(item, i) {
+            return (item.sequencialBdi === sequencialBdi);
+        });
+
+        clearFormBdi();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#bdi").val(item.bdi);
+            $("#bdiPercentual").val(item.bdiPercentual);
+            $("#sequencialBdi").val(item.sequencialBdi);
+        }
     }
 
     // remuneracao
@@ -1053,7 +1308,7 @@ include("inc/scripts.php");
                     return o.sequencialRemuneracao;
                 })) + 1;
             }
-            item["encargoPercentualId"] = 0;
+            item["remuneracaoId"] = 0;
         } else {
             item["sequencialRemuneracao"] = +item["sequencialRemuneracao"];
         }
@@ -1083,7 +1338,7 @@ include("inc/scripts.php");
             var row = $('<tr />');
             $("#tableRemuneracao tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoArray[i].sequencialRemuneracao + '"><i></i></label></td>'));
-            row.append($('<td class="text-center" onclick="carregaRemuneracao(' + jsonRemuneracaoArray[i].sequencialRemuneracao + ');">' + jsonRemuneracaoArray[i].remuneracao + '</td>'));
+            row.append($('<td class="text-left" onclick="carregaRemuneracao(' + jsonRemuneracaoArray[i].sequencialRemuneracao + ');">' + jsonRemuneracaoArray[i].descricaoRemuneracao + '</td>'));
             row.append($('<td class="text-center">' + 'R$ ' + jsonRemuneracaoArray[i].remuneracaoValor + '</td>'));
         }
     }
@@ -1103,6 +1358,14 @@ include("inc/scripts.php");
                 value: remuneracao
             };
         }
+
+        if (fieldName !== '' && (fieldId === "descricaoRemuneracao")) {
+            return {
+                name: fieldName,
+                value: $("#remuneracao option:selected").text()
+            };
+        }
+
         if (fieldName !== '' && (fieldId === "remuneracaoValor")) {
             var remuneracaoValor = $("#remuneracaoValor").val();
             if (remuneracaoValor !== '') {
@@ -1117,10 +1380,84 @@ include("inc/scripts.php");
     }
 
     function calculaValorRemuneracao() {
-        var valorTotalRemuneracao = 0
+        var valorTotalRemuneracao = 0;
         for (var i = 0; i < jsonRemuneracaoArray.length; i++) {
-            valorTotalRemuneracao += +jsonRemuneracaoArray[i].remuneracaoValor.replace(",", ".")
+            var aux = jsonRemuneracaoArray[i].remuneracaoValor;
+            aux = unparseBRL(aux);
+            valorTotalRemuneracao += parseFloat(aux);
         }
         $('#remuneracaoTotal').val(valorTotalRemuneracao.toFixed(2).replace(".", ","));
+    }
+
+    function carregaRemuneracao(sequencialRemuneracao) {
+        var arr = jQuery.grep(jsonRemuneracaoArray, function(item, i) {
+            return (item.sequencialRemuneracao === sequencialRemuneracao);
+        });
+
+        clearFormRemuneracao();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#remuneracao").val(item.remuneracao);
+            $("#remuneracaoValor").val(item.remuneracaoValor);
+            $("#sequencialRemuneracao").val(item.sequencialRemuneracao);
+        }
+    }
+
+    function excluirRemuneracao() {
+        var arrSequencial = [];
+        $('#tableRemuneracao input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonRemuneracaoArray.length - 1; i >= 0; i--) {
+                var obj = jsonRemuneracaoArray[i];
+                if (jQuery.inArray(obj.sequencialRemuneracao, arrSequencial) > -1) {
+                    jsonRemuneracaoArray.splice(i, 1);
+                }
+            }
+            $("#jsonRemuneracao").val(JSON.stringify(jsonRemuneracaoArray));
+            fillTableRemuneracao();
+        } else
+            smartAlert("Erro", "Selecione pelo menos 1 Remuneracao para excluir.", "error");
+    }
+    // remuneracao fim
+
+    function unparseBRL(value) {
+        if (value === '') return 0;
+        return Number(`${value}`.toString().replace(/\./g, "").replace(",", "."));
+    }
+    // Modal inicio 
+    function fillTableRemuneracaoModal() {
+        $("#tableRemuneracaoModal tbody").empty();
+        jsonRemuneracaoModalArray = jsonRemuneracaoArray;
+        var remuneracaoTotal = $('#remuneracaoTotal').val();
+        for (var i = 0; i < jsonRemuneracaoModalArray.length; i++) {
+            var row = $('<tr/>');
+            $("#tableRemuneracaoModal tbody").append(row);
+            // row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoModalArray[i].sequencialRemuneracao + '"><i></i></label></td>'));
+            row.append($('<td class="text-left">' + jsonRemuneracaoModalArray[i].descricaoRemuneracao + '</td>'));
+            row.append($('<td class="text-center">' + "R$ " + jsonRemuneracaoModalArray[i].remuneracaoValor + '</td>'));
+        }
+        var row = $('<tr/>');
+        $("#tableRemuneracaoModal tbody").append(row);
+        row.append($('<td class="text-center"><b>' + "TOTAL: " + '</b></td>'));
+        row.append($('<td class="text-center"><b>' + "R$ " + remuneracaoTotal + '</b></td>'));
+    }
+
+    function fillTableGrupoEncargoModal(array) {
+        $("#tableEncargoGrupoModal tbody").empty();
+        jsonGrupoEncargoModalArray = array.items;
+        for (var i = 0; i < jsonGrupoEncargoModalArray.length; i++) {
+            var row = $('<tr/>');
+            $("#tableEncargoGrupoModal tbody").append(row);
+            // row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoModalArray[i].sequencialRemuneracao + '"><i></i></label></td>'));
+            row.append($('<td class="text-left">' + jsonGrupoEncargoModalArray[i].descricaoGrupoEncargoGrupo + '</td>'));
+            row.append($('<td class="text-center">' + jsonGrupoEncargoModalArray[i].percentualEncargoGrupo + " %" + '</td>'));
+        }
+        // var row = $('<tr/>');
+        // $("#tableRemuneracaoModal tbody").append(row);
+        // row.append($('<td class="text-center"><b>' + "TOTAL: " + '</b></td>'));
+        // row.append($('<td class="text-center"><b>' + "R$ " + remuneracaoTotal + '</b></td>'));
     }
 </script>

@@ -369,7 +369,7 @@ if ($condicaoOperacaoOk) {
             $page_nav['operacao']['sub']['faturamento']['sub'] += array("percentualPostoEncargo" => array("title" => "Percentual Posto Encargo", "url" => APP_URL . "/tabelaBasica_percentualCargoEncargoFiltro.php"));
         }
         if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['operacao']['sub']['faturamento']['sub'] += array("projetoPosto" => array("title" => "Projeto Posto Encargo", "url" => APP_URL . "/tabelaBasica_projetoEncargoFiltro.php"));
+            $page_nav['operacao']['sub']['faturamento']['sub'] += array("projetoPosto" => array("title" => "Projeto Posto Encargo", "url" => APP_URL . "/Faturamento_valorPostoFiltro.php"));
         }
     }
 
