@@ -100,26 +100,7 @@ include("inc/ribbon.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
-                                                            <section class="col col-3 col-auto">
-                                                                <label class="label" for="projeto">Material</label>
-                                                                <label class="select">
-                                                                    <select id="estoque" name="estoque" class="">
-                                                                        <option></option>
-                                                                        <?php
-                                                                        // $reposit = new reposit();
-                                                                        // $sql = "select E.codigo, E.descricao  from Estoque.estoque E  where ativo = 1 order by descricao";
-                                                                        // $result = $reposit->RunQuery($sql);
-                                                                        // foreach($result as $row) {
-                                                                        //     $id = (int) $row['codigo'];
-                                                                        //     $estoque = $row['descricao'];
-                                                                        //     echo '<option value=' . $id . '>' . $estoque . '</option>';
-                                                                        // }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
-
+                                                            
                                                             <section class="col col-3 col-auto">
                                                                 <label class="label" for="projeto">Grupo Item</label>
                                                                 <label class="select">
@@ -138,17 +119,25 @@ include("inc/ribbon.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-<!--                                                             
-                                                               <section class="col col-2 col-auto">
-                                                                <label class="label">Ativo</label>
+
+                                                            <section class="col col-1 col-auto">
+                                                                <label class="label" for="projeto">UF</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo">
+                                                                    <select id="sigla" name="sigla" class="">
                                                                         <option></option>
-                                                                        <option value="1" selected>Sim</option> 
-                                                                        <option value="0">Não</option> 
-                                                                    </select><i></i> 
-                                                                </label> 
-                                                            </section>  -->
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT unidadeFederacao,sigla FROM Ntl.unidadeFederacao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach($result as $row) {
+                                                                            $unidadeFederacao = $row['unidadeFederacao'];
+                                                                            $sigla = $row['sigla'];
+                                                                            echo '<option value=' . $sigla . '>' . $sigla . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
 
                                                             <section class="col col-1 col-auto">
                                                                 <label class="label">NF</label>
@@ -231,12 +220,12 @@ include("inc/scripts.php");
     function listarFiltro() {
        
         var apelido = $('#fornecedor').val();
-        var estoque = $('#estoque').val();
         var grupoItem = $('#grupoItem').val();
+        var sigla = $('#sigla').val();
         var notaFiscal = $('#notaFiscal').val();
            
          
-        var parametrosUrl = '&apelido=' + apelido + '&estoque=' + estoque  + '&grupoItem=' + grupoItem   + '&notaFiscal=' + notaFiscal;
+        var parametrosUrl = '&apelido=' + apelido + '&grupoItem=' + grupoItem + '&sigla=' + sigla   + '&notaFiscal=' + notaFiscal;
         $('#resultadoBusca').load('cadastro_consultaFornecedorFiltroListagem.php?' + parametrosUrl);
     }
     

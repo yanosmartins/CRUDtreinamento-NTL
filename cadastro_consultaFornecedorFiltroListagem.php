@@ -6,25 +6,26 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Fornecedor</th>
-                    <th class="text-left" style="min-width:30px;">Material</th>
+                    <th class="text-left" style="min-width:30px;">Fornecedor</th> 
                     <th class="text-left" style="min-width:30px;">Grupo Item</th>
-                    <th class="text-left" style="min-width:35px;">NF</th>
+                    <th class="text-left" style="min-width:20px;">UF</th>
+                    <th class="text-left" style="min-width:20px;">Bairro</th>
+                    <th class="text-left" style="min-width:20px;">NF</th>
 
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $apelido = "";
-                $estoque = "";
                 $grupoItem = "";
                 $notaFiscal = "";
                
                 $where = "where (0 = 0)";
                 
-                $sql = "SELECT F.codigo AS fornecedor, F.apelido, F.ativo, F.notaFiscal, FGI.grupoItem, GI.descricao AS grupoItem, GI.codigo FROM ntl.fornecedor F
+                $sql = "SELECT F.codigo AS fornecedor, F.apelido, F.ativo, F.notaFiscal,UF.sigla, F.uf, F.bairro, FGI.grupoItem, GI.descricao AS grupoItem, GI.codigo FROM ntl.fornecedor F
                 INNER JOIN ntl.fornecedorGrupoItem FGI ON FGI.fornecedor = F.codigo AND F.ativo = 1
-                INNER JOIN Estoque.grupoItem GI ON GI.codigo = FGI.grupoItem ";
+                INNER JOIN Estoque.grupoItem GI ON GI.codigo = FGI.grupoItem 
+                INNER JOIN ntl.unidadeFederacao UF ON F.uf = UF.sigla ";
 
                 if ($_GET["apelido"] != "") {
                     $apelido = $_GET["apelido"];
@@ -34,6 +35,16 @@ include "js/repositorio.php";
                 if ($_GET["grupoItem"] != "") {
                     $grupoItem = $_GET["grupoItem"];
                     $where = $where . " AND [grupoItem] = " . $grupoItem;
+                }
+
+                if ($_GET["sigla"] != "") {
+                    $sigla = $_GET["sigla"];
+                    $where = $where . " AND [uf] = '" .  $sigla . "'";
+                }
+
+                if ($_GET["bairro"] != "") {
+                    $bairro = $_GET["bairro"];
+                    $where = $where . " AND [bairro] = " . $bairro;
                 }
 
                 if ($_GET["notaFiscal"] != "") {
@@ -47,8 +58,9 @@ include "js/repositorio.php";
                 foreach($result as $row) {
                     $id = (int) $row['codigo'];
                     $apelido = (string)$row['apelido'];
-                    // $estoque = (string)$row['estoque'];
                     $grupoItem = (string)$row['grupoItem'];
+                    $sigla = (string)$row['sigla'];
+                    $bairro = (string)$row['bairro']; 
                     $notaFiscal = $row['notaFiscal'];
      
                     if ($notaFiscal == 1) {
@@ -58,9 +70,10 @@ include "js/repositorio.php";
                     }
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="cadastro_fornecedorCadastro.php?codigo=' . $id . '">' . $apelido . '</a></td>';
-                    echo '<td class="text-left">' . $estoque . '</td>';
+                    echo '<td class="text-left"><a href="cadastro_fornecedorCadastro.php?codigo=' . $id . '">' . $apelido . '</a></td>';  
                     echo '<td class="text-left">' . $grupoItem . '</td>';
+                    echo '<td class="text-left">' . $sigla . '</td>';
+                    echo '<td class="text-left">' . $bairro . '</td>'; 
                     echo '<td class="text-left">' . $notaFiscal . '</td>';
                     echo '</tr >';
                 }

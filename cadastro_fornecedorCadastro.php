@@ -247,8 +247,8 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
 
-                                                                <div class="row">
-                                                                    <section class="col col-4">
+                                                                
+                                                                    <section class="col col-4" >
 
                                                                         <button id="btnAddGrupoDeItem" type="button" class="btn btn-primary" title="Adicionar Item">
                                                                             <i class="fa fa-plus"></i>
@@ -257,7 +257,7 @@ include("inc/nav.php");
                                                                             <i class="fa fa-minus"></i>
                                                                         </button>
                                                                     </section>
-                                                                </div>
+                                                                
                                                             </div>
                                                             <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
                                                                 <table id="tableGrupoDeItem" class="table table-bordered table-striped table-condensed table-hover dataTable">
