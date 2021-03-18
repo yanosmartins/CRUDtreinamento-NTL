@@ -514,27 +514,9 @@ include("inc/nav.php");
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                                     &times;
                                                 </button>
-                                                <h4 class="modal-title">
-                                                    Calculo por grupo
-                                                    <legend> Remuneracao</legend>
-                                                </h4>
-
-                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                    <input id="jsonRemuneracaoModal" name="jsonRemuneracaoModal" type="hidden" value="[]">
-                                                    <table id="tableRemuneracaoModal" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                        <thead>
-                                                            <tr role="row">
-                                                                <!-- <th style="width: 2px"></th> -->
-                                                                <th class="text-center" style="width: 750px">Descricao</th>
-                                                                <th class="text-center">Valor</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <td>TOTAL</td>
-                                                            <td class="text-right decimal-2-casas">0,00</td>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                <h4 class="modal-title"> Calculo por grupo</h4>
+                                            </div>
+                                            <div id="parametroLinkModalBody" class="modal-body" style="min-height:290px;">
                                                 <h4 class="modal-title">
                                                     <legend> Total por Grupo</legend>
                                                 </h4>
@@ -555,10 +537,27 @@ include("inc/nav.php");
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                <h4 class="modal-title">
+                                                    <legend> Remuneracao</legend>
+                                                </h4>
+                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                    <input id="jsonRemuneracaoModal" name="jsonRemuneracaoModal" type="hidden" value="[]">
+                                                    <table id="tableRemuneracaoModal" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <!-- <th style="width: 2px"></th> -->
+                                                                <th class="text-center" style="width: 750px">Descricao</th>
+                                                                <th class="text-center">Valor</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <td>TOTAL</td>
+                                                            <td class="text-right decimal-2-casas">0,00</td>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-                                            <!-- <div id="parametroLinkModalBody" class="modal-body no-padding" style="min-height:290px;">
-                                            </div> -->
-                                            <!-- <div class="modal-footer"></div> -->
+                                            <div class="modal-footer"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -684,6 +683,23 @@ include("inc/scripts.php");
         }).trigger('focusout');
 
         $("#btnAddEncargo").on("click", function() {
+            var encargo = $("#encargo").val();
+            var percentual = $("#percentual").val();
+            var encargoGrupo = $("#encargoGrupo").val();
+
+            if (!encargo) {
+                smartAlert("Atenção", "Escolha um encargo", "error")
+                return;
+            }
+            if (!percentual) {
+                smartAlert("Atenção", "Coloque o percentual do encargo", "error")
+                return;
+            }
+            if (!encargoGrupo) {
+                smartAlert("Atenção", "Informe o grupo do encargo", "error")
+                return;
+            }
+            
             addEncargo();
         });
         $("#btnRemoverEncargo").on("click", function() {
@@ -692,6 +708,23 @@ include("inc/scripts.php");
 
 
         $("#btnAddInsumo").on("click", function() {
+            var insumo = $("#insumo").val();
+            var insumoValor = $("#insumoValor").val();
+            var insumoGrupo = $("#insumoGrupo").val();
+
+            if (!insumo) {
+                smartAlert("Atenção", "Escolha um insumo", "error")
+                return;
+            }
+            if (!insumoValor) {
+                smartAlert("Atenção", "Coloque o valor do insumo", "error")
+                return;
+            }
+            if (!insumoGrupo) {
+                smartAlert("Atenção", "Informe o grupo do insumo", "error")
+                return;
+            }
+
             addInsumo();
         });
         $("#btnRemoverInsumo").on("click", function() {
@@ -699,6 +732,19 @@ include("inc/scripts.php");
         });
 
         $("#btnAddBdi").on("click", function() {
+
+            var bdi = $("#bdi").val();
+            var bdiPercentual = $("#bdiPercentual").val();
+
+            if (!bdi) {
+                smartAlert("Atenção", "Escolha um bdi", "error")
+                return;
+            }
+            if (!bdiPercentual) {
+                smartAlert("Atenção", "Coloque o percentual do bdi", "error")
+                return;
+            }
+
             addBdi();
         });
         $("#btnRemoverBdi").on("click", function() {
@@ -706,6 +752,18 @@ include("inc/scripts.php");
         });
 
         $("#btnAddRemuneracao").on("click", function() {
+            var remuneracao = $("#remuneracao").val();
+            var remuneracaoValor = $("#remuneracaoValor").val();
+
+            if (!remuneracao) {
+                smartAlert("Atenção", "Escolha uma remuneração", "error")
+                return;
+            }
+
+            if (!remuneracaoValor) {
+                smartAlert("Atenção", "Coloque o valor da remuneração", "error")
+                return;
+            }
             addRemuneracao();
             calculaValorRemuneracao()
         });
@@ -1014,6 +1072,7 @@ include("inc/scripts.php");
         $("#insumoId").val('');
         $("#sequencialInsumo").val('');
         $('#insumoValor').val('');
+        $('#insumoGrupo').val('');
     }
 
     function addInsumo() {
