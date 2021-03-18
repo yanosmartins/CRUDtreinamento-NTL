@@ -174,7 +174,11 @@ include("inc/nav.php");
                                                                                 $horaEntrada = $row['horaEntrada'];
                                                                                 $horaSaida = $row['horaSaida'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
+                                                                                if($funcionario == $_SESSION['funcionario']){
+                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaEntrada . " - " . $horaSaida . '</option>';
+                                                                                }else{
+                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
+                                                                                }
                                                                             }
                                                                             ?>
                                                                         </select>
@@ -195,7 +199,11 @@ include("inc/nav.php");
                                                                                 $horaInicio = $row['horaInicio'];
                                                                                 $horaFim = $row['horaFim'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                echo '<option value=' . $funcionario . '>' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                if($funcionario == $_SESSION['funcionario']){
+                                                                                    echo '<option data-funcionario="'.$funcionario.'" value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                }else{
+                                                                                    echo '<option data-funcionario="'.$funcionario.'" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                }
                                                                             }
                                                                             ?>
                                                                         </select>
@@ -920,8 +928,7 @@ include("inc/scripts.php");
                     $("#codigo").val(0);
                     $("#obvercao").val("");
                 }
-                $("#expediente").val(funcionario);
-                $("#almoco").val(funcionario);
+
                 //funcionando
                 try {
                     preencherPonto(JsonFolha);
@@ -930,8 +937,6 @@ include("inc/scripts.php");
                     // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
                 }
-
-
 
             }
         );
@@ -969,8 +974,7 @@ include("inc/scripts.php");
                     $("#codigo").val(0);
                     $("#obvercao").val("");
                 }
-                $("#expediente").val(funcionario);
-                $("#almoco").val(funcionario);
+
                 //funcionando
                 try {
                     preencherPonto(JsonFolha);
