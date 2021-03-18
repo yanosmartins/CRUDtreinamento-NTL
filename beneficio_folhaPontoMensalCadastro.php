@@ -150,189 +150,179 @@ include("inc/nav.php");
                                                                             </select>
                                                                         </label>
                                                                     </section>
-
-
-
                                                                 </div>
-
 
                                                                 <div class="row">
                                                                     <section class="col col-12">
                                                                         <legend><strong></strong></legend>
                                                                     </section>
                                                                 </div>
-                                                                <div class="row">
-                                                                    <section class="col col-md-4">
-                                                                        <label class="label"> </label>
-                                                                        <input id="horaAtual" name="horaAtual" type="text" class="text-center form-control hidden" hidden data-autoclose="true" value="">
 
-                                                                    </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="expediente">Expediente</label>
+                                                                    <label class="select">
+                                                                        <select id="expediente" name="expediente" class="readonly" readonly style="pointer-events: none; touch-action: none">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $reposit = new reposit();
+                                                                            $sql = "SELECT codigo, funcionario,horaEntrada,horaSaida from Ntl.beneficioProjeto where ativo = 1 order by codigo";
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = (int) $row['codigo'];
+                                                                                $horaEntrada = $row['horaEntrada'];
+                                                                                $horaSaida = $row['horaSaida'];
+                                                                                $funcionario = $row['funcionario'];
+                                                                                echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                    </label>
+                                                                </section>
 
-                                                                </div>
-                                                                <div class="row">
-                                                                    <section class="col col-2">
-                                                                        <label class="label" for="expediente">Expediente</label>
-                                                                        <label class="select">
-                                                                            <select id="expediente" name="expediente" class="readonly" readonly style="pointer-events: none; touch-action: none">
-                                                                                <option></option>
-                                                                                <?php
-                                                                                $reposit = new reposit();
-                                                                                $sql = "SELECT codigo, funcionario,horaEntrada,horaSaida from Ntl.beneficioProjeto where ativo = 1 order by codigo";
-                                                                                $result = $reposit->RunQuery($sql);
-                                                                                foreach ($result as $row) {
-                                                                                    $codigo = (int) $row['codigo'];
-                                                                                    $horaEntrada = $row['horaEntrada'];
-                                                                                    $horaSaida = $row['horaSaida'];
-                                                                                    $funcionario = $row['funcionario'];
-                                                                                    echo '<option value=' . $funcionario . '>' . $horaEntrada . " - " . $horaSaida . '</option>';
-                                                                                }
-                                                                                ?>
-                                                                            </select>
-                                                                        </label>
-                                                                    </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="almoco">Almoço</label>
+                                                                    <label class="select">
+                                                                        <select id="almoco" name="almoco" class="readonly" readonly style="pointer-events: none; touch-action: none">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $reposit = new reposit();
+                                                                            $sql = "SELECT codigo, funcionario,horaInicio,horaFim from Ntl.beneficioProjeto where ativo = 1 order by codigo";
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = (int) $row['codigo'];
+                                                                                $horaInicio = $row['horaInicio'];
+                                                                                $horaFim = $row['horaFim'];
+                                                                                $funcionario = $row['funcionario'];
+                                                                                echo '<option value=' . $funcionario . '>' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                    </label>
+                                                                </section>
+                                                            </div>
 
-                                                                    <section class="col col-2">
-                                                                        <label class="label" for="almoco">Almoço</label>
-                                                                        <label class="select">
-                                                                            <select id="almoco" name="almoco" class="readonly" readonly style="pointer-events: none; touch-action: none">
-                                                                                <option></option>
-                                                                                <?php
-                                                                                $reposit = new reposit();
-                                                                                $sql = "SELECT codigo, funcionario,horaInicio,horaFim from Ntl.beneficioProjeto where ativo = 1 order by codigo";
-                                                                                $result = $reposit->RunQuery($sql);
-                                                                                foreach ($result as $row) {
-                                                                                    $codigo = (int) $row['codigo'];
-                                                                                    $horaInicio = $row['horaInicio'];
-                                                                                    $horaFim = $row['horaFim'];
-                                                                                    $funcionario = $row['funcionario'];
-                                                                                    echo '<option value=' . $funcionario . '>' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                }
-                                                                                ?>
-                                                                            </select>
-                                                                        </label>
-                                                                    </section>
-                                                                </div>
+                                                            <div class="row">
 
-                                                                <div class="row">
-
-                                                                    <section class="col col-1">
-                                                                        <div class="form-group">
-                                                                            <label class="label">Dia</label>
-                                                                            <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputDia" name="inputDia" type="text" class="text-center form-control " data-autoclose="true" value="">
-                                                                            </div>
+                                                                <section class="col col-1">
+                                                                    <div class="form-group">
+                                                                        <label class="label">Dia</label>
+                                                                        <div class="input-group" data-align="top" data-autoclose="true">
+                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control " data-autoclose="true" value="">
                                                                         </div>
-                                                                    </section>
+                                                                    </div>
+                                                                </section>
 
-                                                                    <section class="col col-2">
-                                                                        <div class="form-group">
-                                                                            <label id="labelHora" class="label">Entrada</label>
-                                                                            <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
-                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                            </div>
+                                                                <section class="col col-2">
+                                                                    <div class="form-group">
+                                                                        <label id="labelHora" class="label">Entrada</label>
+                                                                        <div class="input-group" data-align="top" data-autoclose="true">
+                                                                            <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
-                                                                    </section>
+                                                                    </div>
+                                                                </section>
 
-                                                                    <section class="col col-1 sectionAlmoco" style="display: block">
-                                                                        <div class="form-group">
-                                                                            <label class="label">Inicio/Almoço</label>
-                                                                            <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:00">
-                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                            </div>
+                                                                <section class="col col-1 sectionAlmoco" style="display: block">
+                                                                    <div class="form-group">
+                                                                        <label class="label">Inicio/Almoço</label>
+                                                                        <div class="input-group" data-align="top" data-autoclose="true">
+                                                                            <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:00">
+                                                                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
-                                                                    </section>
+                                                                    </div>
+                                                                </section>
 
-                                                                    <section class="col col-1 sectionAlmoco" style="display: block">
-                                                                        <div class="form-group">
-                                                                            <label class="label">Fim/Almoço</label>
-                                                                            <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:15">
-                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                            </div>
+                                                                <section class="col col-1 sectionAlmoco" style="display: block">
+                                                                    <div class="form-group">
+                                                                        <label class="label">Fim/Almoço</label>
+                                                                        <div class="input-group" data-align="top" data-autoclose="true">
+                                                                            <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:15">
+                                                                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
-                                                                    </section>
+                                                                    </div>
+                                                                </section>
 
-                                                                    <section class="col col-2">
-                                                                        <div class="form-group">
-                                                                            <label id="labelHora" class="label">Saída</label>
-                                                                            <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
-                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                            </div>
+                                                                <section class="col col-2">
+                                                                    <div class="form-group">
+                                                                        <label id="labelHora" class="label">Saída</label>
+                                                                        <div class="input-group" data-align="top" data-autoclose="true">
+                                                                            <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
-                                                                    </section>
+                                                                    </div>
+                                                                </section>
 
-                                                                    <section class="col col-1">
-                                                                        <div class="form-group">
-                                                                            <label id="labelHora" class="label">H.Extra</label>
-                                                                            <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control readonly" readonly disabled placeholder="  00:00" data-autoclose="true" value="">
-                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                            </div>
+                                                                <section class="col col-1">
+                                                                    <div class="form-group">
+                                                                        <label id="labelHora" class="label">H.Extra</label>
+                                                                        <div class="input-group" data-align="top" data-autoclose="true">
+                                                                            <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control readonly" readonly disabled placeholder="  00:00" data-autoclose="true" value="">
+                                                                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
-                                                                    </section>
+                                                                    </div>
+                                                                </section>
 
-                                                                    <section class="col col-1">
-                                                                        <div class="form-group">
-                                                                            <label id="labelHora" class="label">Atraso</label>
-                                                                            <div class="input-group" data-align="top" data-autoclose="true">
-                                                                                <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control readonly" placeholder="  00:00" data-autoclose="true" disabled readonly value="">
-                                                                                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                            </div>
+                                                                <section class="col col-1">
+                                                                    <div class="form-group">
+                                                                        <label id="labelHora" class="label">Atraso</label>
+                                                                        <div class="input-group" data-align="top" data-autoclose="true">
+                                                                            <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control readonly" placeholder="  00:00" data-autoclose="true" disabled readonly value="">
+                                                                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
-                                                                    </section>
+                                                                    </div>
+                                                                </section>
 
-                                                                    <section class="col col-2">
-                                                                        <label class="label" for="lancamento">Lançamento/Ocorrência</label>
-                                                                        <label class="select">
-                                                                            <select id="inputLancamento" name="inputLancamento">
-                                                                                <option value="0"></option>
-                                                                                <?php
-                                                                                $reposit = new reposit();
-                                                                                $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
-                                                                                $result = $reposit->RunQuery($sql);
-                                                                                foreach ($result as $row) {
-                                                                                    $codigo = (int) $row['codigo'];
-                                                                                    $descricao = $row['descricao'];
-                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
-                                                                                }
-                                                                                ?>
-                                                                            </select>
-                                                                        </label>
-                                                                    </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="lancamento">Lançamento/Ocorrência</label>
+                                                                    <label class="select">
+                                                                        <select id="inputLancamento" name="inputLancamento">
+                                                                            <option value="0"></option>
+                                                                            <?php
+                                                                            $reposit = new reposit();
+                                                                            $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = (int) $row['codigo'];
+                                                                                $descricao = $row['descricao'];
+                                                                                echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                    </label>
+                                                                </section>
 
 
-                                                                </div>
-                                                                <div class="row">
-                                                                    <section class="col col-md-2">
-                                                                        <label class="label"> </label>
-                                                                        <button id="btnAddPonto" type="button" class="btn btn-primary">
-                                                                            <i class="">Lançar Ponto</i>
-                                                                        </button>
-                                                                    </section>
-                                                                    <section class="col col-8">
-                                                                        <label class="label"> </label>
-                                                                        </button>
-                                                                    </section>
-                                                                    <section class="col col-md-1">
-                                                                        <label class=" label"> </label>
-                                                                        <button id="btnGravar" type="button" class="btn btn-success">
-                                                                            <i class="">Confirmar Alterações</i>
-                                                                        </button>
-                                                                    </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-md-2">
+                                                                    <label class="label"> </label>
+                                                                    <button id="btnAddPonto" type="button" class="btn btn-primary">
+                                                                        <i class="">Lançar Ponto</i>
+                                                                    </button>
+                                                                </section>
+                                                                <section class="col col-8">
+                                                                    <label class="label"> </label>
+                                                                    </button>
+                                                                </section>
+                                                                <section class="col col-md-1">
+                                                                    <label class=" label"> </label>
+                                                                    <button id="btnGravar" type="button" class="btn btn-success">
+                                                                        <i class="">Confirmar Alterações</i>
+                                                                    </button>
+                                                                </section>
 
-                                                                </div>
+                                                            </div>
 
-                                                                <hr><br><br>
+                                                            <hr><br><br>
 
-                                                                <?php
-                                                                $i = 0;
-                                                                $days = date("t");
-                                                                while ($i  < $days) {
-                                                                    $i = $i + 1;
-                                                                    echo "<div class=\"row\">
+                                                            <?php
+                                                            $i = 0;
+                                                            $days = date("t");
+                                                            while ($i  < $days) {
+                                                                $i = $i + 1;
+                                                                echo "<div class=\"row\">
 
                                                                     <section class=\"col col-1\">
                                                                         <div class=\"form-group\">
@@ -409,29 +399,29 @@ include("inc/nav.php");
                                                                             <select id=\"lancamento-$i\" name=\"lancamento\" class=\" readonly\" readonly style= \"pointer-events: none; touch-action: none\" tabindex=\"-1\">
                                                                                 <option value=\"0\"></option>";
 
-                                                                    $reposit = new reposit();
-                                                                    $sql = "select codigo, sigla, descricao from Ntl.lancamento where ativo = 1 order by descricao";
-                                                                    $result = $reposit->RunQuery($sql);
-                                                                    foreach ($result as $row) {
-                                                                        $codigo = (int) $row['codigo'];
-                                                                        $descricao = $row['descricao'];
-                                                                        echo "<option value='$codigo'>$descricao</option>";
-                                                                    }
-                                                                    echo " </select><i></i>
+                                                                $reposit = new reposit();
+                                                                $sql = "select codigo, sigla, descricao from Ntl.lancamento where ativo = 1 order by descricao";
+                                                                $result = $reposit->RunQuery($sql);
+                                                                foreach ($result as $row) {
+                                                                    $codigo = (int) $row['codigo'];
+                                                                    $descricao = $row['descricao'];
+                                                                    echo "<option value='$codigo'>$descricao</option>";
+                                                                }
+                                                                echo " </select><i></i>
                                                                         </label>
                                                                     </section>
                                                                 </div>
                                                                 ";
-                                                                }
-                                                                ?>
+                                                            }
+                                                            ?>
 
-                                                                <div class="row">
-                                                                    <section class="col col-12">
-                                                                        <label class="label">Observações</label>
-                                                                        <textarea maxlength="500" id="observacaoFolhaPontoMensal" name="observacaoFolhaPontoMensal" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
-                                                                    </section>
-                                                                </div>
+                                                            <div class="row">
+                                                                <section class="col col-12">
+                                                                    <label class="label">Observações</label>
+                                                                    <textarea maxlength="500" id="observacaoFolhaPontoMensal" name="observacaoFolhaPontoMensal" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
+                                                                </section>
                                                             </div>
+                                                        </div>
                                                     </fieldset>
                                                 </div>
 
@@ -524,7 +514,6 @@ include("inc/scripts.php");
         //TIME INPUT
         $("#inputHoraEntrada").mask("99:99:99");
 
-
         $('#inputHoraEntrada').clockpicker({
             donetext: 'Done',
             default: 'now',
@@ -569,11 +558,12 @@ include("inc/scripts.php");
         //     use24hours: true,
         // }).val(moment().format('HH:mm'));
 
-        // $("#funcionario").on("change", function() {
-        //     var funcionario = $("#funcionario").val();
-        //     $("#expediente").val(funcionario);
-
-        // });
+        $("#funcionario").on("change", function() {
+            var funcionario = $("#funcionario").val();
+            var codigo = $("#expediente option[data-funcionario ='" + funcionario + "']").val();
+            $("#expediente").val(codigo);
+            selecionaFolha();
+        });
 
         $('#inputDia').on('change', function() {
             var dia = $("#inputDia").val()
@@ -634,53 +624,64 @@ include("inc/scripts.php");
             var lancamento = $("#lancamento-" + dia)
             var inputLancamento = $("#inputLancamento").val()
 
-            const data = new Date();
-            const horaAtual = new Date(); //.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'});
-            const inicioExpediente = new Date(data.getFullYear(), data.getMonth(), data.getDate(), 10, 0, 0, 0);
-            const fimExpediente = new Date(data.getFullYear(), data.getMonth(), data.getDate(), 16, 0, 0, 0);
+            //--------------------------------------------------------------------------------
 
-            let separador = inputEntrada.split(':');
-            const horaEntrada = new Date(data.getFullYear(), data.getMonth(), data.getDate(), separador[0], Number(separador[1]));
+            const data = new Date(); //.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'});
 
-            separador = inputSaida.split(':');
-            const horaSaida = new Date(data.getFullYear(), data.getMonth(), data.getDate(), separador[0], Number(separador[1]));
+            let separador = $("expediente").val();
+            separador = separador.split("-");
+            separador[0] = separador[0].trim();
+            separador[1] = separador[1].trim();
+
+            const inicioExpediente = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${separador[0]}:00`);
+            const fimExpediente = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${separador[1]}:00`);
+
+            const horaEntrada = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${inputEntrada}`);
+            const horaSaida = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${inputSaida}`);
+
+            let horaExtra = (horaEntrada.getTime() + horaSaida.getTime()) - (inicioExpediente.getTime() + fimExpediente.getTime());
+            let horaAtraso = (inicioExpediente.getTime() + fimExpediente.getTime()) - (horaEntrada.getTime() + horaSaida.getTime());
 
             if (!inputEntrada) {
                 smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
                 return
             }
 
-            if (!inputSaida && horaAtual.getTime() > fimExpediente.getTime()) {
+            if (!inputSaida && data.getTime() > fimExpediente.getTime()) {
                 smartAlert("Atenção", "A hora de saída deve ser preenchida", "error");
                 return
             }
 
-            if (horaEntrada.getTime() < horaSaida.getTime()) {
+            if (horaEntrada.getTime() > horaSaida.getTime()) {
                 smartAlert("Atenção", "A hora de saída deve ser maior ou igual a hora de entrada", "error");
                 return
             }
 
-            let horaExtra = (inicioExpediente.getTime() - horaEntrada.getTime()) + (horaSaida.getTime() - fimExpediente.getTime());
-            let horaAtraso = (horaEntrada.getTime() - inicioExpediente.getTime()) + (fimExpediente.getTime() - horaSaida.getTime());
-
             if (horaExtra < 0) {
-                horaExtra = new Date(data.getFullYear, data.getMonth(), data.getDate(), 0, 0, 0);
+                horaExtra = "00:00"
             } else {
-                horaExtra = new Date(horaExtra);
+                horaExtra = new Date(horaExtra).toLocaleTimeString('pt-BR', {
+                    timeZone: 'America/Sao_Paulo'
+                });
+
+                horaExtra = horaExtra.slice(0,horaExtra.length - 3);
+
             }
             if (horaAtraso < 0) {
-                horaAtraso = new Date(data.getFullYear, data.getMonth(), data.getDate(), 0, 0, 0);
+                horaAtraso = "00:00";
             } else {
-                horaAtraso = new Date(horaAtraso);
+                horaAtraso = new Date(horaAtraso).toLocaleTimeString('pt-BR', {
+                    timeZone: 'America/Sao_Paulo'
+                });
+
+                horaAtraso = horaAtraso.slice(0,horaAtraso.length - 3)
             }
 
+            $("#inputExtra").val(horaExtra);
+            $("#inputAtraso").val(horaAtraso);
+            inputExtra = horaExtra;
+            inputAtraso = horaAtraso;
 
-            $("#inputExtra").val(horaExtra.toLocaleTimeString('pt-BR', {
-                timeZone: 'America/Sao_Paulo'
-            }));
-            $("#inputAtraso").val(horaAtraso.toLocaleTimeString('pt-BR', {
-                timeZone: 'America/Sao_Paulo'
-            }));
 
             if (!inputExtra) {
                 smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
@@ -695,17 +696,12 @@ include("inc/scripts.php");
             inicioAlmoco.val(inputInicioAlmoco)
             fimAlmoco.val(inputFimAlmoco)
             saida.val(inputSaida)
-            extra.val(horaExtra)
-            atraso.val(horaAtraso)
+            extra.val(inputExtra)
+            atraso.val(inputAtraso)
             lancamento.val(inputLancamento)
 
             return;
         });
-
-        $('#funcionario').on('change', function() {
-            selecionaFolha();
-        });
-
 
         $('#btnNovo').on("click", function() {
             novo()
@@ -733,8 +729,6 @@ include("inc/scripts.php");
                 }
             })
         });
-
-        $("#horaSaida").on("change")
 
         carregaFolhaPontoMensal();
 
@@ -937,7 +931,7 @@ include("inc/scripts.php");
                     return
                 }
 
-                
+
 
             }
         );
