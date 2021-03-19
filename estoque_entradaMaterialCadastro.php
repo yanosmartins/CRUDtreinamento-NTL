@@ -681,29 +681,29 @@ include("inc/scripts.php");
         };
 
 
-        $("#dataEntrega").on("change", function() {
-            var dataAtual = moment().format("DD/MM/YYYY");
-            var dataEntrega = $("#dataEntrega").val();
+        // $("#dataEntrega").on("change", function() {
+        //     var dataAtual = moment().format("DD/MM/YYYY");
+        //     var dataEntrega = $("#dataEntrega").val();
 
-            //Transformando em um objeto usando moment -> Data Atual
-            dataAtual = dataAtual.split("/");
-            dataAtual[1] = dataAtual[1] - 1;
-            dataAtual = moment([dataAtual[2], dataAtual[1], dataAtual[0]]);
+        //     //Transformando em um objeto usando moment -> Data Atual
+        //     dataAtual = dataAtual.split("/");
+        //     dataAtual[1] = dataAtual[1] - 1;
+        //     dataAtual = moment([dataAtual[2], dataAtual[1], dataAtual[0]]);
 
-            //ransformando em um objeto usando moment -> Data Pregão
-            dataEntrega = dataEntrega.split("/");
-            dataEntrega[1] = dataEntrega[1] - 1;
-            dataEntrega = moment([dataEntrega[2], dataEntrega[1], dataEntrega[0]]);
+        //     //ransformando em um objeto usando moment -> Data Pregão
+        //     dataEntrega = dataEntrega.split("/");
+        //     dataEntrega[1] = dataEntrega[1] - 1;
+        //     dataEntrega = moment([dataEntrega[2], dataEntrega[1], dataEntrega[0]]);
 
-            var diferenca = dataAtual.diff(dataEntrega, 'days');
+        //     var diferenca = dataAtual.diff(dataEntrega, 'days');
 
-            if (diferenca < 0) {
-                smartAlert("Atenção", "A data do pregão não pode ser maior do que o dia de hoje !", "error");
-                $("#dataEntrega").val(" ");
-                return;
-            }
+        //     if (diferenca < 0) {
+        //         smartAlert("Atenção", "A data do pregão não pode ser maior do que o dia de hoje !", "error");
+        //         $("#dataEntrega").val(" ");
+        //         return;
+        //     }
 
-        });
+        // });
 
         $("#quantidade").on("change", function() {
             var quantidade = $("#quantidade").val();
@@ -880,11 +880,11 @@ include("inc/scripts.php");
         var codigo = +$("#codigo").val();
 
         if (codigo === 0) {
-            smartAlert("Atenção", "Selecione um pregão para excluir!", "error");
+            smartAlert("Atenção", "Selecione uma Entrada Material para excluir!", "error");
             return;
         }
 
-        excluirPregoes(codigo);
+        excluirEntradaItem(codigo);
     }
 
     function recuperaDescricao() {

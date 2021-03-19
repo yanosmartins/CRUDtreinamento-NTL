@@ -249,7 +249,7 @@ function excluir()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("PREGOESNAOINICIADOS_ACESSAR|PREGOESNAOINICIADOS_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("ENTRADAITEM_ACESSAR|ENTRADAITEM_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -260,18 +260,21 @@ function excluir()
     $codigo = $_POST["codigo"];
 
     if ((empty($_POST['codigo']) || (!isset($_POST['codigo'])) || (is_null($_POST['codigo'])))) {
-        $mensagem = "Selecione um pregão.";
+        $mensagem = "Selecione uma entrada Material.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
 
-    $result = $reposit->update('garimpaPregao' . '|' . 'ativo = 0' . '|' . 'codigo =' . $codigo);
+    $sql = "Estoque.entradaMaterial_Deleta $codigo";
 
+    $reposit = new reposit();
+    $result = $reposit->Execprocedure($sql);
+
+    $ret = 'success';
     if ($result < 1) {
-        echo ('failed#');
-        return;
+        $ret = 'failed';
     }
-    echo 'sucess#' . $result;
+    echo $ret;
     return;
 }
 
