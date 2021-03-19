@@ -32,7 +32,7 @@ if ($condicaoExcluirOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Permissões do Usuário";
+$page_title = "Permissões Grupo";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -44,7 +44,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["configuracao"]["sub"]["permissoesUsuarios"]["active"] = true;
+$page_nav["configuracao"]["sub"]["permissoesGrupoUsuarios"]["active"] = true;
 
 
 include("inc/nav.php");
@@ -234,7 +234,7 @@ include("inc/scripts.php");
 
     $(document).ready(function() {
 
-        $("#usuario").on("change", function() {
+        $("#grupo").on("change", function() {
             carregarFuncionalidade();
         });
 
@@ -305,23 +305,22 @@ include("inc/scripts.php");
     });
 
     function carregarFuncionalidade() {
-        var usuarioIdFiltro = +$('#usuario').val();
+        var usuarioGrupoIdFiltro = +$('#grupo').val();
 
-        if (usuarioIdFiltro === 0) {
+        if (usuarioGrupoIdFiltro === 0) {
             smartAlert("Atenção", "Informe o usuário!", "error");
             return;
         }
-        recuperaPermissaoUsuario(usuarioIdFiltro);
+        recuperaPermissaoUsuario(usuarioGrupoIdFiltro);
         desabilitaCamposPermissao();
     }
 
     function listarFuncionalidadePorItemMenu() {
-        debugger;
-        var usuarioIdFiltro = +$('#usuario').val();
+        var usuarioGrupoIdFiltro = +$('#grupo').val();
         var menuItemIdFiltro = +$('#menuItem').val();
 
-        if (usuarioIdFiltro === 0) {
-            smartAlert("Atenção", "Informe o usuário!", "error");
+        if (usuarioGrupoIdFiltro === 0) {
+            smartAlert("Atenção", "Informe o Grupo!", "error");
             return;
         }
 
@@ -359,13 +358,13 @@ include("inc/scripts.php");
     }
 
     function desabilitaCamposPermissao() {
-        $('#usuario').prop('disabled', 'disabled');
-        $('#usuario').addClass('readonly');
+        $('#grupo').prop('disabled', 'disabled');
+        $('#grupo').addClass('readonly');
     }
 
     function habilitaCamposPermissao() {
-        $('#usuario').prop('disabled', false);
-        $('#usuario').removeClass('readonly');
+        $('#grupo').prop('disabled', false);
+        $('#grupo').removeClass('readonly');
     }
 
     function carregaPagina() {
@@ -435,11 +434,11 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'usuarioFuncionalidadeFiltro.php');
+        $(location).attr('href', 'usuarioGrupoFuncionalidadeFiltro.php');
     }
 
     function excluir() {
-        var idUsuario = $("#usuario").val();
+        var idUsuario = $("#grupo").val();
 
         if (idUsuario === "") {
             smartAlert("Atenção", "Selecione um usuário para excluir !", "error");
@@ -452,10 +451,10 @@ include("inc/scripts.php");
 
     function gravar() {
 
-        var usuarioId = $('#usuario').val();
+        var grupoId = $('#grupo').val();
 
-        if (usuarioId === "") {
-            smartAlert("Atenção", "Informe o usuário !", "error");
+        if (grupoId === "") {
+            smartAlert("Atenção", "Informe o grupo !", "error");
             return;
         }
 
@@ -489,7 +488,7 @@ include("inc/scripts.php");
             $("#JsonFuncionalidadeMarcada").val(JSON.stringify(arrFuncionalidadeMarcada));
             var jsonFuncMarcadas = $('#JsonFuncionalidadeMarcada').val();
 
-            gravaPermissoesUsuario(usuarioId, jsonFuncMarcadas);
+            gravaPermissoesUsuario(grupoId, jsonFuncMarcadas);
         } else {
             smartAlert("Erro", "Selecione pelo menos uma funcionalidade permitida para o usuário.", "error");
         }

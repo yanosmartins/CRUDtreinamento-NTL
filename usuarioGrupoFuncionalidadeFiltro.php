@@ -38,7 +38,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["configuracao"]["sub"]["permissoesUsuarios"]["active"] = true;
+$page_nav["configuracao"]["sub"]["permissoesGrupoUsuarios"]["active"] = true;
 
 include("inc/nav.php");
 

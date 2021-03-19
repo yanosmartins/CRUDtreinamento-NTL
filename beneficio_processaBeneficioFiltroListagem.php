@@ -86,7 +86,7 @@ include "js/repositorio.php";
                         BP.diaUtilNovembroVAVR AS beneficioProjetoDiaUtilNovembroVAVR, BP.diaUtilDezembroVAVR AS beneficioProjetoDiaUtilDezembroVAVR,
                         
                         BP.diaUtilJaneiroVT AS beneficioProjetoDiaUtilJaneiroVT,BP.diaUtilFevereiroVT AS beneficioProjetoDiaUtilFevereiroVT, 
-                        BP.diaUtilMarcoVT AS beneficioProjetoDiaUtilMarcoVT,BP.diaUtilAbrilVT AS beneficioProjetoDiaUtilAbrilVTVT, 
+                        BP.diaUtilMarcoVT AS beneficioProjetoDiaUtilMarcoVT,BP.diaUtilAbrilVT AS beneficioProjetoDiaUtilAbrilVT, 
                         BP.diaUtilMaioVT AS beneficioProjetoDiaUtilMaioVT,BP.diaUtilJunhoVT AS beneficioProjetoDiaUtilJunhoVT, 
                         BP.diaUtilJulhoVT AS beneficioProjetoDiaUtilJulhoVT,BP.diaUtilAgostoVT AS beneficioProjetoDiaUtilAgostoVT, 
                         BP.diaUtilSetembroVT AS beneficioProjetoDiaUtilSetembroVT, BP.diaUtilOutubroVT AS beneficioProjetoDiaUtilOutubroVT, 
