@@ -51,6 +51,8 @@ function grava()
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $indicador = (string)"'" . $_POST['indicador'] . "'";
+    $consumivel = (int)$_POST['consumivel'];
+    $autorizacao = (int)$_POST['autorizacao'];
 
     $sql = "Estoque.codigoItem_Atualiza
             $id,
@@ -64,7 +66,9 @@ function grava()
             $usuario,
             $unidade,
             $indicador,
-            $unidadeItem";
+            $unidadeItem,
+            $consumivel,
+            $autorizacao";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -88,7 +92,8 @@ function recupera()
     }
 
     $sql = "SELECT CI.codigo, CI.codigoItem, CI.codigoFabricante, CI.descricaoItem, CI.estoque, 
-                    CI.grupoItem, CI.localizacaoItem, CI.ativo, CI.unidade, CI.indicador,CI.unidadeItem
+                    CI.grupoItem, CI.localizacaoItem, CI.ativo, CI.unidade, CI.indicador,CI.unidadeItem ,
+                    CI.consumivel,CI.autorizacao
             FROM Estoque.codigoItem AS CI WHERE codigo = $id";
 
     $reposit = new reposit();
@@ -110,6 +115,8 @@ function recupera()
         $unidade = (int)$row['unidade'];
         $indicador = $row['indicador'];
         $unidadeItem = $row['unidadeItem'];
+        $consumivel = $row['consumivel'];
+        $autorizacao = $row['autorizacao'];
       
         $out = $id . "^" .
             $codigoItem . "^" .
@@ -121,7 +128,9 @@ function recupera()
             $unidade . "^" .
             $indicador  . "^" .
             $ativo . "^" .
-            $unidadeItem;
+            $unidadeItem . "^" .
+            $consumivel . "^" .
+            $autorizacao;
 
         if ($out == "") {
             echo "failed#";
