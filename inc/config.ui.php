@@ -434,9 +434,9 @@ if ($condicaoOperacaoOk) {
     if ($condicaoEstoqueOk) {
         $page_nav['operacao']['sub']['estoque'] = array("title" => "Estoque", "icon" => "fa fa-cubes");
         $page_nav['operacao']['sub']['estoque']['sub'] = array();
-        // if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
-        //     $page_nav['operacao']['sub']['estoque']['sub'] += array("entradaItem" => array("title" => "Entrada Item", "url" => APP_URL . "/estoque_entradaItemCadastro.php"));
-        // }
+        if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['operacao']['sub']['estoque']['sub'] += array("entradaItem" => array("title" => "Entrada Item", "url" => APP_URL . "/estoque_entradaMaterialFiltro.php"));
+        }
     }
 }
 
