@@ -669,35 +669,71 @@ include("inc/scripts.php");
             separador[0] = separador[0].trim();
             separador[1] = separador[1].trim();
 
-            if(separador[0].length < 6) separador[0].concat(':00'); 
-            if(separador[1].length < 6) separador[1].concat(':00');
+            let len = separador[0].toString().length;
+            if(len <= 5) separador[0].concat(':00'); 
+            len = separador[1].toString().length;
+            if(len <= 5) separador[1].concat(':00');
 
             const inicioExpediente = separador[0];
             const fimExpediente = separador[1];
 
             const horaEntrada = aleatorizarTempo(inputEntrada,inicioExpediente);
-            const horaSaida = inputSaida;
+            const horaSaida = aleatorizarTempo(inputSaida,fimExpediente);
 
-            const dataEntrada = new Date(`${data.getFullYear}-${data.getMonth}-${data.getDate} ${horaEntrada}`)
-            const dataSaida = new Date(`${data.getFullYear}-${data.getMonth}-${data.getDate} ${horaSaida}`)
-            const dataTotal = new Date(dataEntrada.getTime() + dataSaida.getTime())
+            let horasFuncionario = () =>{
+                    let [h,m,s] = horaEntrada.split(':')
+                    let [h2,m2,s2] = horaSaida.split(':')
 
-            const dataInicioExpediente = new Date(`${data.getFullYear}-${data.getMonth}-${data.getDate} ${inicioExpediente}`)
-            const dataFimExpediente = new Date(`${data.getFullYear}-${data.getMonth}-${data.getDate} ${fimExpediente}`)
-            const dataExpedienteTotal = new Date(dataInicioExpediente.getTime() + dataInicioExpediente.getTime())
+                    s = s + s2;
+                    while(s >= 60){
+                        m = m + 1;
+                        s = s - 60;
+                    }
 
-            let horaExtra,horaAtraso;
+                    m = m + m2;
+                    while(m >= 60){
+                        h = h + 1;
+                        m = m - 60;
+                    }
 
-            if(dataTotal > dataExpedienteTotal){
-               horaExtra = diferencaHoras(dataTotal.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'}),dataExpedienteTotal.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'}),'00:00') 
-               horaAtraso = '00:00';
-            }else if(dataTotal < dataExpedienteTotal){
-                horaAtraso = diferencaHoras(dataTotal.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'}),dataExpedienteTotal.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'}),'00:00') 
-                horaExtra = '00:00';
-            }else{
-                horaExtra = '00:00';
-                horaAtraso = '00:00';
+                    h = h + h2;
+
+                    if(h.toString().length < 2) h = '0'.concat(h)
+                    if(m.toString().length < 2) m = '0'.concat(m)
+                    if(s.toString().length < 2) s = '0'.concat(s)
+
+                    const hora = h +':'+ m +':'+ s
+                    return hora
             }
+            let horasExpediente = () =>{
+                    let [h,m,s] = inicioExpediente.split(':')
+                    let [h2,m2,s2] = fimExpediente.split(':')
+
+                    s = s + s2;
+                    while(s >= 60){
+                        m = m + 1;
+                        s = s - 60;
+                    }
+
+                    m = m + m2;
+                    while(m >= 60){
+                        h = h + 1;
+                        m = m - 60;
+                    }
+
+                    h = h + h2;
+
+                    if(h.toString().length < 2) h = '0'.concat(h)
+                    if(m.toString().length < 2) m = '0'.concat(m)
+                    if(s.toString().length < 2) s = '0'.concat(s)
+
+                    const hora = h +':'+ m +':'+ s
+                    return hora
+            }
+
+            console.table({horaFuncionario:horasFuncionario,horaExpediente:horasExpediente})
+            let horaExtra = diferencaHoras(horasFuncionario,horasExpediente,'00:00');
+            let horaAtraso = diferencaHoras(horasExpediente,horasFuncionario,'00:00');
 
             if (!inputEntrada) {
                 smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
@@ -729,10 +765,10 @@ include("inc/scripts.php");
                 return
             }
 
-            entrada.val(inputEntrada)
+            entrada.val(horaEntrada)
             inicioAlmoco.val(inputInicioAlmoco)
             fimAlmoco.val(inputFimAlmoco)
-            saida.val(inputSaida)
+            saida.val(horaSaida)
             extra.val(inputExtra)
             atraso.val(inputAtraso)
             lancamento.val(inputLancamento)
@@ -1035,14 +1071,15 @@ include("inc/scripts.php");
 
     function aleatorizarTempo(hora,expediente){
         let separador = hora.split(':');
-        const h = Number(separador[0]);
+        let h = Number(separador[0]);
         let m = Number(separador[1]);
         let s = Number(separador[2]);
 
         separador = expediente.split(':');
         const eh = Number(separador[0]);
         const em = Number(separador[1]);
-        const es = Number(separador[2]);
+        let es = Number(separador[2]);
+        if(isNaN(es)) es = Number('00');
 
         if((h == eh) && (m == em)){
             m = Math.floor(Math.random() * (4 - 0)) + 0;
@@ -1050,59 +1087,60 @@ include("inc/scripts.php");
         }
 
         if(h.toString().length < 2) h = `0${h}`;
-        if(m.toString().length < 2) h = `0${m}`;
-        if(s.toString().length < 2) h = `0${s}`;
+        if(m.toString().length < 2) m = `0${m}`;
+        if(s.toString().length < 2) s = `0${s}`;
 
         const result = `${h}:${m}:${s}`;
         return result;
     }
 
-    function diferencaHoras(hora,expediente,format){
-        let h,m,s;
-        let eh,em,es;
+    function diferencaHoras(hora1,hora2,format){
+        let h1,m1,s1;
+        let h2,m2,s2;
         let hourDiff,minDiff,secDiff;
-        let separador = hora.split(':');
+        let separador = hora1.split(':');
 
-        if(hora.toString().length < 6){
-            h = separador[0];
-            m = separador[1];
-            s = '00';
+        if(hora1.toString().length < 6){
+            h1 = Number(separador[0]);
+            m1 = Number(separador[1]);
+            s1 = Number('00');
         }
         else{
-            h = separador[0];
-            m = separador[1];
-            s = separador[2];
+            h1 = Number(separador[0]);
+            m1 = Number(separador[1]);
+            s1 = Number(separador[2]);
         }
 
-        let separador = expediente.split(':');
+        separador = hora2.split(':');
 
-        if(expediente.toString().length < 6){
-            h = separador[0];
-            m = separador[1];
-            s = '00';
+        if(hora2.toString().length < 6){
+            h2 = Number(separador[0]);
+            m2 = Number(separador[1]);
+            s2 = Number('00');
         }
         else{
-            eh = separador[0];
-            em = separador[1];
-            es = separador[2];
+            h2 = Number(separador[0]);
+            m2 = Number(separador[1]);
+            s2 = Number(separador[2]);
         }
 
-        if(h > eh) hourDiff = h - eh;
-        else if(h < eh) hourDiff = eh - h;
-        else hourDiff = '00';
+        if(s1 >= s2) secDiff = s1 - s2;
+        else if(s1 < s2){
+            secDiff = (s1 - s2) - 59;
+            m1 = m1 - 1;
+        }
+
+        if(m1 >= m2) minDiff = m1 - m2;
+        else if(m1 < m2){ 
+            minDiff = (m1 - m2) - 59;
+            h1 = h1 - 1;
+        }
+
+        hourDiff = h1 - h2;
+        if(hourDiff < 0) hourDiff = 0;
 
         if(hourDiff.toString().length < 2) hourDiff = `0${hourDiff}`
-
-        if(m > em) minDiff = m - em;
-        else if(m < em) minDiff = em - m;
-        else minDiff = '00';
-
         if(minDiff.toString().length < 2) minDiff = `0${minDiff}`
-
-        if(s > es) secDiff = s - es;
-        else if(s < es) secDiff = es - s;
-        else secDiff = '00';
-
         if(secDiff.toString().length < 2) secDiff = `0${secDiff}`
 
         if(format == '00:00') return `${hourDiff}:${minDiff}`;
