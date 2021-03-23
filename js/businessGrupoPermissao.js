@@ -1,9 +1,9 @@
-function gravaPermissoesUsuario(codigoUsuario, jsonFuncMarcadas) {
+function gravaPermissoesUsuario(codigoGrupoUsuario, jsonFuncMarcadas) {
     $.ajax({
-        url: 'js/sqlscopePermissao.php',
+        url: 'js/sqlscopeGrupoPermissao.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", codigoUsuario: codigoUsuario, jsonFuncMarcadas: jsonFuncMarcadas}, //valores enviados ao script     
+        data: {funcao: "grava", codigoGrupoUsuario: codigoGrupoUsuario, jsonFuncMarcadas: jsonFuncMarcadas}, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -34,12 +34,12 @@ function gravaPermissoesUsuario(codigoUsuario, jsonFuncMarcadas) {
 
 }
 
-function recuperaPermissaoUsuario(codigoUsuario) {
+function recuperaPermissaoUsuario(codigoGrupoUsuario) {
     $.ajax({
-        url: 'js/sqlscopePermissao.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscopeGrupoPermissao.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: 'recupera', codigoUsuario: codigoUsuario}, //valores enviados ao script     
+        data: {funcao: 'recupera', codigoGrupoUsuario: codigoGrupoUsuario}, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -73,7 +73,7 @@ function recuperaPermissaoUsuario(codigoUsuario) {
 
 function excluirTodasPermissoesUsuario(codigoUsuario) {
     $.ajax({
-        url: 'js/sqlscopePermissao.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscopeGrupoPermissao.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'excluir', codigoUsuario: codigoUsuario}, //valores enviados ao script     

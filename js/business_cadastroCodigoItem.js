@@ -1,5 +1,6 @@
 
-function gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo, unidade, indicador,callback) {
+function gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo, 
+                        unidade, indicador, unidadeItem, consumivel, autorizacao,callback) {
     $.ajax({
         url: 'js/sqlscope_cadastroCodigoItem.php',
         dataType: 'html', //tipo do retorno
@@ -7,7 +8,7 @@ function gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoqu
         data: {
             funcao: "grava", id: id, codigoItem: codigoItem, codigoFabricante: codigoFabricante, 
             descricaoItem: descricaoItem, estoque: estoque, grupoItem: grupoItem, localizacaoItem: localizacaoItem, 
-            ativo: ativo, unidade: unidade, indicador: indicador
+            ativo: ativo, unidade: unidade, indicador: indicador, unidadeItem:unidadeItem, consumivel:consumivel, autorizacao:autorizacao
         },
         success: function (data) {
             callback(data);

@@ -22,13 +22,13 @@ return;
 function grava()
 {
     $reposit = new reposit();
-    // $possuiPermissao = $reposit->PossuiPermissao("FOLHAPONTO_ACESSAR|FOLHAPONTO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("PONTOELETRONICOMENSAL_ACESSAR|PONTOELETRONICOMENSAL_GRAVAR");
 
-    // if ($possuiPermissao === 0) {
-    //     $mensagem = "O usuário não tem permissão para gravar!";
-    //     echo "failed#" . $mensagem . ' ';
-    //     return;
-    // }
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para gravar!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
 
     session_start();
     $usuario = "'" .  $_SESSION['login'] . "'";
@@ -45,7 +45,7 @@ function grava()
     $ativo = (int) $folhaPontoInfo['ativo'];
     $mesAno = (string) $folhaPontoInfo['mesAno'];
     $data = explode('/', $mesAno);
-    $mesAno ="'". trim($data[1] . "-" . $data[0]."-01")."'";
+    $mesAno = "'" . trim($data[1] . "-" . $data[0] . "-01") . "'";
 
     if ($funcionario == 0) {
         $funcionario = (int)$_SESSION["funcionario"];
@@ -129,25 +129,23 @@ function recupera()
 
     $funcionario = (int)$_POST["funcionario"];
     $mesAno = $_POST["mesAno"];
-    if ($mesAno != "") {
-        $aux = explode('/', $mesAno);
-        $data = $aux[1] . '-' . $aux[0];
-        $data =  trim($data);
-        $mesAno = $data;
-    } else {
-        $mesAno = '';
-    }
+
+    $aux = explode('/', $mesAno);
+    $data = $aux[1] . '-' . $aux[0];
+    $data =  trim($data);
+    $mesAno = $data;   
+    $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $aux[0], $aux[1]);
     $folha = "";
 
     if ($funcionario != 0) {
         $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
-        WHERE FU.codigo = " . $funcionario . " AND DATEPART(mm,'$mesAno-01') = DATEPART(mm,F.dataCadastro) AND DATEPART(yy,'$mesAno-01') = DATEPART(yy,F.dataCadastro) ";
+        WHERE FU.codigo = " . $funcionario . " AND F.mesAno BETWEEN '$mesAno-01' AND '$mesAno-$totalDiasMes'";
     } else {
         $funcionario = (int)$_SESSION["funcionario"];
         $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
             INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
-            WHERE FU.codigo = $funcionario  AND DATEPART(mm,'$mesAno-01') = DATEPART(mm,F.dataCadastro) AND DATEPART(yy,'$mesAno-01') = DATEPART(yy,F.dataCadastro) ";
+            WHERE FU.codigo = $funcionario  AND F.mesAno BETWEEN '$mesAno-01' AND '$mesAno-$totalDiasMes'";
     }
 
     $reposit = new reposit();

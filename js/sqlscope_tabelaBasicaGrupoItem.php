@@ -124,9 +124,9 @@ function excluir()
         return;
     }
 
-    $id = $_POST["codigo"];
+    $id = $_POST["id"];
 
-    if ((empty($_POST['codigo']) || (!isset($_POST['codigo'])) || (is_null($_POST['codigo'])))) {
+    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
         $mensagem = "Selecione uma estoque!";
         echo "failed#" . $mensagem . ' ';
         return;

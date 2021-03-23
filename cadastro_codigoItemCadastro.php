@@ -105,7 +105,7 @@ include("inc/nav.php");
                                                             <section class="col col-1 col-auto">
                                                                 <label class="label" for="indicador">Indicador</label>
                                                                 <label class="input">
-                                                                    <input id="indicador" name="indicador" type="text" class="" maxlength="5"  autocomplete="off">
+                                                                    <input id="indicador" name="indicador" type="text" class="" maxlength="5" autocomplete="off">
                                                                 </label>
                                                             </section>
 
@@ -165,7 +165,7 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3">
+                                                            <section class="col col-2">
                                                                 <label class="label" for="localizacaoItem">Localização do item</label>
                                                                 <label class="select">
                                                                     <select id="localizacaoItem" name="localizacaoItem" class="required" required>
@@ -183,8 +183,47 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-1">
+                                                                <label class="label" for="grupoItem">Unidade Medida</label>
+                                                                <label class="select">
+                                                                    <select id="unidadeItem" name="unidadeItem" class="required">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao, sigla FROM Estoque.unidadeItem WHERE ativo = 1 ORDER BY descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $id = $row['codigo'];
+                                                                            $descricao = $row['sigla'];
+                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+
                                                         </div>
                                                         <div class="row">
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="ativo">Consumivel</label>
+                                                                <label class="select">
+                                                                    <select id="consumivel" name="consumivel" class="required">
+                                                                        <option></option>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0'>Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="ativo">Assinatura retirada</label>
+                                                                <label class="select">
+                                                                    <select id="autorizacao" name="autorizacao" class="required">
+                                                                        <option></option>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0'>Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
@@ -365,12 +404,15 @@ include("inc/scripts.php");
                             var codigoItem = piece[1];
                             var codigoFabricante = piece[2];
                             var descricaoItem = piece[3];
-                            var estoque = piece[4]
-                            var grupoItem = piece[5]
-                            var localizacaoItem = piece[6]
-                            var unidade = piece[7]
-                            var indicador = piece[8]
-                            var ativo = piece[9]
+                            var estoque = piece[4];
+                            var grupoItem = piece[5];
+                            var localizacaoItem = piece[6];
+                            var unidade = piece[7];
+                            var indicador = piece[8];
+                            var ativo = piece[9];
+                            var unidadeItem = piece[10];
+                            var consumivel = piece[11];
+                            var autorizacao = piece[12];
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
@@ -385,6 +427,9 @@ include("inc/scripts.php");
                             $("#unidade").val(unidade);
                             $("#indicador").val(indicador);
                             $("#ativo").val(ativo);
+                            $("#unidadeItem").val(unidadeItem);
+                            $("#consumivel").val(consumivel);
+                            $("#autorizacao").val(autorizacao);
 
                             return;
                         }
@@ -443,6 +488,9 @@ include("inc/scripts.php");
         var ativo = +$('#ativo').val();
         var unidade = +$('#unidade').val();
         var indicador = $('#indicador').val();
+        var unidadeItem = +$('#unidadeItem').val();
+        var consumivel = $('#consumivel').val();
+        var autorizacao = $('#autorizacao').val();
 
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
@@ -488,8 +536,29 @@ include("inc/scripts.php");
             return;
         }
 
+        if (!unidadeItem) {
+            smartAlert("Atenção", "Informe a Unidade Medida", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!consumivel) {
+            smartAlert("Atenção", "Informe se o item é consumivel", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!autorizacao) {
+            smartAlert("Atenção", "Informe se o item precisa de assinatura", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+
+
         //Chama a função de gravar do business de convênio de saúde.
-        gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo, unidade, indicador,
+        gravaCodigoItem(id, codigoItem, codigoFabricante, descricaoItem, estoque, grupoItem, localizacaoItem, ativo, unidade, 
+                        indicador, unidadeItem, consumivel, autorizacao,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");

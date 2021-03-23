@@ -339,7 +339,7 @@ include("inc/scripts.php");
 ?>
 
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_licitacaoParticiparPregao.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_estoqueEntradaItem.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -434,8 +434,8 @@ include("inc/scripts.php");
                         response($.map(data, function(item) {
                             return {
                                 id: item.id,
-                                label: item.nome,
-                                value: item.nome
+                                label: item.descricao,
+                                value: item.descricao
                             };
                         }));
                     }
@@ -479,8 +479,8 @@ include("inc/scripts.php");
                         response($.map(data, function(item) {
                             return {
                                 id: item.id,
-                                label: item.nome,
-                                value: item.nome
+                                label: item.descricao,
+                                value: item.descricao
                             };
                         }));
                     }
