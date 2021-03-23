@@ -20,10 +20,10 @@ $condicaoPesadaGravarOK = (in_array('PONTOELETRONICOMENSALPESADA_GRAVAR', $array
 $condicaoPesadaExcluirOK = (in_array('PONTOELETRONICOMENSALPESADA_EXCLUIR', $arrayPermissao, true));
 
 $esconderCampo = "";
-if ($condicaoNormalGravarOK || $condicaoPesadaGravarOK){  
-    $esconderCampo = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly','pointer-events' => 'none', 'touch-action' => 'none'];
-}else if($condicaoLeveGravarOK){
-    $esconderCampo = ['display' => '', 'disabled' => '', 'readonly' => '','pointer-events' => 'auto', 'touch-action' => 'auto'];
+if ($condicaoNormalGravarOK || $condicaoPesadaGravarOK) {
+    $esconderCampo = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
+} else if ($condicaoLeveGravarOK) {
+    $esconderCampo = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
 }
 
 if (($condicaoLeveAcessarOK == false) && ($condicaoNormalAcessarOK == false) && ($condicaoPesadaAcessarOK == false)) {
@@ -41,7 +41,7 @@ if (($condicaoNormalGravarOK == true) || ($condicaoPesadaGravarOK == true)) {
     $esconderBtnGravar = "none";
 }
 
-if($condicaoLeveGravarOK == false){
+if ($condicaoLeveGravarOK == false) {
     $esconderBtnGravar = "none";
 }
 
@@ -119,18 +119,18 @@ include("inc/nav.php");
                                                                     <section class="col col-4">
                                                                         <label class="label " for="funcionario">Funcionário</label>
                                                                         <label class="select">
-                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:<?php echo $esconderCampo['touch-action'];?>;pointer-events:<?php echo $esconderCampo['pointer-events'];?>">
+                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:<?php echo $esconderCampo['touch-action']; ?>;pointer-events:<?php echo $esconderCampo['pointer-events']; ?>">
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo != ".$_SESSION['funcionario']." order by nome";
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo != " . $_SESSION['funcionario'] . " order by nome";
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 foreach ($result as $row) {
                                                                                     $codigo = (int) $row['codigo'];
                                                                                     $nome = $row['nome'];
                                                                                     echo '<option value= ' . $codigo . '>' . $nome . '</option>';
                                                                                 }
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = ". $_SESSION['funcionario'];
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $_SESSION['funcionario'];
 
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 if ($row = $result[0]) {
@@ -660,6 +660,16 @@ include("inc/scripts.php");
             var lancamento = $("#lancamento-" + dia)
             var inputLancamento = $("#inputLancamento").val()
 
+            if (!inputEntrada) {
+                smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
+                return
+            }
+
+            if (!inputSaida) {
+                smartAlert("Atenção", "A hora de saída deve ser preenchida", "error");
+                return
+            }
+
             //--------------------------------------------------------------------------------
 
             const data = new Date(); //.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'});
@@ -669,98 +679,31 @@ include("inc/scripts.php");
             separador[0] = separador[0].trim();
             separador[1] = separador[1].trim();
 
-            let len = separador[0].toString().length;
-            if(len <= 5) separador[0].concat(':00'); 
-            len = separador[1].toString().length;
-            if(len <= 5) separador[1].concat(':00');
+            if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
+            if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
 
             const inicioExpediente = separador[0];
             const fimExpediente = separador[1];
 
-            const horaEntrada = aleatorizarTempo(inputEntrada,inicioExpediente);
-            const horaSaida = aleatorizarTempo(inputSaida,fimExpediente);
+            const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
+            const horaSaida = aleatorizarTempo(inputSaida, fimExpediente);
 
-            let horasFuncionario = () =>{
-                    let [h,m,s] = horaEntrada.split(':')
-                    let [h2,m2,s2] = horaSaida.split(':')
+            let horasFuncionario = somarHoras(horaEntrada,horaSaida);
+            let horasExpediente = somarHoras(inicioExpediente, fimExpediente);
 
-                    s = s + s2;
-                    while(s >= 60){
-                        m = m + 1;
-                        s = s - 60;
-                    }
+            console.table({
+                horaFuncionario: horasFuncionario,
+                horaExpediente: horasExpediente
+            })
+            debugger;
+            let horaExtra = diferencaHoras(horasFuncionario, horasExpediente, '00:00');
+            let horaAtraso = diferencaHoras(horasExpediente, horasFuncionario, '00:00');
 
-                    m = m + m2;
-                    while(m >= 60){
-                        h = h + 1;
-                        m = m - 60;
-                    }
-
-                    h = h + h2;
-
-                    if(h.toString().length < 2) h = '0'.concat(h)
-                    if(m.toString().length < 2) m = '0'.concat(m)
-                    if(s.toString().length < 2) s = '0'.concat(s)
-
-                    const hora = h +':'+ m +':'+ s
-                    return hora
-            }
-            let horasExpediente = () =>{
-                    let [h,m,s] = inicioExpediente.split(':')
-                    let [h2,m2,s2] = fimExpediente.split(':')
-
-                    s = s + s2;
-                    while(s >= 60){
-                        m = m + 1;
-                        s = s - 60;
-                    }
-
-                    m = m + m2;
-                    while(m >= 60){
-                        h = h + 1;
-                        m = m - 60;
-                    }
-
-                    h = h + h2;
-
-                    if(h.toString().length < 2) h = '0'.concat(h)
-                    if(m.toString().length < 2) m = '0'.concat(m)
-                    if(s.toString().length < 2) s = '0'.concat(s)
-
-                    const hora = h +':'+ m +':'+ s
-                    return hora
-            }
-
-            console.table({horaFuncionario:horasFuncionario,horaExpediente:horasExpediente})
-            let horaExtra = diferencaHoras(horasFuncionario,horasExpediente,'00:00');
-            let horaAtraso = diferencaHoras(horasExpediente,horasFuncionario,'00:00');
-
-            if (!inputEntrada) {
-                smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
-                return
-            }
-
-            if (!inputSaida && data > fimExpediente) {
-                smartAlert("Atenção", "A hora de saída deve ser preenchida", "error");
-                return
-            }
-
-            if (dataEntrada > dataSaida) {
-                smartAlert("Atenção", "A hora de saída deve ser maior ou igual a hora de entrada", "error");
-                return
-            }
-
-            $("#inputExtra").val(horaExtra);
-            $("#inputAtraso").val(horaAtraso);
-            inputExtra = horaExtra;
-            inputAtraso = horaAtraso;
-
-
-            if (!inputExtra) {
+            if (!horaExtra) {
                 smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
                 return
             }
-            if (!inputAtraso) {
+            if (!horaAtraso) {
                 smartAlert("Atenção", "Não foi possível calcular as horas de atraso", "error");
                 return
             }
@@ -769,9 +712,13 @@ include("inc/scripts.php");
             inicioAlmoco.val(inputInicioAlmoco)
             fimAlmoco.val(inputFimAlmoco)
             saida.val(horaSaida)
-            extra.val(inputExtra)
-            atraso.val(inputAtraso)
+            extra.val(horaExtra)
+            atraso.val(horaAtraso)
             lancamento.val(inputLancamento)
+
+            $("#inputExtra").val('');
+            $("#inputAtraso").val('');
+            // $().val('');
 
             return;
         });
@@ -1069,7 +1016,7 @@ include("inc/scripts.php");
         })
     }
 
-    function aleatorizarTempo(hora,expediente){
+    function aleatorizarTempo(hora, expediente) {
         let separador = hora.split(':');
         let h = Number(separador[0]);
         let m = Number(separador[1]);
@@ -1079,33 +1026,32 @@ include("inc/scripts.php");
         const eh = Number(separador[0]);
         const em = Number(separador[1]);
         let es = Number(separador[2]);
-        if(isNaN(es)) es = Number('00');
+        if (isNaN(es)) es = Number('00');
 
-        if((h == eh) && (m == em)){
+        if ((h == eh) && (m == em)) {
             m = Math.floor(Math.random() * (4 - 0)) + 0;
             s = Math.floor(Math.random() * 60);
         }
 
-        if(h.toString().length < 2) h = `0${h}`;
-        if(m.toString().length < 2) m = `0${m}`;
-        if(s.toString().length < 2) s = `0${s}`;
+        if (h.toString().length < 2) h = `0${h}`;
+        if (m.toString().length < 2) m = `0${m}`;
+        if (s.toString().length < 2) s = `0${s}`;
 
         const result = `${h}:${m}:${s}`;
         return result;
     }
 
-    function diferencaHoras(hora1,hora2,format){
-        let h1,m1,s1;
-        let h2,m2,s2;
-        let hourDiff,minDiff,secDiff;
+    function diferencaHoras(hora1, hora2, format) {
+        let h1, m1, s1;
+        let h2, m2, s2;
+        let hourDiff, minDiff, secDiff;
         let separador = hora1.split(':');
 
-        if(hora1.toString().length < 6){
+        if (hora1.toString().length < 6) {
             h1 = Number(separador[0]);
             m1 = Number(separador[1]);
             s1 = Number('00');
-        }
-        else{
+        } else {
             h1 = Number(separador[0]);
             m1 = Number(separador[1]);
             s1 = Number(separador[2]);
@@ -1113,38 +1059,63 @@ include("inc/scripts.php");
 
         separador = hora2.split(':');
 
-        if(hora2.toString().length < 6){
+        if (hora2.toString().length < 6) {
             h2 = Number(separador[0]);
             m2 = Number(separador[1]);
             s2 = Number('00');
-        }
-        else{
+        } else {
             h2 = Number(separador[0]);
             m2 = Number(separador[1]);
             s2 = Number(separador[2]);
         }
 
-        if(s1 >= s2) secDiff = s1 - s2;
-        else if(s1 < s2){
+        if (s1 >= s2) secDiff = s1 - s2;
+        else if (s1 < s2) {
             secDiff = (s1 - s2) - 59;
             m1 = m1 - 1;
         }
 
-        if(m1 >= m2) minDiff = m1 - m2;
-        else if(m1 < m2){ 
+        if (m1 >= m2) minDiff = m1 - m2;
+        else if (m1 < m2) {
             minDiff = (m1 - m2) - 59;
             h1 = h1 - 1;
         }
 
         hourDiff = h1 - h2;
-        if(hourDiff < 0) hourDiff = 0;
+        if (hourDiff < 0) hourDiff = 0;
 
-        if(hourDiff.toString().length < 2) hourDiff = `0${hourDiff}`
-        if(minDiff.toString().length < 2) minDiff = `0${minDiff}`
-        if(secDiff.toString().length < 2) secDiff = `0${secDiff}`
+        if (hourDiff.toString().length < 2) hourDiff = `0${hourDiff}`
+        if (minDiff.toString().length < 2) minDiff = `0${minDiff}`
+        if (secDiff.toString().length < 2) secDiff = `0${secDiff}`
 
-        if(format == '00:00') return `${hourDiff}:${minDiff}`;
-        else if(format == '00:00:00') return `${hourDiff}:${minDiff}:${secDiff}`;
+        if (format == '00:00') return `${hourDiff}:${minDiff}`;
+        else if (format == '00:00:00') return `${hourDiff}:${minDiff}:${secDiff}`;
 
+    }
+
+    function somarHoras(hora1, hora2) {
+        let [h, m, s] = hora1.split(':')
+        let [h2, m2, s2] = hora2.split(':')
+
+        s = Number(s) + Number(s2);
+        while (s >= 60) {
+            m = m + 1;
+            s = s - 60;
+        }
+
+        m = Number(m) + Number(m2);
+        while (m >= 60) {
+            h = h + 1;
+            m = m - 60;
+        }
+
+        h = Number(h) + Number(h2);
+
+        if (h.toString().length < 2) h = '0'.concat(h)
+        if (m.toString().length < 2) m = '0'.concat(m)
+        if (s.toString().length < 2) s = '0'.concat(s)
+
+        const hora = h + ':' + m + ':' + s
+        return hora
     }
 </script>
