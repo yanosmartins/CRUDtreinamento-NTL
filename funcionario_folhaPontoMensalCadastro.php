@@ -697,7 +697,7 @@ include("inc/scripts.php");
             })
             debugger;
             let horaExtra = diferencaHoras(horasFuncionario, horasExpediente, '00:00');
-            let horaAtraso = diferencaHoras(horasExpediente, horasFuncionario, '00:00');
+            let horaAtraso = '00:00';
 
             if (!horaExtra) {
                 smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
@@ -1042,6 +1042,7 @@ include("inc/scripts.php");
     }
 
     function diferencaHoras(hora1, hora2, format) {
+        debugger;
         let h1, m1, s1;
         let h2, m2, s2;
         let hourDiff, minDiff, secDiff;
