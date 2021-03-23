@@ -6,23 +6,39 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-// $condicaoAcessarOK = (in_array('LANCAMENTO_ACESSAR', $arrayPermissao, true));
-// $condicaoGravarOK = (in_array('LANCAMENTO_GRAVAR', $arrayPermissao, true));
-// $condicaoExcluirOK = (in_array('LANCAMENTO_EXCLUIR', $arrayPermissao, true));
 
-// if ($condicaoAcessarOK == false) {
-//     unset($_SESSION['login']);
-//     header("Location:login.php");
-// }
+$condicaoLeveAcessarOK = (in_array('PONTOELETRONICOMENSALLEVE_ACESSAR', $arrayPermissao, true));
+$condicaoLeveGravarOK = (in_array('PONTOELETRONICOMENSALLEVE_GRAVAR', $arrayPermissao, true));
+$condicaoLeveExcluirOK = (in_array('PONTOELETRONICOMENSALLEVE_EXCLUIR', $arrayPermissao, true));
 
-// $esconderBtnExcluir = "";
-// if ($condicaoExcluirOK === false) {
-//     $esconderBtnExcluir = "none";
-// }
-// $esconderBtnGravar = "";
-// if ($condicaoGravarOK === false) {
-//     $esconderBtnGravar = "none";
-// }
+$condicaoNormalAcessarOK = (in_array('PONTOELETRONICOMENSALNORMAL_ACESSAR', $arrayPermissao, true));
+$condicaoNormalGravarOK = (in_array('PONTOELETRONICOMENSALNORMAL_GRAVAR', $arrayPermissao, true));
+$condicaoNormalExcluirOK = (in_array('PONTOELETRONICOMENSALNORMAL_EXCLUIR', $arrayPermissao, true));
+
+$condicaoPesadaAcessarOK = (in_array('PONTOELETRONICOMENSALPESADA_ACESSAR', $arrayPermissao, true));
+$condicaoPesadaGravarOK = (in_array('PONTOELETRONICOMENSALPESADA_GRAVAR', $arrayPermissao, true));
+$condicaoPesadaExcluirOK = (in_array('PONTOELETRONICOMENSALPESADA_EXCLUIR', $arrayPermissao, true));
+
+$esconderCampo = "";
+if ($condicaoNormalGravarOK || $condicaoPesadaGravarOK){  
+    $esconderCampo = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly','pointer-events' => 'none', 'touch-action' => 'none'];
+}
+
+if (($condicaoLeveAcessarOK == false) && ($condicaoNormalAcessarOK == false) && ($condicaoPesadaAcessarOK == false)) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
+
+$esconderBtnExcluir = "";
+if (($condicaoLeveExcluirOK == false) || ($condicaoNormalExcluirOK == false) || ($condicaoPesadaExcluirOK == false)) {
+    $esconderBtnExcluir = "none";
+}
+$esconderBtnGravar = "";
+if (($condicaoLeveExcluirOK == false) || ($condicaoNormalExcluirOK == false) || ($condicaoPesadaExcluirOK == false)) {
+    $esconderBtnGravar = "none";
+}
+
+
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -40,7 +56,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]["controlePonto"]["active"] = true;
+$page_nav['operacao']['sub']['funcionario']['sub']["controlePonto"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -96,21 +112,21 @@ include("inc/nav.php");
                                                                     <section class="col col-4">
                                                                         <label class="label " for="funcionario">Funcionário</label>
                                                                         <label class="select">
-                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly>
+                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:<?php echo $esconderCampo['touch-action'];?>;pointer-events:<?php echo $esconderCampo['pointer-events'];?>">
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F LEFT JOIN Ntl.usuario U ON F.codigo = U.funcionario where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND U.login != '" . $_SESSION['login'] . "' order by nome";
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo != ".$_SESSION['funcionario']." order by nome";
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 foreach ($result as $row) {
                                                                                     $codigo = (int) $row['codigo'];
                                                                                     $nome = $row['nome'];
                                                                                     echo '<option value= ' . $codigo . '>' . $nome . '</option>';
                                                                                 }
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F INNER JOIN Ntl.usuario U ON F.codigo = U.funcionario where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND U.login = '" . $_SESSION['login'] . "' AND F.codigo = U.funcionario";
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = ". $_SESSION['funcionario'];
 
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                if ($row = $result) {
+                                                                                if ($row = $result[0]) {
 
                                                                                     $codigo = (int) $row['codigo'];
                                                                                     $nome = $row['nome'];
@@ -174,9 +190,9 @@ include("inc/nav.php");
                                                                                 $horaEntrada = $row['horaEntrada'];
                                                                                 $horaSaida = $row['horaSaida'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                if($funcionario == $_SESSION['funcionario']){
+                                                                                if ($funcionario == $_SESSION['funcionario']) {
                                                                                     echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaEntrada . " - " . $horaSaida . '</option>';
-                                                                                }else{
+                                                                                } else {
                                                                                     echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
                                                                                 }
                                                                             }
@@ -199,10 +215,10 @@ include("inc/nav.php");
                                                                                 $horaInicio = $row['horaInicio'];
                                                                                 $horaFim = $row['horaFim'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                if($funcionario == $_SESSION['funcionario']){
-                                                                                    echo '<option data-funcionario="'.$funcionario.'" value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                }else{
-                                                                                    echo '<option data-funcionario="'.$funcionario.'" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                if ($funcionario == $_SESSION['funcionario']) {
+                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                } else {
+                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
                                                                                 }
                                                                             }
                                                                             ?>
@@ -217,7 +233,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Dia</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control " data-autoclose="true" value="">
+                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control required" required data-autoclose="true" value="">
                                                                         </div>
                                                                     </div>
                                                                 </section>
@@ -611,6 +627,11 @@ include("inc/scripts.php");
 
             var dia = $("#inputDia").val()
 
+            if (!dia) {
+                smartAlert('Atenção', 'Insira um dia para a inserção das horas', 'error')
+                return
+            }
+
             var entrada = $("#horaEntrada-" + dia)
             var inputEntrada = $("#inputHoraEntrada").val()
 
@@ -636,7 +657,7 @@ include("inc/scripts.php");
 
             const data = new Date(); //.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'});
 
-            let separador = $("expediente").val();
+            let separador = $("#expediente option:selected").text();
             separador = separador.split("-");
             separador[0] = separador[0].trim();
             separador[1] = separador[1].trim();
@@ -647,42 +668,38 @@ include("inc/scripts.php");
             const horaEntrada = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${inputEntrada}`);
             const horaSaida = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${inputSaida}`);
 
-            let horaExtra = (horaEntrada.getTime() + horaSaida.getTime()) - (inicioExpediente.getTime() + fimExpediente.getTime());
-            let horaAtraso = (inicioExpediente.getTime() + fimExpediente.getTime()) - (horaEntrada.getTime() + horaSaida.getTime());
+            const totalExpediente = inicioExpediente.getTime() + fimExpediente.getTime()
+            const totalEntradaSaida = horaEntrada.getTime() + horaSaida.getTime()
+
+            let horaExtra
+            let horaAtraso
+            //Calcular Hora Extra && Hora Atraso
+            if (totalExpediente > totalEntradaSaida) {
+                horaAtraso = new Date(totalExpediente - totalEntradaSaida)
+
+                horaExtra = '00:00'
+            } else if (totalEntradaSaida > totalExpediente) {
+                horaExtra = new Date(totalEntradaSaida - totalExpediente)
+
+                horaAtraso = '00:00'
+            } else {
+                horaExtra = '00:00'
+                horaAtraso = '00:00'
+            }
 
             if (!inputEntrada) {
                 smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
                 return
             }
 
-            if (!inputSaida && data.getTime() > fimExpediente.getTime()) {
+            if (!inputSaida && data > fimExpediente) {
                 smartAlert("Atenção", "A hora de saída deve ser preenchida", "error");
                 return
             }
 
-            if (horaEntrada.getTime() > horaSaida.getTime()) {
+            if (horaEntrada > horaSaida) {
                 smartAlert("Atenção", "A hora de saída deve ser maior ou igual a hora de entrada", "error");
                 return
-            }
-
-            if (horaExtra < 0) {
-                horaExtra = "00:00"
-            } else {
-                horaExtra = new Date(horaExtra).toLocaleTimeString('pt-BR', {
-                    timeZone: 'America/Sao_Paulo'
-                });
-
-                horaExtra = horaExtra.slice(0,horaExtra.length - 3);
-
-            }
-            if (horaAtraso < 0) {
-                horaAtraso = "00:00";
-            } else {
-                horaAtraso = new Date(horaAtraso).toLocaleTimeString('pt-BR', {
-                    timeZone: 'America/Sao_Paulo'
-                });
-
-                horaAtraso = horaAtraso.slice(0,horaAtraso.length - 3)
             }
 
             $("#inputExtra").val(horaExtra);
@@ -743,12 +760,12 @@ include("inc/scripts.php");
     });
 
     function voltar() {
-        $(location).attr('href', 'beneficio_folhaPontoMensalFiltro.php');
+        $(location).attr('href', 'funcionario_folhaPontoMensalFiltro.php');
 
     }
 
     function novo() {
-        $(location).attr('href', 'beneficio_folhaPontoMensalCadastro.php');
+        $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php');
 
     }
 
