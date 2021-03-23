@@ -22,6 +22,8 @@ $condicaoPesadaExcluirOK = (in_array('PONTOELETRONICOMENSALPESADA_EXCLUIR', $arr
 $esconderCampo = "";
 if ($condicaoNormalGravarOK || $condicaoPesadaGravarOK){  
     $esconderCampo = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly','pointer-events' => 'none', 'touch-action' => 'none'];
+}else if($condicaoLeveGravarOK){
+    $esconderCampo = ['display' => '', 'disabled' => '', 'readonly' => '','pointer-events' => 'auto', 'touch-action' => 'auto'];
 }
 
 if (($condicaoLeveAcessarOK == false) && ($condicaoNormalAcessarOK == false) && ($condicaoPesadaAcessarOK == false)) {
@@ -30,11 +32,16 @@ if (($condicaoLeveAcessarOK == false) && ($condicaoNormalAcessarOK == false) && 
 }
 
 $esconderBtnExcluir = "";
-if (($condicaoLeveExcluirOK == false) || ($condicaoNormalExcluirOK == false) || ($condicaoPesadaExcluirOK == false)) {
+if (($condicaoLeveExcluirOK == false) && ($condicaoNormalExcluirOK == false) && ($condicaoPesadaExcluirOK == false)) {
     $esconderBtnExcluir = "none";
 }
+
 $esconderBtnGravar = "";
-if (($condicaoLeveExcluirOK == false) || ($condicaoNormalExcluirOK == false) || ($condicaoPesadaExcluirOK == false)) {
+if (($condicaoNormalGravarOK == true) || ($condicaoPesadaGravarOK == true)) {
+    $esconderBtnGravar = "none";
+}
+
+if($condicaoLeveGravarOK == false){
     $esconderBtnGravar = "none";
 }
 
@@ -662,29 +669,34 @@ include("inc/scripts.php");
             separador[0] = separador[0].trim();
             separador[1] = separador[1].trim();
 
-            const inicioExpediente = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${separador[0]}:00`);
-            const fimExpediente = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${separador[1]}:00`);
+            if(separador[0].length < 6) separador[0].concat(':00'); 
+            if(separador[1].length < 6) separador[1].concat(':00');
 
-            const horaEntrada = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${inputEntrada}`);
-            const horaSaida = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${inputSaida}`);
+            const inicioExpediente = separador[0];
+            const fimExpediente = separador[1];
 
-            const totalExpediente = inicioExpediente.getTime() + fimExpediente.getTime()
-            const totalEntradaSaida = horaEntrada.getTime() + horaSaida.getTime()
+            const horaEntrada = aleatorizarTempo(inputEntrada,inicioExpediente);
+            const horaSaida = inputSaida;
 
-            let horaExtra
-            let horaAtraso
-            //Calcular Hora Extra && Hora Atraso
-            if (totalExpediente > totalEntradaSaida) {
-                horaAtraso = new Date(totalExpediente - totalEntradaSaida)
+            const dataEntrada = new Date(`${data.getFullYear}-${data.getMonth}-${data.getDate} ${horaEntrada}`)
+            const dataSaida = new Date(`${data.getFullYear}-${data.getMonth}-${data.getDate} ${horaSaida}`)
+            const dataTotal = new Date(dataEntrada.getTime() + dataSaida.getTime())
 
-                horaExtra = '00:00'
-            } else if (totalEntradaSaida > totalExpediente) {
-                horaExtra = new Date(totalEntradaSaida - totalExpediente)
+            const dataInicioExpediente = new Date(`${data.getFullYear}-${data.getMonth}-${data.getDate} ${inicioExpediente}`)
+            const dataFimExpediente = new Date(`${data.getFullYear}-${data.getMonth}-${data.getDate} ${fimExpediente}`)
+            const dataExpedienteTotal = new Date(dataInicioExpediente.getTime() + dataInicioExpediente.getTime())
 
-                horaAtraso = '00:00'
-            } else {
-                horaExtra = '00:00'
-                horaAtraso = '00:00'
+            let horaExtra,horaAtraso;
+
+            if(dataTotal > dataExpedienteTotal){
+               horaExtra = diferencaHoras(dataTotal.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'}),dataExpedienteTotal.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'}),'00:00') 
+               horaAtraso = '00:00';
+            }else if(dataTotal < dataExpedienteTotal){
+                horaAtraso = diferencaHoras(dataTotal.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'}),dataExpedienteTotal.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'}),'00:00') 
+                horaExtra = '00:00';
+            }else{
+                horaExtra = '00:00';
+                horaAtraso = '00:00';
             }
 
             if (!inputEntrada) {
@@ -697,7 +709,7 @@ include("inc/scripts.php");
                 return
             }
 
-            if (horaEntrada > horaSaida) {
+            if (dataEntrada > dataSaida) {
                 smartAlert("Atenção", "A hora de saída deve ser maior ou igual a hora de entrada", "error");
                 return
             }
@@ -1019,5 +1031,82 @@ include("inc/scripts.php");
             $(`#atraso-${Number(index) + 1}`).val(obj.atraso);
             $(`#lancamento-${Number(index) + 1}`).val(obj.lancamento);
         })
+    }
+
+    function aleatorizarTempo(hora,expediente){
+        let separador = hora.split(':');
+        const h = Number(separador[0]);
+        let m = Number(separador[1]);
+        let s = Number(separador[2]);
+
+        separador = expediente.split(':');
+        const eh = Number(separador[0]);
+        const em = Number(separador[1]);
+        const es = Number(separador[2]);
+
+        if((h == eh) && (m == em)){
+            m = Math.floor(Math.random() * (4 - 0)) + 0;
+            s = Math.floor(Math.random() * 60);
+        }
+
+        if(h.toString().length < 2) h = `0${h}`;
+        if(m.toString().length < 2) h = `0${m}`;
+        if(s.toString().length < 2) h = `0${s}`;
+
+        const result = `${h}:${m}:${s}`;
+        return result;
+    }
+
+    function diferencaHoras(hora,expediente,format){
+        let h,m,s;
+        let eh,em,es;
+        let hourDiff,minDiff,secDiff;
+        let separador = hora.split(':');
+
+        if(hora.toString().length < 6){
+            h = separador[0];
+            m = separador[1];
+            s = '00';
+        }
+        else{
+            h = separador[0];
+            m = separador[1];
+            s = separador[2];
+        }
+
+        let separador = expediente.split(':');
+
+        if(expediente.toString().length < 6){
+            h = separador[0];
+            m = separador[1];
+            s = '00';
+        }
+        else{
+            eh = separador[0];
+            em = separador[1];
+            es = separador[2];
+        }
+
+        if(h > eh) hourDiff = h - eh;
+        else if(h < eh) hourDiff = eh - h;
+        else hourDiff = '00';
+
+        if(hourDiff.toString().length < 2) hourDiff = `0${hourDiff}`
+
+        if(m > em) minDiff = m - em;
+        else if(m < em) minDiff = em - m;
+        else minDiff = '00';
+
+        if(minDiff.toString().length < 2) minDiff = `0${minDiff}`
+
+        if(s > es) secDiff = s - es;
+        else if(s < es) secDiff = es - s;
+        else secDiff = '00';
+
+        if(secDiff.toString().length < 2) secDiff = `0${secDiff}`
+
+        if(format == '00:00') return `${hourDiff}:${minDiff}`;
+        else if(format == '00:00:00') return `${hourDiff}:${minDiff}:${secDiff}`;
+
     }
 </script>
