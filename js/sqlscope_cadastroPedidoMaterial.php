@@ -16,7 +16,13 @@ if ($funcao == 'recupera') {
 if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
+if ($funcao == 'recuperaQuantidadeEstoque') {
+    call_user_func($funcao);
+}
 if ($funcao == 'recuperaDescricaoCodigo') {
+    call_user_func($funcao);
+}
+if ($funcao == 'listaSolicitanteAtivoAutoComplete') {
     call_user_func($funcao);
 }
 if ($funcao == 'listaDescricaoAtivoAutoComplete') {
@@ -26,9 +32,6 @@ if ($funcao == 'listaCodigoAtivoAutoComplete') {
     call_user_func($funcao);
 }
 if ($funcao == 'listaClienteFornecedorAtivoAutoComplete') {
-    call_user_func($funcao);
-}
-if ($funcao == 'populaComboEstoque') {
     call_user_func($funcao);
 }
 
@@ -52,12 +55,10 @@ function grava()
     // Gravação do formulário no banco de dados. 
     $codigo =  (int)$_POST['codigo'] ?: 0;
     $dataMovimento = validaData($_POST['dataMovimento']);
+    $horaMovimento = $_POST['horaMovimento'];
     $clienteFornecedor = (int)$_POST['clienteFornecedorId'] ?: 0;
-    $tipo = (int)$_POST['tipo'] ?: 0;
-    $numero =  validaString($_POST['numero']);
-    $dataEmissao = validaData($_POST['dataEmissao']);
-    $dataEntrada = validaData($_POST['dataEntrada']);
-    $observacao =  validaString($_POST['observacao']);
+    $solicitante = (int)$_POST['solicitanteId'] ?: 0;
+    $projeto = (int)$_POST['projeto'] ?: 0;
 
     $strArrayItem = $_POST['jsonItem'];
     $arrayItem = json_decode($strArrayItem, true);
@@ -97,15 +98,13 @@ function grava()
     $xmlItem = "'" . $xmlItem . "'";
 
 
-    $sql = "Estoque.entradaMaterial_Atualiza
+    $sql = "Estoque.pedidoMaterial_Atualiza
         $codigo,
         $dataMovimento,  
-        $clienteFornecedor, 
-        $tipo, 
-        $numero,
-        $dataEmissao,
-        $dataEntrada,
-        $observacao, 
+        $horaMovimento,
+        $clienteFornecedor,
+        $solicitante,
+        $projeto,
         $usuario, 
         $xmlItem
         ";
@@ -282,32 +281,34 @@ function excluir()
 }
 
 
-function recuperaDescricaoCodigo()
+function recuperaQuantidadeEstoque()
 {
     if ((empty($_POST["codigo"])) || (!isset($_POST["codigo"])) || (is_null($_POST["codigo"]))) {
         $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
         echo "failed#" . $mensagem . ' ';
         return;
     } else {
-        $codigo = (int)$_POST["codigo"];
+        $id = (int)$_POST["codigo"];
     }
 
-    $sql = "SELECT codigo, descricaoItem
-    FROM Estoque.codigoItem
-    WHERE (0=0) AND
-    codigo = " . $codigo;
+    if ((empty($_POST["estoque"])) || (!isset($_POST["estoque"])) || (is_null($_POST["estoque"]))) {
+        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    } else {
+        $estoque = $_POST["estoque"];
+    }
+
 
     $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
 
-    $out = "";
+    $sql = "SELECT SUM(quantidade) as quantidade FROM Estoque.entradaMaterialItem WHERE material =" . $id . "AND estoque =" . $estoque;
+    $result = $reposit->RunQuery($sql);
     if ($row = $result[0]) {
-        $codigo = (int)$row['codigo'];
-        $descricaoItem = $row['descricaoItem'];
+        $quantidade = (int)$row['quantidade'];
     }
 
-    $out =   $codigo . "^" .
-        $descricaoItem;
+    $out =   $quantidade;
 
     if ($out == "") {
         echo "failed#";
@@ -318,6 +319,41 @@ function recuperaDescricaoCodigo()
     return;
 }
 
+function listaSolicitanteAtivoAutoComplete()
+{
+    $condicaoDescricao = !((empty($_POST["descricaoIniciaCom"])) || (!isset($_POST["descricaoIniciaCom"])) || (is_null($_POST["descricaoIniciaCom"])));
+
+    if ($condicaoDescricao === false) {
+        return;
+    }
+
+    if ($condicaoDescricao) {
+        $descricaoPesquisa = $_POST["descricaoIniciaCom"];
+    }
+
+    if ($condicaoDescricao == "") {
+        $id = 0;
+    }
+
+    $reposit = new reposit();
+    $sql = "SELECT * FROM Ntl.funcionario WHERE (0=0) AND ativo = 1 
+    AND nome LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY nome";
+    $result = $reposit->RunQuery($sql);
+    $contador = 0;
+    $array = array();
+    foreach ($result as $row) {
+        $id = $row['codigo'];
+        $descricao = $row["nome"];
+        $contador = $contador + 1;
+        $array[] = array("id" => $id, "descricao" => $descricao);
+    }
+
+    $strArray = json_encode($array);
+
+    echo $strArray;
+
+    return;
+}
 
 function listaDescricaoAtivoAutoComplete()
 {
@@ -351,6 +387,13 @@ function listaDescricaoAtivoAutoComplete()
         $autorizacao = $row['autorizacao'];
         $descricaoItem = $row["descricaoItem"];
         $descricaoItem = $descricaoItem . " " . $row["indicador"];
+
+        $sql = "SELECT SUM(quantidade) as quantidade FROM Estoque.entradaMaterialItem WHERE material =" . $id . "AND estoque =" . $estoque;
+        $result = $reposit->RunQuery($sql);
+        if ($row = $result[0]) {
+            $quantidade = (int)$row['quantidade'];
+        }
+
         $contador = $contador + 1;
         $array[] = array(
             "id" => $id,
@@ -360,7 +403,8 @@ function listaDescricaoAtivoAutoComplete()
             "estoque" => $estoque,
             "unidadeItem" => $unidadeItem,
             "consumivel" => $consumivel,
-            "autorizacao" => $autorizacao
+            "autorizacao" => $autorizacao,
+            "quantidade" => $quantidade
         );
     }
 
@@ -406,6 +450,7 @@ function listaClienteFornecedorAtivoAutoComplete()
 
     return;
 }
+
 function listaCodigoAtivoAutoComplete()
 {
     $condicaoDescricao = !((empty($_POST["descricaoIniciaCom"])) || (!isset($_POST["descricaoIniciaCom"])) || (is_null($_POST["descricaoIniciaCom"])));
@@ -438,8 +483,8 @@ function listaCodigoAtivoAutoComplete()
         $codigoItem = $row["codigoItem"];
         $descricaoItem = $row["descricaoItem"] . " " . $row["indicador"];
 
-        $sql = "SELECT SUM(quantidade) as quantidade FROM Estoque.entradaMaterialItem WHERE material =". $id ."AND estoque =" . $estoque;
-        $result = $reposit->RunQuery($sql); 
+        $sql = "SELECT SUM(quantidade) as quantidade FROM Estoque.entradaMaterialItem WHERE material =" . $id . "AND estoque =" . $estoque;
+        $result = $reposit->RunQuery($sql);
         if ($row = $result[0]) {
             $quantidade = (int)$row['quantidade'];
         }
@@ -465,32 +510,40 @@ function listaCodigoAtivoAutoComplete()
     return;
 }
 
-function populaComboEstoque()
+function recuperaDescricaoCodigo()
 {
-    $unidade = $_POST["unidadeDestino"];
-    if ($unidade > 0) {
-        $sql = "SELECT codigo, descricao, unidade FROM Estoque.estoque 
-                WHERE ativo = 1 AND unidade = $unidade ORDER BY descricao";
+    if ((empty($_POST["codigo"])) || (!isset($_POST["codigo"])) || (is_null($_POST["codigo"]))) {
+        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    } else {
+        $codigo = (int)$_POST["codigo"];
+    }
 
-        $reposit = new reposit();
-        $result = $reposit->RunQuery($sql);
-        $contador = 0;
-        $out = "";
-        foreach ($result as $row) {
-            $id = $row['codigo'];
-            $descricao = $row['descricao'];
+    $sql = "SELECT codigo, descricaoItem
+    FROM Estoque.codigoItem
+    WHERE (0=0) AND
+    codigo = " . $codigo;
 
-            $out = $out . $id . "^" . $descricao . "|";
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
 
-            $contador = $contador + 1;
-        }
-        if ($out != "") {
-            echo "sucess#" . $contador . "#" . $out;
-            return;
-        }
+    $out = "";
+    if ($row = $result[0]) {
+        $codigo = (int)$row['codigo'];
+        $descricaoItem = $row['descricaoItem'];
+    }
+
+    $out =   $codigo . "^" .
+        $descricaoItem;
+
+    if ($out == "") {
         echo "failed#";
         return;
     }
+
+    echo "sucess#" . $out;
+    return;
 }
 
 function validaString($value)
@@ -508,7 +561,6 @@ function validaNumero($value)
     }
     return $value;
 }
-
 
 function validaData($value)
 {

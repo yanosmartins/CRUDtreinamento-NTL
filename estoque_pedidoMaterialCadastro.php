@@ -25,13 +25,14 @@ if ($condicaoExcluirOK === false) {
     $esconderBtnExcluir = "none";
 }
 
-
+session_start();
+$id = $_SESSION['funcionario'];
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Entrada Material";
+$page_title = "Pedido Material";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -43,7 +44,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['estoque']['sub']["entradaItem"]["active"] = true;
+$page_nav['operacao']['sub']['estoque']['sub']["pedidoMaterial"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -71,7 +72,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formEntradaItem" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formPedidoMaterial" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -90,7 +91,7 @@ include("inc/nav.php");
                                                         <div id="formCadastro">
                                                             <div class="row">
                                                                 <section class="col col-2">
-                                                                    <label class="label">Código</label>
+                                                                    <label class="label">Lançamento</label>
                                                                     <label class="input">
                                                                         <input id="codigo" name="codigo" autocomplete="off" class="form-control readonly" readonly type="text" value="">
                                                                     </label>
@@ -98,67 +99,94 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label">Data Movimento</label>
                                                                     <label class="input">
-                                                                        <input id="dataMovimento" name="dataMovimento" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Dados NFe</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-4">
-                                                                    <label class="label">Cliente/Fornecedor</label>
-                                                                    <label class="input">
-                                                                        <input id="clienteFornecedorId" name="clienteFornecedorId" type="hidden" value="">
-                                                                        <input id="clienteFornecedor" name="clienteFornecedorFiltro" autocomplete="off" class="form-control required"  placeholder="Digite o codigo..." type="text" value="">
-                                                                        <i class="icon-append fa fa-filter"></i>
+                                                                        <?php
+                                                                        $hoje = date("d/m/Y");
+                                                                        $hoje = "'" . $hoje . "'";
+                                                                        echo "<input id='dataMovimento' name='dataMovimento' type='text' data-dateformat='dd/mm/yy' class='readonly' style='text-align: center' value="
+                                                                            . $hoje . " data-mask='99/99/9999' data-mask-placeholder='-' autocompvare='new-password' readonly>";
+                                                                        ?>
+
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
-                                                                    <label class="label" for="tipo">Tipo</label>
+                                                                    <label class="label">Hora Movimento</label>
+                                                                    <label class="input">
+                                                                        <i class="icon-append fa fa-clock-o"></i>
+                                                                        <?php
+                                                                        // DEFINE O FUSO HORARIO COMO O HORARIO DE BRASILIA
+                                                                        date_default_timezone_set('America/Sao_Paulo');
+                                                                        // CRIA UMA VARIAVEL E ARMAZENA A HORA ATUAL DO FUSO-HORÀRIO DEFINIDO (BRASÍLIA)
+                                                                        $hora = date('H:i', time());
+                                                                        $hora = "'" . $hora . "'";
+                                                                        echo "<input id='horaMovimento' name='horaMovimento' class='readonly' style='text-align: center' type='text' autocompvare='new-password' value=" . $hora . " readonly>"
+                                                                        ?>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2" id="sectionAprovado" hidden>
+                                                                    <label class="label" for="aprovado">Aprovado</label>
                                                                     <label class="select">
-                                                                        <select id="tipo" name="tipo" class="required" >
+                                                                        <select id="aprovado" name="aprovado" class="required">
+                                                                            <option></option>
+                                                                            <option value="0">Não</option>
+                                                                            <option value="1">Sim</option>
+                                                                        </select><i></i>
+                                                                </section>
+
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-12">
+                                                                    <legend><strong>Dados Solicitação</strong></legend>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    <label class="label">Solicitante</label>
+                                                                    <label class="input">
+                                                                        <input id="solicitanteId" name="solicitanteId" type="hidden" value="">
+                                                                        <input id="solicitante" name="solicitanteFiltro" autocomplete="off" class="form-control required" required placeholder="Digite o nome do solicitante..." type="text" value="">
+                                                                        <i class="icon-append fa fa-filter"></i>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                    <label class="label" for="projeto">Projeto</label>
+                                                                    <label class="select">
+                                                                        <select id="projeto" name="projeto" class="required">
                                                                             <option></option>
                                                                             <?php
-                                                                            $sql =  "SELECT codigo, descricao FROM Estoque.tipoDocumento where ativo = 1 order by descricao";
+                                                                            $sql =  "SELECT codigo, descricao FROM Ntl.projeto where ativo = 1 order by descricao";
                                                                             $reposit = new reposit();
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = $row['codigo'];
                                                                                 $descricao = ($row['descricao']);
-                                                                                echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
+                                                                                echo '<option value=' . $codigo . '>  ' . $descricao . ' </option>';
                                                                             }
                                                                             ?>
                                                                         </select><i></i>
                                                                 </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Número</label>
-                                                                    <label class="input">
-                                                                        <input id="numero" name="numero" maxlength="255" autocomplete="off" class="" type="text" value="">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Data Emissão</label>
-                                                                    <label class="input">
-                                                                        <input id="dataEmissao" name="dataEmissao" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required"  style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
-                                                                        <i class="icon-append fa fa-calendar"></i>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Data Entrada</label>
-                                                                    <label class="input">
-                                                                        <input id="dataEntrega" name="dataEntrega" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
-                                                                        <i class="icon-append fa fa-calendar"></i>
-                                                                    </label>
-                                                                </section>
                                                             </div>
                                                             <div class="row">
-                                                                <section class="col col-12">
-                                                                    <label class="label">Observação</label>
-                                                                    <textarea id="observacao" name="observacao" class="form-control" rows="3" style="resize:vertical" autocomplete="off"></textarea>
+                                                                <section class="col col-6">
+                                                                    <label class="label">Cliente/Fornecedor</label>
+                                                                    <label class="input">
+                                                                        <input id="clienteFornecedorId" name="clienteFornecedorId" type="hidden" value="">
+                                                                        <input id="clienteFornecedor" name="clienteFornecedorFiltro" autocomplete="off" class="form-control required" required placeholder="Digite o cliente/fornecedor..." type="text" value="">
+                                                                        <i class="icon-append fa fa-filter"></i>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                    <label class="label">Responsavel pelo Fornecimento</label>
+                                                                    <label class="input">
+                                                                        <?php
+                                                                        $sql = "SELECT nome FROM Ntl.funcionario WHERE codigo = " . $id;
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        if ($row = $result[0]) {
+                                                                            $nome = "'" . $row['nome'] . "'";
+                                                                            echo "<input id='responsavelFornecimento' maxlength='255' name='responsavelFornecimento' class='readonly' type='select' value=" . $nome . " readonly>";
+                                                                        }
+                                                                        ?>
+                                                                    </label>
                                                                 </section>
                                                             </div>
                                                         </div>
@@ -172,7 +200,7 @@ include("inc/nav.php");
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseItemEntrada" class="" id="accordionItemEntrada">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        item Entrada Material
+                                                        Produto
                                                     </a>
                                                 </h4>
                                             </div>
@@ -185,27 +213,9 @@ include("inc/nav.php");
                                                             <div class="row">
                                                                 <input id="ItemId" name="ItemId" type="hidden" value="">
                                                                 <input id="sequencialItem" name="sequencialItem" type="hidden" value="">
-                                                                <input id="valorTotalItem" name="valorTotalItem" type="hidden" value="0">
-                                                                <input id="valorFinalItem" name="valorFinalItem" type="hidden" value="0">
-                                                                <input id="valorTotalItemTable" name="valorTotalItemTable" type="hidden" value="0">
-                                                                <input id="valorFinalItemTable" name="valorFinalItemTable" type="hidden" value="0">
-                                                                <!-- <section class="col col-2">
-                                                                    <label class="label" for="codigoItem">Código Material</label>
-                                                                    <label class="select">
-                                                                        <select id="codigoItem" name="codigoItem" class="select required" required>
-                                                                            <option></option>
-                                                                            <?php
-                                                                            $sql =  "SELECT codigo, codigoItem FROM Estoque.codigoItem where ativo = 1 order by codigoItem";
-                                                                            $reposit = new reposit();
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            foreach ($result as $row) {
-                                                                                $codigo = $row['codigo'];
-                                                                                $descricao = ($row['codigoItem']);
-                                                                                echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
-                                                                            }
-                                                                            ?>
-                                                                        </select><i></i>
-                                                                </section> -->
+                                                                <input id="unidadeMedidaId" name="unidadeMedidaId" type="hidden" value="">
+                                                                <input id="descricaoUnidadeMedida" name="descricaoUnidadeMedida" type="hidden" value="">
+
                                                                 <section class="col col-2">
                                                                     <label class="label">Código Material</label>
                                                                     <label class="input">
@@ -230,6 +240,12 @@ include("inc/nav.php");
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-2">
+                                                                    <label class="label">Quantiidade em estoque</label>
+                                                                    <label class="input">
+                                                                        <input id="quantidadeEstoque" name="quantidadeEstoque" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
                                                                     <label class="label">Quantiidade</label>
                                                                     <label class="input">
                                                                         <input id="quantidade" name="quantidade" maxlength="255" min="0" autocomplete="off" class="required" type="number" value="">
@@ -253,6 +269,21 @@ include("inc/nav.php");
                                                                             ?>
                                                                         </select><i></i>
                                                                 </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="situacao">Situação</label>
+                                                                    <label class="select">
+                                                                        <select id="situacao" name="situacao" class="required">
+                                                                            <option></option>
+                                                                            <option value="0">Consumo</option>
+                                                                            <option value="1">Disponível</option>
+                                                                            <option value="2">Não Disponível</option>
+                                                                            <option value="3">Reservado</option>
+                                                                            <option value="4">Aguardando Assinatura</option>
+                                                                            <option value="5">Fornecido</option>
+                                                                        </select><i></i>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
                                                                 <section class="col col-4">
                                                                     <label class="label" for="unidadeDestino">Unidade Destino</label>
                                                                     <label class="select">
@@ -271,7 +302,7 @@ include("inc/nav.php");
                                                                         </select><i></i>
                                                                 </section>
                                                                 <section class="col col-4">
-                                                                    <label class="label" for="estoqueDestino">Estoque Destino</label>
+                                                                    <label class="label" for="estoqueDestino">Estoque</label>
                                                                     <label class="select">
                                                                         <select id="estoqueDestino" name="estoqueDestino" class="required">
                                                                             <option></option>
@@ -286,51 +317,6 @@ include("inc/nav.php");
                                                                             }
                                                                             ?>
                                                                         </select><i></i>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="consumivel">Consumível</label>
-                                                                    <label class="select">
-                                                                        <select id="consumivel" name="consumivel" class="readonly" disabled>
-                                                                            <option></option>
-                                                                            <option value="1">Sim</option>
-                                                                            <option value="0">Não</option>
-                                                                        </select><i></i>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="autorizacao">Assinatura Retirada</label>
-                                                                    <label class="select">
-                                                                        <select id="autorizacao" name="autorizacao" class="readonly" disabled>
-                                                                            <option></option>
-                                                                            <option value="1">Sim</option>
-                                                                            <option value="0">Não</option>
-                                                                        </select><i></i>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Valores</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2 col-auto">
-                                                                    <label class="label">Unitário</label>
-                                                                    <label class="input"><i class="icon-append fa fa-dollar"></i>
-                                                                        <input id="unitario" name="unitario" class="decimal-2-casas required" type="text" autocomplete="off">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2 col-auto">
-                                                                    <label class="label">Desconto</label>
-                                                                    <label class="input"><i class="icon-append fa fa-dollar"></i>
-                                                                        <input id="desconto" name="desconto" class="decimal-2-casas required" type="text" autocomplete="off">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2 col-auto">
-                                                                    <label class="label">Final</label>
-                                                                    <label class="input"><i class="icon-append fa fa-dollar"></i>
-                                                                        <input id="final" name="final" class="decimal-2-casas readonly" readonly type="text" autocomplete="off">
-                                                                    </label>
                                                                 </section>
                                                             </div>
 
@@ -354,34 +340,18 @@ include("inc/nav.php");
                                                                             <th class="text-left" style="min-width: 10px;">
                                                                                 Material</th>
                                                                             <th class="text-left" style="min-width: 10px;">
+                                                                                Unidade Medida</th>
+                                                                            <th class="text-left" style="min-width: 10px;">
                                                                                 Unidade Destino</th>
                                                                             <th class="text-left" style="min-width: 10px;">
-                                                                                Estoque Destino</th>
+                                                                                Estoque</th>
                                                                             <th class="text-left" style="min-width: 10px;">
                                                                                 Quantidade</th>
                                                                             <th class="text-left" style="min-width: 10px;">
-                                                                                Vlr. Unitário</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Vlr. Total</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Vlr. Desconto</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Vlr. Final</th>
+                                                                                Situação</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap">TOTAL</td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap">0,00</td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap">0,00</td>
-
-                                                                    </tbody>
+                                                                    <tbody></tbody>
                                                                 </table>
                                                             </div>
                                                         </div>
@@ -445,7 +415,7 @@ include("inc/scripts.php");
 ?>
 
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_estoqueEntradaItem.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_pedidoMaterial.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -477,15 +447,6 @@ include("inc/scripts.php");
     $(document).ready(function() {
 
         carregaPagina();
-
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = today.getFullYear();
-
-        today = dd + '/' + mm + '/' + yyyy;
-        $("#dataMovimento").val(today);
-
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
@@ -533,12 +494,70 @@ include("inc/scripts.php");
             }
         });
 
+        $("#quantidade").on("change", function() {
+            let quantidade = parseInt($("#quantidade").val());
+            let quantidadeEstoque = parseInt($("#quantidadeEstoque").val());
+            if (quantidade > quantidadeEstoque) {
+                smartAlert("Atenção", "A quantidade não pode ser maior que a quantidade em estoque!", "error");
+                $("#quantidade").val("");
+                return;
+            }
+        });
+
+        $("#estoqueDestino").on("change", function() {
+            recuperaQuantidade();
+        });
+
+        $("#solicitante").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        maxRows: 12,
+                        funcao: "listaSolicitanteAtivoAutoComplete",
+                        descricaoIniciaCom: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                id: item.id,
+                                label: item.descricao,
+                                value: item.descricao,
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 3,
+
+            select: function(event, ui) {
+                $("#solicitanteId").val(ui.item.id);
+                $("#solicitanteFiltro").val(ui.item.nome);
+                var descricaoId = $("#solicitanteId").val();
+                $("#solicitante").val(descricaoId)
+                $("#solicitanteFiltro").val('');
+
+            },
+            change: function(event, ui) {
+                if (ui.item === null) {
+                    $("#solicitanteId").val('');
+                    $("#solicitanteFiltro").val('');
+                }
+            }
+        }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+        };
 
         $("#clienteFornecedor").autocomplete({
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroEntradaItem.php',
+                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -583,7 +602,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroEntradaItem.php',
+                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -602,7 +621,8 @@ include("inc/scripts.php");
                                 estoque: item.estoque,
                                 unidadeItem: item.unidadeItem,
                                 consumivel: item.consumivel,
-                                autorizacao: item.autorizacao
+                                autorizacao: item.autorizacao,
+                                quantidade: item.quantidade
                             };
                         }));
                     }
@@ -623,14 +643,17 @@ include("inc/scripts.php");
                 $("#descricaoItem").val(descricaoItem);
                 $("#descricaoItemFiltro").val('');
 
-
                 $("#unidadeDestino").val(ui.item.unidade);
-                popularComboEstoque();
                 $("#estoqueDestino").val(ui.item.estoque);
-
                 $("#unidade").val(ui.item.unidadeItem);
-                $("#consumivel").val(ui.item.consumivel);
-                $("#autorizacao").val(ui.item.autorizacao);
+                $("#unidadeMedidaId").val(ui.item.unidadeItem);
+                $("#quantidadeEstoque").val(ui.item.quantidade);
+
+                $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
+
+                if (ui.item.consumivel == 1) {
+                    $("#situacao").val('0');
+                }
 
             },
             change: function(event, ui) {
@@ -650,7 +673,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroEntradaItem.php',
+                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -669,7 +692,8 @@ include("inc/scripts.php");
                                 estoque: item.estoque,
                                 unidadeItem: item.unidadeItem,
                                 consumivel: item.consumivel,
-                                autorizacao: item.autorizacao
+                                autorizacao: item.autorizacao,
+                                quantidade: item.quantidade
                             };
                         }));
                     }
@@ -690,14 +714,18 @@ include("inc/scripts.php");
                 $("#codigoItem").val(codigoItem);
                 $("#codigoItemFiltro").val('');
 
-
                 $("#unidadeDestino").val(ui.item.unidade);
-                popularComboEstoque();
                 $("#estoqueDestino").val(ui.item.estoque);
-
                 $("#unidade").val(ui.item.unidadeItem);
-                $("#consumivel").val(ui.item.consumivel);
-                $("#autorizacao").val(ui.item.autorizacao);
+                $("#unidadeMedidaId").val(ui.item.unidadeItem);
+                $("#quantidadeEstoque").val(ui.item.quantidade);
+
+                $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
+
+                $("#unidadeMedidaId").val(ui.item.unidadeItem);
+                if (ui.item.consumivel == 1) {
+                    $("#situacao").val('0');
+                }
             },
             change: function(event, ui) {
                 if (ui.item === null) {
@@ -736,81 +764,6 @@ include("inc/scripts.php");
 
         // });
 
-        $("#tipo").on("change", function() {
-            let tipo = $('#tipo option:selected').text().trim();
-            if (tipo == 'NF') {
-                $("#numero").addClass('required');
-                $("#numero").attr('required', true);
-            } else {
-                $("#numero").removeClass('required');
-                $("#numero").attr('required', false);
-            }
-        });
-
-        $("#unidadeDestino").on("change", function() {
-            popularComboEstoque();
-        });
-
-
-        $("#quantidade").on("change", function() {
-            var quantidade = $("#quantidade").val();
-            var unitario = $("#unitario").val();
-            var desconto = $("#desconto").val();
-
-            if (unitario == "") {
-                return;
-            }
-            if (desconto == "") {
-                return;
-            }
-            unitario = unitario.replace(/,/g, ".");
-            desconto = desconto.replace(/,/g, ".");
-
-            var total = (parseFloat(unitario) * parseFloat(quantidade)) - parseFloat(desconto);
-            $("#final").val(total);
-            $("#final").focusout();
-
-        });
-
-        $("#unitario").on("change", function() {
-            var quantidade = $("#quantidade").val();
-            var unitario = $("#unitario").val();
-            var desconto = $("#desconto").val();
-
-            if (quantidade == "") {
-                return;
-            }
-            if (desconto == "") {
-                return;
-            }
-            unitario = unitario.replace(/,/g, ".");
-            desconto = desconto.replace(/,/g, ".");
-
-            var total = (parseFloat(unitario) * parseFloat(quantidade)) - parseFloat(desconto);
-            $("#final").val(total);
-            $("#final").focusout();
-
-        });
-
-        $("#desconto").on("change", function() {
-            var quantidade = $("#quantidade").val();
-            var unitario = $("#unitario").val();
-            var desconto = $("#desconto").val();
-
-            if (unitario == "") {
-                return;
-            }
-            if (quantidade == "") {
-                return;
-            }
-            unitario = unitario.replace(/,/g, ".");
-            desconto = desconto.replace(/,/g, ".");
-
-            var total = (parseFloat(unitario) * parseFloat(quantidade)) - parseFloat(desconto);
-            $("#final").val(total);
-            $("#final").focusout();
-
-        });
 
         $("#btnNovo").on("click", function() {
             novo();
@@ -915,12 +868,33 @@ include("inc/scripts.php");
         }
     }
 
+    function recuperaQuantidade() {
+        let idd = $("#codigoItemId").val();
+        let estoque = $("#estoqueDestino").val();
+        recuperaQuantidadeEstoque(idd, estoque,
+            function(data) {
+                if (data.indexOf('failed') > -1) {} else {
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    var mensagem = piece[0];
+                    var out = piece[1];
+
+                    piece = out.split("^");
+                    quantidade = piece[0];
+
+                    $("#quantidadeEstoque").val(quantidade);
+
+                }
+            }
+        );
+    }
+
     function voltar() {
-        $(location).attr('href', 'estoque_entradaMaterialFiltro.php');
+        $(location).attr('href', 'estoque_pedidoMaterialFiltro.php');
     }
 
     function novo() {
-        $(location).attr('href', 'estoque_entradaMaterialCadastro.php');
+        $(location).attr('href', 'estoque_pedidoMaterialCadastro.php');
     }
 
     function excluir() {
@@ -932,41 +906,6 @@ include("inc/scripts.php");
         }
 
         excluirEntradaItem(codigo);
-    }
-
-    function popularComboEstoque() {
-        var unidadeDestino = $("#unidadeDestino").val()
-        populaComboEstoque(unidadeDestino,
-            function(data) {
-                var atributoId = '#' + 'estoqueDestino';
-                if (data.indexOf('failed') > -1) {
-                    smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
-                    $("#unidade").focus()
-                    $("#estoqueDestino").val("")
-                    $("#estoqueDestino").prop("disabled", true)
-                    $("#estoqueDestino").addClass("readonly")
-                    return;
-                } else {
-                    $("#estoqueDestino").prop("disabled", false)
-                    $("#estoqueDestino").removeClass("readonly")
-                    data = data.replace(/failed/g, '');
-                    var piece = data.split("#");
-
-                    var mensagem = piece[0];
-                    var qtdRegs = piece[1];
-                    var arrayRegistros = piece[2].split("|");
-                    var registro = "";
-
-                    $(atributoId).html('');
-                    $(atributoId).append('<option></option>');
-
-                    for (var i = 0; i < qtdRegs; i++) {
-                        registro = arrayRegistros[i].split("^");
-                        $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
-                    }
-                }
-            }
-        );
     }
 
     function recuperaDescricao() {
@@ -1002,20 +941,8 @@ include("inc/scripts.php");
 
             var unidadeDestino = $("#unidadeDestino option[value = '" + jsonItemArray[i].unidadeDestino + "']").text();
             var estoqueDestino = $("#estoqueDestino option[value = '" + jsonItemArray[i].estoqueDestino + "']").text();
+            var situacao = $("#situacao option[value = '" + jsonItemArray[i].situacao + "']").text();
 
-            var valorTotalItem = jsonItemArray[i].valorTotalItem;
-            var valorFinalItem = jsonItemArray[i].valorFinalItem;
-
-            var valorTotalItemTable = parseFloat($("#valorTotalItemTable").val());
-            var valorFinalItemTable = parseFloat($("#valorFinalItemTable").val());
-            var valorTotalItemTable = parseFloat(valorTotalItemTable) + parseFloat(valorTotalItem);
-            var valorFinalItemTable = parseFloat(valorFinalItemTable) + parseFloat(valorFinalItem);
-            $("#valorTotalItemTable").val(valorTotalItemTable.toFixed(2));
-            $("#valorFinalItemTable").val(valorFinalItemTable.toFixed(2));
-
-
-            var valorTotalItem = valorTotalItem.replace('.', ",");
-            var valorFinalItem = valorFinalItem.replace('.', ",");
             var codigo = $("#codigo").val();
 
             if (codigo === "") {
@@ -1027,30 +954,12 @@ include("inc/scripts.php");
             }
 
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoItemFiltro + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoUnidadeMedida + '</td>'));
             row.append($('<td class="text-nowrap">' + unidadeDestino + '</td>'));
             row.append($('<td class="text-nowrap">' + estoqueDestino + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].quantidade + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].unitario + '</td>'));
-            row.append($('<td class="text-nowrap">' + valorTotalItem + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].desconto + '</td>'));
-            row.append($('<td class="text-nowrap">' + valorFinalItem + '</td>'));
+            row.append($('<td class="text-nowrap">' + situacao + '</td>'));
         }
-        var row = $('<tr />');
-        $("#tableItem tbody").append(row);
-        row.append($('<td></td>'));
-        row.append($('<td class="text-nowrap">TOTAL</td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap">' + $("#valorTotalItemTable").val() + '</td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap">' + $("#valorFinalItemTable").val() + '</td>'));
-
-        var valorTotalItemTable = $("#valorTotalItemTable").val('0');
-        var valorFinalItemTable = $("#valorFinalItemTable").val('0');
-
     }
 
     function validaItem() {
@@ -1062,9 +971,7 @@ include("inc/scripts.php");
         var unidade = $('#unidade').val();
         var unidadeDestino = $('#unidadeDestino').val();
         var estoqueDestino = $('#estoqueDestino').val();
-        var unitario = $('#unitario').val();
-        var desconto = $('#desconto').val();
-        var final = $('#final').val();
+        var situacao = $('#situacao').val();
         var sequencialItem = $('#sequencialItem').val();
 
         if (codigoItem === '') {
@@ -1091,12 +998,8 @@ include("inc/scripts.php");
             smartAlert("Erro", "Informe o Estoque Destino!", "error");
             return false;
         }
-        if (unitario === '') {
-            smartAlert("Erro", "Informe o Valor Unitário!", "error");
-            return false;
-        }
-        if (desconto === '') {
-            smartAlert("Erro", "Informe o Desconto!", "error");
+        if (situacao === '') {
+            smartAlert("Erro", "Informe a Situacao!", "error");
             return false;
         }
         if (sequencialItem === '') {
@@ -1121,19 +1024,6 @@ include("inc/scripts.php");
         validaItem();
 
         var itemRecuperado = $("#itemRecuperado").val();
-
-        var quantidade = $("#quantidade").val();
-        var unitario = parseFloat($("#unitario").val());
-        var desconto = parseFloat($("#desconto").val());
-        var valorTotalItem = parseFloat($("#valorTotalItem").val());
-        var valorFinalItem = parseFloat($("#valorFinalItem").val());
-
-
-        var valorTotal = parseFloat(quantidade) * parseFloat(unitario);
-        var valorFinal = parseFloat($("#final").val());
-        $("#valorTotalItem").val(valorTotal.toFixed(2));
-        $("#valorFinalItem").val(valorFinal.toFixed(2));
-
 
         var item = $("#formItem").toObject({
             mode: 'combine',
@@ -1200,9 +1090,8 @@ include("inc/scripts.php");
         $("#unidadeDestino").val('');
         $("#estoqueDestino").val('');
         $("#unidade").val('');
-        $("#unitario").val('');
-        $("#desconto").val('');
-        $("#final").val('');
+        $("#quantidadeEstoque").val('');
+        $("#situacao").val('');
         $("#sequencialItem").val('');
     }
 
@@ -1222,11 +1111,10 @@ include("inc/scripts.php");
             $("#quantidade").val(item.quantidade);
             $("#unidadeDestino").val(item.unidadeDestino);
             $("#estoqueDestino").val(item.estoqueDestino);
-            $("#unidade").val(item.unidade);
-            $("#unitario").val(item.unitario);
-            $("#desconto").val(item.desconto);
-            $("#final").val(item.final);
+            $("#unidade").val(item.unidadeMedidaId);
+            $("#situacao").val(item.situacao);
             $("#sequencialItem").val(item.sequencialItem);
+            recuperaQuantidade();
         }
     }
 
@@ -1239,14 +1127,6 @@ include("inc/scripts.php");
             for (i = jsonItemArray.length - 1; i >= 0; i--) {
                 var obj = jsonItemArray[i];
                 if (jQuery.inArray(obj.sequencialItem, arrSequencial) > -1) {
-                    var valorTotal = $('#valorTotalItemTable').val();
-                    var valorTotalItem = jsonItemArray[i].valorTotalItem;
-                    var valorTotal = parseFloat(valorTotal) - parseFloat(valorTotalItem);
-                    $('#valorTotalItemTable').val(valorTotal.toFixed(2));
-                    var valorFinal = $('#valorFinalItemTable').val();
-                    var valorFinalItem = jsonItemArray[i].valorFinalItem;
-                    var valorFinal = parseFloat(valorFinal) - parseFloat(valorFinalItem);
-                    $('#valorFinalItemTable').val(valorFinal.toFixed(2));
                     jsonItemArray.splice(i, 1);
                 }
             }
@@ -1296,39 +1176,10 @@ include("inc/scripts.php");
         return true;
     }
 
-    function validaCampos() {
-
-        var clienteFornecedorId = $('#clienteFornecedorId').val();
-        var tipo = $('#tipo option:selected').val();
-        var dataEmissao = $('#dataEmissao').val();
-
-        if (clienteFornecedorId === '') {
-            smartAlert("Erro", "Informe o Fornecedor!", "error");
-            $('#clienteFornecedor').focus();
-            return false;
-        }
-        if (tipo === '') {
-            smartAlert("Erro", "Informe o Tipo!", "error");
-            $('#tipo').focus();
-            return false;
-        }
-        if (dataEmissao === '') {
-            smartAlert("Erro", "Informe o Data Emissão!", "error");
-            $('#dataEmissao').focus();
-            return false;
-        }
-
-        return true;
-    }
-
     function gravar() {
 
-        if(!validaCampos()){
-            return;
-        }
-
-        var form = $('#formEntradaItem')[0];
+        var form = $('#formPedidoMaterial')[0];
         var formData = new FormData(form);
-        gravaEntradaItem(formData);
+        gravaPedidoMaterial(formData);
     }
 </script>

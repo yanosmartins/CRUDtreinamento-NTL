@@ -443,6 +443,9 @@ if ($condicaoOperacaoOk) {
         if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['estoque']['sub'] += array("entradaItem" => array("title" => "Entrada Item", "url" => APP_URL . "/estoque_entradaMaterialFiltro.php"));
         }
+        // if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
+        //     $page_nav['operacao']['sub']['estoque']['sub'] += array("pedidoMaterial" => array("title" => "Pedido Material", "url" => APP_URL . "/estoque_pedidoMaterialFiltro.php"));
+        // }
     }
 }
 
