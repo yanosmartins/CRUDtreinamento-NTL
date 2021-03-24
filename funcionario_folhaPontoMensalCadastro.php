@@ -702,11 +702,11 @@ include("inc/scripts.php");
             })
 
             let horaExtra = diferencaHoras(horasFuncionario, horasExpediente, '00:00');
-            if(horaExtra.indexOf('-') >= 0)
-                horaExtra = '00:00'
+            
             let horaAtraso = diferencaHoras(horasExpediente, horasFuncionario, '00:00');
-            if(horaAtraso.indexOf('-') >= 0)
-                horaAtraso = '00:00'
+            horaAtraso = horaAtraso.replace('-','');
+            if(horaExtra != '00:00')
+                horaAtraso = '00:00';
 
             if (!horaExtra) {
                 smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
@@ -1088,12 +1088,31 @@ include("inc/scripts.php");
         calcH2 = ((Math.pow(60,2)*calcH2)*1000);
 
         let segundos = (calcS - calcS2)/1000;
+        let minutos = ((calcM - calcM2)/1000)/60;
+        let horas = (((calcH - calcH2)/1000)/60)/60;
+
+        if(segundos < 0 && minutos < 0){
+            segundos = segundos + 60;
+            minutos = minutos + 1;
+        }else if(segundos < 0 && minutos >= 0){
+            minutos = minutos - 1;
+        }
+        if(minutos < 0 && horas < 0){
+            minutos = minutos + 60;
+            horas = horas + 1;
+        }else if(minutos < 0 && horas >= 0){
+            horas = horas - 1;
+        }
+        if(horas < 0){
+            segundos = 0;
+            minutos = 0;
+            horas = 0;
+        }
+
         if(segundos.toString().length < 2)
             segundos = '0'.concat(segundos)
-        let minutos = ((calcM - calcM2)/1000)/60;
         if(minutos.toString().length < 2)
             minutos = '0'.concat(minutos)
-        let horas = (((calcH - calcH2)/1000)/60)/60;
         if(horas.toString().length < 2)
             horas = '0'.concat(horas)
 

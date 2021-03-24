@@ -116,8 +116,8 @@ function grava()
         $codigo,
         $funcionario,
         '$mesAno',
-        '$observacao',
-        '$usuario',
+        $observacao,
+        $usuario,
         $xmlFolhaPontoMensal
     ";
 
