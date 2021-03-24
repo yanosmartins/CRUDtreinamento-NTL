@@ -688,8 +688,8 @@ include("inc/scripts.php");
             const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
             const horaSaida = aleatorizarTempo(inputSaida, fimExpediente);
 
-            let horasFuncionario = somarHoras(horaEntrada,horaSaida);
-            let horasExpediente = somarHoras(inicioExpediente, fimExpediente);
+            let horasFuncionario = diferencaHoras(horaSaida,horaEntrada);
+            let horasExpediente = diferencaHoras(fimExpediente,inicioExpediente);
 
             console.table({
                 horaFuncionario: horasFuncionario,
@@ -697,6 +697,7 @@ include("inc/scripts.php");
             })
             debugger;
             let horaExtra = diferencaHoras(horasFuncionario, horasExpediente, '00:00');
+
             let horaAtraso = diferencaHoras(horasExpediente, horasFuncionario, '00:00');
 
             if (!horaExtra) {
@@ -911,11 +912,12 @@ include("inc/scripts.php");
 
         const data = new Date().toLocaleDateString();
         const mesAno = data.slice(3, data.length);
+        const funcionario = $("#funcionario option:selected").val();
 
         $('#mesAno').val(mesAno);
 
 
-        recuperaFolhaPontoMensal(0, mesAno,
+        recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
                 data = data.replace(/failed/gi, '');
                 var piece = data.split("#");
@@ -945,6 +947,7 @@ include("inc/scripts.php");
                 try {
                     preencherPonto(JsonFolha);
                 } catch (e) {
+                    limparPonto();
                     smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
                     // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
@@ -991,6 +994,7 @@ include("inc/scripts.php");
                 try {
                     preencherPonto(JsonFolha);
                 } catch (e) {
+                    limparPonto();
                     smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
                     // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
@@ -1013,6 +1017,21 @@ include("inc/scripts.php");
             $(`#horaExtra-${Number(index) + 1}`).val(obj.horaExtra);
             $(`#atraso-${Number(index) + 1}`).val(obj.atraso);
             $(`#lancamento-${Number(index) + 1}`).val(obj.lancamento);
+        })
+    }
+
+    function limparPonto() {
+        const pontos = $("[name=\"dia\"]").serializeArray()
+            pontos.forEach((_,index) => {
+
+            $(`#dia-${Number(index) + 1}`).val('');
+            $(`#horaEntrada-${Number(index) + 1}`).val('');
+            $(`#inicioAlmoco-${Number(index)+1}`).val('');
+            $(`#fimAlmoco-${Number(index) + 1}`).val('');
+            $(`#horaSaida-${Number(index) + 1}`).val('');
+            $(`#horaExtra-${Number(index) + 1}`).val('');
+            $(`#atraso-${Number(index) + 1}`).val('');
+            $(`#lancamento-${Number(index) + 1}`).val('');
         })
     }
 
@@ -1042,80 +1061,37 @@ include("inc/scripts.php");
     }
 
     function diferencaHoras(hora1, hora2, format) {
-        let h1, m1, s1;
-        let h2, m2, s2;
-        let hourDiff, minDiff, secDiff;
-        let separador = hora1.split(':');
+        let [calcH,calcM,calcS] = hora1.split(':');
+        calcH = Number(calcM);
+        calcM = Number(calcS);
+        calcS = Number(calcH);
+        
+        calcS = calcS * 1000;
+        calcM = ((calcM * 60) * 1000);
+        calcH  = ((Math.pow(60,2)*calcH)*1000);
 
-        if (hora1.toString().length < 6) {
-            h1 = Number(separador[0]);
-            m1 = Number(separador[1]);
-            s1 = Number('00');
-        } else {
-            h1 = Number(separador[0]);
-            m1 = Number(separador[1]);
-            s1 = Number(separador[2]);
-        }
+        let [calcH2,calcM2,calcS2] = hora2.split(':');
+        calcH2 = Number(calcM2);
+        calcM2 = Number(calcS2);
+        calcS2 = Number(calcH2);
 
-        separador = hora2.split(':');
+        calcS2 = calcS2 * 1000;
+        calcM2 = ((calcM2 * 60) * 1000);
+        calcH2 = ((Math.pow(60,2)*calcH2)*1000);
 
-        if (hora2.toString().length < 6) {
-            h2 = Number(separador[0]);
-            m2 = Number(separador[1]);
-            s2 = Number('00');
-        } else {
-            h2 = Number(separador[0]);
-            m2 = Number(separador[1]);
-            s2 = Number(separador[2]);
-        }
+        let segundos = (calcS1 - calcS2)/1000;
+        if(segundos.toString().length < 2)
+            segundos = '0'.concat(segundos)
+        let minutos = ((calcM - calcM2)/1000)/60;
+        if(minutos.toString().length < 2)
+            minutos = '0'.concat(minutos)
+        let horas = ((calcH - calcH2)/1000)*Math.pow(60,2);
+        if(horas.toString().length < 2)
+            horas = '0'.concat(horas)
 
-        if (s1 >= s2) secDiff = s1 - s2;
-        else if (s1 < s2) {
-            secDiff = (s1 - s2) - 59;
-            m1 = m1 - 1;
-        }
-
-        if (m1 >= m2) minDiff = m1 - m2;
-        else if (m1 < m2) {
-            minDiff = (m1 - m2) - 59;
-            h1 = h1 - 1;
-        }
-
-        hourDiff = h1 - h2;
-        if (hourDiff < 0) hourDiff = 0;
-
-        if (hourDiff.toString().length < 2) hourDiff = `0${hourDiff}`
-        if (minDiff.toString().length < 2) minDiff = `0${minDiff}`
-        if (secDiff.toString().length < 2) secDiff = `0${secDiff}`
-
-        if (format == '00:00') return `${hourDiff}:${minDiff}`;
-        else if (format == '00:00:00') return `${hourDiff}:${minDiff}:${secDiff}`;
-
-    }
-
-    function somarHoras(hora1, hora2) {
-        let [h, m, s] = hora1.split(':')
-        let [h2, m2, s2] = hora2.split(':')
-
-        s = Number(s) + Number(s2);
-        while (s >= 60) {
-            m = m + 1;
-            s = s - 60;
-        }
-
-        m = Number(m) + Number(m2);
-        while (m >= 60) {
-            h = h + 1;
-            m = m - 60;
-        }
-
-        h = Number(h) + Number(h2);
-
-        if (h.toString().length < 2) h = '0'.concat(h)
-        if (m.toString().length < 2) m = '0'.concat(m)
-        if (s.toString().length < 2) s = '0'.concat(s)
-
-        const hora = h + ':' + m + ':' + s
-        return hora
+        if(format == '00:00')
+            return `${horas}:${minutos}`;
+        if(format == '00:00:00')
+            return `${horas}:${minutos}:${segundos}`;
     }
 </script>
