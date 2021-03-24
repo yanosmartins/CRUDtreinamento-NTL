@@ -59,7 +59,7 @@ function grava()
     $sql =  "SELECT F.codigo, F.mesAno FROM Funcionario.folhaPontoMensal F 
     INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo 
     WHERE (0=0) 
-    AND F.mesAno BETWEEN \'$mesAno-01\' AND \'$mesAno-$totalDiasMes\' 
+    AND F.mesAno BETWEEN '$mesAno-01' AND '$mesAno-$totalDiasMes' 
     AND FU.codigo = $funcionario";
 
     $result = $reposit->RunQuery($sql);
@@ -115,9 +115,9 @@ function grava()
         "Funcionario.folhaPontoMensal_Atualiza 
         $codigo,
         $funcionario,
-        \'$mesAno\',
-        \'$observacao\',
-        \'$usuario\',
+        '$mesAno',
+        '$observacao',
+        '$usuario',
         $xmlFolhaPontoMensal
     ";
 
@@ -148,9 +148,9 @@ function recupera()
     if (!$funcionario) {
         $funcionario = (int)$_SESSION["funcionario"];
     }
-        $sql = "SELECT F.codigo AS \'folha\',FU.codigo AS \'funcionario\' FROM Funcionario.folhaPontoMensal F
+        $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
             INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
-            WHERE FU.codigo = $funcionario  AND F.mesAno BETWEEN \'$mesAno-01\' AND \'$mesAno-$totalDiasMes\'";
+            WHERE FU.codigo = $funcionario  AND F.mesAno BETWEEN '$mesAno-01' AND '$mesAno-$totalDiasMes'";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -161,7 +161,7 @@ function recupera()
     }
 
     $sql =
-        "SELECT F.codigo, FU.codigo AS z'funcionario\', F.mesAno, F.observacao
+        "SELECT F.codigo, FU.codigo AS 'funcionario', F.mesAno, F.observacao
         FROM Funcionario.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
         WHERE (0=0) AND F.codigo = " . $folha;
