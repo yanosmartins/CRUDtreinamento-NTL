@@ -424,6 +424,9 @@ if ($condicaoOperacaoOk) {
         if (in_array('FOLHAPONTOMENSAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['funcionario']['sub'] += array("emitirFolhaPonto" => array("title" => "Folha Mensal", "url" => APP_URL . "/funcionario_folhaDePontoPdf.php?id=" . $funcionario . "&pag=0"));
         }
+        if (array_intersect(array('PONTOELETRONICOMENSALLEVE_ACESSAR','PONTOELETRONICOMENSALNORMAL_ACESSAR','PONTOELETRONICOMENSALPESADA_ACESSAR'), $arrayPermissao)){
+            $page_nav['operacao']['sub']['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php"));
+        }
         if (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['funcionario']['sub'] += array("geradorFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));
         }
@@ -440,6 +443,9 @@ if ($condicaoOperacaoOk) {
         if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
             $page_nav['operacao']['sub']['estoque']['sub'] += array("entradaItem" => array("title" => "Entrada Item", "url" => APP_URL . "/estoque_entradaMaterialFiltro.php"));
         }
+        // if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
+        //     $page_nav['operacao']['sub']['estoque']['sub'] += array("pedidoMaterial" => array("title" => "Pedido Material", "url" => APP_URL . "/estoque_pedidoMaterialFiltro.php"));
+        // }
     }
 }
 

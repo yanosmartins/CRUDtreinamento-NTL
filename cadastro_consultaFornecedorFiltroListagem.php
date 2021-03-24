@@ -8,6 +8,7 @@ include "js/repositorio.php";
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Fornecedor</th> 
                     <th class="text-left" style="min-width:30px;">Grupo Item</th>
+                    <th class="text-left" style="min-width:20px;">Telefone</th>
                     <th class="text-left" style="min-width:20px;">UF</th>
                     <th class="text-left" style="min-width:20px;">Bairro</th>
                     <th class="text-left" style="min-width:20px;">NF</th>
@@ -22,10 +23,11 @@ include "js/repositorio.php";
                
                 $where = "where (0 = 0)";
                 
-                $sql = "SELECT F.codigo AS fornecedor, F.apelido, F.ativo, F.notaFiscal,UF.sigla, F.uf, F.bairro, FGI.grupoItem, GI.descricao AS grupoItem, GI.codigo FROM ntl.fornecedor F
+                $sql = "SELECT F.codigo AS fornecedor, F.apelido, F.ativo, F.notaFiscal,UF.sigla,FT.fornecedor,FT.telefone AS tel ,FT.telefonePrincipal, F.uf, F.bairro, FGI.grupoItem, GI.descricao AS grupoItem, GI.codigo FROM ntl.fornecedor F
                 INNER JOIN ntl.fornecedorGrupoItem FGI ON FGI.fornecedor = F.codigo AND F.ativo = 1
                 INNER JOIN Estoque.grupoItem GI ON GI.codigo = FGI.grupoItem 
-                INNER JOIN ntl.unidadeFederacao UF ON F.uf = UF.sigla ";
+                INNER JOIN ntl.unidadeFederacao UF ON F.uf = UF.sigla 
+                INNER JOIN ntl.fornecedorTelefone FT ON FT.fornecedor = F.codigo AND FT.telefonePrincipal = 1 ";
 
                 if ($_GET["apelido"] != "") {
                     $apelido = $_GET["apelido"];
@@ -35,6 +37,11 @@ include "js/repositorio.php";
                 if ($_GET["grupoItem"] != "") {
                     $grupoItem = $_GET["grupoItem"];
                     $where = $where . " AND [grupoItem] = " . $grupoItem;
+                }
+
+                if ($_GET["tel"] != "") {
+                    $telefone = $_GET["tel"];
+                    $where = $where . " AND [tel] = '" .  $telefone . "'";
                 }
 
                 if ($_GET["sigla"] != "") {
@@ -56,9 +63,10 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
                 foreach($result as $row) {
-                    $id = (int) $row['codigo'];
+                    $id = (int) $row['fornecedor'];
                     $apelido = (string)$row['apelido'];
                     $grupoItem = (string)$row['grupoItem'];
+                    $telefone = (string)$row['tel'];
                     $sigla = (string)$row['sigla'];
                     $bairro = (string)$row['bairro']; 
                     $notaFiscal = $row['notaFiscal'];
@@ -72,8 +80,9 @@ include "js/repositorio.php";
                     echo '<tr >';
                     echo '<td class="text-left"><a href="cadastro_fornecedorCadastro.php?codigo=' . $id . '">' . $apelido . '</a></td>';  
                     echo '<td class="text-left">' . $grupoItem . '</td>';
+                    echo '<td class="text-left">' . $telefone . '</td>';
                     echo '<td class="text-left">' . $sigla . '</td>';
-                    echo '<td class="text-left">' . $bairro . '</td>'; 
+                    echo '<td class="text-left">' . $bairro . '</td>';       
                     echo '<td class="text-left">' . $notaFiscal . '</td>';
                     echo '</tr >';
                 }

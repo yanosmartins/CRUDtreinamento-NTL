@@ -6,23 +6,46 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-// $condicaoAcessarOK = (in_array('LANCAMENTO_ACESSAR', $arrayPermissao, true));
-// $condicaoGravarOK = (in_array('LANCAMENTO_GRAVAR', $arrayPermissao, true));
-// $condicaoExcluirOK = (in_array('LANCAMENTO_EXCLUIR', $arrayPermissao, true));
 
-// if ($condicaoAcessarOK == false) {
-//     unset($_SESSION['login']);
-//     header("Location:login.php");
-// }
+$condicaoLeveAcessarOK = (in_array('PONTOELETRONICOMENSALLEVE_ACESSAR', $arrayPermissao, true));
+$condicaoLeveGravarOK = (in_array('PONTOELETRONICOMENSALLEVE_GRAVAR', $arrayPermissao, true));
+$condicaoLeveExcluirOK = (in_array('PONTOELETRONICOMENSALLEVE_EXCLUIR', $arrayPermissao, true));
 
-// $esconderBtnExcluir = "";
-// if ($condicaoExcluirOK === false) {
-//     $esconderBtnExcluir = "none";
-// }
-// $esconderBtnGravar = "";
-// if ($condicaoGravarOK === false) {
-//     $esconderBtnGravar = "none";
-// }
+$condicaoNormalAcessarOK = (in_array('PONTOELETRONICOMENSALNORMAL_ACESSAR', $arrayPermissao, true));
+$condicaoNormalGravarOK = (in_array('PONTOELETRONICOMENSALNORMAL_GRAVAR', $arrayPermissao, true));
+$condicaoNormalExcluirOK = (in_array('PONTOELETRONICOMENSALNORMAL_EXCLUIR', $arrayPermissao, true));
+
+$condicaoPesadaAcessarOK = (in_array('PONTOELETRONICOMENSALPESADA_ACESSAR', $arrayPermissao, true));
+$condicaoPesadaGravarOK = (in_array('PONTOELETRONICOMENSALPESADA_GRAVAR', $arrayPermissao, true));
+$condicaoPesadaExcluirOK = (in_array('PONTOELETRONICOMENSALPESADA_EXCLUIR', $arrayPermissao, true));
+
+$esconderCampo = "";
+if ($condicaoNormalGravarOK || $condicaoPesadaGravarOK) {
+    $esconderCampo = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
+} else if ($condicaoLeveGravarOK) {
+    $esconderCampo = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
+}
+
+if (($condicaoLeveAcessarOK == false) && ($condicaoNormalAcessarOK == false) && ($condicaoPesadaAcessarOK == false)) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
+
+$esconderBtnExcluir = "";
+if (($condicaoLeveExcluirOK == false) && ($condicaoNormalExcluirOK == false) && ($condicaoPesadaExcluirOK == false)) {
+    $esconderBtnExcluir = "none";
+}
+
+$esconderBtnGravar = "";
+if (($condicaoNormalGravarOK == true) || ($condicaoPesadaGravarOK == true)) {
+    $esconderBtnGravar = "none";
+}
+
+if ($condicaoLeveGravarOK == false) {
+    $esconderBtnGravar = "none";
+}
+
+
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -40,7 +63,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]["controlePonto"]["active"] = true;
+$page_nav['operacao']['sub']['funcionario']['sub']["controlePonto"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -96,21 +119,21 @@ include("inc/nav.php");
                                                                     <section class="col col-4">
                                                                         <label class="label " for="funcionario">Funcionário</label>
                                                                         <label class="select">
-                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly>
+                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:<?php echo $esconderCampo['touch-action']; ?>;pointer-events:<?php echo $esconderCampo['pointer-events']; ?>">
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F LEFT JOIN Ntl.usuario U ON F.codigo = U.funcionario where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND U.login != '" . $_SESSION['login'] . "' order by nome";
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo != " . $_SESSION['funcionario'] . " order by nome";
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 foreach ($result as $row) {
                                                                                     $codigo = (int) $row['codigo'];
                                                                                     $nome = $row['nome'];
                                                                                     echo '<option value= ' . $codigo . '>' . $nome . '</option>';
                                                                                 }
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F INNER JOIN Ntl.usuario U ON F.codigo = U.funcionario where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND U.login = '" . $_SESSION['login'] . "' AND F.codigo = U.funcionario";
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $_SESSION['funcionario'];
 
                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                if ($row = $result) {
+                                                                                if ($row = $result[0]) {
 
                                                                                     $codigo = (int) $row['codigo'];
                                                                                     $nome = $row['nome'];
@@ -174,9 +197,9 @@ include("inc/nav.php");
                                                                                 $horaEntrada = $row['horaEntrada'];
                                                                                 $horaSaida = $row['horaSaida'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                if($funcionario == $_SESSION['funcionario']){
+                                                                                if ($funcionario == $_SESSION['funcionario']) {
                                                                                     echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaEntrada . " - " . $horaSaida . '</option>';
-                                                                                }else{
+                                                                                } else {
                                                                                     echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
                                                                                 }
                                                                             }
@@ -199,10 +222,10 @@ include("inc/nav.php");
                                                                                 $horaInicio = $row['horaInicio'];
                                                                                 $horaFim = $row['horaFim'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                if($funcionario == $_SESSION['funcionario']){
-                                                                                    echo '<option data-funcionario="'.$funcionario.'" value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                }else{
-                                                                                    echo '<option data-funcionario="'.$funcionario.'" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                if ($funcionario == $_SESSION['funcionario']) {
+                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                } else {
+                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
                                                                                 }
                                                                             }
                                                                             ?>
@@ -217,7 +240,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Dia</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control " data-autoclose="true" value="">
+                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control required" required data-autoclose="true">
                                                                         </div>
                                                                     </div>
                                                                 </section>
@@ -226,7 +249,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Entrada</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                            <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99">
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -236,7 +259,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Inicio/Almoço</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:00">
+                                                                            <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" data-mask="99:99">
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -246,7 +269,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Fim/Almoço</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:15">
+                                                                            <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" data-mask="99:99">
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -256,7 +279,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Saída</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                            <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99">
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -266,7 +289,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">H.Extra</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control readonly" readonly disabled placeholder="  00:00" data-autoclose="true" value="">
+                                                                            <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control readonly" placeholder="00:00" data-autoclose="true" data-mask="99:99">
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -276,7 +299,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Atraso</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control readonly" placeholder="  00:00" data-autoclose="true" disabled readonly value="">
+                                                                            <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control readonly" placeholder="00:00" data-autoclose="true" data-mask="99:99">
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -286,7 +309,7 @@ include("inc/nav.php");
                                                                     <label class="label" for="lancamento">Lançamento/Ocorrência</label>
                                                                     <label class="select">
                                                                         <select id="inputLancamento" name="inputLancamento">
-                                                                            <option value="0"></option>
+                                                                            <option selected value="0"></option>
                                                                             <?php
                                                                             $reposit = new reposit();
                                                                             $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
@@ -307,7 +330,7 @@ include("inc/nav.php");
                                                                 <section class="col col-md-2">
                                                                     <label class="label"> </label>
                                                                     <button id="btnAddPonto" type="button" class="btn btn-primary">
-                                                                        <i class="">Lançar Ponto</i>
+                                                                        <i class="">Adicionar Ponto</i>
                                                                     </button>
                                                                 </section>
                                                                 <section class="col col-8">
@@ -317,7 +340,7 @@ include("inc/nav.php");
                                                                 <section class="col col-md-1">
                                                                     <label class=" label"> </label>
                                                                     <button id="btnGravar" type="button" class="btn btn-success">
-                                                                        <i class="">Confirmar Alterações</i>
+                                                                        <i class="">Salvar alterações</i>
                                                                     </button>
                                                                 </section>
 
@@ -355,7 +378,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Inicio/Almoço</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"inicioAlmoco-$i\" name=\"inicioAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"inicioAlmoco-$i\" name=\"inicioAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -365,7 +388,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Fim/Almoço</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"fimAlmoco-$i\" name=\"fimAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"fimAlmoco-$i\" name=\"fimAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -375,7 +398,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">Saída</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaSaida-$i\" name=\"horaSaida\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaSaida-$i\" name=\"horaSaida\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"00:00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -385,7 +408,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">H.Extra</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaExtra-$i\" name=\"horaExtra\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaExtra-$i\" name=\"horaExtra\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -405,7 +428,7 @@ include("inc/nav.php");
                                                                         <label class=\"label\" for=\"lancamento\">Lançamento/Ocorrência</label>
                                                                         <label class=\"select\">
                                                                             <select id=\"lancamento-$i\" name=\"lancamento\" class=\" readonly\" readonly style= \"pointer-events: none; touch-action: none\" tabindex=\"-1\">
-                                                                                <option value=\"0\"></option>";
+                                                                                <option selected value=\"0\"></option>";
 
                                                                 $reposit = new reposit();
                                                                 $sql = "select codigo, sigla, descricao from Ntl.lancamento where ativo = 1 order by descricao";
@@ -519,53 +542,6 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
 
-        //TIME INPUT
-        $("#inputHoraEntrada").mask("99:99:99");
-
-        $('#inputHoraEntrada').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
-        }).val(moment().format('HH:mm:ss'));
-
-        $("#inputHoraSaida").mask("99:99:99");
-
-        $('#inputHoraSaida').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
-        }).val(moment().format('HH:mm:ss'));
-
-        $("#inputInicioAlmoco").mask("99:99");
-
-        $('#inputInicioAlmoco').clockpicker({
-            donetext: 'Done',
-            use24hours: true,
-        }).val(moment().format('HH:mm'));
-
-        $("#inputFimAlmoco").mask("99:99");
-
-        $('#inputFimAlmoco').clockpicker({
-            donetext: 'Done',
-            use24hours: true,
-        }).val(moment().format('HH:mm'));
-
-        $("#inputHoraExtra").mask("99:99");
-
-        // $('#inputHoraExtra').clockpicker({
-        //     donetext: 'Done',
-        //     default: 'now',
-        //     use24hours: true,
-        // }).val(moment().format('HH:mm'));
-
-        $("#inputAtraso").mask("99:99");
-
-        // $('#inputAtraso').clockpicker({
-        //     donetext: 'Done',
-        //     default: 'now',
-        //     use24hours: true,
-        // }).val(moment().format('HH:mm'));
-
         $("#funcionario").on("change", function() {
             var funcionario = $("#funcionario").val();
             var codigo = $("#expediente option[data-funcionario ='" + funcionario + "']").val();
@@ -573,8 +549,17 @@ include("inc/scripts.php");
             selecionaFolha();
         });
 
+        $('#inputDia').on('keydown', () => {
+            const dia = $("#inputDia").val();
+            const mask = /\D/.test(dia);
+            if (mask) {   
+                return $("#inputDia").val('');
+            }
+            return $("#inputDia").val(dia.slice(0,1));
+        });
+
         $('#inputDia').on('change', function() {
-            var dia = $("#inputDia").val()
+            var dia = $("#inputDia").val();
 
             var entrada = $("#horaEntrada-" + dia).val()
             var inputEntrada = $("#inputHoraEntrada")
@@ -611,6 +596,11 @@ include("inc/scripts.php");
 
             var dia = $("#inputDia").val()
 
+            if (!dia) {
+                smartAlert('Atenção', 'Insira um dia para a inserção das horas', 'error')
+                return
+            }
+
             var entrada = $("#horaEntrada-" + dia)
             var inputEntrada = $("#inputHoraEntrada").val()
 
@@ -632,81 +622,59 @@ include("inc/scripts.php");
             var lancamento = $("#lancamento-" + dia)
             var inputLancamento = $("#inputLancamento").val()
 
-            //--------------------------------------------------------------------------------
-
-            const data = new Date(); //.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'});
-
-            let separador = $("expediente").val();
-            separador = separador.split("-");
-            separador[0] = separador[0].trim();
-            separador[1] = separador[1].trim();
-
-            const inicioExpediente = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${separador[0]}:00`);
-            const fimExpediente = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${separador[1]}:00`);
-
-            const horaEntrada = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${inputEntrada}`);
-            const horaSaida = new Date(`${data.getFullYear()}-${data.getMonth()}-${data.getDate()} ${inputSaida}`);
-
-            let horaExtra = (horaEntrada.getTime() + horaSaida.getTime()) - (inicioExpediente.getTime() + fimExpediente.getTime());
-            let horaAtraso = (inicioExpediente.getTime() + fimExpediente.getTime()) - (horaEntrada.getTime() + horaSaida.getTime());
-
             if (!inputEntrada) {
                 smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
                 return
             }
 
-            if (!inputSaida && data.getTime() > fimExpediente.getTime()) {
+            if (!inputSaida) {
                 smartAlert("Atenção", "A hora de saída deve ser preenchida", "error");
                 return
             }
 
-            if (horaEntrada.getTime() > horaSaida.getTime()) {
-                smartAlert("Atenção", "A hora de saída deve ser maior ou igual a hora de entrada", "error");
-                return
+            let separador = $("#expediente option:selected").text();
+            if (!separador) {
+                separador = '00:00 - 00:00';
             }
+            separador = separador.split("-");
+            separador[0] = separador[0].trim();
+            separador[1] = separador[1].trim();
 
-            if (horaExtra < 0) {
-                horaExtra = "00:00"
-            } else {
-                horaExtra = new Date(horaExtra).toLocaleTimeString('pt-BR', {
-                    timeZone: 'America/Sao_Paulo'
-                });
+            if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
+            if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
 
-                horaExtra = horaExtra.slice(0,horaExtra.length - 3);
+            const inicioExpediente = separador[0];
+            const fimExpediente = separador[1];
 
-            }
-            if (horaAtraso < 0) {
-                horaAtraso = "00:00";
-            } else {
-                horaAtraso = new Date(horaAtraso).toLocaleTimeString('pt-BR', {
-                    timeZone: 'America/Sao_Paulo'
-                });
+            const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
+            const horaSaida = aleatorizarTempo(inputSaida, fimExpediente);
 
-                horaAtraso = horaAtraso.slice(0,horaAtraso.length - 3)
-            }
+            console.table({
+                'Hora entrada': horaEntrada,
+                'Hora saída': horaSaida
+            })
+            console.log('')
+            console.table({
+                'Hora expediente: Inicio': inicioExpediente,
+                'Hora expediente: Fim': fimExpediente
+            })
 
-            $("#inputExtra").val(horaExtra);
-            $("#inputAtraso").val(horaAtraso);
-            inputExtra = horaExtra;
-            inputAtraso = horaAtraso;
+            // if (!horaExtra) {
+            //     smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
+            //     return
+            // }
+            // if (!horaAtraso) {
+            //     smartAlert("Atenção", "Não foi possível calcular as horas de atraso", "error");
+            //     return
+            // }
 
-
-            if (!inputExtra) {
-                smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
-                return
-            }
-            if (!inputAtraso) {
-                smartAlert("Atenção", "Não foi possível calcular as horas de atraso", "error");
-                return
-            }
-
-            entrada.val(inputEntrada)
-            inicioAlmoco.val(inputInicioAlmoco)
-            fimAlmoco.val(inputFimAlmoco)
-            saida.val(inputSaida)
-            extra.val(inputExtra)
-            atraso.val(inputAtraso)
-            lancamento.val(inputLancamento)
+            entrada.val(horaEntrada);
+            inicioAlmoco.val(inputInicioAlmoco);
+            fimAlmoco.val(inputFimAlmoco);
+            extra.val(inputExtra);
+            atraso.val(inputAtraso);
+            saida.val(horaSaida);
+            lancamento.val(inputLancamento);
 
             return;
         });
@@ -743,12 +711,12 @@ include("inc/scripts.php");
     });
 
     function voltar() {
-        $(location).attr('href', 'beneficio_folhaPontoMensalFiltro.php');
+        $(location).attr('href', 'funcionario_folhaPontoMensalFiltro.php');
 
     }
 
     function novo() {
-        $(location).attr('href', 'beneficio_folhaPontoMensalCadastro.php');
+        $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php');
 
     }
 
@@ -811,9 +779,10 @@ include("inc/scripts.php");
         var arrayLancamento = new Array()
         arrayFolha.each((index, el) => {
             let value = Number($(el).val())
-            arrayLancamento.push({
-                lancamento: Number(value)
-            })
+                arrayLancamento.push({
+                    lancamento: Number(value)
+                })
+
         })
 
         var codigo = Number($("#codigo").val())
@@ -899,11 +868,12 @@ include("inc/scripts.php");
 
         const data = new Date().toLocaleDateString();
         const mesAno = data.slice(3, data.length);
+        const funcionario = $("#funcionario option:selected").val();
 
         $('#mesAno').val(mesAno);
 
 
-        recuperaFolhaPontoMensal(0, mesAno,
+        recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
                 data = data.replace(/failed/gi, '');
                 var piece = data.split("#");
@@ -933,6 +903,7 @@ include("inc/scripts.php");
                 try {
                     preencherPonto(JsonFolha);
                 } catch (e) {
+                    limparPonto();
                     smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
                     // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
@@ -979,6 +950,7 @@ include("inc/scripts.php");
                 try {
                     preencherPonto(JsonFolha);
                 } catch (e) {
+                    limparPonto();
                     smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
                     // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
@@ -993,7 +965,6 @@ include("inc/scripts.php");
         object = JSON.parse(object);
         object.forEach((obj, index) => {
 
-            $(`#dia-${Number(index) + 1}`).val(obj.dia);
             $(`#horaEntrada-${Number(index) + 1}`).val(obj.entrada);
             $(`#inicioAlmoco-${Number(index)+1}`).val(obj.inicioAlmoco);
             $(`#fimAlmoco-${Number(index) + 1}`).val(obj.fimAlmoco);
@@ -1002,5 +973,44 @@ include("inc/scripts.php");
             $(`#atraso-${Number(index) + 1}`).val(obj.atraso);
             $(`#lancamento-${Number(index) + 1}`).val(obj.lancamento);
         })
+    }
+
+    function limparPonto() {
+        const pontos = $("[name=\"dia\"]").serializeArray()
+        pontos.forEach((_, index) => {
+
+            $(`#horaEntrada-${Number(index) + 1}`).val('');
+            $(`#inicioAlmoco-${Number(index)+1}`).val('');
+            $(`#fimAlmoco-${Number(index) + 1}`).val('');
+            $(`#horaSaida-${Number(index) + 1}`).val('');
+            $(`#horaExtra-${Number(index) + 1}`).val('');
+            $(`#atraso-${Number(index) + 1}`).val('');
+            $(`#lancamento-${Number(index) + 1}`).val('');
+        })
+    }
+
+    function aleatorizarTempo(hora, expediente) {
+        let separador = hora.split(':');
+        let h = Number(separador[0]);
+        let m = Number(separador[1]);
+        let s = Number(separador[2]);
+
+        separador = expediente.split(':');
+        const eh = Number(separador[0]);
+        const em = Number(separador[1]);
+        let es = Number(separador[2]);
+        if (isNaN(es)) es = Number('00');
+
+        if ((h == eh) && (m == em)) {
+            m = Math.floor(Math.random() * (3 - 0)) + 0;
+            s = Math.floor(Math.random() * 60);
+        }
+
+        if (h.toString().length < 2) h = `0${h}`;
+        if (m.toString().length < 2) m = `0${m}`;
+        if (s.toString().length < 2) s = `0${s}`;
+
+        const result = `${h}:${m}:${s}`;
+        return result;
     }
 </script>
