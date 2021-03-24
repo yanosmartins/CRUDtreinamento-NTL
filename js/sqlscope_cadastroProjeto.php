@@ -46,7 +46,7 @@ function gravaProjeto()
 
     $projeto = $_POST['projeto'];
 
-    $codigo = ($projeto['codigo']);
+    $codigo = (int)$projeto['codigo'];
     $cnpj = validaString($projeto['cnpj']);
     $descricao = validaString($projeto['descricao']);
     $apelido = validaString($projeto['apelido']);
