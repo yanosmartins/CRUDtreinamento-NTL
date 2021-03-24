@@ -63,7 +63,7 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
                 foreach($result as $row) {
-                    $id = (int) $row['codigo'];
+                    $id = (int) $row['fornecedor'];
                     $apelido = (string)$row['apelido'];
                     $grupoItem = (string)$row['grupoItem'];
                     $telefone = (string)$row['tel'];
