@@ -1,7 +1,7 @@
-function gravaEntradaItem(formData) {
+function gravaPedidoMaterial(formData) {
     formData.append('funcao', 'grava');
     $.ajax({ 
-        url: 'js/sqlscope_cadastroEntradaItem.php',
+        url: 'js/sqlscope_cadastroPedidoMaterial.php',
         type: 'post',
         data: formData,
         processData: false,
@@ -21,7 +21,7 @@ function gravaEntradaItem(formData) {
 
 function recuperaEntradaItem(codigo, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroEntradaItem.php',
+        url: 'js/sqlscope_cadastroPedidoMaterial.php',
         dataType: 'html', 
         type: 'post',
         data: {funcao: 'recupera', codigo: codigo},      
@@ -31,9 +31,22 @@ function recuperaEntradaItem(codigo, callback) {
     });
 }
 
+function recuperaQuantidadeEstoque(codigo, estoque, callback) {
+    $.ajax({
+        url: 'js/sqlscope_cadastroPedidoMaterial.php',
+        dataType: 'html', 
+        type: 'post',
+        data: {funcao: 'recuperaQuantidadeEstoque', codigo: codigo, estoque:estoque},      
+        success: function (data) {
+            callback(data); 
+        }
+    });
+}
+
+
 function recuperaDescricaoCodigo(codigo, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroEntradaItem.php',
+        url: 'js/sqlscope_cadastroPedidoMaterial.php',
         dataType: 'html', 
         type: 'post',
         data: {funcao: 'recuperaDescricaoCodigo', codigo: codigo},      
@@ -45,7 +58,7 @@ function recuperaDescricaoCodigo(codigo, callback) {
 
 function populaComboEstoque(unidadeDestino, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroEntradaItem.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_cadastroPedidoMaterial.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'populaComboEstoque', unidadeDestino: unidadeDestino }, //valores enviados ao script     
@@ -59,9 +72,10 @@ function populaComboEstoque(unidadeDestino, callback) {
     return;
 }
 
+
 function excluirEntradaItem(codigo, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroEntradaItem.php', 
+        url: 'js/sqlscope_cadastroPedidoMaterial.php', 
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'excluir', codigo: codigo}, //valores enviados ao script   
