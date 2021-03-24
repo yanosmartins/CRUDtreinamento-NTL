@@ -1,4 +1,4 @@
-epageSetUp();
+pageSetUp();
 
 $(function () {
     $(document).ajaxStart(function () {

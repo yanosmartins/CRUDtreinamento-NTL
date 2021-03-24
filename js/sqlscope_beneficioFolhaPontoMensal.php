@@ -45,7 +45,8 @@ function grava()
     $ativo = (int) $folhaPontoInfo['ativo'];
     $mesAno = (string) $folhaPontoInfo['mesAno'];
     $data = explode('/', $mesAno);
-    $mesAno = "'" . trim($data[1] . "-" . $data[0] . "-01") . "'";
+    $mesAno = trim($data[1] . "-" . $data[0]);
+    $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[0], $data[1]);
 
     if ($funcionario == 0) {
         $funcionario = (int)$_SESSION["funcionario"];
@@ -55,11 +56,16 @@ function grava()
         }
     }
 
+    $sql =  "SELECT F.codigo, F.mesAno FROM Funcionario.folhaPontoMensal F 
+    INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo 
+    WHERE (0=0) 
+    AND F.mesAno BETWEEN '$mesAno-01' AND '$mesAno-$totalDiasMes' 
+    AND FU.codigo = $funcionario";
 
-    $sql =  "SELECT F.codigo, F.mesAno FROM Funcionario.folhaPontoMensal F INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo WHERE DATEPART(mm,mesAno) = DATEPART(mm,F.dataCadastro) AND DATEPART(yy,mesAno) = DATEPART(yy,F.dataCadastro) ";
     $result = $reposit->RunQuery($sql);
+
     if ($row = $result[0]) {
-        if (strlen($row['mesAno']) >= 0)
+        if ($row)
             $codigo = $row["codigo"];
     }
 
@@ -103,11 +109,13 @@ function grava()
     }
     $xmlFolhaPontoMensal = "'" . $xmlFolhaPontoMensal . "'";
 
+    $mesAno = $mesAno.'-01';
+    
     $sql =
         "Funcionario.folhaPontoMensal_Atualiza 
         $codigo,
         $funcionario,
-        $mesAno,
+        '$mesAno',
         $observacao,
         $usuario,
         $xmlFolhaPontoMensal
@@ -137,16 +145,12 @@ function recupera()
     $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $aux[0], $aux[1]);
     $folha = "";
 
-    if ($funcionario != 0) {
-        $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
-        INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
-        WHERE FU.codigo = " . $funcionario . " AND F.mesAno BETWEEN '$mesAno-01' AND '$mesAno-$totalDiasMes'";
-    } else {
+    if (!$funcionario) {
         $funcionario = (int)$_SESSION["funcionario"];
+    }
         $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
             INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
             WHERE FU.codigo = $funcionario  AND F.mesAno BETWEEN '$mesAno-01' AND '$mesAno-$totalDiasMes'";
-    }
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -248,7 +252,7 @@ function excluir()
         $id = (int) $_POST["id"];
     }
 
-    $result = $reposit->update('Funcionario.folhaPontoMensalDetalheDiario' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
+    $result = $reposit->update('Funcionario.folhaPontoMensal' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
 
     if ($result < 1) {
         echo ('failed#');
