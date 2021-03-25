@@ -551,9 +551,9 @@ include("inc/nav.php");
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <!-- <td></td> -->
-                                                            <!-- <td>TOTAL</td>
-                                                            <td class="text-right decimal-2-casas">0,00</td> -->
+                                                            <td>TOTAL</td>
+                                                            <td></td>
+                                                            <td class="text-right decimal-2-casas">0,00</td>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -563,6 +563,26 @@ include("inc/nav.php");
                                                 <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
                                                     <input id="jsonGrupoInsumoModal" name="jsonGrupoInsumoModal" type="hidden" value="[]">
                                                     <table id="tableInsumoGrupoModal" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <!-- <th style="width: 2px"></th> -->
+                                                                <th class="text-center" style="width: 750px">Grupo</th>
+                                                                <th class="text-center">Total R$ </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- <td></td>
+                                                            <td>TOTAL</td>
+                                                            <td class="text-right decimal-2-casas">0,00</td> -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <h4 class="modal-title">
+                                                    <legend><b>Resumo</b></legend>
+                                                </h4>
+                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                    <input id="jsonResumoModal" name="jsonResumoModal" type="hidden" value="[]">
+                                                    <table id="tableResumoModal" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                         <thead>
                                                             <tr role="row">
                                                                 <!-- <th style="width: 2px"></th> -->
@@ -818,7 +838,9 @@ include("inc/scripts.php");
             var arrayInsumo = collect(jsonInsumoArray).groupBy("insumoGrupo").map(function(item) {
                 var insumoValor = item.first().insumoValor;
                 // insumoValor = unparseBRL(insumoValor);
-                insumoValor = item.sum(({insumoValor}) => unparseBRL(insumoValor));
+                insumoValor = item.sum(({
+                    insumoValor
+                }) => unparseBRL(insumoValor));
                 var descricaoGrupoInsumoGrupo = item.first().insumoGrupoDescricao;
                 return {
                     insumoValor,
@@ -873,7 +895,7 @@ include("inc/scripts.php");
 
 
     function novo() {
-        $(location).attr('href', 'tabelaBasica_postoCadastro.php');
+        $(location).attr('href', 'faturamento_valorPostoCadastro.php');
     }
 
     function voltar() {
@@ -1520,7 +1542,6 @@ include("inc/scripts.php");
     }
     // remuneracao fim
 
-
     // Modal inicio 
     function fillTableRemuneracaoModal() {
         $("#tableRemuneracaoModal tbody").empty();
@@ -1536,12 +1557,13 @@ include("inc/scripts.php");
         var row = $('<tr/>');
         $("#tableRemuneracaoModal tbody").append(row);
         row.append($('<td class="text-center"><b>' + "TOTAL: " + '</b></td>'));
-        row.append($('<td class="text-center"><b>' + "R$ " + parseBRL(unparseBRL(remuneracaoTotal), 2)+ '</b></td>'));
+        row.append($('<td class="text-center"><b>' + "R$ " + parseBRL(unparseBRL(remuneracaoTotal), 2) + '</b></td>'));
     }
 
     function fillTableGrupoEncargoModal(array) {
         $("#tableEncargoGrupoModal tbody").empty();
         jsonGrupoEncargoModalArray = array.items;
+        var totalEncargoRemuneracaoModal = 0;
         for (var i = 0; i < jsonGrupoEncargoModalArray.length; i++) {
             var row = $('<tr/>');
             $("#tableEncargoGrupoModal tbody").append(row);
@@ -1549,18 +1571,54 @@ include("inc/scripts.php");
             row.append($('<td class="text-left">' + jsonGrupoEncargoModalArray[i].descricaoGrupoEncargoGrupo + '</td>'));
             row.append($('<td class="text-center">' + parseBRL(jsonGrupoEncargoModalArray[i].percentualEncargoGrupo) + " %" + '</td>'));
             row.append($('<td class="text-center">' + "R$ " + parseBRL(jsonGrupoEncargoModalArray[i].totalEncargoRemuneracao, 2) + '</td>'));
+            var aux = +jsonGrupoEncargoModalArray[i].totalEncargoRemuneracao;
+            totalEncargoRemuneracaoModal += aux;
         }
+        var row = $('<tr/>');
+        $("#tableEncargoGrupoModal tbody").append(row);
+        row.append($('<td class="text-center"><b>' + "TOTAL: " + '</b></td>'));
+        row.append($('<td class="text-center"></td>'));
+        // row.append($('<td class="text-center"><b>' + "R$ " + totalEncargoRemuneracaoModal + '</b></td>'));
+        row.append($('<td class="text-center"><b>' + "R$ " + parseBRL(totalEncargoRemuneracaoModal, 2) + '</b></td>'));
     }
 
     function fillTableGrupoInsumoModal(array) {
         $("#tableInsumoGrupoModal tbody").empty();
         jsonGrupoInsumoModalArray = array.items;
+        var totalInsumooModal = 0;
         for (var i = 0; i < jsonGrupoInsumoModalArray.length; i++) {
             var row = $('<tr/>');
             $("#tableInsumoGrupoModal tbody").append(row);
             // row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoModalArray[i].sequencialRemuneracao + '"><i></i></label></td>'));
             row.append($('<td class="text-left">' + jsonGrupoInsumoModalArray[i].descricaoGrupoInsumoGrupo + '</td>'));
             row.append($('<td class="text-center">' + "R$ " + parseBRL(jsonGrupoInsumoModalArray[i].insumoValor, 2) + '</td>'));
+            var aux = +jsonGrupoInsumoModalArray[i].insumoValor;
+            totalInsumooModal += aux;
         }
+        var row = $('<tr/>');
+        $("#tableInsumoGrupoModal tbody").append(row);
+        row.append($('<td class="text-center"><b>' + "TOTAL: " + '</b></td>'));
+        // row.append($('<td class="text-center"><b>' + "R$ " + totalEncargoRemuneracaoModal + '</b></td>'));
+        row.append($('<td class="text-center"><b>' + "R$ " + parseBRL(totalInsumooModal, 2) + '</b></td>'));
+    }
+
+    function fillTableResumoModal(array) {
+        $("#tableInsumoGrupoModal tbody").empty();
+        jsonGrupoInsumoModalArray = array.items;
+        var totalInsumooModal = 0;
+        for (var i = 0; i < jsonGrupoInsumoModalArray.length; i++) {
+            var row = $('<tr/>');
+            $("#tableInsumoGrupoModal tbody").append(row);
+            // row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoModalArray[i].sequencialRemuneracao + '"><i></i></label></td>'));
+            row.append($('<td class="text-left">' + jsonGrupoInsumoModalArray[i].descricaoGrupoInsumoGrupo + '</td>'));
+            row.append($('<td class="text-center">' + "R$ " + parseBRL(jsonGrupoInsumoModalArray[i].insumoValor, 2) + '</td>'));
+            var aux = +jsonGrupoInsumoModalArray[i].insumoValor;
+            totalInsumooModal += aux;
+        }
+        var row = $('<tr/>');
+        $("#tableInsumoGrupoModal tbody").append(row);
+        row.append($('<td class="text-center"><b>' + "TOTAL: " + '</b></td>'));
+        // row.append($('<td class="text-center"><b>' + "R$ " + totalEncargoRemuneracaoModal + '</b></td>'));
+        row.append($('<td class="text-center"><b>' + "R$ " + parseBRL(totalInsumooModal, 2) + '</b></td>'));
     }
 </script>
