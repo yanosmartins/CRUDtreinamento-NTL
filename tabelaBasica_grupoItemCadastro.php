@@ -287,12 +287,20 @@ include("inc/scripts.php");
     var unidade = $("#unidade").val();
 
     // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+    if (!unidade) {
+      smartAlert("Erro", "Informe a unidade.", "error");
+      return;
+    }
     if (!estoque) {
       smartAlert("Erro", "Informe o estoque.", "error");
       return;
     }
     if (!unidade) {
       smartAlert("Erro", "Informe o unidade.", "error");
+      return;
+    }
+    if (!descricao) {
+      smartAlert("Erro", "Informe a descrição.", "error");
       return;
     }
 
