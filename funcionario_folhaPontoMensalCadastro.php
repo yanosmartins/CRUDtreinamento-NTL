@@ -428,7 +428,7 @@ include("inc/nav.php");
                                                                         <label class=\"label\" for=\"lancamento\">Lançamento/Ocorrência</label>
                                                                         <label class=\"select\">
                                                                             <select id=\"lancamento-$i\" name=\"lancamento\" class=\" readonly\" readonly style= \"pointer-events: none; touch-action: none\" tabindex=\"-1\">
-                                                                                <option selected value=\"0\"></option>";
+                                                                                <option value=\"0\" selected></option>";
 
                                                                 $reposit = new reposit();
                                                                 $sql = "select codigo, sigla, descricao from Ntl.lancamento where ativo = 1 order by descricao";
@@ -612,6 +612,7 @@ include("inc/scripts.php");
 
             var saida = $("#horaSaida-" + dia)
             var inputSaida = $("#inputHoraSaida").val()
+            if(!inputSaida) inputSaida = '00:00:00';
 
             var extra = $("#horaExtra-" + dia)
             var inputExtra = $("#inputHoraExtra").val()
@@ -622,13 +623,10 @@ include("inc/scripts.php");
             var lancamento = $("#lancamento-" + dia)
             var inputLancamento = $("#inputLancamento").val()
 
+
+
             if (!inputEntrada) {
                 smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
-                return
-            }
-
-            if (!inputSaida) {
-                smartAlert("Atenção", "A hora de saída deve ser preenchida", "error");
                 return
             }
 
@@ -775,7 +773,7 @@ include("inc/scripts.php");
             }
         })
 
-        arrayFolha = $("select[name='lancamento'] option:selected")
+        arrayFolha = $("select[name=\"lancamento\"] option[selected]")
         var arrayLancamento = new Array()
         arrayFolha.each((index, el) => {
             let value = Number($(el).val())
