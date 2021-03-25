@@ -20,10 +20,15 @@ $condicaoPesadaGravarOK = (in_array('PONTOELETRONICOMENSALPESADA_GRAVAR', $array
 $condicaoPesadaExcluirOK = (in_array('PONTOELETRONICOMENSALPESADA_EXCLUIR', $arrayPermissao, true));
 
 $esconderCampo = "";
-if ($condicaoNormalGravarOK || $condicaoPesadaGravarOK) {
-    $esconderCampo = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
-} else if ($condicaoLeveGravarOK) {
-    $esconderCampo = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
+if ($condicaoPesadaGravarOK) {
+    $esconderCampoPesado = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
+}
+    if ($condicaoNormalGravarOK) {
+        $esconderCampoNormal = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
+    }
+if ($condicaoLeveGravarOK) {
+    $esconderCampoPesado = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
+    $esconderCampoNormal = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
 }
 
 if (($condicaoLeveAcessarOK == false) && ($condicaoNormalAcessarOK == false) && ($condicaoPesadaAcessarOK == false)) {
@@ -119,7 +124,7 @@ include("inc/nav.php");
                                                                     <section class="col col-4">
                                                                         <label class="label " for="funcionario">Funcionário</label>
                                                                         <label class="select">
-                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:<?php echo $esconderCampo['touch-action']; ?>;pointer-events:<?php echo $esconderCampo['pointer-events']; ?>">
+                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:<?php if($esconderCampoPesado){echo $esconderCampoPesado['touch-action'];}else if($esconderCampoNormal){echo $esconderCampoNormal['touch-action'];} ?>;pointer-events:<?php if($esconderCampoPesado){echo $esconderCampoPesado['pointer-events'];}else if($esconderCampoNormal){echo $esconderCampoNormal['pointer-events'];} ?>">
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
@@ -240,7 +245,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Dia</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control required" required data-autoclose="true">
+                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control required <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];}?>" required data-autoclose="true" <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>>
                                                                         </div>
                                                                     </div>
                                                                 </section>
@@ -249,7 +254,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Entrada</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99">
+                                                                            <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -259,7 +264,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Inicio/Almoço</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" data-mask="99:99">
+                                                                            <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -269,7 +274,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Fim/Almoço</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" data-mask="99:99">
+                                                                            <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -279,7 +284,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Saída</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99">
+                                                                            <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -289,7 +294,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">H.Extra</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control readonly" placeholder="00:00" data-autoclose="true" data-mask="99:99">
+                                                                            <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -299,7 +304,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Atraso</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control readonly" placeholder="00:00" data-autoclose="true" data-mask="99:99">
+                                                                            <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -308,7 +313,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="lancamento">Lançamento/Ocorrência</label>
                                                                     <label class="select">
-                                                                        <select id="inputLancamento" name="inputLancamento">
+                                                                        <select id="inputLancamento" name="inputLancamento" style="touch-action:<?php if($esconderCampoPesado){echo $esconderCampoPesado['touch-action'];} ?>;pointer-events:<?php if($esconderCampoPesado){echo $esconderCampoPesado['pointer-events'];} ?>>
                                                                             <option selected value="0"></option>
                                                                             <?php
                                                                             $reposit = new reposit();
