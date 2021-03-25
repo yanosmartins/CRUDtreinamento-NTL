@@ -226,7 +226,7 @@ include("inc/scripts.php");
            
          
         var parametrosUrl = '&apelido=' + apelido + '&grupoItem=' + grupoItem + '&sigla=' + sigla   + '&notaFiscal=' + notaFiscal;
-        $('#resultadoBusca').load('cadastro_consultaFornecedorFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('estoque_consultaFornecedorFiltroListagem.php?' + parametrosUrl);
     }
     
    
