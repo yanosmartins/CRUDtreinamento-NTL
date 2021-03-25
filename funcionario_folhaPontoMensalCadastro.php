@@ -313,7 +313,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="lancamento">Lançamento/Ocorrência</label>
                                                                     <label class="select">
-                                                                        <select id="inputLancamento" name="inputLancamento" style="touch-action:<?php if($esconderCampoPesado){echo $esconderCampoPesado['touch-action'];} ?>;pointer-events:<?php if($esconderCampoPesado){echo $esconderCampoPesado['pointer-events'];} ?>>
+                                                                        <select id="inputLancamento" name="inputLancamento" style="touch-action:<?php if($esconderCampoPesado){echo $esconderCampoPesado['touch-action'];} ?>;pointer-events:<?php if($esconderCampoPesado){echo $esconderCampoPesado['pointer-events'];} ?>">
                                                                             <option selected value="0"></option>
                                                                             <?php
                                                                             $reposit = new reposit();
@@ -325,7 +325,7 @@ include("inc/nav.php");
                                                                                 echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                             }
                                                                             ?>
-                                                                        </select>
+                                                                        </select><i></i>
                                                                     </label>
                                                                 </section>
 
@@ -443,7 +443,7 @@ include("inc/nav.php");
                                                                     $descricao = $row['descricao'];
                                                                     echo "<option value='$codigo'>$descricao</option>";
                                                                 }
-                                                                echo " </select><i></i>
+                                                                echo " </select>
                                                                         </label>
                                                                     </section>
                                                                 </div>
@@ -630,10 +630,15 @@ include("inc/scripts.php");
 
 
 
-            if (!inputEntrada) {
-                smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
-                return
-            }
+            // if ((!inputEntrada || inputEntrada == "00:00:00") && !inputLancamento) {
+            //     smartAlert("Atenção", "A HORA DE ENTRADA deve ser preenchida", "error");
+            //     return
+            // }
+
+            // if (inputSaida == "00:00:00" && (inputExtra != "00:00:00")) {
+            //     smartAlert("Atenção", "Preencha a HORA DE SAÍDA para preencher a HORA EXTRA", "error");
+            //     return
+            // }
 
             let separador = $("#expediente option:selected").text();
             if (!separador) {
@@ -907,7 +912,8 @@ include("inc/scripts.php");
                     preencherPonto(JsonFolha);
                 } catch (e) {
                     limparPonto();
-                    smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
+                    
+                    smartAlert("Aviso", "O usuário não possui uma folha registrada desse mês!", "info");
                     // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
                 }
