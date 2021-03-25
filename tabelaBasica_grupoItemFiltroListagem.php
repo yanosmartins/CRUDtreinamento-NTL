@@ -6,8 +6,9 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Estoque</th>
                     <th class="text-left" style="min-width:30px;">Descrição</th>
+                    <th class="text-left" style="min-width:30px;">unidade</th>
+                    <th class="text-left" style="min-width:30px;">Estoque</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
@@ -15,8 +16,11 @@ include "js/repositorio.php";
                 <?php
 
                 $reposit = new reposit();
-                $sql = "SELECT GI.codigo, E.descricao as 'descricaoEstoque', GI.descricao, GI.ativo
-                FROM Estoque.grupoItem GI INNER JOIN Estoque.estoque E ON GI.estoque = E.codigo ";
+                $sql = "SELECT GI.codigo, E.descricao as 'descricaoEstoque', GI.descricao, GI.ativo, GI.unidade ,U.descricao AS unidadeDescricao
+                FROM Estoque.grupoItem GI 
+                INNER JOIN Estoque.estoque E ON GI.estoque = E.codigo 
+                LEFT JOIN Ntl.unidade U ON GI.unidade = U.codigo";
+                
                 $where = " WHERE (0=0) ";
 
 
@@ -28,6 +32,11 @@ include "js/repositorio.php";
                 if ($_GET["descricao"] != "") {
                     $descricao = $_GET["descricao"];
                     $where = $where . " AND ( GI.descricao = $descricao)";
+                }
+
+                if ($_GET["unidade"] != "") {
+                    $unidade = $_GET["unidade"];
+                    $where = $where . " AND ( GI.unidade = $unidade)";
                 }
 
                 if ($_GET["ativo"] !== "") {
@@ -44,9 +53,11 @@ include "js/repositorio.php";
                     $estoqueDescricao = (string) $row['descricaoEstoque'];
                     $descricao = (string) $row['descricao'];
                     $ativo = (int) $row['ativo'];
+                    $unidadeDescricao = (string)$row['unidadeDescricao'];
 
                     echo '<tr>';
                     echo '<td class="text-left"><a href="tabelaBasica_grupoItemCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';
+                    echo '<td class="text-left">' . $unidadeDescricao . '</td>';    
                     echo '<td class="text-left">' . $estoqueDescricao . '</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';

@@ -93,7 +93,7 @@ include("inc/nav.php");
                                                             <section class="col col-3 col-auto">
                                                                 <label class="label" for="codigoFabricante">Código Fabricante</label>
                                                                 <label class="input">
-                                                                    <input id="codigoFabricante" name="codigoFabricante" type="text" class="required" maxlength="50" required autocomplete="off">
+                                                                    <input id="codigoFabricante" name="codigoFabricante" type="text" class="" maxlength="50"  autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-5 col-auto">
@@ -500,11 +500,11 @@ include("inc/scripts.php");
             return;
         }
 
-        if (!codigoFabricante) {
-            smartAlert("Atenção", "Informe codigo do fabricante", "error");
-            $("#btnGravar").prop('disabled', false);
-            return;
-        }
+        // if (!codigoFabricante) {
+        //     smartAlert("Atenção", "Informe codigo do fabricante", "error");
+        //     $("#btnGravar").prop('disabled', false);
+        //     return;
+        // }
 
         if (!descricaoItem) {
             smartAlert("Atenção", "Informe a descricao do item", "error");
