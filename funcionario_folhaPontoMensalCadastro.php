@@ -313,7 +313,8 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="lancamento">Lançamento/Ocorrência</label>
                                                                     <label class="select">
-                                                                        <select id="inputLancamento" name="inputLancamento" style="touch-action:<?php if($esconderCampoPesado){echo $esconderCampoPesado['touch-action'];} ?>;pointer-events:<?php if($esconderCampoPesado){echo $esconderCampoPesado['pointer-events'];} ?>">
+                                                                        <select id="inputLancamento" name="inputLancamento" style="touch-action:<?php if($esconderCampoPesado){echo $esconderCampoPesado['touch-action'];} ?>;pointer-events:<?php if($esconderCampoPesado){echo $esconderCampoPesado['pointer-events'];} ?>" <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?> class="
+                                                                        <?php if($esconderCampoPesado){echo $esconderCampoPesado['readonly'];} ?>">
                                                                             <option selected value="0"></option>
                                                                             <?php
                                                                             $reposit = new reposit();
@@ -334,7 +335,7 @@ include("inc/nav.php");
                                                             <div class="row">
                                                                 <section class="col col-md-2">
                                                                     <label class="label"> </label>
-                                                                    <button id="btnAddPonto" type="button" class="btn btn-primary">
+                                                                    <button id="btnAddPonto" type="button" class="btn btn-primary" style="display:<?php if($esconderCampoPesado){echo $esconderCampoPesado['display'];} ?>">
                                                                         <i class="">Adicionar Ponto</i>
                                                                     </button>
                                                                 </section>
@@ -344,7 +345,7 @@ include("inc/nav.php");
                                                                 </section>
                                                                 <section class="col col-md-1">
                                                                     <label class=" label"> </label>
-                                                                    <button id="btnGravar" type="button" class="btn btn-success">
+                                                                    <button id="btnGravar" type="button" class="btn btn-success" style="display:<?php if($esconderCampoPesado){echo $esconderCampoPesado['display'];} ?>">
                                                                         <i class="">Salvar alterações</i>
                                                                     </button>
                                                                 </section>
@@ -783,10 +784,12 @@ include("inc/scripts.php");
             }
         })
 
-        arrayFolha = $("select[name=\"lancamento\"] option[selected]")
-        var arrayLancamento = new Array()
+        arrayFolha = $("select[name='lancamento']");
+        var arrayLancamento = new Array();
         arrayFolha.each((index, el) => {
-            let value = Number($(el).val())
+            if($(el).val() == null)
+                $(el).val(0);
+            let value = Number($(el).val());
                 arrayLancamento.push({
                     lancamento: Number(value)
                 })
@@ -900,11 +903,11 @@ include("inc/scripts.php");
 
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
-                    $("#obvercao").val(observacao);
+                    $("#observacaoFolhaPontoMensal").val(observacao);
                     $("#mesAno").val(mesAnoFolhaPonto);
                 } else {
                     $("#codigo").val(0);
-                    $("#obvercao").val("");
+                    $("#observacaoFolhaPontoMensal").val("");
                 }
 
                 //funcionando
@@ -948,11 +951,11 @@ include("inc/scripts.php");
 
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
-                    $("#obvercao").val(observacao);
+                    $("#observacaoFolhaPontoMensal").val(observacao);
                     $("#mesAno").val(mesAnoFolhaPonto);
                 } else {
                     $("#codigo").val(0);
-                    $("#obvercao").val("");
+                    $("#observacaoFolhaPontoMensal").val("");
                 }
 
                 //funcionando
