@@ -98,11 +98,11 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao FROM 
-                                                                        sysgc.dbo.portal WHERE ativo = 1 ORDER BY descricao";
+                                                                        Ntl.portal WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $codigo = +$row['codigo'];
-                                                                            $descricao = mb_convert_encoding($row['descricao'], 'UTF-8', 'HTML-ENTITIES');
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int)$row['codigo'];
+                                                                            $descricao = (string)$row['descricao'];
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -159,21 +159,20 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <div class="row" id="rowTarefa">
-                                                        <section class="col col-3 col-auto">
+                                                            <section class="col col-3 col-auto">
                                                                 <label class="label" for="tarefa">Tarefa</label>
                                                                 <label class="select">
                                                                     <select id="tarefa" name="tarefa">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao  FROM dbo.tarefa  where ativo = 1  
+                                                                        $sql =  "SELECT codigo, descricao  FROM Ntl.tarefa  where ativo = 1  
                                                                             AND (visivel = 3 OR visivel = 1) order by descricao;";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
-                                                                            $codigo = $row['codigo'];
-                                                                            $nomeTarefa = ($row['descricao']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $nomeTarefa . '</option>';
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int)$row['codigo'];
+                                                                            $descricao = (string)$row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
@@ -184,17 +183,16 @@ include("inc/nav.php");
                                                                     <select id="responsavel" name="responsavel">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, nome FROM dbo.responsavel  where ativo = 1  
+                                                                        $sql =  "SELECT codigo, nome FROM Ntl.responsavel  where ativo = 1  
                                                                         order by nome";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        while (($row = odbc_fetch_array($result))) {
-                                                                            $row = array_map('utf8_encode', $row);
-                                                                            $codigo = $row['codigo'];
-                                                                            $nome = ($row['nome']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $nome . '</option>';
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int)$row['codigo'];
+                                                                            $nome = (string)$row['nome'];
+                                                                            echo '<option value=' . $codigo . '>' . $nome . '</option>';
                                                                         }
-                                                                ?>
+                                                                        ?>
                                                                     </select><i></i>
                                                             </section>
                                                             <section class="col col-3">
@@ -202,17 +200,17 @@ include("inc/nav.php");
                                                                 <label class="select">
                                                                     <select id="tipoTarefa" name="tipoTarefa">
                                                                         <option></option>
-                                                                        <option value="0">Pré-Pregão</option> 
+                                                                        <option value="0">Pré-Pregão</option>
                                                                     </select><i></i>
                                                             </section>
                                                             <section class="col col-3 col-auto">
                                                                 <label class="label" for="tarefaConcluida">Tarefa Concluída</label>
                                                                 <label class="select">
-                                                                    <select id="tarefaConcluida" name="tarefaConcluida"> 
+                                                                    <select id="tarefaConcluida" name="tarefaConcluida">
                                                                         <option value=""></option>
                                                                         <option value="1">Sim</option>
                                                                         <option value="0" selected>Não</option>
-                                                                ?>
+                                                                        ?>
                                                                     </select><i></i>
                                                             </section>
                                                         </div>
@@ -370,7 +368,7 @@ include("inc/scripts.php");
         var horaPregao = $('#horaPregao').val();
         var dataPregao = $('#dataPregao').val();
         var condicao = $('#condicao').val();
-        var ativo = $('#ativo').val(); 
+        var ativo = $('#ativo').val();
         var tarefa = $('#tarefa').val();
         var responsavel = $('#responsavel').val();
         var tipoTarefa = $('#tipoTarefa').val();
@@ -402,7 +400,7 @@ include("inc/scripts.php");
                 tarefa: tarefa,
                 responsavel: responsavel,
                 tipoTarefa: tipoTarefa,
-                resumoPregao:resumoPregao,
+                resumoPregao: resumoPregao,
                 tarefaConcluida: tarefaConcluida
 
             });
