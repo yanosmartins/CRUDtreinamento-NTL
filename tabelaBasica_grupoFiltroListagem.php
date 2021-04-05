@@ -36,7 +36,7 @@
                     } 
                     
                     
-                    $sql = "SELECT codigo,descricao,ativo,tipo FROM Estoque.grupo";
+                    $sql = "SELECT codigo,descricao,ativo,tipo FROM Ntl.grupo";
                     $sql = $sql.$where;
                     
                     $reposit = new reposit();                                       
