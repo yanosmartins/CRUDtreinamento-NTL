@@ -2,75 +2,54 @@
 include "js/repositorio.php";
 ?>
 <div class="table-container">
-    <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+    <div class="table-responsive"
+        style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Descrição</th>
-                    <th class="text-left" style="min-width:35px;">Ativo</th>
-                    <th class="text-left" style="min-width:35px;">Cor Fonte</th>
-                    <th class="text-left" style="min-width:35px;">Cor Fundo</th>
+                    <th class="text-left" style="min-width:20px;">Nome da Situação</th>
+                    <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
+                
+                    $descricao = "";
+                    $ativo= ""; 
 
-                $descricaoFiltro = "";
-                $ativoFiltro = "";
-                $corFonteFiltro = "";
-                $corFundoFiltro = "";
-                $where = " WHERE (0 = 0)";
+                    $sql = " SELECT codigo, descricao, ativo, corFonte, corFundo  FROM Ntl.situacao ";
+                    $where = "WHERE (0 = 0)";
 
-                if ($_GET["descricaoFiltro"] != "") {
-                    $descricaoFiltro = $_GET["descricaoFiltro"];
-                    $where = $where . " AND descricao like '%' + " . "replace('" . $descricaoFiltro . "',' ','%') + " . "'%'";
-                }
-
-                if ($_GET["ativoFiltro"] != "") {
-                    $ativoFiltro = $_GET["ativoFiltro"];
-                    $where = $where . " AND ativo = $ativoFiltro";
-                }
-
-                if ($_GET["corFonteFiltro"] != "") {
-                    $corFonteFiltro = $_GET["corFonteFiltro"];
-                    $where = $where . " AND corFonte like '%' + " . "replace('" . $corFonteFiltro . "',' ','%') + " . "'%'";
-                }
-
-                if ($_GET["corFundoFiltro"] != "") {
-                    $corFundoFiltro = $_GET["corFundoFiltro"];
-                    $where = $where . " AND corFundo like '%' + " . "replace('" . $corFundoFiltro . "',' ','%') + " . "'%'";
-                }
-
-                $sql = "SELECT codigo,descricao,ativo,corFonte,corFundo FROM Ntl.situacao";
-                $sql = $sql . $where;
-
-                $reposit = new reposit();
-                $result = $reposit->RunQuery($sql);
-
-                foreach($result as $row) {
-                    $id = (int) $row['codigo'];
-                    $descricao = $row['descricao'];
-                    $ativo = (int) $row['ativo'];
-                    $corFonte = $row['corFonte'];
-                    $corFundo = $row['corFundo'];
-
-                    //Modifica os valores booleanos por Sim e Não. 
-                    //Ativo
-                    if ($ativo == 1) {
-                        $descricaoAtivo = "Sim";
-                    } else {
-                        $descricaoAtivo = "Não";
+                    if ($_POST["descricao"] != "") {
+                        $descricao = $_POST["descricao"];
+                        $where = $where . " and ( descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                     }
 
-                    echo '<tr >';
-                    echo '<td class="text-left"><a href="tabelaBasica_situacaoCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $descricaoAtivo . '</td>';
-                    echo '<td class="text-left">' . $corFonte . '</td>';
-                    echo '<td class="text-left">' . $corFundo . '</td>';
-                    echo '</tr >';
-                }
+                    if ($_POST["ativo"] != "") {
+                        $ativo = +$_POST["ativo"];
+                        $where = $where . " and ativo = ".$ativo;
+                    } 
+                    
+                    $sql .= $where;
+                    $sql .= " order by descricao "; 
+                    $reposit = new reposit();
+                    $result = $reposit->RunQuery($sql);
+
+                    foreach($result as $row) {
+                        $id = $row['codigo'];
+                        $descricao = $row['descricao']; 
+                        $ativo = $row['ativo']; 
+                        $ativo == 1 ? $descricaoAtivo = 'Sim' : $descricaoAtivo = 'Não';
+                        $corFonte = $row['corFonte'];
+                        $corFundo = $row['corFundo'];
+
+                        echo '<tr >';  
+                        echo '<td style="background:'.$corFundo.'" class="text-left"><a href="tabelaBasica_situacaoCadastro.php?codigo=' . $id . '" style="color:'.$corFonte.';"><strong>' . $descricao . '</strong></a></td>';
+                        echo '<td class="text-left">'.$descricaoAtivo.'</td>';
+                        echo '</tr >';
+                    }
                 ?>
-            </tbody>
+          </tbody>
         </table>
     </div>
 </div>
