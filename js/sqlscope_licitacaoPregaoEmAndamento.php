@@ -24,9 +24,9 @@ if ($funcao == 'excluir') {
 return;
 
 function grava()
-{
+{   
     $reposit = new reposit(); //Abre a conexão.    
-
+    $comum = new comum();
     // Gravação do formulário no banco de dados. 
     session_start();
     $codigo =  (int)$_POST['codigo'];
@@ -34,7 +34,9 @@ function grava()
     $usuario = validaString($_SESSION['login']);
 
     //informações adicionais pregões em andamento
-    $situacao =  (int) $_POST['situacao'];
+    $situacao =  $_POST['situacao'];
+    if(!$situacao)
+        $situacao = $comum->formataNuloGravar($situacao);
     $posicao =  (int) $_POST['posicao'];
     $dataReaberturaPregao = validaData($_POST['dataReaberturaPregao']);
     $horaReaberturaPregao = validaString($_POST['horaReaberturaPregao']);
@@ -45,6 +47,9 @@ function grava()
     $observacaoCondicao = validaString($_POST['observacaoCondicao']);
 
     $strArrayTarefa = $_POST['jsonTarefa'];
+    if (!$strArrayTarefa){ 
+        $strArrayTarefa = '[]';
+    }
     $arrayTarefa = json_decode($strArrayTarefa, true);
     $xmlTarefa = "";
     $nomeXml = "ArrayOfTarefa";
