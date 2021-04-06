@@ -706,47 +706,42 @@ include("inc/scripts.php");
             const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
             const horaSaida = aleatorizarTempo(inputSaida, fimExpediente)
 
-            // const totalHoras = calcularTotalHoras(horaEntrada, horaSaida);
-            // const totalExpediente = calcularTotalHoras(inicioExpediente, fimExpediente);
+            //Começa cálculo de Hora Extra
+            if (horaSaida != "00:00:00") {
+                const parseHoraEntrada = parse(horaEntrada)
+                const parseHoraSaida = parse(horaSaida)
+                const parseHoraInicio = parse(inicioExpediente)
+                const parseHoraFim = parse(fimExpediente)
 
-            // const horaExtra = calcularHoraExtra(totalHoras, totalExpediente)
+                let jornadaNormal = duracao(inicioExpediente, fimExpediente);
 
-            // testando
-            const parseHoraEntrada = parse(horaEntrada)
-            const parseHoraSaida = parse(horaSaida)
-            const parseHoraInicio = parse(inicioExpediente)
-            const parseHoraFim = parse(fimExpediente)
+                // quantidade de minutos efetivamente trabalhados
+                let jornada = duracao(horaEntrada, horaSaida);
 
-            let jornadaNormal = duracao(inicioExpediente, fimExpediente);
+                // diferença entre as jornadas
+                let diff = Math.abs(jornada - jornadaNormal);
 
-            // quantidade de minutos efetivamente trabalhados
-            let jornada = duracao(horaEntrada, horaSaida);
+                if (diff != 0) {
+                    let horas = Math.floor(diff / 60);
+                    let minutos = diff - (horas * 60);
 
-            // diferença entre as jornadas
-            let diff = Math.abs(jornada - jornadaNormal);
+                    if (horas.toString().length < 2) horas = `0${horas}`;
+                    if (minutos.toString().length < 2) minutos = `0${minutos}`;
 
-            if (diff != 0) {
-                let horas = Math.floor(diff / 60);
-                let minutos = diff - (horas * 60);
-
-                if (horas.toString().length < 2) horas = `0${horas}`;
-                if (minutos.toString().length < 2) minutos = `0${minutos}`;
-               
-                if (jornada > jornadaNormal) {
-                    inputExtra = (`${horas}:${minutos}`);
-                } else {
-                    inputAtraso = (`${horas}:${minutos}`)
+                    if (jornada > jornadaNormal) {
+                        inputExtra = (`${horas}:${minutos}`);
+                    } else {
+                        inputAtraso = (`${horas}:${minutos}`)
+                    }
                 }
             }
 
-            // if (!horaExtra) {
-            //     smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
-            //     return
-            // }
-            // if (!horaAtraso) {
-            //     smartAlert("Atenção", "Não foi possível calcular as horas de atraso", "error");
-            //     return
-            // }
+            if (!inputExtra && horaSaida != "00:00:00") {
+                smartAlert("Aviso", "O funcionário não tem horas extras", "info");
+            }
+            if (!inputAtraso && horaSaida != "00:00:00") {
+                smartAlert("Aviso", "O funcionário não tem atrasos", "info");
+            }
 
             entrada.val(horaEntrada);
             inicioAlmoco.val(inputInicioAlmoco);
@@ -923,7 +918,6 @@ include("inc/scripts.php");
     }
 
     function excluir() {
-        debugger;
         var id = +$("#codigo").val();
 
         if (id === 0) {
@@ -973,7 +967,6 @@ include("inc/scripts.php");
                     var funcionario = piece[1];
                     var observacao = piece[2];
                     var mesAnoFolhaPonto = piece[3];
-                    debugger
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
                     $("#observacaoFolhaPontoMensal").val(observacao);
