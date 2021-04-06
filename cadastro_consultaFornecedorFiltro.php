@@ -93,8 +93,8 @@ include("inc/ribbon.php");
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach($result as $row) {
                                                                             $id = (int) $row['codigo'];
-                                                                            $descricao = $row['apelido'];
-                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                            $apelido = (string)$row['apelido'];
+                                                                            echo '<option value=' . $id . '>' . $apelido . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
@@ -102,18 +102,18 @@ include("inc/ribbon.php");
                                                             </section>
                                                             
                                                             <section class="col col-3 col-auto">
-                                                                <label class="label" for="projeto">Grupo Item</label>
+                                                                <label class="label" for="projeto">Tipo Item</label>
                                                                 <label class="select">
-                                                                    <select id="grupoItem" name="grupoItem" class="">
+                                                                    <select id="tipoItem" name="tipoItem" class="">
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, estoque, descricao, ativo FROM Estoque.grupoItem WHERE ativo = 1";
+                                                                        $sql = "SELECT codigo, descricao, ativo FROM Estoque.tipoItem WHERE ativo = 1";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach($result as $row) {
                                                                             $id = (int) $row['codigo'];
-                                                                            $grupoItem = $row['descricao'];
-                                                                            echo '<option value=' . $id . '>' . $grupoItem . '</option>';
+                                                                            $tipoItem = $row['descricao'];
+                                                                            echo '<option value=' . $id . '>' . $tipoItem . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
@@ -220,12 +220,12 @@ include("inc/scripts.php");
     function listarFiltro() {
        
         var apelido = $('#fornecedor').val();
-        var grupoItem = $('#grupoItem').val();
+        var tipoItem = $('#tipoItem').val();
         var sigla = $('#sigla').val();
         var notaFiscal = $('#notaFiscal').val();
            
          
-        var parametrosUrl = '&apelido=' + apelido + '&grupoItem=' + grupoItem + '&sigla=' + sigla   + '&notaFiscal=' + notaFiscal;
+        var parametrosUrl = '&fornecedor=' + apelido + '&tipoItem=' + tipoItem + '&sigla=' + sigla   + '&notaFiscal=' + notaFiscal;
         $('#resultadoBusca').load('cadastro_consultaFornecedorFiltroListagem.php?' + parametrosUrl);
     }
     

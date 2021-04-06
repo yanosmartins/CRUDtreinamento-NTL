@@ -191,19 +191,19 @@ include("inc/nav.php");
                                                 </div>
                                                 <div id="collapseGrupoDeItem" class="panel-collapse collapse">
                                                     <div class="panel-body no-padding">
-                                                        <input id="jsonGrupoItem" name="jsonGrupoItem" type="hidden" value="[]">
+                                                        <input id="jsonTipoItem" name="jsonTipoItem" type="hidden" value="[]">
                                                         <fieldset id="formGrupoDeItem">
-                                                            <input id="sequencialGrupoDeItem" name="sequencialGrupoDeItem" type="hidden" value="">
+                                                            <input id="sequencialTipoItem" name="sequencialTipoItem" type="hidden" value="">
 
                                                             <br>
                                                             <div class="row">
                                                                 <section class="col col-3">
-                                                                    <label class="label">Estoque</label>
+                                                                    <label class="label">Tipo Item</label>
                                                                     <label class="select">
-                                                                        <select id="estoque" name="estoque" class="form-control">
+                                                                        <select id="tipoItem" name="tipoItem" class="form-control">
                                                                             <option style="display:none;" value="">Selecione</option>
                                                                             <?php
-                                                                            $sql =  "SELECT codigo, descricao FROM estoque.estoque  where ativo = 1  order by codigo";
+                                                                            $sql =  "SELECT codigo, descricao FROM estoque.tipoItem  where ativo = 1  order by codigo";
                                                                             $reposit = new reposit();
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
@@ -219,12 +219,12 @@ include("inc/nav.php");
                                                                 </section>
 
                                                                 <section class="col col-3">
-                                                                    <label class="label">Grupo Item</label>
+                                                                    <label class="label">Fabricante</label>
                                                                     <label class="select">
-                                                                        <select id="grupoItem" name="grupoItem" class="form-control">
+                                                                        <select id="fabricante" name="fabricante" class="form-control">
                                                                             <option style="display:none;" value="">Selecione</option>
                                                                             <?php
-                                                                            $sql =  "SELECT codigo, descricao FROM estoque.grupoItem  where ativo = 1  order by codigo";
+                                                                            $sql =  "SELECT codigo, descricao FROM estoque.fabricante  where ativo = 1  order by codigo";
                                                                             $reposit = new reposit();
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
@@ -265,8 +265,8 @@ include("inc/nav.php");
                                                                         <tr role="row">
 
                                                                             <th class="text-left" style="min-width: 10px;"></th>
-                                                                            <th class="text-left" style="min-width: 10px;">Estoque</th>
-                                                                            <th class="text-left" style="min-width: 10px;">Grupo de Item</th>
+                                                                            <th class="text-left" style="min-width: 10px;">Tipo Item</th>
+                                                                            <th class="text-left" style="min-width: 10px;">Fabricante</th>
                                                                             <th class="text-left" style="min-width: 30px;">Observacao</th>
                                                                         </tr>
                                                                     </thead>
@@ -487,7 +487,7 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
-    jsonGrupoItemArray = JSON.parse($("#jsonGrupoItem").val());
+    jsonTipoItemArray = JSON.parse($("#jsonTipoItem").val());
     jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
     jsonEmailArray = JSON.parse($("#jsonEmail").val());
     $(document).ready(function() {
@@ -616,36 +616,36 @@ include("inc/scripts.php");
             nodeCallback: processDataGrupoDeItem
         });
 
-        if (item["sequencialGrupoDeItem"] === '') {
-            if (jsonGrupoItemArray.length === 0) {
-                item["sequencialGrupoDeItem"] = 1;
+        if (item["sequencialTipoItem"] === '') {
+            if (jsonTipoItemArray.length === 0) {
+                item["sequencialTipoItem"] = 1;
             } else {
-                item["sequencialGrupoDeItem"] = Math.max.apply(Math, jsonGrupoItemArray.map(function(o) {
-                    return o.sequencialGrupoDeItem;
+                item["sequencialTipoItem"] = Math.max.apply(Math, jsonTipoItemArray.map(function(o) {
+                    return o.sequencialTipoItem;
                 })) + 1;
             }
 
         } else {
-            item["sequencialGrupoDeItem"] = +item["sequencialGrupoDeItem"];
+            item["sequencialTipoItem"] = +item["sequencialTipoItem"];
         }
 
-        item.estoqueText = $('#estoque option:selected').text().trim();
-        item.grupoItemText = $('#grupoItem option:selected').text().trim();
+        item.tipoItemText = $('#tipoItem option:selected').text().trim();
+        item.fabricanteText = $('#fabricante option:selected').text().trim();
 
         var index = -1;
-        $.each(jsonGrupoItemArray, function(i, obj) {
-            if (+$('#sequencialGrupoDeItem').val() === obj.sequencialGrupoDeItem) {
+        $.each(jsonTipoItemArray, function(i, obj) {
+            if (+$('#sequencialTipoItem').val() === obj.sequencialTipoItem) {
                 index = i;
                 return false;
             }
         });
 
         if (index >= 0)
-            jsonGrupoItemArray.splice(index, 1, item);
+            jsonTipoItemArray.splice(index, 1, item);
         else
-            jsonGrupoItemArray.push(item);
+            jsonTipoItemArray.push(item);
 
-        $("#jsonGrupoItem").val(JSON.stringify(jsonGrupoItemArray));
+        $("#jsonTipoItem").val(JSON.stringify(jsonTipoItemArray));
         fillTableGrupoDeItem();
 
     }
@@ -654,18 +654,18 @@ include("inc/scripts.php");
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
         var fieldName = node.getAttribute ? node.getAttribute('name') : '';
 
-        if (fieldName !== '' && (fieldId === "Estoque")) {
+        if (fieldName !== '' && (fieldId === "tipoItem")) {
             return {
                 name: fieldName,
-                value: $("#estoque option:selected").val()
+                value: $("#tipoItem option:selected").val()
             };
         }
 
 
-        if (fieldName !== '' && (fieldId === "GrupoItem")) {
+        if (fieldName !== '' && (fieldId === "fabricante")) {
             return {
                 name: fieldName,
-                value: $("#grupoItem option:selected").val()
+                value: $("#fabricante option:selected").val()
             };
         }
 
@@ -683,14 +683,14 @@ include("inc/scripts.php");
 
     function fillTableGrupoDeItem() {
         $("#tableGrupoDeItem tbody").empty();
-        if (typeof(jsonGrupoItemArray) != 'undefined') {
-            for (var i = 0; i < jsonGrupoItemArray.length; i++) {
+        if (typeof(jsonTipoItemArray) != 'undefined') {
+            for (var i = 0; i < jsonTipoItemArray.length; i++) {
                 var row = $('<tr />');
                 $("#tableGrupoDeItem tbody").append(row);
-                row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonGrupoItemArray[i].sequencialGrupoDeItem + '"><i></i></label></td>'));
-                row.append($('<td class="text-nowrap" onclick="carregaGrupoDeItem(' + jsonGrupoItemArray[i].sequencialGrupoDeItem + ');">' + jsonGrupoItemArray[i].estoqueText + '</td>'));
-                row.append($('<td class="text-nowrap" (' + jsonGrupoItemArray[i].sequencialGrupoDeItem + ');">' + jsonGrupoItemArray[i].grupoItemText + '</td>'));
-                row.append($('<td class="text-nowrap" (' + jsonGrupoItemArray[i].sequencialGrupoDeItem + ');">' + jsonGrupoItemArray[i].observacao + '</td>'));
+                row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTipoItemArray[i].sequencialTipoItem + '"><i></i></label></td>'));
+                row.append($('<td class="text-nowrap" onclick="carregaGrupoDeItem(' + jsonTipoItemArray[i].sequencialTipoItem + ');">' + jsonTipoItemArray[i].tipoItemText + '</td>'));
+                row.append($('<td class="text-nowrap" (' + jsonTipoItemArray[i].sequencialTipoItem + ');">' + jsonTipoItemArray[i].fabricanteText + '</td>'));
+                row.append($('<td class="text-nowrap" (' + jsonTipoItemArray[i].sequencialTipoItem + ');">' + jsonTipoItemArray[i].observacao + '</td>'));
 
 
             }
@@ -701,17 +701,12 @@ include("inc/scripts.php");
     function validaGrupoDeItem() {
         var existe = false;
         var achou = false;
-        var grupoItem = $('#grupoItem').val();
-        var estoque = $('#estoque').val();
-        var sequencial = +$('#sequencialGrupoDeItem').val();
+        var fabricante = $('#fabricante').val();
+        var tipoItem = $('#tipoItem').val();
+        var sequencial = +$('#sequencialTipoItem').val();
 
-        if (grupoItem == '') {
-            smartAlert("Erro", "Informe os campos Grupo Item e Estoque.", "error");
-            return false;
-        }
-
-        if (estoque == '') {
-            smartAlert("Erro", "Informe os campos Grupo Item e Estoque.", "error");
+        if (tipoItem == '') {
+            smartAlert("Erro", "Informe o campo Tipo Item.", "error");
             return false;
         }
 
@@ -719,15 +714,15 @@ include("inc/scripts.php");
     }
 
     function clearFormGrupoDeItem() {
-        $('#estoque').val("");
-        $('#grupoItem').val("");
+        $('#tipoItem').val("");
+        $('#fabricante').val("");
         $('#observacao').val('');
     }
 
-    function carregaGrupoDeItem(sequencialGrupoDeItem) {
+    function carregaGrupoDeItem(sequencialTipoItem) {
         // habilitaTodoCampoGrupoDeItem()
-        var arr = jQuery.grep(jsonGrupoItemArray, function(item, i) {
-            return (item.sequencialGrupoDeItem === sequencialGrupoDeItem);
+        var arr = jQuery.grep(jsonTipoItemArray, function(item, i) {
+            return (item.sequencialTipoItem === sequencialTipoItem);
         });
 
 
@@ -735,9 +730,9 @@ include("inc/scripts.php");
         clearFormGrupoDeItem();
         if (arr.length > 0) {
             var item = arr[0];
-            $('#sequencialGrupoDeItem').val(item.sequencialGrupoDeItem);
-            $('#estoque').val(item.estoque);
-            $('#grupoItem').val(item.grupoItem);
+            $('#sequencialTipoItem').val(item.sequencialTipoItem);
+            $('#tipoItem').val(item.tipoItem);
+            $('#fabricante').val(item.fabricante);
             $('#observacao').val(item.observacao);
         }
     }
@@ -749,14 +744,14 @@ include("inc/scripts.php");
         });
 
         if (arrSequencial.length > 0) {
-            for (i = jsonGrupoItemArray.length - 1; i >= 0; i--) {
-                var obj = jsonGrupoItemArray[i];
-                if (jQuery.inArray(obj.sequencialGrupoDeItem, arrSequencial) > -1) {
-                    jsonGrupoItemArray.splice(i, 1);
+            for (i = jsonTipoItemArray.length - 1; i >= 0; i--) {
+                var obj = jsonTipoItemArray[i];
+                if (jQuery.inArray(obj.sequencialTipoItem, arrSequencial) > -1) {
+                    jsonTipoItemArray.splice(i, 1);
                 }
             }
 
-            $("#jsonGrupoItem").val(JSON.stringify(jsonGrupoItemArray));
+            $("#jsonTipoItem").val(JSON.stringify(jsonTipoItemArray));
             fillTableGrupoDeItem();
         } else {
             smartAlert("Erro", "Selecione pelo menos 1 grupo de item para excluir.", "error");
@@ -1236,7 +1231,7 @@ include("inc/scripts.php");
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var out = piece[1];
-                            var $strArrayGrupoItem = piece[2];
+                            var $strArrayTipoItem = piece[2];
                             var $strArrayTelefone = piece[3];
                             var $strArrayEmail = piece[4];
                             piece = out.split("^");
@@ -1273,11 +1268,11 @@ include("inc/scripts.php");
                             $("#notaFiscal").val(notaFiscal);
                             $("#cep").val(cep);
                             $("#endereco").val(endereco);
-                            $("#jsonGrupoItem").val($strArrayGrupoItem);
+                            $("#jsonTipoItem").val($strArrayTipoItem);
                             $("#jsonTelefone").val($strArrayTelefone);
                             $("#jsonEmail").val($strArrayEmail);
 
-                            jsonGrupoItemArray = JSON.parse($("#jsonGrupoItem").val());
+                            jsonTipoItemArray = JSON.parse($("#jsonTipoItem").val());
                             fillTableGrupoDeItem();
                             jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
                             fillTableTelefone();
@@ -1350,7 +1345,7 @@ include("inc/scripts.php");
         var notaFiscal = $("#notaFiscal").val();
         var cep = $("#cep").val();
         var endereco = $("#endereco").val();
-        var jsonGrupoItemArray = JSON.parse($("#jsonGrupoItem").val());
+        var jsonTipoItemArray = JSON.parse($("#jsonTipoItem").val());
         var jsonTelefoneArray =  JSON.parse($("#jsonTelefone").val());
         var jsonEmailArray =  JSON.parse($("#jsonEmail").val());
 
@@ -1385,7 +1380,7 @@ include("inc/scripts.php");
             return;
         }
 
-        gravaFornecedor(id, cnpj, razaoSocial, apelido, ativo, logradouro, numero, complemento, bairro, cidade, uf, notaFiscal, cep, endereco, jsonGrupoItemArray,jsonTelefoneArray,jsonEmailArray,
+        gravaFornecedor(id, cnpj, razaoSocial, apelido, ativo, logradouro, numero, complemento, bairro, cidade, uf, notaFiscal, cep, endereco, jsonTipoItemArray,jsonTelefoneArray,jsonEmailArray,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");

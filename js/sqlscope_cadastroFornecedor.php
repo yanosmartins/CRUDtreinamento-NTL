@@ -55,47 +55,47 @@ function grava()
     $cep = $_POST['cep'];
     $endereco = $_POST['endereco'];
 
-    $strArrayGrupoItem = $_POST['jsonGrupoItemArray'];
-    $arrayGrupoItem = $strArrayGrupoItem;
-    if (!is_null($strArrayGrupoItem)) {
-        $xmlGrupoItem = "";
-        $nomeXml = "ArrayOfGrupoItem";
-        $nomeTabela = "fornecedorGrupoItem";
-        if (sizeof($arrayGrupoItem) > 0) {
-            $xmlGrupoItem = '<?xml version="1.0"?>';
-            $xmlGrupoItem = $xmlGrupoItem . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+    $strArrayTipoItem = $_POST['jsonTipoItemArray'];
+    $arrayTipoItem = $strArrayTipoItem;
+    if (!is_null($strArrayTipoItem)) {
+        $xmlTipoItem = "";
+        $nomeXml = "ArrayOfTipoItem";
+        $nomeTabela = "fornecedorTipoItem";
+        if (sizeof($arrayTipoItem) > 0) {
+            $xmlTipoItem = '<?xml version="1.0"?>';
+            $xmlTipoItem = $xmlTipoItem . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
 
-            foreach ($arrayGrupoItem as $chave) {
-                $xmlGrupoItem = $xmlGrupoItem . "<" . $nomeTabela . ">";
+            foreach ($arrayTipoItem as $chave) {
+                $xmlTipoItem = $xmlTipoItem . "<" . $nomeTabela . ">";
                 foreach ($chave as $campo => $valor) {
 
-                    if (($campo === "sequencialGrupoDeItem")) {
+                    if (($campo === "sequencialTipoItem")) {
                         continue;
                     }
 
 
-                    $xmlGrupoItem = $xmlGrupoItem . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+                    $xmlTipoItem = $xmlTipoItem . "<" . $campo . ">" . $valor . "</" . $campo . ">";
                 }
-                $xmlGrupoItem = $xmlGrupoItem . "</" . $nomeTabela . ">";
+                $xmlTipoItem = $xmlTipoItem . "</" . $nomeTabela . ">";
             }
-            $xmlGrupoItem = $xmlGrupoItem . "</" . $nomeXml . ">";
+            $xmlTipoItem = $xmlTipoItem . "</" . $nomeXml . ">";
         } else {
-            $xmlGrupoItem = '<?xml version="1.0"?>';
-            $xmlGrupoItem = $xmlGrupoItem . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-            $xmlGrupoItem = $xmlGrupoItem . "</" . $nomeXml . ">";
+            $xmlTipoItem = '<?xml version="1.0"?>';
+            $xmlTipoItem = $xmlTipoItem . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+            $xmlTipoItem = $xmlTipoItem . "</" . $nomeXml . ">";
         }
 
-        $xml = simplexml_load_string($xmlGrupoItem);
+        $xml = simplexml_load_string($xmlTipoItem);
 
         if ($xml === false) {
             $mensagem = "Erro na criação do XML de Vale Transporte";
             echo "failed#" . $mensagem . ' ';
             return;
         }
-        $xmlGrupoItem = "'" . $xmlGrupoItem . "'";
+        $xmlTipoItem = "'" . $xmlTipoItem . "'";
     } else {
 
-        $xmlGrupoItem = "'" . '<?xml version="1.0"?>' . '<' . "ArrayOfGrupoItem" . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">' . "</ArrayOfGrupoItem>" . "'";
+        $xmlTipoItem = "'" . '<?xml version="1.0"?>' . '<' . "ArrayOfTipoItem" . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">' . "</ArrayOfTipoItem>" . "'";
     }
 
     $strArrayTelefone = $_POST['jsonTelefoneArray'];
@@ -189,7 +189,7 @@ function grava()
         "'" .   $cep . "'" . "," .
         "'" .   $endereco . "'"  . "," .
         "'" .   $usuario . "'"  . "," .
-        $xmlGrupoItem . "," .
+        $xmlTipoItem . "," .
         $xmlTelefone . "," .
         $xmlEmail;
 
@@ -259,38 +259,38 @@ function recupera()
         $endereco =  $row['endereco'];
 
 
-        // ARRAY GRUPO ITEM // 
+        // ARRAY TIPO ITEM // 
         $reposit = "";
         $result = "";
-        $sql = "SELECT  F.codigo,FGI.codigo,FGI.estoque,FGI.grupoItem,FGI.observacao,E.codigo,E.descricao AS estoqueText,GI.codigo,GI.descricao AS grupoItemText FROM ntl.fornecedor F
-        INNER JOIN ntl.fornecedorGrupoItem FGI ON F.codigo = FGI.fornecedor 
-        INNER JOIN estoque.estoque E ON FGI.estoque = E.codigo
-		INNER JOIN estoque.grupoItem GI ON FGI.estoque = GI.codigo
+        $sql = "SELECT  F.codigo,FTI.codigo,FTI.tipoItem,FTI.fabricante,FTI.observacao,FA.codigo,FA.descricao AS fabricanteText,TI.codigo,TI.descricao AS tipoItemText FROM ntl.fornecedor F
+        INNER JOIN ntl.fornecedorTipoItem FTI ON F.codigo = FTI.fornecedor 
+        INNER JOIN estoque.fabricante FA ON FTI.fabricante = FA.codigo
+		INNER JOIN estoque.tipoItem TI ON FTI.tipoItem = TI.codigo
         WHERE F.codigo = $id";
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
 
-        $contadorGrupoItem = 0;
-        $arrayGrupoItem = array();
+        $contadorTipoItem = 0;
+        $arrayTipoItem = array();
         foreach ($result as $row) {
-            $estoque = (string)$row['estoqueText'];
-            $grupoItem = (string)$row['grupoItemText'];
+            $fabricante = (string)$row['fabricanteText'];
+            $tipoItem = (string)$row['tipoItemText'];
             $observacao = (string)$row['observacao'];
-            $estoqueId = (int) $row['estoque'];
-            $grupoItemId = (int) $row['grupoItem'];
+            $fabricanteId = (int) $row['fabricante'];
+            $tipoItemId = (int) $row['tipoItem'];
 
-            $contadorGrupoItem = $contadorGrupoItem + 1;
-            $arrayGrupoItem[] = array(
-                "sequencialGrupoDeItem" => $contadorGrupoItem,
-                "estoqueText" => $estoque,
-                "grupoItemText" => $grupoItem,
+            $contadorTipoItem = $contadorTipoItem + 1;
+            $arrayTipoItem[] = array(
+                "sequencialTipoItem" => $contadorTipoItem,
+                "fabricanteText" => $fabricante,
+                "tipoItemText" => $tipoItem,
                 "observacao" => $observacao,
-                "estoque" => $estoqueId,
-                "grupoItem" => $grupoItemId
+                "fabricante" => $fabricanteId,
+                "tipoItem" => $tipoItemId
             );
         }
 
-        $strArrayGrupoItem = json_encode($arrayGrupoItem);
+        $strArrayTipoItem = json_encode($arrayTipoItem);
 
         // ARRAY TELEFONE // 
         $reposit = "";
@@ -390,7 +390,7 @@ function recupera()
             echo "failed#";
         }
         if ($out != '') {
-            echo "sucess#" . $out . "#" . $strArrayGrupoItem . "#" . $strArrayTelefone . "#" . $strArrayEmail;
+            echo "sucess#" . $out . "#" . $strArrayTipoItem . "#" . $strArrayTelefone . "#" . $strArrayEmail;
         }
 
         return;

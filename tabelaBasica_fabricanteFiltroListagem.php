@@ -1,95 +1,59 @@
 <?php
-include "js/repositorio.php";
+    include "js/repositorio.php"; 
 ?>
 <div class="table-container">
     <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Fornecedor</th> 
-                    <th class="text-left" style="min-width:30px;">tipo Item</th>
-                    <th class="text-left" style="min-width:20px;">Telefone</th>
-                    <th class="text-left" style="min-width:20px;">UF</th>
-                    <th class="text-left" style="min-width:20px;">Bairro</th>
-                    <th class="text-left" style="min-width:20px;">NF</th>
-
+                    <th class="text-left" style="min-width:30px;">Fabricante</th>
+                     <th class="text-left" style="min-width:35px;">Ativo</th>
+                   
                 </tr>
             </thead>
             <tbody>
-                <?php
-                $apelido = "";
-                $tipoItem = "";
-                $notaFiscal = "";
-               
-                $where = "where (0 = 0)";
+                <?php 
                 
-                $sql = "SELECT F.codigo, F.apelido, F.ativo, 
-                 F.notaFiscal,UF.sigla,FT.fornecedor, FT.telefone AS tel ,
-                 FT.telefonePrincipal, F.uf, F.bairro, FTI.tipoItem,
-                 TI.descricao AS tipoItem, TI.codigo FROM ntl.fornecedor F
-                INNER JOIN ntl.fornecedorTipoItem FTI ON FTI.fornecedor = F.codigo AND F.ativo = 1
-                INNER JOIN Estoque.tipoItem TI ON TI.codigo = FTI.tipoItem 
-                INNER JOIN ntl.unidadeFederacao UF ON F.uf = UF.sigla 
-                INNER JOIN ntl.fornecedorTelefone FT ON FT.fornecedor = F.codigo AND FT.telefonePrincipal = 1 ";
+                    $descricaoFiltro = "";
 
-        
-                if ($_GET["tipoItem"] != "") {
-                    $tipoItem = $_GET["tipoItem"];
-                    $where = $where . " AND [tipoItem] = " . $tipoItem;
-                }
-
-                if ($_GET["tel"] != "") {
-                    $telefone = $_GET["tel"];
-                    $where = $where . " AND [tel] = '" .  $telefone . "'";
-                }
-
-                if ($_GET["sigla"] != "") {
-                    $sigla = $_GET["sigla"];
-                    $where = $where . " AND [uf] = '" .  $sigla . "'";
-                }
-
-                if ($_GET["fornecedor"] != "") {
-                    $fornecedor = $_GET["fornecedor"];
-                    $where = $where . " AND F.codigo = " . $fornecedor;
-                }
-
-                if ($_GET["bairro"] != "") {
-                    $bairro = $_GET["bairro"];
-                    $where = $where . " AND [bairro] = " . $bairro;
-                }
-
-                if ($_GET["notaFiscal"] != "") {
-                    $notaFiscal = $_GET["notaFiscal"];
-                    $where = $where . " AND [notaFiscal] = " . $notaFiscal;
-                }
-                $sql .=$where;
-                $reposit = new reposit();
-                $result = $reposit->RunQuery($sql);
-
-                foreach($result as $row) {
-                    $id = (int) $row['fornecedor'];
-                    $apelido = (string)$row['apelido'];
-                    $tipoItem = (string)$row['tipoItem'];
-                    $telefone = (string)$row['tel'];
-                    $sigla = (string)$row['sigla'];
-                    $bairro = (string)$row['bairro']; 
-                    $notaFiscal = $row['notaFiscal'];
-     
-                    if ($notaFiscal == 1) {
-                        $notaFiscal = "Sim";
-                    } else {
-                        $notaFiscal = "Não";
+                    $ativoFiltro = "";
+                    $where = " WHERE (0 = 0)";
+                     
+                    if ($_GET["descricaoFiltro"] != "") {
+                        $descricaoFiltro = $_GET["descricaoFiltro"];
+                        $where = $where." AND descricao like '%' + "."replace('".$descricaoFiltro."',' ','%') + "."'%'";
                     }
 
-                    echo '<tr >';
-                    echo '<td class="text-left"><a href="cadastro_fornecedorCadastro.php?codigo=' . $id . '">' . $apelido . '</a></td>';  
-                    echo '<td class="text-left">' . $tipoItem . '</td>';
-                        echo '<td class="text-left">' . $telefone . '</td>';
-                    echo '<td class="text-left">' . $sigla . '</td>';
-                    echo '<td class="text-left">' . $bairro . '</td>';       
-                    echo '<td class="text-left">' . $notaFiscal . '</td>';
-                    echo '</tr >';
-                }
+                     if ($_GET["ativoFiltro"] != "") {
+                        $ativoFiltro = $_GET["ativoFiltro"];
+                        $where = $where." AND ativo = $ativoFiltro";
+                    } 
+                    
+                    $sql = "SELECT codigo,descricao,ativo FROM Estoque.fabricante";
+                    $sql = $sql.$where;
+                    
+                    $reposit = new reposit();                                       
+                    $result=$reposit->RunQuery($sql);
+
+                    foreach($result as $row) {
+                        $id = (int) $row['codigo'];
+                        $descricao = $row['descricao'];
+                        $ativo = (int) $row['ativo'];
+                        
+                        //Modifica os valores booleanos por Sim e Não. 
+                        //Ativo
+                        if ($ativo==1){
+                            $descricaoAtivo = "Sim";
+                        }
+                        else{
+                            $descricaoAtivo = "Não";                            
+                        }
+                         
+                        echo '<tr >'; 
+                        echo '<td class="text-left"><a href="tabelaBasica_fabricanteCadastro.php?codigo='.$id.'">'.$descricao.'</a></td>';
+                        echo '<td class="text-left">'.$descricaoAtivo.'</td>';
+                        echo '</tr >';
+                    }
                 ?>               
             </tbody>
         </table>        
@@ -103,7 +67,7 @@ include "js/repositorio.php";
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css"/>
-
+ 
 <script type="text/javascript" src="js/plugin/JSZip-2.5.0/jszip.min.js"></script>
 <script type="text/javascript" src="js/plugin/pdfmake-0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="js/plugin/pdfmake-0.1.36/vfs_fonts.js"></script>
@@ -121,8 +85,6 @@ include "js/repositorio.php";
             tablet: 1024,
             phone: 480
         };
-
-        /* TABLETOOLS */
         $('#tableSearchResult').dataTable({
 
             // Tabletools options:
@@ -158,10 +120,10 @@ include "js/repositorio.php";
                 //{extend: 'csv', className: 'btn btn-default'},
                 {extend: 'excel', className: 'btn btn-default'},
                 {extend: 'pdf', className: 'btn btn-default'},
-                        //{extend: 'print', className: 'btn btn-default'}
+                //{extend: 'print', className: 'btn btn-default'}
             ],
             "autoWidth": true,
-
+            
             "preDrawCallback": function () {
                 // Initialize the responsive datatables helper once.
                 if (!responsiveHelper_datatable_tabletools) {
