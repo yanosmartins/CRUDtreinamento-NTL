@@ -5,6 +5,7 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
+// //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('SITUACAO_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('SITUACAO_GRAVAR', $arrayPermissao, true));
 $condicaoExcluirOK = (in_array('SITUACAO_EXCLUIR', $arrayPermissao, true));
@@ -14,17 +15,18 @@ if ($condicaoAcessarOK == false) {
     header("Location:login.php");
 }
 
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
 $esconderBtnGravar = "";
 if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-/* ---------------- PHP Custom Scripts ---------
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
 
+
+/* ---------------- PHP Custom Scripts ---------
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
@@ -48,11 +50,11 @@ include("inc/nav.php");
 <!-- MAIN PANEL -->
 <div id="main" role="main">
     <?php
-    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-    //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
-    include("inc/ribbon.php");
-    ?>
+//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+//$breadcrumbs["New Crumb"] => "http://url.com"
+$breadcrumbs["Tabela Básica"] = "";
+include("inc/ribbon.php");
+?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
@@ -60,19 +62,23 @@ include("inc/nav.php");
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false"
+                        data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false"
+                        style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Siuação</h2>
+                            <h2>Situação</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formSituacao" method="post" enctype="multipart/form-data">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formSituacao"
+                                    method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseCadastro" class="" id="accordionCadastro">
+                                                    <a data-toggle="collapse" data-parent="#accordion"
+                                                        href="#collapseCadastro" class="" id="accordionCadastro">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
                                                         Cadastro
@@ -83,32 +89,37 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <input id="codigo" name="codigo" type="text" class="hidden" value="">
-                                                            <section class="col col-5 col-auto">
-                                                                <label class="label" for="descricao">Descrição</label>
+                                                            <input id="codigo" name="codigo" type="text" class="hidden">
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-6">
+                                                                <label class="label" for="descricao">Nome da
+                                                                    Situação</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" type="text" class="required" maxlength="50" required autocomplete="off">
+                                                                    <input id="descricao" maxlength="255"
+                                                                        name="descricao" type="text" value=""
+                                                                        auto-complete="off" class="required">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="ativo">Ativo</label>
-                                                                <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required" required>
-                                                                        <option value="1">Ativo</option>
-                                                                        <option value="0">Inativo</option>
-                                                                    </select><i></i>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="preview">Visualização</label>
+                                                                <label class="input">
+                                                                    <input id="preview" maxlength="255" name="preview"
+                                                                        type="text" value="Situação" readonly>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="corFonte">Cor Fonte</label>
+
+                                                            <section class="col col-2">
+                                                                <label class="label" for="corFundo">Cor do Fundo</label>
                                                                 <label class="input">
-                                                                    <input id="corFonte" name="corFonte" type="text" class="required" maxlength="20" required autocomplete="off">
+                                                                    <input type="color" id="corFundo" name="corFundo"
+                                                                        value="#ffffff">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="corFundo">Cor Fundo</label>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="corFonte">Cor da Fonte</label>
                                                                 <label class="input">
-                                                                    <input id="corFundo" name="corFundo" type="text" class="required" maxlength="20" required autocomplete="off">
+                                                                    <input type="color" id="corFonte" name="corFonte">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -116,18 +127,23 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                     <footer>
-                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true"
+                                            title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
-                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
-                                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable"
+                                            tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir"
+                                            aria-labelledby="ui-id-1"
+                                            style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                            <div
+                                                class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                                                 <span id="ui-id-2" class="ui-dialog-title">
                                                 </span>
                                             </div>
-                                            <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                            <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content"
+                                                style="width: auto; min-height: 0px; max-height: none; height: auto;">
                                                 <p>CONFIRMA A EXCLUSÃO ? </p>
                                             </div>
                                             <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
@@ -135,13 +151,17 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <button type="submited" id="btnGravar" class="btn btn-success"
+                                            aria-hidden="true" title="Gravar"
+                                            style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
-                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true"
+                                            title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file-o"></span>
                                         </button>
-                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true"
+                                            title="Voltar">
                                             <span class="fa fa-backward "></span>
                                         </button>
                                     </footer>
@@ -174,7 +194,7 @@ include("inc/scripts.php");
 ?>
 
 <script src="<?php echo ASSETS_URL; ?>/js/business_tabelaBasicaSituacao.js" type="text/javascript"></script>
-
+<!-- <script src="<?php echo ASSETS_URL; ?>/js/businessVendedor.js" type="text/javascript"></script> -->
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -195,188 +215,155 @@ include("inc/scripts.php");
 <!--<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>-->
 
 
-<!-- Validador de CPF -->
-<script src="js/plugin/cpfcnpj/jquery.cpfcnpj.js"></script>
-
-
 <!-- Form to json -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/jquery.toObject.js"></script>
 
 
-
-
-
 <script language="JavaScript" type="text/javascript">
-    $(document).ready(function() {
+$(document).ready(function() {
+    carregaPagina();
 
-        carregaPagina();
 
-
-        $('#dlgSimpleExcluir').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            title: "Atenção",
-            buttons: [{
-                html: "Excluir registro",
-                "class": "btn btn-success",
-                click: function() {
-                    $(this).dialog("close");
-                    excluir();
-                }
-            }, {
-                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                "class": "btn btn-default",
-                click: function() {
-                    $(this).dialog("close");
-                }
-            }]
-        });
-
-        $("#btnExcluir").on("click", function() {
-            var id = $("#codigo").val();
-
-            if (id === 0) {
-                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-                $("#nome").focus();
-                return;
+    $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+        _title: function(title) {
+            if (!this.options.title) {
+                title.html("&#160;");
+            } else {
+                title.html(this.options.title);
             }
+        }
+    }));
 
-            if (id !== 0) {
-                $('#dlgSimpleExcluir').dialog('open');
+    $('#dlgSimpleExcluir').dialog({
+        autoOpen: false,
+        width: 400,
+        resizable: false,
+        modal: true,
+        title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+        buttons: [{
+            html: "Excluir registro",
+            "class": "btn btn-success",
+            click: function() {
+                $(this).dialog("close");
+                excluir();
             }
-        });
-
-        $("#btnNovo").on("click", function() {
-            novo();
-        });
-
-        $("#btnGravar").on("click", function() {
-            gravar()
-        });
-
-        $("#btnVoltar").on("click", function() {
-            voltar();
-        });
+        }, {
+            html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+            "class": "btn btn-default",
+            click: function() {
+                $(this).dialog("close");
+            }
+        }]
     });
 
-    function carregaPagina() {
-        var urlx = window.document.URL.toString();
-        var params = urlx.split("?");
-        if (params.length === 2) {
-            var id = params[1];
-            var idx = id.split("=");
-            var idd = idx[1];
-            if (idd !== "") {
-                recuperaSituacao(idd,
-                    function(data) {
-                        if (data.indexOf('failed') > -1) {
-                            return;
-                        } else {
-                            data = data.replace(/failed/g, '');
-                            var piece = data.split("#");
-                            var mensagem = piece[0];
-                            var out = piece[1];
-                            piece = out.split("^");
 
-                            // Atributos de vale transporte unitário que serão recuperados: 
-                            var codigo = +piece[0];
-                            var descricao = piece[1];
-                            var ativo = piece[2];
-                            var corFonte = piece[3];
-                            var corFundo = piece[4];
+    $("#corFundo, #corFonte").on("change", () => {
+        atualizarVisualizacao();
+    });
 
-                            //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
-                            $("#codigo").val(codigo);
-                            $("#descricao").val(descricao);
-                            $("#ativo").val(ativo);
-                            $("#corFonte").val(corFonte);
-                            $("#corFundo").val(corFundo);
-
-                            return;
-
-                        }
-                    }
-                );
-            }
-        }
-        $("#descricao").focus();
-    }
-
-    function novo() {
-        $(location).attr('href', 'tabelaBasica_situacaoCadastro.php');
-    }
-
-    function voltar() {
-        $(location).attr('href', 'tabelaBasica_situacaoFiltro.php');
-    }
-
-    function excluir() {
-        var id = $("#codigo").val();
+    $("#btnExcluir").on("click", function() {
+        var id = +$("#codigo").val();
 
         if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+            smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+            $("#nome").focus();
             return;
         }
 
-        excluirSituacao(id,
-            function(data) {
-                if (data.indexOf('failed') > -1) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                    }
-                    voltar();
-                } else {
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    voltar();
-                }
-            }
-        );
-    }
-
-    function gravar() {
-        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
-        $("#btnGravar").prop('disabled', true);
-        // Variáveis que vão ser gravadas no banco:
-        var id = +$('#codigo').val();
-        var descricao = $('#descricao').val().trim().replace(/'/g, " ");
-        var ativo = +$('#ativo').val();
-        var corFonte = $('#corFonte').val();
-        var corFundo = $('#corFundo').val();
-
-        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        if (!descricao) {
-            smartAlert("Atenção", "Informe a descrição", "error");
-            $("#btnGravar").prop('disabled', false);
-            return;
+        if (id !== 0) {
+            $('#dlgSimpleExcluir').dialog('open');
         }
+    });
 
-        //Chama a função de gravar do business de convênio de saúde.
-        gravaSituacao(id, ativo, descricao, corFonte, corFundo,
-            function(data) {
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        $("#btnGravar").prop('disabled', false);
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                        $("#btnGravar").prop('disabled', false);
+    $("#btnNovo").on("click", function() {
+        novo();
+    });
+
+    $("#btnVoltar").on("click", function() {
+        voltar();
+    });
+});
+
+function carregaPagina() {
+    var urlx = window.document.URL.toString();
+    var params = urlx.split("?");
+    if (params.length === 2) {
+        var id = params[1];
+        var idx = id.split("=");
+        var idd = idx[1];
+        if (idd !== "") {
+            recuperaSituacao(idd,
+                function(data) {
+                    if (data.indexOf('failed') > -1) {} else {
+                        data = data.replace(/failed/g, '');
+                        var piece = data.split("|");
+                        var mensagem = piece[0];
+                        var out = piece[1];
+
+                        debugger;
+                        piece = out.split("^");
+                        codigo = piece[0];
+                        descricao = piece[1];
+                        ativo = piece[2];
+                        corFonte = piece[3];
+                        corFundo = piece[4];
+
+                        $("#codigo").val(codigo);
+                        $("#descricao").val(descricao);
+                        $("#ativo").val(ativo);
+                        $("#corFonte").val(corFonte);
+                        $("#corFundo").val(corFundo);
+
+                        atualizarVisualizacao();
+
                     }
-                    return '';
-                } else {
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
                 }
-            }
-        );
+
+            )
+        };
     }
+    $("#nome").focus();
+
+}
+
+function novo() {
+    $(location).attr('href', 'tabelaBasica_situacaoCadastro.php');
+}
+
+function voltar() {
+    $(location).attr('href', 'tabelaBasica_situacaoFiltro.php');
+}
+
+function excluir() {
+    var codigo = +$("#codigo").val();
+
+    if (codigo === 0) {
+        smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+        return;
+    } 
+    excluirSituacao(codigo);
+}
+
+function gravar() { 
+    let descricao = $("#descricao").val();
+
+    if (descricao === "") {
+        smartAlert("Atenção", "Informe o Nome da Situação !", "error");
+        $("#descricao").focus();
+        return;
+    }
+
+    let form = $('#formSituacao')[0];
+    let formData = new FormData(form);
+    gravaSituacao(formData);
+}
+
+function atualizarVisualizacao() {
+    let corFundo = document.querySelector('#corFundo').value;
+    let corFonte = document.querySelector('#corFonte').value;
+    document.getElementById('preview').style.background = corFundo;
+    document.getElementById('preview').style.color = corFonte;
+}
+
 </script>

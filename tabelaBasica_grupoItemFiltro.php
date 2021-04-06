@@ -109,8 +109,25 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2">
+                                                                <label class="label" for="localizacaoItem">Unidade</label>
+                                                                <label class="select">
+                                                                    <select id="unidade" name="unidade" class="">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao FROM Ntl.unidade WHERE ativo = 1 ORDER BY descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $id = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
                                                                     <input id="descricao" name="descricao" style="text-align: right;" type="text" autocomplete="off">
@@ -202,10 +219,10 @@ include("inc/scripts.php");
         var estoque = $('#estoque').val();
         var descricao = $('#descricao').val();
         var ativo = $('#ativo').val();
+        var unidade = $('#unidade').val();
 
-        var parametrosUrl = '&estoque=' + estoque;
-        var parametrosUrl = '&descricao=' + descricao;
-        parametrosUrl = '&ativo=' + ativo;
+        var parametrosUrl = '&estoque=' + estoque + '&descricao=' + descricao + '&unidade=' + unidade + '&ativo=' + ativo;
+
         $('#resultadoBusca').load('tabelaBasica_grupoItemFiltroListagem.php?' + parametrosUrl);
     }
 </script>

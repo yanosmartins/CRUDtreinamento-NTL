@@ -38,8 +38,8 @@ include "js/repositorio.php";
                     FROM ntl.pregao GP
                     LEFT JOIN ntl.portal P ON P.codigo = GP.portal
                     LEFT JOIN ntl.situacao S ON S.codigo = GP.situacao
-                    INNER JOIN ntl.grupo G ON G.codigo = GP.grupoResponsavel
-                    INNER JOIN ntl.responsavel R ON R.codigo = GP.responsavel";
+                    LEFT JOIN ntl.grupo G ON G.codigo = GP.grupoResponsavel
+                    LEFT JOIN ntl.responsavel R ON R.codigo = GP.responsavel";
                 $where = " WHERE (0 = 0) AND GP.participaPregao = 1 AND GP.condicao = 2 AND GP.dataReabertura <= " . $hoje;
 
                 if ($_POST["numeroPregao"] != "") {

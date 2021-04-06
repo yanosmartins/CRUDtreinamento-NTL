@@ -20,10 +20,15 @@ $condicaoPesadaGravarOK = (in_array('PONTOELETRONICOMENSALPESADA_GRAVAR', $array
 $condicaoPesadaExcluirOK = (in_array('PONTOELETRONICOMENSALPESADA_EXCLUIR', $arrayPermissao, true));
 
 $esconderCampo = "";
-if ($condicaoNormalGravarOK || $condicaoPesadaGravarOK) {
-    $esconderCampo = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
-} else if ($condicaoLeveGravarOK) {
-    $esconderCampo = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
+if ($condicaoPesadaGravarOK) {
+    $esconderCampoPesado = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
+}
+if ($condicaoNormalGravarOK) {
+    $esconderCampoNormal = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
+}
+if ($condicaoLeveGravarOK) {
+    $esconderCampoPesado = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
+    $esconderCampoNormal = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
 }
 
 if (($condicaoLeveAcessarOK == false) && ($condicaoNormalAcessarOK == false) && ($condicaoPesadaAcessarOK == false)) {
@@ -119,7 +124,15 @@ include("inc/nav.php");
                                                                     <section class="col col-4">
                                                                         <label class="label " for="funcionario">Funcionário</label>
                                                                         <label class="select">
-                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:<?php echo $esconderCampo['touch-action']; ?>;pointer-events:<?php echo $esconderCampo['pointer-events']; ?>">
+                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:<?php if ($esconderCampoPesado) {
+                                                                                                                                                                            echo $esconderCampoPesado['touch-action'];
+                                                                                                                                                                        } else if ($esconderCampoNormal) {
+                                                                                                                                                                            echo $esconderCampoNormal['touch-action'];
+                                                                                                                                                                        } ?>;pointer-events:<?php if ($esconderCampoPesado) {
+                                                                                                                                                                                                echo $esconderCampoPesado['pointer-events'];
+                                                                                                                                                                                            } else if ($esconderCampoNormal) {
+                                                                                                                                                                                                echo $esconderCampoNormal['pointer-events'];
+                                                                                                                                                                                            } ?>">
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
@@ -240,7 +253,11 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Dia</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control required" required data-autoclose="true" value="">
+                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control required <?php if ($esconderCampoPesado) {
+                                                                                                                                                                            echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                        } ?>" required data-autoclose="true" <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                                                    echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                                                                } ?>>
                                                                         </div>
                                                                     </div>
                                                                 </section>
@@ -249,7 +266,11 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Entrada</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                            <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                    echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                                } ?>" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                                                                                                echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                                                                                                            } ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -259,7 +280,11 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Inicio/Almoço</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:00">
+                                                                            <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                    echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                                } ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                                                                                        echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                                                                                                    } ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -269,7 +294,11 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Fim/Almoço</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control" placeholder="00:00" data-autoclose="true" value="12:15">
+                                                                            <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                            } ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                                                                                    echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                                                                                                } ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -279,7 +308,11 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Saída</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control" placeholder="  00:00:00" data-autoclose="true" value="">
+                                                                            <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                            } ?>" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                                                                                            echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                                                                                                        } ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -289,7 +322,11 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">H.Extra</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control readonly" readonly disabled placeholder="  00:00" data-autoclose="true" value="">
+                                                                            <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                            } ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                                                                                    echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                                                                                                } ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -299,7 +336,11 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Atraso</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control readonly" placeholder="  00:00" data-autoclose="true" disabled readonly value="">
+                                                                            <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control <?php if ($esconderCampoPesado) {
+                                                                                                                                                                        echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                    } ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                                                                            echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                                                                                        } ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -308,8 +349,17 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="lancamento">Lançamento/Ocorrência</label>
                                                                     <label class="select">
-                                                                        <select id="inputLancamento" name="inputLancamento">
-                                                                            <option value="0"></option>
+                                                                        <select id="inputLancamento" name="inputLancamento" style="touch-action:<?php if ($esconderCampoPesado) {
+                                                                                                                                                    echo $esconderCampoPesado['touch-action'];
+                                                                                                                                                } ?>;pointer-events:<?php if ($esconderCampoPesado) {
+                                                                                                                                                                        echo $esconderCampoPesado['pointer-events'];
+                                                                                                                                                                    } ?>" <?php if ($esconderCampoPesado) {
+                                                                                                                                                                                echo $esconderCampoPesado['readonly'];
+                                                                                                                                                                            } ?> class="
+                                                                        <?php if ($esconderCampoPesado) {
+                                                                            echo $esconderCampoPesado['readonly'];
+                                                                        } ?>">
+                                                                            <option selected value="0"></option>
                                                                             <?php
                                                                             $reposit = new reposit();
                                                                             $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
@@ -320,7 +370,7 @@ include("inc/nav.php");
                                                                                 echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                             }
                                                                             ?>
-                                                                        </select>
+                                                                        </select><i></i>
                                                                     </label>
                                                                 </section>
 
@@ -329,8 +379,10 @@ include("inc/nav.php");
                                                             <div class="row">
                                                                 <section class="col col-md-2">
                                                                     <label class="label"> </label>
-                                                                    <button id="btnAddPonto" type="button" class="btn btn-primary">
-                                                                        <i class="">Lançar Ponto</i>
+                                                                    <button id="btnAddPonto" type="button" class="btn btn-primary" style="display:<?php if ($esconderCampoPesado) {
+                                                                                                                                                        echo $esconderCampoPesado['display'];
+                                                                                                                                                    } ?>">
+                                                                        <i class="">Adicionar Ponto</i>
                                                                     </button>
                                                                 </section>
                                                                 <section class="col col-8">
@@ -339,8 +391,10 @@ include("inc/nav.php");
                                                                 </section>
                                                                 <section class="col col-md-1">
                                                                     <label class=" label"> </label>
-                                                                    <button id="btnGravar" type="button" class="btn btn-success">
-                                                                        <i class="">Confirmar Alterações</i>
+                                                                    <button id="btnGravar" type="button" class="btn btn-success" style="display:<?php if ($esconderCampoPesado) {
+                                                                                                                                                    echo $esconderCampoPesado['display'];
+                                                                                                                                                } ?>">
+                                                                        <i class="">Salvar alterações</i>
                                                                     </button>
                                                                 </section>
 
@@ -378,7 +432,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Inicio/Almoço</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"inicioAlmoco-$i\" name=\"inicioAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"inicioAlmoco-$i\" name=\"inicioAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -388,7 +442,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label class=\"label\">Fim/Almoço</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"fimAlmoco-$i\" name=\"fimAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"fimAlmoco-$i\" name=\"fimAlmoco\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -398,7 +452,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">Saída</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaSaida-$i\" name=\"horaSaida\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaSaida-$i\" name=\"horaSaida\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"00:00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -408,7 +462,7 @@ include("inc/nav.php");
                                                                         <div class=\"form-group\">
                                                                             <label id=\"labelHora\" class=\"label\">H.Extra</label>
                                                                             <div class=\"input-group\" data-align=\"top\" data-autoclose=\"true\">
-                                                                                <input id=\"horaExtra-$i\" name=\"horaExtra\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"  00:00\" data-autoclose=\"true\" value=\"\">
+                                                                                <input id=\"horaExtra-$i\" name=\"horaExtra\" type=\"text\" class=\"text-center form-control readonly\" readonly desabled placeholder=\"00:00\" data-autoclose=\"true\" value=\"\">
                                                                                 <span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>
                                                                             </div>
                                                                         </div>
@@ -428,7 +482,7 @@ include("inc/nav.php");
                                                                         <label class=\"label\" for=\"lancamento\">Lançamento/Ocorrência</label>
                                                                         <label class=\"select\">
                                                                             <select id=\"lancamento-$i\" name=\"lancamento\" class=\" readonly\" readonly style= \"pointer-events: none; touch-action: none\" tabindex=\"-1\">
-                                                                                <option value=\"0\"></option>";
+                                                                                <option value=\"0\" selected></option>";
 
                                                                 $reposit = new reposit();
                                                                 $sql = "select codigo, sigla, descricao from Ntl.lancamento where ativo = 1 order by descricao";
@@ -438,7 +492,7 @@ include("inc/nav.php");
                                                                     $descricao = $row['descricao'];
                                                                     echo "<option value='$codigo'>$descricao</option>";
                                                                 }
-                                                                echo " </select><i></i>
+                                                                echo " </select>
                                                                         </label>
                                                                     </section>
                                                                 </div>
@@ -459,9 +513,9 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                         <footer>
-                                            <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                            <!-- <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
                                                 <span class="fa fa-trash"></span>
-                                            </button>
+                                            </button> -->
                                             <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                                                     <span id="ui-id-2" class="ui-dialog-title">
@@ -476,13 +530,13 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
 
-                                            <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <!-- <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                                 <span class="fa fa-file-o"></span>
                                             </button>
 
                                             <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
                                                 <span class="fa fa-backward"></span>
-                                            </button>
+                                            </button> -->
 
                                         </footer>
                                 </form>
@@ -542,53 +596,6 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
 
-        //TIME INPUT
-        $("#inputHoraEntrada").mask("99:99:99");
-
-        $('#inputHoraEntrada').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
-        }).val(moment().format('HH:mm:ss'));
-
-        $("#inputHoraSaida").mask("99:99:99");
-
-        $('#inputHoraSaida').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            use24hours: true,
-        }).val(moment().format('HH:mm:ss'));
-
-        $("#inputInicioAlmoco").mask("99:99");
-
-        $('#inputInicioAlmoco').clockpicker({
-            donetext: 'Done',
-            use24hours: true,
-        }).val(moment().format('HH:mm'));
-
-        $("#inputFimAlmoco").mask("99:99");
-
-        $('#inputFimAlmoco').clockpicker({
-            donetext: 'Done',
-            use24hours: true,
-        }).val(moment().format('HH:mm'));
-
-        $("#inputHoraExtra").mask("99:99");
-
-        // $('#inputHoraExtra').clockpicker({
-        //     donetext: 'Done',
-        //     default: 'now',
-        //     use24hours: true,
-        // }).val(moment().format('HH:mm'));
-
-        $("#inputAtraso").mask("99:99");
-
-        // $('#inputAtraso').clockpicker({
-        //     donetext: 'Done',
-        //     default: 'now',
-        //     use24hours: true,
-        // }).val(moment().format('HH:mm'));
-
         $("#funcionario").on("change", function() {
             var funcionario = $("#funcionario").val();
             var codigo = $("#expediente option[data-funcionario ='" + funcionario + "']").val();
@@ -596,17 +603,26 @@ include("inc/scripts.php");
             selecionaFolha();
         });
 
+        $('#inputDia').on('keydown', () => {
+            const dia = $("#inputDia").val();
+            const mask = /\D/.test(dia);
+            if (mask) {
+                return $("#inputDia").val('');
+            }
+            return $("#inputDia").val(dia.slice(0, 1));
+        });
+
         $('#inputDia').on('change', function() {
-            var dia = $("#inputDia").val()
+            var dia = $("#inputDia").val();
 
             var entrada = $("#horaEntrada-" + dia).val()
             var inputEntrada = $("#inputHoraEntrada")
 
-            var inicioAlmoco = $("#inicioAlmoco-" + dia).val()
-            var inputInicioAlmoco = $("#inputInicioAlmoco")
+            // var inicioAlmoco = $("#inicioAlmoco-" + dia).val()
+            // var inputInicioAlmoco = $("#inputInicioAlmoco")
 
-            var fimAlmoco = $("#fimAlmoco-" + dia).val()
-            var inputFimAlmoco = $("#inputFimAlmoco")
+            // var fimAlmoco = $("#fimAlmoco-" + dia).val()
+            // var inputFimAlmoco = $("#inputFimAlmoco")
 
             var saida = $("#horaSaida-" + dia).val()
             var inputSaida = $("#inputHoraSaida")
@@ -621,8 +637,8 @@ include("inc/scripts.php");
             var inputLancamento = $("#inputLancamento")
 
             inputEntrada.val(entrada)
-            inputInicioAlmoco.val(inicioAlmoco)
-            inputFimAlmoco.val(fimAlmoco)
+            // inputInicioAlmoco.val(inicioAlmoco)
+            // inputFimAlmoco.val(fimAlmoco)
             inputSaida.val(saida)
             inputExtra.val(extra)
             inputAtraso.val(atraso)
@@ -650,6 +666,7 @@ include("inc/scripts.php");
 
             var saida = $("#horaSaida-" + dia)
             var inputSaida = $("#inputHoraSaida").val()
+            if (!inputSaida) inputSaida = '00:00:00';
 
             var extra = $("#horaExtra-" + dia)
             var inputExtra = $("#inputHoraExtra").val()
@@ -660,74 +677,86 @@ include("inc/scripts.php");
             var lancamento = $("#lancamento-" + dia)
             var inputLancamento = $("#inputLancamento").val()
 
-            if (!inputEntrada) {
-                smartAlert("Atenção", "A hora de entrada deve ser preenchida", "error");
-                return
-            }
 
-            if (!inputSaida) {
-                smartAlert("Atenção", "A hora de saída deve ser preenchida", "error");
-                return
-            }
 
-            //--------------------------------------------------------------------------------
+            // if ((!inputEntrada || inputEntrada == "00:00:00") && !inputLancamento) {
+            //     smartAlert("Atenção", "A HORA DE ENTRADA deve ser preenchida", "error");
+            //     return
+            // }
 
-            const data = new Date(); //.toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'});
+            // if (inputSaida == "00:00:00" && (inputExtra != "00:00:00")) {
+            //     smartAlert("Atenção", "Preencha a HORA DE SAÍDA para preencher a HORA EXTRA", "error");
+            //     return
+            // }
 
             let separador = $("#expediente option:selected").text();
-            if (separador) {
-                separador = separador.split("-");
-                separador[0] = separador[0].trim();
-                separador[1] = separador[1].trim();
-
-                if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
-                if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
-            }else{
-                smartAlert('Atenção','Não foi possível calcular as horas extras/atrasos','error');
-                return;
+            if (!separador) {
+                separador = '00:00 - 00:00';
             }
+            separador = separador.split("-");
+            separador[0] = separador[0].trim();
+            separador[1] = separador[1].trim();
+
+            if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
+            if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
 
             const inicioExpediente = separador[0];
             const fimExpediente = separador[1];
 
             const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
-            const horaSaida = aleatorizarTempo(inputSaida, fimExpediente);
+            const horaSaida = aleatorizarTempo(inputSaida, fimExpediente)
 
-            let horasFuncionario = diferencaHoras(horaSaida, horaEntrada,'00:00:00');
-            let horasExpediente = diferencaHoras(fimExpediente, inicioExpediente,'00:00:00');
+            // const totalHoras = calcularTotalHoras(horaEntrada, horaSaida);
+            // const totalExpediente = calcularTotalHoras(inicioExpediente, fimExpediente);
 
-            console.table({
-                horaFuncionario: horasFuncionario,
-                horaExpediente: horasExpediente
-            })
+            // const horaExtra = calcularHoraExtra(totalHoras, totalExpediente)
 
-            let horaExtra = diferencaHoras(horasFuncionario, horasExpediente, '00:00');
-            
-            let horaAtraso = diferencaHoras(horasExpediente, horasFuncionario, '00:00');
-            horaAtraso = horaAtraso.replace('-','');
-            if(horaExtra != '00:00')
-                horaAtraso = '00:00';
+            // testando
+            const parseHoraEntrada = parse(horaEntrada)
+            const parseHoraSaida = parse(horaSaida)
+            const parseHoraInicio = parse(inicioExpediente)
+            const parseHoraFim = parse(fimExpediente)
 
-            if (!horaExtra) {
-                smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
-                return
+            let jornadaNormal = duracao(inicioExpediente, fimExpediente);
+
+            // quantidade de minutos efetivamente trabalhados
+            let jornada = duracao(horaEntrada, horaSaida);
+
+            // diferença entre as jornadas
+            let diff = Math.abs(jornada - jornadaNormal);
+
+            if (diff != 0) {
+                let horas = Math.floor(diff / 60);
+                let minutos = diff - (horas * 60);
+
+                if (horas.toString().length < 2) horas = `0${horas}`;
+                if (minutos.toString().length < 2) minutos = `0${minutos}`;
+               
+                if (jornada > jornadaNormal) {
+                    inputExtra = (`${horas}:${minutos}`);
+                } else {
+                    inputAtraso = (`${horas}:${minutos}`)
+                }
             }
-            if (!horaAtraso) {
-                smartAlert("Atenção", "Não foi possível calcular as horas de atraso", "error");
-                return
-            }
 
-            entrada.val(horaEntrada)
-            inicioAlmoco.val(inputInicioAlmoco)
-            fimAlmoco.val(inputFimAlmoco)
-            saida.val(horaSaida)
-            extra.val(horaExtra)
-            atraso.val(horaAtraso)
-            lancamento.val(inputLancamento)
+            // if (!horaExtra) {
+            //     smartAlert("Atenção", "Não foi possível calcular as horas extras trabalhadas", "error");
+            //     return
+            // }
+            // if (!horaAtraso) {
+            //     smartAlert("Atenção", "Não foi possível calcular as horas de atraso", "error");
+            //     return
+            // }
 
-            $("#inputExtra").val('');
-            $("#inputAtraso").val('');
-            // $().val('');
+            entrada.val(horaEntrada);
+            inicioAlmoco.val(inputInicioAlmoco);
+            fimAlmoco.val(inputFimAlmoco);
+            extra.val(inputExtra);
+            atraso.val(inputAtraso);
+            saida.val(horaSaida);
+            lancamento.val(inputLancamento);
+
+
 
             return;
         });
@@ -828,13 +857,16 @@ include("inc/scripts.php");
             }
         })
 
-        arrayFolha = $("select[name='lancamento'] option:selected")
-        var arrayLancamento = new Array()
+        arrayFolha = $("select[name='lancamento']");
+        var arrayLancamento = new Array();
         arrayFolha.each((index, el) => {
-            let value = Number($(el).val())
+            if ($(el).val() == null)
+                $(el).val(0);
+            let value = Number($(el).val());
             arrayLancamento.push({
                 lancamento: Number(value)
             })
+
         })
 
         var codigo = Number($("#codigo").val())
@@ -941,22 +973,32 @@ include("inc/scripts.php");
                     var funcionario = piece[1];
                     var observacao = piece[2];
                     var mesAnoFolhaPonto = piece[3];
-
+                    debugger
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
-                    $("#obvercao").val(observacao);
+                    $("#observacaoFolhaPontoMensal").val(observacao);
                     $("#mesAno").val(mesAnoFolhaPonto);
                 } else {
                     $("#codigo").val(0);
-                    $("#obvercao").val("");
+                    $("#observacaoFolhaPontoMensal").val("");
                 }
 
                 //funcionando
+                //-------------------
+                var almoco = $('#almoco option:selected').text().trim();
+                almoco = almoco.split("-");
+                almoco[0] = almoco[0].trim();
+                almoco[1] = almoco[1].trim();
+
+                $("#inputInicioAlmoco").val(almoco[0]);
+                $("#inputFimAlmoco").val(almoco[1]);
+                //-------------------
                 try {
                     preencherPonto(JsonFolha);
                 } catch (e) {
                     limparPonto();
-                    smartAlert("Atenção", "O usuário não possui uma folha registrada desse mês!", "error");
+
+                    smartAlert("Aviso", "O usuário não possui uma folha registrada desse mês!", "info");
                     // throw new Error("O usuário não possui uma folha registrada desse mês!");
                     return
                 }
@@ -991,11 +1033,11 @@ include("inc/scripts.php");
 
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
-                    $("#obvercao").val(observacao);
+                    $("#observacaoFolhaPontoMensal").val(observacao);
                     $("#mesAno").val(mesAnoFolhaPonto);
                 } else {
                     $("#codigo").val(0);
-                    $("#obvercao").val("");
+                    $("#observacaoFolhaPontoMensal").val("");
                 }
 
                 //funcionando
@@ -1012,12 +1054,12 @@ include("inc/scripts.php");
 
     }
 
+
     //funcionando
     function preencherPonto(object) {
         object = JSON.parse(object);
         object.forEach((obj, index) => {
 
-            $(`#dia-${Number(index) + 1}`).val(obj.dia);
             $(`#horaEntrada-${Number(index) + 1}`).val(obj.entrada);
             $(`#inicioAlmoco-${Number(index)+1}`).val(obj.inicioAlmoco);
             $(`#fimAlmoco-${Number(index) + 1}`).val(obj.fimAlmoco);
@@ -1032,7 +1074,6 @@ include("inc/scripts.php");
         const pontos = $("[name=\"dia\"]").serializeArray()
         pontos.forEach((_, index) => {
 
-            $(`#dia-${Number(index) + 1}`).val('');
             $(`#horaEntrada-${Number(index) + 1}`).val('');
             $(`#inicioAlmoco-${Number(index)+1}`).val('');
             $(`#fimAlmoco-${Number(index) + 1}`).val('');
@@ -1056,7 +1097,7 @@ include("inc/scripts.php");
         if (isNaN(es)) es = Number('00');
 
         if ((h == eh) && (m == em)) {
-            m = Math.floor(Math.random() * (4 - 0)) + 0;
+            m = Math.floor(Math.random() * (3 - 0)) + 0;
             s = Math.floor(Math.random() * 60);
         }
 
@@ -1068,57 +1109,128 @@ include("inc/scripts.php");
         return result;
     }
 
-    function diferencaHoras(hora1, hora2, format) {
-        let [calcH,calcM,calcS] = hora1.split(':');
-        calcH = Number(calcH);
-        calcM = Number(calcM);
-        calcS = Number(calcS);
-
-        calcS = calcS * 1000;
-        calcM = ((calcM * 60) * 1000);
-        calcH  = (((60*calcH)*60)*1000);
-
-        let [calcH2,calcM2,calcS2] = hora2.split(':');
-        calcH2 = Number(calcH2);
-        calcM2 = Number(calcM2);
-        calcS2 = Number(calcS2);
-
-        calcS2 = calcS2 * 1000;
-        calcM2 = ((calcM2 * 60) * 1000);
-        calcH2 = ((Math.pow(60,2)*calcH2)*1000);
-
-        let segundos = (calcS - calcS2)/1000;
-        let minutos = ((calcM - calcM2)/1000)/60;
-        let horas = (((calcH - calcH2)/1000)/60)/60;
-
-        if(segundos < 0 && minutos < 0){
-            segundos = segundos + 60;
-            minutos = minutos + 1;
-        }else if(segundos < 0 && minutos >= 0){
-            minutos = minutos - 1;
+    function parse(horario) {
+        // divide a string em duas partes, separado por dois-pontos, e transforma em número
+        let [hora, minuto] = horario.split(':').map(v => parseInt(v));
+        if (!minuto) { // para o caso de não ter os minutos
+            minuto = 00;
         }
-        if(minutos < 0 && horas < 0){
-            minutos = minutos + 60;
-            horas = horas + 1;
-        }else if(minutos < 0 && horas >= 0){
-            horas = horas - 1;
-        }
-        if(horas < 0){
-            segundos = 0;
-            minutos = 0;
-            horas = 0;
-        }
+        return minuto + (hora * 60);
+    }
 
-        if(segundos.toString().length < 2)
-            segundos = '0'.concat(segundos)
-        if(minutos.toString().length < 2)
-            minutos = '0'.concat(minutos)
-        if(horas.toString().length < 2)
-            horas = '0'.concat(horas)
+    function duracao(inicioExpediente, fimExpediente) {
+        return (parse(fimExpediente) - parse(inicioExpediente));
+    }
 
-        if(format == '00:00')
-            return `${horas}:${minutos}`;
-        if(format == '00:00:00')
-            return `${horas}:${minutos}:${segundos}`;
+
+
+
+
+
+
+
+
+
+
+
+
+    // function calcularTotalHoras(entrada, saida) {
+    //     if (entrada.length <= 5) {
+    //         entrada = entrada + ":00"
+    //     }
+    //     if (saida.length <= 5) {
+    //         saida = saida + ":00"
+    //     }
+
+    //     entrada = entrada.replace(':', '')
+    //     entrada = entrada.replace(':', '')
+    //     saida = saida.replace(':', '')
+    //     saida = saida.replace(':', '')
+
+    //     const total = Number(entrada) + Number(saida)
+    //     let text = String(total).split("")
+    //     let horas = parseInt(`${text[0]}${text[1]}`)
+    //     let minutos = parseInt(`${text[2]}${text[3]}`)
+    //     let segundos = parseInt(`${text[4]}${text[5]}`)
+    //     if (segundos >= 60) {
+    //         segundos = segundos - 60
+    //         minutos += 1
+    //     }
+    //     if (minutos >= 60) {
+    //         minutos = minutos - 60
+    //         horas += 1
+    //     }
+
+    //     minutos = String(minutos).split("")
+    //     if (minutos.length < 2)
+    //         minutos.unshift("0")
+    //     text.splice(2, 1, minutos[0])
+    //     text.splice(3, 1, minutos[1])
+    //     segundos = String(segundos).split("")
+    //     if (segundos.length < 2)
+    //         segundos.unshift("0")
+    //     text.splice(4, 1, segundos[0])
+    //     text.splice(5, 1, segundos[1])
+    //     text.splice(2, 0, ':')
+    //     text.splice(5, 0, ':')
+    //     text = text.join("")
+
+    //     return text
+    // }
+
+    // function calcularHoraExtra(totalHora,totalExpediente) {
+    //     if (totalHora.length <= 5) {
+    //         totalHora = totalHora + ":00"
+    //     }
+    //     if (totalExpediente.length <= 5) {
+    //         totalExpediente = totalExpediente + ":00"
+    //     }
+
+    //     totalHora = totalHora.replace(':', '')
+    //     totalHora = totalHora.replace(':', '')
+    //     totalExpediente = totalExpediente.replace(':', '')
+    //     totalExpediente = totalExpediente.replace(':', '')
+
+    //     let total = Number(totalHora) - Number(totalExpediente)
+    //     let text = String(total).split("")
+    //     if(text.length == 5){
+    //         text.unshift("0")
+    //     }
+    //     let horas = parseInt(`${text[0]}${text[1]}`)
+    //     let minutos = parseInt(`${text[2]}${text[3]}`)
+    //     let segundos = parseInt(`${text[4]}${text[5]}`)
+    //     if (segundos >= 60) {
+    //         segundos = segundos - 60
+    //         minutos -= 1
+    //     }
+    //     if (minutos >= 60) {
+    //         minutos = minutos - 60
+    //         horas -= 1
+    //     }
+
+    //     minutos = String(minutos).split("")
+    //     if (minutos.length < 2)
+    //         minutos.unshift("0")
+    //     text.splice(2, 1, minutos[0])
+    //     text.splice(3, 1, minutos[1])
+    //     segundos = String(segundos).split("")
+    //     if (segundos.length < 2)
+    //         segundos.unshift("0")
+    //     text.splice(4, 1, segundos[0])
+    //     text.splice(5, 1, segundos[1])
+    //     text.splice(2, 0, ':')
+    //     text.splice(5, 0, ':')
+    //     text = text.join("")
+
+    //     if(text.indexOf('-') >= 0){
+    //         return "00:00:00"
+    //     }
+
+    //     return text
+
+    // }
+
+    function calcularHoraAtraso() {
+
     }
 </script>

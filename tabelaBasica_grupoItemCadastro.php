@@ -89,13 +89,29 @@ include("inc/nav.php");
                         <div class="panel-body no-padding">
                           <fieldset>
                             <input id="codigo" name="codigo" type="text" class="hidden" value="0">
-
                             <div class="row ">
-
+                              <section class="col col-3">
+                                <label class="label" for="localizacaoItem">Unidade</label>
+                                <label class="select">
+                                  <select id="unidade" name="unidade" class="required">
+                                    <option value=""></option>
+                                    <?php
+                                    $reposit = new reposit();
+                                    $sql = "SELECT codigo, descricao FROM Ntl.unidade WHERE ativo = 1 ORDER BY descricao";
+                                    $result = $reposit->RunQuery($sql);
+                                    foreach ($result as $row) {
+                                      $id = $row['codigo'];
+                                      $descricao = $row['descricao'];
+                                      echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                    }
+                                    ?>
+                                  </select><i></i>
+                                </label>
+                              </section>
                               <section class="col col-2">
                                 <label class="label">Estoque</label>
                                 <label class="select">
-                                  <select id="estoque" name="estoque" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+                                  <select id="estoque" name="estoque" style="text-align: right;" type="text" class="required readonly" autocomplete="off" required disabled>
                                     <option value=""></option>
                                     <?php
                                     $reposit = new reposit();
@@ -113,14 +129,12 @@ include("inc/nav.php");
                                   </select><i></i>
                                 </label>
                               </section>
-
-                              <section class="col col-2">
+                              <section class="col col-4">
                                 <label class="label">Descrição</label>
                                 <label class="input">
-                                  <input id="descricao" name="descricao" style="text-align: right;" type="text" class="required" autocomplete="off" required>
+                                  <input id="descricao" name="descricao" style="text-align: left;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
-
                             </div>
                           </fieldset>
                         </div>
@@ -251,6 +265,9 @@ include("inc/scripts.php");
     $("#btnVoltar").on("click", function() {
       voltar();
     });
+    $("#unidade").on("change", function() {
+      popularComboEstoque()
+    });
 
     carregaGrupoItem();
 
@@ -267,14 +284,28 @@ include("inc/scripts.php");
     var codigo = parseInt($("#codigo").val());
     var descricao = $("#descricao").val();
     var estoque = $("#estoque").val();
+    var unidade = $("#unidade").val();
 
     // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+    if (!unidade) {
+      smartAlert("Erro", "Informe a unidade.", "error");
+      return;
+    }
     if (!estoque) {
       smartAlert("Erro", "Informe o estoque.", "error");
       return;
     }
+    if (!unidade) {
+      smartAlert("Erro", "Informe o unidade.", "error");
+      return;
+    }
+    if (!descricao) {
+      smartAlert("Erro", "Informe a descrição.", "error");
+      return;
+    }
 
-    gravaGrupoItem(codigo, estoque, descricao,
+
+    gravaGrupoItem(codigo, estoque, descricao, unidade,
       function(data) {
 
         if (data.indexOf('sucess') < 0) {
@@ -346,18 +377,56 @@ include("inc/scripts.php");
             var codigo = parseInt(piece[0]);
             var descricao = piece[1];
             var estoque = +piece[2];
+            var unidade = +piece[3];
 
             //Atributos de cliente        
             $("#codigo").val(codigo);
             $("#estoque").val(estoque);
             $("#descricao").val(descricao);
-
+            $("#unidade").val(unidade);
           }
-
         );
       }
     }
+  }
 
+  function popularComboEstoque() {
+    var unidade = +$("#unidade").val()
+    $("#estoque").val("")
+    $("#estoque").prop("disabled", true)
+    $("#estoque").addClass("readonly")
+    if (unidade != 0) {
+      populaComboEstoque(unidade,
+        function(data) {
+          var atributoId = '#' + 'estoque';
+          if (data.indexOf('failed') > -1) {
+            smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
+            $("#unidade").focus()
+            $("#estoque").val("")
+            $("#estoque").prop("disabled", true)
+            $("#estoque").addClass("readonly")
+            return;
+          } else {
+            $("#estoque").prop("disabled", false)
+            $("#estoque").removeClass("readonly")
+            data = data.replace(/failed/g, '');
+            var piece = data.split("#");
 
+            var mensagem = piece[0];
+            var qtdRegs = piece[1];
+            var arrayRegistros = piece[2].split("|");
+            var registro = "";
+
+            $(atributoId).html('');
+            $(atributoId).append('<option></option>');
+
+            for (var i = 0; i < qtdRegs; i++) {
+              registro = arrayRegistros[i].split("^");
+              $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
+            }
+          }
+        }
+      );
+    }
   }
 </script>

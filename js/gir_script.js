@@ -23,21 +23,21 @@ function hideLoading() {
 
 $(document).ready(function () {
     jQuery.validator.addMethod(
-            'date',
-            function (value, element, params) {
-                if (this.optional(element)) {
-                    return true;
-                }
-                ;
-                var result = false;
-                try {
-                    $.datepicker.parseDate('dd/mm/yy', value);
-                    result = true;
-                } catch (err) {
-                    result = false;
-                }
-                return result;
+        'date',
+        function (value, element, params) {
+            if (this.optional(element)) {
+                return true;
             }
+            ;
+            var result = false;
+            try {
+                $.datepicker.parseDate('dd/mm/yy', value);
+                result = true;
+            } catch (err) {
+                result = false;
+            }
+            return result;
+        }
     );
 });
 
@@ -50,23 +50,23 @@ $(document).ready(function () {
         factory(jQuery.datepicker);
     }
 }
-(function (datepicker) {
-    datepicker.regional['pt-BR'] = {
-        changeMonth: true,
-        changeYear: true,
-        dateFormat: 'dd/mm/yy',
-        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-        nextText: 'Próximo',
-        prevText: 'Anterior'
-    };
-    datepicker.setDefaults(datepicker.regional['pt-BR']);
+    (function (datepicker) {
+        datepicker.regional['pt-BR'] = {
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd/mm/yy',
+            dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+            dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+            dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            nextText: 'Próximo',
+            prevText: 'Anterior'
+        };
+        datepicker.setDefaults(datepicker.regional['pt-BR']);
 
-    return datepicker.regional['pt-BR'];
-}));
+        return datepicker.regional['pt-BR'];
+    }));
 
 
 function smartAlert(title, message, type) {
@@ -164,8 +164,7 @@ function stringToFloat(value) {
     ;
 }
 
-function isValidDate(format, value)
-{
+function isValidDate(format, value) {
     var isValid = true;
 
     try {
@@ -261,7 +260,7 @@ function setarUnidadeClinicaPrincipal(codigoUnidade) {
         url: 'js/sqlscopeUsuario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "alterarUnidadePrincipal", codigoUnidade: codigoUnidade}, //valores enviados ao script     
+        data: { funcao: "alterarUnidadePrincipal", codigoUnidade: codigoUnidade }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -606,59 +605,71 @@ function validaPlaca(placa) {
 }
 
 //Função que quebra uma string e transforma ela em um valor.
-    function formataData(valor){
-        var y = (parseInt(valor.split('/')[2]));
-        var m = (parseInt(valor.split('/')[1]) - 1);
-        var d = (parseInt(valor.split('/')[0]));
-        valor = new Date(y,m,d); 
-        return valor;
+function formataData(valor) {
+    var y = (parseInt(valor.split('/')[2]));
+    var m = (parseInt(valor.split('/')[1]) - 1);
+    var d = (parseInt(valor.split('/')[0]));
+    valor = new Date(y, m, d);
+    return valor;
+}
+
+//Função que valida todas as datas
+function validaData(valor) {
+    var date = valor;
+    var ardt = new Array;
+    var ExpReg = new RegExp("(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}");
+    ardt = date.split("/");
+    erro = false;
+    if (date.search(ExpReg) == -1) {
+        erro = true;
     }
-    
-    //Função que valida todas as datas
-    function validaData(valor){
-        var date=valor;
-	var ardt=new Array;
-	var ExpReg=new RegExp("(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}");
-	ardt=date.split("/");
-	erro=false;
-	if ( date.search(ExpReg)==-1){
-		erro = true;
-		}
-	else if (((ardt[1]==4)||(ardt[1]==6)||(ardt[1]==9)||(ardt[1]==11))&&(ardt[0]>30))
-		erro = true;
-	else if ( ardt[1]==2) {
-		if ((ardt[0]>28)&&((ardt[2]%4)!=0))
-			erro = true;
-		if ((ardt[0]>29)&&((ardt[2]%4)==0))
-			erro = true;
-	}
-	if (erro) {
-		smartAlert("Erro", "O valor inserido é inválido.", "error"); 
-		return false;
-	}
-	return true;
+    else if (((ardt[1] == 4) || (ardt[1] == 6) || (ardt[1] == 9) || (ardt[1] == 11)) && (ardt[0] > 30))
+        erro = true;
+    else if (ardt[1] == 2) {
+        if ((ardt[0] > 28) && ((ardt[2] % 4) != 0))
+            erro = true;
+        if ((ardt[0] > 29) && ((ardt[2] % 4) == 0))
+            erro = true;
     }
-    
+    if (erro) {
+        smartAlert("Erro", "O valor inserido é inválido.", "error");
+        return false;
+    }
+    return true;
+}
+
 //Função que permite digitar apenas letras em um campo html 
-    function validaCampoApenasLetras(event) {
+function validaCampoApenasLetras(event) {
     var value = String.fromCharCode(event.which);
     var pattern = new RegExp(/[a-zåäöëïüãõçÇãõáÁàÀéÉèÈíÍìÌóÓòÒúÚùÙ' ]/i);
     return pattern.test(value);
-    }
+}
 
 //Função que permite digitar apenas números em um campo html 
-    function validaCampoApenasNumeros(event) {
+function validaCampoApenasNumeros(event) {
     var value = String.fromCharCode(event.which);
     var pattern = new RegExp(/[0123456789]/i);
     return pattern.test(value);
-    }
+}
 
-    function marcarDesmarcarTodos(idTabela) {
-        let desmarcados = $('#' + idTabela + ' input:checkbox:not(:checked)').length;
-        let marcados = $('#' + idTabela + ' input:checkbox:checked').length;
-        if (marcados > desmarcados) {
-            $('#' + idTabela + ' input:checkbox').prop("checked", false);
-        } else {
-            $('#' + idTabela + ' input:checkbox ').prop("checked", true);
-        }
+function marcarDesmarcarTodos(idTabela) {
+    let desmarcados = $('#' + idTabela + ' input:checkbox:not(:checked)').length;
+    let marcados = $('#' + idTabela + ' input:checkbox:checked').length;
+    if (marcados > desmarcados) {
+        $('#' + idTabela + ' input:checkbox').prop("checked", false);
+    } else {
+        $('#' + idTabela + ' input:checkbox ').prop("checked", true);
     }
+}
+
+function unparseBRL(value) {
+    if (value === '') return 0;
+    return Number(`${value}`.toString().replace(/\./g, "").replace(",", "."));
+}
+
+function parseBRL(value, digits = 5) {
+    if (isNaN(value)) {
+        return '0,' + '0'.repeat(digits);
+    }
+    return Number(value).toLocaleString('pt-BR', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+}

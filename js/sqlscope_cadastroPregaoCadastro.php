@@ -142,6 +142,9 @@ function grava()
     
 
     $strArrayTarefa = $_POST['jsonTarefa'];
+    if (!$strArrayTarefa){
+        $strArrayTarefa = '[]';
+    }
     $arrayTarefa = json_decode($strArrayTarefa, true);
     $xmlTarefa = "";
     $nomeXml = "ArrayOfTarefa";

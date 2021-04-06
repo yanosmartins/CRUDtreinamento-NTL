@@ -233,4 +233,9 @@ function validaDataInversa($campo)
     return $campo;
 }
 
+function formataNuloGravar($value){
+    $value = 'NULL'; //funcao criada caso mude a forma de passar o null no grava, 
+    return $value;// retorna NULL com aspas.
+}
+
 }

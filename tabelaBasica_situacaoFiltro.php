@@ -5,18 +5,12 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
+// //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('SITUACAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('SITUACAO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
-}
-
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
 }
 
 /* ---------------- PHP Custom Scripts ---------
@@ -42,29 +36,34 @@ include("inc/nav.php");
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-    <?php
-    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-    //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
-    include("inc/ribbon.php");
-    ?>
+<?php
+//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+//$breadcrumbs["New Crumb"] => "http://url.com"
+$breadcrumbs["Tabela Básica"] = "";
+include("inc/ribbon.php");
+?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
 
         <!-- widget grid -->
         <section id="widget-grid" class="">
+            <div class="row" style="margin: 0 0 13px 0;">
+                <?php if ($condicaoGravarOK) { ?>
+                    <a class="btn btn-primary fa fa-file-o" aria-hidden="true" title="Novo" href="<?php echo APP_URL; ?>/usuarioCadastro.php" style="float:right"></a>
+                <?php } ?>    
+            </div>                    
 
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
                             <h2>Situação</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formSituacaoFiltro" method="post">
+                                <form action="javascript:gravar()" class="smart-form client-form" id="formUsuarioFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -80,55 +79,42 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-5 col-auto">
-                                                                <label class="label" for="descricao">Descrição</label>
-                                                                <label class="input">
-                                                                    <input id="descricao" maxlength="50" name="descricao" type="text" autocomplete="off">
+                                                            <section class="col col-6">
+                                                                <label class="label">Nome da Situação</label>
+                                                                <label class="input"> 
+                                                                    <input id="descricao" maxlength="255" name="descricao" type="text" value="" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="ativo">Ativo</label>
-                                                                <label class="select">
-                                                                    <select id="ativo" name="ativo">
-                                                                        <option></option>
-                                                                        <option value='1' selected>Sim</option>
-                                                                        <option value='0'>Não</option>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="corFonte">Cor Fonte</label>
-                                                                <label class="input">
-                                                                    <input id="corFonte" maxlength="50" name="corFonte" type="text" autocomplete="off">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="corFundo">Cor Fundo</label>
-                                                                <label class="input">
-                                                                    <input id="corFundo" maxlength="50" name="corFundo" type="text" autocomplete="off">
-                                                                </label>
-                                                            </section>
-                                                        </div>
+                                                            <section class="col col-2">
+                                                            <label class="label" for="ativo">Ativo</label>
+                                                            <label class="select"> 
+                                                                <select id="ativo" name="ativo" >
+                                                                    <option></option>
+                                                                    <option value="1" selected>Sim</option>
+                                                                    <option value="0">Não</option>
+                                                                </select><i></i>
+                                                            </section> 
+                                                        </div>  
                                                     </fieldset>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <footer>
+                                                <footer>
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
+                                            </div>   
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <div id="resultadoBusca"></div>
                         </div>
                     </div>
                 </article>
-            </div>
+            </div>                          
         </section>
         <!-- end widget grid -->
     </div>
@@ -167,41 +153,25 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
+
 <script>
-    $(document).ready(function() {
-        $('#btnSearch').on("click", function() {
+    $(document).ready(function () {
+        $('#btnSearch').on("click", function () {
             listarFiltro();
         });
-        $('#btnNovo').on("click", function() {
-            novo();
+        $('#btnNovo').on("click", function () {
+           novo();
         });
     });
 
     function listarFiltro() {
-
-        var descricaoFiltro = $('#descricao').val();
-        var ativoFiltro = $('#ativo').val();
-
-        var corFonteFiltro = $('#corFonte').val();
-        var corFundoFiltro = $('#corFundo').val();
-
-        if (descricaoFiltro !== "") {
-            descricaoFiltro = descricaoFiltro.replace(/^\s+|\s+$/g, "");
-            descricaoFiltro = encodeURIComponent(descricaoFiltro);
-        }
-
-        if (corFonteFiltro !== "") {
-            corFonteFiltro = corFonteFiltro.replace(/^\s+|\s+$/g, "");
-            corFonteFiltro = encodeURIComponent(corFonteFiltro);
-        }
-
-        if (corFundoFiltro !== "") {
-            corFundoFiltro = corFundoFiltro.replace(/^\s+|\s+$/g, "");
-            corFundoFiltro = encodeURIComponent(corFundoFiltro);
-        }
-
-        var parametrosUrl = '&descricaoFiltro=' + descricaoFiltro + '&corFonteFiltro=' + corFonteFiltro + '&corFundoFiltro=' + corFundoFiltro + '&ativoFiltro=' + ativoFiltro;
-        $('#resultadoBusca').load('tabelaBasica_situacaoFiltroListagem.php?' + parametrosUrl);
+        let descricao = $('#descricao').val();
+        let ativo = $("#ativo").val();   
+ 
+        $('#resultadoBusca').load('tabelaBasica_situacaoFiltroListagem.php?', {
+            descricao: descricao,
+            ativo: ativo
+        });
     }
 
     function novo() {
