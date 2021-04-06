@@ -1625,13 +1625,17 @@ include("inc/scripts.php");
         valorUnitarioCategoria = (resumoValorUnitarioCategoria + percentualBdiTotal);
         var a = (valorUnitarioCategoria/remuneracaoTotalResumo) - (100/100) ;
         a = a * 100;
+
+        contaMarcello =  (100 + jsonBdiArray[0].bdiPercentual) * (100 + jsonBdiArray[1].bdiPercentual)  
+        / (100 - (jsonBdiArray[2].bdiPercentual + jsonBdiArray[3].bdiPercentual + jsonBdiArray[4].bdiPercentual)) - 100; //calculo tirado do excel 
+
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
         row.append($('<td class="text-left">' + "Total Categoria: " + '</td>'));
         row.append($('<td class="text-center">' + "R$ " + parseBRL(resumoValorUnitarioCategoria, 2) + '</td>'));
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
-        row.append($('<td class="text-left">' + "BDI: " + '</td>'));
+        row.append($('<td class="text-left">' + "BDI: " + totalBdi + " %" + "M:"+ contaMarcello + '</td>'));
         row.append($('<td class="text-center">' + "R$ " + parseBRL(percentualBdiTotal, 2)+'</td>'));
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
