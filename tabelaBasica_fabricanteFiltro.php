@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('FUNCAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('FUNCAO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('FABRICANTE_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('FABRICANTE_GRAVAR', $arrayPermissao, true));
 
 
 if ($condicaoAcessarOK == false) {
@@ -20,7 +20,7 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-$page_title = "Função";
+$page_title = "Fabricante";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -29,7 +29,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["funcao"]["active"] = true;
+$page_nav["operacao"]["sub"]["estoque"]["sub"]["fabricante"]["active"] = true;
 
 include("inc/nav.php");
 ?>

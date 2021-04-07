@@ -5,9 +5,9 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-$condicaoAcessarOK = (in_array('FUNCAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('FUNCAO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('FUNCAO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('FABRICANTE_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('FABRICANTE_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('FABRICANTE_EXCLUIR', $arrayPermissao, true));
 
 
 if ($condicaoAcessarOK == false) {
@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-$page_title = "Função";
+$page_title = "Fabricante";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["funcao"]["active"] = true;
+$page_nav["operacao"]["sub"]["estoque"]["sub"]["fabricante"]["active"] = true;
 
 include("inc/nav.php");
 ?>
