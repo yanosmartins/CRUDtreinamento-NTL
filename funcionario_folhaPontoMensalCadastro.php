@@ -158,17 +158,10 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
 
-
-                                                                    <?php
-                                                                    setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-                                                                    date_default_timezone_set('America/Sao_Paulo');
-                                                                    $dataAtual = strftime('%m/%Y', strtotime('today'));
-                                                                    ?>
                                                                     <section class="col col-2">
                                                                         <label class="label" for="mesAno">Mês/Ano</label>
                                                                         <label class="input">
-                                                                            <i class="icon-append fa fa-calendar"></i>
-                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="text" class="readonly" readonly value="<?= $dataAtual  ?>">
+                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="<?= $esconderCampoNormal['readonly'] ?>" <?= $esconderCampoNormal['readonly'] ?> >
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-1">
@@ -603,6 +596,13 @@ include("inc/scripts.php");
             selecionaFolha();
         });
 
+        $("#mesAno").on("change", function() {
+            var funcionario = $("#funcionario").val();
+            var codigo = $("#expediente option[data-funcionario ='" + funcionario + "']").val();
+            $("#expediente").val(codigo);
+            selecionaFolha();
+        });
+
         $('#inputDia').on('keydown', () => {
             const dia = $("#inputDia").val();
             const mask = /\D/.test(dia);
@@ -868,7 +868,8 @@ include("inc/scripts.php");
         var codigo = Number($("#codigo").val())
         var ativo = Number($("#ativo").val())
         var funcionario = Number($("#funcionario").val());
-        var mesAno = String($("#mesAno").val());
+        debugger
+        var mesAno = String($("#mesAno").val()).replace(/\d\d$/g,01);
         var observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
@@ -945,12 +946,10 @@ include("inc/scripts.php");
 
     function carregaFolhaPontoMensal() {
 
-        const data = new Date().toLocaleDateString();
-        const mesAno = data.slice(3, data.length);
+        const mesAno = new Date().toJSON().slice(0,10).replace(/[0-9]$/g,01);
         const funcionario = $("#funcionario option:selected").val();
 
         $('#mesAno').val(mesAno);
-
 
         recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
@@ -1115,5 +1114,4 @@ include("inc/scripts.php");
     function duracao(inicioExpediente, fimExpediente) {
         return (parse(fimExpediente) - parse(inicioExpediente));
     }
-
 </script>
