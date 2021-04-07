@@ -33,7 +33,7 @@ include "js/repositorio.php";
                 $hoje = "'" . date("Y-m-d") . "'";
 
                 $sql = "SELECT GP.codigo, P.descricao, P.endereco, GP.orgaoLicitante, GP.numeroPregao, GP.oportunidadeCompra, S.codigo as codigoSituacao, S.corFundo, S.corFonte, S.descricao as situacao, GP.posicao, GP.dataReabertura, 
-                    GP.horaReabertura, GP.prioridade, GP.ativo, GP.dataAlerta, GP.horaAlerta,GP.resumoPregao, GP.usuarioAlteracao, GP.dataAlteracao, GP.dataCadastro,
+                    GP.horaReabertura, GP.prioridade, GP.ativo, GP.dataAlerta, GP.horaAlerta,GP.resumoPregao, GP.usuarioAlteracao, GP.dataAlteracao, GP.dataCadastro, GP.condicao,
                     G.descricao AS grupoResponsavel, R.nome AS responsavelPregao
                     FROM ntl.pregao GP
                     LEFT JOIN ntl.portal P ON P.codigo = GP.portal
@@ -160,6 +160,7 @@ include "js/repositorio.php";
                     $posicao = $row['posicao'];
                     $campoPrioridade = '';
                     $prioridade = $row['prioridade'];
+                    $prioridade == 1 ? $campoPrioridade = 'Sim' : $campoPrioridade = 'Não';
                     $resumoPregao = $row['resumoPregao'];
                     $dataLancamento = $row['dataCadastro'];
                     $dataLancamento = explode(" ", $dataLancamento);
@@ -199,7 +200,13 @@ include "js/repositorio.php";
                             $condicao = '';
                     }
 
-                    $corFundo = "#bf2724";
+                    
+                    if ($prioridade == "1") {
+                        $campoPrioridade = '<i class="" aria-hidden="true">Sim</i>';
+                        $corFundo = "#bf2724";
+                        $corFonte = "#fff5f5";
+                        $corLink = "#ffffff";
+                    }
 
 
                     echo '<tr style="background:' . $corFundo . '; color:' . $corFonte . ';">';
@@ -360,6 +367,7 @@ include "js/repositorio.php";
                     $posicao = $row['posicao'];
                     $campoPrioridade = '';
                     $prioridade = $row['prioridade'];
+                    $prioridade == 1 ? $campoPrioridade = 'Sim' : $campoPrioridade = 'Não';
                     $resumoPregao = $row['resumoPregao'];
                     $dataLancamento = $row['dataCadastro'];
                     $dataLancamento = explode(" ", $dataLancamento);
@@ -400,7 +408,7 @@ include "js/repositorio.php";
                     }
 
                     if ($prioridade == "1") {
-                        $campoPrioridade = '<i class="fa fa-check-circle-o" aria-hidden="true"></i>';
+                        $campoPrioridade = '<i class="" aria-hidden="true">Sim</i>';
                         $corFundo = "#bf2724";
                         $corFonte = "#fff5f5";
                         $corLink = "#ffffff";
