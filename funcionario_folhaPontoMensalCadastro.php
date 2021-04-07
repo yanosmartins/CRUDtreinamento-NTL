@@ -161,7 +161,11 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label" for="mesAno">Mês/Ano</label>
                                                                         <label class="input">
-                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="<?= $esconderCampoNormal['readonly'] ?>" <?= $esconderCampoNormal['readonly'] ?> >
+                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" 
+                                                                            class="<?= $esconderCampoPesado['readonly'] ?>" 
+                                                                            <?= $esconderCampoPesado['readonly'] ?>
+                                                                            style="pointer-events:<?= $esconderCampoPesado['pointer-events']?>;
+                                                                            touch-action:<?= $esconderCampoPesado['touch-action']?>" >
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-1">
@@ -656,17 +660,16 @@ include("inc/scripts.php");
             }
 
             var entrada = $("#horaEntrada-" + dia)
-            var inputEntrada = $("#inputHoraEntrada").val()
+            var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
 
             var inicioAlmoco = $("#inicioAlmoco-" + dia)
-            var inputInicioAlmoco = $("#inputInicioAlmoco").val()
+            var inputInicioAlmoco = $("#inputInicioAlmoco").val() || '00:00:00'
 
             var fimAlmoco = $("#fimAlmoco-" + dia)
-            var inputFimAlmoco = $("#inputFimAlmoco").val()
+            var inputFimAlmoco = $("#inputFimAlmoco").val() || '00:00:00'
 
             var saida = $("#horaSaida-" + dia)
-            var inputSaida = $("#inputHoraSaida").val()
-            if (!inputSaida) inputSaida = '00:00:00';
+            var inputSaida = $("#inputHoraSaida").val() || '00:00:00'
 
             var extra = $("#horaExtra-" + dia)
             var inputExtra = $("#inputHoraExtra").val()
@@ -721,9 +724,20 @@ include("inc/scripts.php");
                     if (minutos.toString().length < 2) minutos = `0${minutos}`;
 
                     if (jornada > jornadaNormal) {
+                        if (!inputExtra)
                         inputExtra = (`${horas}:${minutos}`);
                     } else {
-                        inputAtraso = (`${horas}:${minutos}`)
+                        if (!inputAtraso){
+                            inputAtraso = (`${horas}:${minutos}`)
+                            debugger
+                            inputLancamento = $('#inputLancamento option');
+                            inputLancamento.each((index,el) =>{
+                                if(/atraso/gi.test($(el).text())){
+                                    return inputLancamento = $(el).val();
+                                }
+                            })
+                        }
+                        
                     }
                 }
             }
@@ -751,8 +765,6 @@ include("inc/scripts.php");
             atraso.val(inputAtraso);
             saida.val(horaSaida);
             lancamento.val(inputLancamento);
-
-
 
             return;
         });
@@ -1090,8 +1102,7 @@ include("inc/scripts.php");
         if (isNaN(es)) es = Number('00');
 
         if ((h == eh) && (m == em)) {
-            m = Math.floor(Math.random() * (3 - 0)) + 0;
-            s = Math.floor(Math.random() * 60);
+            s = Math.floor(Math.random() * 50);
         }
 
         if (h.toString().length < 2) h = `0${h}`;
