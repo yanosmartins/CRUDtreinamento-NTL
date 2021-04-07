@@ -224,14 +224,8 @@ include("inc/scripts.php");
         var sigla = $('#sigla').val();
         var notaFiscal = $('#notaFiscal').val();
            
-         
-<<<<<<< HEAD:cadastro_consultaFornecedorFiltro.php
         var parametrosUrl = '&fornecedor=' + apelido + '&tipoItem=' + tipoItem + '&sigla=' + sigla   + '&notaFiscal=' + notaFiscal;
-        $('#resultadoBusca').load('cadastro_consultaFornecedorFiltroListagem.php?' + parametrosUrl);
-=======
-        var parametrosUrl = '&apelido=' + apelido + '&grupoItem=' + grupoItem + '&sigla=' + sigla   + '&notaFiscal=' + notaFiscal;
         $('#resultadoBusca').load('estoque_consultaFornecedorFiltroListagem.php?' + parametrosUrl);
->>>>>>> origin:estoque_consultaFornecedorFiltro.php
     }
     
    
