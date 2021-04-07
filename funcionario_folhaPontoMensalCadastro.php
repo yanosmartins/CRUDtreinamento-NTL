@@ -678,17 +678,7 @@ include("inc/scripts.php");
             var inputLancamento = $("#inputLancamento").val()
 
 
-
-            // if ((!inputEntrada || inputEntrada == "00:00:00") && !inputLancamento) {
-            //     smartAlert("Atenção", "A HORA DE ENTRADA deve ser preenchida", "error");
-            //     return
-            // }
-
-            // if (inputSaida == "00:00:00" && (inputExtra != "00:00:00")) {
-            //     smartAlert("Atenção", "Preencha a HORA DE SAÍDA para preencher a HORA EXTRA", "error");
-            //     return
-            // }
-
+            //Preparação dos valores para cálculo e aleatorização dos minutos e segundos
             let separador = $("#expediente option:selected").text();
             if (!separador) {
                 separador = '00:00 - 00:00';
@@ -706,7 +696,9 @@ include("inc/scripts.php");
             const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
             const horaSaida = aleatorizarTempo(inputSaida, fimExpediente)
 
-            //Começa cálculo de Hora Extra
+
+
+            //Começo Cálculo de Hora Extra
             if (horaSaida != "00:00:00") {
                 const parseHoraEntrada = parse(horaEntrada)
                 const parseHoraSaida = parse(horaSaida)
@@ -735,6 +727,13 @@ include("inc/scripts.php");
                     }
                 }
             }
+            //Fim Cálculo de Hora Extra
+
+            // Verificações antes de adicionar o ponto
+            if ((!inputEntrada || inputEntrada == "00:00:00") && !inputLancamento) {
+                smartAlert("Atenção", "A HORA DE ENTRADA deve ser preenchida", "error");
+                return
+            }
 
             if (!inputExtra && horaSaida != "00:00:00") {
                 smartAlert("Aviso", "O funcionário não tem horas extras", "info");
@@ -742,6 +741,8 @@ include("inc/scripts.php");
             if (!inputAtraso && horaSaida != "00:00:00") {
                 smartAlert("Aviso", "O funcionário não tem atrasos", "info");
             }
+
+
 
             entrada.val(horaEntrada);
             inicioAlmoco.val(inputInicioAlmoco);
@@ -1115,115 +1116,4 @@ include("inc/scripts.php");
         return (parse(fimExpediente) - parse(inicioExpediente));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // function calcularTotalHoras(entrada, saida) {
-    //     if (entrada.length <= 5) {
-    //         entrada = entrada + ":00"
-    //     }
-    //     if (saida.length <= 5) {
-    //         saida = saida + ":00"
-    //     }
-
-    //     entrada = entrada.replace(':', '')
-    //     entrada = entrada.replace(':', '')
-    //     saida = saida.replace(':', '')
-    //     saida = saida.replace(':', '')
-
-    //     const total = Number(entrada) + Number(saida)
-    //     let text = String(total).split("")
-    //     let horas = parseInt(`${text[0]}${text[1]}`)
-    //     let minutos = parseInt(`${text[2]}${text[3]}`)
-    //     let segundos = parseInt(`${text[4]}${text[5]}`)
-    //     if (segundos >= 60) {
-    //         segundos = segundos - 60
-    //         minutos += 1
-    //     }
-    //     if (minutos >= 60) {
-    //         minutos = minutos - 60
-    //         horas += 1
-    //     }
-
-    //     minutos = String(minutos).split("")
-    //     if (minutos.length < 2)
-    //         minutos.unshift("0")
-    //     text.splice(2, 1, minutos[0])
-    //     text.splice(3, 1, minutos[1])
-    //     segundos = String(segundos).split("")
-    //     if (segundos.length < 2)
-    //         segundos.unshift("0")
-    //     text.splice(4, 1, segundos[0])
-    //     text.splice(5, 1, segundos[1])
-    //     text.splice(2, 0, ':')
-    //     text.splice(5, 0, ':')
-    //     text = text.join("")
-
-    //     return text
-    // }
-
-    // function calcularHoraExtra(totalHora,totalExpediente) {
-    //     if (totalHora.length <= 5) {
-    //         totalHora = totalHora + ":00"
-    //     }
-    //     if (totalExpediente.length <= 5) {
-    //         totalExpediente = totalExpediente + ":00"
-    //     }
-
-    //     totalHora = totalHora.replace(':', '')
-    //     totalHora = totalHora.replace(':', '')
-    //     totalExpediente = totalExpediente.replace(':', '')
-    //     totalExpediente = totalExpediente.replace(':', '')
-
-    //     let total = Number(totalHora) - Number(totalExpediente)
-    //     let text = String(total).split("")
-    //     if(text.length == 5){
-    //         text.unshift("0")
-    //     }
-    //     let horas = parseInt(`${text[0]}${text[1]}`)
-    //     let minutos = parseInt(`${text[2]}${text[3]}`)
-    //     let segundos = parseInt(`${text[4]}${text[5]}`)
-    //     if (segundos >= 60) {
-    //         segundos = segundos - 60
-    //         minutos -= 1
-    //     }
-    //     if (minutos >= 60) {
-    //         minutos = minutos - 60
-    //         horas -= 1
-    //     }
-
-    //     minutos = String(minutos).split("")
-    //     if (minutos.length < 2)
-    //         minutos.unshift("0")
-    //     text.splice(2, 1, minutos[0])
-    //     text.splice(3, 1, minutos[1])
-    //     segundos = String(segundos).split("")
-    //     if (segundos.length < 2)
-    //         segundos.unshift("0")
-    //     text.splice(4, 1, segundos[0])
-    //     text.splice(5, 1, segundos[1])
-    //     text.splice(2, 0, ':')
-    //     text.splice(5, 0, ':')
-    //     text = text.join("")
-
-    //     if(text.indexOf('-') >= 0){
-    //         return "00:00:00"
-    //     }
-
-    //     return text
-
-    // }
-
-    function calcularHoraAtraso() {
-
-    }
 </script>
