@@ -7,97 +7,86 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:60px;">Lançamento</th>
-                    <th class="text-left" style="min-width:110px;">Data Entrada</th>
-                    <th class="text-left" style="min-width:200px;">Cliente/Fornecedor</th>
-                    <th class="text-left" style="min-width:110px;">Tipo Doc.</th>
-                    <th class="text-left" style="min-width:30px;">Número</th>
-                    <th class="text-left" style="min-width:30px;">Valor Nota</th>
-                    <th class="text-left" style="min-width:30px;">Materiais</th>
-                    <th class="text-left" style="min-width:300px;">Estoque</th>
+                    <th class="text-left" style="min-width:110px;">Data Pedido</th>
+                    <th class="text-left" style="min-width:300px;">Solicitante</th>
+                    <th class="text-left" style="min-width:100px;">Cliente/Fornecedor</th>
+                    <th class="text-left" style="min-width:300px;">Responsável</th>
+                    <th class="text-left" style="min-width:300px;">Projeto</th>
+                    <th class="text-left" style="min-width:30px;">Aprovado</th>
+                    <th class="text-left" style="min-width:50px;">Materiais</th>
+                    <th class="text-left" style="min-width:100px;">Estoque</th>
 
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $nomeTarefa = "";
-                $tipoTarefa = "";
-                $visivel = "";
-                $ativo = "";
+                $clienteFornecedorId = "";
+                $solicitanteId = "";
+                $projeto = "";
+                $responsavelFornecimentoId = $_SESSION['funcionario'];
 
 
-                $sql = "SELECT DISTINCT EM.codigo, EM.fornecedor, F.apelido, EM.tipoDocumento , T.descricao AS descricaoTipoDocumento, EM.numeroNF, EM.dataEntradaMaterial ,
-                SUBSTRING(
-                       (
-                           SELECT  '/ ' + CI.descricaoItem  AS [text()]
-                           FROM Estoque.entradaMaterialItem EMI
-                           left JOIN Estoque.codigoItem CI ON EMI.material = CI.codigo
-                           WHERE EMI.entradamaterial = EM.codigo
-                           ORDER BY CI.descricaoItem
-                           FOR XML PATH ('')
-                       ), 2, 1000) [material],
-               
-               SUBSTRING(
-                       (
-                           SELECT DISTINCT '/ ' + E.descricao  AS [text()]
-                           FROM Estoque.entradaMaterialItem EMI
-                           left JOIN Estoque.estoque E ON EMI.estoque = E.codigo
-                           WHERE EMI.entradamaterial = EM.codigo
-                           FOR XML PATH ('')
-                       ), 2, 1000) [estoque],
-               SUBSTRING(
-                       (
-                           SELECT SUM(EMI.valorTotalItem)  AS [text()]
-                           FROM Estoque.entradaMaterialItem EMI
-                           left JOIN Estoque.estoque E ON EMI.estoque = E.codigo
-                           WHERE EMI.entradamaterial = EM.codigo
-                           FOR XML PATH ('')
-                       ), 0, 1000) [valorTotal]
-               
-               FROM Estoque.entradaMaterial EM
-               LEFT JOIN Ntl.fornecedor F ON F.codigo = EM.fornecedor
-               LEFT JOIN Estoque.tipoDocumento T ON T.codigo = EM.tipoDocumento
-               LEFT JOIN Estoque.entradaMaterialItem EMI ON EMI.entradaMaterial = EM.codigo";
+                $sql = "SELECT DISTINCT PM.codigo, PM.fornecedor, F.apelido, PM.projeto, P.descricao AS descricaoProjeto,
+                PM.solicitante, FS.nome AS descricaoSolicitante, PM.responsavel, FR.nome AS descricaoResponsavel, PM.aprovado, PM.dataCadastramento,
+                    SUBSTRING(
+                            (
+                                SELECT DISTINCT  '/ ' + CI.descricaoItem  AS [text()]
+                                FROM Estoque.estoqueMovimento EMI
+                                left JOIN Estoque.codigoItem CI ON EMI.material = CI.codigo
+                                WHERE EMI.pedidoMaterial = PM.codigo
+                                FOR XML PATH ('')
+                            ), 2, 1000) [material],
+                    
+                    SUBSTRING(
+                            (
+                                SELECT DISTINCT '/ ' + E.descricao  AS [text()]
+                                FROM Estoque.estoqueMovimento EMI
+                                left JOIN Estoque.estoque E ON EMI.estoque = E.codigo
+                                WHERE EMI.pedidoMaterial = PM.codigo
+                                FOR XML PATH ('')
+                            ), 2, 1000) [estoque]
+                                            
+                    FROM Estoque.pedidoMaterial PM
+                    LEFT JOIN Ntl.fornecedor F ON F.codigo = PM.fornecedor
+                    LEFT JOIN Estoque.entradaMaterialItem EMI ON EMI.entradaMaterial = PM.codigo
+                    LEFT JOIN Ntl.projeto P ON P.codigo = PM.projeto
+                    LEFT JOIN Ntl.funcionario FS ON FS.codigo = PM.solicitante
+                    LEFT JOIN Ntl.funcionario FR ON FR.codigo = PM.responsavel";
 
                 $where = " WHERE (0 = 0)";
 
                 if ($_POST["clienteFornecedorId"] != "") {
                     $clienteFornecedorId = (int)$_POST["clienteFornecedorId"];
-                    $where = $where . " AND ( EM.fornecedor = $clienteFornecedorId)";
+                    $where = $where . " AND ( PM.fornecedor = $clienteFornecedorId)";
+                }
+
+                if ($_POST["solicitanteId"] != "") {
+                    $solicitanteId = (int)$_POST["solicitanteId"];
+                    $where = $where . " AND ( PM.solicitante = $solicitanteId)";
+                }
+
+                if ($_POST["responsavelFornecimentoId"] != "") {
+                    $responsavelFornecimentoId = (int)$_POST["responsavelFornecimentoId"];
+                    $where = $where . " AND ( PM.responsavel = $responsavelFornecimentoId)";
+                }
+
+                if ($_POST["projeto"] != "") {
+                    $projeto = (int)$_POST["projeto"];
+                    $where = $where . " AND ( PM.projeto = $projeto)";
                 }
 
                 if ($_POST["dataInicial"] != "") {
                     $dataInicial = $_POST["dataInicial"];
                     $data = explode("/", $dataInicial);
                     $data = $data[2] . "-" . $data[1] . "-" . $data[0];
-                    $where = $where . " AND EM.dataEntradaMaterial >= '" . $data . "'";
+                    $where = $where . " AND PM.dataCadastramento >= CONVERT(DATETIME,'".$dataInicial." 00:00:00', 103) ";
                 }
                 if ($_POST["dataFinal"] != "") {
                     $dataFinal = $_POST["dataFinal"];
                     $data = explode("/", $dataFinal);
                     $data = $data[2] . "-" . $data[1] . "-" . $data[0];
-                    $where = $where . " AND EM.dataEntradaMaterial <= '" . $data . "'";
+                    $where = $where . " AND PM.dataCadastramento <= CONVERT(DATETIME,'".$dataFinal." 23:59:59', 103) ";
                 }
-
-                if ($_POST["tipo"] != "") {
-                    $tipo = (int)$_POST["tipo"];
-                    $where = $where . " AND EM.tipoDocumento = " . $tipo;
-                }
-
-                if ($_POST["estoqueDestino"] != "") {
-                    $estoqueDestino = $_POST["estoqueDestino"];
-                    $where = $where . " AND EMI.estoque = " . $estoqueDestino;
-                }
-
-                if ($_POST["numero"] != "") {
-                    $numero = (int)$_POST["numero"];
-                    $where = $where . " AND (numeroNF like '%' + " . "replace('" . $numero . "',' ','%') + " . "'%')";
-                }
-
-                if ($_POST["codigoItemId"] != "") {
-                    $codigoItemId = (int)$_POST["codigoItemId"];
-                    $where = $where . " AND EMI.material = " . $codigoItemId;
-                }
-
 
                 $orderBy = "";
 
@@ -108,14 +97,24 @@ include "js/repositorio.php";
                 foreach ($result as $row) {
                     $id = $row['codigo'];
                     $fornecedor = $row['apelido'];
-                    $tipoDocumento = $row['descricaoTipoDocumento'];
-                    $numeroNF = $row['numeroNF'];
+                    $solicitante = $row['descricaoSolicitante'];
+                    $responsavel = $row['descricaoResponsavel'];
+                    $projeto = $row['descricaoProjeto'];
+                    $aprovado = $row['aprovado'];
+                    $descricaoAprovado = "";
+
+                    if($aprovado === 1){
+                        $descricaoAprovado = "SIM";
+                    }
+                    if($aprovado === 0){
+                        $descricaoAprovado = "NÃO";
+                    }
 
                     //A data recuperada foi formatada para D/M/Y
-                    $dataEntradaMaterial = $row['dataEntradaMaterial'];
-                    $descricaoData = explode(" ", $dataEntradaMaterial);
+                    $dataCadastramento = $row['dataCadastramento'];
+                    $descricaoData = explode(" ", $dataCadastramento);
                     $descricaoData = explode("-", $descricaoData[0]);
-                    $descricaoHora = explode(" ", $dataEntradaMaterial);
+                    $descricaoHora = explode(" ", $dataCadastramento);
                     $descricaoHora = $descricaoHora[1];
                     $descricaoHora = explode(":", $descricaoHora);
                     $descricaoHora = $descricaoHora[0] . ":" . $descricaoHora[1];
@@ -123,15 +122,15 @@ include "js/repositorio.php";
 
                     $material = $row['material'];
                     $estoque = $row['estoque'];
-                    $valorTotal = str_replace(".", ",", $row['valorTotal']);
 
                     echo '<tr >';
                     echo '<td class="text-left">' . $id . '</td>';
-                    echo '<td class="text-left"><a href="estoque_entradaMaterialCadastro.php?id=' . $id . '">' . $descricaoData . '</td>';
+                    echo '<td class="text-left"><a href="estoque_fornecimentoMaterialCadastro.php?id=' . $id . '">' . $descricaoData . '</td>';
+                    echo '<td class="text-left">' . $solicitante . '</td>';
                     echo '<td class="text-left">' . $fornecedor . '</td>';
-                    echo '<td class="text-justify">' . $tipoDocumento . '</td>';
-                    echo '<td class="text-justify">' . $numeroNF . '</td>';
-                    echo '<td class="text-justify">' . $valorTotal . '</td>';
+                    echo '<td class="text-justify">' . $responsavel . '</td>';
+                    echo '<td class="text-justify">' . $projeto . '</td>';
+                    echo '<td class="text-justify">' . $descricaoAprovado . '</td>';
                     echo '<td class="text-justify">' . $material . '</td>';
                     echo '<td class="text-justify">' . $estoque . '</td>';
                 }

@@ -59,6 +59,10 @@ function grava()
     $dataEntrada = validaData($_POST['dataEntrada']);
     $observacao =  validaString($_POST['observacao']);
 
+    if($numero ==""){
+        $numero = $codigo;
+    }
+
     $strArrayItem = $_POST['jsonItem'];
     $arrayItem = json_decode($strArrayItem, true);
     $xmlItem = "";

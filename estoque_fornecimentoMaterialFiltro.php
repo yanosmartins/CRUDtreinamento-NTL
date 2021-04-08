@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Pedido Material";
+$page_title = "Fornecimento Material";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['estoque']['sub']["pedidoMaterial"]["active"] = true;
+$page_nav['estoque']['sub']['fornecimentoMaterial']['sub'] = true;
 
 include("inc/nav.php");
 ?>
@@ -221,7 +221,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
+                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -266,7 +266,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
+                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -355,24 +355,24 @@ include("inc/scripts.php");
     });
 
     function novo() {
-        $(location).attr('href', 'estoque_pedidoMaterialCadastro.php');
+        $(location).attr('href', 'estoque_fornecimentoMaterialCadastro.php');
     }
 
     function listarFiltro() {
         var clienteFornecedorId = $('#clienteFornecedorId').val();
+        var solicitanteId = $('#solicitanteId').val();
+        var projeto = $('#projeto').val();
+        var responsavelFornecimentoId = $('#responsavelFornecimentoId').val();
         var dataInicial = $('#dataInicial').val();
         var dataFinal = $('#dataFinal').val();
-        var tipo = $('#tipo').val();
-        var estoqueDestino = $('#estoqueDestino').val();
-        var numero = $('#numero').val();
 
-        $('#resultadoBusca').load('estoque_entradaMaterialFiltroListagem.php?', {
+        $('#resultadoBusca').load('estoque_fornecimentoMaterialFiltroListagem.php?', {
             clienteFornecedorId: clienteFornecedorId,
+            solicitanteId: solicitanteId,
+            projeto: projeto,
+            responsavelFornecimentoId: responsavelFornecimentoId,
             dataInicial: dataInicial,
-            dataFinal: dataFinal,
-            tipo: tipo,
-            estoqueDestino: estoqueDestino,
-            numero: numero
+            dataFinal: dataFinal
         });
     }
 </script>
