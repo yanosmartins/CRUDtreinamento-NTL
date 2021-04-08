@@ -480,27 +480,27 @@ if ($condicaoEstoqueOk) {
     $page_nav['estoque']['sub'] = array();
     $condicaoContratacaoOk = true;
     if (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['estoque']['sub']['estoqueTabelas'] = array("title" => "Tabelas");
-        $page_nav['estoque']['sub']['estoqueTabelas']['sub'] = array();
+        $page_nav['estoque']['sub']['tabela'] = array("title" => "Tabelas");
+        $page_nav['estoque']['sub']['tabela']['sub'] = array();
 
-        if (in_array('FUNCAO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['estoque']['sub']['estoqueTabelas']['sub'] += array("tipoItem" => array("title" => "Tipo Item", "url" => APP_URL . "/tabelaBasica_tipoItemFiltro.php"));
+        if (in_array('TIPOITEM_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['estoque']['sub']['tabela']['sub'] += array("tipoItem" => array("title" => "Tipo Item", "url" => APP_URL . "/tabelaBasica_tipoItemFiltro.php"));
         }
 
-        if (in_array('FUNCAO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['estoque']['sub']['estoqueTabelas']['sub'] += array("fabricante" => array("title" => "Fabricante", "url" => APP_URL . "/tabelaBasica_fabricanteFiltro.php"));
+        if (in_array('FABRICANTE_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['estoque']['sub']['tabela']['sub'] += array("fabricante" => array("title" => "Fabricante", "url" => APP_URL . "/tabelaBasica_fabricanteFiltro.php"));
         }
 
         if (in_array('LOCALIZACAOITEM_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['estoque']['sub']['estoqueTabelas']['sub'] += array("localizacaoItem" => array("title" => "Localização do Item", "url" => APP_URL . "/tabelaBasica_localizacaoItemFiltro.php"));
+            $page_nav['estoque']['sub']['tabela']['sub'] += array("localizacaoItem" => array("title" => "Localização do Item", "url" => APP_URL . "/tabelaBasica_localizacaoItemFiltro.php"));
         }
 
         if (in_array('UNIDADE_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['estoque']['sub']['estoqueTabelas']['sub'] += array("unidade" => array("title" => "Unidade", "url" => APP_URL . "/tabelaBasica_unidadeFiltro.php")); //SYSGC 
+            $page_nav['estoque']['sub']['tabela']['sub'] += array("unidade" => array("title" => "Unidade", "url" => APP_URL . "/tabelaBasica_unidadeFiltro.php")); //SYSGC 
         }
 
         if (in_array('UNIDADEITEM_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['estoque']['sub']['estoqueTabelas']['sub'] += array("unidadeItem" => array("title" => "Unidade do item", "url" => APP_URL . "/tabelaBasica_unidadeItemFiltro.php"));
+            $page_nav['estoque']['sub']['tabela']['sub'] += array("unidadeItem" => array("title" => "Unidade do item", "url" => APP_URL . "/tabelaBasica_unidadeItemFiltro.php"));
         }
     }
 
@@ -528,19 +528,22 @@ if ($condicaoEstoqueOk) {
         if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
             $page_nav['estoque']['sub']['operacao']['sub'] += array("entradaItem" => array("title" => "Entrada Item", "url" => APP_URL . "/estoque_entradaMaterialFiltro.php"));
         }
-    }
 
+        if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['estoque']['sub']['operacao']['sub'] += array("fornecimentoMaterial" => array("title" => "Fornecimento Material", "url" => APP_URL . "/estoque_fornecimentoMaterialFiltro.php"));
+        }
+
+    }
 
     // if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
     //     $page_nav['operacao']['sub']['estoque']['sub'] += array("pedidoMaterial" => array("title" => "Pedido Material", "url" => APP_URL . "/estoque_pedidoMaterialFiltro.php"));
     // }
-    //SUBMENU RETENÇÃO CONTA VINCULADA - SYSGEF
     if (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['estoque']['sub']['estoqueRelatorio'] = array("title" => "Relatórios");
-        $page_nav['estoque']['sub']['estoqueRelatorio']['sub'] = array();
+        $page_nav['estoque']['sub']['relatorio'] = array("title" => "Relatórios");
+        $page_nav['estoque']['sub']['relatorio']['sub'] = array();
 
         if (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['estoque']['sub']['estoqueRelatorio']['sub'] += array("consultaFornecedor" => array("title" => "Consulta Fornecedor", "url" => APP_URL . "/estoque_consultaFornecedorFiltro.php"));
+            $page_nav['estoque']['sub']['relatorio']['sub'] += array("consultaFornecedor" => array("title" => "Consulta Fornecedor", "url" => APP_URL . "/estoque_consultaFornecedorFiltro.php"));
         }
     }
 }

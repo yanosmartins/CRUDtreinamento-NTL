@@ -37,7 +37,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['localizacaoItem']["active"] = true;
+$page_nav['estoque']['sub']['tabela']['sub']['localizacaoItem']["active"] = true;
 
 include("inc/nav.php");
 ?>
