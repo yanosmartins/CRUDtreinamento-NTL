@@ -275,7 +275,7 @@ if ($condicaoFaturamentoOk) {
     $page_nav['faturamento'] = array("title" => "Faturamento", "icon" => "fa fa-dollar");
     $page_nav['faturamento']['sub'] = array();
 
-    if (in_array('BDI_ACESSAR', $arrayPermissao, true)) {
+    if (in_array('CONTRATO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['faturamento']['sub']['tabela'] = array("title" => "Tabelas");
         $page_nav['faturamento']['sub']['tabela']['sub'] = array();
 
@@ -389,7 +389,7 @@ if ($condicaoLicitacaoOk) {
     $page_nav['licitacao'] = array("title" => "Licitação", "icon" => "fa fa-line-chart");
     $page_nav['licitacao']['sub'] = array();
 
-    if (in_array('PORTAL_ACESSAR', $arrayPermissao, true)) {
+    if (in_array('PREGAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['licitacao']['sub']['tabela'] = array("title" => "Tabelas");
         $page_nav['licitacao']['sub']['tabela']['sub'] = array();
 

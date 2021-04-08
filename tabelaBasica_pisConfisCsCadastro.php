@@ -40,7 +40,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['tabelaBasica']['sub']['retencaoTributaria']['sub']["pisConfisCs"]["active"] = true;
+$page_nav['faturamento']['sub']['tabela']['sub']['retencaoTributaria']['sub']["pisConfisCs"]["active"] = true;
 include("inc/nav.php");
 ?>
 
