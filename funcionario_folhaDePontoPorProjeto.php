@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]["funcionario"]["sub"]["emitirFolhaPorProjeto"]["active"] = true;
+$page_nav["funcionario"]["sub"]["emitirFolhaPorProjeto"]["active"] = true;
 
 include("inc/nav.php");
 ?>

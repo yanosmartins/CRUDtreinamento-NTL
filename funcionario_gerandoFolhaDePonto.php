@@ -32,7 +32,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['funcionario']['sub']["geradorFolha"]["active"] = true;
+$page_nav['funcionario']['sub']["geradorFolha"]["active"] = true;
 
 include("inc/nav.php");
 ?>
