@@ -28,7 +28,7 @@ $page_css[] = "your_style.css";
 include("inc/header.php");
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["produto"]["active"] = true;
+$page_nav['beneficio']['sub']['cadastro']['sub']["produto"]["active"] = true;
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
