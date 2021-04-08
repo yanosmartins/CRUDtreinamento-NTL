@@ -68,7 +68,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['funcionario']['sub']["controlePonto"]["active"] = true;
+$page_nav['funcionario']['sub']["controlePonto"]["active"] = true;
 include("inc/nav.php");
 ?>
 
