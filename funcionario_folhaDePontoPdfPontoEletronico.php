@@ -17,7 +17,7 @@ if ((empty($_GET["id"])) || (!isset($_GET["id"])) || (is_null($_GET["id"]))) {
     $id = (int)$_GET["id"];
 }
 $folha = (int)$_GET["folha"];
-$pag =(int)$_GET["pag"];
+$pag = (int)$_GET["pag"];
 
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
@@ -27,15 +27,15 @@ require_once('fpdf/fpdf.php');
 
 $mesAno = $_GET["data"];
 if ($mesAno != "") {
-    $mesteste = explode("/", $mesAno);
-    $mes = $mesteste[0];
+    $mesteste = explode("-", $mesAno);
+    $mes = $mesteste[1];
     if ($pag == 0 && $mes == 01) {
         $mes = 12;
-    } 
-    if($pag == 0 && $mes != 01) {
+    }
+    if ($pag == 0 && $mes != 01) {
         $mes = $mes - 1;
     }
-    $ano = $mesteste[1];
+    $ano = $mesteste[0];
     $mesExtenso = ucfirst(mb_convert_encoding(strftime('%B', strtotime("$ano-$mes")), 'UTF-8', 'HTML-ENTITIES'));
     // $mes = date("m"); //02
     $days = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
@@ -45,8 +45,8 @@ if ($mesAno != "") {
     $mes = date("m"); //02
     if ($pag == 0 && $mes == 01) {
         $mes = 12;
-    }  
-    if($pag == 0 && $mes != 01) {
+    }
+    if ($pag == 0 && $mes != 01) {
         $mes = $mes - 1;
     }
     $ano = date("Y"); //2021
@@ -65,64 +65,61 @@ $sql = "SELECT BP.codigo,F.codigo AS 'funcionario',F.nome,F.matricula,F.logradou
     WHERE (0=0) AND F.codigo = $id AND BP.ativo = 1";
 
 $result = $reposit->RunQuery($sql);
-$row = $result[0];
-if ($row) {
-    $estado =$row['estado'];
-    $municipioFerias = $row['municipioFerias'];
-    $horaEntrada = $row['horaEntrada'];
-    $horaSaida = $row['horaSaida'];
-    $horaInicio = $row['horaInicio'];
-    $horaFim = $row['horaFim'];
-    $cargo = $row['cargo'];    
+
+if ($row = $result[0]) {
+    $beneficioProjeto = $row['codigo'];
     $funcionario = $row['funcionario'];
     $nome = $row['nome'];
     $matricula = $row['matricula'];
     $logradouro = $row['logradouro'];
     $projeto = $row['projeto'];
-    $beneficioProjeto = $row['codigo'];
+    $horaEntrada = $row['horaEntrada'];
+    $horaSaida = $row['horaSaida'];
+    $horaInicio = $row['horaInicio'];
+    $horaFim = $row['horaFim'];
+    $apelido = $row['apelido'];
+    $estado = $row['estado'];
+    $cidade = $row['cidade'];
+    $municipioFerias = $row['municipioFerias'];
+    $cargo = $row['cargo'];
 }
 
 $dataInicio = "$ano-$mes-01";
 $dataFim = "$ano-$mes-$days";
 
-$sql2 = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
+$sql = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
 FROM Ntl.feriado F 
 LEFT JOIN Ntl.municipio M ON M.codigo = F.municipio
 WHERE F.ativo = 1 AND data BETWEEN '$dataInicio' AND '$dataFim'
 AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = $estado)) OR F.tipoFeriado = 2 and M.codigo = $municipioFerias) 
 AND DATENAME(weekday,F.data) NOT IN ('Saturday', 'Sunday')";
-$result2 = $reposit->RunQuery($sql2);
-$row2 = $result2[0];
-// if ($row2) {
-//     $dataferiado = "'" . $row2['data'] . "'";
-// }
+$result = $reposit->RunQuery($sql);
 
 $feriados = array();
-foreach ($result2 as $row2) {
-    array_push($feriados, $row2);
+foreach ($result as $row) {
+    array_push($feriados, $row);
 }
 $ponto = array();
 $sql = "SELECT F.codigo AS 'folha',FD.dia,F.mesAno,FD.horaEntrada,FD.inicioAlmoco,FD.fimAlmoco,FD.horaSaida,FD.horaExtra,FD.atraso,FD.lancamento,F.observacao FROM Funcionario.folhaPontoMensal F
 INNER JOIN Funcionario.folhaPontoMensalDetalheDiario FD ON F.codigo = FD.folhaPontoMensal
 INNER JOIN ntl.funcionario FU ON FU.codigo = F.funcionario 
 LEFT JOIN ntl.lancamento L ON L.codigo = FD.lancamento
-WHERE (0=0) AND FU.codigo = 13082 AND F.codigo = 16";
+WHERE (0=0) AND FU.codigo = $funcionario AND F.codigo = $folha";
 $result = $reposit->RunQuery($sql);
-foreach($result as $row) {
-   array_push($ponto,[
-          "codigo"=>$row["codigo"],
-          "dia"=>$row["dia"],
-          "horaEntrada"=>$row["horaEntrada"],
-          "inicioAlmoco"=>$row["inicioAlmoco"],
-          "fimAlmoco"=>$row["fimAlmoco"],
-          "horaSaida"=>$row["horaSaida"],
-          "horaExtra"=>$row["horaExtra"],
-          "atraso"=>$row["atraso"],
-          "lancamento"=>$row["lancamento"],
-          "observacao"=>$row["observacao"]
-          ]);
+foreach ($result as $row) {
+    array_push($ponto, [
+        "codigo" => $row["codigo"],
+        "dia" => $row["dia"],
+        "horaEntrada" => $row["horaEntrada"],
+        "inicioAlmoco" => $row["inicioAlmoco"],
+        "fimAlmoco" => $row["fimAlmoco"],
+        "horaSaida" => $row["horaSaida"],
+        "horaExtra" => $row["horaExtra"],
+        "atraso" => $row["atraso"],
+        "lancamento" => $row["lancamento"],
+        "observacao" => $row["observacao"]
+    ]);
 }
-
 
 class PDF extends FPDF
 {
@@ -151,8 +148,6 @@ class PDF extends FPDF
         $this->SetY(202);
     }
 }
-
-
 
 
 $pdf = new PDF('P', 'mm', 'A4'); #Crio o PDF padrão RETRATO, Medida em Milímetro e papel A$
@@ -318,8 +313,8 @@ $linhahorizontalteste = 50;
 $linhaverticalteste = 50;
 $days = (int)$days;
 foreach ($ponto as $registro) {
-    $diadasemana = strftime('%u', strtotime("" . $ano . '-' . $mes. '-' . $registro['dia'] . ""));
-    $diaferiado = "" . $ano . '-' . $mes . '-' . $registro['dia'] . "00:00:00.000";
+    $diadasemana = strftime('%u', strtotime($ano . '-' . $mes . '-' . $registro['dia']));
+    $diaferiado = new DateTime($ano . '-' . $mes . '-' . $registro['dia']);
 
     $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
     $pdf->Line(16, $linhaverticalteste, 16, 33.1); // 1
@@ -333,117 +328,110 @@ foreach ($ponto as $registro) {
     $pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
     $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
 
-    $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
-    $pdf->Line(16, $linhaverticalteste, 16, 33.1); // 1
-    $pdf->Line(32.1, $linhaverticalteste, 32.1, 33); // 2
-    $pdf->Line(49.1, $linhaverticalteste, 49.1, 39.1); // 3 
-    $pdf->Line(67.1, $linhaverticalteste, 67.1, 17); // 4 
-    $pdf->Line(86.1, $linhaverticalteste, 86.1, 33); // 5 
-    $pdf->Line(106.1, $linhaverticalteste, 106.1, 39.1); // 6
-    $pdf->Line(126.1, $linhaverticalteste, 126.1, 33); // 7
-    $pdf->Line(169.1, $linhaverticalteste, 169.1, 33); // 8
-    $pdf->Line(205.1, $linhaverticalteste, 205.1, 17); // 9 
-    $pdf->Line(5, $linhahorizontalteste+0.1, 205, $linhahorizontalteste+0.1);
+    // $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
+    // $pdf->Line(16, $linhaverticalteste, 16, 33.1); // 1
+    // $pdf->Line(32.1, $linhaverticalteste, 32.1, 33); // 2
+    // $pdf->Line(49.1, $linhaverticalteste, 49.1, 39.1); // 3 
+    // $pdf->Line(67.1, $linhaverticalteste, 67.1, 17); // 4 
+    // $pdf->Line(86.1, $linhaverticalteste, 86.1, 33); // 5 
+    // $pdf->Line(106.1, $linhaverticalteste, 106.1, 39.1); // 6
+    // $pdf->Line(126.1, $linhaverticalteste, 126.1, 33); // 7
+    // $pdf->Line(169.1, $linhaverticalteste, 169.1, 33); // 8
+    // $pdf->Line(205.1, $linhaverticalteste, 205.1, 17); // 9 
+    $pdf->Line(5, $linhahorizontalteste + 0.1, 205, $linhahorizontalteste + 0.1);
     $pdf->setY($linhavertical - 2.7);
-    
+
     $pdf->setX(5);
-    $pdf->SetFont('Arial', 'B', 7);
     $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $registro['dia'] . ""), 0, 0, "L", 0);
-    $pdf->setX(14);
+    $pdf->SetFont('Arial', 'B', 7);
+    switch ($diadasemana) {
+        case 1:
+            $pdf->setX(7);
+            $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
+            $pdf->SetFont('Arial', 'B', 8);
+            break;
+        case 2:
+            $pdf->setX(7);
+            $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
+            $pdf->SetFont('Arial', 'B', 8);
+            break;
+        case 3:
+            $pdf->setX(7);
+            $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
+            $pdf->SetFont('Arial', 'B', 8);
+            break;
+        case 4:
+            $pdf->setX(7);
+            $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
+            $pdf->SetFont('Arial', 'B', 8);
+            break;
+        case 5:
+            $pdf->setX(7);
+            $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
+            $pdf->SetFont('Arial', 'B', 8);
+            break;
+        case 6:
+            $pdf->setX(7);
+            $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
+            $pdf->setX(16.2);
+            $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(67.2);
+            $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(126.35);
+            $pdf->Cell(42.75, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(169.35);
+            $pdf->Cell(35.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->SetFont('Arial', 'B', 8);
+            break;
+        case 7:
+            $pdf->setX(7);
+            $pdf->SetFont('Arial', 'B', 7);
+            $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0);
+            $pdf->setX(16.2);
+            $pdf->Cell(15.65, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(67.21);
+            $pdf->Cell(18.69, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(126.35);
+            $pdf->Cell(42.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->setX(169.35);
+            $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            $pdf->SetFont('Arial', 'B', 8);
+            break;
+        default:
+    }
+
+    //isso tem que estar de alguma forma vinculado a um if/else para mostrar...
+    foreach ($feriados as $feriado) {
+        if ($feriado['data'] == $diaferiado) {
+            $pdf->SetFont('Arial', 'B', 9);
+            $pdf->setX(18);
+            $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " FERIADO"), 0, 0, "L", 0);// isso...
+            $pdf->SetFont('Arial', 'B', 9);
+        }
+    }
     $pdf->setX(18);
-    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $registro['horaEntrada'] . ""), 0, 0, "L", 0);
-    $pdf->setX(42,5);
-    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $registro['horaSaida'] . ""), 0, 0, "L", 0);
-    
-   
 
-    if ($dataferiado == $diaferiado) {
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->setX(15);
-        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " FERIADO"), 0, 0, "L", 0);
-        $pdf->SetFont('Arial', 'B', 9);
-    }
+    //Hora Entrada/Saida
+    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['horaEntrada']), 0, 0, "C", 0);// ou isso
+    $pdf->setX(42, 5);
+    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['horaSaida']), 0, 0, "C", 0);// ou isso
 
-    if ($diadasemana == 1) {
-        $pdf->SetFont('Arial', 'B', 7);
-        $pdf->setX(7);
-        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
-        $pdf->SetFont('Arial', 'B', 8);
-    }
-
-
-    if ($diadasemana == 2) {
-        $pdf->setX(7);
-        $pdf->SetFont('Arial', 'B', 7);
-        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
-    }
-
-
-    if ($diadasemana == 3) {
-        $pdf->SetFont('Arial', 'B', 7);
-        $pdf->setX(7);
-        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
-        $pdf->SetFont('Arial', 'B', 7);
-    }
-
-
-    if ($diadasemana == 4) {
-        $pdf->setX(7);
-        $pdf->SetFont('Arial', 'B', 7);
-        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
-    }
-
-    if ($diadasemana == 5) {
-        $pdf->SetFont('Arial', 'B', 7);
-        $pdf->setX(7);
-        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
-        $pdf->SetFont('Arial', 'B', 7);
-    }
-
-    if ($diadasemana == 6) {
-        $pdf->SetFont('Arial', 'B', 7);
-        $pdf->setX(7);
-        $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
-        $pdf->setX(16.2);
-        $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-        $pdf->setX(67.2);
-        $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-        $pdf->setX(126.35);
-        $pdf->Cell(42.75, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-        $pdf->setX(169.35);
-        $pdf->Cell(35.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-        $pdf->SetFont('Arial', 'B', 7);
-    }
-
-    if ($diadasemana == 7) {
-        $pdf->setX(7);
-        $pdf->SetFont('Arial', 'B', 7);
-        $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0);
-        $pdf->setX(16.2);
-        $pdf->Cell(15.65, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-        $pdf->setX(67.21);
-        $pdf->Cell(18.69, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-        $pdf->setX(126.35);
-        $pdf->Cell(42.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-        $pdf->setX(169.35);
-        $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-        $pdf->SetFont('Arial', 'B', 7);
-    }
-    //campos de almoco cinza
+    //Almoço Entrada/Saida CINZA
     $pdf->setX(32.2);
-    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['inicioAlmoco']), 0, 0, 0, 1);
+    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['inicioAlmoco']), 0, 0, "C", 1);// ou isso
     $pdf->setX(49.2);
-    $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['fimAlmoco']), 0, 0, 0, 1);
-    //campos de hora extra cinza
+    $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['fimAlmoco']), 0, 0, "C", 1);// ou isso
+
+    //Hora Extra/Atraso
     $pdf->setX(86.3);
-    $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+    $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1);// ou isso
     $pdf->setX(106.3);
-    $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+    $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1);// ou isso
     //campos observacao
     $pdf->setX(128);
-    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['lancamento']), 0, 0, 0, 1);
+    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['lancamento']), 0, 0, 0, 1);// ou isso
 
-    
+    //Só rodando para ver oque essa parte faz
     if ($diadasemana != 6 && $diadasemana != 7) {
         foreach ($feriados as $feriado) {
             if (mb_ereg("-$mes-" . str_pad($i, 2, 0, STR_PAD_LEFT), $feriado["data"])) {
