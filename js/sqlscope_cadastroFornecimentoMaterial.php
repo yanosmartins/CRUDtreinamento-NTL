@@ -34,6 +34,9 @@ if ($funcao == 'listaCodigoAtivoAutoComplete') {
 if ($funcao == 'listaClienteFornecedorAtivoAutoComplete') {
     call_user_func($funcao);
 }
+if ($funcao == 'populaComboEstoque') {
+    call_user_func($funcao);
+}
 
 return;
 
@@ -58,6 +61,8 @@ function grava()
     $horaMovimento = $_POST['horaMovimento'];
     $clienteFornecedor = (int)$_POST['clienteFornecedorId'] ?: 0;
     $solicitante = (int)$_POST['solicitanteId'] ?: 0;
+    $aprovado = (int)$_POST['aprovado'] ?: 0;
+    $responsavel = (int)$_SESSION['funcionario'] ?: 0;
     $projeto = (int)$_POST['projeto'] ?: 0;
 
     $strArrayItem = $_POST['jsonItem'];
@@ -101,10 +106,11 @@ function grava()
     $sql = "Estoque.pedidoMaterial_Atualiza
         $codigo,
         $dataMovimento,  
-        $horaMovimento,
         $clienteFornecedor,
         $solicitante,
+        $responsavel,
         $projeto,
+        $aprovado,
         $usuario, 
         $xmlItem
         ";
@@ -130,48 +136,49 @@ function recupera()
         $codigo = +$_POST["codigo"];
     }
 
-    $sql = "SELECT EM.codigo, EM.fornecedor, F.apelido, EM.tipoDocumento , T.descricao AS descricaoTipoDocumento, 
-    EM.numeroNF, EM.dataEntradaMaterial,EM.dataEntrega, EM.dataEmissaoNF, EM.observacao
-    FROM Estoque.entradaMaterial EM
-    LEFT JOIN Ntl.fornecedor F ON F.codigo = EM.fornecedor
-    LEFT JOIN Estoque.tipoDocumento T ON T.codigo = EM.tipoDocumento
-    WHERE (0=0) AND
-    EM.codigo = " . $codigo;
+    $sql = "SELECT PM.codigo, PM.fornecedor, F.apelido, PM.projeto, P.descricao AS descricaoProjeto, 
+    PM.solicitante, FS.nome AS descricaoSolicitante, PM.responsavel, FR.nome AS descricaoResponsavel, PM.aprovado, PM.dataCadastramento
+        FROM Estoque.pedidoMaterial PM
+        LEFT JOIN Ntl.fornecedor F ON F.codigo = PM.fornecedor
+        LEFT JOIN Ntl.projeto P ON P.codigo = PM.projeto
+        LEFT JOIN Ntl.funcionario FS ON FS.codigo = PM.solicitante
+        LEFT JOIN Ntl.funcionario FR ON FR.codigo = PM.responsavel
+        WHERE (0=0) AND
+        PM.codigo = " . $codigo;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
     if ($row = $result[0])
-        $codigo = (int)$row['codigo'];
-    $dataEntradaMaterial = $row['dataEntradaMaterial'];
+    $codigo = (int)$row['codigo'];
     $fornecedorID = (int)$row['fornecedor'];
     $descricaoFornecedor = $row['apelido'];
-    $tipoDocumento = (int)$row['tipoDocumento'];
-    $numeroNF = $row['numeroNF'];
-    $dataEntrada = $row['dataEntrega'];
-    $dataEmissaoNF = $row['dataEmissaoNF'];
-    $observacao = $row['observacao'];
+    $solicitanteID = (int)$row['solicitante'];
+    $descricaoSolicitante = $row['descricaoSolicitante'];
+    $responsavelID = (int)$row['responsavel'];
+    $descricaoResponsavel = $row['descricaoResponsavel'];
+    $aprovado = (int)$row['aprovado'];
+    $projeto = (int)$row['projeto'];
+    $dataCadastramento = $row['dataCadastramento'];
 
-    $valorEstimado = number_format($row['valorEstimado'], 2, ',', '.');
 
-
-    //Montando array de tarefas  
+    //Montando array de itens  
     $reposit = "";
     $result = "";
-    $sql = "SELECT EMI.codigo,EMI.entradaMaterial, EMI.material, CI.codigoItem, EMI.estoque,
-        E.descricao AS descricaoEstoque, EMI.quantidade,EMI.valorUnitario, EMI.valorDesconto, EMI.valorTotalItem,
-        CI.descricaoItem, CI.unidade, U.descricao AS descricaoUnidade
-        FROM Estoque.entradaMaterialItem EMI
-        LEFT JOIN Estoque.codigoItem CI ON CI.codigo = EMI.material
-        LEFT JOIN Estoque.estoque E ON E.codigo = EMI.estoque
-        LEFT JOIN Ntl.unidade U ON U.codigo = CI.unidade
-    WHERE (0=0) AND EMI.entradaMaterial = " . $codigo;
+    $sql = "SELECT PMI.codigo,PMI.pedidoMaterial, PMI.material, CI.codigoItem, PMI.estoque,
+    E.descricao AS descricaoEstoque, PMI.quantidade, CI.descricaoItem, PMI.unidade,
+    U.descricao AS descricaoUnidade, CI.unidadeItem, UI.descricao AS descricaoUnidadeItem,
+    PMI.situacao
+    FROM Estoque.pedidoMaterialItem PMI
+    LEFT JOIN Estoque.codigoItem CI ON CI.codigo = PMI.material
+    LEFT JOIN Estoque.estoque E ON E.codigo = PMI.estoque
+    LEFT JOIN Ntl.unidade U ON U.codigo = PMI.unidade
+    LEFT JOIN Estoque.unidadeItem UI ON UI.codigo = CI.unidadeItem
+    WHERE (0=0) AND PMI.pedidoMaterial = " . $codigo;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    $valorFinalItemTable = 0;
-    $valorTotalItemTable = 0;
     $contadorItem = 0;
     $arrayItem = array();
     foreach ($result as $row) {
@@ -181,30 +188,12 @@ function recupera()
         $estoque = $row['estoque'];
         $descricaoEstoque = $row['descricaoEstoque'];
         $quantidade =  number_format($row['quantidade'], 0, '', '');
-        $valorUnitario =  number_format($row['valorUnitario'], 2, ',', '');
-        $valorDesconto = number_format($row['valorDesconto'], 2, ',', '');
-        $valorFinalItem = number_format($row['valorTotalItem'], 2, ',', '');
         $descricaoItem = $row['descricaoItem'];
         $unidade = $row['unidade'];
         $descricaoUnidade = $row['descricaoUnidade'];
-
-        $valorTotalItem = 0;
-        $valorTotalItem = ($valorUnitario * $quantidade);
-        $valorTotalItem = number_format($valorTotalItem, 2, '.', '');
-        // $valorFinalItemTable = $valorFinalItemTable + $valorFinalItem;
-        // $valorFinalItemTable = number_format($valorFinalItemTable, 2, '.', '');
-        // $valorTotalItemTable = $valorTotalItemTable + $valorTotalItem;
-        // $valorTotalItemTable = number_format($valorTotalItemTable, 2, '.', '');
-
-        // if ($dataSolicitacao != "") {
-        //     $horario = explode(" ", $dataSolicitacao);
-        //     $horario = explode(":", $horario[1]);
-        //     $dataSolicitacao = date("d-m-Y", strtotime($dataSolicitacao));
-        //     $dataSolicitacao = str_replace('-', '/', $dataSolicitacao);
-        //     $dataSolicitacao = $dataSolicitacao . " " . $horario[0] . ":" . $horario[1];
-        // }
-
-
+        $descricaoUnidadeMedida = $row['descricaoUnidadeItem'];
+        $situacao = $row['situacao'];
+        
         $contadorItem = $contadorItem + 1;
         $arrayItem[] = array(
             "sequencialItem" => $contadorItem,
@@ -215,12 +204,10 @@ function recupera()
             "estoqueDestino" => $estoque,
             "descricaoEstoque" => $descricaoEstoque,
             "quantidade" => $quantidade,
-            "unitario" => $valorUnitario,
-            "desconto" => $valorDesconto,
-            "valorFinalItem" => $valorFinalItem,
-            "valorTotalItem" => $valorTotalItem,
             "unidadeDestino" => $unidade,
             "descricaoUnidade" => $descricaoUnidade,
+            "descricaoUnidadeMedida" => $descricaoUnidadeMedida,
+            "situacao" => $situacao,
             "unidade" => $unidade
         );
     }
@@ -228,14 +215,15 @@ function recupera()
     $strArrayItem = json_encode($arrayItem);
 
     $out =   $codigo . "^" .
-        $dataEntradaMaterial . "^" .
         $fornecedorID . "^" .
         $descricaoFornecedor . "^" .
-        $tipoDocumento . "^" .
-        $numeroNF . "^" .
-        $dataEntrada . "^" .
-        $dataEmissaoNF . "^" .
-        $observacao;
+        $solicitanteID . "^" .
+        $descricaoSolicitante . "^" .
+        $responsavelID . "^" .
+        $descricaoResponsavel . "^" .
+        $projeto . "^" .
+        $aprovado . "^" .
+        $dataCadastramento;
 
     if ($out == "") {
         echo "failed#";
@@ -302,7 +290,7 @@ function recuperaQuantidadeEstoque()
 
     $reposit = new reposit();
 
-    $sql = "SELECT SUM(quantidade) as quantidade FROM Estoque.entradaMaterialItem WHERE material =" . $id . "AND estoque =" . $estoque;
+    $sql = "SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacaoItem = 1 AND material =" . $id . " AND estoque =" . $estoque;
     $result = $reposit->RunQuery($sql);
     if ($row = $result[0]) {
         $quantidade = (int)$row['quantidade'];
@@ -336,16 +324,20 @@ function listaSolicitanteAtivoAutoComplete()
     }
 
     $reposit = new reposit();
-    $sql = "SELECT * FROM Ntl.funcionario WHERE (0=0) AND ativo = 1 
-    AND nome LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY nome";
+    $sql = "SELECT F.codigo, F.nome, U.login
+    FROM Ntl.funcionario F
+    LEFT JOIN NTL.usuario U ON U.funcionario = F.codigo
+    WHERE (0=0) AND F.ativo = 1 AND U.login IS NOT NULL
+    AND F.nome LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY F.nome";
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
     foreach ($result as $row) {
         $id = $row['codigo'];
         $descricao = $row["nome"];
+        $login = $row["login"];
         $contador = $contador + 1;
-        $array[] = array("id" => $id, "descricao" => $descricao);
+        $array[] = array("id" => $id, "descricao" => $descricao, "login" => $login);
     }
 
     $strArray = json_encode($array);
@@ -544,6 +536,34 @@ function recuperaDescricaoCodigo()
 
     echo "sucess#" . $out;
     return;
+}
+
+function populaComboEstoque()
+{
+    $unidade = $_POST["unidadeDestino"];
+    if ($unidade > 0) {
+        $sql = "SELECT codigo, descricao, unidade FROM Estoque.estoque 
+                WHERE ativo = 1 AND unidade = $unidade ORDER BY descricao";
+
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+        $contador = 0;
+        $out = "";
+        foreach ($result as $row) {
+            $id = $row['codigo'];
+            $descricao = $row['descricao'];
+
+            $out = $out . $id . "^" . $descricao . "|";
+
+            $contador = $contador + 1;
+        }
+        if ($out != "") {
+            echo "sucess#" . $contador . "#" . $out;
+            return;
+        }
+        echo "failed#";
+        return;
+    }
 }
 
 function validaString($value)
