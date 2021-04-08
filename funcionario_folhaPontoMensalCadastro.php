@@ -161,11 +161,8 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label" for="mesAno">Mês/Ano</label>
                                                                         <label class="input">
-                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" 
-                                                                            class="<?= $esconderCampoPesado['readonly'] ?>" 
-                                                                            <?= $esconderCampoPesado['readonly'] ?>
-                                                                            style="pointer-events:<?= $esconderCampoPesado['pointer-events']?>;
-                                                                            touch-action:<?= $esconderCampoPesado['touch-action']?>" >
+                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="<?= $esconderCampoPesado['readonly'] ?>" <?= $esconderCampoPesado['readonly'] ?> style="pointer-events:<?= $esconderCampoPesado['pointer-events'] ?>;
+                                                                            touch-action:<?= $esconderCampoPesado['touch-action'] ?>">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-1">
@@ -382,10 +379,16 @@ include("inc/nav.php");
                                                                         <i class="">Adicionar Ponto</i>
                                                                     </button>
                                                                 </section>
-                                                                <section class="col col-8">
+
+                                                                <section class="col col-6">
                                                                     <label class="label"> </label>
                                                                     </button>
                                                                 </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label"> </label>
+                                                                    </button>
+                                                                </section>
+
                                                                 <section class="col col-md-1">
                                                                     <label class=" label"> </label>
                                                                     <button id="btnGravar" type="button" class="btn btn-success" style="display:<?php if ($esconderCampoPesado) {
@@ -394,6 +397,14 @@ include("inc/nav.php");
                                                                         <i class="">Salvar alterações</i>
                                                                     </button>
                                                                 </section>
+
+                                                                <section class="col col-md-1">
+                                                                    <label class="label"> </label>
+                                                                    <button type="button" id="btnPdf" class="fa fa-file-pdf-o btn btn-danger" aria-hidden="true" style="height: 32px; width: 70px;">
+                                                                    </button>
+                                                                </section>
+
+
 
                                                             </div>
 
@@ -644,10 +655,10 @@ include("inc/scripts.php");
             // inputInicioAlmoco.val(inicioAlmoco)
             // inputFimAlmoco.val(fimAlmoco)
             inputSaida.val(saida)
-            if((extra.trim() != '00:00:00') && (extra.trim() != '00:00'))
-            inputExtra.val(extra)
-            if((atraso.trim() != '00:00:00') && (atraso.trim() != '00:00'))
-            inputAtraso.val(atraso)
+            if ((extra.trim() != '00:00:00') && (extra.trim() != '00:00'))
+                inputExtra.val(extra)
+            if ((atraso.trim() != '00:00:00') && (atraso.trim() != '00:00'))
+                inputAtraso.val(atraso)
             inputLancamento.val(lancamento)
 
         });
@@ -661,7 +672,7 @@ include("inc/scripts.php");
                 return
             }
 
-            
+
             var entrada = $("#horaEntrada-" + dia)
             var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
 
@@ -728,19 +739,26 @@ include("inc/scripts.php");
 
                     if (jornada > jornadaNormal) {
                         if (!inputExtra)
-                        inputExtra = (`${horas}:${minutos}`);
+                            inputExtra = (`${horas}:${minutos}`);
+
+                        inputLancamento = $('#inputLancamento option');
+                        inputLancamento.each((index, el) => {
+                            if (/hora\ ?extra/gi.test($(el).text())) {
+                                return inputLancamento = $(el).val();
+                            }
+                        })
                     } else {
-                        if (!inputAtraso){
+                        if (!inputAtraso) {
                             inputAtraso = (`${horas}:${minutos}`)
-                            
+
                             inputLancamento = $('#inputLancamento option');
-                            inputLancamento.each((index,el) =>{
-                                if(/atraso/gi.test($(el).text())){
+                            inputLancamento.each((index, el) => {
+                                if (/atraso/gi.test($(el).text())) {
                                     return inputLancamento = $(el).val();
                                 }
                             })
                         }
-                        
+
                     }
                 }
             }
@@ -883,8 +901,8 @@ include("inc/scripts.php");
         var codigo = Number($("#codigo").val())
         var ativo = Number($("#ativo").val())
         var funcionario = Number($("#funcionario").val());
-        
-        var mesAno = String($("#mesAno").val()).replace(/\d\d$/g,01);
+
+        var mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
         var observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
@@ -961,7 +979,7 @@ include("inc/scripts.php");
 
     function carregaFolhaPontoMensal() {
 
-        const mesAno = new Date().toJSON().slice(0,10).replace(/[0-9]$/g,01);
+        const mesAno = new Date().toJSON().slice(0, 10).replace(/[0-9]$/g, 01);
         const funcionario = $("#funcionario option:selected").val();
 
         $('#mesAno').val(mesAno);
