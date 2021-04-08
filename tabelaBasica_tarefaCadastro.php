@@ -42,7 +42,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["tarefa"]["active"] = true;
+$page_nav["licitacao"]["sub"]["tabela"]['sub']["tarefa"]["active"] = true;
 
 include("inc/nav.php");
 ?>
