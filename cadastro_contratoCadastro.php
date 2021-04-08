@@ -45,7 +45,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['cadastro']['sub']['contrato']['active'] = true;
+$page_nav['faturamento']['sub']['cadastro']['sub']['contrato']['active'] = true;
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
