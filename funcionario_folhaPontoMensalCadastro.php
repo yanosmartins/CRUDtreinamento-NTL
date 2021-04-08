@@ -644,7 +644,9 @@ include("inc/scripts.php");
             // inputInicioAlmoco.val(inicioAlmoco)
             // inputFimAlmoco.val(fimAlmoco)
             inputSaida.val(saida)
+            if((extra.trim() != '00:00:00') && (extra.trim() != '00:00'))
             inputExtra.val(extra)
+            if((atraso.trim() != '00:00:00') && (atraso.trim() != '00:00'))
             inputAtraso.val(atraso)
             inputLancamento.val(lancamento)
 
@@ -659,6 +661,7 @@ include("inc/scripts.php");
                 return
             }
 
+            
             var entrada = $("#horaEntrada-" + dia)
             var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
 
@@ -729,7 +732,7 @@ include("inc/scripts.php");
                     } else {
                         if (!inputAtraso){
                             inputAtraso = (`${horas}:${minutos}`)
-                            debugger
+                            
                             inputLancamento = $('#inputLancamento option');
                             inputLancamento.each((index,el) =>{
                                 if(/atraso/gi.test($(el).text())){
@@ -880,7 +883,7 @@ include("inc/scripts.php");
         var codigo = Number($("#codigo").val())
         var ativo = Number($("#ativo").val())
         var funcionario = Number($("#funcionario").val());
-        debugger
+        
         var mesAno = String($("#mesAno").val()).replace(/\d\d$/g,01);
         var observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
 
