@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['estoque']['sub']['operacao']['sub']["operacao"]["active"] = true;
+$page_nav['estoque']['sub']['entradaItem']['sub'] = true;
 
 include("inc/nav.php");
 ?>
@@ -105,6 +105,30 @@ include("inc/nav.php");
                                                             </section>
 
                                                         </div>
+                                                        <div class="row">                            
+                                                            <section class="col col-6">
+                                                                <label class="label"> Descrição Item</label>
+                                                                <label class="input">
+                                                                    <input id="descricaoItemId" name="descricaoItemId" type="hidden" value="">
+                                                                    <input id="descricaoItem" name="descricaoItemFiltro" autocomplete="off" class="form-control " placeholder="Digite a descrição..." type="text" value="">
+                                                                    <i class="icon-append fa fa-filter"></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Código Material</label>
+                                                                <label class="input">
+                                                                    <input id="codigoItemId" name="codigoItemId" type="hidden" value="">
+                                                                    <input id="codigoItem" name="codigoItemFiltro" autocomplete="off" class="form-control " placeholder="Digite o codigo..." type="text" value="">
+                                                                    <i class="icon-append fa fa-filter"></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Número NF</label>
+                                                                <label class="input">
+                                                                    <input id="numero" name="numero" maxlength="255" autocomplete="off" class="" type="text" value="">
+                                                                </label>
+                                                            </section>
+                                                        </div>
                                                         <div class="row">
                                                             <section class="col col-3">
                                                                 <label class="label" for="tipo">Tipo</label>
@@ -140,12 +164,7 @@ include("inc/nav.php");
                                                                         ?>
                                                                     </select><i></i>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Número NF</label>
-                                                                <label class="input">
-                                                                    <input id="numero" name="numero" maxlength="255" autocomplete="off" class="" type="text" value="">
-                                                                </label>
-                                                            </section>
+                                                          
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -269,6 +288,120 @@ include("inc/scripts.php");
                 .appendTo(ul);
         };
 
+        $("#codigoItem").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'js/sqlscope_cadastroEntradaItem.php',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        maxRows: 12,
+                        funcao: "listaCodigoAtivoAutoComplete",
+                        descricaoIniciaCom: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                id: item.id,
+                                label: item.descricao,
+                                value: item.descricao,
+                                descricaoItem: item.descricaoItem,
+                                unidade: item.unidade,
+                                estoque: item.estoque,
+                                unidadeItem: item.unidadeItem,
+                                consumivel: item.consumivel,
+                                autorizacao: item.autorizacao
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 3,
+
+            select: function(event, ui) {
+                $("#codigoItemId").val(ui.item.id);
+                $("#codigoItemFiltro").val(ui.item.nome);
+                var descricaoId = $("#codigoItemId").val();
+                $("#codigoItem").val(descricaoId)
+                $("#codigoItemFiltro").val('');
+
+                var descricaoItem = ui.item.descricaoItem;
+                $("#descricaoItemFiltro").val(descricaoItem);
+                $("#descricaoItemId").val(descricaoId);
+                $("#descricaoItem").val(descricaoItem);
+                $("#descricaoItemFiltro").val('');
+
+            },
+            change: function(event, ui) {
+                if (ui.item === null) {
+                    $("#codigoItemId").val('');
+                    $("#codigoItemFiltro").val('');
+                }
+            }
+        }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+        };
+
+
+        $("#descricaoItem").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'js/sqlscope_cadastroEntradaItem.php',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        maxRows: 12,
+                        funcao: "listaDescricaoAtivoAutoComplete",
+                        descricaoIniciaCom: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                id: item.id,
+                                label: item.descricao,
+                                value: item.descricao,
+                                codigoItem: item.codigoItem,
+                                unidade: item.unidade,
+                                estoque: item.estoque,
+                                unidadeItem: item.unidadeItem,
+                                consumivel: item.consumivel,
+                                autorizacao: item.autorizacao
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 3,
+
+            select: function(event, ui) {
+                $("#descricaoItemId").val(ui.item.id);
+                $("#descricaoItemFiltro").val(ui.item.nome);
+                var descricaoId = $("#descricaoItemId").val();
+                $("#descricaoItem").val(descricaoId)
+                $("#descricaoItemFiltro").val('');
+
+                var codigoItem = ui.item.codigoItem;
+                $("#codigoItemFiltro").val(codigoItem);
+                $("#codigoItemId").val(descricaoId);
+                $("#codigoItem").val(codigoItem);
+                $("#codigoItemFiltro").val('');
+            },
+            change: function(event, ui) {
+                if (ui.item === null) {
+                    $("#descricaoItemId").val('');
+                    $("#descricaoItemsFiltro").val('');
+                }
+            }
+        }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+        };
+
     });
 
     function novo() {
@@ -282,6 +415,7 @@ include("inc/scripts.php");
         var tipo = $('#tipo').val();
         var estoqueDestino = $('#estoqueDestino').val();
         var numero = $('#numero').val();
+        var codigoItemId = $('#codigoItemId').val();
 
         $('#resultadoBusca').load('estoque_entradaMaterialFiltroListagem.php?', {
             clienteFornecedorId: clienteFornecedorId,
@@ -289,7 +423,8 @@ include("inc/scripts.php");
             dataFinal: dataFinal,
             tipo: tipo,
             estoqueDestino: estoqueDestino,
-            numero: numero
+            numero: numero,
+            codigoItemId: codigoItemId
         });
     }
 </script>

@@ -43,7 +43,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['estoque']['sub']["entradaItem"]["active"] = true;
+$page_nav['estoque']['sub']['entradaItem']['sub'] = true;
 
 include("inc/nav.php");
 ?>
@@ -90,7 +90,7 @@ include("inc/nav.php");
                                                         <div id="formCadastro">
                                                             <div class="row">
                                                                 <section class="col col-2">
-                                                                    <label class="label">Código</label>
+                                                                    <label class="label">Lançamento</label>
                                                                     <label class="input">
                                                                         <input id="codigo" name="codigo" autocomplete="off" class="form-control readonly" readonly type="text" value="">
                                                                     </label>
@@ -113,14 +113,14 @@ include("inc/nav.php");
                                                                     <label class="label">Cliente/Fornecedor</label>
                                                                     <label class="input">
                                                                         <input id="clienteFornecedorId" name="clienteFornecedorId" type="hidden" value="">
-                                                                        <input id="clienteFornecedor" name="clienteFornecedorFiltro" autocomplete="off" class="form-control required"  placeholder="Digite o codigo..." type="text" value="">
+                                                                        <input id="clienteFornecedor" name="clienteFornecedorFiltro" autocomplete="off" class="form-control required" placeholder="Digite o codigo..." type="text" value="">
                                                                         <i class="icon-append fa fa-filter"></i>
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
                                                                     <label class="label" for="tipo">Tipo</label>
                                                                     <label class="select">
-                                                                        <select id="tipo" name="tipo" class="required" >
+                                                                        <select id="tipo" name="tipo" class="required">
                                                                             <option></option>
                                                                             <?php
                                                                             $sql =  "SELECT codigo, descricao FROM Estoque.tipoDocumento where ativo = 1 order by descricao";
@@ -137,20 +137,20 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label">Número</label>
                                                                     <label class="input">
-                                                                        <input id="numero" name="numero" maxlength="255" autocomplete="off" class="" type="text" value="">
+                                                                        <input id="numero" name="numero" maxlength="255" autocomplete="off" class="readonly" disabled type="text" value="">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
                                                                     <label class="label">Data Emissão</label>
                                                                     <label class="input">
-                                                                        <input id="dataEmissao" name="dataEmissao" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required"  style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                        <input id="dataEmissao" name="dataEmissao" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                         <i class="icon-append fa fa-calendar"></i>
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
                                                                     <label class="label">Data Entrada</label>
                                                                     <label class="input">
-                                                                        <input id="dataEntrega" name="dataEntrega" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                        <input id="dataEntrega" name="dataEntrega" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                         <i class="icon-append fa fa-calendar"></i>
                                                                     </label>
                                                                 </section>
@@ -323,7 +323,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2 col-auto">
                                                                     <label class="label">Desconto</label>
                                                                     <label class="input"><i class="icon-append fa fa-dollar"></i>
-                                                                        <input id="desconto" name="desconto" class="decimal-2-casas required" type="text" autocomplete="off">
+                                                                        <input id="desconto" name="desconto" class="decimal-2-casas" type="text" autocomplete="off">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2 col-auto">
@@ -739,11 +739,15 @@ include("inc/scripts.php");
         $("#tipo").on("change", function() {
             let tipo = $('#tipo option:selected').text().trim();
             if (tipo == 'NF') {
+                $("#numero").removeClass('readonly');
+                $("#numero").attr('disabled', false);
                 $("#numero").addClass('required');
                 $("#numero").attr('required', true);
             } else {
                 $("#numero").removeClass('required');
                 $("#numero").attr('required', false);
+                $("#numero").addClass('readonly');
+                $("#numero").attr('disabled', true);
             }
         });
 
@@ -761,7 +765,8 @@ include("inc/scripts.php");
                 return;
             }
             if (desconto == "") {
-                return;
+                var desconto = '0';
+                $("#desconto").val('0,00');
             }
             unitario = unitario.replace(/,/g, ".");
             desconto = desconto.replace(/,/g, ".");
@@ -781,7 +786,8 @@ include("inc/scripts.php");
                 return;
             }
             if (desconto == "") {
-                return;
+                var desconto = '0';
+                $("#desconto").val('0,00');
             }
             unitario = unitario.replace(/,/g, ".");
             desconto = desconto.replace(/,/g, ".");
@@ -1301,6 +1307,7 @@ include("inc/scripts.php");
         var clienteFornecedorId = $('#clienteFornecedorId').val();
         var tipo = $('#tipo option:selected').val();
         var dataEmissao = $('#dataEmissao').val();
+        var dataEntrega = $('#dataEntrega').val();
 
         if (clienteFornecedorId === '') {
             smartAlert("Erro", "Informe o Fornecedor!", "error");
@@ -1317,13 +1324,22 @@ include("inc/scripts.php");
             $('#dataEmissao').focus();
             return false;
         }
+        if (dataEntrega === '') {
+            smartAlert("Erro", "Informe o Data Entrada!", "error");
+            $('#dataEntrega').focus();
+            return false;
+        }
+        if (jsonItemArray.length === 0) {
+            smartAlert("Erro", "Nenhum item na lista!", "error");
+            return false;
+        }
 
         return true;
     }
 
     function gravar() {
 
-        if(!validaCampos()){
+        if (!validaCampos()) {
             return;
         }
 
