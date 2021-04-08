@@ -32,7 +32,7 @@ $id = $_SESSION['funcionario'];
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Pedido Material";
+$page_title = "Fornecimento Material";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -44,7 +44,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['estoque']['sub']["pedidoMaterial"]["active"] = true;
+$page_nav['estoque']['sub']['fornecimentoMaterial']['sub'] = true;
 
 include("inc/nav.php");
 ?>
@@ -68,7 +68,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Entrada Item</h2>
+                            <h2>Fornecimento Item</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -140,6 +140,7 @@ include("inc/nav.php");
                                                                 </section>
                                                             </div>
                                                             <div class="row">
+                                                                <input id="login" name="login" type="hidden" value="">
                                                                 <section class="col col-6">
                                                                     <label class="label">Solicitante</label>
                                                                     <label class="input">
@@ -215,6 +216,7 @@ include("inc/nav.php");
                                                                 <input id="sequencialItem" name="sequencialItem" type="hidden" value="">
                                                                 <input id="unidadeMedidaId" name="unidadeMedidaId" type="hidden" value="">
                                                                 <input id="descricaoUnidadeMedida" name="descricaoUnidadeMedida" type="hidden" value="">
+                                                                <input id="situacaoId" name="situacaoId" type="hidden" value="">
 
                                                                 <section class="col col-2">
                                                                     <label class="label">Código Material</label>
@@ -272,11 +274,11 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="situacao">Situação</label>
                                                                     <label class="select">
-                                                                        <select id="situacao" name="situacao" class="required">
+                                                                        <select id="situacao" name="situacao" class="readonly" disabled>
                                                                             <option></option>
-                                                                            <option value="0">Consumo</option>
                                                                             <option value="1">Disponível</option>
                                                                             <option value="2">Não Disponível</option>
+                                                                            <option value="6">Consumo</option>
                                                                             <option value="3">Reservado</option>
                                                                             <option value="4">Aguardando Assinatura</option>
                                                                             <option value="5">Fornecido</option>
@@ -376,9 +378,25 @@ include("inc/nav.php");
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button type="submited" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                                 <span class="fa fa-floppy-o"></span>
                                             </button>
+                                            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleGravar" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                    <span id="ui-id-2" class="ui-dialog-title">
+                                                    </span>
+                                                </div>
+                                                <div id="dlgSimpleGravar" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                    <p>INSIRA A SENHA DO SOlICITANTE PARA LIBERAÇÃO:</p>
+                                                    <section class="col col-12">
+                                                        <input id="senha" name="senha" maxlength="255" autocomplete="off" class="" type="password" value="" style="width:50%;">
+                                                    </section>
+                                                </div>
+                                                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                    <div class="ui-dialog-buttonset">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                                 <span class="fa fa-file-o"></span>
                                             </button>
@@ -415,7 +433,8 @@ include("inc/scripts.php");
 ?>
 
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_pedidoMaterial.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_fornecimentoMaterial.js" type="text/javascript"></script>
+
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -480,6 +499,30 @@ include("inc/scripts.php");
             }]
         });
 
+        $('#dlgSimpleGravar').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Confirmar",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    doLogin();
+                    $('#senha').val('');
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $('#senha').val('');
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
 
@@ -494,6 +537,13 @@ include("inc/scripts.php");
             }
         });
 
+        $("#btnGravar").on("click", function() {
+            if (!validaCampos()) {
+                return;
+            }
+            $('#dlgSimpleGravar').dialog('open');
+        });
+
         $("#quantidade").on("change", function() {
             let quantidade = parseInt($("#quantidade").val());
             let quantidadeEstoque = parseInt($("#quantidadeEstoque").val());
@@ -504,6 +554,10 @@ include("inc/scripts.php");
             }
         });
 
+        $("#unidadeDestino").on("change", function() {
+            popularComboEstoque();
+        });
+
         $("#estoqueDestino").on("change", function() {
             recuperaQuantidade();
         });
@@ -512,7 +566,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
+                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -526,6 +580,7 @@ include("inc/scripts.php");
                                 id: item.id,
                                 label: item.descricao,
                                 value: item.descricao,
+                                login: item.login,
                             };
                         }));
                     }
@@ -536,6 +591,7 @@ include("inc/scripts.php");
             select: function(event, ui) {
                 $("#solicitanteId").val(ui.item.id);
                 $("#solicitanteFiltro").val(ui.item.nome);
+                $("#login").val(ui.item.login);
                 var descricaoId = $("#solicitanteId").val();
                 $("#solicitante").val(descricaoId)
                 $("#solicitanteFiltro").val('');
@@ -557,7 +613,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
+                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -602,7 +658,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
+                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -644,7 +700,9 @@ include("inc/scripts.php");
                 $("#descricaoItemFiltro").val('');
 
                 $("#unidadeDestino").val(ui.item.unidade);
+                popularComboEstoque();
                 $("#estoqueDestino").val(ui.item.estoque);
+
                 $("#unidade").val(ui.item.unidadeItem);
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
                 $("#quantidadeEstoque").val(ui.item.quantidade);
@@ -652,7 +710,11 @@ include("inc/scripts.php");
                 $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
 
                 if (ui.item.consumivel == 1) {
-                    $("#situacao").val('0');
+                    $("#situacao").val('6');
+                    $("#situacaoId").val('6');
+                } else {
+                    $("#situacao").val('3');
+                    $("#situacaoId").val('3');
                 }
 
             },
@@ -673,7 +735,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroPedidoMaterial.php',
+                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -714,8 +776,11 @@ include("inc/scripts.php");
                 $("#codigoItem").val(codigoItem);
                 $("#codigoItemFiltro").val('');
 
+
                 $("#unidadeDestino").val(ui.item.unidade);
+                popularComboEstoque();
                 $("#estoqueDestino").val(ui.item.estoque);
+
                 $("#unidade").val(ui.item.unidadeItem);
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
                 $("#quantidadeEstoque").val(ui.item.quantidade);
@@ -723,8 +788,13 @@ include("inc/scripts.php");
                 $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
 
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
+
                 if (ui.item.consumivel == 1) {
-                    $("#situacao").val('0');
+                    $("#situacao").val('6');
+                    $("#situacaoId").val('6');
+                } else {
+                    $("#situacao").val('3');
+                    $("#situacaoId").val('3');
                 }
             },
             change: function(event, ui) {
@@ -804,58 +874,51 @@ include("inc/scripts.php");
 
                             piece = out.split("^");
                             codigo = piece[0];
-                            dataEntregaMaterial = piece[1];
-                            fornecedorID = piece[2];
-                            descricaoFornecedor = piece[3];
-                            tipoDocumento = piece[4];
-                            numeroNF = piece[5];
-                            dataEntrega = piece[6];
-                            dataEmissaoNF = piece[7];
-                            observacao = piece[8];
+                            fornecedorID = piece[1];
+                            descricaoFornecedor = piece[2];
+                            solicitanteID = piece[3];
+                            descricaoSolicitante = piece[4];
+                            responsavelID = piece[5];
+                            descricaoResponsavel = piece[6];
+                            projeto = piece[7];
+                            aprovado = piece[8];
+                            dataCadastramento = piece[9];
 
                             //Arrumando o valor de data 
-                            dataEntregaMaterial = dataEntregaMaterial.split(" ");
-                            dataEntregaMaterial = dataEntregaMaterial[0].split("-");
-                            dataEntregaMaterial = dataEntregaMaterial[2] + "/" + dataEntregaMaterial[1] + "/" + dataEntregaMaterial[0];
-                            // horaLancamento = dataCadastro[1].split(":");
-                            // horaLancamento = horaLancamento[0] + ":" + horaLancamento[1];
-
-                            if (dataEntrega != "") {
-                                dataEntrega = dataEntrega.split(" ");
-                                dataEntrega = dataEntrega[0].split("-");
-                                dataEntrega = dataEntrega[2] + "/" + dataEntrega[1] + "/" + dataEntrega[0];
-                            }
-
-                            dataEmissaoNF = dataEmissaoNF.split(" ");
-                            dataEmissaoNF = dataEmissaoNF[0].split("-");
-                            dataEmissaoNF = dataEmissaoNF[2] + "/" + dataEmissaoNF[1] + "/" + dataEmissaoNF[0];
-
-
+                            dataMovimento = dataCadastramento.split(" ");
+                            dataCadastramento = dataMovimento[0].split("-");
+                            dataCadastramento = dataCadastramento[2] + "/" + dataCadastramento[1] + "/" + dataCadastramento[0];
+                            horaLancamento = dataMovimento[1].split(":");
+                            horaLancamento = horaLancamento[0] + ":" + horaLancamento[1];
 
                             $("#codigo").val(codigo);
-                            $("#dataMovimento").val(dataEntregaMaterial);
+                            $("#dataMovimento").val(dataCadastramento);
                             $("#clienteFornecedorId").val(fornecedorID);
                             $("#clienteFornecedor").val(descricaoFornecedor);
-                            $("#tipo").val(tipoDocumento);
-                            $("#numero").val(numeroNF);
-                            $("#dataEntrega").val(dataEntrega);
-                            $("#dataEmissao").val(dataEmissaoNF);
-                            $("#observacao").val(observacao);
+                            $("#solicitanteId").val(solicitanteID);
+                            $("#solicitante").val(descricaoSolicitante);
+                            $("#responsavelId").val(responsavelID);
+                            $("#responsavel").val(descricaoResponsavel);
+                            $("#projeto").val(projeto);
+                            $("#aprovado").val(aprovado);
+                            $("#dataMovimento").val(dataCadastramento);
+                            $("#horaMovimnento").val(horaLancamento);
+
 
                             $("#dataMovimento").addClass('readonly');
                             $("#dataMovimento").attr('disabled', true);
                             $("#clienteFornecedor").addClass('readonly');
                             $("#clienteFornecedor").attr('disabled', true);
-                            $("#tipo").addClass('readonly');
-                            $("#tipo").attr('disabled', true);
-                            $("#numero").addClass('readonly');
-                            $("#numero").attr('disabled', true);
-                            $("#dataEmissao").addClass('readonly');
-                            $("#dataEmissao").attr('disabled', true);
+                            $("#solicitante").addClass('readonly');
+                            $("#solicitante").attr('disabled', true);
+                            $("#projeto").addClass('readonly');
+                            $("#projeto").attr('disabled', true);
+
+                            $("#sectionAprovado").attr('hidden', false);
 
                             $("#btnAddItem").attr('disabled', true);
                             $("#btnRemoverItem").attr('disabled', true);
-                            $("#btnGravar").attr('disabled', true);
+                            // $("#btnGravar").attr('disabled', true);
 
                             $("#jsonItem").val(strArrayItem);
                             jsonItemArray = JSON.parse($("#jsonItem").val());
@@ -866,6 +929,41 @@ include("inc/scripts.php");
                 );
             }
         }
+    }
+
+    function popularComboEstoque() {
+        var unidadeDestino = $("#unidadeDestino").val()
+        populaComboEstoque(unidadeDestino,
+            function(data) {
+                var atributoId = '#' + 'estoqueDestino';
+                if (data.indexOf('failed') > -1) {
+                    smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
+                    $("#unidade").focus()
+                    $("#estoqueDestino").val("")
+                    $("#estoqueDestino").prop("disabled", true)
+                    $("#estoqueDestino").addClass("readonly")
+                    return;
+                } else {
+                    $("#estoqueDestino").prop("disabled", false)
+                    $("#estoqueDestino").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+
+                    var mensagem = piece[0];
+                    var qtdRegs = piece[1];
+                    var arrayRegistros = piece[2].split("|");
+                    var registro = "";
+
+                    $(atributoId).html('');
+                    $(atributoId).append('<option></option>');
+
+                    for (var i = 0; i < qtdRegs; i++) {
+                        registro = arrayRegistros[i].split("^");
+                        $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
+                    }
+                }
+            }
+        );
     }
 
     function recuperaQuantidade() {
@@ -890,11 +988,11 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'estoque_pedidoMaterialFiltro.php');
+        $(location).attr('href', 'estoque_fornecimentoMaterialFiltro.php');
     }
 
     function novo() {
-        $(location).attr('href', 'estoque_pedidoMaterialCadastro.php');
+        $(location).attr('href', 'estoque_fornecimentoMaterialCadastro.php');
     }
 
     function excluir() {
@@ -941,7 +1039,7 @@ include("inc/scripts.php");
 
             var unidadeDestino = $("#unidadeDestino option[value = '" + jsonItemArray[i].unidadeDestino + "']").text();
             var estoqueDestino = $("#estoqueDestino option[value = '" + jsonItemArray[i].estoqueDestino + "']").text();
-            var situacao = $("#situacao option[value = '" + jsonItemArray[i].situacao + "']").text();
+            var situacao = $("#situacao option[value = '" + jsonItemArray[i].situacaoId + "']").text();
 
             var codigo = $("#codigo").val();
 
@@ -1173,6 +1271,36 @@ include("inc/scripts.php");
             smartAlert("Erro", "O valor inserido é inválido.", "error");
             return false;
         }
+        return true;
+    }
+
+    function validaCampos() {
+
+        var clienteFornecedorId = $('#clienteFornecedorId').val();
+        var projeto = $('#projeto option:selected').val();
+        var solicitanteId = $('#solicitanteId').val();
+
+        if (solicitanteId === '') {
+            smartAlert("Erro", "Informe o Solicitante!", "error");
+            $('#solicitante').focus();
+            return false;
+        }
+        if (projeto === '') {
+            smartAlert("Erro", "Informe o Projeto!", "error");
+            $('#projeto').focus();
+            return false;
+        }
+        if (clienteFornecedorId === '') {
+            smartAlert("Erro", "Informe o Fornecedor!", "error");
+            $('#clienteFornecedor').focus();
+            return false;
+        }
+        if (jsonItemArray.length === 0) {
+            smartAlert("Erro", "Nenhum item na lista!", "error");
+            return false;
+        }
+
+
         return true;
     }
 

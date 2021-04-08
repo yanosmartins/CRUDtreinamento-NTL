@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]["mensageria"]["sub"]["solicitacaoEmAndamento"]["active"] = true;
+$page_nav["mensageria"]["sub"]["solicitacaoEmAndamento"]["active"] = true;
 
 include("inc/nav.php");
 ?>

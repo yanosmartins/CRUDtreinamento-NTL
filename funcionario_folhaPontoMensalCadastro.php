@@ -68,7 +68,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['funcionario']['sub']["controlePonto"]["active"] = true;
+$page_nav['funcionario']['sub']["controlePonto"]["active"] = true;
 include("inc/nav.php");
 ?>
 
@@ -158,17 +158,11 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
 
-
-                                                                    <?php
-                                                                    setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-                                                                    date_default_timezone_set('America/Sao_Paulo');
-                                                                    $dataAtual = strftime('%m/%Y', strtotime('today'));
-                                                                    ?>
                                                                     <section class="col col-2">
                                                                         <label class="label" for="mesAno">Mês/Ano</label>
                                                                         <label class="input">
-                                                                            <i class="icon-append fa fa-calendar"></i>
-                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="text" class="readonly" readonly value="<?= $dataAtual  ?>">
+                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="<?= $esconderCampoPesado['readonly'] ?>" <?= $esconderCampoPesado['readonly'] ?> style="pointer-events:<?= $esconderCampoPesado['pointer-events'] ?>;
+                                                                            touch-action:<?= $esconderCampoPesado['touch-action'] ?>">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-1">
@@ -385,10 +379,16 @@ include("inc/nav.php");
                                                                         <i class="">Adicionar Ponto</i>
                                                                     </button>
                                                                 </section>
-                                                                <section class="col col-8">
+
+                                                                <section class="col col-6">
                                                                     <label class="label"> </label>
                                                                     </button>
                                                                 </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label"> </label>
+                                                                    </button>
+                                                                </section>
+
                                                                 <section class="col col-md-1">
                                                                     <label class=" label"> </label>
                                                                     <button id="btnGravar" type="button" class="btn btn-success" style="display:<?php if ($esconderCampoPesado) {
@@ -397,6 +397,14 @@ include("inc/nav.php");
                                                                         <i class="">Salvar alterações</i>
                                                                     </button>
                                                                 </section>
+
+                                                                <section class="col col-md-1">
+                                                                    <label class="label"> </label>
+                                                                    <button type="button" id="btnPdf" class="fa fa-file-pdf-o btn btn-danger" aria-hidden="true" style="height: 32px; width: 70px;">
+                                                                    </button>
+                                                                </section>
+
+
 
                                                             </div>
 
@@ -603,6 +611,13 @@ include("inc/scripts.php");
             selecionaFolha();
         });
 
+        $("#mesAno").on("change", function() {
+            var funcionario = $("#funcionario").val();
+            var codigo = $("#expediente option[data-funcionario ='" + funcionario + "']").val();
+            $("#expediente").val(codigo);
+            selecionaFolha();
+        });
+
         $('#inputDia').on('keydown', () => {
             const dia = $("#inputDia").val();
             const mask = /\D/.test(dia);
@@ -640,8 +655,10 @@ include("inc/scripts.php");
             // inputInicioAlmoco.val(inicioAlmoco)
             // inputFimAlmoco.val(fimAlmoco)
             inputSaida.val(saida)
-            inputExtra.val(extra)
-            inputAtraso.val(atraso)
+            if ((extra.trim() != '00:00:00') && (extra.trim() != '00:00'))
+                inputExtra.val(extra)
+            if ((atraso.trim() != '00:00:00') && (atraso.trim() != '00:00'))
+                inputAtraso.val(atraso)
             inputLancamento.val(lancamento)
 
         });
@@ -655,18 +672,18 @@ include("inc/scripts.php");
                 return
             }
 
+
             var entrada = $("#horaEntrada-" + dia)
-            var inputEntrada = $("#inputHoraEntrada").val()
+            var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
 
             var inicioAlmoco = $("#inicioAlmoco-" + dia)
-            var inputInicioAlmoco = $("#inputInicioAlmoco").val()
+            var inputInicioAlmoco = $("#inputInicioAlmoco").val() || '00:00:00'
 
             var fimAlmoco = $("#fimAlmoco-" + dia)
-            var inputFimAlmoco = $("#inputFimAlmoco").val()
+            var inputFimAlmoco = $("#inputFimAlmoco").val() || '00:00:00'
 
             var saida = $("#horaSaida-" + dia)
-            var inputSaida = $("#inputHoraSaida").val()
-            if (!inputSaida) inputSaida = '00:00:00';
+            var inputSaida = $("#inputHoraSaida").val() || '00:00:00'
 
             var extra = $("#horaExtra-" + dia)
             var inputExtra = $("#inputHoraExtra").val()
@@ -721,9 +738,27 @@ include("inc/scripts.php");
                     if (minutos.toString().length < 2) minutos = `0${minutos}`;
 
                     if (jornada > jornadaNormal) {
-                        inputExtra = (`${horas}:${minutos}`);
+                        if (!inputExtra)
+                            inputExtra = (`${horas}:${minutos}`);
+
+                        inputLancamento = $('#inputLancamento option');
+                        inputLancamento.each((index, el) => {
+                            if (/hora\ ?extra/gi.test($(el).text())) {
+                                return inputLancamento = $(el).val();
+                            }
+                        })
                     } else {
-                        inputAtraso = (`${horas}:${minutos}`)
+                        if (!inputAtraso) {
+                            inputAtraso = (`${horas}:${minutos}`)
+
+                            inputLancamento = $('#inputLancamento option');
+                            inputLancamento.each((index, el) => {
+                                if (/atraso/gi.test($(el).text())) {
+                                    return inputLancamento = $(el).val();
+                                }
+                            })
+                        }
+
                     }
                 }
             }
@@ -751,8 +786,6 @@ include("inc/scripts.php");
             atraso.val(inputAtraso);
             saida.val(horaSaida);
             lancamento.val(inputLancamento);
-
-
 
             return;
         });
@@ -868,7 +901,8 @@ include("inc/scripts.php");
         var codigo = Number($("#codigo").val())
         var ativo = Number($("#ativo").val())
         var funcionario = Number($("#funcionario").val());
-        var mesAno = String($("#mesAno").val());
+
+        var mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
         var observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
@@ -945,12 +979,10 @@ include("inc/scripts.php");
 
     function carregaFolhaPontoMensal() {
 
-        const data = new Date().toLocaleDateString();
-        const mesAno = data.slice(3, data.length);
+        const mesAno = new Date().toJSON().slice(0, 10).replace(/[0-9]$/g, 01);
         const funcionario = $("#funcionario option:selected").val();
 
         $('#mesAno').val(mesAno);
-
 
         recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
@@ -1091,8 +1123,7 @@ include("inc/scripts.php");
         if (isNaN(es)) es = Number('00');
 
         if ((h == eh) && (m == em)) {
-            m = Math.floor(Math.random() * (3 - 0)) + 0;
-            s = Math.floor(Math.random() * 60);
+            s = Math.floor(Math.random() * 50);
         }
 
         if (h.toString().length < 2) h = `0${h}`;
@@ -1115,5 +1146,4 @@ include("inc/scripts.php");
     function duracao(inicioExpediente, fimExpediente) {
         return (parse(fimExpediente) - parse(inicioExpediente));
     }
-
 </script>
