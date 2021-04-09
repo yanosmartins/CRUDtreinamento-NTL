@@ -135,6 +135,10 @@ if ($condicaoCadastroOk) {
         $page_nav['cadastro']['sub'] += array("cargo" => array("title" => "Cargo", "url" => APP_URL . "/cadastro_cargoFiltro.php")); //SYSCB   
     }
 
+    if (in_array('DIASUTEISMUNICIPIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("diasUteisPorMunicipio" => array("title" => "Dias Úteis por Município", "url" => APP_URL . "/cadastro_diasUteisPorMunicipioFiltro.php")); //SYSCB 
+    }
+
     if (in_array('FERIADO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("feriado" => array("title" => "Feriado", "url" => APP_URL . "/cadastro_feriadoFiltro.php")); //SYSCB 
     }
@@ -188,9 +192,7 @@ if ($condicaoBeneficioOk) {
         if (in_array('CONVENIOSAUDE_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['cadastro']['sub'] += array("convenioSaude" => array("title" => "Convênio de Saúde", "url" => APP_URL . "/cadastro_convenioSaudeFiltro.php"));
         }
-        if (in_array('DIASUTEISMUNICIPIO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['beneficio']['sub']['cadastro']['sub'] += array("diasUteisPorMunicipio" => array("title" => "Dias Úteis por Município", "url" => APP_URL . "/cadastro_diasUteisPorMunicipioFiltro.php")); //SYSCB 
-        }
+   
 
         if (in_array('PRODUTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['cadastro']['sub'] += array("produto" => array("title" => "Produto", "url" => APP_URL . "/cadastro_produtoFiltro.php")); //SYSCB
@@ -463,7 +465,7 @@ $condicaoFuncionarioOk = true;
 if ($condicaoFuncionarioOk) {
     $page_nav['funcionario'] = array("title" => "Área do Funcionário", "icon" => "fa fa-user");
     $page_nav['funcionario']['sub'] = array();
-    if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
+    if (in_array('FOLHAPONTOMENSAL_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("contraChequeWeb" => array("title" => "Contra Cheque Web", "url" => "http://www.contrachequeweb.com.br/ntl/"));
     }
     if (in_array('FOLHAPONTOMENSAL_ACESSAR', $arrayPermissao, true)) {
