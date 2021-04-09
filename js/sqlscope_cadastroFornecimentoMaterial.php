@@ -44,7 +44,7 @@ function grava()
 {
     $reposit = new reposit(); //Abre a conexão.  
 
-    $possuiPermissao = $reposit->PossuiPermissao("ENTRADAITEM_ACESSAR|ENTRADAITEM_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("FORNECIMENTOMATERIAL_ACESSAR|FORNECIMENTOMATERIAL_GRAVAR|PEDIDOMATERIAL_ACESSAR|PEDIDOMATERIAL_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -245,7 +245,7 @@ function excluir()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("ENTRADAITEM_ACESSAR|ENTRADAITEM_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("FORNECIMENTOMATERIAL_ACESSAR|FORNECIMENTOMATERIAL_EXCLUIR|PEDIDOMATERIAL_ACESSAR|PEDIDOMATERIAL_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";

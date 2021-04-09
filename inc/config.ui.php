@@ -537,16 +537,15 @@ if ($condicaoEstoqueOk) {
         if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
             $page_nav['estoque']['sub']['operacao']['sub'] += array("entradaItem" => array("title" => "Entrada Item", "url" => APP_URL . "/estoque_entradaMaterialFiltro.php"));
         }
-
-        if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
+        if (in_array('PEDIDOMATERIAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['estoque']['sub']['operacao']['sub'] += array("pedidoMaterial" => array("title" => "Pedido Material", "url" => APP_URL . "/estoque_pedidoMaterialCadastro.php"));
+        }
+        if (in_array('FORNECIMENTOMATERIAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['estoque']['sub']['operacao']['sub'] += array("fornecimentoMaterial" => array("title" => "Fornecimento Material", "url" => APP_URL . "/estoque_fornecimentoMaterialFiltro.php"));
         }
 
     }
 
-    // if (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true)) {
-    //     $page_nav['operacao']['sub']['estoque']['sub'] += array("pedidoMaterial" => array("title" => "Pedido Material", "url" => APP_URL . "/estoque_pedidoMaterialFiltro.php"));
-    // }
     if (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true)) {
         $page_nav['estoque']['sub']['relatorio'] = array("title" => "Relatórios");
         $page_nav['estoque']['sub']['relatorio']['sub'] = array();

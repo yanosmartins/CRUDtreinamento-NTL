@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('ENTRADAITEM_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('ENTRADAITEM_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('ENTRADAITEM_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PEDIDOMATERIAL_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PEDIDOMATERIAL_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('PEDIDOMATERIAL_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -44,7 +44,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['estoque']['sub']['operacao']['sub']['fornecimentoMaterial']["active"]  = true;
+$page_nav['estoque']['sub']['operacao']['sub']['pedidoMaterial']["active"]  = true;
 
 include("inc/nav.php");
 ?>
