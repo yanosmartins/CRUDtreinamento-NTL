@@ -158,7 +158,7 @@ include("inc/nav.php");
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeguroVida" class="collapsed" id="accordionSeguroVida">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Seguro de Vida
+                                                        Tolerância Atraso
                                                     </a>
                                                 </h4>
                                             </div>
@@ -166,16 +166,20 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="seguroVida">Seguro de
-                                                                    vida</label>
-                                                                <label class="select">
-                                                                    <select id="seguroVida" name="seguroVida" class="required">
-                                                                        <option value="" style="display:none;"></option>
-                                                                        <option value='1'>Sim</option>
-                                                                        <option value='0'>Não</option>
-                                                                    </select><i></i>
-                                                                </label>
+
+                                                            <section class="col col-1">
+                                                                <label id="labelHora" class="label">Limite Entrada</label>
+                                                                <div class="input-group" data-align="top" data-autoclose="true">
+                                                                    <input id="limiteEntrada" name="limiteEntrada" type="text" class="text-center form-control required" placeholder="00:00" data-autoclose="true" value="">
+                                                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                </div>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label id="labelHora" class="label">Limite Saida</label>
+                                                                <div class="input-group" data-align="top" data-autoclose="true">
+                                                                    <input id="limiteSaida" name="limiteSaida" type="text" class="text-center form-control required" placeholder="00:00" data-autoclose="true" value="">
+                                                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                </div>
                                                             </section>
                                                         </div>
                                                     </fieldset>
@@ -210,14 +214,22 @@ include("inc/nav.php");
                                                                     <input type="text" placeholder="0,00" id="valorDescontoFolhaPlanoSaude" name="valorDescontoFolhaPlanoSaude" style="text-align: right;" class="decimal-2-casas " />
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="seguroVida">Seguro de
+                                                                    vida</label>
+                                                                <label class="select">
+                                                                    <select id="seguroVida" name="seguroVida" class="required">
+                                                                        <option value="" style="display:none;"></option>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0'>Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
-
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <!-- ENDEREÇO -->
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -311,7 +323,7 @@ include("inc/nav.php");
                                                                                 FROM Ntl.municipio 
                                                                                 WHERE ativo = 1 ORDER BY descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $id = (int) $row['codigo'];
                                                                             $nome = $row['descricao'];
@@ -1508,6 +1520,9 @@ include("inc/scripts.php");
             $(this).mask(len > 10 ? "(99) 99999-999?9" : "(99) 9999-9999?9");
         });
 
+        $("#limiteEntrada").mask("99:99");
+        $("#limiteSaida").mask("99:99");
+
         carregaPagina();
 
     });
@@ -1594,6 +1609,8 @@ include("inc/scripts.php");
                             var valorDescontoFolhaPlanoSaude = piece[53];
                             var municipioFerias = piece[54];
                             var razaoSocial = piece[55];
+                            var limiteEntrada = piece[56];
+                            var limiteSaida = piece[57];
 
                             $("#codigo").val(codigo);
                             $("#cnpj").val(cnpj);
@@ -1662,6 +1679,8 @@ include("inc/scripts.php");
                             $("#valorDescontoFolhaPlanoSaude").val(valorDescontoFolhaPlanoSaude);
                             $("#municipioFerias").val(municipioFerias);
                             $("#razaoSocial").val(razaoSocial);
+                            $("#limiteEntrada").val(limiteEntrada);
+                            $("#limiteSaida").val(limiteSaida);
                             jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
                             jsonEmailArray = JSON.parse($("#jsonEmail").val());
                             jsonFolgaArray = JSON.parse($("#jsonFolga").val());
