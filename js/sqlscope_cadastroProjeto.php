@@ -110,6 +110,9 @@ function gravaProjeto()
     $valorDescontoFolhaPlanoSaude    = validaNumero($projeto['valorDescontoFolhaPlanoSaude']);
     $municipioFerias = validaNumero($projeto['municipioFerias']);
     $razaoSocial = validaString($projeto['razaoSocial']);
+
+    $limiteEntrada = validaString($projeto['limiteEntrada']);
+    $limiteSaida = validaString($projeto['limiteSaida']);
     //------------------------PROJETO Telefone------------------
     $strArrayTelefone = $projeto['jsonTelefone'];
     $arrayTelefone = json_decode($strArrayTelefone, true);
@@ -284,7 +287,9 @@ function gravaProjeto()
         $valorDescontoFolhaPlanoSaude,
         $municipioFerias,
         $razaoSocial,
-        $usuario";
+        $usuario,
+        $limiteEntrada,
+        $limiteSaida";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -403,6 +408,9 @@ function recuperaProjeto()
         $municipioFerias = +$row['municipioFerias'];
         $razaoSocial = $row['razaoSocial'];
 
+        $limiteEntrada = (string)$row['limiteEntrada'];
+        $limiteSaida = (string)$row['limiteSaida'];
+
         $out = $id . "^" .
             $cnpj . "^" .
             $descricao . "^" .
@@ -418,7 +426,6 @@ function recuperaProjeto()
             $cidade . "^" .
             $estado . "^" .
             $ativo . "^" .
-
             $diaUtilJaneiroVAVR . "^" .
             $diaUtilFevereiroVAVR . "^" .
             $diaUtilMarcoVAVR . "^" .
@@ -460,7 +467,9 @@ function recuperaProjeto()
             $descontoFolhaPlanoSaude . "^" .  
             $valorDescontoFolhaPlanoSaude . "^" . 
             $municipioFerias . "^" . 
-            $razaoSocial;
+            $razaoSocial . "^" . 
+            $limiteEntrada . "^" . 
+            $limiteSaida;
 
         //----------------------Montando o array do Telefone
         $sql = "SELECT * FROM Ntl.projeto SI 
