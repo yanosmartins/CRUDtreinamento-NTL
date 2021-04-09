@@ -42,7 +42,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]["beneficio"]["sub"]["ferias"]["active"] = true;
+$page_nav["beneficio"]["sub"]["operacao"]["sub"]["ferias"]["active"] = true;
 
 include("inc/nav.php");
 include_once("populaTabela/popula.php");
@@ -90,7 +90,7 @@ include_once("populaTabela/popula.php");
 
                                                         <div class="row">
                                                             <input id="codigo" name="codigo" type="text" readonly class="hidden" value="">
-                                                            <section class="col col-3">
+                                                            <section class="col col-5">
                                                                 <label class="label" for="projeto">Projeto</label>
                                                                 <label class="select">
                                                                     <select id="projeto" name="projeto" class="required">

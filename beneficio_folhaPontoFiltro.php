@@ -35,7 +35,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["operacao"]["sub"]["beneficio"]["sub"]["folhaPonto"]["active"] = true;
+$page_nav["beneficio"]["sub"]["operacao"]["sub"]["folhaPonto"]["active"] = true;
 
 include("inc/nav.php");
 ?>

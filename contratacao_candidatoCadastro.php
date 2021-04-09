@@ -57,7 +57,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['operacao']['sub']['recursoshumanos']['sub']["contratacao"]['sub']['candidato']["active"] = true;
+$page_nav['recursoshumanos']['sub']["contratacao"]['sub']['candidato']["active"] = true;
 include("inc/nav.php");
 
 ?>

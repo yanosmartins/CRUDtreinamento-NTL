@@ -135,6 +135,10 @@ if ($condicaoCadastroOk) {
         $page_nav['cadastro']['sub'] += array("cargo" => array("title" => "Cargo", "url" => APP_URL . "/cadastro_cargoFiltro.php")); //SYSCB   
     }
 
+    if (in_array('DIASUTEISMUNICIPIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("diasUteisPorMunicipio" => array("title" => "Dias Úteis por Município", "url" => APP_URL . "/cadastro_diasUteisPorMunicipioFiltro.php")); //SYSCB 
+    }
+
     if (in_array('FERIADO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("feriado" => array("title" => "Feriado", "url" => APP_URL . "/cadastro_feriadoFiltro.php")); //SYSCB 
     }
@@ -171,7 +175,7 @@ if ($condicaoBeneficioOk) {
     $page_nav['beneficio'] = array("title" => "Departamento Pessoal", "icon" => "fa fa-folder-open");
     $page_nav['beneficio']['sub'] = array();
 
-    if (in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true)) {
+    if (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['beneficio']['sub']['tabela'] = array("title" => "Tabelas");
         $page_nav['beneficio']['sub']['tabela']['sub'] = array();
 
@@ -188,9 +192,7 @@ if ($condicaoBeneficioOk) {
         if (in_array('CONVENIOSAUDE_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['cadastro']['sub'] += array("convenioSaude" => array("title" => "Convênio de Saúde", "url" => APP_URL . "/cadastro_convenioSaudeFiltro.php"));
         }
-        if (in_array('DIASUTEISMUNICIPIO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['beneficio']['sub']['cadastro']['sub'] += array("diasUteisPorMunicipio" => array("title" => "Dias Úteis por Município", "url" => APP_URL . "/cadastro_diasUteisPorMunicipioFiltro.php")); //SYSCB 
-        }
+   
 
         if (in_array('PRODUTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['cadastro']['sub'] += array("produto" => array("title" => "Produto", "url" => APP_URL . "/cadastro_produtoFiltro.php")); //SYSCB
@@ -204,25 +206,32 @@ if ($condicaoBeneficioOk) {
         }
     }
 
-    if (in_array('AFASTAMENTOFUNCIONARIO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['beneficio']['sub'] += array("afastamentoFuncionario" => array("title" => "Afastamento do Funcionário", "url" => APP_URL . "/beneficio_afastamentoFuncionarioFiltro.php")); //SYSCB 
+    if (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['beneficio']['sub']['operacao'] = array("title" => "Operações");
+        $page_nav['beneficio']['sub']['operacao']['sub'] = array();
+        
+        if (in_array('AFASTAMENTOFUNCIONARIO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['operacao']['sub'] += array("afastamentoFuncionario" => array("title" => "Afastamento do Funcionário", "url" => APP_URL . "/beneficio_afastamentoFuncionarioFiltro.php")); //SYSCB 
+        }
+    
+        // if (in_array('CONSULTABENEFICIO_ACESSAR', $arrayPermissao, true)) {
+        //     $page_nav['beneficio']['sub'] += array("consultaBenefício" => array("title" => "Consulta Benefício", "url" => APP_URL . "/beneficio_afastamentoFuncionarioFiltro.php"));
+        // }
+        if (in_array('FERIAS_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['operacao']['sub'] += array("ferias" => array("title" => "Férias", "url" => APP_URL . "/beneficio_feriasFiltro.php")); //SYSCB 
+        }
+        if (in_array('FECHAMENTOMES_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['operacao']['sub'] += array("fechamentoMes" => array("title" => "Fechamento do Mês", "url" => APP_URL . "/beneficio_fechamentoMesFiltro.php"));
+        }
+        if (in_array('FOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['operacao']['sub'] += array("folhaPonto" => array("title" => "Folha de Ponto", "url" => APP_URL . "/beneficio_folhaPontoFiltro.php"));
+        }
+        if (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['operacao']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
+        }
     }
 
-    if (in_array('CONSULTABENEFICIO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['beneficio']['sub'] += array("consultaBenefício" => array("title" => "Consulta Benefício", "url" => APP_URL . "/beneficio_afastamentoFuncionarioFiltro.php"));
-    }
-    if (in_array('FERIAS_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['beneficio']['sub'] += array("ferias" => array("title" => "Férias", "url" => APP_URL . "/beneficio_feriasFiltro.php")); //SYSCB 
-    }
-    if (in_array('FECHAMENTOMES_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['beneficio']['sub'] += array("fechamentoMes" => array("title" => "Fechamento do Mês", "url" => APP_URL . "/beneficio_fechamentoMesFiltro.php"));
-    }
-    if (in_array('FOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['beneficio']['sub'] += array("folhaPonto" => array("title" => "Folha de Ponto", "url" => APP_URL . "/beneficio_folhaPontoFiltro.php"));
-    }
-    if (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['beneficio']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
-    }
+   
 }
 
 $condicaoRHOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
@@ -275,7 +284,7 @@ if ($condicaoFaturamentoOk) {
     $page_nav['faturamento'] = array("title" => "Faturamento", "icon" => "fa fa-dollar");
     $page_nav['faturamento']['sub'] = array();
 
-    if (in_array('BDI_ACESSAR', $arrayPermissao, true)) {
+    if (in_array('CONTRATO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['faturamento']['sub']['tabela'] = array("title" => "Tabelas");
         $page_nav['faturamento']['sub']['tabela']['sub'] = array();
 
@@ -389,7 +398,7 @@ if ($condicaoLicitacaoOk) {
     $page_nav['licitacao'] = array("title" => "Licitação", "icon" => "fa fa-line-chart");
     $page_nav['licitacao']['sub'] = array();
 
-    if (in_array('PORTAL_ACESSAR', $arrayPermissao, true)) {
+    if (in_array('PREGAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['licitacao']['sub']['tabela'] = array("title" => "Tabelas");
         $page_nav['licitacao']['sub']['tabela']['sub'] = array();
 
@@ -456,7 +465,7 @@ $condicaoFuncionarioOk = true;
 if ($condicaoFuncionarioOk) {
     $page_nav['funcionario'] = array("title" => "Área do Funcionário", "icon" => "fa fa-user");
     $page_nav['funcionario']['sub'] = array();
-    if (in_array('SOLICITACAO_ACESSAR', $arrayPermissao, true)) {
+    if (in_array('FOLHAPONTOMENSAL_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("contraChequeWeb" => array("title" => "Contra Cheque Web", "url" => "http://www.contrachequeweb.com.br/ntl/"));
     }
     if (in_array('FOLHAPONTOMENSAL_ACESSAR', $arrayPermissao, true)) {

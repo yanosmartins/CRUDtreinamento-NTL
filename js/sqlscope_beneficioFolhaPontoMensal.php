@@ -79,7 +79,7 @@ function grava()
     foreach ($arrayFolhaPontoMensal as $folha) {
         $xmlFolhaPontoMensal .= "<$nomeTabela>";
         foreach ($folha as $key => $value) {
-            if (in_array($key, ['horaEntrada', 'horaSaida', 'horaExtra', 'atraso'])) {
+            if (in_array($key, ['horaEntrada', 'horaSaida'])) {
                 if ($value == '') {
                     $xmlFolhaPontoMensal .= "<$key>00:00:00</$key>";
                 } else {
@@ -87,7 +87,7 @@ function grava()
                 }
                 continue;
             }
-            if (in_array($key, ['inicioAlmoco', 'fimAlmoco'])) {
+            if (in_array($key, ['inicioAlmoco','fimAlmoco','horaExtra', 'atraso'])) {
                 if ($value == '') {
                     $xmlFolhaPontoMensal .= "<$key>00:00</$key>";
                 } else {
