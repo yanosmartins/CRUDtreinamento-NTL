@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['estoque']['sub']['fornecimentoMaterial']['sub'] = true;
+$page_nav['estoque']['sub']['operacao']['sub']['fornecimentoMaterial']["active"]  = true;
 
 include("inc/nav.php");
 ?>
@@ -125,6 +125,24 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <div class="row">
+                                                            <section class="col col-2" id="sectionAprovado">
+                                                                <label class="label" for="aprovado">Aprovado</label>
+                                                                <label class="select">
+                                                                    <select id="aprovado" name="aprovado" class="">
+                                                                        <option></option>
+                                                                        <option value="0">Não</option>
+                                                                        <option value="1">Sim</option>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-2" >
+                                                                <label class="label" for="tipo">Tipo</label>
+                                                                <label class="select">
+                                                                    <select id="tipo" name="tipo" class="">
+                                                                        <option></option>
+                                                                        <option value="0">Pedido</option>
+                                                                        <option value="1">Fornecedor</option>
+                                                                    </select><i></i>
+                                                            </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Data Inicial</label>
                                                                 <label class="input">
@@ -261,7 +279,7 @@ include("inc/scripts.php");
                 .append("<a>" + highlight(item.label, this.term) + "</a>")
                 .appendTo(ul);
         };
-        
+
         $("#responsavelFornecimento").autocomplete({
             source: function(request, response) {
                 $.ajax({
@@ -365,6 +383,8 @@ include("inc/scripts.php");
         var responsavelFornecimentoId = $('#responsavelFornecimentoId').val();
         var dataInicial = $('#dataInicial').val();
         var dataFinal = $('#dataFinal').val();
+        var aprovado = $('#aprovado').val();
+        var tipo = $('#tipo').val();
 
         $('#resultadoBusca').load('estoque_fornecimentoMaterialFiltroListagem.php?', {
             clienteFornecedorId: clienteFornecedorId,
@@ -372,7 +392,9 @@ include("inc/scripts.php");
             projeto: projeto,
             responsavelFornecimentoId: responsavelFornecimentoId,
             dataInicial: dataInicial,
-            dataFinal: dataFinal
+            dataFinal: dataFinal,
+            aprovado: aprovado,
+            tipo: tipo
         });
     }
 </script>

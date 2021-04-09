@@ -32,7 +32,7 @@ $id = $_SESSION['funcionario'];
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Fornecimento Material";
+$page_title = "Pedido Material";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -68,7 +68,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Fornecimento Item</h2>
+                            <h2>Pedido Item</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -90,8 +90,7 @@ include("inc/nav.php");
 
                                                         <div id="formCadastro">
                                                             <div class="row">
-                                                                <input id="tipo" name="tipo" type="hidden" value="1">
-
+                                                                <input id="tipo" name="tipo" type="hidden" value="0">
                                                                 <section class="col col-2">
                                                                     <label class="label">Lançamento</label>
                                                                     <label class="input">
@@ -146,9 +145,15 @@ include("inc/nav.php");
                                                                 <section class="col col-6">
                                                                     <label class="label">Solicitante</label>
                                                                     <label class="input">
-                                                                        <input id="solicitanteId" name="solicitanteId" type="hidden" value="">
-                                                                        <input id="solicitante" name="solicitanteFiltro" autocomplete="off" class="form-control required" required placeholder="Digite o nome do solicitante..." type="text" value="">
-                                                                        <i class="icon-append fa fa-filter"></i>
+                                                                        <?php
+                                                                        $sql = "SELECT nome FROM Ntl.funcionario WHERE codigo = " . $id;
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        if ($row = $result[0]) {
+                                                                            $nome = "'" . $row['nome'] . "'";
+                                                                            echo "<input id='responsavelFornecimento' maxlength='255' name='responsavelFornecimento' class='readonly' type='select' value=" . $nome . " readonly>";
+                                                                            echo "<input id='solicitanteId' name='solicitanteId' type='hidden' value=".$id.">";
+                                                                        }
+                                                                        ?>
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-6">
@@ -176,19 +181,6 @@ include("inc/nav.php");
                                                                         <input id="clienteFornecedorId" name="clienteFornecedorId" type="hidden" value="">
                                                                         <input id="clienteFornecedor" name="clienteFornecedorFiltro" autocomplete="off" class="form-control required" required placeholder="Digite o cliente/fornecedor..." type="text" value="">
                                                                         <i class="icon-append fa fa-filter"></i>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-6">
-                                                                    <label class="label">Responsavel pelo Fornecimento</label>
-                                                                    <label class="input">
-                                                                        <?php
-                                                                        $sql = "SELECT nome FROM Ntl.funcionario WHERE codigo = " . $id;
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        if ($row = $result[0]) {
-                                                                            $nome = "'" . $row['nome'] . "'";
-                                                                            echo "<input id='responsavelFornecimento' maxlength='255' name='responsavelFornecimento' class='readonly' type='select' value=" . $nome . " readonly>";
-                                                                        }
-                                                                        ?>
                                                                     </label>
                                                                 </section>
                                                             </div>
@@ -380,25 +372,10 @@ include("inc/nav.php");
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <button type="submited" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                                 <span class="fa fa-floppy-o"></span>
                                             </button>
-                                            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleGravar" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
-                                                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                    <span id="ui-id-2" class="ui-dialog-title">
-                                                    </span>
-                                                </div>
-                                                <div id="dlgSimpleGravar" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                    <p>INSIRA A SENHA DO SOlICITANTE PARA LIBERAÇÃO:</p>
-                                                    <section class="col col-12">
-                                                        <input id="senha" name="senha" maxlength="255" autocomplete="off" class="" type="password" value="" style="width:50%;">
-                                                    </section>
-                                                </div>
-                                                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                                    <div class="ui-dialog-buttonset">
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                             <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                                 <span class="fa fa-file-o"></span>
                                             </button>
@@ -501,29 +478,7 @@ include("inc/scripts.php");
             }]
         });
 
-        $('#dlgSimpleGravar').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
-            buttons: [{
-                html: "Confirmar",
-                "class": "btn btn-success",
-                click: function() {
-                    $(this).dialog("close");
-                    doLogin();
-                    $('#senha').val('');
-                }
-            }, {
-                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                "class": "btn btn-default",
-                click: function() {
-                    $('#senha').val('');
-                    $(this).dialog("close");
-                }
-            }]
-        });
+      
 
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
@@ -539,17 +494,6 @@ include("inc/scripts.php");
             }
         });
 
-        $("#btnGravar").on("click", function() {
-            var id = +$("#codigo").val();
-            if (!validaCampos()) {
-                return;
-            }
-            if(id == '0'){
-                $('#dlgSimpleGravar').dialog('open');
-            }else{
-                gravar();
-            }
-        });
 
         $("#quantidade").on("change", function() {
             let quantidade = parseInt($("#quantidade").val());
@@ -565,56 +509,11 @@ include("inc/scripts.php");
             popularComboEstoque();
         });
 
-        // $("#estoqueDestino").on("change", function() {
-        //     recuperaQuantidade();
-        // });
+        $("#estoqueDestino").on("change", function() {
+            recuperaQuantidade();
+        });
 
-        $("#solicitante").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        maxRows: 12,
-                        funcao: "listaSolicitanteAtivoAutoComplete",
-                        descricaoIniciaCom: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                id: item.id,
-                                label: item.descricao,
-                                value: item.descricao,
-                                login: item.login,
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 3,
-
-            select: function(event, ui) {
-                $("#solicitanteId").val(ui.item.id);
-                $("#solicitanteFiltro").val(ui.item.nome);
-                $("#login").val(ui.item.login);
-                var descricaoId = $("#solicitanteId").val();
-                $("#solicitante").val(descricaoId)
-                $("#solicitanteFiltro").val('');
-
-            },
-            change: function(event, ui) {
-                if (ui.item === null) {
-                    $("#solicitanteId").val('');
-                    $("#solicitanteFiltro").val('');
-                }
-            }
-        }).data("ui-autocomplete")._renderItem = function(ul, item) {
-            return $("<li>")
-                .append("<a>" + highlight(item.label, this.term) + "</a>")
-                .appendTo(ul);
-        };
+    
 
         $("#clienteFornecedor").autocomplete({
             source: function(request, response) {
@@ -684,7 +583,8 @@ include("inc/scripts.php");
                                 estoque: item.estoque,
                                 unidadeItem: item.unidadeItem,
                                 consumivel: item.consumivel,
-                                autorizacao: item.autorizacao
+                                autorizacao: item.autorizacao,
+                                quantidade: item.quantidade
                             };
                         }));
                     }
@@ -711,6 +611,7 @@ include("inc/scripts.php");
 
                 $("#unidade").val(ui.item.unidadeItem);
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
+                $("#quantidadeEstoque").val(ui.item.quantidade);
 
                 $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
 
@@ -721,7 +622,6 @@ include("inc/scripts.php");
                     $("#situacao").val('3');
                     $("#situacaoId").val('3');
                 }
-                recuperaQuantidade();
 
             },
             change: function(event, ui) {
@@ -760,7 +660,8 @@ include("inc/scripts.php");
                                 estoque: item.estoque,
                                 unidadeItem: item.unidadeItem,
                                 consumivel: item.consumivel,
-                                autorizacao: item.autorizacao
+                                autorizacao: item.autorizacao,
+                                quantidade: item.quantidade
                             };
                         }));
                     }
@@ -788,6 +689,7 @@ include("inc/scripts.php");
 
                 $("#unidade").val(ui.item.unidadeItem);
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
+                $("#quantidadeEstoque").val(ui.item.quantidade);
 
                 $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
 
@@ -800,7 +702,6 @@ include("inc/scripts.php");
                     $("#situacao").val('3');
                     $("#situacaoId").val('3');
                 }
-                recuperaQuantidade();
             },
             change: function(event, ui) {
                 if (ui.item === null) {
@@ -1310,6 +1211,8 @@ include("inc/scripts.php");
     }
 
     function gravar() {
+
+        validaCampos();
 
         var form = $('#formPedidoMaterial')[0];
         var formData = new FormData(form);

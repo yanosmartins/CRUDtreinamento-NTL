@@ -56,7 +56,7 @@ function grava()
     $tipo = (int)$_POST['tipo'] ?: 0;
     $numero =  validaString($_POST['numero']);
     $dataEmissao = validaData($_POST['dataEmissao']);
-    $dataEntrada = validaData($_POST['dataEntrada']);
+    $dataEntrada = validaData($_POST['dataEntrega']);
     $observacao =  validaString($_POST['observacao']);
 
     if($numero ==""){

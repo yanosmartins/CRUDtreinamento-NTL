@@ -7,7 +7,7 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:60px;">Lançamento</th>
-                    <th class="text-left" style="min-width:110px;">Data Pedido</th>
+                    <th class="text-left" style="min-width:80px;">Data Pedido</th>
                     <th class="text-left" style="min-width:300px;">Solicitante</th>
                     <th class="text-left" style="min-width:100px;">Cliente/Fornecedor</th>
                     <th class="text-left" style="min-width:300px;">Responsável</th>
@@ -15,6 +15,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Aprovado</th>
                     <th class="text-left" style="min-width:50px;">Materiais</th>
                     <th class="text-left" style="min-width:100px;">Estoque</th>
+                    <th class="text-left" style="min-width:100px;">Tipo</th>
 
                 </tr>
             </thead>
@@ -27,7 +28,7 @@ include "js/repositorio.php";
 
 
                 $sql = "SELECT DISTINCT PM.codigo, PM.fornecedor, F.apelido, PM.projeto, P.descricao AS descricaoProjeto,
-                PM.solicitante, FS.nome AS descricaoSolicitante, PM.responsavel, FR.nome AS descricaoResponsavel, PM.aprovado, PM.dataCadastramento,
+                PM.solicitante, FS.nome AS descricaoSolicitante, PM.responsavel, FR.nome AS descricaoResponsavel, PM.aprovado, PM.dataCadastramento, PM.tipo,
                     SUBSTRING(
                             (
                                 SELECT DISTINCT  '/ ' + CI.descricaoItem  AS [text()]
@@ -75,6 +76,16 @@ include "js/repositorio.php";
                     $where = $where . " AND ( PM.projeto = $projeto)";
                 }
 
+                if ($_POST["tipo"] != "") {
+                    $tipo = (int)$_POST["tipo"];
+                    $where = $where . " AND ( PM.tipo = $tipo)";
+                }
+
+                if ($_POST["aprovado"] != "") {
+                    $aprovado = (int)$_POST["aprovado"];
+                    $where = $where . " AND ( PM.aprovado = $aprovado)";
+                }
+
                 if ($_POST["dataInicial"] != "") {
                     $dataInicial = $_POST["dataInicial"];
                     $data = explode("/", $dataInicial);
@@ -88,7 +99,7 @@ include "js/repositorio.php";
                     $where = $where . " AND PM.dataCadastramento <= CONVERT(DATETIME,'".$dataFinal." 23:59:59', 103) ";
                 }
 
-                $orderBy = "";
+                $orderBy = " ORDER BY PM.tipo ,PM.dataCadastramento";
 
                 $sql .= $where . $orderBy;
                 $reposit = new reposit();
@@ -101,6 +112,7 @@ include "js/repositorio.php";
                     $responsavel = $row['descricaoResponsavel'];
                     $projeto = $row['descricaoProjeto'];
                     $aprovado = $row['aprovado'];
+                    $tipo = $row['tipo'];
                     $descricaoAprovado = "";
 
                     if($aprovado === 1){
@@ -108,6 +120,13 @@ include "js/repositorio.php";
                     }
                     if($aprovado === 0){
                         $descricaoAprovado = "NÃO";
+                    }
+                    
+                    if($tipo === 1){
+                        $descricaoTipo = "Fornecimento";
+                    }
+                    if($tipo === 0){
+                        $descricaoTipo = "Pedido";
                     }
 
                     //A data recuperada foi formatada para D/M/Y
@@ -133,6 +152,7 @@ include "js/repositorio.php";
                     echo '<td class="text-justify">' . $descricaoAprovado . '</td>';
                     echo '<td class="text-justify">' . $material . '</td>';
                     echo '<td class="text-justify">' . $estoque . '</td>';
+                    echo '<td class="text-justify">' . $descricaoTipo . '</td>';
                 }
                 ?>
             </tbody>

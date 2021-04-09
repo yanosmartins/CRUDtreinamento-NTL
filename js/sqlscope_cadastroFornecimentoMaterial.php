@@ -59,12 +59,17 @@ function grava()
     $codigo =  (int)$_POST['codigo'] ?: 0;
     $dataMovimento = validaData($_POST['dataMovimento']);
     $horaMovimento = $_POST['horaMovimento'];
-    $clienteFornecedor = (int)$_POST['clienteFornecedorId'] ?: 0;
-    $solicitante = (int)$_POST['solicitanteId'] ?: 0;
+    $clienteFornecedor = (int)$_POST['clienteFornecedorId'] ?: 'NULL';
+    $solicitante = (int)$_POST['solicitanteId'] ?: 'NULL';
     $aprovado = (int)$_POST['aprovado'] ?: 0;
-    $responsavel = (int)$_SESSION['funcionario'] ?: 0;
-    $projeto = (int)$_POST['projeto'] ?: 0;
-
+    $projeto = (int)$_POST['projeto'] ?: 'NULL';
+    $tipo = (int)$_POST['tipo'] ?: 0;
+    if($tipo == 1){
+        $responsavel = (int)$_SESSION['funcionario'] ?: 'NULL';
+    }else{
+        $responsavel = 'NULL';
+    }
+    
     $strArrayItem = $_POST['jsonItem'];
     $arrayItem = json_decode($strArrayItem, true);
     $xmlItem = "";
@@ -112,6 +117,7 @@ function grava()
         $projeto,
         $aprovado,
         $usuario, 
+        $tipo, 
         $xmlItem
         ";
 
@@ -207,7 +213,7 @@ function recupera()
             "unidadeDestino" => $unidade,
             "descricaoUnidade" => $descricaoUnidade,
             "descricaoUnidadeMedida" => $descricaoUnidadeMedida,
-            "situacao" => $situacao,
+            "situacaoId" => $situacao,
             "unidade" => $unidade
         );
     }
