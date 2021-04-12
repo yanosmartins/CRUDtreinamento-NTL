@@ -82,21 +82,8 @@ if ($condicaoTabelaBasicaOk) {
     $page_nav['tabelaBasica'] = array("title" => "Tabela Básica", "icon" => "fa fa-table");
     $page_nav['tabelaBasica']['sub'] = array();
 
-    if (in_array('BANCO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("banco" => array("title" => "Banco", "url" => APP_URL . "/tabelaBasica_bancoFiltro.php")); //SYSCC   
-    }
-
-
-    if (in_array('DEPARTAMENTO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("departamento" => array("title" => "Departamento", "url" => APP_URL . "/tabelaBasica_departamentoFiltro.php")); //SYSGEF
-    }
-
     if (in_array('ESCALA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("escala" => array("title" => "Escala", "url" => APP_URL . "/tabelaBasica_escalaFiltro.php")); //SYSCC  
-    }
-
-    if (in_array('FUNCAO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("funcao" => array("title" => "Função", "url" => APP_URL . "/tabelaBasica_funcaoFiltro.php"));
     }
 
     if (in_array('GRUPO_ACESSAR', $arrayPermissao, true)) {
@@ -111,17 +98,11 @@ if ($condicaoTabelaBasicaOk) {
         $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
     }
 
-    if (in_array('MOTIVOAFASTAMENTO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/tabelaBasica_motivoAfastamentoFiltro.php")); //SYSCB
-    }
-
     if (in_array('MUNICIPIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("municipio" => array("title" => "Município", "url" => APP_URL . "/tabelaBasica_municipioFiltro.php")); //SYSCB 
     }
 
-    if (in_array('RESPONSAVEL_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['tabelaBasica']['sub'] += array("responsavel" => array("title" => "Responsável", "url" => APP_URL . "/tabelaBasica_responsavelFiltro.php")); //SYSGC 
-    }
+
 }
 
 $condicaoCadastroOk = (in_array('CADASTRO_ACESSAR', $arrayPermissao, true));
@@ -183,6 +164,13 @@ if ($condicaoBeneficioOk) {
             $page_nav['beneficio']['sub']['tabela']['sub'] += array("beneficioIndireto" => array("title" => "Benefício Indireto", "url" => APP_URL . "/tabelaBasica_beneficioIndiretoFiltro.php")); //SYSCB 
         }
 
+        if (in_array('DEPARTAMENTO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['tabela']['sub'] += array("departamento" => array("title" => "Departamento", "url" => APP_URL . "/tabelaBasica_departamentoFiltro.php")); //SYSGEF
+        }
+
+        if (in_array('MOTIVOAFASTAMENTO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['tabela']['sub'] += array("motivoAfastamento" => array("title" => "Motivo do Afastamento", "url" => APP_URL . "/tabelaBasica_motivoAfastamentoFiltro.php")); //SYSCB
+        }
     }
 
     if (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true)) {
@@ -240,10 +228,20 @@ if ($condicaoRHOk) {
     $page_nav['recursoshumanos'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
     $page_nav['recursoshumanos']['sub'] = array();
     $condicaoContratacaoOk = true;
+
+    if ($condicaoContratacaoOk) { // a pedido do marcio no dia 18/02/21 foi pedido para colocar tudo referente a contratacao dentro de rh em um "novo modulo"
+        $page_nav['recursoshumanos']['sub']['tabela'] = array("title" => "Tabelas");
+        $page_nav['recursoshumanos']['sub']['tabela']['sub'] = array();
+
+        if (in_array('BANCO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['recursoshumanos']['sub']['tabela']['sub'] += array("banco" => array("title" => "Banco", "url" => APP_URL . "/tabelaBasica_bancoFiltro.php")); //SYSCC   
+        }
+    }
+
     if ($condicaoContratacaoOk) { // a pedido do marcio no dia 18/02/21 foi pedido para colocar tudo referente a contratacao dentro de rh em um "novo modulo"
         $page_nav['recursoshumanos']['sub']['contratacao'] = array("title" => "Contratação", "icon" => "fa fa-fax");
         $page_nav['recursoshumanos']['sub']['contratacao']['sub'] = array();
-
+       
         if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Triagem", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
         }
@@ -302,6 +300,10 @@ if ($condicaoFaturamentoOk) {
 
         if (in_array('ENCARGO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['faturamento']['sub']['tabela']['sub'] += array("encargo" => array("title" => "Encargo", "url" => APP_URL . "/tabelaBasica_encargoFiltro.php"));
+        }
+
+        if (in_array('FUNCAO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['faturamento']['sub']['tabela']['sub'] += array("funcao" => array("title" => "Função", "url" => APP_URL . "/tabelaBasica_funcaoFiltro.php"));
         }
 
         if (in_array('INSUMO_ACESSAR', $arrayPermissao, true)) {
@@ -411,6 +413,10 @@ if ($condicaoLicitacaoOk) {
         }
         if (in_array('TAREFA_ACESSAR', $arrayPermissao, true)) {
             $page_nav['licitacao']['sub']['tabela']['sub'] += array("tarefa" => array("title" => "Tarefa", "url" => APP_URL . "/tabelaBasica_tarefaFiltro.php")); //SYSGC    
+        }
+
+        if (in_array('RESPONSAVEL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['licitacao']['sub']['tabela']['sub'] += array("responsavel" => array("title" => "Responsável", "url" => APP_URL . "/tabelaBasica_responsavelFiltro.php")); //SYSGC 
         }
     }
 

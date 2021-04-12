@@ -35,7 +35,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["responsavel"]["active"] = true;
+$page_nav['licitacao']['sub']['tabela']['sub']["responsavel"]["active"] = true;
 
 include("inc/nav.php");
 ?>
