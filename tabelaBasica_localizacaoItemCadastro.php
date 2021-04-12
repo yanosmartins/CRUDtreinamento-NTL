@@ -290,6 +290,7 @@ include("inc/scripts.php");
           var mensagem = piece[1];
           if (mensagem !== "") {
             smartAlert("Atenção", mensagem, "error");
+            $("#btnGravar").prop('disabled', false);
             return false;
           } else {
             smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");

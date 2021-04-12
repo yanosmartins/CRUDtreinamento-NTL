@@ -43,6 +43,10 @@ function grava()
     $sigla = "'$sigla'";
     $ativo = $form['ativo'];
 
+    if (validaUnidadeItem($sigla) && $codigo == 0) {
+        echo "failed#" . "Sigla já cadastrada!";
+        return;
+    }
 
     $sql = "Estoque.unidadeItem_Atualiza
         $codigo,
@@ -131,4 +135,19 @@ function excluir()
 
     echo 'sucess#' . $result;
     return;
+}
+
+function validaUnidadeItem($sigla)
+{
+    $sql = "SELECT codigo,sigla,ativo FROM Estoque.unidadeItem 
+    WHERE sigla = $sigla and ativo = 1";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if ($result[0]) {
+        return true;
+    } else {
+        return false;
+    }
 }

@@ -36,6 +36,10 @@ function grava()
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $codigo =  (int) $_POST['codigo'];
     $descricao = "'" . $_POST['descricao'] . "'";
+    if (validaUnidade($descricao) && $codigo == 0) {
+        echo "failed#" . "Unidade já cadastrada!";
+        return;
+    }
     $ativo = 1;
 
     $sql = "Ntl.unidade_Atualiza
@@ -140,3 +144,19 @@ function excluir()
     echo 'sucess#' . $result;
     return;
 }
+
+function validaUnidade($descricao)
+{
+    $sql = "SELECT codigo,descricao,ativo FROM Ntl.unidade 
+    WHERE descricao LIKE $descricao and ativo = 1";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if ($result[0]) {
+        return true;
+    } else {
+        return false;
+    }
+}
+

@@ -20,9 +20,7 @@ return;
 
 function grava()
 {
-
     $reposit = new reposit(); //Abre a conexão.
-
     //Verifica permissões
     $possuiPermissao = $reposit->PossuiPermissao("LOCALIZACAOITEM_ACESSAR|LOCALIZACAOITEM_GRAVAR");
 
@@ -37,6 +35,11 @@ function grava()
     $codigo =  (int) $_POST['codigo'];
     $estoque =  (int) $_POST['estoque'];
     $localizacaoItem = "'" . $_POST['localizacaoItem'] . "'";
+    
+    if (validaLocalizacaoItem($estoque,$localizacaoItem) && $codigo == 0) {
+        echo "failed#" . "Localização já cadastrada no estoque!";
+        return;
+    }
     // $ativo = (int) $_POST['ativo'];
 
     $sql = "Estoque.localizacaoItem_Atualiza
@@ -141,4 +144,19 @@ function excluir()
 
     echo 'sucess#' . $result;
     return;
+}
+
+function validaLocalizacaoItem($estoque,$localizacaoItem)
+{
+    $sql = "SELECT codigo,localizacaoItem,ativo FROM estoque.localizacaoItem 
+    WHERE estoque = $estoque AND localizacaoItem LIKE $localizacaoItem and ativo = 1";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if ($result[0]) {
+        return true;
+    } else {
+        return false;
+    }
 }

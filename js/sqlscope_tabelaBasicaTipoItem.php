@@ -36,6 +36,10 @@ function grava()
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $codigo = (int)$_POST['id'];
     $descricao = "'" . $_POST['descricao'] . "'";
+    if (validaTipoItem($descricao) && $codigo == 0) {
+        echo "failed#" . "Tipo Item já cadastrado!";
+        return;
+    }
     $ativo = (int)$_POST['ativo'];
 
     $sql = "Estoque.tipoItem_Atualiza
@@ -136,4 +140,19 @@ function excluir()
     }
     echo 'sucess#' . $result;
     return;
+}
+
+function validaTipoItem($descricao)
+{
+    $sql = "SELECT codigo,descricao,ativo FROM Estoque.tipoItem 
+    WHERE descricao LIKE $descricao and ativo = 1";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if ($result[0]) {
+        return true;
+    } else {
+        return false;
+    }
 }

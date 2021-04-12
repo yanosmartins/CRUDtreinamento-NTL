@@ -36,6 +36,10 @@ function grava()
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $codigo = (int)$_POST['id'];
     $descricao = "'" . $_POST['descricao'] . "'";
+    if (validaFabricante($descricao) && $codigo == 0) {
+        echo "failed#" . "Fabricante já cadastrado!";
+        return;
+    }
     $ativo = (int)$_POST['ativo'];
 
     $sql = "Estoque.fabricante_Atualiza
@@ -136,4 +140,19 @@ function excluir()
     }
     echo 'sucess#' . $result;
     return;
+}
+
+function validaFabricante($descricao)
+{
+    $sql = "SELECT codigo,descricao,ativo FROM Estoque.fabricante 
+    WHERE descricao LIKE $descricao and ativo = 1";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if ($result[0]) {
+        return true;
+    } else {
+        return false;
+    }
 }
