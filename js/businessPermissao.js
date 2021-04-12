@@ -1,9 +1,9 @@
-function gravaPermissoesUsuario(codigoUsuario, jsonFuncMarcadas) {
+function gravaPermissoesUsuario(codigoUsuario, jsonFuncMarcadas, grupo) {
     $.ajax({
         url: 'js/sqlscopePermissao.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", codigoUsuario: codigoUsuario, jsonFuncMarcadas: jsonFuncMarcadas}, //valores enviados ao script     
+        data: {funcao: "grava", codigoUsuario: codigoUsuario, jsonFuncMarcadas: jsonFuncMarcadas, grupo: grupo}, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },

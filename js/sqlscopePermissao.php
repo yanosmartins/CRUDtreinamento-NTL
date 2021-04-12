@@ -1,5 +1,6 @@
 <?php
 include "repositorio.php";
+include "girComum.php";
 
 $funcao  = $_POST["funcao"];
 
@@ -81,12 +82,19 @@ function grava()
     }
     $xmlFuncionalidade = "'" . $xmlFuncionalidade . "'";
 
-
+    $comum = new comum();
     session_start();
     $usuario = $_SESSION['login'];
     $usuario = "'" . $usuario . "'";
+    $grupo = (int)$_POST["grupo"];
+ 
+    if ($grupo > 0){ // se tiver algum gurpo ele não pode ter funcionalidades individuais.
+        $xmlFuncionalidade = $comum->formataNuloGravar($xmlFuncionalidade);
+    }else{
+        $grupo = $comum->formataNuloGravar($grupo);
+    }
 
-    $sql = "Ntl.usuarioFuncionalidade_AtualizaPermissoesUsuario " . $idUsuario . "," . $usuario . "," . $xmlFuncionalidade . " ";
+    $sql = "Ntl.usuarioFuncionalidade_AtualizaPermissoesUsuario " . $idUsuario . "," . $usuario . "," . $xmlFuncionalidade . "," . $grupo . " ";
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
@@ -114,7 +122,7 @@ function recupera()
         $idUsuario = (int) $_POST["codigoUsuario"];
     }
 
-    $sql = " SELECT USUF.codigo,USUF.funcionalidade
+    $sql = " SELECT USUF.codigo,USUF.funcionalidade, USU.grupo
            FROM Ntl.usuarioFuncionalidade USUF
            INNER JOIN Ntl.usuario USU on USU.codigo = USUF.usuario
            INNER JOIN Ntl.funcionalidade FNC on FNC.codigo = USUF.funcionalidade ";
@@ -126,6 +134,7 @@ function recupera()
     $arrayPermissao = array();
     foreach($result as $row) {
         array_push($arrayPermissao, +$row["funcionalidade"]);
+        // $grupo = (int) $row["grupo"];
     }
 
     $sql = " SELECT FNC.codigo,FNC.nome,FNC.nomeCompleto,FNC.menuItem

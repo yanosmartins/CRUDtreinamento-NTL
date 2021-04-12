@@ -7,6 +7,7 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Login</th>
+                    <th class="text-left" style="min-width:35px;">Grupo</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
@@ -21,13 +22,15 @@ include "js/repositorio.php";
                     $where = $where . " and (USU.[login] like '%' + " . "replace('" . $nomeFiltro . "',' ','%') + " . "'%')";
                 }
 
-                $sql = "SELECT USU.codigo,USU.[login],USU.ativo FROM Ntl.usuario USU ";
+                $sql = "SELECT USU.codigo,USU.[login],USU.ativo, USU.grupo,USUG.grupo as descricaoGrupo
+                        FROM Ntl.usuario USU
+                        LEFT JOIN Ntl.usuarioGrupo USUG ON USUG.codigo = USU.grupo ";
                 $sql = $sql . $where;
 
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                foreach($result as $row) {
+                foreach ($result as $row) {
                     $id = (int) $row['codigo'];
                     $login = $row['login'];
                     $ativo = (int) $row['ativo'];
@@ -36,9 +39,12 @@ include "js/repositorio.php";
                     } else {
                         $descricaoAtivo = "Não";
                     }
+                    $grupo = $row['grupo'];
+                    $descricaoGrupo = $row['descricaoGrupo'];
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="usuarioFuncionalidadeCadastro.php?codigoUsuario=' . $id . '">' . $login . '</a></td>';
+                    echo '<td class="text-left"><a href="usuarioFuncionalidadeCadastro.php?codigoUsuario=' . $id . '?grupo=' . $grupo . '">' . $login . '</a></td>';
+                    echo '<td class="text-left">' . $descricaoGrupo . '</td>';
                     echo '<td class="text-left">' . $descricaoAtivo . '</td>';
                     echo '</tr >';
                 }

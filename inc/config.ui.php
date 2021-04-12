@@ -22,6 +22,8 @@ if ($row = $result[0]) {
     $codigoUsuario = (int)$row['codigo'];
     $tipoUsuario = $row['tipoUsuario'];
     $candidato = (int)$row['candidato'];
+    $grupo = (int)$row['grupo'];
+
 
     if ($tipoUsuario === "C") {
         $sql = "SELECT FNC.nome FROM Ntl.usuarioFuncionalidade USUF
@@ -32,8 +34,19 @@ if ($row = $result[0]) {
             array_push($arrayPermissao, $row["nome"]);
         }
     }
+
     if ($tipoUsuario === "S") {
         $sql = " SELECT nome FROM Ntl.funcionalidade";
+        $result = $reposit->RunQuery($sql);
+        foreach ($result as $row) {
+            array_push($arrayPermissao, $row["nome"]);
+        }
+    }
+
+    if ($grupo > 0) {
+        $sql = "SELECT FNC.nome FROM Ntl.usuarioGrupoFuncionalidade USUGF
+				INNER JOIN Ntl.funcionalidade FNC ON FNC.codigo = USUGF.funcionalidade
+                WHERE USUGF.grupo = " . $grupo;
         $result = $reposit->RunQuery($sql);
         foreach ($result as $row) {
             array_push($arrayPermissao, $row["nome"]);
@@ -58,6 +71,9 @@ if ($condicaoConfiguracoesOK) {
     }
     if (in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("permissoesUsuarios" => array("title" => "Permissões do Usuário", "url" => APP_URL . "/usuarioFuncionalidadeFiltro.php"));
+    }
+    if (in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['configuracao']['sub'] += array("permissoesGrupoUsuarios" => array("title" => "Permissões do Grupo", "url" => APP_URL . "/usuarioGrupoFuncionalidadeFiltro.php"));
     }
     // if (in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true)) {
     //     $page_nav['configuracao']['sub'] += array("permissoesGrupoUsuarios" => array("title" => "Permissões do Grupo", "url" => APP_URL . "/usuarioGrupoFuncionalidadeFiltro.php"));

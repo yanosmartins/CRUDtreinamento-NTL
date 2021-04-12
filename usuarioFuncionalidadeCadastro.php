@@ -89,7 +89,7 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-5">
+                                                            <section class="col col-4">
                                                                 <label class="label">Usuário</label>
                                                                 <label class="select">
                                                                     <select id="usuario" name="usuario">
@@ -110,7 +110,28 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-5">
+                                                            <section class="col col-3">
+                                                                <label class="label">Escolha de Permissão por Grupo</label>
+                                                                <label class="select">
+                                                                    <select id="grupo" name="grupo">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $tabela1 = "usuarioGrupo";
+                                                                        $arg = " (0=0) ORDER BY grupo ";
+
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->SelectCond($tabela1 . "|" . $arg . "");
+
+                                                                        foreach($result as $row) {
+                                                                            $id = (int) $row['codigo'];
+                                                                            $grupo = $row['grupo'];
+                                                                            echo '<option value=' . $id . '>' . $grupo . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-4">
                                                                 <label class="label">Escolha de Permissão por Menu</label>
                                                                 <label class="select">
                                                                     <select id="menuItem" name="menuItem">
@@ -301,6 +322,15 @@ include("inc/scripts.php");
             voltar();
         });
 
+        $("#grupo").on("change", function() {
+            $("#menuItem").val('')
+            JsonFuncionalidade = [];
+            JsonFuncionalidadeMarcada = [];
+            fillTablePermissaoUsuario();
+        });
+        $("#menuItem").on("change", function() {
+            $("#grupo").val('')
+        });
         habilitaCamposPermissao();
         carregaPagina();
     });
@@ -372,12 +402,16 @@ include("inc/scripts.php");
     function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
-        if (params.length === 2) {
+        if (params.length === 3) {
             var id = params[1];
+            var idGrupo = params[2];
             var idx = id.split("=");
             var iddUsuario = idx[1];
+            var idxGrupo = idGrupo.split("=");
+            var grupo = idxGrupo[1];
             if (iddUsuario !== "") {
                 $('#usuario').val(iddUsuario);
+                $('#grupo').val(grupo);
                 carregarFuncionalidade();
             }
         }
@@ -454,6 +488,7 @@ include("inc/scripts.php");
     function gravar() {
 
         var usuarioId = $('#usuario').val();
+        var grupo = $('#grupo').val();
 
         if (usuarioId === "") {
             smartAlert("Atenção", "Informe o usuário !", "error");
@@ -486,11 +521,11 @@ include("inc/scripts.php");
             return (item.marcado === 1);
         });
 
-        if (arrFuncionalidadeMarcada.length > 0) {
+        if (arrFuncionalidadeMarcada.length > 0 || grupo != "") {
             $("#JsonFuncionalidadeMarcada").val(JSON.stringify(arrFuncionalidadeMarcada));
             var jsonFuncMarcadas = $('#JsonFuncionalidadeMarcada').val();
 
-            gravaPermissoesUsuario(usuarioId, jsonFuncMarcadas);
+            gravaPermissoesUsuario(usuarioId, jsonFuncMarcadas, grupo);
         } else {
             smartAlert("Erro", "Selecione pelo menos uma funcionalidade permitida para o usuário.", "error");
         }
