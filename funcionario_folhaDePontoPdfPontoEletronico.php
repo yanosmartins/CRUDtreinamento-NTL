@@ -29,12 +29,6 @@ $mesAno = $_GET["data"];
 if ($mesAno != "") {
     $mesteste = explode("-", $mesAno);
     $mes = $mesteste[1];
-    if ($pag == 0 && $mes == 01) {
-        $mes = 12;
-    }
-    if ($pag == 0 && $mes != 01) {
-        $mes = $mes - 1;
-    }
     $ano = $mesteste[0];
     $mesExtenso = ucfirst(mb_convert_encoding(strftime('%B', strtotime("$ano-$mes")), 'UTF-8', 'HTML-ENTITIES'));
     // $mes = date("m"); //02
@@ -42,16 +36,9 @@ if ($mesAno != "") {
     // $ano = date("Y"); //2021
 } else {
 
-    $mes = date("m"); //02
-    if ($pag == 0 && $mes == 01) {
-        $mes = 12;
-    }
-    if ($pag == 0 && $mes != 01) {
-        $mes = $mes - 1;
-    }
+    $mes = date("m"); 
     $ano = date("Y"); //2021
     $days = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
-
     $mesExtenso = ucfirst(mb_convert_encoding(strftime('%B', strtotime("$ano-$mes")), 'UTF-8', 'HTML-ENTITIES'));
 }
 
@@ -90,7 +77,7 @@ $dataFim = "$ano-$mes-$days";
 $sql = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
 FROM Ntl.feriado F 
 LEFT JOIN Ntl.municipio M ON M.codigo = F.municipio
-WHERE F.ativo = 1 AND data BETWEEN '2021-03-01' AND '2021-03-31'
+WHERE F.ativo = 1 AND data BETWEEN '$dataInicio' AND '$dataFim'
 AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = 'RJ')) OR F.tipoFeriado = 2 and M.codigo = 1) 
 AND DATENAME(weekday,F.data) NOT IN ('Saturday', 'Sunday')";
 $result = $reposit->RunQuery($sql);
@@ -104,7 +91,7 @@ $sql = "SELECT F.codigo AS 'folha',FD.dia,F.mesAno,FD.horaEntrada,FD.inicioAlmoc
 INNER JOIN Funcionario.folhaPontoMensalDetalheDiario FD ON F.codigo = FD.folhaPontoMensal
 INNER JOIN ntl.funcionario FU ON FU.codigo = F.funcionario 
 LEFT JOIN ntl.lancamento L ON L.codigo = FD.lancamento
-WHERE (0=0) AND FU.codigo = 13080 AND F.codigo = 14";
+WHERE (0=0) AND FU.codigo = $id AND F.codigo =$folha";
 $result = $reposit->RunQuery($sql);
 foreach ($result as $row) {
     array_push($ponto, [
