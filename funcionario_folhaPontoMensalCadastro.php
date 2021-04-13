@@ -378,7 +378,7 @@ include("inc/nav.php");
                                                                     </button>
                                                                 </section>
 
-                                                                <section class="col col-md-1">
+                                                                <section class="col col-md-2">
                                                                     <label class="label"> </label>
                                                                     <button id="btnAddPonto" type="button" class="btn btn-primary" style="display:<?php if ($esconderCampoPesado) {
                                                                                                                                                         echo $esconderCampoPesado['display'];
@@ -389,7 +389,7 @@ include("inc/nav.php");
 
 
 
-                                                                <section class="col col-md-1">
+                                                                <section class="col col-md-2">
                                                                     <label class=" label"> </label>
                                                                     <button id="btnGravar" type="button" class="btn btn-success" style="display:<?php if ($esconderCampoPesado) {
                                                                                                                                                     echo $esconderCampoPesado['display'];
@@ -598,6 +598,8 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
+    var toleranciaExtra = 0;
+    var toleranciaAtraso = 0;
     $(document).ready(function() {
 
         $("#funcionario").on("change", function() {
@@ -765,11 +767,18 @@ include("inc/scripts.php");
             }
             //Fim Cálculo de Hora Extra
             //Verificação de Atraso
+            
             separador = inputAtraso.split(':');
             let h = Number(separador[0]);
             let m = Number(separador[1]);
 
-            if (m < 6) {
+            let separadorTolerancia = toleranciaAtraso.split(':');
+            let hTolerancia = Number(separadorTolerancia[0]);
+            let mTolerancia = Number(separadorTolerancia[1]);
+
+
+            //m <= tolerancia Atraso
+            if (m < mTolerancia && h==0) {
                 inputAtraso = ""
             }
 
@@ -780,7 +789,12 @@ include("inc/scripts.php");
              h = Number(separador[0]);
              m = Number(separador[1]);
 
-            if (m < 6) {
+             separadorTolerancia = toleranciaExtra.split(':');
+             hTolerancia = Number(separadorTolerancia[0]);
+             mTolerancia = Number(separadorTolerancia[1]);
+
+             //m <= tolerancia Extra
+            if (m <= mTolerancia && h==0) {
                 inputExtra = ""
             }
 
@@ -811,6 +825,10 @@ include("inc/scripts.php");
 
             return;
         });
+
+        $('#btnPdf').on("click",function() {
+            imprimir();
+        })
 
         $('#btnNovo').on("click", function() {
             novo()
@@ -1017,11 +1035,13 @@ include("inc/scripts.php");
                 piece = out.split("^");
 
                 //funcionando
-                if (out.length >= 0 && out != "") {
+                if (out.length >= 0&& out != "") {
                     var codigo = piece[0];
                     var funcionario = piece[1];
                     var observacao = piece[2];
                     var mesAnoFolhaPonto = piece[3];
+                    toleranciaAtraso = piece[4] || '05:00';
+                    toleranciaExtra = piece[5] || '05:00';
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
                     $("#observacaoFolhaPontoMensal").val(observacao);
@@ -1078,6 +1098,8 @@ include("inc/scripts.php");
                     var funcionario = piece[1];
                     var observacao = piece[2];
                     var mesAnoFolhaPonto = piece[3];
+                    toleranciaAtraso = piece[4] || '05:00';
+                    toleranciaExtra = piece[5] || '05:00';
 
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
@@ -1167,5 +1189,13 @@ include("inc/scripts.php");
 
     function duracao(inicioExpediente, fimExpediente) {
         return (parse(fimExpediente) - parse(inicioExpediente));
+    }
+
+    function imprimir(){
+        const id = $('#funcionario').val();
+        const folha = $('#codigo').val();
+        const mesAno = $('#mesAno').val();
+
+        $(location).attr('href', `funcionario_folhaDePontoPdfPontoEletronico.php?id=${id}&folha=${folha}&data=${mesAno}`);
     }
 </script>

@@ -156,9 +156,11 @@ function recupera()
     }
 
     $sql =
-        "SELECT F.codigo, FU.codigo AS 'funcionario', F.mesAno, F.observacao
+        "SELECT F.codigo, FU.codigo AS 'funcionario', F.mesAno, F.observacao, P.limiteEntrada AS 'limiteAtraso', P.limiteSaida AS 'limiteExtra'
         FROM Funcionario.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
+        LEFT JOIN Ntl.beneficioProjeto BP ON FU.codigo = BP.funcionario 
+        LEFT JOIN Ntl.projeto P ON P.codigo = BP.projeto
         WHERE (0=0) AND F.codigo = " . $folha;
 
     $result = $reposit->RunQuery($sql);
@@ -179,12 +181,16 @@ function recupera()
         }
 
         $observacao = trim($row['observacao']);
+        $toleranciaAtraso = trim($row['limiteAtraso']);
+        $toleranciaExtra = trim($row['limiteExtra']);
 
         $out =
             $folha . "^" .
             $funcionario . "^" .
             $observacao . "^" .
-            $mesAno;
+            $mesAno . "^" .
+            $toleranciaAtraso . "^" .
+            $toleranciaExtra;
     }
 
     if ($out == "") {
