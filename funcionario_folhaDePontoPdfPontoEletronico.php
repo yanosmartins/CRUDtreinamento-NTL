@@ -29,12 +29,6 @@ $mesAno = $_GET["data"];
 if ($mesAno != "") {
     $mesteste = explode("-", $mesAno);
     $mes = $mesteste[1];
-    if ($pag == 0 && $mes == 01) {
-        $mes = 12;
-    }
-    if ($pag == 0 && $mes != 01) {
-        $mes = $mes - 1;
-    }
     $ano = $mesteste[0];
     $mesExtenso = ucfirst(mb_convert_encoding(strftime('%B', strtotime("$ano-$mes")), 'UTF-8', 'HTML-ENTITIES'));
     // $mes = date("m"); //02
@@ -42,16 +36,9 @@ if ($mesAno != "") {
     // $ano = date("Y"); //2021
 } else {
 
-    $mes = date("m"); //02
-    if ($pag == 0 && $mes == 01) {
-        $mes = 12;
-    }
-    if ($pag == 0 && $mes != 01) {
-        $mes = $mes - 1;
-    }
+    $mes = date("m"); 
     $ano = date("Y"); //2021
     $days = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
-
     $mesExtenso = ucfirst(mb_convert_encoding(strftime('%B', strtotime("$ano-$mes")), 'UTF-8', 'HTML-ENTITIES'));
 }
 
@@ -91,7 +78,7 @@ $sql = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unid
 FROM Ntl.feriado F 
 LEFT JOIN Ntl.municipio M ON M.codigo = F.municipio
 WHERE F.ativo = 1 AND data BETWEEN '$dataInicio' AND '$dataFim'
-AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = $estado)) OR F.tipoFeriado = 2 and M.codigo = $municipioFerias) 
+AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = 'RJ')) OR F.tipoFeriado = 2 and M.codigo = 1) 
 AND DATENAME(weekday,F.data) NOT IN ('Saturday', 'Sunday')";
 $result = $reposit->RunQuery($sql);
 
@@ -100,11 +87,11 @@ foreach ($result as $row) {
     array_push($feriados, $row);
 }
 $ponto = array();
-$sql = "SELECT F.codigo AS 'folha',FD.dia,F.mesAno,FD.horaEntrada,FD.inicioAlmoco,FD.fimAlmoco,FD.horaSaida,FD.horaExtra,FD.atraso,FD.lancamento,F.observacao FROM Funcionario.folhaPontoMensal F
+$sql = "SELECT F.codigo AS 'folha',FD.dia,F.mesAno,FD.horaEntrada,FD.inicioAlmoco,FD.fimAlmoco,FD.horaSaida,FD.horaExtra,FD.atraso,FD.lancamento,L.descricao,F.observacao FROM Funcionario.folhaPontoMensal F
 INNER JOIN Funcionario.folhaPontoMensalDetalheDiario FD ON F.codigo = FD.folhaPontoMensal
 INNER JOIN ntl.funcionario FU ON FU.codigo = F.funcionario 
 LEFT JOIN ntl.lancamento L ON L.codigo = FD.lancamento
-WHERE (0=0) AND FU.codigo = $funcionario AND F.codigo = $folha";
+WHERE (0=0) AND FU.codigo = $id AND F.codigo =$folha";
 $result = $reposit->RunQuery($sql);
 foreach ($result as $row) {
     array_push($ponto, [
@@ -116,6 +103,7 @@ foreach ($result as $row) {
         "horaSaida" => $row["horaSaida"],
         "horaExtra" => $row["horaExtra"],
         "atraso" => $row["atraso"],
+        "descricao" => $row["descricao"],
         "lancamento" => $row["lancamento"],
         "observacao" => $row["observacao"]
     ]);
@@ -404,35 +392,50 @@ foreach ($ponto as $registro) {
     foreach ($feriados as $feriado) {
         if ($feriado['data'] == $diaferiado) {
             $pdf->SetFont('Arial', 'B', 9);
-            $pdf->setX(18);
+            $pdf->setX(14);
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " FERIADO"), 0, 0, "L", 0);// isso...
             $pdf->SetFont('Arial', 'B', 9);
         }
     }
-    $pdf->setX(18);
+   
 
-    //Hora Entrada/Saida
+   
+
+    //CINZA
+    $pdf->setX(32.2);
+    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);// ou isso
+    $pdf->setX(49.2);
+    $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);// ou isso
+    $pdf->setX(86.3);
+    $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);// ou isso
+    $pdf->setX(106.3);
+    $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);// ou isso
+    
+
+    if ($diadasemana != 6 && $diadasemana != 7) {
+
+         //Hora Entrada/Saida
+    $pdf->setX(14);
     $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['horaEntrada']), 0, 0, "C", 0);// ou isso
-    $pdf->setX(42, 5);
+    $pdf->setX(66, 5);
     $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['horaSaida']), 0, 0, "C", 0);// ou isso
 
-    //Almoço Entrada/Saida CINZA
+    //Almoço Entrada/Saida 
     $pdf->setX(32.2);
-    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['inicioAlmoco']), 0, 0, "C", 1);// ou isso
+    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['inicioAlmoco']), 0, 0, "C", 0);// ou isso
     $pdf->setX(49.2);
-    $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['fimAlmoco']), 0, 0, "C", 1);// ou isso
+    $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['fimAlmoco']), 0, 0, "C", 0);// ou isso
 
-    //Hora Extra/Atraso
-    $pdf->setX(86.3);
-    $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1);// ou isso
-    $pdf->setX(106.3);
-    $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1);// ou isso
-    //campos observacao
+     //Hora Extra/Atraso
+     $pdf->setX(86.3);
+     $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 0);// ou isso
+     $pdf->setX(106.3);
+     $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 0);// ou isso
+
+    //Observacao
     $pdf->setX(128);
-    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['lancamento']), 0, 0, 0, 1);// ou isso
+    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, 0, 0);// ou isso
 
-    //Só rodando para ver oque essa parte faz
-    if ($diadasemana != 6 && $diadasemana != 7) {
         foreach ($feriados as $feriado) {
             if (mb_ereg("-$mes-" . str_pad($i, 2, 0, STR_PAD_LEFT), $feriado["data"])) {
                 $pdf->SetFont('Arial', 'B', 8);

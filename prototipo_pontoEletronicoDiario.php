@@ -102,7 +102,25 @@ include("inc/nav.php");
                                                                 </script>
                                                                 <div id="hora" style="font-size: 17px;"></div>
                                                                 <div class="#"><br>
-                                                                    <h4>Funcionario: <span id="#">Fillipy José Pessoa Ferreira Monteiro</span></h4>
+                                                                    <h4>Funcionario: <span id="#"><option></option><?php
+                                                                                $reposit = new reposit();
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo != " . $_SESSION['funcionario'] . " order by nome";
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = (int) $row['codigo'];
+                                                                                    $nome = $row['nome'];
+                                                                                    echo '<option value= ' . $codigo . '>' . $nome . '</option>';
+                                                                                }
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $_SESSION['funcionario'];
+
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                if ($row = $result[0]) {
+
+                                                                                    $codigo = (int) $row['codigo'];
+                                                                                    $nome = $row['nome'];
+                                                                                    echo '<option value= ' . $codigo . ' selected>' . $nome . '</option>';
+                                                                                }
+                                                                                ?></span></h4>
                                                                     <h4>Expediente: <span id="#">10:00 ás 16:00</span></h4>
                                                                 </div>
                                                             </div>
