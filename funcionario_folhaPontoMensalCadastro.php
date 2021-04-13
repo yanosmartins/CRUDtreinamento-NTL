@@ -378,7 +378,7 @@ include("inc/nav.php");
                                                                     </button>
                                                                 </section>
 
-                                                                <section class="col col-md-1">
+                                                                <section class="col col-md-2">
                                                                     <label class="label"> </label>
                                                                     <button id="btnAddPonto" type="button" class="btn btn-primary" style="display:<?php if ($esconderCampoPesado) {
                                                                                                                                                         echo $esconderCampoPesado['display'];
@@ -389,7 +389,7 @@ include("inc/nav.php");
 
 
 
-                                                                <section class="col col-md-1">
+                                                                <section class="col col-md-2">
                                                                     <label class=" label"> </label>
                                                                     <button id="btnGravar" type="button" class="btn btn-success" style="display:<?php if ($esconderCampoPesado) {
                                                                                                                                                     echo $esconderCampoPesado['display'];
@@ -598,6 +598,8 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
+    var toleranciaExtra = 0;
+    var toleranciaAtraso = 0;
     $(document).ready(function() {
 
         $("#funcionario").on("change", function() {
@@ -769,7 +771,8 @@ include("inc/scripts.php");
             let h = Number(separador[0]);
             let m = Number(separador[1]);
 
-            if (m < 6) {
+            //m <= tolerancia Atraso
+            if (m < ) {
                 inputAtraso = ""
             }
 
@@ -780,8 +783,9 @@ include("inc/scripts.php");
              h = Number(separador[0]);
              m = Number(separador[1]);
 
-            if (m < 6) {
-                inputExtra = ""
+             //m <= tolerancia Extra
+            if (m <= ) {
+                inputExtra = "00:00"
             }
 
             //Fim da Verificação de Extra
@@ -1017,11 +1021,13 @@ include("inc/scripts.php");
                 piece = out.split("^");
 
                 //funcionando
-                if (out.length >= 0 && out != "") {
+                if (out.length >= 0&& out != "") {
                     var codigo = piece[0];
                     var funcionario = piece[1];
                     var observacao = piece[2];
                     var mesAnoFolhaPonto = piece[3];
+                    toleranciaAtraso = piece[4] || '05:00';
+                    toleranciaExtra = piece[5] || '05:00';
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
                     $("#observacaoFolhaPontoMensal").val(observacao);
@@ -1078,6 +1084,8 @@ include("inc/scripts.php");
                     var funcionario = piece[1];
                     var observacao = piece[2];
                     var mesAnoFolhaPonto = piece[3];
+                    toleranciaAtraso = piece[4] || '05:00';
+                    toleranciaExtra = piece[5] || '05:00';
 
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
