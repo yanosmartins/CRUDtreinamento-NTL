@@ -69,6 +69,9 @@ if ($condicaoConfiguracoesOK) {
     if (in_array('USUARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("usuarios" => array("title" => "Usuário", "url" => APP_URL . "/usuarioFiltro.php"));
     }
+    if (in_array('USUARIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['configuracao']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/usuarioGrupoFiltro.php"));
+    }
     if (in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("permissoesUsuarios" => array("title" => "Permissões do Usuário", "url" => APP_URL . "/usuarioFuncionalidadeFiltro.php"));
     }
