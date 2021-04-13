@@ -12,10 +12,6 @@ $condicaoAcessarOK = (in_array('GESTOR_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('GESTOR_GRAVAR', $arrayPermissao, true));
 $condicaoExcluirOK = (in_array('GESTOR_EXCLUIR', $arrayPermissao, true));
 
-$condicaoAcessarOK = true;
-$condicaoGravarOK = true;
-$condicaoExcluirOK = true;
-
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");

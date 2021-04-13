@@ -10,7 +10,6 @@ $condicaoAcessarOK = (in_array('CONTRATACAORH_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('CONTRATACAORH_GRAVAR', $arrayPermissao, true));
 $condicaoExcluirOK = (in_array('CONTRATACAORH_EXCLUIR', $arrayPermissao, true));
 
-$condicaoAcessarOK = true;
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
