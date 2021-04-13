@@ -767,12 +767,18 @@ include("inc/scripts.php");
             }
             //Fim Cálculo de Hora Extra
             //Verificação de Atraso
+            
             separador = inputAtraso.split(':');
             let h = Number(separador[0]);
             let m = Number(separador[1]);
 
+            let separadorTolerancia = toleranciaAtraso.split(':');
+            let hTolerancia = Number(separadorTolerancia[0]);
+            let mTolerancia = Number(separadorTolerancia[1]);
+
+
             //m <= tolerancia Atraso
-            if (m < ) {
+            if (m < mTolerancia && h==0) {
                 inputAtraso = ""
             }
 
@@ -783,9 +789,13 @@ include("inc/scripts.php");
              h = Number(separador[0]);
              m = Number(separador[1]);
 
+             separadorTolerancia = toleranciaExtra.split(':');
+             hTolerancia = Number(separadorTolerancia[0]);
+             mTolerancia = Number(separadorTolerancia[1]);
+
              //m <= tolerancia Extra
-            if (m <= ) {
-                inputExtra = "00:00"
+            if (m <= mTolerancia && h==0) {
+                inputExtra = ""
             }
 
             //Fim da Verificação de Extra
