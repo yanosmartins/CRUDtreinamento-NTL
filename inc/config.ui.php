@@ -234,8 +234,6 @@ if ($condicaoBeneficioOk) {
             $page_nav['beneficio']['sub']['operacao']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
         }
     }
-
-   
 }
 
 $condicaoRHOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
@@ -261,33 +259,18 @@ if ($condicaoRHOk) {
         if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Triagem", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
         }
-        if (!in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {
+        if (in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {
             $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/contratacao_gestorFiltro.php"));
         }
 
-        if (!in_array('RECURSOSHUMANOS_ACESSAR', $arrayPermissao, true)) {
+        if (in_array('CONTRATACAORH_ACESSAR', $arrayPermissao, true)) {
             $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/contratacao_rhFiltro.php"));
         }
 
-        if (!in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
+        if (in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
         }
     }
-    // if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
-    //     $page_nav['operacao']['sub']['recursoshumanos']['sub'] += array("candidato" => array("title" => "Triagem", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
-    // }
-
-    // if (!in_array('GESTOR_ACESSAR', $arrayPermissao, true)) {
-    //     $page_nav['operacao']['sub']['recursoshumanos']['sub'] += array("gestor" => array("title" => "Gestor", "url" => APP_URL . "/contratacao_gestorFiltro.php"));
-    // }
-
-    // if (!in_array('RECURSOSHUMANOS_ACESSAR', $arrayPermissao, true)) {
-    //     $page_nav['operacao']['sub']['recursoshumanos']['sub'] += array("rh" => array("title" => "RH", "url" => APP_URL . "/contratacao_rhFiltro.php"));
-    // }
-
-    // if (!in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
-    //     $page_nav['operacao']['sub']['recursoshumanos']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
-    // }
 } else if ($tipoUsuario == 'T') {
     $page_nav['candidato'] = array("title" => "Contratação", "icon" => "fa fa-folder-open");
     $page_nav['candidato']['sub'] = array();
