@@ -624,7 +624,6 @@ include("inc/scripts.php");
             selecionaFolha();
         });
 
-        debugger;
         $("#mesAno").attr('min',minDate);
         $("#mesAno").attr('max',maxDate);
 
