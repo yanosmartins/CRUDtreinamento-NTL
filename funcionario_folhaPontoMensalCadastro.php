@@ -165,13 +165,14 @@ include("inc/nav.php");
                                                                             touch-action:<?= $esconderCampoPesado['touch-action'] ?>">
                                                                         </label>
                                                                     </section>
-                                                                    <section class="col col-md-1">
-                                                                        <label class="label">&nbsp;</label>
-                                                                        <label id="labelCheckAlmoco" class="checkbox hidden">
-                                                                            <input id="checkAlmoco" name="checkAlmoco" type="checkbox" value="true">
-                                                                            Habilitar Almoço
-                                                                        </label>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label"> </label>
+                                                                        <button type="button" id="btnPdf" class="btn btn-danger" aria-hidden="true">
+                                                                            <i class="">Imprimir Folha</i>
+                                                                        </button>
                                                                     </section>
+
+
 
                                                                     <section class="col col-2">
                                                                         <label class="select">
@@ -371,7 +372,13 @@ include("inc/nav.php");
 
                                                             </div>
                                                             <div class="row">
-                                                                <section class="col col-md-2">
+
+                                                                <section class="col col-4">
+                                                                    <label class="label"> </label>
+                                                                    </button>
+                                                                </section>
+
+                                                                <section class="col col-md-1">
                                                                     <label class="label"> </label>
                                                                     <button id="btnAddPonto" type="button" class="btn btn-primary" style="display:<?php if ($esconderCampoPesado) {
                                                                                                                                                         echo $esconderCampoPesado['display'];
@@ -380,14 +387,7 @@ include("inc/nav.php");
                                                                     </button>
                                                                 </section>
 
-                                                                <section class="col col-6">
-                                                                    <label class="label"> </label>
-                                                                    </button>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label"> </label>
-                                                                    </button>
-                                                                </section>
+
 
                                                                 <section class="col col-md-1">
                                                                     <label class=" label"> </label>
@@ -398,11 +398,7 @@ include("inc/nav.php");
                                                                     </button>
                                                                 </section>
 
-                                                                <section class="col col-md-1">
-                                                                    <label class="label"> </label>
-                                                                    <button type="button" id="btnPdf" class="fa fa-file-pdf-o btn btn-danger" aria-hidden="true" style="height: 32px; width: 70px;">
-                                                                    </button>
-                                                                </section>
+
 
 
 
@@ -619,16 +615,18 @@ include("inc/scripts.php");
         });
 
         $('#inputDia').on('keydown', () => {
-            const dia = $("#inputDia").val();
-            const mask = /\D/.test(dia);
-            if (mask) {
-                return $("#inputDia").val('');
-            }
-            return $("#inputDia").val(dia.slice(0, 1));
+            const pattern = /(\d|\t)/g
+
+            let value = $('#inputDia').val();
+
+            value = value.replace(/\D/gi, "");
+
+            return $('#inputDia').val(value);
         });
 
         $('#inputDia').on('change', function() {
             var dia = $("#inputDia").val();
+            dia = dia.replace(/\D/gi, "");
 
             var entrada = $("#horaEntrada-" + dia).val()
             var inputEntrada = $("#inputHoraEntrada")
@@ -639,28 +637,31 @@ include("inc/scripts.php");
             // var fimAlmoco = $("#fimAlmoco-" + dia).val()
             // var inputFimAlmoco = $("#inputFimAlmoco")
 
-            var saida = $("#horaSaida-" + dia).val()
-            var inputSaida = $("#inputHoraSaida")
+            try {
+                var saida = $("#horaSaida-" + dia).val()
+                var inputSaida = $("#inputHoraSaida")
 
-            var extra = $("#horaExtra-" + dia).val()
-            var inputExtra = $("#inputHoraExtra")
+                var extra = $("#horaExtra-" + dia).val()
+                var inputExtra = $("#inputHoraExtra")
 
-            var atraso = $("#atraso-" + dia).val()
-            var inputAtraso = $("#inputAtraso")
+                var atraso = $("#atraso-" + dia).val()
+                var inputAtraso = $("#inputAtraso")
 
-            var lancamento = $("#lancamento-" + dia).val()
-            var inputLancamento = $("#inputLancamento")
+                var lancamento = $("#lancamento-" + dia).val()
+                var inputLancamento = $("#inputLancamento")
 
-            inputEntrada.val(entrada)
-            // inputInicioAlmoco.val(inicioAlmoco)
-            // inputFimAlmoco.val(fimAlmoco)
-            inputSaida.val(saida)
-            if ((extra.trim() != '00:00:00') && (extra.trim() != '00:00'))
-                inputExtra.val(extra)
-            if ((atraso.trim() != '00:00:00') && (atraso.trim() != '00:00'))
-                inputAtraso.val(atraso)
-            inputLancamento.val(lancamento)
-
+                inputEntrada.val(entrada)
+                // inputInicioAlmoco.val(inicioAlmoco)
+                // inputFimAlmoco.val(fimAlmoco)
+                inputSaida.val(saida)
+                if ((extra.trim() != '00:00:00') && (extra.trim() != '00:00'))
+                    inputExtra.val(extra)
+                if ((atraso.trim() != '00:00:00') && (atraso.trim() != '00:00'))
+                    inputAtraso.val(atraso)
+                inputLancamento.val(lancamento)
+            } catch (e) {
+                return smartAlert('Atenção', 'Insira um dia válido!', 'error')
+            }
         });
 
         $("#btnAddPonto").on("click", function() {
@@ -763,6 +764,27 @@ include("inc/scripts.php");
                 }
             }
             //Fim Cálculo de Hora Extra
+            //Verificação de Atraso
+            separador = inputAtraso.split(':');
+            let h = Number(separador[0]);
+            let m = Number(separador[1]);
+
+            if (m < 6) {
+                inputAtraso = ""
+            }
+
+            //Fim da Verificação de Atraso
+
+            //Verificação de Extra
+            separador = inputExtra.split(':');
+             h = Number(separador[0]);
+             m = Number(separador[1]);
+
+            if (m < 6) {
+                inputExtra = ""
+            }
+
+            //Fim da Verificação de Extra
 
             // Verificações antes de adicionar o ponto
             if ((!inputEntrada || inputEntrada == "00:00:00") && !inputLancamento) {
