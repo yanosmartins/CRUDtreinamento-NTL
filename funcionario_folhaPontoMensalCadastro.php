@@ -826,6 +826,10 @@ include("inc/scripts.php");
             return;
         });
 
+        $('#btnPdf').on("click",function() {
+            imprimir();
+        })
+
         $('#btnNovo').on("click", function() {
             novo()
         });
@@ -1185,5 +1189,13 @@ include("inc/scripts.php");
 
     function duracao(inicioExpediente, fimExpediente) {
         return (parse(fimExpediente) - parse(inicioExpediente));
+    }
+
+    function imprimir(){
+        const id = $('#funcionario').val();
+        const folha = $('#codigo').val();
+        const mesAno = $('#mesAno').val();
+
+        $(location).attr('href', `funcionario_folhaDePontoPdfPontoEletronico.php?id=${id}&folha=${folha}&data=${mesAno}`);
     }
 </script>
