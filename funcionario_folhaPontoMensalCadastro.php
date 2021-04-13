@@ -600,6 +600,21 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     var toleranciaExtra = 0;
     var toleranciaAtraso = 0;
+
+    const defaultDate = new Date();
+    const formatedDate = defaultDate.toLocaleDateString('pt-BR');
+    const cutout = formatedDate.split('/');
+    const maxDay = cutout[0];
+    const maxMonth = cutout[1];
+
+    var minDay = '01';
+    var minMonth = Number(maxMonth - 1);
+    if(minMonth < 1) minMonth = 12;
+    if (minMonth < 10) minMonth = '0'.concat(minMonth);
+
+    const minDate = defaultDate.getFullYear() + '-' + minMonth + '-' + minDay;
+    const maxDate = defaultDate.getFullYear() + '-' + maxMonth + '-' + maxDay;
+
     $(document).ready(function() {
 
         $("#funcionario").on("change", function() {
@@ -608,6 +623,10 @@ include("inc/scripts.php");
             $("#expediente").val(codigo);
             selecionaFolha();
         });
+
+        debugger;
+        $("#mesAno").attr('min',minDate);
+        $("#mesAno").attr('max',maxDate);
 
         $("#mesAno").on("change", function() {
             var funcionario = $("#funcionario").val();
