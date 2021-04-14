@@ -36,20 +36,18 @@ function grava()
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $codigo = (int)$_POST['id'];
-    $descricao = "'" . $_POST['descricao'] . "'";
-    if (validaUsuarioGrupo($descricao) && $codigo == 0) {
+    $grupo = "'" . $_POST['descricao'] . "'";
+    if (validaUsuarioGrupo($grupo) && $codigo == 0) {
         echo "failed#" . "Grupo de usuários já cadastrado!";
         return;
     }
     $ativo = (int)$_POST['ativo'];
-    $tipo = "'" . $_POST['tipo'] . "'";
 
-    $sql = "Ntl.grupo_Atualiza
+    $sql = "Ntl.usuarioGrupo_Atualiza
             $codigo,
+            $grupo,
             $ativo,
-            $descricao,
-            $usuario,
-            $tipo";
+            $usuario";
 
     $result = $reposit->Execprocedure($sql);
 
