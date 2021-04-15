@@ -84,13 +84,13 @@ include "js/repositorio.php";
                 if ($_POST["tipo"] != "") {
                     $tipo = (int)$_POST["tipo"];
                     $where = $where . " AND ( PM.tipo = $tipo)";
-                }else{
-                    $where = $where . " AND ( PM.tipo = 1)";
                 }
 
                 if ($_POST["aprovado"] != "") {
                     $aprovado = (int)$_POST["aprovado"];
                     $where = $where . " AND ( PM.aprovado = $aprovado)";
+                }else{
+                    $where = $where . " AND ( PM.aprovado IS NULL)";
                 }
 
                 if ($_POST["dataInicial"] != "") {
