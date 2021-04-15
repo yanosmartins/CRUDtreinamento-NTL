@@ -534,8 +534,8 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
-    var toleranciaExtra = 0;
-    var toleranciaAtraso = 0;
+    var toleranciaExtra = '05:00';
+    var toleranciaAtraso = '05:00';
 
     const defaultDate = new Date();
     const formatedDate = defaultDate.toLocaleDateString('pt-BR');
