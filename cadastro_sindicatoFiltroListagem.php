@@ -14,28 +14,29 @@ include "js/repositorio.php";
             </thead>
             <tbody>
                 <?php
+                
 
                 $sql = "SELECT codigo, descricao, apelido, cnpj, situacao FROM Ntl.sindicato WHERE (0=0) ";
                 $codigo = (int) $_GET["sindicato"];
                 $apelido = (int) $_GET["apelidoId"];
                 $cnpj = $_GET["cnpj"];
-                $ativo = (int) $_GET['ativo'] ;
+                $situacao = $_GET['situacao'] ;
 
                 if ($codigo > 0) {
                     $where =  " AND codigo = " . $codigo;
                 }
 
-                if ($apelido > 0) {
+                if ($apelido >0) {
 
                     $where .= $where . " AND codigo = " . $apelido;
                 }
 
-                if ($cnpj != "") {
-                    $where .= $where . " AND cnpj = $cnpj";
+                if ($cnpj > 0) {
+                    $where .= $where . " AND cnpj = '$cnpj'";
                 }
 
-                if (($_GET['ativo'] === 1) || ($_GET['ativo'] === 0)) {
-                    $where .=  " AND situacao = " . $ativo;
+                if ($situacao != "") {
+                    $where .=  " AND situacao = " . $situacao;
                 }
 
                 $sql = $sql . $where;
@@ -45,19 +46,19 @@ include "js/repositorio.php";
                 foreach($result as $row) {
                     $id = (int) $row['codigo'];
                     $descricao = $row['descricao'];
-                    $apelido = $row['apelido'];
+                    $apelido = (string)$row['apelido'];
                     $cnpj = $row['cnpj'];
-                    $ativo = (int) $row['situacao'];
-                    if ($ativo == 1) {
-                        $ativo = "Sim";
+                    $situacao = (int) $row['situacao'];
+                    if ($situacao == 1) {
+                        $situacao = "Sim";
                     } else {
-                        $ativo = "Não";
+                        $situacao = "Não";
                     }
                     echo '<tr >';
                     echo '<td class="text-left"><a href="cadastro_sindicatoCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
                     echo '<td class="text-left">' . $apelido . '</td>';
                     echo '<td class="text-left">' . $cnpj . '</td>';
-                    echo '<td class="text-left">' . $ativo . '</td>';
+                    echo '<td class="text-left">' . $situacao . '</td>';
                     echo '</tr >';
                 }
                 ?>

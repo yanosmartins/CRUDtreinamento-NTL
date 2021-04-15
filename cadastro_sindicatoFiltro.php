@@ -116,7 +116,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo">
+                                                                    <select id="situacao" name="situacao">
                                                                         <option></option>
                                                                         <option value="1" selected>Sim</option>
                                                                         <option value="0">Não</option>
@@ -270,12 +270,12 @@ include("inc/scripts.php");
         var sindicato = +$('#sindicato').val();
         var apelidoId = +$("#apelidoId").val();
         var cnpj = $("#cnpj").val();
-        var ativo = $("#ativo").val();
+        var situacao = $("#situacao").val();
         var parametrosUrl;
         parametrosUrl = '&sindicato=' + sindicato +
             '&apelidoId=' + apelidoId +
             '&cnpj=' + cnpj +
-            '&ativo=' + ativo;
+            '&situacao=' + situacao;
         $('#resultadoBusca').load('cadastro_sindicatoFiltroListagem.php?' + parametrosUrl);
     }
 </script>

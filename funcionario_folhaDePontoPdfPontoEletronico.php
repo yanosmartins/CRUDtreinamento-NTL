@@ -412,12 +412,9 @@ foreach ($ponto as $registro) {
         // $resultado = $resultado - ($hora_ponto * 3600);
         // $min_ponto = floor($resultado / 60);
         // $resultado = $resultado - ($min_ponto * 60);
-        // $secs_ponto = $resultado;
+        // $secs_ponto = $resultado; 
         // $tempo = $hora_ponto.":".$min_ponto.":".$secs_ponto;
        
-        // if ($tempo > $tempoMinimo) {
-
-        // }
 
          //Hora Entrada/Saida
     $pdf->setX(14);
