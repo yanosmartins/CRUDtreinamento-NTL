@@ -7,10 +7,12 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:60px;">Lançamento</th>
+                    <th class="text-left" style="min-width:110px;">Data Lançamento</th>
                     <th class="text-left" style="min-width:110px;">Data Entrada</th>
                     <th class="text-left" style="min-width:200px;">Cliente/Fornecedor</th>
                     <th class="text-left" style="min-width:110px;">Tipo Doc.</th>
                     <th class="text-left" style="min-width:30px;">Número</th>
+                    <th class="text-left" style="min-width:110px;">Data Emissão</th>
                     <th class="text-left" style="min-width:30px;">Valor Nota</th>
                     <th class="text-left" style="min-width:30px;">Materiais</th>
                     <th class="text-left" style="min-width:300px;">Estoque</th>
@@ -26,6 +28,7 @@ include "js/repositorio.php";
 
 
                 $sql = "SELECT DISTINCT EM.codigo, EM.fornecedor, F.apelido, EM.tipoDocumento , T.descricao AS descricaoTipoDocumento, EM.numeroNF, EM.dataEntradaMaterial ,
+				EM.dataEntrega, EM.dataEmissaoNF,
                 SUBSTRING(
                        (
                            SELECT  '/ ' + CI.descricaoItem  AS [text()]
@@ -69,13 +72,42 @@ include "js/repositorio.php";
                     $dataInicial = $_POST["dataInicial"];
                     $data = explode("/", $dataInicial);
                     $data = $data[2] . "-" . $data[1] . "-" . $data[0];
-                    $where = $where . " AND EM.dataEntradaMaterial >= '" . $data . "'";
+                    $where = $where . " AND EM.dataEntradaMaterial  >= CONVERT(DATETIME,'" . $dataInicial . " 00:00:00', 103) ";
                 }
+
                 if ($_POST["dataFinal"] != "") {
                     $dataFinal = $_POST["dataFinal"];
                     $data = explode("/", $dataFinal);
                     $data = $data[2] . "-" . $data[1] . "-" . $data[0];
-                    $where = $where . " AND EM.dataEntradaMaterial <= '" . $data . "'";
+                    $where = $where . " AND EM.dataEntradaMaterial  <= CONVERT(DATETIME,'" . $dataFinal . " 00:00:00', 103) ";
+                }
+
+                if ($_POST["dataInicialEntrada"] != "") {
+                    $dataInicialEntrada = $_POST["dataInicialEntrada"];
+                    $data = explode("/", $dataInicialEntrada);
+                    $data = $data[2] . "-" . $data[1] . "-" . $data[0];
+                    $where = $where . " AND EM.dataEntrega  >= CONVERT(DATETIME,'" . $dataInicialEntrada . " 00:00:00', 103) ";
+                }
+
+                if ($_POST["dataFinalEntrada"] != "") {
+                    $dataFinalEntrada = $_POST["dataFinalEntrada"];
+                    $data = explode("/", $dataFinalEntrada);
+                    $data = $data[2] . "-" . $data[1] . "-" . $data[0];
+                    $where = $where . " AND EM.dataEntrega  <= CONVERT(DATETIME,'" . $dataFinalEntrada . " 00:00:00', 103) ";
+                }
+
+                if ($_POST["dataInicialEmissao"] != "") {
+                    $dataInicialEmissao = $_POST["dataInicialEmissao"];
+                    $data = explode("/", $dataInicialEmissao);
+                    $data = $data[2] . "-" . $data[1] . "-" . $data[0];
+                    $where = $where . " AND EM.dataEmissaoNF  >= CONVERT(DATETIME,'" . $dataInicialEmissao . " 00:00:00', 103) ";
+                }
+
+                if ($_POST["dataInicialEmissao"] != "") {
+                    $dataInicialEmissao = $_POST["dataInicialEmissao"];
+                    $data = explode("/", $dataInicialEmissao);
+                    $data = $data[2] . "-" . $data[1] . "-" . $data[0];
+                    $where = $where . " AND EM.dataEmissaoNF  <= CONVERT(DATETIME,'" . $dataInicialEmissao . " 00:00:00', 103) ";
                 }
 
                 if ($_POST["tipo"] != "") {
@@ -112,14 +144,35 @@ include "js/repositorio.php";
                     $numeroNF = $row['numeroNF'];
 
                     //A data recuperada foi formatada para D/M/Y
-                    $dataEntradaMaterial = $row['dataEntradaMaterial'];
-                    $descricaoData = explode(" ", $dataEntradaMaterial);
-                    $descricaoData = explode("-", $descricaoData[0]);
-                    $descricaoHora = explode(" ", $dataEntradaMaterial);
-                    $descricaoHora = $descricaoHora[1];
-                    $descricaoHora = explode(":", $descricaoHora);
-                    $descricaoHora = $descricaoHora[0] . ":" . $descricaoHora[1];
-                    $descricaoData =  $descricaoData[2] . "/" . $descricaoData[1] . "/" . $descricaoData[0];
+                    $dataLancamento = $row['dataEntradaMaterial'];
+                    $descricaoDataLancamento = explode(" ", $dataLancamento);
+                    $descricaoDataLancamento = explode("-", $descricaoDataLancamento[0]);
+                    $descricaoHoraLancamento = explode(" ", $dataLancamento);
+                    $descricaoHoraLancamento = $descricaoHoraLancamento[1];
+                    $descricaoHoraLancamento = explode(":", $descricaoHoraLancamento);
+                    $descricaoHoraLancamento = $descricaoHoraLancamento[0] . ":" . $descricaoHoraLancamento[1];
+                    $descricaoDataLancamento =  $descricaoDataLancamento[2] . "/" . $descricaoDataLancamento[1] . "/" . $descricaoDataLancamento[0];
+
+                    $dataEntrada = $row['dataEntrega'];
+                    if ($dataEntrada != '') {
+
+                        $descricaoDataEntrada = explode(" ", $dataEntrada);
+                        $descricaoDataEntrada = explode("-", $descricaoDataEntrada[0]);
+                        $descricaoHoraEntrada = explode(" ", $dataEntrada);
+                        $descricaoHoraEntrada = $descricaoHoraEntrada[1];
+                        $descricaoHoraEntrada = explode(":", $descricaoHoraEntrada);
+                        $descricaoHoraEntrada = $descricaoHoraEntrada[0] . ":" . $descricaoHoraEntrada[1];
+                        $descricaoDataEntrada =  $descricaoDataEntrada[2] . "/" . $descricaoDataEntrada[1] . "/" . $descricaoDataEntrada[0];
+                    }
+
+                    $dataEmissao = $row['dataEmissaoNF'];
+                    $descricaoDataEmissao = explode(" ", $dataEmissao);
+                    $descricaoDataEmissao = explode("-", $descricaoDataEmissao[0]);
+                    $descricaoHoraEmissao = explode(" ", $dataEmissao);
+                    $descricaoHoraEmissao = $descricaoHoraEmissao[1];
+                    $descricaoHoraEmissao = explode(":", $descricaoHoraEmissao);
+                    $descricaoHoraEmissao = $descricaoHoraEmissao[0] . ":" . $descricaoHoraEmissao[1];
+                    $descricaoDataEmissao =  $descricaoDataEmissao[2] . "/" . $descricaoDataEmissao[1] . "/" . $descricaoDataEmissao[0];
 
                     $material = $row['material'];
                     $estoque = $row['estoque'];
@@ -127,10 +180,12 @@ include "js/repositorio.php";
 
                     echo '<tr >';
                     echo '<td class="text-left">' . $id . '</td>';
-                    echo '<td class="text-left"><a href="estoque_entradaMaterialCadastro.php?id=' . $id . '">' . $descricaoData . '</td>';
+                    echo '<td class="text-left"><a href="estoque_entradaMaterialCadastro.php?id=' . $id . '">' . $descricaoDataLancamento . '</td>';
+                    echo '<td class="text-left">' . $descricaoDataEntrada . '</td>';
                     echo '<td class="text-left">' . $fornecedor . '</td>';
                     echo '<td class="text-justify">' . $tipoDocumento . '</td>';
                     echo '<td class="text-justify">' . $numeroNF . '</td>';
+                    echo '<td class="text-justify">' . $descricaoDataEmissao . '</td>';
                     echo '<td class="text-justify">' . $valorTotal . '</td>';
                     echo '<td class="text-justify">' . $material . '</td>';
                     echo '<td class="text-justify">' . $estoque . '</td>';

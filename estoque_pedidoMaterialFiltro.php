@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('FORNECIMENTOMATERIAL_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('FORNECIMENTOMATERIAL_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PEDIDOMATERIAL_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PEDIDOMATERIAL_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Fornecimento Material";
+$page_title = "Pedido Material";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +36,8 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['estoque']['sub']['operacao']['sub']['fornecimentoMaterial']["active"]  = true;
+$page_nav['estoque']['sub']['operacao']['sub']['pedidoMaterial']["active"]  = true;
+
 
 include("inc/nav.php");
 ?>
@@ -60,7 +61,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Fornecimento Material</h2>
+                            <h2>Pedido Material</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -141,7 +142,6 @@ include("inc/nav.php");
                                                                     <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2">
                                                                 <label class="label">Data Inicial</label>
                                                                 <label class="input">
@@ -155,7 +155,6 @@ include("inc/nav.php");
                                                                     <input id="dataFinal" name="dataFinal" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                     <i class="icon-append fa fa-calendar"></i>
                                                                 </label>
-
                                                             </section>
                                                         </div>
                                                         <div class="row">
@@ -173,8 +172,8 @@ include("inc/nav.php");
                                                                 <label class="select">
                                                                     <select id="tipo" name="tipo" class="">
                                                                         <option></option>
-                                                                        <option value="0">Pedido</option>
-                                                                        <option value="1">Fornecedor</option>
+                                                                        <option value="3">Resrvado</option>
+                                                                        <option value="4">Pendente</option>
                                                                     </select><i></i>
                                                             </section>
                                                         </div>
@@ -508,7 +507,7 @@ include("inc/scripts.php");
     });
 
     function novo() {
-        $(location).attr('href', 'estoque_fornecimentoMaterialCadastro.php');
+        $(location).attr('href', 'estoque_pedidoMaterialCadastro.php');
     }
 
     function listarFiltro() {
@@ -523,7 +522,7 @@ include("inc/scripts.php");
         var codigoItemId = $('#codigoItemId').val();
 
 
-        $('#resultadoBusca').load('estoque_fornecimentoMaterialFiltroListagem.php?', {
+        $('#resultadoBusca').load('estoque_pedidoMaterialFiltroListagem.php?', {
             clienteFornecedorId: clienteFornecedorId,
             solicitanteId: solicitanteId,
             projeto: projeto,
