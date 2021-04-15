@@ -704,23 +704,9 @@ include("inc/scripts.php");
                     if (jornada > jornadaNormal) {
                         if (!inputExtra)
                             inputExtra = (`${horas}:${minutos}`);
-
-                        inputLancamento = $('#inputLancamento option');
-                        inputLancamento.each((index, el) => {
-                            if (/hora\ ?extra/gi.test($(el).text())) {
-                                return inputLancamento = $(el).val();
-                            }
-                        })
                     } else {
                         if (!inputAtraso) {
                             inputAtraso = (`${horas}:${minutos}`)
-
-                            inputLancamento = $('#inputLancamento option');
-                            inputLancamento.each((index, el) => {
-                                if (/atraso/gi.test($(el).text())) {
-                                    return inputLancamento = $(el).val();
-                                }
-                            })
                         }
 
                     }
