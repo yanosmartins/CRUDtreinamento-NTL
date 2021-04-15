@@ -90,14 +90,20 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Data Inicial</label>
+                                                                <label class="label">Número NF</label>
+                                                                <label class="input">
+                                                                    <input id="numero" name="numero" maxlength="255" autocomplete="off" class="" type="text" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Lançamento – Inicio</label>
                                                                 <label class="input">
                                                                     <input id="dataInicial" name="dataInicial" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                     <i class="icon-append fa fa-calendar"></i>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Data Final</label>
+                                                                <label class="label">Data de Lançamento – Fim</label>
                                                                 <label class="input">
                                                                     <input id="dataFinal" name="dataFinal" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                     <i class="icon-append fa fa-calendar"></i>
@@ -105,7 +111,7 @@ include("inc/nav.php");
                                                             </section>
 
                                                         </div>
-                                                        <div class="row">                            
+                                                        <div class="row">
                                                             <section class="col col-6">
                                                                 <label class="label"> Descrição Item</label>
                                                                 <label class="input">
@@ -123,14 +129,56 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Número NF</label>
+                                                                <label class="label">Data de Emissão – Inicio</label>
                                                                 <label class="input">
-                                                                    <input id="numero" name="numero" maxlength="255" autocomplete="off" class="" type="text" value="">
+                                                                    <input id="dataInicialEmissao" name="dataInicialEmissao" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Emissão – Fim</label>
+                                                                <label class="input">
+                                                                    <input id="dataFinalEmissao" name="dataFinalEmissao" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                    <i class="icon-append fa fa-calendar"></i>
                                                                 </label>
                                                             </section>
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-3">
+                                                                <label class="label" for="unidadeDestino">Unidade Destino</label>
+                                                                <label class="select">
+                                                                    <select id="unidadeDestino" name="unidadeDestino" class="">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.unidade where ativo = 1 order by descricao";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = ($row['descricao']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label" for="estoqueDestino">Estoque</label>
+                                                                <label class="select">
+                                                                    <select id="estoqueDestino" name="estoqueDestino" class="readonly" disabled>
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, descricao FROM Estoque.estoque where ativo = 1 order by descricao";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = ($row['descricao']);
+                                                                            echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-2">
                                                                 <label class="label" for="tipo">Tipo</label>
                                                                 <label class="select">
                                                                     <select id="tipo" name="tipo" class="">
@@ -147,24 +195,20 @@ include("inc/nav.php");
                                                                         ?>
                                                                     </select><i></i>
                                                             </section>
-                                                            <section class="col col-3">
-                                                                <label class="label" for="estoqueDestino">Estoque</label>
-                                                                <label class="select">
-                                                                    <select id="estoqueDestino" name="estoqueDestino" class="">
-                                                                        <option></option>
-                                                                        <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM Estoque.estoque where ativo = 1 order by descricao";
-                                                                        $reposit = new reposit();
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach ($result as $row) {
-                                                                            $codigo = $row['codigo'];
-                                                                            $descricao = ($row['descricao']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Entrada – Inicio</label>
+                                                                <label class="input">
+                                                                    <input id="dataInicialEntrada" name="dataInicialEntrada" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                </label>
                                                             </section>
-                                                          
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Entrada – Fim</label>
+                                                                <label class="input">
+                                                                    <input id="dataFinalEntrada" name="dataFinalEntrada" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -206,7 +250,8 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<!--script src="<?php echo ASSETS_URL; ?>/js/businessTabelaBasica.js" type="text/javascript"></script-->
+<script src="<?php echo ASSETS_URL; ?>/js/business_fornecimentoMaterial.js" type="text/javascript"></script>
+
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -402,16 +447,58 @@ include("inc/scripts.php");
                 .appendTo(ul);
         };
 
+        $("#unidadeDestino").on("change", function() {
+            popularComboEstoque();
+        });
     });
 
     function novo() {
         $(location).attr('href', 'estoque_entradaMaterialCadastro.php');
     }
 
+    function popularComboEstoque() {
+        var unidadeDestino = $("#unidadeDestino").val()
+        populaComboEstoque(unidadeDestino,
+            function(data) {
+                var atributoId = '#' + 'estoqueDestino';
+                if (data.indexOf('failed') > -1) {
+                    smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
+                    $("#unidade").focus()
+                    $("#estoqueDestino").val("")
+                    $("#estoqueDestino").prop("disabled", true)
+                    $("#estoqueDestino").addClass("readonly")
+                    return;
+                } else {
+                    $("#estoqueDestino").prop("disabled", false)
+                    $("#estoqueDestino").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+
+                    var mensagem = piece[0];
+                    var qtdRegs = piece[1];
+                    var arrayRegistros = piece[2].split("|");
+                    var registro = "";
+
+                    $(atributoId).html('');
+                    $(atributoId).append('<option></option>');
+
+                    for (var i = 0; i < qtdRegs; i++) {
+                        registro = arrayRegistros[i].split("^");
+                        $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
+                    }
+                }
+            }
+        );
+    }
+
     function listarFiltro() {
         var clienteFornecedorId = $('#clienteFornecedorId').val();
         var dataInicial = $('#dataInicial').val();
         var dataFinal = $('#dataFinal').val();
+        var dataInicialEntrada = $('#dataInicialEntrada').val();
+        var dataFinalEntrada = $('#dataFinalEntrada').val();
+        var dataInicialEmissao = $('#dataInicialEmissao').val();
+        var dataFinalEmissao = $('#dataFinalEmissao').val();
         var tipo = $('#tipo').val();
         var estoqueDestino = $('#estoqueDestino').val();
         var numero = $('#numero').val();

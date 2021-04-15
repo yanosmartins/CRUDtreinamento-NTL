@@ -6,38 +6,25 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Descrição</th>
-                    <th class="text-left" style="min-width:35px;">Apelido</th>
-                    <th class="text-left" style="min-width:35px;">CNPJ</th>
+                    <th class="text-left" style="min-width:30px;">Grupo</th>
+              
                     <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                
+                $nomeFiltro = "";
 
-                $sql = "SELECT codigo, descricao, apelido, cnpj, situacao FROM Ntl.sindicato WHERE (0=0) ";
-                $codigo = (int) $_GET["sindicato"];
-                $apelido = (int) $_GET["apelidoId"];
-                $cnpj = $_GET["cnpj"];
-                $situacao = $_GET['situacao'] ;
+                $nomeFiltro =$_GET["nome"];
 
-                if ($codigo > 0) {
-                    $where =  " AND codigo = " . $codigo;
+                if ($nomeFiltro != "") {
+                    $where = $where . " AND grupo like '%' + " . "replace('" . $nomeFiltro . "',' ','%')";
                 }
 
-                if ($apelido >0) {
-
-                    $where .= $where . " AND codigo = " . $apelido;
-                }
-
-                if ($cnpj > 0) {
-                    $where .= $where . " AND cnpj = '$cnpj'";
-                }
-
-                if ($situacao != "") {
-                    $where .=  " AND situacao = " . $situacao;
-                }
+                $sql = "SELECT codigo, grupo, ativo
+                        FROM Ntl.usuarioGrupo
+                        WHERE ativo = 1";
+                $where = $where;
 
                 $sql = $sql . $where;
                 $reposit = new reposit();
@@ -45,20 +32,18 @@ include "js/repositorio.php";
 
                 foreach($result as $row) {
                     $id = (int) $row['codigo'];
-                    $descricao = $row['descricao'];
-                    $apelido = (string)$row['apelido'];
-                    $cnpj = $row['cnpj'];
-                    $situacao = (int) $row['situacao'];
-                    if ($situacao == 1) {
-                        $situacao = "Sim";
+                    $ativo = (int) $row['ativo'];
+                    $grupo = $row['grupo'];
+                    $descricaoAtivo = "";
+                    if ($ativo == 1) {
+                        $descricaoAtivo = "Sim";
                     } else {
-                        $situacao = "Não";
+                        $descricaoAtivo = "Não";
                     }
+
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="cadastro_sindicatoCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $apelido . '</td>';
-                    echo '<td class="text-left">' . $cnpj . '</td>';
-                    echo '<td class="text-left">' . $situacao . '</td>';
+                    echo '<td class="text-left"><a href="usuarioGrupoCadastro.php?id=' . $id . '">' . $grupo . '</a></td>';
+                    echo '<td class="text-left">' . $descricaoAtivo . '</td>';
                     echo '</tr >';
                 }
                 ?>
@@ -69,23 +54,15 @@ include "js/repositorio.php";
 <!-- PAGE RELATED PLUGIN(S) -->
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
-<!--script src="js/plugin/datatables/dataTables.tableTools.min.js"></script-->
+<script src="js/plugin/datatables/dataTables.tableTools.min.js"></script>
 <script src="js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
-
-<link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css" />
-
-<script type="text/javascript" src="js/plugin/JSZip-2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="js/plugin/pdfmake-0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="js/plugin/pdfmake-0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.flash.min.js"></script>
-<script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.print.min.js"></script>
-
-
 <script>
     $(document).ready(function() {
+
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
         var responsiveHelper_datatable_tabletools = undefined;
 
         var breakpointDefinition = {
@@ -95,10 +72,9 @@ include "js/repositorio.php";
 
         /* TABLETOOLS */
         $('#tableSearchResult').dataTable({
-
-            // Tabletools options:
+            // Tabletools options: 
             //   https://datatables.net/extensions/tabletools/button_options
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'B'l'C>r>" +
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
                 "t" +
                 "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
             "oLanguage": {
@@ -106,8 +82,7 @@ include "js/repositorio.php";
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
                 "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
                 "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                //"sLengthMenu": "_MENU_ Resultados por página",
-                "sLengthMenu": "_MENU_",
+                "sLengthMenu": "_MENU_ Resultados por página",
                 "sInfoPostFix": "",
                 "sInfoThousands": ".",
                 "sLoadingRecords": "Carregando...",
@@ -124,21 +99,21 @@ include "js/repositorio.php";
                     "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
-            "buttons": [
-                //{extend: 'copy', className: 'btn btn-default'},
-                //{extend: 'csv', className: 'btn btn-default'},
-                {
-                    extend: 'excel',
-                    className: 'btn btn-default'
-                },
-                {
-                    extend: 'pdf',
-                    className: 'btn btn-default'
-                },
-                //{extend: 'print', className: 'btn btn-default'}
-            ],
+            "oTableTools": {
+                "aButtons": ["copy", "csv", "xls", {
+                        "sExtends": "pdf",
+                        "sTitle": "SmartAdmin_PDF",
+                        "sPdfMessage": "SmartAdmin PDF Export",
+                        "sPdfSize": "letter"
+                    },
+                    {
+                        "sExtends": "print",
+                        "sMessage": "Generated by SmartAdmin <i>(press Esc to close)</i>"
+                    }
+                ],
+                "sSwfPath": "js/plugin/datatables/swf/copy_csv_xls_pdf.swf"
+            },
             "autoWidth": true,
-
             "preDrawCallback": function() {
                 // Initialize the responsive datatables helper once.
                 if (!responsiveHelper_datatable_tabletools) {
@@ -153,6 +128,5 @@ include "js/repositorio.php";
             }
         });
 
-        /* END TABLETOOLS */
     });
 </script>

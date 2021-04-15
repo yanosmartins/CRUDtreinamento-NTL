@@ -146,12 +146,15 @@ include("inc/nav.php");
                                                                     <label class="label">Solicitante</label>
                                                                     <label class="input">
                                                                         <?php
-                                                                        $sql = "SELECT nome FROM Ntl.funcionario WHERE codigo = " . $id;
+                                                                        $sql = "SELECT F.nome, BP.projeto FROM Ntl.funcionario F
+                                                                        LEFT JOIN Ntl.beneficioProjeto BP ON BP.funcionario = F.codigo
+                                                                        WHERE F.codigo =" . $id;
                                                                         $result = $reposit->RunQuery($sql);
                                                                         if ($row = $result[0]) {
                                                                             $nome = "'" . $row['nome'] . "'";
+                                                                            $projeto = $row['projeto'];
                                                                             echo "<input id='responsavelFornecimento' maxlength='255' name='responsavelFornecimento' class='readonly' type='select' value=" . $nome . " readonly>";
-                                                                            echo "<input id='solicitanteId' name='solicitanteId' type='hidden' value=".$id.">";
+                                                                            echo "<input id='solicitanteId' name='solicitanteId' type='hidden' value=" . $id . ">";
                                                                         }
                                                                         ?>
                                                                     </label>
@@ -168,7 +171,11 @@ include("inc/nav.php");
                                                                             foreach ($result as $row) {
                                                                                 $codigo = $row['codigo'];
                                                                                 $descricao = ($row['descricao']);
-                                                                                echo '<option value=' . $codigo . '>  ' . $descricao . ' </option>';
+                                                                                if ($codigo == $projeto) {
+                                                                                    echo '<option value=' . $codigo . ' selected>  ' . $descricao . ' </option>';
+                                                                                } else {
+                                                                                    echo '<option value=' . $codigo . '>  ' . $descricao . ' </option>';
+                                                                                }
                                                                             }
                                                                             ?>
                                                                         </select><i></i>
@@ -205,7 +212,7 @@ include("inc/nav.php");
 
                                                         <input id="jsonItem" name="jsonItem" type="hidden" value="[]">
                                                         <div id="formItem">
-                                                            <div class="row">
+                                                            <div class="row" id="linha1">
                                                                 <input id="ItemId" name="ItemId" type="hidden" value="">
                                                                 <input id="sequencialItem" name="sequencialItem" type="hidden" value="">
                                                                 <input id="unidadeMedidaId" name="unidadeMedidaId" type="hidden" value="">
@@ -229,12 +236,12 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
                                                             </div>
-                                                            <div class="row">
+                                                            <div class="row" id="linha2">
                                                                 <section class="col col-12">
                                                                     <legend><strong>Informação Item</strong></legend>
                                                                 </section>
                                                             </div>
-                                                            <div class="row">
+                                                            <div class="row" id="linha3">
                                                                 <section class="col col-2">
                                                                     <label class="label">Quantiidade em estoque</label>
                                                                     <label class="input">
@@ -245,6 +252,18 @@ include("inc/nav.php");
                                                                     <label class="label">Quantiidade</label>
                                                                     <label class="input">
                                                                         <input id="quantidade" name="quantidade" maxlength="255" min="0" autocomplete="off" class="required" type="number" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Quantiidade reservada</label>
+                                                                    <label class="input">
+                                                                        <input id="quantidadeReservada" name="quantidadeReservada" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Quantiidade fora de estoque</label>
+                                                                    <label class="input">
+                                                                        <input id="quantidadeForaEstoque" name="quantidadeForaEstoque" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
@@ -272,14 +291,12 @@ include("inc/nav.php");
                                                                             <option></option>
                                                                             <option value="1">Disponível</option>
                                                                             <option value="2">Não Disponível</option>
-                                                                            <option value="6">Consumo</option>
                                                                             <option value="3">Reservado</option>
-                                                                            <option value="4">Aguardando Assinatura</option>
-                                                                            <option value="5">Fornecido</option>
+                                                                            <option value="4">Fornecido</option>
                                                                         </select><i></i>
                                                                 </section>
                                                             </div>
-                                                            <div class="row">
+                                                            <div class="row" id="linha4">
                                                                 <section class="col col-4">
                                                                     <label class="label" for="unidadeDestino">Unidade Destino</label>
                                                                     <label class="select">
@@ -316,7 +333,7 @@ include("inc/nav.php");
                                                                 </section>
                                                             </div>
 
-                                                            <div class="row">
+                                                            <div class="row" id="botoesTabela">
                                                                 <section class="col col-4">
                                                                     <button id="btnAddItem" type="button" class="btn btn-primary" title="Adicionar Item">
                                                                         <i class="fa fa-plus"></i>
@@ -478,7 +495,7 @@ include("inc/scripts.php");
             }]
         });
 
-      
+
 
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
@@ -513,7 +530,7 @@ include("inc/scripts.php");
             recuperaQuantidade();
         });
 
-    
+
 
         $("#clienteFornecedor").autocomplete({
             source: function(request, response) {
@@ -584,7 +601,9 @@ include("inc/scripts.php");
                                 unidadeItem: item.unidadeItem,
                                 consumivel: item.consumivel,
                                 autorizacao: item.autorizacao,
-                                quantidade: item.quantidade
+                                quantidade: item.quantidade,
+                                quantidadeReservada: item.quantidadeReservada,
+                                quantidadeFora: item.quantidadeFora
                             };
                         }));
                     }
@@ -612,16 +631,13 @@ include("inc/scripts.php");
                 $("#unidade").val(ui.item.unidadeItem);
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
                 $("#quantidadeEstoque").val(ui.item.quantidade);
+                $("#quantidadeReservada").val(ui.item.quantidadeReservada);
+                $("#quantidadeForaEstoque").val(ui.item.quantidadeFora);
 
                 $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
 
-                if (ui.item.consumivel == 1) {
-                    $("#situacao").val('6');
-                    $("#situacaoId").val('6');
-                } else {
-                    $("#situacao").val('3');
-                    $("#situacaoId").val('3');
-                }
+                $("#situacao").val('3');
+                $("#situacaoId").val('3');
 
             },
             change: function(event, ui) {
@@ -661,7 +677,9 @@ include("inc/scripts.php");
                                 unidadeItem: item.unidadeItem,
                                 consumivel: item.consumivel,
                                 autorizacao: item.autorizacao,
-                                quantidade: item.quantidade
+                                quantidade: item.quantidade,
+                                quantidadeReservada: item.quantidadeReservada,
+                                quantidadeFora: item.quantidadeFora
                             };
                         }));
                     }
@@ -690,18 +708,15 @@ include("inc/scripts.php");
                 $("#unidade").val(ui.item.unidadeItem);
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
                 $("#quantidadeEstoque").val(ui.item.quantidade);
+                $("#quantidadeReservada").val(ui.item.quantidadeReservada);
+                $("#quantidadeForaEstoque").val(ui.item.quantidadeFora);
 
                 $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
 
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
+                $("#situacao").val('3');
+                $("#situacaoId").val('3');
 
-                if (ui.item.consumivel == 1) {
-                    $("#situacao").val('6');
-                    $("#situacaoId").val('6');
-                } else {
-                    $("#situacao").val('3');
-                    $("#situacaoId").val('3');
-                }
             },
             change: function(event, ui) {
                 if (ui.item === null) {
@@ -821,6 +836,16 @@ include("inc/scripts.php");
                             $("#projeto").attr('disabled', true);
 
                             $("#sectionAprovado").attr('hidden', false);
+                            $("#aprovado").addClass('readonly');
+                            $("#aprovado").attr('disabled', true);
+
+                            $("#linha1").addClass('hidden', true);
+                            $("#linha2").addClass('hidden', true);
+                            $("#linha3").addClass('hidden', true);
+                            $("#linha4").addClass('hidden', true);
+                            $("#botoesTabela").addClass('hidden', true);
+
+                            $("#collapseItemEntrada").addClass('collapse in', true);
 
                             $("#btnAddItem").attr('disabled', true);
                             $("#btnRemoverItem").attr('disabled', true);
@@ -894,11 +919,11 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'estoque_fornecimentoMaterialFiltro.php');
+        $(location).attr('href', 'estoque_pedidoMaterialFiltro.php');
     }
 
     function novo() {
-        $(location).attr('href', 'estoque_fornecimentoMaterialCadastro.php');
+        $(location).attr('href', 'estoque_pedidoMaterialCadastro.php');
     }
 
     function excluir() {
@@ -1097,6 +1122,8 @@ include("inc/scripts.php");
         $("#quantidadeEstoque").val('');
         $("#situacao").val('');
         $("#sequencialItem").val('');
+        $("#quantidadeReservada").val('');
+        $("#quantidadeForaEstoque").val('');
     }
 
     function carregaItem(sequencialItem) {

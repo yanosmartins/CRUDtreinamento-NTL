@@ -10,17 +10,42 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:80px;">Data Pedido</th>
                     <th class="text-left" style="min-width:300px;">Solicitante</th>
                     <th class="text-left" style="min-width:100px;">Cliente/Fornecedor</th>
-                    <th class="text-left" style="min-width:150px;">Materiais</th>
                     <th class="text-left" style="min-width:300px;">Projeto</th>
                     <th class="text-left" style="min-width:30px;">Aprovado</th>
-                    <th class="text-left" style="min-width:300px;">Responsável</th>
+                    <th class="text-left" style="min-width:150px;">Materiais</th>
                     <th class="text-left" style="min-width:100px;">Estoque</th>
                     <th class="text-left" style="min-width:100px;">Tipo</th>
-
                 </tr>
             </thead>
             <tbody>
                 <?php
+                $where = " WHERE (0 = 0) ";
+
+                // if ($_POST["codigoItemId"] != "") {
+                //     $codigoItemId = (int)$_POST["codigoItemId"];
+                //     $sql = " SELECT DISTINCT EM.pedidoMaterial, CI.consumivel
+                //     FROM Estoque.estoqueMovimento EM 
+                // 	LEFT JOIN Estoque.codigoItem CI ON CI.codigo = EM.material
+                // 	WHERE (0=0) AND EM.pedidoMaterial IS NOT NULL AND EM.material =" . $codigoItemId  ;
+
+                //     $reposit = new reposit();
+                //     $result = $reposit->RunQuery($sql);
+
+                //     $where = $where. "AND PM.codigo in (";
+
+                //     foreach ($result as $row) {
+                //         $id = $row['pedidoMaterial'];
+                //         $where = $where . $id . ",";
+                //     }
+                //     $where = substr_replace($where ,"",-1);
+                //     $where =  $where .")";
+                // }else{
+                //     $where = $where . " AND ( CI.consumivel = 0)";
+                // }
+
+
+                $sql = "";
+                $result = "";
                 $clienteFornecedorId = "";
                 $solicitanteId = "";
                 $projeto = "";
@@ -28,7 +53,7 @@ include "js/repositorio.php";
 
 
                 $sql = "SELECT DISTINCT PM.codigo, PM.fornecedor, F.apelido, PM.projeto, P.descricao AS descricaoProjeto,
-                PM.solicitante, FS.nome AS descricaoSolicitante, PM.responsavel, FR.nome AS descricaoResponsavel, PM.aprovado, PM.dataCadastramento, PM.tipo,
+                PM.solicitante, FS.nome AS descricaoSolicitante, PM.responsavel, FR.nome AS descricaoResponsavel, PM.aprovado, PM.dataCadastramento, PM.tipo,EM.situacaoItem,
                     SUBSTRING(
                             (
                                 SELECT DISTINCT  '/ ' + CI.descricaoItem  AS [text()]
@@ -52,14 +77,17 @@ include "js/repositorio.php";
                     LEFT JOIN Estoque.pedidoMaterialItem PMI ON PMI.pedidoMaterial = PM.codigo
                     LEFT JOIN Ntl.projeto P ON P.codigo = PM.projeto
                     LEFT JOIN Ntl.funcionario FS ON FS.codigo = PM.solicitante
-                    LEFT JOIN Ntl.funcionario FR ON FR.codigo = PM.responsavel";
+                    LEFT JOIN Ntl.funcionario FR ON FR.codigo = PM.responsavel
+					LEFT JOIN Estoque.estoqueMovimento EM ON EM.pedidoMaterial = PM.codigo
+					LEFT JOIN Estoque.codigoItem CI ON CI.codigo = EM.material";
 
-                $where = " WHERE (0 = 0)";
 
                 if ($_POST["codigoItemId"] != "") {
                     $codigoItemId = (int)$_POST["codigoItemId"];
                     $where = $where . " AND ( PMI.material = $codigoItemId)";
-                } 
+                } else {
+                    $where = $where . " AND ( CI.consumivel = 0)";
+                }
 
                 if ($_POST["clienteFornecedorId"] != "") {
                     $clienteFornecedorId = (int)$_POST["clienteFornecedorId"];
@@ -81,30 +109,30 @@ include "js/repositorio.php";
                     $where = $where . " AND ( PM.projeto = $projeto)";
                 }
 
-                if ($_POST["tipo"] != "") {
-                    $tipo = (int)$_POST["tipo"];
-                    $where = $where . " AND ( PM.tipo = $tipo)";
-                }else{
-                    $where = $where . " AND ( PM.tipo = 1)";
-                }
-
                 if ($_POST["aprovado"] != "") {
                     $aprovado = (int)$_POST["aprovado"];
                     $where = $where . " AND ( PM.aprovado = $aprovado)";
+                }
+
+                if ($_POST["tipo"] != "") {
+                    $tipo = (int)$_POST["tipo"];
+                    $where = $where . " AND EM.situacaoItem = $tipo";
                 }
 
                 if ($_POST["dataInicial"] != "") {
                     $dataInicial = $_POST["dataInicial"];
                     $data = explode("/", $dataInicial);
                     $data = $data[2] . "-" . $data[1] . "-" . $data[0];
-                    $where = $where . " AND PM.dataCadastramento >= CONVERT(DATETIME,'".$dataInicial." 00:00:00', 103) ";
+                    $where = $where . " AND PM.dataCadastramento >= CONVERT(DATETIME,'" . $dataInicial . " 00:00:00', 103) ";
                 }
+
                 if ($_POST["dataFinal"] != "") {
                     $dataFinal = $_POST["dataFinal"];
                     $data = explode("/", $dataFinal);
                     $data = $data[2] . "-" . $data[1] . "-" . $data[0];
-                    $where = $where . " AND PM.dataCadastramento <= CONVERT(DATETIME,'".$dataFinal." 23:59:59', 103) ";
+                    $where = $where . " AND PM.dataCadastramento <= CONVERT(DATETIME,'" . $dataFinal . " 23:59:59', 103) ";
                 }
+
 
                 $orderBy = " ORDER BY PM.tipo ,PM.dataCadastramento";
 
@@ -120,24 +148,23 @@ include "js/repositorio.php";
                     $projeto = $row['descricaoProjeto'];
                     $aprovado = $row['aprovado'];
                     $tipo = $row['tipo'];
+                    $situacaoItem = $row['situacaoItem'];
                     $descricaoAprovado = "";
 
-                    if($aprovado === 1){
-                        $descricaoAprovado = "Sim";
+                    if ($aprovado === 1) {
+                        $descricaoAprovado = "SIM";
                     }
-                    if($aprovado === 0){
-                        $descricaoAprovado = "Não";
+                    if ($aprovado === 0) {
+                        $descricaoAprovado = "NÃO";
                     }
-                    if($aprovado === null){
-                        $descricaoAprovado = "Pendente";
+
+                    if ($situacaoItem === 4) {
+                        $descricaoSituacaoItem = "Pendente";
                     }
-                    
-                    if($tipo === 1){
-                        $descricaoTipo = "Fornecimento";
+                    if ($situacaoItem === 3) {
+                        $descricaoSituacaoItem = "Reservado";
                     }
-                    if($tipo === 0){
-                        $descricaoTipo = "Pedido";
-                    }
+
 
                     //A data recuperada foi formatada para D/M/Y
                     $dataCadastramento = $row['dataCadastramento'];
@@ -154,15 +181,14 @@ include "js/repositorio.php";
 
                     echo '<tr >';
                     echo '<td class="text-left">' . $id . '</td>';
-                    echo '<td class="text-left"><a href="estoque_fornecimentoMaterialCadastro.php?id=' . $id . '">' . $descricaoData . '</td>';
+                    echo '<td class="text-left"><a href="estoque_pedidoMaterialCadastro.php?id=' . $id . '">' . $descricaoData . '</td>';
                     echo '<td class="text-left">' . $solicitante . '</td>';
                     echo '<td class="text-left">' . $fornecedor . '</td>';
-                    echo '<td class="text-justify">' . $material . '</td>';
                     echo '<td class="text-justify">' . $projeto . '</td>';
                     echo '<td class="text-justify">' . $descricaoAprovado . '</td>';
-                    echo '<td class="text-justify">' . $responsavel . '</td>';
+                    echo '<td class="text-justify">' . $material . '</td>';
                     echo '<td class="text-justify">' . $estoque . '</td>';
-                    echo '<td class="text-justify">' . $descricaoTipo . '</td>';
+                    echo '<td class="text-justify">' . $descricaoSituacaoItem . '</td>';
                 }
                 ?>
             </tbody>

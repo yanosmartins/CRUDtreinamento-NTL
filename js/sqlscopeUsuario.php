@@ -168,6 +168,10 @@ function grava()
     session_start();
     $usuario = $_SESSION['login'];
     $usuario = "'" . $usuario . "'";
+    if (validaUsuario($login) && $id == 0) {
+        echo "failed#" . "Usuário já cadastrado!";
+        return;
+    }
 
     $sql = "Ntl.usuario_Atualiza " . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . "," . $funcionario . " ";
 
@@ -281,3 +285,19 @@ function excluir()
     echo 'sucess#' . $result;
     return;
 }
+
+function validaUsuario($login)
+{
+    $sql = "SELECT codigo,[login],ativo FROM Ntl.usuario
+    WHERE [login] LIKE $login and ativo = 1";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if ($result[0]) {
+        return true;
+    } else {
+        return false;
+    }
+}
+

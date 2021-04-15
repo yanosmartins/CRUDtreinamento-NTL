@@ -45,7 +45,7 @@ include "js/repositorio.php";
 
                     echo '<tr>';
                     echo '<td class="text-left"><a href="tabelaBasica_encargoCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $percentual . '</td>';
+                    echo '<td class="text-right">' . $percentual . ' %'.'</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {

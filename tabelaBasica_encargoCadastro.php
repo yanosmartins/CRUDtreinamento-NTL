@@ -92,7 +92,7 @@ include("inc/nav.php");
 
                             <div class="row ">
 
-                              <section class="col col-2">
+                              <section class="col col-4">
                                 <label class="label">Descrição</label>
                                 <label class="input">
                                   <input id="descricao" name="descricao" style="text-align: left;" type="text" class="required" autocomplete="off" required>

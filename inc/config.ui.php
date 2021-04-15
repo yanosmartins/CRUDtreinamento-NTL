@@ -69,6 +69,9 @@ if ($condicaoConfiguracoesOK) {
     if (in_array('USUARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("usuarios" => array("title" => "Usuário", "url" => APP_URL . "/usuarioFiltro.php"));
     }
+    if (in_array('USUARIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['configuracao']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/usuarioGrupoFiltro.php"));
+    }
     if (in_array('PERMISSAOUSUARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['configuracao']['sub'] += array("permissoesUsuarios" => array("title" => "Permissões do Usuário", "url" => APP_URL . "/usuarioFuncionalidadeFiltro.php"));
     }
@@ -382,7 +385,7 @@ if ($condicaoFaturamentoOk) {
             $page_nav['faturamento']['sub']['cadastro']['sub'] += array("contrato" => array("title" => "Contrato", "url" => APP_URL . "/cadastro_contratoFiltro.php"));
         }
 
-        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
+        if (in_array('VALORPOSTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['faturamento']['sub']['cadastro']['sub'] += array("projetoPosto" => array("title" => "Valor Posto", "url" => APP_URL . "/Faturamento_valorPostoFiltro.php"));
         }
     }
@@ -543,7 +546,7 @@ if ($condicaoEstoqueOk) {
             $page_nav['estoque']['sub']['operacao']['sub'] += array("entradaItem" => array("title" => "Entrada Item", "url" => APP_URL . "/estoque_entradaMaterialFiltro.php"));
         }
         if (in_array('PEDIDOMATERIAL_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['estoque']['sub']['operacao']['sub'] += array("pedidoMaterial" => array("title" => "Pedido Material", "url" => APP_URL . "/estoque_pedidoMaterialCadastro.php"));
+            $page_nav['estoque']['sub']['operacao']['sub'] += array("pedidoMaterial" => array("title" => "Pedido Material", "url" => APP_URL . "/estoque_pedidoMaterialFiltro.php"));
         }
         if (in_array('FORNECIMENTOMATERIAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['estoque']['sub']['operacao']['sub'] += array("fornecimentoMaterial" => array("title" => "Fornecimento Material", "url" => APP_URL . "/estoque_fornecimentoMaterialFiltro.php"));
