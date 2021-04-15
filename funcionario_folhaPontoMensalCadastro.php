@@ -597,14 +597,14 @@ include("inc/scripts.php");
                 var inputSaida = $("#inputHoraSaida")
 
                 var extra = $("#pointFieldGenerator [name=extra]");
-                
+
                 extra = extra[index].value;
 
                 var inputExtra = $("#inputHoraExtra");
 
                 var atraso = $("#pointFieldGenerator [name=atraso]");
                 atraso = atraso[index].value;
-                
+
                 var inputAtraso = $("#inputAtraso");
 
                 var lancamento = $("#pointFieldGenerator [name=lancamento]");
@@ -655,7 +655,7 @@ include("inc/scripts.php");
             var inputAtraso = $("#inputAtraso").val()
 
             var lancamento = $("#pointFieldGenerator select[name=lancamento]")[index]
-            
+
             var inputLancamento = $("#inputLancamento").val()
 
 
@@ -1193,9 +1193,9 @@ include("inc/scripts.php");
 
     //funcionando
     function preencherPonto(object) {
-        if(object)
+        if (object)
             object = JSON.parse(object);
-            
+
         const mesAno = $('#mesAno').val();
         const cutOut = mesAno.split('-');
         const data = new Date(cutOut[0], cutOut[1], 0);
@@ -1209,58 +1209,59 @@ include("inc/scripts.php");
         const atraso = [];
         const lancamento = [];
 
-        if (!object[0].dia) {
+        if (object && !object[0].dia) {
             for (let i = 1; i <= totalDias; i++) {
                 dia.push(i);
             }
         }
 
-        if (!object[0].entrada) {
+        if (object && !object[0].entrada) {
             for (let i = 1; i <= totalDias; i++) {
                 entrada.push('00:00:00');
             }
         }
 
-        if (!object[0].inicioAlmoco) {
+        if (object && !object[0].inicioAlmoco) {
             for (let i = 1; i <= totalDias; i++) {
                 inicioAlmoco.push('00:00');
             }
         }
 
-        if (!object[0].fimAlmoco) {
+        if (object && !object[0].fimAlmoco) {
             for (let i = 1; i <= totalDias; i++) {
                 fimAlmoco.push('00:00');
             }
         }
 
-        if (!object[0].saida) {
+        if (object && !object[0].saida) {
             for (let i = 1; i <= totalDias; i++) {
                 saida.push('00:00:00');
             }
         }
 
-        if (!object[0].horaExtra) {
+        if (object && !object[0].horaExtra) {
             for (let i = 1; i <= totalDias; i++) {
                 extra.push('00:00');
             }
         }
 
-        if (!object[0].atraso) {
+        if (object && !object[0].atraso) {
             for (let i = 1; i <= totalDias; i++) {
                 atraso.push('00:00');
             }
         }
 
-        object.forEach((obj, index) => {
-            dia.push(obj.dia);
-            entrada.push(obj.entrada);
-            inicioAlmoco.push(obj.inicioAlmoco);
-            fimAlmoco.push(obj.fimAlmoco);
-            saida.push(obj.saida);
-            extra.push(obj.horaExtra);
-            atraso.push(obj.atraso);
-            lancamento.push(obj.lancamento);
-        })
+        if (object)
+            object.forEach((obj, index) => {
+                dia.push(obj.dia);
+                entrada.push(obj.entrada);
+                inicioAlmoco.push(obj.inicioAlmoco);
+                fimAlmoco.push(obj.fimAlmoco);
+                saida.push(obj.saida);
+                extra.push(obj.horaExtra);
+                atraso.push(obj.atraso);
+                lancamento.push(obj.lancamento);
+            })
 
         $('#pointFieldGenerator [name=dia]').each((index, el) => {
             if (!dia[index]) dia[index] = index + 1;
