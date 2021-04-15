@@ -564,7 +564,7 @@ function excluir()
     }
 
     $reposit = new reposit();
-    $result = $reposit->update('Ntl.sindicato' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->update('Ntl.sindicato' . '|' . 'situacao = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');
