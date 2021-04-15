@@ -18,28 +18,14 @@ include "js/repositorio.php";
                 $posto = $_GET["posto"];
                 $ativo = $_GET["ativo"];
 
-                // if ($codigoItem != "") {
-                //     $where = $where . " and (VP.codigoItem like '%' + " . "replace('" . $codigoItem . "',' ','%') + " . "'%')";
-                // }
-                // if ($codigoFabricante != "") {
-                //     $where = $where . " and (VP.codigoFabricante like '%' + " . "replace('" . $codigoFabricante . "',' ','%') + " . "'%')";
-                // }
-                // if ($descricaoItem != "") {
-                //     $where = $where . " and (VP.descricaoItem like '%' + " . "replace('" . $descricaoItem . "',' ','%') + " . "'%')";
-                // }
+                if ($posto != "") {
+                    $where = $where . " AND VP.posto = $posto";
+                }
 
-                // if ($estoque != "") {
-                //     $where = $where . " AND VP.estoque = $estoque ";
-                // }
-                // if ($grupoItem != "") {
-
-                //     $where = $where . " AND VP.grupoItem = $grupoItem ";
-                // }
-                // if ($localizacaoItem != "") {
-
-                //     $where = $where . " AND VP.localizacaoItem = $localizacaoItem ";
-                // }
-
+                if ($projeto != "") {
+                    $where = $where . " AND VP.projeto = $projeto ";
+                }
+            
                 if ($ativo != "") {
 
                     $where = $where . " AND VP.ativo = $ativo ";

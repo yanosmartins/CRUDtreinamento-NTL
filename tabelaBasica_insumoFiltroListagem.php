@@ -52,7 +52,7 @@ include "js/repositorio.php";
 
                     echo '<tr>';
                     echo '<td class="text-left"><a href="tabelaBasica_insumoCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';
-                    echo '<td class="text-left">' . $valor . '</td>';
+                    echo '<td class="text-right">' . "R$ "  . $valor .'</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {

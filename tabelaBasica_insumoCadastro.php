@@ -102,7 +102,7 @@ include("inc/nav.php");
                               <section class="col col-2">
                                 <label class="label">Valor</label>
                                 <label class="input"><i class="icon-append fa fa-dollar"></i>
-                                  <input id="valor" name="valor" style="text-align: right;" type="text" class="required" placeholder="00,00" autocomplete="off" required>
+                                  <input class="text-right decimal-2-casas" id="valor" name="valor" style="text-align: right;" type="text" class="required"  autocomplete="off" required>
                                 </label>
                               </section>
 
@@ -189,32 +189,6 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
   $(document).ready(function() {
-
-    $('#valor').focusout(function(el) {
-      let value = $(el.target).val().replace(/[^\d]+/g, '');
-      let validate = /\D/
-      if (validate.test(value) || value == "") {
-        return $('#valor').val('');
-      } else {
-        const centavos = value.substr(-2)
-        let reais = value.substr(0, value.length - 2)
-
-        value = parseFloat(reais + '.' + centavos)
-
-        value = value.toLocaleString('pt-BR', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        });
-
-        if (value.length < 5) {
-          const recorte = value.slice(-4)
-          value = (0000) + recorte
-        }
-
-        return $('#valor').val(value);
-      }
-    }).trigger('focusout');
-
     $('#dlgSimpleExcluir').dialog({
       autoOpen: false,
       width: 400,
@@ -237,7 +211,6 @@ include("inc/scripts.php");
       }]
     });
 
-
     $("#btnExcluir").on("click", function() {
       var id = $("#codigo").val();
 
@@ -252,8 +225,6 @@ include("inc/scripts.php");
       }
     });
 
-
-
     $('#btnNovo').on("click", function() {
       $(location).attr('href', 'tabelaBasica_insumoCadastro.php');
     });
@@ -265,20 +236,16 @@ include("inc/scripts.php");
     });
 
     carregaInsumo();
-
-
   });
 
   function voltar() {
     $(location).attr('href', 'tabelaBasica_insumoFiltro.php');
-
   }
 
   function gravar() {
 
     //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
     $("#btnGravar").prop('disabled', true);
-
     var codigo = +$("#codigo").val();
     var descricao = $("#descricao").val();
     var valor = $("#valor").val();
@@ -338,8 +305,6 @@ include("inc/scripts.php");
     });
   }
 
-
-
   function carregaInsumo() {
     var urlx = window.document.URL.toString();
     var params = urlx.split("?");
@@ -371,11 +336,8 @@ include("inc/scripts.php");
             $("#valor").val(valor);
 
           }
-
         );
       }
     }
-
-
   }
 </script>

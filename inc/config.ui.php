@@ -385,7 +385,7 @@ if ($condicaoFaturamentoOk) {
             $page_nav['faturamento']['sub']['cadastro']['sub'] += array("contrato" => array("title" => "Contrato", "url" => APP_URL . "/cadastro_contratoFiltro.php"));
         }
 
-        if (in_array('FATURAMENTOMENULATERAL_ACESSAR', $arrayPermissao, true)) {
+        if (in_array('VALORPOSTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['faturamento']['sub']['cadastro']['sub'] += array("projetoPosto" => array("title" => "Valor Posto", "url" => APP_URL . "/Faturamento_valorPostoFiltro.php"));
         }
     }

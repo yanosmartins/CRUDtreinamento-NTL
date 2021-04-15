@@ -6,18 +6,18 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-// $condicaoAcessarOK = (in_array('ISS_ACESSAR', $arrayPermissao, true));
-// $condicaoGravarOK = (in_array('ISS_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('VALORPOSTO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('VALORPOSTO_GRAVAR', $arrayPermissao, true));
 
-// if ($condicaoAcessarOK == false) {
-//     unset($_SESSION['login']);
-//     header("Location:login.php");
-// }
+if ($condicaoAcessarOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
 
-// $esconderBtnGravar = "";
-// if ($condicaoGravarOK === false) {
-//     $esconderBtnGravar = "none";
-// }
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -91,7 +91,7 @@ include("inc/nav.php");
                                                             <label class="label" for="projeto">Projeto</label>
                                                             <label class="select">
                                                                 <select id="projeto" name="projeto">
-                                                                    <option style="display:none;">Selecione</option>
+                                                                <option></option>
                                                                     <?php
                                                                     $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
                                                                     $reposit = new reposit();
@@ -113,7 +113,7 @@ include("inc/nav.php");
                                                             <label class="label" for="posto">Posto</label>
                                                             <label class="select">
                                                                 <select id="posto" name="posto">
-                                                                    <option style="display:none;">Selecione</option>
+                                                                    <option></option>
                                                                     <?php
                                                                     $sql =  "SELECT codigo,  descricao FROM Ntl.posto where ativo = 1 order by codigo";
                                                                     $reposit = new reposit();
@@ -228,12 +228,12 @@ include("inc/scripts.php");
 
     function listarFiltro() {
         var posto = $('#posto').val();
-        var posto = $('#projeto').val();
+        var projeto = $('#projeto').val();
         var ativo = $('#ativo').val();
 
         var parametrosUrl = '&posto=' + posto;
-        var parametrosUrl = '&projeto=' + projeto;
-        parametrosUrl = '&ativo=' + ativo;
+        parametrosUrl += '&projeto=' + projeto;
+        parametrosUrl += '&ativo=' + ativo;
         $('#resultadoBusca').load('faturamento_valorPostoFiltroListagem.php?' + parametrosUrl);
     }
 </script>

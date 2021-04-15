@@ -98,7 +98,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Valor</label>
                                                                 <label class="input"><i class="icon-append fa fa-dollar"></i>
-                                                                    <input id="valor" name="valor" style="text-align: right;" type="text" placeholder="00,00" autocomplete="off">
+                                                                    <input class="text-right decimal-2-casas" id="valor" name="valor" style="text-align: right;" type="text" placeholder="" autocomplete="off">
 
                                                                 </label>
                                                             </section>
@@ -173,31 +173,6 @@ include("inc/scripts.php");
 
 <script>
     $(document).ready(function() {
-        $('#valor').focusout(function(el) {
-            let value = $(el.target).val().replace(/[^\d]+/g, '');
-            let validate = /\D/
-            if (validate.test(value) || value == "") {
-                return $('#valor').val('');
-            } else {
-                const centavos = value.substr(-2)
-                let reais = value.substr(0, value.length - 2)
-
-                value = parseFloat(reais + '.' + centavos)
-
-                value = value.toLocaleString('pt-BR', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                if (value.length < 5) {
-                    const recorte = value.slice(-4)
-                    value = (0000) + recorte
-                }
-
-                return $('#valor').val(value);
-            }
-        }).trigger('focusout');
-
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
