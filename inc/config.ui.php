@@ -86,12 +86,6 @@ if ($condicaoConfiguracoesOK) {
     }
 }
 
-
-$condicaoFaturamentoOk = true;
-$condicaoLicitacaoOk = true;
-$condicaoOperacoesEspeciaisoOk = false;
-$condicaoVersaoSistemaOk = true;
-$condicaoTesteOk = true;
 $condicaoOperacaoOk = true;
 
 // TABELAS BÁSICAS
@@ -120,13 +114,10 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('MUNICIPIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("municipio" => array("title" => "Município", "url" => APP_URL . "/tabelaBasica_municipioFiltro.php")); //SYSCB 
     }
-
-
 }
 
-$condicaoCadastroOk = (in_array('CADASTRO_ACESSAR', $arrayPermissao, true));
-
 // CADASTROS
+$condicaoCadastroOk = (in_array('CADASTRO_ACESSAR', $arrayPermissao, true));
 if ($condicaoCadastroOk) {
     $page_nav['cadastro'] = array("title" => "Cadastro", "icon" => "fa-pencil-square-o");
     $page_nav['cadastro']['sub'] = array();
@@ -171,7 +162,6 @@ if ($condicaoCadastroOk) {
 
 $condicaoBeneficioOk = (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true));
 if ($condicaoBeneficioOk) {
-
     $page_nav['beneficio'] = array("title" => "Departamento Pessoal", "icon" => "fa fa-folder-open");
     $page_nav['beneficio']['sub'] = array();
 
@@ -238,7 +228,7 @@ if ($condicaoBeneficioOk) {
         }
     }
 }
-
+//CONTRATACAO
 $condicaoRHOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
 $condicaoContratacaoOk = false;
 if ($condicaoRHOk) {
@@ -280,6 +270,8 @@ if ($condicaoRHOk) {
     $page_nav['candidato']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoCadastro.php?=" . $candidato));
 }
 
+//FATURAMENTO
+$condicaoFaturamentoOk = (in_array('FATURAMENTO_ACESSAR', $arrayPermissao, true));
 if ($condicaoFaturamentoOk) {
     $page_nav['faturamento'] = array("title" => "Faturamento", "icon" => "fa fa-dollar");
     $page_nav['faturamento']['sub'] = array();
@@ -398,6 +390,7 @@ if ($condicaoFaturamentoOk) {
 }
 
 // LICITAÇÕES - SYSGC
+$condicaoLicitacaoOk = (in_array('LICITACAO_ACESSAR', $arrayPermissao, true));
 if ($condicaoLicitacaoOk) {
     $page_nav['licitacao'] = array("title" => "Licitação", "icon" => "fa fa-line-chart");
     $page_nav['licitacao']['sub'] = array();
@@ -456,8 +449,8 @@ if ($condicaoLicitacaoOk) {
         }
     }
 }
-// Mensageria // a pedido do guinancio 24/02/21 colocar servico externo no nome
-$condicaoMensageriaOk = true;
+// MENSAGERIA // a pedido do guinancio 24/02/21 colocar servico externo no nome
+$condicaoMensageriaOk = (in_array('MENSAGERIA_ACESSAR', $arrayPermissao, true));
 if ($condicaoMensageriaOk) {
     $page_nav['mensageria'] = array("title" => "Serviço Externo", "icon" => "fa fa-envelope-open-o ");
     $page_nav['mensageria']['sub'] = array();
