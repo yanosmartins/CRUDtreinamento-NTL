@@ -61,15 +61,18 @@ function grava()
     $horaMovimento = $_POST['horaMovimento'];
     $clienteFornecedor = (int)$_POST['clienteFornecedorId'] ?: 'NULL';
     $solicitante = (int)$_POST['solicitanteId'] ?: 'NULL';
-    $aprovado = (int)$_POST['aprovado'] ?: 0;
+    $aprovado = $_POST['aprovado'];
+    if($aprovado === ''){
+        $aprovado = 'NULL';
+    }
     $projeto = (int)$_POST['projeto'] ?: 'NULL';
     $tipo = (int)$_POST['tipo'] ?: 0;
-    if($tipo == 1){
+    if ($tipo == 1) {
         $responsavel = (int)$_SESSION['funcionario'] ?: 'NULL';
-    }else{
+    } else {
         $responsavel = 'NULL';
     }
-    
+
     $strArrayItem = $_POST['jsonItem'];
     $arrayItem = json_decode($strArrayItem, true);
     $xmlItem = "";
@@ -143,12 +146,15 @@ function recupera()
     }
 
     $sql = "SELECT PM.codigo, PM.fornecedor, F.apelido, PM.projeto, P.descricao AS descricaoProjeto, 
-    PM.solicitante, FS.nome AS descricaoSolicitante, PM.responsavel, FR.nome AS descricaoResponsavel, PM.aprovado, PM.dataCadastramento
+    PM.solicitante, FS.nome AS descricaoSolicitante, PM.responsavel, FR.nome AS descricaoResponsavel,
+	PM.aprovado, PM.dataCadastramento, U.login
         FROM Estoque.pedidoMaterial PM
         LEFT JOIN Ntl.fornecedor F ON F.codigo = PM.fornecedor
         LEFT JOIN Ntl.projeto P ON P.codigo = PM.projeto
         LEFT JOIN Ntl.funcionario FS ON FS.codigo = PM.solicitante
         LEFT JOIN Ntl.funcionario FR ON FR.codigo = PM.responsavel
+        LEFT JOIN Ntl.usuario U ON U.funcionario = PM.responsavel
+
         WHERE (0=0) AND
         PM.codigo = " . $codigo;
 
@@ -164,7 +170,8 @@ function recupera()
     $descricaoSolicitante = $row['descricaoSolicitante'];
     $responsavelID = (int)$row['responsavel'];
     $descricaoResponsavel = $row['descricaoResponsavel'];
-    $aprovado = (int)$row['aprovado'];
+    $login = $row['login'];
+    $aprovado = $row['aprovado'];
     $projeto = (int)$row['projeto'];
     $dataCadastramento = $row['dataCadastramento'];
 
@@ -199,7 +206,7 @@ function recupera()
         $descricaoUnidade = $row['descricaoUnidade'];
         $descricaoUnidadeMedida = $row['descricaoUnidadeItem'];
         $situacao = $row['situacao'];
-        
+
         $contadorItem = $contadorItem + 1;
         $arrayItem[] = array(
             "sequencialItem" => $contadorItem,
@@ -229,7 +236,8 @@ function recupera()
         $descricaoResponsavel . "^" .
         $projeto . "^" .
         $aprovado . "^" .
-        $dataCadastramento;
+        $dataCadastramento . "^" .
+        $login;
 
     if ($out == "") {
         echo "failed#";
@@ -386,10 +394,20 @@ function listaDescricaoAtivoAutoComplete()
         $descricaoItem = $row["descricaoItem"];
         $descricaoItem = $descricaoItem . " " . $row["indicador"];
 
-        $sql = "SELECT SUM(quantidade) as quantidade FROM Estoque.entradaMaterialItem WHERE material =" . $id . "AND estoque =" . $estoque;
+        $sql = "SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacaoItem = 1 AND material =" . $id . "AND estoque =" . $estoque;
         $result = $reposit->RunQuery($sql);
         if ($row = $result[0]) {
             $quantidade = (int)$row['quantidade'];
+        }
+        $sql = "SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacaoItem = 3 AND material =" . $id . "AND estoque =" . $estoque;
+        $result = $reposit->RunQuery($sql);
+        if ($row = $result[0]) {
+            $quantidadeReservada = (int)$row['quantidade'];
+        }
+        $sql = "SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacaoItem = 4 AND material =" . $id . "AND estoque =" . $estoque;
+        $result = $reposit->RunQuery($sql);
+        if ($row = $result[0]) {
+            $quantidadeFora = (int)$row['quantidade'];
         }
 
         $contador = $contador + 1;
@@ -402,7 +420,9 @@ function listaDescricaoAtivoAutoComplete()
             "unidadeItem" => $unidadeItem,
             "consumivel" => $consumivel,
             "autorizacao" => $autorizacao,
-            "quantidade" => $quantidade
+            "quantidade" => $quantidade,
+            "quantidadeReservada" => $quantidadeReservada,
+            "quantidadeFora" => $quantidadeFora
         );
     }
 
@@ -481,10 +501,20 @@ function listaCodigoAtivoAutoComplete()
         $codigoItem = $row["codigoItem"];
         $descricaoItem = $row["descricaoItem"] . " " . $row["indicador"];
 
-        $sql = "SELECT SUM(quantidade) as quantidade FROM Estoque.entradaMaterialItem WHERE material =" . $id . "AND estoque =" . $estoque;
+        $sql = "SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacaoItem = 1 AND material =" . $id . "AND estoque =" . $estoque;
         $result = $reposit->RunQuery($sql);
         if ($row = $result[0]) {
             $quantidade = (int)$row['quantidade'];
+        }
+        $sql = "SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacaoItem = 3 AND material =" . $id . "AND estoque =" . $estoque;
+        $result = $reposit->RunQuery($sql);
+        if ($row = $result[0]) {
+            $quantidadeReservada = (int)$row['quantidade'];
+        }
+        $sql = "SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacaoItem = 4 AND material =" . $id . "AND estoque =" . $estoque;
+        $result = $reposit->RunQuery($sql);
+        if ($row = $result[0]) {
+            $quantidadeFora = (int)$row['quantidade'];
         }
 
         $contador = $contador + 1;
@@ -497,7 +527,9 @@ function listaCodigoAtivoAutoComplete()
             "unidadeItem" => $unidadeItem,
             "consumivel" => $consumivel,
             "autorizacao" => $autorizacao,
-            "quantidade" => $quantidade
+            "quantidade" => $quantidade,
+            "quantidadeReservada" => $quantidadeReservada,
+            "quantidadeFora" => $quantidadeFora
         );
     }
 
