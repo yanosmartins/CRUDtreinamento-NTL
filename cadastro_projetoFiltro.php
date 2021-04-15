@@ -231,20 +231,21 @@ include("inc/scripts.php");
 
     function listarFiltro() {
         var ativo = $('#ativo').val();
-        var descricao = $('#descricao').val();
-        var apelido = $('#apelido').val();
         var cnpj = $('#cnpj').val();
+        var apelido = $('#apelido').val();
+        var descricao = $('#descricao').val();
         var dataInicial = $('#dataInicial').val();
         var dataFinal = $('#dataFinal').val();
         var dataInicialAssinatura = $('#dataInicialAssinatura').val();
         var dataFinalAssinatura = $('#dataFinalAssinatura').val();
         var busca = $('#busca').val();
 
+        descricao = descricao.replaceAll(' ','%20')
+        apelido = apelido.replaceAll(' ','%20')
 
 
-
-        var parametrosUrl = '&ativo=' + ativo + '&descricao=' + descricao + '&apelido=' + apelido + '&cnpj=' + cnpj +
-            '&dataInicial=' + dataInicial + '&dataFinal=' + dataFinal + '&busca=' + busca;
+        var parametrosUrl = '&ativo=' + ativo + '&cnpj=' + cnpj + '&apelido=' + apelido + '&descricao=' + descricao +
+        '&dataInicial=' + dataInicial + '&dataFinal=' + dataFinal + '&busca=' + busca;
         $('#resultadoBusca').load('cadastro_projetoFiltroListagem.php?' + parametrosUrl);
     }
 
