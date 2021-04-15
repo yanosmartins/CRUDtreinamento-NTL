@@ -21,29 +21,26 @@ include "js/repositorio.php";
                 $sql = "SELECT codigo, descricao, apelido, cnpj, dataAssinatura, dataRenovacao, ativo FROM Ntl.projeto ";
                 $where = "WHERE (0 = 0)";
 
-
                 if ($_GET["descricao"] != "") {
                     $descricao = $_GET["descricao"];
-                    $where = $where . " and (descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
-
 
                 if ($_GET["apelido"] != "") {
                     $apelido = $_GET["apelido"];
-                    $where = $where . " and (apelido like '%' + " . "replace('" . $apelido . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (apelido like '%' + " . "replace('" . $apelido . "',' ','%') + " . "'%')";
                 }
 
                 if ($_GET["cnpj"] != "") {
                     $cnpj = $_GET["cnpj"];
-                    $where = $where . " and (cnpj like '%' + " . "replace('" . $cnpj . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (cnpj like '%' + " . "replace('" . $cnpj . "',' ','%') + " . "'%')";
                 }
 
 
                 if ($_GET["ativo"] != "") {
                     $ativo = $_GET["ativo"];
-                    $where = $where . " and (ativo = $ativo)";
+                    $where = $where . " AND (ativo = $ativo)";
                 }
-
                 if ($_GET["busca"] == "R") {
                     if ($_GET["dataInicial"] != "") {
                         $dataInicial = $_GET["dataInicial"];
@@ -73,11 +70,11 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
                 foreach($result as $row) {
-                    $row = array_map('utf8_encode',$row);
+                    
                     $id = (int) $row['codigo'];
-                    $descricao = $row['descricao'];
-                    $apelido = $row['apelido'];
+                    $apelido = (string)$row['apelido'];
                     $cnpj = $row['cnpj'];
+                    $descricao = (string)$row['descricao'];
                     $dataAssinatura = $row['dataAssinatura'];
                     $dataRenovacao = $row['dataRenovacao'];
                     $ativo = (int) $row['ativo'];
