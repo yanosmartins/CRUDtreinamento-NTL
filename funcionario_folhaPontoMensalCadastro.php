@@ -1193,7 +1193,9 @@ include("inc/scripts.php");
 
     //funcionando
     function preencherPonto(object) {
-        object = JSON.parse(object);
+        if(object)
+            object = JSON.parse(object);
+            
         const mesAno = $('#mesAno').val();
         const cutOut = mesAno.split('-');
         const data = new Date(cutOut[0], cutOut[1], 0);
