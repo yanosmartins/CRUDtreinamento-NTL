@@ -153,7 +153,7 @@ function recupera()
         LEFT JOIN Ntl.projeto P ON P.codigo = PM.projeto
         LEFT JOIN Ntl.funcionario FS ON FS.codigo = PM.solicitante
         LEFT JOIN Ntl.funcionario FR ON FR.codigo = PM.responsavel
-        LEFT JOIN Ntl.usuario U ON U.funcionario = PM.responsavel
+        LEFT JOIN Ntl.usuario U ON U.funcionario = PM.solicitante
 
         WHERE (0=0) AND
         PM.codigo = " . $codigo;
@@ -338,9 +338,10 @@ function listaSolicitanteAtivoAutoComplete()
     }
 
     $reposit = new reposit();
-    $sql = "SELECT F.codigo, F.nome, U.login
+    $sql = "SELECT F.codigo, F.nome, U.login, BP.projeto
     FROM Ntl.funcionario F
     LEFT JOIN NTL.usuario U ON U.funcionario = F.codigo
+	LEFT JOIN Ntl.beneficioProjeto BP ON BP.funcionario = F.codigo
     WHERE (0=0) AND F.ativo = 1 AND U.login IS NOT NULL
     AND F.nome LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY F.nome";
     $result = $reposit->RunQuery($sql);
@@ -350,8 +351,9 @@ function listaSolicitanteAtivoAutoComplete()
         $id = $row['codigo'];
         $descricao = $row["nome"];
         $login = $row["login"];
+        $projeto = $row["projeto"];
         $contador = $contador + 1;
-        $array[] = array("id" => $id, "descricao" => $descricao, "login" => $login);
+        $array[] = array("id" => $id, "descricao" => $descricao, "login" => $login, "projeto" => $projeto);
     }
 
     $strArray = json_encode($array);

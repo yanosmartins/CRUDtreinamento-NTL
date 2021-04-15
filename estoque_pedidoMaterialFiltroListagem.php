@@ -112,6 +112,8 @@ include "js/repositorio.php";
                 if ($_POST["aprovado"] != "") {
                     $aprovado = (int)$_POST["aprovado"];
                     $where = $where . " AND ( PM.aprovado = $aprovado)";
+                }else{
+                    $where = $where . " AND ( PM.aprovado IS NULL)";
                 }
 
                 if ($_POST["tipo"] != "") {
@@ -152,10 +154,10 @@ include "js/repositorio.php";
                     $descricaoAprovado = "";
 
                     if ($aprovado === 1) {
-                        $descricaoAprovado = "SIM";
+                        $descricaoAprovado = "Sim";
                     }
                     if ($aprovado === 0) {
-                        $descricaoAprovado = "NÃO";
+                        $descricaoAprovado = "Não";
                     }
 
                     if ($situacaoItem === 4) {
