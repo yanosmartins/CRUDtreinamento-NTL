@@ -432,7 +432,7 @@ foreach ($ponto as $registro) {
      $pdf->setX(106.3);
      $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', $registro['variavelDaSaidaHoraExtra']), 0, 0, "C", 0);// ou isso
     //Observacao
-    $pdf->setX(129.8);
+    $pdf->setX(126.8);
     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, 0, 0);// ou isso
         
     
