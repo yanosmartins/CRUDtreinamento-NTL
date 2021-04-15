@@ -177,9 +177,11 @@ include("inc/scripts.php");
             element = $(this);
             element.unmask();
             percentual = element.val().replace(/\D/g, '');
-            if (percentual.length > 5) {
+            if (percentual.length == "") {
                 element.mask("99.9999?9");
-            } else {
+            } else if (percentual.length > 5) {
+                element.mask("99.9999?9");
+            } else if ((percentual.length < 5) && (percentual.length != "")) {
                 element.mask("9.9999?9");
             }
         }).trigger('focusout');

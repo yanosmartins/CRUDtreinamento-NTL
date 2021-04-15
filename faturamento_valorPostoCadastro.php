@@ -6,24 +6,24 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-// $condicaoAcessarOK = (in_array('POSTO_ACESSAR', $arrayPermissao, true));
-// $condicaoGravarOK = (in_array('POSTO_GRAVAR', $arrayPermissao, true));
-// $condicaoExcluirOK = (in_array('POSTO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('VALORPOSTO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('VALORPOSTO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('VALORPOSTO_EXCLUIR', $arrayPermissao, true));
 
-// if ($condicaoAcessarOK == false) {
-//     unset($_SESSION['login']);
-//     header("Location:login.php");
-// }
+if ($condicaoAcessarOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
 
-// $esconderBtnGravar = "";
-// if ($condicaoGravarOK === false) {
-//     $esconderBtnGravar = "none";
-// }
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
 
-// $esconderBtnExcluir = "";
-// if ($condicaoExcluirOK === false) {
-//     $esconderBtnExcluir = "none";
-// }
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -189,7 +189,7 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label">Valor</label>
                                                                         <label class="input"><i class="icon-append fa fa-money"></i>
-                                                                            <input id="remuneracaoValor" name="remuneracaoValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100" placeholder="0,00">
+                                                                            <input class="text-right decimal-2-casas" id="remuneracaoValor" name="remuneracaoValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100" placeholder="0,00">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-2">
@@ -333,7 +333,7 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label">Valor</label>
                                                                         <label class="input"><i class="icon-append fa fa-money"></i>
-                                                                            <input id="insumoValor" name="insumoValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                            <input class="text-right decimal-2-casas" id="insumoValor" name="insumoValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-4">
@@ -568,7 +568,7 @@ include("inc/nav.php");
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                        
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -707,15 +707,32 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
+        //mascaras
         $('#percentual').focusout(function() {
             var percentual, element;
             element = $(this);
             element.unmask();
             percentual = element.val().replace(/\D/g, '');
-            if (percentual.length > 3) {
-                element.mask("99.99?9");
-            } else {
-                element.mask("9.99?9");
+            if (percentual.length == "") {
+                element.mask("99.9999?9");
+            } else if (percentual.length > 5) {
+                element.mask("99.9999?9");
+            } else if ((percentual.length < 5) && (percentual.length != "")) {
+                element.mask("9.9999?9");
+            }
+        }).trigger('focusout');
+
+        $('#bdiPercentual').focusout(function() {
+            var percentual, element;
+            element = $(this);
+            element.unmask();
+            percentual = element.val().replace(/\D/g, '');
+            if (percentual.length == "") {
+                element.mask("99.9999?9");
+            } else if (percentual.length > 5) {
+                element.mask("99.9999?9");
+            } else if ((percentual.length < 5) && (percentual.length != "")) {
+                element.mask("9.9999?9");
             }
         }).trigger('focusout');
 
@@ -1321,6 +1338,7 @@ include("inc/scripts.php");
 
     }
     var totalBdi;
+
     function fillTableBdi() {
         $("#tableBdi tbody").empty();
         totalBdi = 0;
@@ -1364,7 +1382,7 @@ include("inc/scripts.php");
             }
             return {
                 name: fieldName,
-                value: unparseBRL(bdiPercentual)
+                value: bdiPercentual
             };
         }
 
@@ -1561,6 +1579,7 @@ include("inc/scripts.php");
     }
 
     var totalEncargoRemuneracaoModal;
+
     function fillTableGrupoEncargoModal(array) {
         $("#tableEncargoGrupoModal tbody").empty();
         totalEncargoRemuneracaoModal = 0;
@@ -1584,6 +1603,7 @@ include("inc/scripts.php");
     }
 
     var totalInsumooModal;
+
     function fillTableGrupoInsumoModal(array) {
         $("#tableInsumoGrupoModal tbody").empty();
         totalInsumooModal = 0;
@@ -1604,10 +1624,11 @@ include("inc/scripts.php");
         row.append($('<td class="text-center"><b>' + "R$ " + parseBRL(totalInsumooModal, 2) + '</b></td>'));
     }
     var resumoValorUnitarioCategoria = 0;
+
     function fillTableResultadoModal(array) {
         $("#tableResultadoGrupoModal tbody").empty();
         remuneracaoTotalResumo = unparseBRL(remuneracaoTotal = $('#remuneracaoTotal').val());
-        
+
         jsonGrupoResultadoModalArray = [];
         var totalResultadooModal = 0;
         for (var i = 0; i < jsonGrupoResultadoModalArray.length; i++) {
@@ -1621,13 +1642,14 @@ include("inc/scripts.php");
         }
         //Contas para Resumo
         resumoValorUnitarioCategoria = totalEncargoRemuneracaoModal + totalInsumooModal + remuneracaoTotalResumo; // Valor Total Cat. = Todos insumos/encargos + remuneraçao
-        percentualBdiTotal = (totalBdi/100)*resumoValorUnitarioCategoria // total do % bdi * resumoValorUnitarioCategoria
+        percentualBdiTotal = (totalBdi / 100) * resumoValorUnitarioCategoria // total do % bdi * resumoValorUnitarioCategoria
         valorUnitarioCategoria = (resumoValorUnitarioCategoria + percentualBdiTotal);
-        var a = (valorUnitarioCategoria/remuneracaoTotalResumo) - (100/100) ;
+        var a = (valorUnitarioCategoria / remuneracaoTotalResumo) - (100 / 100);
         a = a * 100;
 
-        contaMarcello =  (100 + jsonBdiArray[0].bdiPercentual) * (100 + jsonBdiArray[1].bdiPercentual)  
-        / (100 - (jsonBdiArray[2].bdiPercentual + jsonBdiArray[3].bdiPercentual + jsonBdiArray[4].bdiPercentual)) - 100; //calculo tirado do excel 
+        //calculo tirado do excel 
+        // contaMarcello = (100 + jsonBdiArray[0].bdiPercentual) * (100 + jsonBdiArray[1].bdiPercentual) /
+        //     (100 - (jsonBdiArray[2].bdiPercentual + jsonBdiArray[3].bdiPercentual + jsonBdiArray[4].bdiPercentual)) - 100; 
 
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
@@ -1635,8 +1657,8 @@ include("inc/scripts.php");
         row.append($('<td class="text-center">' + "R$ " + parseBRL(resumoValorUnitarioCategoria, 2) + '</td>'));
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
-        row.append($('<td class="text-left">' + "BDI: " + totalBdi + " %" + "M:"+ contaMarcello + '</td>'));
-        row.append($('<td class="text-center">' + "R$ " + parseBRL(percentualBdiTotal, 2)+'</td>'));
+        row.append($('<td class="text-left">' + "BDI: " + totalBdi + " %" + '</td>')); //+ "M:" + contaMarcello 
+        row.append($('<td class="text-center">' + "R$ " + parseBRL(percentualBdiTotal, 2) + '</td>'));
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
         row.append($('<td class="text-left"><b>' + "VALOR UNITARIO CATEGORIA: " + '</b></td>'));
@@ -1644,7 +1666,6 @@ include("inc/scripts.php");
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
         row.append($('<td class="text-left"><b>' + "PERCENTUAL SOBRE A MATRIZ REFERENCIAL: " + '</b></td>'));
-        row.append($('<td class="text-center"><b>'  + parseBRL(a) + " %" + '</b></td>'));
+        row.append($('<td class="text-center"><b>' + parseBRL(a) + " %" + '</b></td>'));
     }
-    
 </script>
