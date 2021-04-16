@@ -1647,6 +1647,8 @@ include("inc/scripts.php");
         var a = (valorUnitarioCategoria / remuneracaoTotalResumo) - (100 / 100);
         a = a * 100;
 
+        //conversa com jose dia 16/04 bdi é o calculo do total(custo) + despesas indiretas + lucro /100 - total Impostos 
+
         //calculo tirado do excel 
         // contaMarcello = (100 + jsonBdiArray[0].bdiPercentual) * (100 + jsonBdiArray[1].bdiPercentual) /
         //     (100 - (jsonBdiArray[2].bdiPercentual + jsonBdiArray[3].bdiPercentual + jsonBdiArray[4].bdiPercentual)) - 100; 

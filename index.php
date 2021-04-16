@@ -79,16 +79,16 @@ include("inc/nav.php");
                                                             </section>
                                                             
                                                             <section class="col col-auto" >
-                                                                <a href="javascript:void(0);" class="btn btn-primary  btn-lg" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa-clock-o fa-3x"></i><br>Bater Ponto   </a>
+                                                                <a  href="" class="btn btn-primary fadeIn" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa-clock-o fa-3x"></i><br>Bater Ponto   </a>
                                                             </section>
                                                             <section class="col col-auto" >
-                                                                <a href="javascript:void(0);" class="btn btn-primary  btn-lg" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
+                                                                <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" class="btn btn-primary " id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
                                                             </section>
                                                             <section class="col col-auto" >
-                                                                <a href="javascript:void(0);" class="btn btn-primary  btn-lg" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file-text fa-3x"> </i>Folha Mensal <br> Preenchida</a>
+                                                                <a href="javascript:void(0);" class="btn btn-primary  " id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file-text fa-3x"> </i>Folha Mensal <br> Preenchida</a>
                                                             </section>
                                                             <section class="col col-auto" >
-                                                                <a href="javascript:void(0);" class="btn btn-primary  btn-lg" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa fa-money fa-3x"></i><br>Emitir Folha   </a>
+                                                                <a href="javascript:void(0);" class="btn btn-primary " id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa fa-money fa-3x"></i><br>contracheque</a>
                                                             </section>
                                                         </div>
                                                     </fieldset>
@@ -172,13 +172,11 @@ include("inc/scripts.php");
 
 <script>
     $(document).ready(function() {
-
-
+        // $("#buttonFolhaMensal").on("click", function() {
+        //     window.location = "http://www.google.com";
+        // });
+//         .botaoTelaIndex:hover  {
+//     background-color: lightblue;
+//   }
     });
 </script>
-
-//<?php
-    //	//include footer
-    //	include("inc/google-analytics.php"); 
-    //
-    ?>
