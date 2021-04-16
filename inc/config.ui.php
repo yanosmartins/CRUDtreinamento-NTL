@@ -63,7 +63,7 @@ $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PERMISSAOUSU
 $condicaoConfiguracoesOK = (($condicaoConfiguracoesOK) or in_array('PARAMETRO_ACESSAR', $arrayPermissao, true));
 
 if ($condicaoConfiguracoesOK) {
-    $page_nav['configuracao'] = array("title" => "Configurações", "icon" => "fa-gear");
+    $page_nav['configuracao'] = array("title" => "Configurações", "icon" => "fa-gear fa-spin");
     $page_nav['configuracao']['sub'] = array();
 
     if (in_array('USUARIO_ACESSAR', $arrayPermissao, true)) {
