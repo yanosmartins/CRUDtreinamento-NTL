@@ -251,7 +251,7 @@ include "js/repositorio.php";
                 LEFT JOIN ntl.situacao S ON S.codigo = GP.situacao
                 INNER JOIN ntl.grupo G ON G.codigo = GP.grupoResponsavel
                 INNER JOIN ntl.responsavel R ON R.codigo = GP.responsavel";
-                $where = " WHERE (0 = 0) AND GP.participaPregao = 1 AND GP.dataReabertura IS NULL OR GP.dataReabertura > " . $hoje;
+                $where = " WHERE (0 = 0) AND GP.participaPregao = 1 AND GP.condicao = 2 AND GP.dataReabertura IS NULL OR GP.dataReabertura > " . $hoje;
 
                 if ($_POST["numeroPregao"] != "") {
                     $numeroPregao = $_POST["numeroPregao"];
