@@ -79,11 +79,11 @@ include("inc/nav.php");
                                                             </section> -->
 
                                                             <section class="col col-auto">
-                                                                <a href="" class="btn btn-primary btn-xs " id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa-clock-o fa-3x"></i><br>Bater Ponto   </a>
+                                                                <a href="funcionario_folhaPontoMensalCadastro.php" class="btn btn-primary btn-xs " id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-clock-o fa-3x"></i><br>Bater Ponto   </a>
                                                                 <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" target="_blank" class="btn btn-primary btn-xs" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
                                                             <!-- </section>
                                                             <section class="col col-auto" > -->
-                                                                <a href="javascript:void(0);" class="btn btn-primary btn-xs disabled" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file-text fa-3x"> </i>Folha Mensal <br> Preenchida</a>
+                                                                <a href="javascript:void(0);" class="btn btn-primary btn-xs disabled" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file-text fa-3x "> </i>Folha Mensal <br> Preenchida</a>
                                                                 <a href="http://www.contrachequeweb.com.br/ntl/"  target="_blank"class="btn btn-primary btn-xs" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa fa-money fa-3x"></i><br>contracheque</a>
                                                             </section>
                                                         </div>
