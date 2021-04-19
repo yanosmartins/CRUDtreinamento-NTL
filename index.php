@@ -42,11 +42,11 @@ include("inc/nav.php");
         <!-- widget grid -->
         <section id="widget-grid" class="">
             <div class="row">
-                <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+                <article class="col-sm-12 col-md-12 col-lg-6 sortable-grid ui-sortable leftBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
-                            <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2> Bem vindo ao sistema NTL,
+                            <span class="widget-icon"><i class="fa fa-user"></i></span>
+                            <h2> <b>Área do Funcionário</b>
                             </h2>
                         </header>
                         <div>
@@ -67,29 +67,59 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
-                                                        <div class="row ">
+                                                        <!-- <div class="row ">
                                                             <section class="col col-6">
                                                                 <label class="input">
                                                                     <input id="descricao" name="descricao" class="hidden" autocomplete="off" type="text" class="required" value="" required>
                                                                 </label>
                                                             </section>
-                                                        </div>
+                                                        </div> -->
                                                         <div class="row ">
-                                                            <section class="col col-1">
+                                                            <!-- <section class="col col-1">
+                                                            </section> -->
+
+                                                            <section class="col col-auto">
+                                                                <a href="" class="btn btn-primary btn-xs " id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa-clock-o fa-3x"></i><br>Bater Ponto   </a>
+                                                                <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" target="_blank" class="btn btn-primary btn-xs" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
+                                                            <!-- </section>
+                                                            <section class="col col-auto" > -->
+                                                                <a href="javascript:void(0);" class="btn btn-primary btn-xs disabled" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file-text fa-3x"> </i>Folha Mensal <br> Preenchida</a>
+                                                                <a href="http://www.contrachequeweb.com.br/ntl/"  target="_blank"class="btn btn-primary btn-xs" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa fa-money fa-3x"></i><br>contracheque</a>
                                                             </section>
-                                                            
-                                                            <section class="col col-auto" >
-                                                                <a  href="" class="btn btn-primary fadeIn" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa-clock-o fa-3x"></i><br>Bater Ponto   </a>
-                                                            </section>
-                                                            <section class="col col-auto" >
-                                                                <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" class="btn btn-primary " id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
-                                                            </section>
-                                                            <section class="col col-auto" >
-                                                                <a href="javascript:void(0);" class="btn btn-primary  " id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file-text fa-3x"> </i>Folha Mensal <br> Preenchida</a>
-                                                            </section>
-                                                            <section class="col col-auto" >
-                                                                <a href="javascript:void(0);" class="btn btn-primary " id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa fa-money fa-3x"></i><br>contracheque</a>
-                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <!-- <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="col col-auto">
+                                                                            <a href="" class="btn btn-primary fadeIn" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa-clock-o fa-3x"></i><br>Bater Ponto   </a>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="col col-auto">
+                                                                            <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" class="btn btn-primary " id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="col col-auto">
+                                                                            <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" class="btn btn-primary " id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
+                                                                        </div >
+                                                                    </td>
+                                                                </tr> -->
+                                                                <!-- <tr> </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="col">
+                                                                            <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" class="btn btn-primary " id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
+                                                                        </div >
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="col">
+                                                                            <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" class="btn btn-primary " id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr> -->
+                                                            </table>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -175,8 +205,8 @@ include("inc/scripts.php");
         // $("#buttonFolhaMensal").on("click", function() {
         //     window.location = "http://www.google.com";
         // });
-//         .botaoTelaIndex:hover  {
-//     background-color: lightblue;
-//   }
+        //         .botaoTelaIndex:hover  {
+        //     background-color: lightblue;
+        //   }
     });
 </script>
