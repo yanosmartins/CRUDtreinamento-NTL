@@ -89,23 +89,30 @@ include("inc/nav.php");
                         <div class="panel-body no-padding">
                           <fieldset>
                             <input id="codigo" name="codigo" type="text" class="hidden" value="0">
-
                             <div class="row ">
-
                               <section class="col col-2">
                                 <label class="label">Descrição</label>
                                 <label class="input">
                                   <input id="descricao" name="descricao" style="text-align: left;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
-
                               <section class="col col-2">
                                 <label class="label">Percentual</label>
                                 <label class="input"><i class="icon-append fa fa-percent"></i>
                                   <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
-
+                              <section class="col col-2 col-auto">
+                                <label class="label">Tipo</label>
+                                <label class="select">
+                                  <select id="tipo" name="tipo" class="required">
+                                  <option></option>
+                                    <option value="I">Imposto</option>
+                                    <option value="L">Lucro</option>
+                                    <option value="C">Custo</option>
+                                  </select><i></i>
+                                </label>
+                              </section>
                             </div>
                           </fieldset>
                         </div>
@@ -135,15 +142,12 @@ include("inc/nav.php");
                     <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                       <span class="fa fa-file-o"></span>
                     </button>
-
                     <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
                       <span class="fa fa-backward"></span>
                     </button>
-
                   </footer>
                 </form>
               </div>
-
             </div>
           </div>
         </article>
@@ -268,14 +272,23 @@ include("inc/scripts.php");
     var codigo = parseInt($("#codigo").val());
     var descricao = $("#descricao").val();
     var percentual = $("#percentual").val();
+    var tipo = $("#tipo").val();
 
     // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+    if (!descricao) {
+      smartAlert("Erro", "Informe a Descricao.", "error");
+      return;
+    }
     if (!percentual) {
       smartAlert("Erro", "Informe o percentual.", "error");
       return;
     }
+    if (!tipo) {
+      smartAlert("Erro", "Informe o tipo.", "error");
+      return;
+    }
 
-    gravaBdi(codigo, descricao, percentual,
+    gravaBdi(codigo, descricao, percentual, tipo,
       function(data) {
 
         if (data.indexOf('sucess') < 0) {
@@ -350,12 +363,15 @@ include("inc/scripts.php");
             var codigo = parseInt(piece[0]);
             var descricao = piece[1];
             var percentual = piece[2];
-
+            var ativo = piece[3];
+            var tipo = piece[4];
 
             //Atributos de cliente        
             $("#codigo").val(codigo);
             $("#descricao").val(descricao);
             $("#percentual").val(percentual);
+            $("#ativo").val(ativo);
+            $("#tipo").val(tipo);
 
           }
 

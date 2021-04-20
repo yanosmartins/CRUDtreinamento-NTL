@@ -1,4 +1,4 @@
-function gravaBdi(codigo, descricao, percentual, callback) {
+function gravaBdi(codigo, descricao, percentual, tipo, callback) {
   $.ajax({
     url: 'js/sqlscope_tabelaBasicaBdi.php',
     dataType: 'html', //tipo do retorno
@@ -8,6 +8,7 @@ function gravaBdi(codigo, descricao, percentual, callback) {
       codigo: codigo,
       descricao: descricao,
       percentual: percentual,
+      tipo: tipo
     }, //valores enviados ao script
     success: function (data) {
       callback(data)

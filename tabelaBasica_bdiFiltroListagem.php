@@ -8,6 +8,7 @@ include "js/repositorio.php";
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Descrição</th>
                     <th class="text-left" style="min-width:30px;">Percentual</th>
+                    <th class="text-left" style="min-width:30px;">Tipo</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
@@ -15,7 +16,7 @@ include "js/repositorio.php";
                 <?php
 
                 $reposit = new reposit();
-                $sql = "SELECT codigo, descricao, percentual, ativo
+                $sql = "SELECT codigo, descricao, percentual, ativo, tipo
                 FROM Ntl.bdi  ";
                 $where = " WHERE (0=0) ";
                 // $descricao = $_GET["descricao"];
@@ -44,10 +45,24 @@ include "js/repositorio.php";
                     $descricao = (string) $row['descricao'];
                     $percentual = (float) $row['percentual'];
                     $ativo = (int) $row['ativo'];
-
+                    $tipo = (string) $row['tipo'];
+                    switch($tipo){
+                        case 'I':
+                            $tipo = 'Imposto'; 
+                            break;
+                        case 'L':
+                            $tipo = 'Lucro'; 
+                            break;
+                        case 'C':
+                            $tipo = 'Custo'; 
+                            break;
+                        default: 
+                        break;
+                    }
                     echo '<tr>';
                     echo '<td class="text-left"><a href="tabelaBasica_bdiCadastro.php?codigo=' . $codigo . '">'  . $descricao . '</a></td>';
                     echo '<td class="text-right">' . $percentual . ' %' .'</td>';
+                    echo '<td class="text-left">' . $tipo . '</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {

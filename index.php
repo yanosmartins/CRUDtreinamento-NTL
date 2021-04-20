@@ -74,19 +74,32 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div> -->
-                                                        <div class="row ">
-                                                            <!-- <section class="col col-1">
+                                                        <!-- <div class="row "> -->
+                                                        <!-- <section class="col col-1">
                                                             </section> -->
-
-                                                            <section class="col col-auto">
-                                                                <a href="funcionario_folhaPontoMensalCadastro.php" class="btn btn-primary btn-xs " id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-clock-o fa-3x"></i><br>Bater Ponto   </a>
-                                                                <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" target="_blank" class="btn btn-primary btn-xs" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-3x"> </i><br>Folha Mensal</a>
-                                                            <!-- </section>
-                                                            <section class="col col-auto" > -->
-                                                                <a href="javascript:void(0);" class="btn btn-primary btn-xs disabled" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file-text fa-3x "> </i>Folha Mensal <br> Preenchida</a>
-                                                                <a href="http://www.contrachequeweb.com.br/ntl/"  target="_blank"class="btn btn-primary btn-xs" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa fa-money fa-3x"></i><br>contracheque</a>
-                                                            </section>
-                                                        </div>
+                                                        <!-- <section class="col col-6"> -->
+                                                        <button>
+                                                            <a href=".php" class="btn btn-primary btn-xs disabled" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-clock-o fa-2x"></i><br> Bater Ponto</a>
+                                                        </button>
+                                                        <button>
+                                                            <a href="funcionario_folhaPontoMensalCadastro.php" class="btn btn-primary btn-xs " id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-calendar fa-2x"></i><br>Ponto Mensal </a>
+                                                        </button>
+                                                        <button>
+                                                            <a href="funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>" target="_blank" class="btn btn-primary btn-xs" id="buttonPonto" name="buttonPonto" style="display:inline-grid"><i class="fa fa-file fa-2x"> </i><br>Folha Mensal</a>
+                                                        </button>
+                                                        <button>
+                                                            <a href="javascript:void(0);" class="btn btn-primary btn-xs disabled" id="buttonPonto" name="buttonPonto" style="display:inline-grid" disabled><i class="fa fa-file-text fa-2x "> </i>Folha Mensal <br> Preenchida</a>
+                                                        </button>
+                                                        <!-- </section> 
+                                                            <section class="col col-5"> -->
+                                                        <button>
+                                                            <a href="http://www.contrachequeweb.com.br/ntl/" target="_blank" class="btn btn-primary btn-xs" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa fa-money fa-2x"></i><br>contracheque</a>
+                                                        </button>
+                                                        <button>
+                                                            <a href="" class="btn btn-primary btn-xs disabled" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid" disabled><i class="fa fa fa-stethoscope fa-2x "></i><br>Consulta ASO</a>
+                                                        </button>
+                                                        <!-- </section>
+                                                        </div> -->
                                                         <div class="row">
                                                             <!-- <table>
                                                                 <tr>
@@ -106,7 +119,7 @@ include("inc/nav.php");
                                                                         </div >
                                                                     </td>
                                                                 </tr> -->
-                                                                <!-- <tr> </tr>
+                                                            <!-- <tr> </tr>
                                                                 <tr>
                                                                     <td>
                                                                         <div class="col">
@@ -119,7 +132,7 @@ include("inc/nav.php");
                                                                         </div>
                                                                     </td>
                                                                 </tr> -->
-                                                            </table>
+
                                                         </div>
                                                     </fieldset>
                                                 </div>

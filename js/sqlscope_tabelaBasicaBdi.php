@@ -39,13 +39,15 @@ function grava()
     $percentual = $_POST['percentual'];
     $ativo = 1;
     $percentual = str_replace(",", ".", $percentual);
+    $tipo = "'" . $_POST['tipo'] . "'";
 
     $sql = "Ntl.Bdi_Atualiza
         $codigo,
         $descricao,
         $percentual,
-        $ativo ,
-        $usuario";
+        $ativo,
+        $usuario,
+        $tipo";
 
     $reposit = new reposit();
 
@@ -68,7 +70,7 @@ function recupera()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT codigo, descricao, percentual,ativo FROM Ntl.bdi WHERE (0=0) AND codigo = " . $id;
+    $sql = "SELECT codigo, descricao, percentual,ativo,tipo FROM Ntl.bdi WHERE (0=0) AND codigo = " . $id;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -80,12 +82,14 @@ function recupera()
     $descricao = $row['descricao'];
     $percentual = +$row['percentual'];
     $ativo = $row['ativo'];
+    $tipo = $row['tipo'];
     // $percentual = str_replace(".", ",", $percentual);
 
     $out =   $id . "^" .
         $descricao . "^" .
         $percentual . "^" .
-        $ativo;
+        $ativo . "^" .
+        $tipo;
 
 
     if ($out == "") {
