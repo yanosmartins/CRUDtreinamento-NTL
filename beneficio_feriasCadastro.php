@@ -611,13 +611,12 @@ include("inc/scripts.php");
         var diaFeriado = +$("#diasDescontar").val();
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        if (mesAno === "" || mesAno === " ") {
-            smartAlert("Atenção", "Informe o Mês/Ano de Referência", "error");
+        if (!projeto) {
+            smartAlert("Atenção", "Informe o Projeto", "error");
             return;
         }
-
-        if (projeto === "" || projeto === " ") {
-            smartAlert("Atenção", "Informe o Projeto", "error");
+        if (mesAno === "" || mesAno === " ") {
+            smartAlert("Atenção", "Informe o Mês/Ano de Referência", "error");
             return;
         }
 
