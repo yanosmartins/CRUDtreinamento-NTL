@@ -114,6 +114,10 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('MUNICIPIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("municipio" => array("title" => "Município", "url" => APP_URL . "/tabelaBasica_municipioFiltro.php")); //SYSCB 
     }
+
+    if (in_array('STATUS_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("status" => array("title" => "Status", "url" => APP_URL . "/tabelaBasica_statusFiltro.php")); //SYSCB 
+    }
 }
 
 // CADASTROS
