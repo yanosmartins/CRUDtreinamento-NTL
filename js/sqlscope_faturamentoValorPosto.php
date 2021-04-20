@@ -17,6 +17,11 @@ if ($funcao == 'excluirValorPosto') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'recuperarDadosBdi') {
+    call_user_func($funcao);
+}
+
+
 return;
 
 function gravaValorPosto()
@@ -221,6 +226,17 @@ function gravaValorPosto()
     }
     $xmlJsonBdi = "'" . $xmlJsonBdi . "'";
     //Fim do Json Bdi
+    $situacao = "A";
+    $totalCategoria = (float)$valorPosto["totalCategoria"];
+    $totalCategoria = round($totalCategoria, 5);
+    $valorPostoBdi = (float)$valorPosto["valorPostoBdi"];
+    $valorPostoBdi = round($valorPostoBdi, 5);
+    $valorPostoBdiPercentual = (float)$valorPosto["valorPostoBdiPercentual"];
+    $valorPostoBdiPercentual = round($valorPostoBdiPercentual, 5);
+    $valorUnitarioCategoria = (float)$valorPosto["valorUnitarioCategoria"];
+    $valorUnitarioCategoria = round($valorUnitarioCategoria, 5);
+    $percentualMatrizReferencial = (float)$valorPosto["percentualMatrizReferencial"];
+    $percentualMatrizReferencial = round($percentualMatrizReferencial, 5);
 
     $sql = "Faturamento.valorPosto_Atualiza
         $codigo,
@@ -232,7 +248,13 @@ function gravaValorPosto()
         $xmlJsonRemuneracaoPercentual,
         $xmlJsonEncargo,
         $xmlJsonInsumo,
-        $xmlJsonBdi";
+        $xmlJsonBdi,
+        $situacao,
+        $totalCategoria,
+        $valorPostoBdi,
+        $valorUnitarioCategoria,
+        $percentualMatrizReferencial,
+        $valorPostoBdiPercentual";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -422,7 +444,7 @@ function recuperaValorPosto()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT VP.codigo,VP.valorPosto,VP.bdi, R.descricao AS bdiDescricao,VP.percentual
+    $sql = "SELECT VP.codigo,VP.valorPosto,VP.bdi, R.descricao AS bdiDescricao,VP.percentual, R.tipo
             FROM faturamento.valorPostoBdi VP  
             LEFT JOIN Ntl.bdi R ON R.codigo = VP.bdi
             WHERE VP.valorPosto = $id";
@@ -437,6 +459,7 @@ function recuperaValorPosto()
         $bdi = (int)$row['bdi'];
         $bdiDescricao = (string)$row['bdiDescricao'];
         $percentual = (float)$row['percentual'];
+        $tipo = (string)$row['tipo'];
 
 
         $contadorBdi = $contadorBdi + 1;
@@ -446,6 +469,7 @@ function recuperaValorPosto()
             "bdi" => $bdi,
             "bdiDescricao" => $bdiDescricao,
             "bdiPercentual" => $percentual,
+            "bdiTipo" => $tipo,
         );
     }
 
@@ -509,5 +533,45 @@ function virgulaParaPonto($value)
         $aux = 'null';
     }
     return $aux;
+}
+
+function recuperarDadosBdi()
+{
+    if ((empty($_POST["bdi"])) || (!isset($_POST["bdi"])) || (is_null($_POST["bdi"]))) {
+        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    } else {
+        $bdi = (int)$_POST["bdi"];
+    }
+
+    $sql = "SELECT codigo, descricao, ativo, percentual, tipo
+    FROM Ntl.bdi
+    WHERE (0=0) AND
+    codigo = " . $bdi;
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $out = "";
+    if ($row = $result[0]) {
+        $codigo = (int)$row['codigo'];
+        $descricao = $row['descricao'];
+        $percentual = $row['percentual'];
+        $tipo = $row['tipo'];
+    }
+
+    $out = $codigo . "^" .
+        $descricao . "^" .
+        $percentual . "^" .
+        $tipo;
+
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out;
+    return;
 }
 

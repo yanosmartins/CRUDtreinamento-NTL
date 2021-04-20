@@ -4,7 +4,7 @@ require_once("inc/init.php");
 
 //Requer a configuração de UI (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
-
+include_once("populaTabela/popula.php");
 //colocar o tratamento de perminssão sempre abaixo de require_once("inc/config.ui.php");
 $condicaoAcessarOK = (in_array('BDI_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('BDI_GRAVAR', $arrayPermissao, true));
@@ -35,6 +35,7 @@ $page_title = "BDI";
 //Note: all css files are inside css/ folder
 $page_css[] = "your_style.css";
 include("inc/header.php");
+
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
@@ -102,14 +103,13 @@ include("inc/nav.php");
                                   <input id="percentual" name="percentual" style="text-align: right;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
-                              <section class="col col-2 col-auto">
-                                <label class="label">Tipo</label>
+                              <section class="col col-2">
+                                <label class="label" for="tipo">Tipo</label>
                                 <label class="select">
                                   <select id="tipo" name="tipo" class="required">
-                                  <option></option>
-                                    <option value="I">Imposto</option>
-                                    <option value="L">Lucro</option>
-                                    <option value="C">Custo</option>
+                                    <?php
+                                    echo populaBdi();
+                                    ?>
                                   </select><i></i>
                                 </label>
                               </section>
