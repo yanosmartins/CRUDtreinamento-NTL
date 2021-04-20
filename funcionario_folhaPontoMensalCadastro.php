@@ -248,6 +248,29 @@ include("inc/nav.php");
                                                                         </select>
                                                                     </label>
                                                                 </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="status">Status</label>
+                                                                    <label class="select">
+                                                                        <select id="status" name="status" class="readonly" readonly style="pointer-events: none; touch-action: none">
+                                                                            <?php
+                                                                            $reposit = new reposit();
+                                                                            $sql = "SELECT S.codigo,S.descricao from Funcionario.statusFolha S INNER JOIN Funcionario.folhaPontoMensal F ON S.codigo = F.status where S.ativo = 1 order by S.codigo";
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = (int) $row['codigo'];
+                                                                                $horaInicio = $row['horaInicio'];
+                                                                                $horaFim = $row['horaFim'];
+                                                                                $funcionario = $row['funcionario'];
+                                                                                if ($funcionario == $_SESSION['funcionario']) {
+                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                } else {
+                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
+                                                                                }
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                    </label>
+                                                                </section>
                                                             </div>
 
                                                             <div class="row">

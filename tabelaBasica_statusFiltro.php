@@ -43,24 +43,24 @@ include("inc/nav.php");
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-<?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
-$breadcrumbs["Tabela Básica"] = "";
-include("inc/ribbon.php");
-?>
+    <?php
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
+    $breadcrumbs["Tabela Básica"] = "";
+    include("inc/ribbon.php");
+    ?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
 
         <!-- widget grid -->
-        <section id="widget-grid" class="">                
+        <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Benefício Indireto</h2>
+                            <h2>Status</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -79,16 +79,16 @@ include("inc/ribbon.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        
-                                                        <div class="row">  
-                                                             
+
+                                                        <div class="row">
+
                                                             <section class="col col-4 col-auto">
-                                                                <label class="label" for="valorModal">Benefício Indireto</label>
+                                                                <label class="label" for="valorModal">Status</label>
                                                                 <label class="input">
                                                                     <input id="descricao" name="descricao" type="text" maxlength="50" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            
+
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
@@ -97,22 +97,22 @@ include("inc/ribbon.php");
                                                                         <option value='1' selected>Sim</option>
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>
-                                                                </label>                                                                                                                                
+                                                                </label>
                                                             </section>
-                                                              
+
                                                         </div>
-                                                        
-                                                    </fieldset> 
+
+                                                    </fieldset>
                                                 </div>
-                                            </div>   
+                                            </div>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <footer>
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                       <button type="button" id="btnNovo" class="btn btn-primary pull-left" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file" ></span>
+                                        <button type="button" id="btnNovo" class="btn btn-primary pull-left" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
                                 </form>
@@ -121,7 +121,7 @@ include("inc/ribbon.php");
                         </div>
                     </div>
                 </article>
-            </div>                          
+            </div>
         </section>
         <!-- end widget grid -->
     </div>
@@ -162,30 +162,29 @@ include("inc/scripts.php");
 
 
 <script>
-       $(document).ready(function () {
-         $('#btnSearch').on("click", function () {
+    $(document).ready(function() {
+        $('#btnSearch').on("click", function() {
             listarFiltro();
         });
-        $('#btnNovo').on("click", function () {
-           novo();
+        $('#btnNovo').on("click", function() {
+            novo();
         });
     });
-   
+
     function listarFiltro() {
         var descricao = $('#descricao').val();
         var ativo = $('#ativo').val();
-       
+
         if (descricao !== "") {
             descricao = descricao.replace(/^\s+|\s+$/g, "");
             descricao = encodeURIComponent(descricao);
         }
- 
-        var parametrosUrl = '&descricao=' + descricao +  '&ativo=' + ativo;
-        $('#resultadoBusca').load('tabelaBasica_beneficioIndiretoFiltroListagem.php?' + parametrosUrl);
+
+        var parametrosUrl = '&descricao=' + descricao + '&ativo=' + ativo;
+        $('#resultadoBusca').load('tabelaBasica_statusFiltroListagem.php?' + parametrosUrl);
     }
-    
+
     function novo() {
-        $(location).attr('href', 'tabelaBasica_beneficioIndiretoCadastro.php');
+        $(location).attr('href', 'tabelaBasica_statusCadastro.php');
     }
-    
-</script>    
+</script>
