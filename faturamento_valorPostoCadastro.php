@@ -218,11 +218,75 @@ include("inc/nav.php");
                                                                 </table>
                                                             </div>
                                                         </div>
+
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend>Remuneração Percentual</legend>
+                                                            </section>
+                                                        </div>
+                                                        <input id="jsonRemuneracaoPercentual" name="jsonRemuneracaoPercentual" type="hidden" value="[]">
+                                                        <div id="formRemuneracaoPercentual" class="col-sm-12">
+                                                            <input id="remuneracaoIdPercentual" name="remuneracaoIdPercentual" type="hidden" value="">
+                                                            <input id="sequencialRemuneracaoPercentual" name="sequencialRemuneracaoPercentual" type="hidden" value="">
+                                                            <input id="descricaoRemuneracaoPercentual" name="descricaoRemuneracaoPercentual" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-4">
+                                                                        <label class="label">Remuneração</label>
+                                                                        <label class="select">
+                                                                            <select id="remuneracaoPercentual" name="remuneracaoPercentual">
+                                                                                <option></option>
+                                                                                <?php
+                                                                                $sql =  "SELECT codigo, descricao FROM Ntl.remuneracao where ativo = 1 order by codigo";
+                                                                                $reposit = new reposit();
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = $row['codigo'];
+                                                                                    $descricao = ($row['descricao']);
+                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                }
+                                                                                ?>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label class="label">Percentual</label>
+                                                                        <label class="input"><i class="icon-append fa fa-percent"></i>
+                                                                        <input id="percentualRemuneracao" name="percentualRemuneracao" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddRemuneracaoPercentual" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverRemuneracaoPercentual" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableRemuneracaoPercentual" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th style="width: 2px"></th>
+                                                                
+                                                                            <th class="text-center">Percentual</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend>Encargos Percentuais</legend>
                                                             </section>
-                                                        </div>
+                                                         <th class="text-center" style="min-width: 500%;">Descrição</th>           </div>
                                                         <input id="jsonEncargo" name="jsonEncargo" type="hidden" value="[]">
                                                         <div id="formEncargo" class="col-sm-12">
                                                             <input id="encargoId" name="encargoId" type="hidden" value="">
@@ -661,6 +725,7 @@ include("inc/scripts.php");
         jsonGrupoEncargoModalArray = JSON.parse($("#jsonGrupoEncargoModal").val());
         jsonGrupoInsumoModalArray = JSON.parse($("#jsonGrupoInsumoModal").val());
         jsonGrupoResultadoModalArray = JSON.parse($("#jsonGrupoResultadoModal").val());
+        jsonRemuneracaoPercentualArray = JSON.parse($("#jsonRemuneracaoPercentual").val());
 
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
@@ -722,6 +787,20 @@ include("inc/scripts.php");
             }
         }).trigger('focusout');
 
+        $('#percentualRemuneracao').focusout(function() {
+            var percentualRemuneracao, element;
+            element = $(this);
+            element.unmask();
+            percentualRemuneracao = element.val().replace(/\D/g, '');
+            if (percentualRemuneracao.length == "") {
+                element.mask("99.9999?9");
+            } else if (percentualRemuneracao.length > 5) {
+                element.mask("99.9999?9");
+            } else if ((percentualRemuneracao.length < 5) && (percentualRemuneracao.length != "")) {
+                element.mask("9.9999?9");
+            }
+        }).trigger('focusout');
+
         $('#bdiPercentual').focusout(function() {
             var percentual, element;
             element = $(this);
@@ -735,6 +814,7 @@ include("inc/scripts.php");
                 element.mask("9.9999?9");
             }
         }).trigger('focusout');
+
 
         $("#btnAddEncargo").on("click", function() {
             var encargo = $("#encargo").val();
@@ -824,6 +904,30 @@ include("inc/scripts.php");
         $("#btnRemoverRemuneracao").on("click", function() {
             excluirRemuneracao();
         });
+
+
+        // Percentual
+
+        $("#btnAddRemuneracaoPercentual").on("click", function() {
+            var remuneracaoPercentual = $("#remuneracaoPercentual").val();
+            var percentualRemuneracao = $("#percentualRemuneracao").val();
+
+            if (!remuneracaoPercentual) {
+                smartAlert("Atenção", "Escolha uma remuneração", "error")
+                return;
+            }
+
+            if (!percentualRemuneracao) {
+                smartAlert("Atenção", "Coloque o valor do Percentual", "error")
+                return;
+            }
+            addRemuneracaoPercentual();
+            // calculaValorRemuneracaoPercentual()
+        });
+        $("#btnRemoverRemuneracaoPercentual").on("click", function() {
+            excluirRemuneracaoPercentual();
+        });
+
 
 
         $("#btnRecuperaEncargo").on("click", function() {
@@ -960,6 +1064,7 @@ include("inc/scripts.php");
                             var strArrayEncargo = piece[3];
                             var strArrayInsumo = piece[4];
                             var strArrayBdi = piece[5];
+                            var strArrayRemuneracaoPercentual = piece[6];
 
                             piece = out.split("^");
                             codigo = +piece[0];
@@ -984,6 +1089,9 @@ include("inc/scripts.php");
                             $("#jsonBdi").val(strArrayBdi);
                             jsonBdiArray = JSON.parse($("#jsonBdi").val());
                             fillTableBdi();
+                            $("#jsonRemuneracaoPercentual").val(strArrayRemuneracaoPercentual);
+                            jsonRemuneracaoPercentualArray = JSON.parse($("#jsonRemuneracaoPercentual").val());
+                            fillTableRemuneracaoPercentual();
                             calculaValorRemuneracao();
 
                         }
@@ -1559,6 +1667,145 @@ include("inc/scripts.php");
             smartAlert("Erro", "Selecione pelo menos 1 Remuneracao para excluir.", "error");
     }
     // remuneracao fim
+
+  // remuneracaoPercentual
+  function clearFormRemuneracaoPercentual() {
+        $("#remuneracaoPercentual").val('');
+        $("#remuneracaoIdPercentual").val('');
+        $("#sequencialRemuneracaoPercentual").val('');
+        $('#percentualRemuneracao').val('');
+    }
+
+    function addRemuneracaoPercentual() {
+        var item = $("#formRemuneracaoPercentual").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataRemuneracaoPercentual
+        });
+
+        if (item["sequencialRemuneracaoPercentual"] === '') {
+            if (jsonRemuneracaoPercentualArray.length === 0) {
+                item["sequencialRemuneracaoPercentual"] = 1;
+            } else {
+                item["sequencialRemuneracaoPercentual"] = Math.max.apply(Math, jsonRemuneracaoPercentualArray.map(function(o) {
+                    return o.sequencialRemuneracaoPercentual;
+                })) + 1;
+            }
+            item["remuneracaoIdPercentual"] = 0;
+        } else {
+            item["sequencialRemuneracaoPercentual"] = +item["sequencialRemuneracaoPercentual"];
+        }
+
+        var index = -1;
+        $.each(jsonRemuneracaoPercentualArray, function(i, obj) {
+            if (+$('#sequencialRemuneracaoPercentual').val() === obj.sequencialRemuneracaoPercentual) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonRemuneracaoPercentualArray.splice(index, 1, item);
+        else
+            jsonRemuneracaoPercentualArray.push(item);
+
+        $("#jsonRemuneracaoPercentual").val(JSON.stringify(jsonRemuneracaoPercentualArray));
+        fillTableRemuneracaoPercentual();
+        clearFormRemuneracaoPercentual();
+
+    }
+
+    function fillTableRemuneracaoPercentual() {
+        $("#tableRemuneracaoPercentual tbody").empty();
+        for (var i = 0; i < jsonRemuneracaoPercentualArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableRemuneracaoPercentual tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoPercentualArray[i].sequencialRemuneracaoPercentual + '"><i></i></label></td>'));
+            row.append($('<td class="text-left" onclick="carregaRemuneracaoPercentual(' + jsonRemuneracaoPercentualArray[i].sequencialRemuneracaoPercentual + ');">' + jsonRemuneracaoPercentualArray[i].descricaoRemuneracaoPercentual + '</td>'));
+            row.append($('<td class="text-center">'+ parseBRL(jsonRemuneracaoPercentualArray[i].percentualRemuneracao)  + ' %' + '</td>'));
+        }
+    }
+
+
+    function processDataRemuneracaoPercentual(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "remuneracaoPercentual")) {
+            var remuneracaoPercentual = $("#remuneracaoPercentual").val();
+            if (remuneracaoPercentual !== '') {
+                fieldName = "remuneracaoPercentual";
+            }
+            return {
+                name: fieldName,
+                value: remuneracaoPercentual
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "descricaoRemuneracaoPercentual")) {
+            return {
+                name: fieldName,
+                value: $("#remuneracaoPercentual option:selected").text()
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "percentualRemuneracao")) {
+            var percentualRemuneracao= $("#percentualRemuneracao").val();
+            if (percentualRemuneracao !== '') {
+                fieldName = "percentualRemuneracao";
+            }
+            return {
+                name: fieldName,
+                value: percentualRemuneracao
+            };
+        }
+        return false;
+    }
+
+    function calculaValorRemuneracaoPercentual() {
+        var valorTotalRemuneracao = 0;
+        for (var i = 0; i < jsonRemuneracaoPercentualArray.length; i++) {
+            var aux = jsonRemuneracaoPercentualArray[i].percentualRemuneracao;
+            aux = unparseBRL(aux);
+            valorTotalRemuneracao += parseFloat(aux);
+        }
+    }
+
+    function carregaRemuneracaoPercentual(sequencialRemuneracaoPercentual) {
+        var arr = jQuery.grep(jsonRemuneracaoPercentualArray, function(item, i) {
+            return (item.sequencialRemuneracaoPercentual === sequencialRemuneracaoPercentual);
+        });
+
+        clearFormRemuneracaoPercentual();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#remuneracaoPercentual").val(item.remuneracaoPercentual);
+            $("#percentualRemuneracao").val(item.percentualRemuneracao);
+            $("#sequencialRemuneracaoPercentual").val(item.sequencialRemuneracaoPercentual);
+        }
+    }
+
+    function excluirRemuneracaoPercentual() {
+        var arrSequencial = [];
+        $('#tableRemuneracaoPercentual input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonRemuneracaoPercentualArray.length - 1; i >= 0; i--) {
+                var obj = jsonRemuneracaoPercentualArray[i];
+                if (jQuery.inArray(obj.sequencialRemuneracaoPercentual, arrSequencial) > -1) {
+                    jsonRemuneracaoPercentualArray.splice(i, 1);
+                }
+            }
+            $("#jsonRemuneracaoPercentual").val(JSON.stringify(jsonRemuneracaoPercentualArray));
+            fillTableRemuneracaoPercentual();
+        } else
+            smartAlert("Erro", "Selecione pelo menos 1 Remuneracao para excluir.", "error");
+    }
+    // remuneracaoPercentual fim
+
+
 
     // Modal inicio 
     function fillTableRemuneracaoModal() {
