@@ -39,7 +39,7 @@ $page_title = "Posto";
 //Note: all css files are inside css/ folder
 $page_css[] = "your_style.css";
 include("inc/header.php");
-
+include_once("populaTabela/popula.php");
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
 $page_nav['faturamento']['sub']['cadastro']['sub']["projetoPosto"]["active"] = true;
@@ -84,9 +84,16 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-
                                                         <div class="row">
                                                             <input id="codigo" name="codigo" type="text" class="hidden">
+                                                          
+                                                            <input id="situacao" name="situacao" type="hidden" value="">
+                                                            <input id="valorPostoBdi" name="valorPostoBdi" type="hidden" value="">
+                                                            <input id="valorPostoBdiPercentual" name="valorPostoBdiPercentual" type="hidden" value="">
+                                                            <input id="totalCategoria" name="totalCategoria" type="hidden" value="">
+                                                            <input id="valorUnitarioCategoria" name="valorUnitarioCategoria" type="hidden" value="">
+                                                            <input id="percentualMatrizReferencial" name="percentualMatrizReferencial" type="hidden" value="">
+                                                            
                                                             <section class="col col-5">
                                                                 <label class="label">Projeto</label>
                                                                 <label class="select">
@@ -107,7 +114,6 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-4">
                                                                 <label class="label">Posto</label>
                                                                 <label class="select">
@@ -201,7 +207,6 @@ include("inc/nav.php");
                                                                             <i class="fa fa-minus"></i>
                                                                         </button>
                                                                     </section>
-
                                                                 </div>
                                                             </div>
                                                             <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
@@ -218,7 +223,6 @@ include("inc/nav.php");
                                                                 </table>
                                                             </div>
                                                         </div>
-
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend>Remuneração Percentual</legend>
@@ -252,7 +256,7 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label">Percentual</label>
                                                                         <label class="input"><i class="icon-append fa fa-percent"></i>
-                                                                        <input id="percentualRemuneracao" name="percentualRemuneracao" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
+                                                                            <input id="percentualRemuneracao" name="percentualRemuneracao" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-2">
@@ -264,7 +268,6 @@ include("inc/nav.php");
                                                                             <i class="fa fa-minus"></i>
                                                                         </button>
                                                                     </section>
-
                                                                 </div>
                                                             </div>
                                                             <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
@@ -272,7 +275,7 @@ include("inc/nav.php");
                                                                     <thead>
                                                                         <tr role="row">
                                                                             <th style="width: 2px"></th>
-                                                                
+                                                                            <th class="text-center">Remuneração</th>
                                                                             <th class="text-center">Percentual</th>
                                                                         </tr>
                                                                     </thead>
@@ -281,12 +284,12 @@ include("inc/nav.php");
                                                                 </table>
                                                             </div>
                                                         </div>
-
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend>Encargos Percentuais</legend>
                                                             </section>
-                                                         <th class="text-center" style="min-width: 500%;">Descrição</th>           </div>
+                                                            <th class="text-center" style="min-width: 500%;">Descrição</th>
+                                                        </div>
                                                         <input id="jsonEncargo" name="jsonEncargo" type="hidden" value="[]">
                                                         <div id="formEncargo" class="col-sm-12">
                                                             <input id="encargoId" name="encargoId" type="hidden" value="">
@@ -481,6 +484,16 @@ include("inc/nav.php");
                                                                             <input id="bdiPercentual" name="bdiPercentual" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                         </label>
                                                                     </section>
+                                                                    <section class="col col-2">
+                                                                        <label class="label " for="bdiTipo">Tipo</label>
+                                                                        <label class="select ">
+                                                                            <select id="bdiTipo" name="bdiTipo" class="">
+                                                                                <?php
+                                                                                echo populaBdi();
+                                                                                ?>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
                                                                     <section class="col col-md-2">
                                                                         <label class="label">&nbsp;</label>
                                                                         <button id="btnAddBdi" type="button" class="btn btn-primary">
@@ -560,9 +573,9 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <!-- <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
-                                        </button>
+                                        </button> -->
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file-o"></span>
                                         </button>
@@ -657,7 +670,11 @@ include("inc/nav.php");
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer"></div>
+                                            <div class="modal-footer">
+                                                <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                                    <span class="fa fa-floppy-o"></span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -668,15 +685,11 @@ include("inc/nav.php");
             </div>
         </section>
         <!-- end widget grid -->
-
     </div>
     <!-- END MAIN CONTENT -->
-
 </div>
 <!-- END MAIN PANEL -->
-
 <!-- ==========================CONTENT ENDS HERE ========================== -->
-
 <!-- PAGE FOOTER -->
 <?php
 include("inc/footer.php");
@@ -836,10 +849,10 @@ include("inc/scripts.php");
 
             addEncargo();
         });
+
         $("#btnRemoverEncargo").on("click", function() {
             excluirEncargo();
         });
-
 
         $("#btnAddInsumo").on("click", function() {
             var insumo = $("#insumo").val();
@@ -881,6 +894,7 @@ include("inc/scripts.php");
 
             addBdi();
         });
+
         $("#btnRemoverBdi").on("click", function() {
             excluirBdi();
         });
@@ -901,10 +915,10 @@ include("inc/scripts.php");
             addRemuneracao();
             calculaValorRemuneracao()
         });
+
         $("#btnRemoverRemuneracao").on("click", function() {
             excluirRemuneracao();
         });
-
 
         // Percentual
 
@@ -924,11 +938,10 @@ include("inc/scripts.php");
             addRemuneracaoPercentual();
             // calculaValorRemuneracaoPercentual()
         });
+
         $("#btnRemoverRemuneracaoPercentual").on("click", function() {
             excluirRemuneracaoPercentual();
         });
-
-
 
         $("#btnRecuperaEncargo").on("click", function() {
             $("#tableEncargo tbody").css("display", "")
@@ -972,11 +985,14 @@ include("inc/scripts.php");
             $('#parametroLinkModalPanel').modal();
         });
 
+        $("#bdi").on("change", function() {
+            recuperarDadosBdi();
+        });
+
         carregaPagina();
     });
 
     function gravar() {
-
         var descricao = $("#descricao").val();
 
         if (descricao == "" || descricao === " ") {
@@ -1010,7 +1026,6 @@ include("inc/scripts.php");
             }
         );
     }
-
 
     function novo() {
         $(location).attr('href', 'faturamento_valorPostoCadastro.php');
@@ -1405,6 +1420,7 @@ include("inc/scripts.php");
         $("#bdiId").val('');
         $("#sequencialBdi").val('');
         $('#bdiPercentual').val('');
+        $('#bdiTipo').val('');
     }
 
     function addBdi() {
@@ -1446,7 +1462,9 @@ include("inc/scripts.php");
 
     }
     var totalBdi;
-
+    var totalBdiImposto = 0; // para calculo do bdi
+    var totalBdiLucro = 0; // para calculo do bdi
+    var totalBdiCusto = 0; // para calculo do bdi
     function fillTableBdi() {
         $("#tableBdi tbody").empty();
         totalBdi = 0;
@@ -1457,6 +1475,13 @@ include("inc/scripts.php");
             row.append($('<td class="text-left" onclick="carregaBdi(' + jsonBdiArray[i].sequencialBdi + ');">' + jsonBdiArray[i].bdiDescricao + '</td>'));
             row.append($('<td class="text-center">' + parseBRL(jsonBdiArray[i].bdiPercentual) + ' %' + '</td>'));
             totalBdi += +jsonBdiArray[i].bdiPercentual;
+            if (jsonBdiArray[i].bdiTipo == "I") {
+                totalBdiImposto += +jsonBdiArray[i].bdiPercentual;
+            } else if (jsonBdiArray[i].bdiTipo == "L") {
+                totalBdiLucro += +jsonBdiArray[i].bdiPercentual;
+            } else if (jsonBdiArray[i].bdiTipo == "C") {
+                totalBdiCusto += +jsonBdiArray[i].bdiPercentual;
+            }
         }
     }
 
@@ -1491,6 +1516,18 @@ include("inc/scripts.php");
             return {
                 name: fieldName,
                 value: bdiPercentual
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "bdiTipo")) {
+            var bdiTipo = $("#bdiTipo").val();
+
+            if (insumoValor !== '') {
+                fieldName = "bdiTipo";
+            }
+            return {
+                name: fieldName,
+                value: bdiTipo
             };
         }
 
@@ -1668,8 +1705,8 @@ include("inc/scripts.php");
     }
     // remuneracao fim
 
-  // remuneracaoPercentual
-  function clearFormRemuneracaoPercentual() {
+    // remuneracaoPercentual
+    function clearFormRemuneracaoPercentual() {
         $("#remuneracaoPercentual").val('');
         $("#remuneracaoIdPercentual").val('');
         $("#sequencialRemuneracaoPercentual").val('');
@@ -1722,7 +1759,7 @@ include("inc/scripts.php");
             $("#tableRemuneracaoPercentual tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoPercentualArray[i].sequencialRemuneracaoPercentual + '"><i></i></label></td>'));
             row.append($('<td class="text-left" onclick="carregaRemuneracaoPercentual(' + jsonRemuneracaoPercentualArray[i].sequencialRemuneracaoPercentual + ');">' + jsonRemuneracaoPercentualArray[i].descricaoRemuneracaoPercentual + '</td>'));
-            row.append($('<td class="text-center">'+ parseBRL(jsonRemuneracaoPercentualArray[i].percentualRemuneracao)  + ' %' + '</td>'));
+            row.append($('<td class="text-center">' + parseBRL(jsonRemuneracaoPercentualArray[i].percentualRemuneracao) + ' %' + '</td>'));
         }
     }
 
@@ -1750,7 +1787,7 @@ include("inc/scripts.php");
         }
 
         if (fieldName !== '' && (fieldId === "percentualRemuneracao")) {
-            var percentualRemuneracao= $("#percentualRemuneracao").val();
+            var percentualRemuneracao = $("#percentualRemuneracao").val();
             if (percentualRemuneracao !== '') {
                 fieldName = "percentualRemuneracao";
             }
@@ -1887,26 +1924,35 @@ include("inc/scripts.php");
             var aux = +jsonGrupoResultadoModalArray[i].insumoValor;
             totalResultadooModal += aux;
         }
-        //Contas para Resumo
-        resumoValorUnitarioCategoria = totalEncargoRemuneracaoModal + totalInsumooModal + remuneracaoTotalResumo; // Valor Total Cat. = Todos insumos/encargos + remuneraçao
-        percentualBdiTotal = (totalBdi / 100) * resumoValorUnitarioCategoria // total do % bdi * resumoValorUnitarioCategoria
-        valorUnitarioCategoria = (resumoValorUnitarioCategoria + percentualBdiTotal);
-        var a = (valorUnitarioCategoria / remuneracaoTotalResumo) - (100 / 100);
-        a = a * 100;
 
+        FormulaBdi = (100 + totalBdiCusto) * (100 + totalBdiLucro) / // custos + 100% * lucro(em cima do total + custo) + 100% / total dos impostos - 100%
+            (100 - (totalBdiImposto)) - 100;
         //conversa com jose dia 16/04 bdi é o calculo do total(custo) + despesas indiretas + lucro /100 - total Impostos 
-
         //calculo tirado do excel 
         // contaMarcello = (100 + jsonBdiArray[0].bdiPercentual) * (100 + jsonBdiArray[1].bdiPercentual) /
         //     (100 - (jsonBdiArray[2].bdiPercentual + jsonBdiArray[3].bdiPercentual + jsonBdiArray[4].bdiPercentual)) - 100; 
 
+
+        //Contas para Resumo
+        resumoValorUnitarioCategoria = totalEncargoRemuneracaoModal + totalInsumooModal + remuneracaoTotalResumo; // Valor Total Cat. = Todos insumos/encargos + remuneraçao
+        percentualBdiTotal = (FormulaBdi / 100) * resumoValorUnitarioCategoria // total do % bdi * resumoValorUnitarioCategoria
+        valorUnitarioCategoria = (resumoValorUnitarioCategoria + percentualBdiTotal);
+        var aux = (valorUnitarioCategoria / remuneracaoTotalResumo) - (100 / 100);
+        percentualMAtrizRef = aux * 100;
+
+        $("#totalCategoria").val(resumoValorUnitarioCategoria);
+        $("#valorPostoBdi").val(percentualBdiTotal);
+        $("#valorPostoBdiPercentual").val(FormulaBdi);
+        $("#valorUnitarioCategoria").val(valorUnitarioCategoria);
+        $('#percentualMatrizReferencial').val(percentualMAtrizRef);
+        
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
         row.append($('<td class="text-left">' + "Total Categoria: " + '</td>'));
         row.append($('<td class="text-center">' + "R$ " + parseBRL(resumoValorUnitarioCategoria, 2) + '</td>'));
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
-        row.append($('<td class="text-left">' + "BDI: " + totalBdi + " %" + '</td>')); //+ "M:" + contaMarcello 
+        row.append($('<td class="text-left">' + "BDI: " + FormulaBdi + " %" + '</td>')); //+ "M:" + contaMarcello 
         row.append($('<td class="text-center">' + "R$ " + parseBRL(percentualBdiTotal, 2) + '</td>'));
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
@@ -1915,6 +1961,34 @@ include("inc/scripts.php");
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
         row.append($('<td class="text-left"><b>' + "PERCENTUAL SOBRE A MATRIZ REFERENCIAL: " + '</b></td>'));
-        row.append($('<td class="text-center"><b>' + parseBRL(a) + " %" + '</b></td>'));
+        row.append($('<td class="text-center"><b>' + parseBRL(percentualMAtrizRef) + " %" + '</b></td>'));
+    }
+    //inicio Recuperação dados de cada tabela basica
+    function recuperarDadosBdi() {
+        var bdi = $("#bdi").val()
+        recuperaDadosBdi(bdi,
+            function(data) {
+                var atributoId = '#' + 'estoqueDestino';
+                if (data.indexOf('failed') > -1) {
+                    smartAlert("Aviso", "Erro ao buscar bdi!", "info");
+                    $("#bdi").focus()
+                    $("#bdiPercentual").val("")
+                    // $("#bditi").prop("disabled", true)
+                    // $("#estoqueDestino").addClass("readonly")
+                    return;
+                } else {
+                    $("#bdi").prop("disabled", false)
+                    $("#bdi").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    var mensagem = piece[0];
+                    var registros = piece[1].split("^");
+                    var percentual = registros[2];
+                    var tipo = registros[3];
+                    $("#bdiPercentual").val(percentual);
+                    $("#bdiTipo").val(tipo);
+                }
+            }
+        );
     }
 </script>

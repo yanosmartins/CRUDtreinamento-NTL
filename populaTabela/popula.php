@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 function populaMes()
 {
@@ -305,7 +305,7 @@ END;
 
 function populaTipoDiaUtil()
 {
-     //Mes corrente retirado devido a falta de uso por parte da ntl temporariamente.
+    //Mes corrente retirado devido a falta de uso por parte da ntl temporariamente.
     // <option value='4' selected>Mês Corrente</option> 
     return <<<END
             <option value="" style="display:none;">Selecione</option>
@@ -414,4 +414,14 @@ function populaAnoPonto()
     }
 
     return $string;
+}
+
+function populaBdi()
+{
+    return <<<END
+            <option></option>
+            <option value="I">Imposto</option>
+            <option value="L">Lucro</option>
+            <option value="C">Custo</option>
+END;
 }
