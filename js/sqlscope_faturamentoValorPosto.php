@@ -78,6 +78,45 @@ function gravaValorPosto()
     $xmlJsonRemuneracao = "'" . $xmlJsonRemuneracao . "'";
     //Fim do Json Remuneracao
 
+    // Inicio do Json Remuneracao Percentual 
+
+    $strJsonRemuneracaoPercentual = $valorPosto["jsonRemuneracaoPercentual"];
+    $arrayJsonRemuneracaoPercentual = json_decode($strJsonRemuneracaoPercentual, true);
+    $xmlJsonRemuneracaoPercentual = "";
+    $nomeXml = "ArrayOfRemuneracaoPercentual";
+    $nomeTabela = "valorPostoRemuneracaoPercentual";
+    if (sizeof($arrayJsonRemuneracaoPercentual) > 0) {
+        $xmlJsonRemuneracaoPercentual = '<?xml version="1.0"?>';
+        $xmlJsonRemuneracaoPercentual = $xmlJsonRemuneracaoPercentual . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        foreach ($arrayJsonRemuneracaoPercentual as $chave) {
+            $xmlJsonRemuneracaoPercentual = $xmlJsonRemuneracaoPercentual . "<" . $nomeTabela . ">";
+            foreach ($chave as $campo => $valor) {
+                if (($campo === "sequencialRemuneracaoPercentual")) {
+                    continue;
+                }
+                if (($campo === "remuneracaoValorPercentual")) {
+                    $valor = virgulaParaPonto($valor);
+                }
+                $xmlJsonRemuneracaoPercentual = $xmlJsonRemuneracaoPercentual . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+            }
+            $xmlJsonRemuneracaoPercentual = $xmlJsonRemuneracaoPercentual . "</" . $nomeTabela . ">";
+        }
+        $xmlJsonRemuneracaoPercentual = $xmlJsonRemuneracaoPercentual . "</" . $nomeXml . ">";
+    } else {
+        $xmlJsonRemuneracaoPercentual = '<?xml version="1.0"?>';
+        $xmlJsonRemuneracaoPercentual = $xmlJsonRemuneracaoPercentual . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlJsonRemuneracaoPercentual = $xmlJsonRemuneracaoPercentual . "</" . $nomeXml . ">";
+    }
+    $xml = simplexml_load_string($xmlJsonRemuneracaoPercentual);
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML de telefone";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+    $xmlJsonRemuneracaoPercentual = "'" . $xmlJsonRemuneracaoPercentual . "'";
+
+    // Fim do Json Remuneracao Percentual
+
     //Inicio do Json Encargo
     $strJsonEncargo = $valorPosto["jsonEncargo"];
     $arrayJsonEncargo = json_decode($strJsonEncargo, true);
@@ -190,6 +229,7 @@ function gravaValorPosto()
         $ativo,
         $usuario,
         $xmlJsonRemuneracao,
+        $xmlJsonRemuneracaoPercentual,
         $xmlJsonEncargo,
         $xmlJsonInsumo,
         $xmlJsonBdi";
@@ -262,6 +302,42 @@ function recuperaValorPosto()
 
     $strArrayRemuneracao = json_encode($arrayRemuneracao);
     //------------------------Fim do Array remuneracao
+
+
+    // //----------------------Montando o array de remuneracao Percentual
+
+    $reposit = "";
+    $result = "";
+    $sql = "SELECT VP.codigo,VP.valorPosto,VP.remuneracao, R.descricao AS remuneracaoDescricao,VP.percentual
+    FROM faturamento.valorPostoRemuneracaoPercentual VP  
+    LEFT JOIN Ntl.remuneracao R ON R.codigo = VP.remuneracao
+    WHERE VP.valorPosto = $id";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $contadorRemuneracaoPercentual = 0;
+    $arrayRemuneracaoPercentual = array();
+    foreach ($result as $row) {
+        $remuneracaoIdPercentual = (int)$row['codigo'];
+        $remuneracaoPercentual = (int)$row['remuneracao'];
+        $remuneracaoDescricaoPercentual = (string)$row['remuneracaoDescricao'];
+        $percentualRemuneracao = (float)$row['percentual'];
+
+
+        $contadorRemuneracaoPercentual = $contadorRemuneracaoPercentual + 1;
+        $arrayRemuneracaoPercentual[] = array(
+            "sequencialRemuneracaoPercentual" => $contadorRemuneracaoPercentual,
+            "remuneracaoIdPercentual" => $remuneracaoIdPercentual,
+            "remuneracaoPercentual" => $remuneracaoPercentual,
+            "descricaoRemuneracaoPercentual" => $remuneracaoDescricaoPercentual,
+            "percentualRemuneracao" => $percentualRemuneracao,
+        );
+    }
+
+    $strArrayRemuneracaoPercentual = json_encode($arrayRemuneracaoPercentual);
+    //------------------------Fim do Array remuneracao Percentual
+
 
     // //----------------------Montando o array de Encargo
 
@@ -388,7 +464,7 @@ function recuperaValorPosto()
         return;
     }
 
-    echo "sucess#" . $out . "#" . $strArrayRemuneracao . "#" . $strArrayEncargo . "#" . $strArrayInsumo . "#" . $strArrayBdi;
+    echo "sucess#" . $out . "#" . $strArrayRemuneracao . "#" . $strArrayEncargo . "#" . $strArrayInsumo . "#" . $strArrayBdi . "#" . $strArrayRemuneracaoPercentual;
     return;
 }
 
