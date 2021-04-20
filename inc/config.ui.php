@@ -380,6 +380,10 @@ if ($condicaoFaturamentoOk) {
         if (in_array('VALORPOSTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['faturamento']['sub']['cadastro']['sub'] += array("projetoPosto" => array("title" => "Valor Posto", "url" => APP_URL . "/Faturamento_valorPostoFiltro.php"));
         }
+
+        if (in_array('VALORPOSTO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['faturamento']['sub']['cadastro']['sub'] += array("projetoPostoFechamento" => array("title" => "Fechamendo Valor Posto", "url" => APP_URL . "/Faturamento_valorPostoFechamentoFiltro.php"));
+        }
     }
 
 

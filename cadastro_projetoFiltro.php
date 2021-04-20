@@ -116,7 +116,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Busca por Data</label>
                                                                 <label class="select">
-                                                                    <select id="busca" name="ativo" class="required">
+                                                                    <select id="busca" name="ativo" class="">
                                                                         <option></option>
                                                                         <option value="A">Assinatura</option>
                                                                         <option value="R">Renovação</option>
@@ -127,14 +127,14 @@ include("inc/nav.php");
                                                                 <label class="label">Data inicial</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataInicial" name="dataInicial" type="text" data-dateformat="dd/mm/yy" class="datepicker required" required value="" data-mask="99/99/9999" data-mask-placeholder="_" autocomplete="off" onchange="validaData(this)">
+                                                                    <input id="dataInicial" name="dataInicial" type="text" data-dateformat="dd/mm/yy" class="datepicker "  value="" data-mask="99/99/9999" data-mask-placeholder="_" autocomplete="off" onchange="validaData(this)">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Data final</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataFinal" name="dataFinal" type="text" data-dateformat="dd/mm/yy" class="datepicker required" required value="" data-mask="99/99/9999" data-mask-placeholder="_" autocomplete="off" onchange="validaData(this)">
+                                                                    <input id="dataFinal" name="dataFinal" type="text" data-dateformat="dd/mm/yy" class="datepicker "  value="" data-mask="99/99/9999" data-mask-placeholder="_" autocomplete="off" onchange="validaData(this)">
                                                                 </label>
                                                             </section>
                                                         </div>

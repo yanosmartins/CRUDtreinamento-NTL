@@ -67,19 +67,19 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
-                                                        <!-- <div class="row ">
-                                                            <section class="col col-6">
-                                                                <label class="input">
+                                                        <!-- <div class="row "> -->
+                                                           <!-- <section class="col col-1">
+                                                              <label class="input">
                                                                     <input id="descricao" name="descricao" class="hidden" autocomplete="off" type="text" class="required" value="" required>
-                                                                </label>
-                                                            </section>
-                                                        </div> -->
+                                                                </label> 
+                                                            </section> -->
+                                                        <!-- </div>  -->
                                                         <!-- <div class="row "> -->
                                                         <!-- <section class="col col-1">
                                                             </section> -->
                                                         <!-- <section class="col col-6"> -->
                                                         <button>
-                                                            <a href=".php" class="btn btn-primary btn-xs disabled" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-clock-o fa-2x"></i><br> Bater Ponto</a>
+                                                            <a href=".php" class="btn btn-primary btn-xs disabled" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-clock-o fa-2x"></i><br> Bater Ponto </a>
                                                         </button>
                                                         <button>
                                                             <a href="funcionario_folhaPontoMensalCadastro.php" class="btn btn-primary btn-xs " id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-calendar fa-2x"></i><br>Ponto Mensal </a>
@@ -93,7 +93,7 @@ include("inc/nav.php");
                                                         <!-- </section> 
                                                             <section class="col col-5"> -->
                                                         <button>
-                                                            <a href="http://www.contrachequeweb.com.br/ntl/" target="_blank" class="btn btn-primary btn-xs" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa fa-money fa-2x"></i><br>contracheque</a>
+                                                            <a href="http://www.contrachequeweb.com.br/ntl/" target="_blank" class="btn btn-primary btn-xs" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid"><i class="fa fa fa-money fa-2x"></i><br>contracheque </a>
                                                         </button>
                                                         <button>
                                                             <a href="" class="btn btn-primary btn-xs disabled" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid" disabled><i class="fa fa fa-stethoscope fa-2x "></i><br>Consulta ASO</a>
