@@ -38,12 +38,15 @@ function grava()
     $codigo = (int)$_POST['id'];
     $descricao = "'" . $_POST['descricao'] . "'";
     $ativo = $_POST['ativo'];
+    $tipo = "'" . $_POST['tipo'] . "'";
+
 
     $sql = "Ntl.remuneracao_Atualiza
             $codigo,
             $descricao,
             $ativo,
-            $usuario";
+            $usuario,
+            $tipo";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -80,7 +83,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo,descricao,ativo FROM Ntl.remuneracao WHERE (0 = 0)";
+    $sql = "SELECT codigo,descricao,ativo,tipo FROM Ntl.remuneracao WHERE (0 = 0)";
 
     if ($condicaoId) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -96,8 +99,9 @@ function recupera()
         $id = (int)$row['codigo'];
         $descricao = $row['descricao'];
         $ativo = (int)$row['ativo'];
+        $tipo = $row['tipo'];
 
-        $out = $id . "^" . $descricao . "^" . $ativo;
+        $out = $id . "^" . $descricao . "^" . $ativo . "^" . $tipo;
 
         if ($out == "") {
             echo "failed#";

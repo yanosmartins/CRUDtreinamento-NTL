@@ -1,9 +1,9 @@
-function gravaRemuneracao(id, ativo, descricao, callback) {
+function gravaRemuneracao(id, ativo, descricao, tipo, callback) {
   $.ajax({
     url: 'js/sqlscope_tabelaBasicaRemuneracao.php',
     dataType: 'html', //tipo do retorno
     type: 'post', //metodo de envio
-    data: { funcao: 'grava', id: id, ativo: ativo, descricao: descricao },
+    data: { funcao: 'grava', id: id, ativo: ativo, descricao: descricao, tipo: tipo },
     success: function (data) {
       callback(data)
     },
