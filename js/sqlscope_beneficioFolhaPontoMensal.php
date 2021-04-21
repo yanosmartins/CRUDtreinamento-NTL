@@ -187,7 +187,7 @@ function recupera()
         }
 
         $observacao = trim($row['observacao']);
-        $status = trim($row['status']);
+        $status = (int)trim($row['status']);
         $toleranciaAtraso = trim($row['limiteAtraso']);
         $toleranciaExtra = trim($row['limiteExtra']);
 
@@ -279,7 +279,7 @@ function verificar(){
     $result = $reposit->RunQuery($sql);
     /* <-->Função destinada para consultar dados relacionados a página<--> */
     $row = $result[0];
-    $abonaAtraso = $row['abonaAtraso'];
+    $abonaAtraso = (int)$row['abonaAtraso'];
 
     /*<-->Espaço destinado ao envio de dados<-->*/
     $out = $abonaAtraso;
@@ -289,7 +289,7 @@ function verificar(){
         return;
     }
 
-    echo "sucess#" . "$out";
+    echo "sucess#" . "$out#";
     return;
 
 }

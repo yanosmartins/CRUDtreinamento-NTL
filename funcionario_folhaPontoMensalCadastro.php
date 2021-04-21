@@ -985,6 +985,7 @@ include("inc/scripts.php");
 
         recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
+
                 data = data.replace(/failed/gi, '');
                 var piece = data.split("#");
 
@@ -1593,14 +1594,17 @@ include("inc/scripts.php");
 
             abonarAtraso = piece[0];
 
+            let arrayFolha = $("#pointFieldGenerator select[name='lancamento']");
+
+            if (abonarAtraso == 1) {
+                arrayFolha.each((index, el) => {
+
+                    if ($(el).val() == lancamento)
+                        $("#atraso")[index].value = "00:00";
+                })
+            }
+
             return;
-        })
-
-        let arrayFolha = $("#pointFieldGenerator select[name='lancamento']");
-
-        arrayFolha.each((index, el) => {
-            if ($(el).val() == lancamento);
-                $("atraso")[index].value = "00:00";
         })
 
     }
