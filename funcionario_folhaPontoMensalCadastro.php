@@ -7,46 +7,46 @@ require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 
-$condicaoLeveAcessarOK = (in_array('PONTOELETRONICOMENSALLEVE_ACESSAR', $arrayPermissao, true));
-$condicaoLeveGravarOK = (in_array('PONTOELETRONICOMENSALLEVE_GRAVAR', $arrayPermissao, true));
-$condicaoLeveExcluirOK = (in_array('PONTOELETRONICOMENSALLEVE_EXCLUIR', $arrayPermissao, true));
+$condicaoMaximaAcessarOK = (in_array('PONTOELETRONICOMENSALMAXIMO_ACESSAR', $arrayPermissao, true));
+$condicaoMaximaGravarOK = (in_array('PONTOELETRONICOMENSALMAXIMO_GRAVAR', $arrayPermissao, true));
+$condicaoMaximaExcluirOK = (in_array('PONTOELETRONICOMENSALMAXIMO_EXCLUIR', $arrayPermissao, true));
 
-$condicaoNormalAcessarOK = (in_array('PONTOELETRONICOMENSALNORMAL_ACESSAR', $arrayPermissao, true));
-$condicaoNormalGravarOK = (in_array('PONTOELETRONICOMENSALNORMAL_GRAVAR', $arrayPermissao, true));
-$condicaoNormalExcluirOK = (in_array('PONTOELETRONICOMENSALNORMAL_EXCLUIR', $arrayPermissao, true));
+$condicaoModeradaAcessarOK = (in_array('PONTOELETRONICOMENSALMODERADO_ACESSAR', $arrayPermissao, true));
+$condicaoModeradaGravarOK = (in_array('PONTOELETRONICOMENSALMODERADO_GRAVAR', $arrayPermissao, true));
+$condicaoModeradaExcluirOK = (in_array('PONTOELETRONICOMENSALMODERADO_EXCLUIR', $arrayPermissao, true));
 
-$condicaoPesadaAcessarOK = (in_array('PONTOELETRONICOMENSALPESADA_ACESSAR', $arrayPermissao, true));
-$condicaoPesadaGravarOK = (in_array('PONTOELETRONICOMENSALPESADA_GRAVAR', $arrayPermissao, true));
-$condicaoPesadaExcluirOK = (in_array('PONTOELETRONICOMENSALPESADA_EXCLUIR', $arrayPermissao, true));
+$condicaoMinimaAcessarOK = (in_array('PONTOELETRONICOMENSALMINIMO_ACESSAR', $arrayPermissao, true));
+$condicaoMinimaGravarOK = (in_array('PONTOELETRONICOMENSALMINIMO_GRAVAR', $arrayPermissao, true));
+$condicaoMinimaExcluirOK = (in_array('PONTOELETRONICOMENSALMINIMO_EXCLUIR', $arrayPermissao, true));
 
 $esconderCampo = "";
-if ($condicaoPesadaGravarOK) {
-    $esconderCampoPesado = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
+if ($condicaoMinimaGravarOK) {
+    $esconderCampoMinimo = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
 }
-if ($condicaoNormalGravarOK) {
-    $esconderCampoNormal = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
+if ($condicaoModeradaGravarOK) {
+    $esconderCampoModerado = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
 }
-if ($condicaoLeveGravarOK) {
-    $esconderCampoPesado = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
-    $esconderCampoNormal = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
+if ($condicaoMaximaGravarOK) {
+    $esconderCampoMinimo = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
+    $esconderCampoModerado = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
 }
 
-if (($condicaoLeveAcessarOK == false) && ($condicaoNormalAcessarOK == false) && ($condicaoPesadaAcessarOK == false)) {
+if (($condicaoMaximaAcessarOK == false) && ($condicaoModeradaAcessarOK == false) && ($condicaoMinimaAcessarOK == false)) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
 
 $esconderBtnExcluir = "";
-if (($condicaoLeveExcluirOK == false) && ($condicaoNormalExcluirOK == false) && ($condicaoPesadaExcluirOK == false)) {
+if (($condicaoMaximaExcluirOK == false) && ($condicaoModeradaExcluirOK == false) && ($condicaoMinimaExcluirOK == false)) {
     $esconderBtnExcluir = "none";
 }
 
 $esconderBtnGravar = "";
-if (($condicaoNormalGravarOK == true) || ($condicaoPesadaGravarOK == true)) {
+if (($condicaoModeradaGravarOK == true) || ($condicaoMinimaGravarOK == true)) {
     $esconderBtnGravar = "none";
 }
 
-if ($condicaoLeveGravarOK == false) {
+if ($condicaoMaximaGravarOK == false) {
     $esconderBtnGravar = "none";
 }
 
@@ -126,17 +126,17 @@ include("inc/nav.php");
                                                                         <label class="select">
                                                                             <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:
                                                                             <?php
-                                                                            if ($esconderCampoPesado) {
-                                                                                echo $esconderCampoPesado['touch-action'];
-                                                                            } else if ($esconderCampoNormal) {
-                                                                                echo $esconderCampoNormal['touch-action'];
+                                                                            if ($esconderCampoMinimo) {
+                                                                                echo $esconderCampoMinimo['touch-action'];
+                                                                            } else if ($esconderCampoModerado) {
+                                                                                echo $esconderCampoModerado['touch-action'];
                                                                             }
                                                                             ?>;pointer-events:
                                                                             <?php
-                                                                            if ($esconderCampoPesado) {
-                                                                                echo $esconderCampoPesado['pointer-events'];
-                                                                            } else if ($esconderCampoNormal) {
-                                                                                echo $esconderCampoNormal['pointer-events'];
+                                                                            if ($esconderCampoMinimo) {
+                                                                                echo $esconderCampoMinimo['pointer-events'];
+                                                                            } else if ($esconderCampoModerado) {
+                                                                                echo $esconderCampoModerado['pointer-events'];
                                                                             }
                                                                             ?>">
                                                                                 <option></option>
@@ -167,10 +167,10 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label" for="mesAno">Mês/Ano</label>
                                                                         <label class="input">
-                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="<?= $esconderCampoPesado['readonly'] ?>" <?= $esconderCampoPesado['readonly'] ?> style="pointer-events:
-                                                                            <?= $esconderCampoPesado['pointer-events'] ?>;
+                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="<?= $esconderCampoMinimo['readonly'] ?>" <?= $esconderCampoMinimo['readonly'] ?> style="pointer-events:
+                                                                            <?= $esconderCampoMinimo['pointer-events'] ?>;
                                                                             touch-action:
-                                                                            <?= $esconderCampoPesado['touch-action'] ?>">
+                                                                            <?= $esconderCampoMinimo['touch-action'] ?>">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-2">
@@ -277,12 +277,12 @@ include("inc/nav.php");
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
                                                                             <input id="inputDia" name="inputDia" type="text" class="text-center form-control required 
                                                                             <?php
-                                                                            if ($esconderCampoPesado) {
-                                                                                echo $esconderCampoPesado['readonly'];
+                                                                            if ($esconderCampoMinimo) {
+                                                                                echo $esconderCampoMinimo['readonly'];
                                                                             }
                                                                             ?>" required data-autoclose="true" <?php
-                                                                                                                if ($esconderCampoPesado) {
-                                                                                                                    echo $esconderCampoPesado['readonly'];
+                                                                                                                if ($esconderCampoMinimo) {
+                                                                                                                    echo $esconderCampoMinimo['readonly'];
                                                                                                                 }
                                                                                                                 ?>>
                                                                         </div>
@@ -295,12 +295,12 @@ include("inc/nav.php");
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
                                                                             <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control 
                                                                             <?php
-                                                                            if ($esconderCampoPesado) {
-                                                                                echo $esconderCampoPesado['readonly'];
+                                                                            if ($esconderCampoMinimo) {
+                                                                                echo $esconderCampoMinimo['readonly'];
                                                                             }
                                                                             ?>" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" <?php
-                                                                                                                                                    if ($esconderCampoPesado) {
-                                                                                                                                                        echo $esconderCampoPesado['readonly'];
+                                                                                                                                                    if ($esconderCampoMinimo) {
+                                                                                                                                                        echo $esconderCampoMinimo['readonly'];
                                                                                                                                                     }
                                                                                                                                                     ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
@@ -314,12 +314,12 @@ include("inc/nav.php");
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
                                                                             <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control 
                                                                             <?php
-                                                                            if ($esconderCampoPesado) {
-                                                                                echo $esconderCampoPesado['readonly'];
+                                                                            if ($esconderCampoMinimo) {
+                                                                                echo $esconderCampoMinimo['readonly'];
                                                                             }
                                                                             ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php
-                                                                                                                                            if ($esconderCampoPesado) {
-                                                                                                                                                echo $esconderCampoPesado['readonly'];
+                                                                                                                                            if ($esconderCampoMinimo) {
+                                                                                                                                                echo $esconderCampoMinimo['readonly'];
                                                                                                                                             }
                                                                                                                                             ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
@@ -333,12 +333,12 @@ include("inc/nav.php");
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
                                                                             <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control 
                                                                             <?php
-                                                                            if ($esconderCampoPesado) {
-                                                                                echo $esconderCampoPesado['readonly'];
+                                                                            if ($esconderCampoMinimo) {
+                                                                                echo $esconderCampoMinimo['readonly'];
                                                                             }
                                                                             ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php
-                                                                                                                                            if ($esconderCampoPesado) {
-                                                                                                                                                echo $esconderCampoPesado['readonly'];
+                                                                                                                                            if ($esconderCampoMinimo) {
+                                                                                                                                                echo $esconderCampoMinimo['readonly'];
                                                                                                                                             }
                                                                                                                                             ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
@@ -352,12 +352,12 @@ include("inc/nav.php");
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
                                                                             <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control 
                                                                             <?php
-                                                                            if ($esconderCampoPesado) {
-                                                                                echo $esconderCampoPesado['readonly'];
+                                                                            if ($esconderCampoMinimo) {
+                                                                                echo $esconderCampoMinimo['readonly'];
                                                                             }
                                                                             ?>" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" <?php
-                                                                                                                                                    if ($esconderCampoPesado) {
-                                                                                                                                                        echo $esconderCampoPesado['readonly'];
+                                                                                                                                                    if ($esconderCampoMinimo) {
+                                                                                                                                                        echo $esconderCampoMinimo['readonly'];
                                                                                                                                                     }
                                                                                                                                                     ?>>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
@@ -371,7 +371,7 @@ include("inc/nav.php");
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
                                                                             <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control 
                                                                             <?php
-                                                                            if ($esconderCampoPesado) {
+                                                                            if ($esconderCampoMinimo) {
                                                                                 echo $esconderCampoPesado['readonly'];
                                                                             } ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php
                                                                                                                                                 if ($esconderCampoPesado) {
@@ -705,13 +705,13 @@ include("inc/scripts.php");
                 const parseHoraInicio = parse(inicioExpediente)
                 const parseHoraFim = parse(fimExpediente)
 
-                let jornadaNormal = duracao(inicioExpediente, fimExpediente);
+                let jornadaModerada = duracao(inicioExpediente, fimExpediente);
 
                 // quantidade de minutos efetivamente trabalhados
                 let jornada = duracao(horaEntrada, horaSaida);
 
                 // diferença entre as jornadas
-                let diff = Math.abs(jornada - jornadaNormal);
+                let diff = Math.abs(jornada - jornadaModerada);
 
                 if (diff != 0) {
                     let horas = Math.floor(diff / 60);
@@ -720,7 +720,7 @@ include("inc/scripts.php");
                     if (horas.toString().length < 2) horas = `0${horas}`;
                     if (minutos.toString().length < 2) minutos = `0${minutos}`;
 
-                    if (jornada > jornadaNormal) {
+                    if (jornada > jornadaModerada) {
                         if (!inputExtra)
                             inputExtra = (`${horas}:${minutos}`);
                     } else {
