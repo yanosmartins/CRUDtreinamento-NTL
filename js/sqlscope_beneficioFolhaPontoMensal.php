@@ -43,6 +43,7 @@ function grava()
     $funcionario = (int) $folhaPontoInfo['funcionario'];
     $observacao = "'" . (string)$folhaPontoInfo['observacao'] . "'";
     $ativo = (int) $folhaPontoInfo['ativo'];
+    $status = (int) $folhaPontoInfo['status'];
     $mesAno = (string) $folhaPontoInfo['mesAno'];
     $data = explode('-', $mesAno);
     $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
@@ -114,6 +115,7 @@ function grava()
         $funcionario,
         '$mesAno',
         $observacao,
+        $status,
         $usuario,
         $xmlFolhaPontoMensal
     ";
@@ -156,7 +158,7 @@ function recupera()
     }
 
     $sql =
-        "SELECT F.codigo, FU.codigo AS 'funcionario', F.mesAno, F.observacao, P.limiteEntrada AS 'limiteAtraso', P.limiteSaida AS 'limiteExtra'
+        "SELECT F.codigo, FU.codigo AS 'funcionario', F.mesAno, F.status, F.observacao, P.limiteEntrada AS 'limiteAtraso', P.limiteSaida AS 'limiteExtra'
         FROM Funcionario.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
         LEFT JOIN Ntl.beneficioProjeto BP ON FU.codigo = BP.funcionario 
@@ -181,6 +183,7 @@ function recupera()
         }
 
         $observacao = trim($row['observacao']);
+        $status = trim($row['status']);
         $toleranciaAtraso = trim($row['limiteAtraso']);
         $toleranciaExtra = trim($row['limiteExtra']);
 
@@ -190,7 +193,8 @@ function recupera()
             $observacao . "^" .
             $mesAno . "^" .
             $toleranciaAtraso . "^" .
-            $toleranciaExtra;
+            $toleranciaExtra. "^" .
+            $status;
     }
 
     if ($out == "") {
