@@ -251,8 +251,8 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="status">Status</label>
                                                                     <label class="select">
-                                                                        <select id="status" name="status" >
-                                                                        <option value="0" selected></option>
+                                                                        <select id="status" name="status">
+                                                                            <option value="0" selected></option>
                                                                             <?php
                                                                             $reposit = new reposit();
                                                                             $sql = "SELECT S.codigo,S.descricao from Ntl.status S  where S.ativo = 1 order by S.codigo";
@@ -260,8 +260,7 @@ include("inc/nav.php");
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $descricao = $row['descricao'];
-                                                                                    echo '<option value="' . $codigo . '">' . $descricao . '</option>';
-                                                                                
+                                                                                echo '<option value="' . $codigo . '">' . $descricao . '</option>';
                                                                             }
                                                                             ?>
                                                                         </select><i></i>
@@ -789,6 +788,8 @@ include("inc/scripts.php");
             saida.value = horaSaida;
             lancamento.value = inputLancamento;
 
+            abonarAtraso();
+
             return;
         });
 
@@ -922,7 +923,7 @@ include("inc/scripts.php");
             ativo: Number(ativo),
             funcionario: Number(funcionario),
             mesAno: String(mesAno),
-            status:Number(status),
+            status: Number(status),
             observacao: String(observacaoFolhaPontoMensal)
         }
 
@@ -1576,5 +1577,31 @@ include("inc/scripts.php");
         }
         const data = new Date(ano, mes, 0);
         return data.getDate();
+    }
+
+    function abonarAtraso() {
+        const lancamento = $("#inputLancamento").val();
+        let abonarAtraso = 0;
+
+        consultarDados(lancamento, function(data) {
+            data = data.replace(/failed/gi, '');
+            var piece = data.split("#");
+
+            var mensagem = piece[0];
+            var out = piece[1];
+            piece = out.split("^");
+
+            abonarAtraso = piece[0];
+
+            return;
+        })
+
+        let arrayFolha = $("#pointFieldGenerator select[name='lancamento']");
+
+        arrayFolha.each((index, el) => {
+            if ($(el).val() == lancamento);
+                $("atraso")[index].value = "00:00";
+        })
+
     }
 </script>

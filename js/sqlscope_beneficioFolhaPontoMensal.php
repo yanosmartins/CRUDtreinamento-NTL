@@ -17,6 +17,10 @@ if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'verificar') {
+    call_user_func($funcao);
+}
+
 return;
 
 function grava()
@@ -261,4 +265,31 @@ function excluir()
 
     echo 'sucess#' . $result;
     return;
+}
+
+function verificar(){
+    /*<-->Espaço destinada a variáveis ou funções utilitárias<-->*/
+    session_start();
+    $reposit = new reposit();
+    $lancamento = $_POST['lancamento'];
+    
+    $search = "abonaAtraso";
+    $table = "Ntl.lancamento";
+    $sql = "SELECT ". $search ." FROM ". $table ." WHERE codigo = ". $lancamento ."";
+    $result = $reposit->RunQuery($sql);
+    /* <-->Função destinada para consultar dados relacionados a página<--> */
+    $row = $result[0];
+    $abonaAtraso = $row['abonaAtraso'];
+
+    /*<-->Espaço destinado ao envio de dados<-->*/
+    $out = $abonaAtraso;
+
+    if ($out == "") {
+        echo "failed#" . "$out#";
+        return;
+    }
+
+    echo "sucess#" . "$out";
+    return;
+
 }
