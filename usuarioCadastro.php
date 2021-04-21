@@ -293,7 +293,7 @@ include("inc/scripts.php");
             rules: {
                 'login': {
                     required: true,
-                    maxlength: 15
+                    maxlength: 35
                 },
                 'senha': {
                     senhaRequerida: true,
@@ -311,7 +311,7 @@ include("inc/scripts.php");
             messages: {
                 'login': {
                     required: 'Informe o Login.',
-                    maxlength: 'Digite no máximo de 15 caracteres.',
+                    maxlength: 'Digite no máximo de 35 caracteres.',
                     minlength: 'Digite no mínimo 7 caracteres'
                 },
                 'senha': {
