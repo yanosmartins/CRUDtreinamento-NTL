@@ -94,7 +94,7 @@ class comum {
             return 3;
         }
 
-        if (strlen($login)>15){
+        if (strlen($login)>35){
             return 4;
         }
                 
