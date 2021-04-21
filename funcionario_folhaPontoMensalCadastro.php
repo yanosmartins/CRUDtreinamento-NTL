@@ -251,24 +251,20 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="status">Status</label>
                                                                     <label class="select">
-                                                                        <select id="status" name="status" class="readonly" readonly style="pointer-events: none; touch-action: none">
+                                                                        <select id="status" name="status" >
+                                                                        <option value="0" selected></option>
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "SELECT S.codigo,S.descricao from Funcionario.statusFolha S INNER JOIN Funcionario.folhaPontoMensal F ON S.codigo = F.status where S.ativo = 1 order by S.codigo";
+                                                                            $sql = "SELECT S.codigo,S.descricao from Ntl.status S  where S.ativo = 1 order by S.codigo";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
-                                                                                $horaInicio = $row['horaInicio'];
-                                                                                $horaFim = $row['horaFim'];
-                                                                                $funcionario = $row['funcionario'];
-                                                                                if ($funcionario == $_SESSION['funcionario']) {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                } else {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                }
+                                                                                $descricao = $row['descricao'];
+                                                                                    echo '<option value="' . $codigo . '">' . $descricao . '</option>';
+                                                                                
                                                                             }
                                                                             ?>
-                                                                        </select>
+                                                                        </select><i></i>
                                                                     </label>
                                                                 </section>
                                                             </div>
@@ -901,6 +897,7 @@ include("inc/scripts.php");
         var codigo = Number($("#codigo").val())
         var ativo = Number($("#ativo").val())
         var funcionario = Number($("#funcionario").val());
+        var status = Number($('#status').val());
 
         var mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
         var observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
@@ -925,6 +922,7 @@ include("inc/scripts.php");
             ativo: Number(ativo),
             funcionario: Number(funcionario),
             mesAno: String(mesAno),
+            status:Number(status),
             observacao: String(observacaoFolhaPontoMensal)
         }
 
@@ -1002,13 +1000,17 @@ include("inc/scripts.php");
                     var mesAnoFolhaPonto = piece[3];
                     toleranciaAtraso = piece[4] || '05:00';
                     toleranciaExtra = piece[5] || '05:00';
+                    var status = piece[6];
+
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
                     $("#observacaoFolhaPontoMensal").val(observacao);
                     $("#mesAno").val(mesAnoFolhaPonto);
+                    $("#status").val(status);
                 } else {
                     $("#codigo").val(0);
                     $("#observacaoFolhaPontoMensal").val("");
+                    $("#status").val(0);
                 }
 
                 //funcionando
@@ -1116,14 +1118,17 @@ include("inc/scripts.php");
                     var mesAnoFolhaPonto = piece[3];
                     toleranciaAtraso = piece[4] || '05:00';
                     toleranciaExtra = piece[5] || '05:00';
+                    var status = piece[6];
 
                     $("#codigo").val(codigo);
                     $("#funcionario").val(funcionario);
                     $("#observacaoFolhaPontoMensal").val(observacao);
                     $("#mesAno").val(mesAnoFolhaPonto);
+                    $("#status").val(status);
                 } else {
                     $("#codigo").val(0);
                     $("#observacaoFolhaPontoMensal").val("");
+                    $("#status").val(0);
                 }
 
                 deleteElements('#pointFieldGenerator .row');
