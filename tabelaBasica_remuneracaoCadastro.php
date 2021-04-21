@@ -4,6 +4,7 @@ require_once("inc/init.php");
 
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
+include_once("populaTabela/popula.php");
 
 $condicaoAcessarOK = (in_array('REMUNERACAO_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('REMUNERACAO_GRAVAR', $arrayPermissao, true));
@@ -96,6 +97,16 @@ include("inc/nav.php");
                                                                     <select id="ativo" name="ativo" class="required" required>
                                                                         <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="tipo">Tipo</label>
+                                                                <label class="select">
+                                                                    <select id="tipo" name="tipo" class="required">
+                                                                        <?php
+                                                                        echo populaTipoRemuneracao();
+                                                                        ?>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -273,11 +284,13 @@ include("inc/scripts.php");
                             var codigo = +piece[0];
                             var descricao = piece[1];
                             var ativo = +piece[2];
+                            var tipo = piece[3];
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
                             $("#descricao").val(descricao);
                             $("#ativo").val(ativo);
+                            $("#tipo").val(tipo);
 
                             return;
 
@@ -332,6 +345,7 @@ include("inc/scripts.php");
         var id = $('#codigo').val();
         var descricao = $('#descricao').val().trim().replace(/'/g, " ");
         var ativo = parseInt($('#ativo').val());
+        var tipo = $('#tipo').val();
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
@@ -340,8 +354,14 @@ include("inc/scripts.php");
             return;
         }
 
+        if (!tipo) {
+            smartAlert("Atenção", "Informe o Tipo", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
         //Chama a função de gravar do business de convênio de saúde.
-        gravaRemuneracao(id, ativo, descricao,
+        gravaRemuneracao(id, ativo, descricao, tipo,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");

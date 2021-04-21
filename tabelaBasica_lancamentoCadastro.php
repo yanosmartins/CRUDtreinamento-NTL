@@ -100,7 +100,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="faltaAusencia">Tipo de Desconto</label>
                                                                 <label class="select">
                                                                     <select id="faltaAusencia" name="faltaAusencia" class="required" required>
-                                                                        <option></option>
+                                                                        <option value='N'>Nenhum</option>
                                                                         <option value='F'>Falta</option>
                                                                         <option value='A'>Ausência</option>
                                                                         <option value='VT'>VT</option>
@@ -117,11 +117,39 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
+                                                        <div class="row">
+                                                            <section class="col col-1 col-auto">
+                                                                <label class="label" for="ativo">Abona atraso</label>
+                                                                <label class="select">
+                                                                    <select id="abonaAtraso" name="abonaAtraso" class="required" required>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0' selected>Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1 col-auto">
+                                                                <label class="label" for="ativo">Imprimir folha</label>
+                                                                <label class="select">
+                                                                    <select id="imprimeFolha" name="imprimeFolha" class="required" required>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0' selected>Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1 col-auto">
+                                                                <label class="label" for="ativo">Planilha Faturamento</label>
+                                                                <label class="select">
+                                                                    <select id="planilhaFaturamento" name="planilhaFaturamento" class="required" required>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='0' selected>Não</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                     <footer>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
@@ -293,12 +321,21 @@ include("inc/scripts.php");
                             var ativo = +piece[3];
                             var faltaAusencia = piece[4]
 
+                            var abonaAtraso = +piece[5]
+                            var imprimeFolha = +piece[6]
+                            var planilhaFaturamento = +piece[7]
+                            
+
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
                             $("#descricao").val(descricao);
                             $("#sigla").val(sigla);
                             $("#ativo").val(ativo);
                             $("#faltaAusencia").val(faltaAusencia);
+
+                            $("#abonaAtraso").val(abonaAtraso);
+                            $("#imprimeFolha").val(imprimeFolha);
+                            $("#planilhaFaturamento").val(planilhaFaturamento);
 
                             return;
 
@@ -356,6 +393,10 @@ include("inc/scripts.php");
         var ativo = +$('#ativo').val();
         var faltaAusencia = $('#faltaAusencia').val();
 
+        var abonaAtraso = +$('#abonaAtraso').val();
+        var imprimeFolha = +$('#imprimeFolha').val();
+        var planilhaFaturamento = +$('#planilhaFaturamento').val();
+
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
             smartAlert("Atenção", "Informe a descrição", "error");
@@ -369,15 +410,9 @@ include("inc/scripts.php");
             return;
         }
 
-        if (!faltaAusencia) {
-            smartAlert("Atenção", "Informe o tipo desconto", "error");
-            $("#btnGravar").prop('disabled', false);
-            return;
-        }
-
-
         //Chama a função de gravar do business de convênio de saúde.
-        gravaLancamento(id, ativo, descricao, sigla, faltaAusencia,
+        gravaLancamento(id, ativo, descricao, sigla, faltaAusencia, abonaAtraso, imprimeFolha, 
+                        planilhaFaturamento,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");

@@ -43,7 +43,10 @@ function grava()
     $descricao = "'" . $_POST['descricao'] . "'";
     $sigla = "'" . $_POST['sigla'] . "'";
     $ativo = $_POST['ativo'];
-    $faltaAusencia = $_POST['faltaAusencia'];
+    $faltaAusencia = "'" . $_POST['faltaAusencia'] . "'";
+    $abonaAtraso = $_POST['abonaAtraso'];
+    $imprimeFolha = $_POST['imprimeFolha'];
+    $planilhaFaturamento = $_POST['planilhaFaturamento'];
 
     $sql = "Ntl.lancamento_Atualiza
             $codigo,
@@ -51,7 +54,10 @@ function grava()
             $sigla,
             $descricao,
             $usuario,
-            $faltaAusencia";
+            $faltaAusencia,
+            $abonaAtraso,
+            $imprimeFolha,
+            $planilhaFaturamento";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -88,7 +94,8 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT codigo,descricao,sigla,ativo,tipoDesconto FROM Ntl.lancamento WHERE (0 = 0)";
+    $sql = "SELECT codigo,descricao,sigla,ativo,tipoDesconto, abonaAtraso, imprimeFolha, planilhaFaturamento
+            FROM Ntl.lancamento WHERE (0 = 0)";
 
     if ($condicaoId) {
         $sql = $sql . " AND codigo = " . $codigo . " ";
@@ -107,7 +114,12 @@ function recupera()
         $ativo = +$row['ativo'];
         $faltaAusencia = $row['tipoDesconto'];
 
-        $out = $id . "^" . $descricao . "^" . $sigla .  "^" . $ativo .  "^" . $faltaAusencia;
+        $abonaAtraso = +$row['abonaAtraso'];
+        $imprimeFolha = +$row['imprimeFolha'];
+        $planilhaFaturamento = +$row['planilhaFaturamento'];
+
+        $out = $id . "^" . $descricao . "^" . $sigla .  "^" . $ativo .  "^" . $faltaAusencia 
+                .  "^" . $abonaAtraso .  "^" . $imprimeFolha .  "^" . $planilhaFaturamento;
 
         if ($out == "") {
             echo "failed#";

@@ -425,3 +425,13 @@ function populaBdi()
             <option value="C">Custo</option>
 END;
 }
+
+function populaTipoRemuneracao()
+{
+    return <<<END
+            <option></option>
+            <option value="S">Salário</option>
+            <option value="A">Adicional</option>
+           
+END;
+}

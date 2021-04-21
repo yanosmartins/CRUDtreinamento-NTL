@@ -7,6 +7,7 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Descrição</th>
+                    <th class="text-left" style="min-width:35px;">Tipo</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
@@ -27,7 +28,7 @@ include "js/repositorio.php";
                     $where = $where . " AND ativo = $ativoFiltro";
                 }
 
-                $sql = "SELECT codigo,descricao,ativo FROM Ntl.remuneracao";
+                $sql = "SELECT codigo,descricao,ativo,tipo FROM Ntl.remuneracao";
                 $sql = $sql . $where;
 
                 $reposit = new reposit();
@@ -37,7 +38,12 @@ include "js/repositorio.php";
                     $id = (int) $row['codigo'];
                     $descricao = $row['descricao'];
                     $ativo = (int) $row['ativo'];
-
+                    $tipo = $row['tipo'];
+                    if($tipo == 'S'){
+                        $tipo = 'Salário';
+                    }else if($tipo == 'A'){
+                        $tipo = 'Adicional';
+                    }
                     //Modifica os valores booleanos por Sim e Não. 
                     //Ativo
                     if ($ativo == 1) {
@@ -48,6 +54,7 @@ include "js/repositorio.php";
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="tabelaBasica_remuneracaoCadastro.php?codigo=' . $id . '">' . $descricao . '</a></td>';
+                    echo '<td class="text-left">' . $tipo . '</td>';
                     echo '<td class="text-left">' . $descricaoAtivo . '</td>';
                     echo '</tr >';
                 }
