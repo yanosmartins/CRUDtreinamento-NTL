@@ -21,6 +21,9 @@ if ($funcao == 'recuperarDadosBdi') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'recuperarTipoRemuneracao') {
+    call_user_func($funcao);
+}
 
 return;
 
@@ -295,7 +298,7 @@ function recuperaValorPosto()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT VP.codigo,VP.valorPosto,VP.remuneracao, R.descricao AS remuneracaoDescricao,VP.valor
+    $sql = "SELECT VP.codigo,VP.valorPosto,VP.remuneracao, R.descricao AS remuneracaoDescricao,VP.valor,VP.tipo
     FROM faturamento.valorPostoRemuneracao VP  
     LEFT JOIN Ntl.remuneracao R ON R.codigo = VP.remuneracao
     WHERE VP.valorPosto = $id";
@@ -310,7 +313,7 @@ function recuperaValorPosto()
         $remuneracao = (int)$row['remuneracao'];
         $remuneracaoDescricao = (string)$row['remuneracaoDescricao'];
         $valor = number_format((float)$row['valor'], 2, ',', '.');
-
+        $remuneracaoTipo = (string)$row['tipo'];
 
         $contadorRemuneracao = $contadorRemuneracao + 1;
         $arrayRemuneracao[] = array(
@@ -319,6 +322,7 @@ function recuperaValorPosto()
             "remuneracao" => $remuneracao,
             "descricaoRemuneracao" => $remuneracaoDescricao,
             "remuneracaoValor" => $valor,
+            "remuneracaoTipo" => $remuneracaoTipo,
         );
     }
 
@@ -330,7 +334,7 @@ function recuperaValorPosto()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT VP.codigo,VP.valorPosto,VP.remuneracao, R.descricao AS remuneracaoDescricao,VP.percentual
+    $sql = "SELECT VP.codigo,VP.valorPosto,VP.remuneracao, R.descricao AS remuneracaoDescricao,VP.percentual,VP.tipo
     FROM faturamento.valorPostoRemuneracaoPercentual VP  
     LEFT JOIN Ntl.remuneracao R ON R.codigo = VP.remuneracao
     WHERE VP.valorPosto = $id";
@@ -345,7 +349,7 @@ function recuperaValorPosto()
         $remuneracaoPercentual = (int)$row['remuneracao'];
         $remuneracaoDescricaoPercentual = (string)$row['remuneracaoDescricao'];
         $percentualRemuneracao = (float)$row['percentual'];
-
+        $remuneracaoPercentualTipo = (string)$row['tipo'];
 
         $contadorRemuneracaoPercentual = $contadorRemuneracaoPercentual + 1;
         $arrayRemuneracaoPercentual[] = array(
@@ -354,6 +358,7 @@ function recuperaValorPosto()
             "remuneracaoPercentual" => $remuneracaoPercentual,
             "descricaoRemuneracaoPercentual" => $remuneracaoDescricaoPercentual,
             "percentualRemuneracao" => $percentualRemuneracao,
+            "remuneracaoPercentualTipo" => $remuneracaoPercentualTipo,
         );
     }
 
@@ -564,6 +569,44 @@ function recuperarDadosBdi()
     $out = $codigo . "^" .
         $descricao . "^" .
         $percentual . "^" .
+        $tipo;
+
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out;
+    return;
+}
+
+function recuperarTipoRemuneracao()
+{
+    if ((empty($_POST["remuneracao"])) || (!isset($_POST["remuneracao"])) || (is_null($_POST["remuneracao"]))) {
+        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    } else {
+        $remuneracao = (int)$_POST["remuneracao"];
+    }
+
+    $sql = "SELECT codigo, descricao, ativo, tipo
+    FROM Ntl.remuneracao
+    WHERE (0=0) AND
+    codigo = " . $remuneracao;
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $out = "";
+    if ($row = $result[0]) {
+        $codigo = (int)$row['codigo'];
+        $descricao = $row['descricao'];
+        $tipo = $row['tipo'];
+    }
+
+    $out = $codigo . "^" .
+        $descricao . "^" .
         $tipo;
 
     if ($out == "") {

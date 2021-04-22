@@ -86,14 +86,14 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <div class="row">
                                                             <input id="codigo" name="codigo" type="text" class="hidden">
-                                                          
+
                                                             <input id="situacao" name="situacao" type="hidden" value="">
                                                             <input id="valorPostoBdi" name="valorPostoBdi" type="hidden" value="">
                                                             <input id="valorPostoBdiPercentual" name="valorPostoBdiPercentual" type="hidden" value="">
                                                             <input id="totalCategoria" name="totalCategoria" type="hidden" value="">
                                                             <input id="valorUnitarioCategoria" name="valorUnitarioCategoria" type="hidden" value="">
                                                             <input id="percentualMatrizReferencial" name="percentualMatrizReferencial" type="hidden" value="">
-                                                            
+
                                                             <section class="col col-5">
                                                                 <label class="label">Projeto</label>
                                                                 <label class="select">
@@ -198,6 +198,16 @@ include("inc/nav.php");
                                                                             <input class="text-right decimal-2-casas" id="remuneracaoValor" name="remuneracaoValor" style="text-align: right;" type="text" autocomplete="off" maxlength="100" placeholder="0,00">
                                                                         </label>
                                                                     </section>
+                                                                    <section class="col col-2">
+                                                                        <label class="label " for="remuneracaoTipo">Tipo</label>
+                                                                        <label class="select ">
+                                                                            <select id="remuneracaoTipo" name="remuneracaoTipo" class="">
+                                                                                <?php
+                                                                                echo populaTipoRemuneracao();
+                                                                                ?>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
                                                                     <section class="col col-md-2">
                                                                         <label class="label">&nbsp;</label>
                                                                         <button id="btnAddRemuneracao" type="button" class="btn btn-primary">
@@ -259,6 +269,16 @@ include("inc/nav.php");
                                                                             <input id="percentualRemuneracao" name="percentualRemuneracao" style="text-align: right;" type="text" autocomplete="off" maxlength="100">
                                                                         </label>
                                                                     </section>
+                                                                    <section class="col col-2">
+                                                                        <label class="label " for="remuneracaoPercentualTipo">Tipo</label>
+                                                                        <label class="select ">
+                                                                            <select id="remuneracaoPercentualTipo" name="remuneracaoPercentualTipo" class="">
+                                                                                <?php
+                                                                                echo populaTipoRemuneracao();
+                                                                                ?>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
                                                                     <section class="col col-md-2">
                                                                         <label class="label">&nbsp;</label>
                                                                         <button id="btnAddRemuneracaoPercentual" type="button" class="btn btn-primary">
@@ -288,7 +308,6 @@ include("inc/nav.php");
                                                             <section class="col col-12">
                                                                 <legend>Encargos Percentuais</legend>
                                                             </section>
-                                                            <th class="text-center" style="min-width: 500%;">Descrição</th>
                                                         </div>
                                                         <input id="jsonEncargo" name="jsonEncargo" type="hidden" value="[]">
                                                         <div id="formEncargo" class="col-sm-12">
@@ -913,7 +932,6 @@ include("inc/scripts.php");
                 return;
             }
             addRemuneracao();
-            calculaValorRemuneracao()
         });
 
         $("#btnRemoverRemuneracao").on("click", function() {
@@ -921,7 +939,6 @@ include("inc/scripts.php");
         });
 
         // Percentual
-
         $("#btnAddRemuneracaoPercentual").on("click", function() {
             var remuneracaoPercentual = $("#remuneracaoPercentual").val();
             var percentualRemuneracao = $("#percentualRemuneracao").val();
@@ -987,6 +1004,14 @@ include("inc/scripts.php");
 
         $("#bdi").on("change", function() {
             recuperarDadosBdi();
+        });
+
+        $("#remuneracao").on("change", function() {
+            recuperarTipoRemuneracao(1);
+        });
+
+        $("#remuneracaoPercentual").on("change", function() {
+            recuperarTipoRemuneracao(2);
         });
 
         carregaPagina();
@@ -1323,7 +1348,6 @@ include("inc/scripts.php");
         }
     }
 
-
     function processDataInsumo(node) {
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
         var fieldName = node.getAttribute ? node.getAttribute('name') : '';
@@ -1362,8 +1386,6 @@ include("inc/scripts.php");
                 value: $("#insumo option:selected").text()
             };
         }
-
-
 
         if (fieldName !== '' && (fieldId === "insumoGrupo")) {
             var insumoGrupo = $("#insumoGrupo").val();
@@ -1564,6 +1586,7 @@ include("inc/scripts.php");
             $("#bdi").val(item.bdi);
             $("#bdiPercentual").val(item.bdiPercentual);
             $("#sequencialBdi").val(item.sequencialBdi);
+            $("#bdiTipo").val(item.bdiTipo);
         }
     }
 
@@ -1573,6 +1596,7 @@ include("inc/scripts.php");
         $("#remuneracaoId").val('');
         $("#sequencialRemuneracao").val('');
         $('#remuneracaoValor').val('');
+        $('#remuneracaoTipo').val('');
     }
 
     function addRemuneracao() {
@@ -1614,15 +1638,22 @@ include("inc/scripts.php");
 
     }
 
+    var salario;
+
     function fillTableRemuneracao() {
         $("#tableRemuneracao tbody").empty();
+        salario = 0;
         for (var i = 0; i < jsonRemuneracaoArray.length; i++) {
             var row = $('<tr />');
             $("#tableRemuneracao tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoArray[i].sequencialRemuneracao + '"><i></i></label></td>'));
             row.append($('<td class="text-left" onclick="carregaRemuneracao(' + jsonRemuneracaoArray[i].sequencialRemuneracao + ');">' + jsonRemuneracaoArray[i].descricaoRemuneracao + '</td>'));
             row.append($('<td class="text-center">' + 'R$ ' + parseBRL(unparseBRL(jsonRemuneracaoArray[i].remuneracaoValor), 2) + '</td>'));
+            if (jsonRemuneracaoArray[i].remuneracaoTipo == "S") {
+                salario += unparseBRL(jsonRemuneracaoArray[i].remuneracaoValor);
+            }
         }
+        calculaValorRemuneracao();
     }
 
 
@@ -1658,6 +1689,17 @@ include("inc/scripts.php");
                 value: remuneracaoValor
             };
         }
+
+        if (fieldName !== '' && (fieldId === "remuneracaoTipo")) {
+            var remuneracaoTipo = $("#remuneracaoTipo").val();
+            if (remuneracaoTipo !== '') {
+                fieldName = "remuneracaoTipo";
+            }
+            return {
+                name: fieldName,
+                value: remuneracaoTipo
+            };
+        }
         return false;
     }
 
@@ -1683,6 +1725,7 @@ include("inc/scripts.php");
             $("#remuneracao").val(item.remuneracao);
             $("#remuneracaoValor").val(item.remuneracaoValor);
             $("#sequencialRemuneracao").val(item.sequencialRemuneracao);
+            $("#remuneracaoTipo").val(item.remuneracaoTipo);
         }
     }
 
@@ -1711,6 +1754,7 @@ include("inc/scripts.php");
         $("#remuneracaoIdPercentual").val('');
         $("#sequencialRemuneracaoPercentual").val('');
         $('#percentualRemuneracao').val('');
+        $('#remuneracaoPercentualTipo').val('');
     }
 
     function addRemuneracaoPercentual() {
@@ -1796,6 +1840,17 @@ include("inc/scripts.php");
                 value: percentualRemuneracao
             };
         }
+
+        if (fieldName !== '' && (fieldId === "remuneracaoPercentualTipo")) {
+            var remuneracaoPercentualTipo = $("#remuneracaoPercentualTipo").val();
+            if (remuneracaoPercentualTipo !== '') {
+                fieldName = "remuneracaoPercentualTipo";
+            }
+            return {
+                name: fieldName,
+                value: remuneracaoPercentualTipo
+            };
+        }
         return false;
     }
 
@@ -1820,6 +1875,7 @@ include("inc/scripts.php");
             $("#remuneracaoPercentual").val(item.remuneracaoPercentual);
             $("#percentualRemuneracao").val(item.percentualRemuneracao);
             $("#sequencialRemuneracaoPercentual").val(item.sequencialRemuneracaoPercentual);
+            $("#remuneracaoPercentualTipo").val(item.remuneracaoPercentualTipo);
         }
     }
 
@@ -1945,7 +2001,7 @@ include("inc/scripts.php");
         $("#valorPostoBdiPercentual").val(FormulaBdi);
         $("#valorUnitarioCategoria").val(valorUnitarioCategoria);
         $('#percentualMatrizReferencial').val(percentualMAtrizRef);
-        
+
         var row = $('<tr/>');
         $("#tableResultadoGrupoModal tbody").append(row);
         row.append($('<td class="text-left">' + "Total Categoria: " + '</td>'));
@@ -1987,6 +2043,40 @@ include("inc/scripts.php");
                     var tipo = registros[3];
                     $("#bdiPercentual").val(percentual);
                     $("#bdiTipo").val(tipo);
+                }
+            }
+        );
+    }
+
+    function recuperarTipoRemuneracao(percentualOuValor) {
+        if(percentualOuValor == 1){
+            var remuneracao = $("#remuneracao").val()
+        }else if(percentualOuValor == 2){
+            var remuneracao = $("#remuneracaoPercentual").val()
+        }
+        recuperaTipoRemuneracao(remuneracao,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    smartAlert("Aviso", "Remuneração nao possui um tipo", "info");
+                    // $("#remuneracao").focus()
+                    // $("#remuneracao").val("")
+                    // $("#bditi").prop("disabled", true)
+                    // $("#estoqueDestino").addClass("readonly")
+                    return;
+                } else {
+                    $("#remuneracao").prop("disabled", false)
+                    $("#remuneracao").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    var mensagem = piece[0];
+                    var registros = piece[1].split("^");
+                    var tipo = registros[2];
+                    if (percentualOuValor == 1) {
+                        $("#remuneracaoTipo").val(tipo);
+                    }else if(percentualOuValor == 2){
+                        $("#remuneracaoPercentualTipo").val(tipo);
+                    }
+
                 }
             }
         );
