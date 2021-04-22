@@ -1585,6 +1585,8 @@ include("inc/scripts.php");
         let abonarAtraso = 0;
 
         consultarDados(lancamento, function(data) {
+
+            debugger
             data = data.replace(/failed/gi, '');
             var piece = data.split("#");
 
@@ -1600,7 +1602,7 @@ include("inc/scripts.php");
                 arrayFolha.each((index, el) => {
 
                     if ($(el).val() == lancamento)
-                        $("#atraso")[index].value = "00:00";
+                        $("input[name=atraso]")[index].value = "00:00";
                 })
             }
 
