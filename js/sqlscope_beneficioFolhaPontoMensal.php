@@ -271,7 +271,7 @@ function verificar(){
     /*<-->Espaço destinada a variáveis ou funções utilitárias<-->*/
     session_start();
     $reposit = new reposit();
-    $lancamento = $_POST['lancamento'];
+    $lancamento = $_POST['id'];
     
     $search = "abonaAtraso";
     $table = "Ntl.lancamento";
