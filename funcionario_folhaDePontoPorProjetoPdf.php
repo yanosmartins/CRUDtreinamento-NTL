@@ -42,7 +42,7 @@ class PDF extends FPDF
 $pdf = new PDF('P', 'mm', 'A4'); #Crio o PDF padrão RETRATO, Medida em Milímetro e papel A$
 $pdf->SetMargins(0, 0, 0); #Seta a Margin Esquerda com 20 milímetro, superrior com 20 milímetro e esquerda com 20 milímetros
 $pdf->SetDisplayMode('default', 'continuous'); #Digo que o PDF abrirá em tamanho PADRÃO e as páginas na exibição serão contínuas
-$pdf->SetFillColor(220, 220, 220);
+$pdf->SetFillColor(238, 238, 238);
 
 $strArrayProjeto = json_decode($_GET["strArrayProjeto"]);
 $length = count($strArrayProjeto);
@@ -118,8 +118,8 @@ for ($k = 0; $k < $length; $k++) {
         $horaFim = $row['horaFim'];
     }
 
-    $dataInicio = "$ano/$mes/01";
-    $dataFim = "$ano/$mes/$days";
+    $dataInicio = "$ano-$mes-01";
+    $dataFim = "$ano-$mes-$days";
 
     $sql2 = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
     FROM Ntl.feriado F 

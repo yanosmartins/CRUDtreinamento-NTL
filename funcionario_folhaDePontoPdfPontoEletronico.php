@@ -64,7 +64,7 @@ if ($row = $result[0]) {
     $horaInicio = $row['horaInicio'];
     $horaFim = $row['horaFim'];
     $apelido = $row['apelido'];
-    $estado = $row['estado'];
+    $estado = " ' " . $row['estado'] . " ' ";
     $cidade = $row['cidade'];
     $municipioFerias = $row['municipioFerias'];
     $cargo = $row['cargo'];
@@ -76,8 +76,8 @@ $dataFim = "$ano-$mes-$days";
 $sql = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
 FROM Ntl.feriado F 
 LEFT JOIN Ntl.municipio M ON M.codigo = F.municipio
-WHERE F.ativo = 1 AND data BETWEEN '2021-02-01' AND '2021-02-28'
-AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = 'RJ')) OR F.tipoFeriado = 2 and M.codigo = 1) 
+WHERE F.ativo = 1 AND data BETWEEN '$dataInicio' AND '$dataFim'
+AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = $estado)) OR F.tipoFeriado = 2 and M.codigo = $municipioFerias) 
 AND DATENAME(weekday,F.data) NOT IN ('Saturday', 'Sunday')";
 $result = $reposit->RunQuery($sql);
 
@@ -574,33 +574,49 @@ foreach ($ponto as $registro) {
                 $pdf->Cell(15, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
                 $pdf->setX(125.5);
                 $pdf->Cell(85, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                $pdf->setX(14);
-                $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
+                $pdf->setX(16);
+                $pdf->Cell(17, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
 
                 if ($registro['horaEntrada'] != "00:00:00") {
                     $pdf->SetFont('Arial', 'B', 8);
                     $pdf->setX(14);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['horaEntrada']), 0, 0, "C", 0); // ou isso
-                } else {
-                    $pdf->setX(14);
-                    $pdf->Cell(16, 6.61, iconv('UTF-8', 'windows-1252', "FERIADO"), 0, 0, "L", 1);
-                    $pdf->SetTextColor(0, 0, 0);
-                };
-                if ($registro['inicioAlmoco'] != "00:00:00") {
+                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['horaEntrada']), 0, 0, "C", 0); 
                     $pdf->SetFont('Arial', 'B', 8);
                     $pdf->setX(32.2);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['inicioAlmoco']), 0, 0, "C", 0); // ou isso
-                };
-                if ($registro['fimAlmoco'] != "00:00:00") {
+                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['inicioAlmoco']), 0, 0, "C", 0); 
                     $pdf->SetFont('Arial', 'B', 8);
                     $pdf->setX(49.2);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['fimAlmoco']), 0, 0, "C", 0); // ou isso
+                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['fimAlmoco']), 0, 0, "C", 0); 
+            
+                    if ($verificaHora == 1) {
+                        // POSSUI HORA EXTRA
+                        $pdf->SetFont('Arial', 'B', 8);
+                        $pdf->setX(66);
+                        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 0); // saida
+                        $pdf->setX(86.3);
+                        $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 1); // HORA EXTRA ENTRADA
+                        $pdf->setX(106);
+                        $pdf->Cell(20,  6.4, iconv('UTF-8', 'windows-1252', $registro['horaSaida']), 0, 0, "C", 1); // HORA EXTRA SAIDA
+                    } else {
+                        // NAO POSSUI HORA EXTRA
+                        $pdf->SetFont('Arial', 'B', 8);
+                        $pdf->setX(66);
+                        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['horaSaida']), 0, 0, "C", 0); // saida
+                        $pdf->setX(86.3);
+                        $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA ENTRADA
+                        $pdf->setX(105);
+                        $pdf->Cell(22,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA
                 };
-
-                if ($registro['horaSaida'] != "00:00:00") {
-                    $pdf->SetFont('Arial', 'B', 8);
-                    $pdf->setX(66, 5);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['horaSaida']), 0, 0, "C", 0); // ou isso
+                $pdf->setX(126.35);
+                $pdf->SetFont('Arial', 'B', 8);
+                $pdf->Cell(42.75, 6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 1); // descricao funcionario
+                $pdf->setX(169.35);
+                $pdf->Cell(35.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+            } else {
+                    $pdf->setX(17);
+                    $pdf->Cell(12, 6.31, iconv('UTF-8', 'windows-1252', "FERIADO"), 0, 0, "L", 0);
+                    $pdf->SetTextColor(0, 0, 0);
+                    //LOCALIZAR
                 };
             }
         }
