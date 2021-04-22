@@ -51,3 +51,19 @@ function recuperaDadosBdi(bdi, callback) {
 
     return;
 }
+
+function recuperaTipoRemuneracao(remuneracao, callback) {
+    $.ajax({
+        url: 'js/sqlscope_faturamentoValorPosto.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: 'recuperarTipoRemuneracao', remuneracao: remuneracao }, //valores enviados ao script     
+        async: false,
+        success: function (data) {
+            callback(data);
+        }
+
+    });
+
+    return;
+}

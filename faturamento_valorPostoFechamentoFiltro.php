@@ -90,7 +90,7 @@ include("inc/nav.php");
                                                         <section class="col col-4">
                                                             <label class="label" for="projeto">Projeto</label>
                                                             <label class="select">
-                                                                <select id="projeto" name="projeto">
+                                                                <select id="projeto" class="required" name="projeto">
                                                                     <option></option>
                                                                     <?php
                                                                     $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
@@ -112,7 +112,7 @@ include("inc/nav.php");
                                                         <section class="col col-4">
                                                             <label class="label" for="posto">Posto</label>
                                                             <label class="select">
-                                                                <select id="posto" name="posto">
+                                                                <select id="posto" class="required" name="posto">
                                                                     <option></option>
                                                                     <?php
                                                                     $sql =  "SELECT codigo,  descricao FROM Ntl.posto where ativo = 1 order by codigo";
