@@ -72,12 +72,12 @@ if ($row) {
 }
 
 
-$sql = "SELECT BP.codigo,BP.funcionario,BP.projeto,BP.horaEntrada,BP.horaSaida,BP.horaInicio,BP.horaFim,P.apelido,P.estado,P.cidade,P.municipioFerias,C.descricao
+$sql = "SELECT BP.codigo,BP.funcionario,BP.projeto,BP.horaEntrada,BP.horaSaida,BP.horaInicio,BP.horaFim,P.apelido,P.estado,P.cidade,P.municipioFerias,C.descricao,BP.ativo
 FROM Ntl.beneficioProjeto BP
 INNER JOIN Ntl.projeto P ON P.codigo = BP.projeto
 INNER JOIN Ntl.cargo C ON C.ativo = 1 
 INNER JOIN Ntl.funcionario F ON F.codigo = BP.funcionario
- WHERE BP.funcionario = $funcionario AND F.cargo = C.codigo";
+ WHERE BP.funcionario = $funcionario AND F.cargo = C.codigo AND BP.ativo = 1";
 $result = $reposit->RunQuery($sql);
 $row = $result[0];
 if ($row) {
