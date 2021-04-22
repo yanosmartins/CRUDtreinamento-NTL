@@ -252,7 +252,6 @@ include("inc/nav.php");
                                                                     <label class="label" for="status">Status</label>
                                                                     <label class="select">
                                                                         <select id="status" name="status">
-                                                                            <option value="0" selected></option>
                                                                             <?php
                                                                             $reposit = new reposit();
                                                                             $sql = "SELECT S.codigo,S.descricao from Ntl.status S  where S.ativo = 1 order by S.codigo";
@@ -260,7 +259,11 @@ include("inc/nav.php");
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $descricao = $row['descricao'];
-                                                                                echo '<option value="' . $codigo . '">' . $descricao . '</option>';
+                                                                                if($descricao == 'aberto'){
+                                                                                  echo '<option value="' . $codigo . '" selected>' . $descricao . '</option>';  
+                                                                                }else{
+                                                                                    echo '<option value="' . $codigo . '">' . $descricao . '</option>';  
+                                                                                }
                                                                             }
                                                                             ?>
                                                                         </select><i></i>
@@ -1586,7 +1589,6 @@ include("inc/scripts.php");
 
         consultarDados(lancamento, function(data) {
 
-            debugger
             data = data.replace(/failed/gi, '');
             var piece = data.split("#");
 
