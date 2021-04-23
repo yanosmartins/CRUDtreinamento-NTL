@@ -49,12 +49,13 @@ include "js/repositorio.php";
                     $ativo = (int)$row['ativo'];
                     $status = "";
                     $valor = "";
+                    $statusDescricao = 'PENDENTE';
 
                     echo '<tr>';
                     echo '<td class="text-left"><a href="faturamento_valorPostoCadastro.php?codigo=' . $codigo . '">'  . $nomeProjeto . '</a></td>';
                     echo '<td class="text-left">' . $nomePosto . '</td>';
                     echo '<td class="text-left">' . $valor . '</td>';
-                    echo '<td class="text-left">' . $status . '</td>';
+                    echo '<td class="text-left">' . $statusDescricao . '</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {
