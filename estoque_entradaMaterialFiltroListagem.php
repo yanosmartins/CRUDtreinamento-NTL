@@ -14,7 +14,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Número</th>
                     <th class="text-left" style="min-width:110px;">Data Emissão</th>
                     <th class="text-left" style="min-width:30px;">Valor Nota</th>
-                    <th class="text-left" style="min-width:30px;">Materiais</th>
+                    <th class="text-left" style="min-width:150px;">Materiais</th>
                     <th class="text-left" style="min-width:300px;">Estoque</th>
 
                 </tr>

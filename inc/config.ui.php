@@ -552,6 +552,9 @@ if ($condicaoEstoqueOk) {
         if (in_array('FORNECIMENTOMATERIAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['estoque']['sub']['operacao']['sub'] += array("fornecimentoMaterial" => array("title" => "Fornecimento Material", "url" => APP_URL . "/estoque_fornecimentoMaterialFiltro.php"));
         }
+        if (in_array('DEVOLUCAOMATERIAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['estoque']['sub']['operacao']['sub'] += array("devolucaoMaterial" => array("title" => "Devolução Material", "url" => APP_URL . "/estoque_devolucaoMaterialFiltro.php"));
+        }
 
     }
 
