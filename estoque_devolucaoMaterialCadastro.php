@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('FORNECIMENTOMATERIAL_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('FORNECIMENTOMATERIAL_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('FORNECIMENTOMATERIAL_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('DEVOLUCAOMATERIAL_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('DEVOLUCAOMATERIAL_GRAVAR', $arrayPermissao, true));
+
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,10 +20,6 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
 
 session_start();
 $id = $_SESSION['funcionario'];
@@ -32,7 +28,7 @@ $id = $_SESSION['funcionario'];
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Fornecimento Material";
+$page_title = "Devolução Material";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -44,7 +40,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['estoque']['sub']['operacao']['sub']['fornecimentoMaterial']["active"]  = true;
+$page_nav['estoque']['sub']['operacao']['sub']['devolucaoMaterial']["active"]  = true;
 
 include("inc/nav.php");
 ?>
@@ -68,7 +64,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Fornecimento Item</h2>
+                            <h2>Devolução Item</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -181,14 +177,7 @@ include("inc/nav.php");
                                                                 <section class="col col-6">
                                                                     <label class="label">Responsavel pelo Fornecimento</label>
                                                                     <label class="input">
-                                                                        <?php
-                                                                        $sql = "SELECT nome FROM Ntl.funcionario WHERE codigo = " . $id;
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        if ($row = $result[0]) {
-                                                                            $nome = "'" . $row['nome'] . "'";
-                                                                            echo "<input id='responsavelFornecimento' maxlength='255' name='responsavelFornecimento' class='readonly' type='select' value=" . $nome . " readonly>";
-                                                                        }
-                                                                        ?>
+                                                                        <input id='responsavelFornecimento' maxlength='255' name='responsavelFornecimento' class='readonly' type='select' value="" readonly>
                                                                     </label>
                                                                 </section>
                                                             </div>
@@ -212,19 +201,49 @@ include("inc/nav.php");
                                                     <fieldset>
 
                                                         <input id="jsonItem" name="jsonItem" type="hidden" value="[]">
+                                                        <input id="jsonItemDevolucao" name="jsonItemDevolucao" type="hidden" value="[]">
+                                                        <input id="jsonItemDevolucaoNovo" name="jsonItemDevolucaoNovo" type="hidden" value="[]">
                                                         <div id="formItem">
-                                                            <div class="row" id='linha1'>
+                                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
                                                                 <input id="ItemId" name="ItemId" type="hidden" value="">
                                                                 <input id="sequencialItem" name="sequencialItem" type="hidden" value="">
                                                                 <input id="unidadeMedidaId" name="unidadeMedidaId" type="hidden" value="">
                                                                 <input id="descricaoUnidadeMedida" name="descricaoUnidadeMedida" type="hidden" value="">
                                                                 <input id="situacaoId" name="situacaoId" type="hidden" value="">
-
+                                                                <input id="saldo" name="saldo" type="hidden" value="">
+                                                                <input id="quantidadeTemp" name="quantidadeTemp" type="hidden" value="">
+                                                                <input id="estoqueDestino" name="estoqueDestino" type="hidden" value="">
+                                                                <input id="data" name="data" type="hidden" value="">
+                                                                <input id="hora" name="hora" type="hidden" value="">
+                                                                <table id="tableItem" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                Código Material</th>
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                Material</th>
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                Unidade Medida</th>
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                Quantidade</th>
+                                                                            <th class="text-left" style="min-width: 10px;">
+                                                                                saldo</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody></tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="row" id='linha2'>
+                                                                <section class="col col-12">
+                                                                    <legend><strong>Devolução do Item</strong></legend>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row" id='linha1'>
                                                                 <section class="col col-2">
                                                                     <label class="label">Código Material</label>
                                                                     <label class="input">
                                                                         <input id="codigoItemId" name="codigoItemId" type="hidden" value="">
-                                                                        <input id="codigoItem" name="codigoItemFiltro" autocomplete="off" class="form-control required" placeholder="Digite o codigo..." type="text" value="">
+                                                                        <input id="codigoItem" name="codigoItemFiltro" autocomplete="off" class="form-control readonly" placeholder="Digite o codigo..." type="text" value="" readonly>
                                                                         <i class="icon-append fa fa-filter"></i>
                                                                     </label>
                                                                 </section>
@@ -232,41 +251,22 @@ include("inc/nav.php");
                                                                     <label class="label"> Descrição Item</label>
                                                                     <label class="input">
                                                                         <input id="descricaoItemId" name="descricaoItemId" type="hidden" value="">
-                                                                        <input id="descricaoItem" name="descricaoItemFiltro" autocomplete="off" class="form-control required" placeholder="Digite a descrição..." type="text" value="">
+                                                                        <input id="descricaoItem" name="descricaoItemFiltro" autocomplete="off" class="form-control readonly" readonly placeholder="Digite a descrição..." type="text" value="">
                                                                         <i class="icon-append fa fa-filter"></i>
                                                                     </label>
                                                                 </section>
                                                             </div>
-                                                            <div class="row" id='linha2'>
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Informação Item</strong></legend>
-                                                                </section>
-                                                            </div>
+
                                                             <div class="row" id='linha3'>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Quantiidade em estoque</label>
-                                                                    <label class="input">
-                                                                        <input id="quantidadeEstoque" name="quantidadeEstoque" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
-                                                                    </label>
-                                                                </section>
+
                                                                 <section class="col col-2">
                                                                     <label class="label">Quantiidade</label>
                                                                     <label class="input">
                                                                         <input id="quantidade" name="quantidade" maxlength="255" min="0" autocomplete="off" class="required" type="number" value="">
                                                                     </label>
                                                                 </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Quantiidade reservada</label>
-                                                                    <label class="input">
-                                                                        <input id="quantidadeReservada" name="quantidadeReservada" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Quantiidade fora de estoque</label>
-                                                                    <label class="input">
-                                                                        <input id="quantidadeForaEstoque" name="quantidadeForaEstoque" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
-                                                                    </label>
-                                                                </section>
+
+
                                                                 <section class="col col-2">
                                                                     <label class="label" for="unidade">Unidade Medida</label>
                                                                     <label class="select">
@@ -288,93 +288,72 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="situacao">Situação</label>
                                                                     <label class="select">
-                                                                        <select id="situacao" name="situacao" class="readonly" disabled>
+                                                                        <select id="situacao" name="situacao" class="required">
                                                                             <option></option>
                                                                             <option value="1">Disponível</option>
                                                                             <option value="2">Não Disponível</option>
-                                                                            <option value="3">Reservado</option>
-                                                                            <option value="4">Fornecido</option>
                                                                         </select><i></i>
                                                                 </section>
-                                                            </div>
-                                                            <div class="row" id='linha4'>
-                                                                <section class="col col-4">
-                                                                    <label class="label" for="unidadeDestino">Unidade Destino</label>
-                                                                    <label class="select">
-                                                                        <select id="unidadeDestino" name="unidadeDestino" class="required">
-                                                                            <option></option>
-                                                                            <?php
-                                                                            $sql =  "SELECT codigo, descricao FROM Ntl.unidade where ativo = 1 order by descricao";
-                                                                            $reposit = new reposit();
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            foreach ($result as $row) {
-                                                                                $codigo = $row['codigo'];
-                                                                                $descricao = ($row['descricao']);
-                                                                                echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
-                                                                            }
-                                                                            ?>
-                                                                        </select><i></i>
-                                                                </section>
-                                                                <section class="col col-4">
-                                                                    <label class="label" for="estoqueDestino">Estoque</label>
-                                                                    <label class="select">
-                                                                        <select id="estoqueDestino" name="estoqueDestino" class="required">
-                                                                            <option></option>
-                                                                            <?php
-                                                                            $sql =  "SELECT codigo, descricao FROM Estoque.estoque where ativo = 1 order by descricao";
-                                                                            $reposit = new reposit();
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            foreach ($result as $row) {
-                                                                                $codigo = $row['codigo'];
-                                                                                $descricao = ($row['descricao']);
-                                                                                echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
-                                                                            }
-                                                                            ?>
-                                                                        </select><i></i>
+                                                                <section class="col col-6">
+                                                                    <label class="label">Responsavel pelo Recebimento</label>
+                                                                    <label class="input">
+                                                                        <?php
+                                                                        $sql = "SELECT nome FROM Ntl.funcionario WHERE codigo = " . $id;
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        if ($row = $result[0]) {
+                                                                            $nome = "'" . $row['nome'] . "'";
+                                                                            echo "<input id='responsavelRecebimento' maxlength='255' name='responsavelRecebimento' class='readonly' type='select' value=" . $nome . " readonly>";
+                                                                        }
+                                                                        ?>
+                                                                    </label>
                                                                 </section>
                                                             </div>
 
-                                                            <div class="row" id='botoesTabela'>
-                                                                <section class="col col-4">
-                                                                    <button id="btnAddItem" type="button" class="btn btn-primary" title="Adicionar Item">
-                                                                        <i class="fa fa-plus"></i>
-                                                                    </button>
-                                                                    <button id="btnRemoverItem" type="button" class="btn btn-danger" title="Remover Item">
-                                                                        <i class="fa fa-minus"></i>
-                                                                    </button>
-                                                                </section>
-                                                            </div>
-                                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                <table id="tableItem" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                    <thead>
-                                                                        <tr role="row">
-                                                                            <th></th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Código Material</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Material</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Unidade Medida</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Unidade Destino</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Estoque</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Quantidade</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Situação</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody></tbody>
-                                                                </table>
-                                                            </div>
                                                         </div>
-                                                    </fieldset>
+
+                                                        <div class="row" id='botoesTabela'>
+                                                            <section class="col col-4">
+                                                                <button id="btnAddItem" type="button" class="btn btn-primary" title="Adicionar Item">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </button>
+                                                                <button id="btnRemoverItem" type="button" class="btn btn-danger" title="Remover Item">
+                                                                    <i class="fa fa-minus"></i>
+                                                                </button>
+                                                            </section>
+                                                        </div>
+                                                        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                            <table id="tableItemDevolucao" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                <thead>
+                                                                    <tr role="row">
+                                                                        <th></th>
+                                                                        <th class="text-left" style="min-width: 10px;">
+                                                                            Código Material</th>
+                                                                        <th class="text-left" style="min-width: 10px;">
+                                                                            Material</th>
+                                                                        <th class="text-left" style="min-width: 10px;">
+                                                                            Unidade Medida</th>
+                                                                        <th class="text-left" style="min-width: 10px;">
+                                                                            Quantidade</th>
+                                                                        <th class="text-left" style="min-width: 10px;">
+                                                                            Situação</th>
+                                                                        <th class="text-left" style="min-width: 10px;">
+                                                                            data</th>
+                                                                        <th class="text-left" style="min-width: 10px;">
+                                                                            hora</th>
+                                                                        <th class="text-left" style="min-width: 10px;">
+                                                                            Responsável Recebimento</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
                                                 </div>
+                                                </fieldset>
                                             </div>
                                         </div>
-                                        <footer>
-                                            <!-- <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                    </div>
+                                    <footer>
+                                        <!-- <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
                                                 <span class="fa fa-trash"></span>
                                             </button>
                                             <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
@@ -390,32 +369,30 @@ include("inc/nav.php");
                                                     </div>
                                                 </div>
                                             </div> -->
-                                            <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                                <span class="fa fa-floppy-o"></span>
-                                            </button>
-                                            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleGravar" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
-                                                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                    <span id="ui-id-2" class="ui-dialog-title">
-                                                    </span>
-                                                </div>
-                                                <div id="dlgSimpleGravar" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                    <p>INSIRA A SENHA DO SOlICITANTE PARA LIBERAÇÃO:</p>
-                                                    <section class="col col-12">
-                                                        <input id="senha" name="senha" maxlength="255" autocomplete="off" class="" type="password" value="" style="width:50%;">
-                                                    </section>
-                                                </div>
-                                                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                                    <div class="ui-dialog-buttonset">
-                                                    </div>
+                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <span class="fa fa-floppy-o"></span>
+                                        </button>
+                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleGravar" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                <span id="ui-id-2" class="ui-dialog-title">
+                                                </span>
+                                            </div>
+                                            <div id="dlgSimpleGravar" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                <p>INSIRA A SENHA DO SOlICITANTE PARA LIBERAÇÃO:</p>
+                                                <section class="col col-12">
+                                                    <input id="senha" name="senha" maxlength="255" autocomplete="off" class="" type="password" value="" style="width:50%;">
+                                                </section>
+                                            </div>
+                                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                <div class="ui-dialog-buttonset">
                                                 </div>
                                             </div>
-                                            <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                                <span class="fa fa-file-o"></span>
-                                            </button>
-                                            <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                                <span class="fa fa-backward "></span>
-                                            </button>
-                                        </footer>
+                                        </div>
+
+                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                            <span class="fa fa-backward "></span>
+                                        </button>
+                                    </footer>
                                 </form>
                             </div>
                         </div>
@@ -446,6 +423,7 @@ include("inc/scripts.php");
 
 
 <script src="<?php echo ASSETS_URL; ?>/js/business_fornecimentoMaterial.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_devolucaoMaterial.js" type="text/javascript"></script>
 
 
 <!-- PAGE RELATED PLUGIN(S) 
@@ -474,6 +452,8 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     jsonItemArray = JSON.parse($("#jsonItem").val());
+    jsonItemDevolucaoArray = JSON.parse($("#jsonItemDevolucao").val());
+    jsonItemDevolucaoNovoArray = JSON.parse($("#jsonItemDevolucaoNovo").val());
 
     $(document).ready(function() {
 
@@ -511,29 +491,29 @@ include("inc/scripts.php");
             }]
         });
 
-        $('#dlgSimpleGravar').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
-            buttons: [{
-                html: "Confirmar",
-                "class": "btn btn-success",
-                click: function() {
-                    $(this).dialog("close");
-                    doLogin();
-                    $('#senha').val('');
-                }
-            }, {
-                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                "class": "btn btn-default",
-                click: function() {
-                    $('#senha').val('');
-                    $(this).dialog("close");
-                }
-            }]
-        });
+        // $('#dlgSimpleGravar').dialog({
+        //     autoOpen: false,
+        //     width: 400,
+        //     resizable: false,
+        //     modal: true,
+        //     title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+        //     buttons: [{
+        //         html: "Confirmar",
+        //         "class": "btn btn-success",
+        //         click: function() {
+        //             $(this).dialog("close");
+        //             doLogin();
+        //             $('#senha').val('');
+        //         }
+        //     }, {
+        //         html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+        //         "class": "btn btn-default",
+        //         click: function() {
+        //             $('#senha').val('');
+        //             $(this).dialog("close");
+        //         }
+        //     }]
+        // });
 
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
@@ -551,19 +531,19 @@ include("inc/scripts.php");
 
         $("#btnGravar").on("click", function() {
             var id = +$("#codigo").val();
-            if (!validaCampos()) {
-                return;
-            }
-            $('#dlgSimpleGravar').dialog('open');
-            // gravar();
+            // if (!validaCampos()) {
+            //     return;
+            // }
+            // $('#dlgSimpleGravar').dialog('open');
+            gravar();
         });
 
         $("#quantidade").on("change", function() {
             let quantidade = parseInt($("#quantidade").val());
-            let quantidadeEstoque = parseInt($("#quantidadeEstoque").val());
-            if (quantidade > quantidadeEstoque) {
-                smartAlert("Atenção", "A quantidade não pode ser maior que a quantidade em estoque!", "error");
-                $("#quantidade").val("");
+            let saldo = parseInt($("#saldo").val());
+            if (quantidade > saldo) {
+                smartAlert("Atenção", "A quantidade não pode ser maior que o saldo!", "error");
+                $("#quantidade").val(saldo);
                 return;
             }
         });
@@ -588,110 +568,13 @@ include("inc/scripts.php");
             if (jsonItemArray.length != 0) {
                 for (i = jsonItemArray.length - 1; i >= 0; i--) {
                     jsonItemArray[i].situacaoId = $situacao;
-                    $("#jsonItem").val(JSON.stringify(jsonItemArray));
-
                 }
             }
             fillTableItem();
         });
 
-        // $("#estoqueDestino").on("change", function() {
-        //     recuperaQuantidade();
-        // });
 
-        $("#solicitante").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        maxRows: 12,
-                        funcao: "listaSolicitanteAtivoAutoComplete",
-                        descricaoIniciaCom: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                id: item.id,
-                                label: item.descricao,
-                                value: item.descricao,
-                                login: item.login,
-                                projeto: item.projeto,
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 3,
 
-            select: function(event, ui) {
-                $("#solicitanteId").val(ui.item.id);
-                $("#solicitanteFiltro").val(ui.item.nome);
-                $("#projeto").val(ui.item.projeto);
-                $("#login").val(ui.item.login);
-                var descricaoId = $("#solicitanteId").val();
-                $("#solicitante").val(descricaoId)
-                $("#solicitanteFiltro").val('');
-
-            },
-            change: function(event, ui) {
-                if (ui.item === null) {
-                    $("#solicitanteId").val('');
-                    $("#solicitanteFiltro").val('');
-                }
-            }
-        }).data("ui-autocomplete")._renderItem = function(ul, item) {
-            return $("<li>")
-                .append("<a>" + highlight(item.label, this.term) + "</a>")
-                .appendTo(ul);
-        };
-
-        $("#clienteFornecedor").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        maxRows: 12,
-                        funcao: "listaClienteFornecedorAtivoAutoComplete",
-                        descricaoIniciaCom: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                id: item.id,
-                                label: item.descricao,
-                                value: item.descricao,
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 3,
-
-            select: function(event, ui) {
-                $("#clienteFornecedorId").val(ui.item.id);
-                $("#clienteFornecedorFiltro").val(ui.item.nome);
-                var descricaoId = $("#clienteFornecedorId").val();
-                $("#clienteFornecedor").val(descricaoId)
-                $("#clienteFornecedorFiltro").val('');
-
-            },
-            change: function(event, ui) {
-                if (ui.item === null) {
-                    $("#clienteFornecedorId").val('');
-                    $("#clienteFornecedorFiltro").val('');
-                }
-            }
-        }).data("ui-autocomplete")._renderItem = function(ul, item) {
-            return $("<li>")
-                .append("<a>" + highlight(item.label, this.term) + "</a>")
-                .appendTo(ul);
-        };
 
         $("#codigoItem").autocomplete({
             source: function(request, response) {
@@ -830,7 +713,6 @@ include("inc/scripts.php");
 
 
                 $("#unidadeDestino").val(ui.item.unidade);
-                popularComboEstoque();
                 $("#estoqueDestino").val(ui.item.estoque);
 
                 $("#unidade").val(ui.item.unidadeItem);
@@ -871,31 +753,6 @@ include("inc/scripts.php");
         };
 
 
-        // $("#dataEntrega").on("change", function() {
-        //     var dataAtual = moment().format("DD/MM/YYYY");
-        //     var dataEntrega = $("#dataEntrega").val();
-
-        //     //Transformando em um objeto usando moment -> Data Atual
-        //     dataAtual = dataAtual.split("/");
-        //     dataAtual[1] = dataAtual[1] - 1;
-        //     dataAtual = moment([dataAtual[2], dataAtual[1], dataAtual[0]]);
-
-        //     //ransformando em um objeto usando moment -> Data Pregão
-        //     dataEntrega = dataEntrega.split("/");
-        //     dataEntrega[1] = dataEntrega[1] - 1;
-        //     dataEntrega = moment([dataEntrega[2], dataEntrega[1], dataEntrega[0]]);
-
-        //     var diferenca = dataAtual.diff(dataEntrega, 'days');
-
-        //     if (diferenca < 0) {
-        //         smartAlert("Atenção", "A data do pregão não pode ser maior do que o dia de hoje !", "error");
-        //         $("#dataEntrega").val(" ");
-        //         return;
-        //     }
-
-        // });
-
-
         $("#btnNovo").on("click", function() {
             novo();
         });
@@ -924,7 +781,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaEntradaItem(idd,
+                recuperaDevolucaoItem(idd,
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
@@ -932,6 +789,7 @@ include("inc/scripts.php");
                             var mensagem = piece[0];
                             var out = piece[1];
                             var strArrayItem = piece[2];
+                            var strArrayItemDevolucao = piece[3];
 
                             piece = out.split("^");
                             codigo = piece[0];
@@ -961,6 +819,7 @@ include("inc/scripts.php");
                             $("#solicitante").val(descricaoSolicitante);
                             $("#responsavelId").val(responsavelID);
                             $("#responsavel").val(descricaoResponsavel);
+                            $("#responsavelFornecimento").val(descricaoResponsavel);
                             $("#projeto").val(projeto);
                             $("#aprovado").val(aprovado);
                             $("#dataMovimento").val(dataCadastramento);
@@ -976,37 +835,22 @@ include("inc/scripts.php");
                             $("#solicitante").attr('disabled', true);
                             $("#projeto").addClass('readonly');
                             $("#projeto").attr('disabled', true);
+                            $("#aprovado").addClass('readonly');
+                            $("#aprovado").attr('disabled', true);
 
                             $("#sectionAprovado").attr('hidden', false);
 
-                            $("#linha1").addClass('hidden', true);
-                            $("#linha2").addClass('hidden', true);
-                            $("#linha3").addClass('hidden', true);
-                            $("#linha4").addClass('hidden', true);
-                            $("#botoesTabela").addClass('hidden', true);
-
                             $("#collapseItemEntrada").addClass('collapse in', true);
 
-                            if (aprovado == '0') {
-                                $("#btnGravar").attr('disabled', true);
-                                $("#btnExcluir").attr('disabled', true);
-                                $("#aprovado").addClass('readonly');
-                                $("#aprovado").attr('disabled', true);
-                            }
-                            if (aprovado == '1') {
-                                $("#btnGravar").attr('disabled', true);
-                                $("#btnExcluir").attr('disabled', true);
-                                $("#aprovado").addClass('readonly');
-                                $("#aprovado").attr('disabled', true);
-                            }
-
-                            $("#btnAddItem").attr('disabled', true);
-                            $("#btnRemoverItem").attr('disabled', true);
                             // $("#btnGravar").attr('disabled', true);
 
                             $("#jsonItem").val(strArrayItem);
                             jsonItemArray = JSON.parse($("#jsonItem").val());
                             fillTableItem();
+
+                            $("#jsonItemDevolucao").val(strArrayItemDevolucao);
+                            jsonItemDevolucaoArray = JSON.parse($("#jsonItemDevolucao").val());
+                            fillTableItemDevolucao();
 
                         }
                     }
@@ -1015,45 +859,29 @@ include("inc/scripts.php");
         }
     }
 
-    function popularComboEstoque() {
-        var unidadeDestino = $("#unidadeDestino").val()
-        populaComboEstoque(unidadeDestino,
-            function(data) {
-                var atributoId = '#' + 'estoqueDestino';
-                if (data.indexOf('failed') > -1) {
-                    smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
-                    $("#unidade").focus()
-                    $("#estoqueDestino").val("")
-                    $("#estoqueDestino").prop("disabled", true)
-                    $("#estoqueDestino").addClass("readonly")
-                    return;
-                } else {
-                    $("#estoqueDestino").prop("disabled", false)
-                    $("#estoqueDestino").removeClass("readonly")
-                    data = data.replace(/failed/g, '');
-                    var piece = data.split("#");
-
-                    var mensagem = piece[0];
-                    var qtdRegs = piece[1];
-                    var arrayRegistros = piece[2].split("|");
-                    var registro = "";
-
-                    $(atributoId).html('');
-                    $(atributoId).append('<option></option>');
-
-                    for (var i = 0; i < qtdRegs; i++) {
-                        registro = arrayRegistros[i].split("^");
-                        $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
-                    }
-                }
-            }
-        );
+    function voltar() {
+        $(location).attr('href', 'estoque_devolucaoMaterialFiltro.php');
     }
 
+    function novo() {
+        $(location).attr('href', 'estoque_devolucaoMaterialCadastro.php');
+    }
+
+    function excluir() {
+        var codigo = +$("#codigo").val();
+
+        if (codigo === 0) {
+            smartAlert("Atenção", "Selecione uma Entrada Material para excluir!", "error");
+            return;
+        }
+
+        excluirEntradaItem(codigo);
+    }
+
+
     function recuperaQuantidade() {
-        let idd = $("#codigoItemId").val();
-        let estoque = $("#estoqueDestino").val();
-        recuperaQuantidadeEstoque(idd, estoque,
+        let idd = $("#codigo").val();
+        recuperaQuantidadeEstoque(idd,
             function(data) {
                 if (data.indexOf('failed') > -1) {} else {
                     data = data.replace(/failed/g, '');
@@ -1071,46 +899,7 @@ include("inc/scripts.php");
         );
     }
 
-    function voltar() {
-        $(location).attr('href', 'estoque_fornecimentoMaterialFiltro.php');
-    }
 
-    function novo() {
-        $(location).attr('href', 'estoque_fornecimentoMaterialCadastro.php');
-    }
-
-    function excluir() {
-        var codigo = +$("#codigo").val();
-
-        if (codigo === 0) {
-            smartAlert("Atenção", "Selecione uma Entrada Material para excluir!", "error");
-            return;
-        }
-
-        excluirEntradaItem(codigo);
-    }
-
-    function recuperaDescricao() {
-        var idd = $("#codigoItem").val();
-        recuperaDescricaoCodigo(idd,
-            function(data) {
-                if (data.indexOf('failed') > -1) {} else {
-                    data = data.replace(/failed/g, '');
-                    var piece = data.split("#");
-                    var mensagem = piece[0];
-                    var out = piece[1];
-
-                    piece = out.split("^");
-                    codigo = piece[0];
-                    descricao = piece[1];
-
-                    $("#descricaoItem").val(descricao);
-                    $("#descricaoItemFiltro").val(codigo);
-
-                }
-            }
-        );
-    }
 
     //############################################################################## LISTA ITEM INICIO ####################################################################################################################
 
@@ -1119,7 +908,6 @@ include("inc/scripts.php");
         for (var i = 0; i < jsonItemArray.length; i++) {
             var row = $('<tr />');
             $("#tableItem tbody").append(row);
-            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonItemArray[i].sequencialItem + '"><i></i></label></td>'));
 
             var unidadeDestino = $("#unidadeDestino option[value = '" + jsonItemArray[i].unidadeDestino + "']").text();
             var estoqueDestino = $("#estoqueDestino option[value = '" + jsonItemArray[i].estoqueDestino + "']").text();
@@ -1127,21 +915,78 @@ include("inc/scripts.php");
 
             var codigo = $("#codigo").val();
 
-            if (codigo === "") {
-                row.append($('<td class="text-nowrap" onclick="carregaItem(' + jsonItemArray[i].sequencialItem + ');">' +
-                    jsonItemArray[i].codigoItemFiltro + '</td>'));
+            if (jsonItemArray[i].saldo == 0) {
+                row.append($('<td class="text-nowrap">' + jsonItemArray[i].codigoItemFiltro + '</td>'));
             } else {
-                row.append($('<td class="text-nowrap">' +
+                row.append($('<td class="text-nowrap" onclick="carregaItem(' + jsonItemArray[i].sequencialItem + ');">' +
                     jsonItemArray[i].codigoItemFiltro + '</td>'));
             }
 
+
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoItemFiltro + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoUnidadeMedida + '</td>'));
-            row.append($('<td class="text-nowrap">' + unidadeDestino + '</td>'));
-            row.append($('<td class="text-nowrap">' + estoqueDestino + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].quantidade + '</td>'));
-            row.append($('<td class="text-nowrap">' + situacao + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].saldo + '</td>'));
         }
+    }
+
+
+    function carregaItem(sequencialItem) {
+        var arr = jQuery.grep(jsonItemArray, function(item, i) {
+            return (item.sequencialItem === sequencialItem);
+        });
+
+        clearFormItem();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#codigoItem").val(item.codigoItemFiltro);
+            $("#descricaoItem").val(item.descricaoItemFiltro);
+            $("#codigoItemId").val(item.codigoItemId);
+            $("#descricaoItemId").val(item.descricaoItemId);
+            $("#quantidade").val(item.saldo);
+            $("#quantidadeTemp").val(item.quantidade);
+            $("#saldo").val(item.saldo);
+            $("#unidade").val(item.unidade);
+            $("#unidadeMedidaId").val(item.unidade);
+            $("#descricaoUnidadeMedida").val(item.descricaoUnidadeMedida);
+            $("#estoqueDestino").val(item.estoqueDestino);
+            // $("#sequencialItem").val(item.sequencialItem);
+
+        }
+    }
+
+    //############################################################################## LISTA ITEM FIM #######################################################################################################################
+    //############################################################################## LISTA ITEM DEVOLUCAO INICIO ####################################################################################################################
+
+    function fillTableItemDevolucao() {
+        $("#tableItemDevolucao tbody").empty();
+        for (var i = 0; i < jsonItemDevolucaoArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableItemDevolucao tbody").append(row);
+            if (jsonItemDevolucaoArray[i].recuperado == 1) {
+                row.append($('<td></td>'));
+            } else {
+                row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonItemDevolucaoArray[i].sequencialItem + '"><i></i></label></td>'));
+            }
+
+            var unidadeMedida = $("#unidadeMedida option[value = '" + jsonItemDevolucaoArray[i].descricaoUnidadeMedida + "']").text();
+            var situacao = $("#situacao option[value = '" + jsonItemDevolucaoArray[i].situacao + "']").text();
+
+            var codigo = $("#codigo").val();
+            var responsavelRecebimento = $("#responsavelRecebimento").val();
+
+            row.append($('<td class="text-nowrap">' + jsonItemDevolucaoArray[i].codigoItemFiltro + '</td>'));
+
+            row.append($('<td class="text-nowrap">' + jsonItemDevolucaoArray[i].descricaoItemFiltro + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemDevolucaoArray[i].descricaoUnidadeMedida + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemDevolucaoArray[i].quantidade + '</td>'));
+            row.append($('<td class="text-nowrap">' + situacao + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemDevolucaoArray[i].data + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemDevolucaoArray[i].hora + '</td>'));
+            row.append($('<td class="text-nowrap">' + responsavelRecebimento + '</td>'));
+        }
+        $('#sequencialItem').val("");
     }
 
     function validaItem() {
@@ -1184,62 +1029,85 @@ include("inc/scripts.php");
             smartAlert("Erro", "Informe a Situacao!", "error");
             return false;
         }
-        if (sequencialItem === '') {
-            for (i = jsonItemArray.length - 1; i >= 0; i--) {
-                if ((jsonItemArray[i].descricaoItemFiltro === descricaoItem) ||
-                    (jsonItemArray[i].descricaoItemFiltro === descricaoItem)) {
-                    achouData = true;
-                    break;
-                }
-            }
-        }
-        if (achouData === true) {
-            smartAlert("Erro", "Já existe este Item : (" + descricaoItem + ")", "error");
-            return false;
-        }
 
         return true;
     }
 
+    function verificaItem() {
+
+        var codigoItem = $('#codigoItem').val();
+        var situacao = $('#situacao').val();
+        var sequencialItem = $('#sequencialItem').val();
+
+        if (sequencialItem === '') {
+            for (i = jsonItemDevolucaoArray.length - 1; i >= 0; i--) {
+                if ((jsonItemDevolucaoArray[i].codigoItemFiltro == codigoItem) && (jsonItemDevolucaoArray[i].situacao == situacao)) {
+                    return jsonItemDevolucaoArray[i].sequencialItem;
+                }
+            }
+            return false;
+        }
+        return false;
+
+    }
+
     function addItem() {
 
-        validaItem();
+        var sequencialItem = verificaItem();
 
         var itemRecuperado = $("#itemRecuperado").val();
+
+        $("#data").val(moment().format("DD/MM/YYYY"));
+        $("#hora").val(moment().format("HH:mm:ss"));
 
         var item = $("#formItem").toObject({
             mode: 'combine',
             skipEmpty: false
         });
 
+        if (sequencialItem != false) {
+            item["sequencialItem"] = sequencialItem;
+        }
         if (item["sequencialItem"] === '') {
-            if (jsonItemArray.length === 0) {
+            if (jsonItemDevolucaoArray.length === 0) {
                 item["sequencialItem"] = 1;
             } else {
-                item["sequencialItem"] = Math.max.apply(Math, jsonItemArray.map(function(o) {
+                item["sequencialItem"] = Math.max.apply(Math, jsonItemDevolucaoArray.map(function(o) {
                     return o.sequencialItem;
                 })) + 1;
             }
             item["ItemId"] = 0;
         } else {
-            item["sequencialItem"] = +item["sequencialItem"];
+            item["sequencialItem"] = parseInt(item["sequencialItem"]) + 1;
         }
 
         var index = -1;
-        $.each(jsonItemArray, function(i, obj) {
+        $.each(jsonItemDevolucaoArray, function(i, obj) {
             if (+$('#sequencialItem').val() === obj.sequencialItem) {
                 index = i;
                 return false;
             }
         });
 
-        if (index >= 0)
-            jsonItemArray.splice(index, 1, item);
-        else
-            jsonItemArray.push(item);
+        if (index >= 0) {
+            jsonItemDevolucaoArray.splice(index, 1, item);
+            jsonItemDevolucaoNovoArray.push(item);
+        } else {
+            jsonItemDevolucaoArray.push(item);
+            jsonItemDevolucaoNovoArray.push(item);
+        }
 
-        $("#jsonItem").val(JSON.stringify(jsonItemArray));
+        $("#jsonItemDevolucao").val(JSON.stringify(jsonItemDevolucaoArray));
+        $("#jsonItemDevolucaoNovo").val(JSON.stringify(jsonItemDevolucaoNovoArray));
+
+        for (i = jsonItemArray.length - 1; i >= 0; i--) {
+            if (jsonItemArray[i].codigoItemFiltro === item["codigoItemFiltro"]) {
+                jsonItemArray[i].saldo = jsonItemArray[i].saldo - item["quantidade"];
+            }
+        }
+
         fillTableItem();
+        fillTableItemDevolucao();
         clearFormItem();
 
     }
@@ -1277,49 +1145,41 @@ include("inc/scripts.php");
         $("#sequencialItem").val('');
     }
 
-    function carregaItem(sequencialItem) {
-        var arr = jQuery.grep(jsonItemArray, function(item, i) {
-            return (item.sequencialItem === sequencialItem);
-        });
 
-        clearFormItem();
-
-        if (arr.length > 0) {
-            var item = arr[0];
-            $("#codigoItem").val(item.codigoItemFiltro);
-            $("#descricaoItem").val(item.descricaoItemFiltro);
-            $("#codigoItemId").val(item.codigoItemId);
-            $("#descricaoItemId").val(item.descricaoItemId);
-            $("#quantidade").val(item.quantidade);
-            $("#unidadeDestino").val(item.unidadeDestino);
-            $("#estoqueDestino").val(item.estoqueDestino);
-            $("#unidade").val(item.unidadeMedidaId);
-            $("#situacao").val(item.situacao);
-            $("#sequencialItem").val(item.sequencialItem);
-            recuperaQuantidade();
-        }
-    }
 
     function excluirItem() {
         var arrSequencial = [];
-        $('#tableItem input[type=checkbox]:checked').each(function() {
+        $('#tableItemDevolucao input[type=checkbox]:checked').each(function() {
             arrSequencial.push(parseInt($(this).val()));
         });
         if (arrSequencial.length > 0) {
-            for (i = jsonItemArray.length - 1; i >= 0; i--) {
-                var obj = jsonItemArray[i];
+            for (i = jsonItemDevolucaoArray.length - 1; i >= 0; i--) {
+                var obj = jsonItemDevolucaoArray[i];
                 if (jQuery.inArray(obj.sequencialItem, arrSequencial) > -1) {
-                    jsonItemArray.splice(i, 1);
+                    for (x = jsonItemArray.length - 1; x >= 0; x--) {
+                        if ((jsonItemArray[x].codigoItemFiltro === jsonItemDevolucaoArray[i].codigoItemFiltro) && (jsonItemDevolucaoArray[i].recuperado != 1)) {
+                            jsonItemArray[x].saldo = parseInt(jsonItemArray[x].saldo) + parseInt(jsonItemDevolucaoArray[i].quantidade);
+                            var sequencialItem = jsonItemDevolucaoArray[i].sequencialItem;
+                        }
+                    }
+                    for (h = jsonItemDevolucaoNovoArray.length - 1; h >= 0; h--) {
+                        if (jsonItemDevolucaoNovoArray[h].sequencialItem == sequencialItem) {
+                            jsonItemDevolucaoNovoArray.splice(h, 1);
+                        }
+                    }
+                    jsonItemDevolucaoArray.splice(i, 1);
                 }
             }
 
-            $("#jsonItem").val(JSON.stringify(jsonItemArray));
+
+            $("#jsonItemDevolucao").val(JSON.stringify(jsonItemDevolucaoArray));
+            fillTableItemDevolucao();
             fillTableItem();
         } else
             smartAlert("Erro", "Selecione pelo menos uma informação para excluir.", "error");
     }
 
-    //############################################################################## LISTA Filho FIM #######################################################################################################################
+    //############################################################################## LISTA ITEM DEVOLUCAO FIM #######################################################################################################################
 
 
     function validaCampoData(campo) {
@@ -1392,6 +1252,6 @@ include("inc/scripts.php");
 
         var form = $('#formPedidoMaterial')[0];
         var formData = new FormData(form);
-        gravaPedidoMaterial(formData);
+        gravaDevolucaoMaterial(formData);
     }
 </script>
