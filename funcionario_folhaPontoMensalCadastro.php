@@ -371,15 +371,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">H.Extra</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control 
-                                                                            <?php
-                                                                            if ($esconderCampoMinimo) {
-                                                                                echo $esconderCampoPesado['readonly'];
-                                                                            } ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php
-                                                                                                                                                if ($esconderCampoPesado) {
-                                                                                                                                                    echo $esconderCampoPesado['readonly'];
-                                                                                                                                                }
-                                                                                                                                                ?>>
+                                                                            <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control readonly" placeholder="00:00" readonly data-autoclose="true" data-mask="99:99">
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -389,16 +381,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Atraso</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control 
-                                                                            <?php
-                                                                            if ($esconderCampoPesado) {
-                                                                                echo $esconderCampoPesado['readonly'];
-                                                                            }
-                                                                            ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php
-                                                                                                                                            if ($esconderCampoPesado) {
-                                                                                                                                                echo $esconderCampoPesado['readonly'];
-                                                                                                                                            }
-                                                                                                                                            ?>>
+                                                                            <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control readonly" placeholder="00:00" readonly data-autoclose="true" data-mask="99:99">
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -723,13 +706,9 @@ include("inc/scripts.php");
                     if (minutos.toString().length < 2) minutos = `0${minutos}`;
 
                     if (jornada > jornadaModerada) {
-                        if (!inputExtra)
                             inputExtra = (`${horas}:${minutos}`);
                     } else {
-                        if (!inputAtraso) {
-                            inputAtraso = (`${horas}:${minutos}`)
-                        }
-
+                            inputAtraso = (`${horas}:${minutos}`);
                     }
                 }
             }
