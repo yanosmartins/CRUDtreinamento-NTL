@@ -1302,10 +1302,8 @@ include("inc/nav.php");
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
-                                                                            $codigoBanco = mb_convert_encoding($row['codigoBanco'], 'UTF-8', 'HTML-ENTITIES');
-                                                                            $nomeBanco = mb_convert_encoding($row['nomeBanco'], 'UTF-8', 'HTML-ENTITIES');
-
-
+                                                                            $codigoBanco = $row['codigoBanco'];
+                                                                            $nomeBanco = $row['nomeBanco'];
                                                                             echo '<option value=' . $codigo . '>' . $codigoBanco . ' - ' . strtoupper($nomeBanco) . '</option>';
                                                                         }
                                                                         ?>
@@ -2866,7 +2864,7 @@ include("inc/scripts.php");
             $("#contaCorrente").removeAttr('disabled');
 
             $("#variacao").removeClass('readonly');
-            $("#variacao").addClass('required');
+            // $("#variacao").addClass('required'); 
             $("#variacao").removeAttr('disabled');
 
             $("#digitoContaBanco").removeClass('readonly');
