@@ -90,14 +90,14 @@ if ($row) {
     $cargo = $row['descricao'];
 }
 
-$dataInicio = "$ano/$mes/01";
-$dataFim = "$ano/$mes/$days";
+$dataInicio = "$ano-$mes-01";
+$dataFim = "$ano-$mes-$days";
 
 $sql2 = "SELECT F.codigo,F.descricao,F.tipoFeriado,F.municipio,M.descricao,F.unidadeFederacao,F.data,F.sabado,F.domingo 
 FROM Ntl.feriado F 
 LEFT JOIN Ntl.municipio M ON M.codigo = F.municipio
 WHERE F.ativo = 1 AND data BETWEEN '$dataInicio' AND '$dataFim'
-AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = '$estado')) OR F.tipoFeriado = 2 and M.codigo = $municipioFerias) 
+AND (F.tipoFeriado = 3 OR (F.tipoFeriado = 1 and (F.unidadeFederacao = $estado)) OR F.tipoFeriado = 2 and M.codigo = $municipioFerias) 
 AND DATENAME(weekday,F.data) NOT IN ('Saturday', 'Sunday')";
 $result2 = $reposit->RunQuery($sql2);
 $row2 = $result2[0];
@@ -142,7 +142,7 @@ class PDF extends FPDF
 
 
 $pdf = new PDF('P', 'mm', 'A4'); #Crio o PDF padrão RETRATO, Medida em Milímetro e papel A$
-$pdf->SetFillColor(220, 220, 220);
+$pdf->SetFillColor(238, 238, 238);
 $pdf->SetMargins(0, 0, 0); #Seta a Margin Esquerda com 20 milímetro, superrior com 20 milímetro e esquerda com 20 milímetros
 $pdf->SetDisplayMode('default', 'continuous'); #Digo que o PDF abrirá em tamanho PADRÃO e as páginas na exibição serão contínuas
 $pdf->AddPage();

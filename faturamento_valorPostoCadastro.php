@@ -235,7 +235,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-12">
-                                                                <legend>Remuneração Percentual</legend>
+                                                                <legend> Percentual sobre salário</legend>
                                                             </section>
                                                         </div>
                                                         <input id="jsonRemuneracaoPercentual" name="jsonRemuneracaoPercentual" type="hidden" value="[]">
@@ -953,7 +953,6 @@ include("inc/scripts.php");
                 return;
             }
             addRemuneracaoPercentual();
-            // calculaValorRemuneracaoPercentual()
         });
 
         $("#btnRemoverRemuneracaoPercentual").on("click", function() {
@@ -1131,9 +1130,8 @@ include("inc/scripts.php");
                             fillTableBdi();
                             $("#jsonRemuneracaoPercentual").val(strArrayRemuneracaoPercentual);
                             jsonRemuneracaoPercentualArray = JSON.parse($("#jsonRemuneracaoPercentual").val());
-                            fillTableRemuneracaoPercentual();
                             calculaValorRemuneracao();
-
+                            fillTableRemuneracaoPercentual();
                         }
                     }
                 );
@@ -1654,6 +1652,7 @@ include("inc/scripts.php");
             }
         }
         calculaValorRemuneracao();
+        calculaSalarioPercentualRemuneracao();
     }
 
 
@@ -1702,9 +1701,9 @@ include("inc/scripts.php");
         }
         return false;
     }
-
+    var valorTotalRemuneracao;
     function calculaValorRemuneracao() {
-        var valorTotalRemuneracao = 0;
+        valorTotalRemuneracao = 0;
         for (var i = 0; i < jsonRemuneracaoArray.length; i++) {
             var aux = jsonRemuneracaoArray[i].remuneracaoValor;
             aux = unparseBRL(aux);
@@ -1796,17 +1795,32 @@ include("inc/scripts.php");
 
     }
 
+    var totalRemuneracaoPercentual;
+
     function fillTableRemuneracaoPercentual() {
         $("#tableRemuneracaoPercentual tbody").empty();
+        totalRemuneracaoPercentual = 0;
         for (var i = 0; i < jsonRemuneracaoPercentualArray.length; i++) {
             var row = $('<tr />');
             $("#tableRemuneracaoPercentual tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonRemuneracaoPercentualArray[i].sequencialRemuneracaoPercentual + '"><i></i></label></td>'));
             row.append($('<td class="text-left" onclick="carregaRemuneracaoPercentual(' + jsonRemuneracaoPercentualArray[i].sequencialRemuneracaoPercentual + ');">' + jsonRemuneracaoPercentualArray[i].descricaoRemuneracaoPercentual + '</td>'));
             row.append($('<td class="text-center">' + parseBRL(jsonRemuneracaoPercentualArray[i].percentualRemuneracao) + ' %' + '</td>'));
+            totalRemuneracaoPercentual += +jsonRemuneracaoPercentualArray[i].percentualRemuneracao;
         }
+        calculaSalarioPercentualRemuneracao();
     }
 
+    function calculaSalarioPercentualRemuneracao() {
+        var salarioPercentualRemuneracao;
+        if (jsonRemuneracaoPercentualArray.length >= 1) {
+            salarioPercentualRemuneracao = (salario * (totalRemuneracaoPercentual / 100)) + valorTotalRemuneracao;
+            // $("#remuneracaoTotal").val(salarioPercentualRemuneracao.toFixed(2));
+            $('#remuneracaoTotal').val(salarioPercentualRemuneracao.toFixed(2).replace(".", ","));
+        }else{
+            calculaValorRemuneracao();
+        }
+    }
 
     function processDataRemuneracaoPercentual(node) {
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';
@@ -1852,15 +1866,6 @@ include("inc/scripts.php");
             };
         }
         return false;
-    }
-
-    function calculaValorRemuneracaoPercentual() {
-        var valorTotalRemuneracao = 0;
-        for (var i = 0; i < jsonRemuneracaoPercentualArray.length; i++) {
-            var aux = jsonRemuneracaoPercentualArray[i].percentualRemuneracao;
-            aux = unparseBRL(aux);
-            valorTotalRemuneracao += parseFloat(aux);
-        }
     }
 
     function carregaRemuneracaoPercentual(sequencialRemuneracaoPercentual) {
@@ -2049,9 +2054,9 @@ include("inc/scripts.php");
     }
 
     function recuperarTipoRemuneracao(percentualOuValor) {
-        if(percentualOuValor == 1){
+        if (percentualOuValor == 1) {
             var remuneracao = $("#remuneracao").val()
-        }else if(percentualOuValor == 2){
+        } else if (percentualOuValor == 2) {
             var remuneracao = $("#remuneracaoPercentual").val()
         }
         recuperaTipoRemuneracao(remuneracao,
@@ -2073,7 +2078,7 @@ include("inc/scripts.php");
                     var tipo = registros[2];
                     if (percentualOuValor == 1) {
                         $("#remuneracaoTipo").val(tipo);
-                    }else if(percentualOuValor == 2){
+                    } else if (percentualOuValor == 2) {
                         $("#remuneracaoPercentualTipo").val(tipo);
                     }
 

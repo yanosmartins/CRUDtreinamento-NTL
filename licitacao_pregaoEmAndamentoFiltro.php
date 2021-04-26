@@ -133,12 +133,12 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <div class="row" id="pregaoDiv">
-                                                            <section class="col col-3">
-                                                                <label class="label" for="dataReabertura">Data da Reabertura do Pregão</label>
+                                                        <!-- hidden pois no dia 23/04 o filtro não fazia sentido pois já tem outra data além de não funcionar corretamente -->
+                                                                <label class="label hidden" for="dataReabertura">Data da Reabertura do Pregão</label>
                                                                 <label class="input">
-                                                                    <input id="dataReabertura" name="dataReabertura" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="off" placeholder="--/--/----">
-                                                                </label>
-                                                            </section>
+                                                                    <input class="hidden" id="dataReabertura" name="dataReabertura" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="off" placeholder="--/--/----">
+                                                                </label> 
+                                                         <!-- hidden Fim -->
                                                             <section class="col col-3">
                                                                 <label class="label" for="horaPregao">Hora do Pregão</label>
                                                                 <label class="input">

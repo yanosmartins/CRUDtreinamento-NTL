@@ -105,10 +105,15 @@ include("inc/nav.php");
                                                                     <input id="funcionario" name="funcionario" type="text" class="readonly" readonly>
                                                                 </label>
                                                             </section>
-
+                                                            <section class="col col-2">
+                                                                <label class="label">Data admissão</label>
+                                                                <label class="input">
+                                                                    <input id="dataAdmissao" name="dataAdmissao" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataAdmissao')">
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                         <div class="row">
-                                                            <section class="col col-10">
+                                                            <section class="col col-8">
                                                                 <label class="label" for="tipoContrato">Tipo de Contrato
                                                                     de Trabalho</label>
                                                                 <label class="select">
@@ -141,14 +146,9 @@ include("inc/nav.php");
                                                                     <input id="prazoDeterminado" name="prazoDeterminado" class="number required" value="" autocomplete="new-password" maxlength="3">
                                                                 </label>
                                                             </section>
+                                                           
                                                         </div>
                                                         <div class="row">
-                                                            <section class="col col-2">
-                                                                <label class="label">Data admissão</label>
-                                                                <label class="input">
-                                                                    <input id="dataAdmissao" name="dataAdmissao" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataAdmissao')">
-                                                                </label>
-                                                            </section>
                                                             <section class="col col-4">
                                                                 <label class="label" for="projeto">Projeto</label>
                                                                 <label class="select">
