@@ -500,7 +500,7 @@ foreach ($ponto as $registro) {
             }
             $pdf->setX(126.8);
             $pdf->SetFont('Arial', 'B', 8);
-            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 1);
+            $pdf->Cell(20,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 1);
             $pdf->setX(169.35);
             $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
             $pdf->SetFont('Arial', 'B', 8);
@@ -563,7 +563,11 @@ foreach ($ponto as $registro) {
 
         //Observacao
         $pdf->setX(126.8);
-        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, 0, 0); // Observacao
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 0);
+        $pdf->setX(169.35);
+        $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 8);
 
 
         foreach ($feriados as $feriado) {
