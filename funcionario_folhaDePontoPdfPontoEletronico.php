@@ -334,6 +334,7 @@ foreach ($ponto as $registro) {
 
 
     $expedienteSaida = $horaSaida . ":00";
+    $expedienteSaidaDois = $horaSaida . ":01";
     $saida = $horaSaida;
     $saidaExtra = $registro['horaSaida'];
     $hora1 = explode(":", $saida);
@@ -413,7 +414,7 @@ foreach ($ponto as $registro) {
                     $pdf->setX(66);
                     $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 0); // saida
                     $pdf->setX(86.3);
-                    $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 1); // HORA EXTRA ENTRADA
+                    $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $expedienteSaidaDois), 0, 0, "C", 1); // HORA EXTRA ENTRADA
                     $pdf->setX(106);
                     $pdf->Cell(20,  6.4, iconv('UTF-8', 'windows-1252', $registro['horaSaida']), 0, 0, "C", 1); // HORA EXTRA SAIDA
                 } else {
@@ -433,9 +434,9 @@ foreach ($ponto as $registro) {
                 $pdf->setX(105);
                 $pdf->Cell(21,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA FALTA JUSTIFICADA
             };
-            $pdf->setX(126.35);
+            $pdf->setX(126.8);
             $pdf->SetFont('Arial', 'B', 8);
-            $pdf->Cell(42.75, 6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 1); // descricao funcionario
+            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 1); // descricao funcionario
             $pdf->setX(169.35);
             $pdf->Cell(35.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
             $pdf->SetFont('Arial', 'B', 8);
@@ -477,7 +478,7 @@ foreach ($ponto as $registro) {
                     $pdf->setX(66);
                     $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 0); // saida
                     $pdf->setX(86.3);
-                    $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 1); // HORA EXTRA ENTRADA
+                    $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $expedienteSaidaDois), 0, 0, "C", 1); // HORA EXTRA ENTRADA
                     $pdf->setX(106.3);
                     $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $registro['horaSaida']), 0, 0, "C", 1); // HORA EXTRA SAIDA
                 } else {
@@ -497,9 +498,9 @@ foreach ($ponto as $registro) {
                 $pdf->setX(105);
                 $pdf->Cell(21,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA FALTA JUSTIFICADA
             }
-            $pdf->setX(126.35);
+            $pdf->setX(126.8);
             $pdf->SetFont('Arial', 'B', 8);
-            $pdf->Cell(42.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 1);
+            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 1);
             $pdf->setX(169.35);
             $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
             $pdf->SetFont('Arial', 'B', 8);
@@ -539,7 +540,7 @@ foreach ($ponto as $registro) {
                 $pdf->setX(66);
                 $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 0); // saida
                 $pdf->setX(86.3);
-                $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 1); // HORA EXTRA ENTRADA
+                $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $expedienteSaidaDois), 0, 0, "C", 1); // HORA EXTRA ENTRADA
                 $pdf->setX(106.2);
                 $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $registro['horaSaida']), 0, 0, "C", 1); // HORA EXTRA SAIDA
                 // \/ NÃO POSSUI HORA EXTRA \/
@@ -594,7 +595,7 @@ foreach ($ponto as $registro) {
                         $pdf->setX(66);
                         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 0); // saida
                         $pdf->setX(86.3);
-                        $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $expedienteSaida), 0, 0, "C", 1); // HORA EXTRA ENTRADA
+                        $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', $expedienteSaidaDois), 0, 0, "C", 1); // HORA EXTRA ENTRADA
                         $pdf->setX(106);
                         $pdf->Cell(20,  6.4, iconv('UTF-8', 'windows-1252', $registro['horaSaida']), 0, 0, "C", 1); // HORA EXTRA SAIDA
                     } else {
@@ -607,9 +608,9 @@ foreach ($ponto as $registro) {
                         $pdf->setX(105);
                         $pdf->Cell(22,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA
                 };
-                $pdf->setX(126.35);
+                $pdf->setX(126.8);
                 $pdf->SetFont('Arial', 'B', 8);
-                $pdf->Cell(42.75, 6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 1); // descricao funcionario
+                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricao']), 0, 0, "L", 1); // descricao funcionario
                 $pdf->setX(169.35);
                 $pdf->Cell(35.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
             } else {
