@@ -47,6 +47,51 @@ function grava()
     $abonaAtraso = $_POST['abonaAtraso'];
     $imprimeFolha = $_POST['imprimeFolha'];
     $planilhaFaturamento = $_POST['planilhaFaturamento'];
+    $strArrayProjeto = $_POST['jsonProjetoArray'];
+    $arrayProjeto = $strArrayProjeto;
+    if (!is_null($strArrayProjeto)) {
+        $xmlProjeto = "";
+        $nomeXml = "ArrayOfProjeto";
+        $nomeTabela = "lancamentoProjeto";
+        if (sizeof($arrayProjeto) > 0) {
+            $xmlProjeto = '<?xml version="1.0"?>';
+            $xmlProjeto = $xmlProjeto . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+
+            foreach ($arrayProjeto as $chave) {
+                $xmlProjeto = $xmlProjeto . "<" . $nomeTabela . ">";
+                foreach ($chave as $campo => $valor) {
+
+                    if (($campo === "sequencialProjeto")) {
+                        continue;
+                    }
+                    if (($campo === "descricaoProjeto")) {
+                        continue;
+                    }
+
+
+                    $xmlProjeto = $xmlProjeto . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+                }
+                $xmlProjeto = $xmlProjeto . "</" . $nomeTabela . ">";
+            }
+            $xmlProjeto = $xmlProjeto . "</" . $nomeXml . ">";
+        } else {
+            $xmlProjeto = '<?xml version="1.0"?>';
+            $xmlProjeto = $xmlProjeto . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+            $xmlProjeto = $xmlProjeto . "</" . $nomeXml . ">";
+        }
+
+        $xml = simplexml_load_string($xmlProjeto);
+
+        if ($xml === false) {
+            $mensagem = "Erro na criação do XML de Vale Transporte";
+            echo "failed#" . $mensagem . ' ';
+            return;
+        }
+        $xmlProjeto = "'" . $xmlProjeto . "'";
+    } else {
+
+        $xmlProjeto = "'" . '<?xml version="1.0"?>' . '<' . "ArrayOfProjeto" . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">' . "</ArrayOfTipoItem>" . "'";
+    }
 
     $sql = "Ntl.lancamento_Atualiza
             $codigo,
@@ -57,7 +102,8 @@ function grava()
             $faltaAusencia,
             $abonaAtraso,
             $imprimeFolha,
-            $planilhaFaturamento";
+            $planilhaFaturamento,
+            $xmlProjeto";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -118,6 +164,34 @@ function recupera()
         $imprimeFolha = +$row['imprimeFolha'];
         $planilhaFaturamento = +$row['planilhaFaturamento'];
 
+        $reposit = "";
+        $result = "";
+        $sql = "SELECT LP.codigo,LP.lancamento,LP.projeto,P.descricao AS 'descricaoProjeto' , L.codigo FROM ntl.lancamentoProjeto LP
+        INNER JOIN ntl.lancamento L ON LP.lancamento = L.codigo
+        INNER JOIN ntl.projeto P ON LP.projeto = P.codigo
+        WHERE L.ativo = 1 AND LP.lancamento = $codigo";
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+
+        $contadorProjeto = 0;
+        $arrayProjeto = array();
+        foreach ($result as $row) {
+            $projetoDescricao = (string)$row['descricaoProjeto'];
+            $projetoId = (int) $row['projeto'];
+
+            $contadorProjeto = $contadorProjeto + 1;
+            $arrayProjeto[] = array(
+                "sequencialProjeto" => $contadorProjeto,
+                "descricaoProjeto" => $projetoDescricao,
+                "projeto" => $projetoId,
+            );
+        }
+
+        $strArrayProjeto = json_encode($arrayProjeto);
+
+
+
+
         $out = $id . "^" . $descricao . "^" . $sigla .  "^" . $ativo .  "^" . $faltaAusencia 
                 .  "^" . $abonaAtraso .  "^" . $imprimeFolha .  "^" . $planilhaFaturamento;
 
@@ -125,7 +199,7 @@ function recupera()
             echo "failed#";
         }
         if ($out != '') {
-            echo "sucess#" . $out;
+            echo "sucess#" . $out . "#" .  $strArrayProjeto;
         }
         return;
     }
