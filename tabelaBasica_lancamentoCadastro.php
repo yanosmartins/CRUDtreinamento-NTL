@@ -137,7 +137,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1 col-auto">
-                                                                <label class="label" for="ativo">Planilha Faturamento</label>
+                                                                <label class="label" for="ativo">Planilha de Faturamento</label>
                                                                 <label class="select">
                                                                     <select id="planilhaFaturamento" name="planilhaFaturamento" class="required" required>
                                                                         <option value='1'>Sim</option>
@@ -145,6 +145,56 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                        </div>
+                                                        <input id="jsonProjeto" name="jsonProjeto" type="hidden" value="[]">
+                                                        <div id="formProjeto" class="col-sm-12">
+                                                            <input id="projetoId" name="projetoId" type="hidden" value="">
+                                                            <input id="sequencialProjeto" name="sequencialProjeto" type="hidden" value="">
+                                                            <input id="descricaoProjeto" name="descricaoProjeto" type="hidden" value="">
+                                                            <div class="form-group">
+                                                        <div class="row">
+                                                            <section class="col col-4">
+                                                                <label class="label">Projeto</label>
+                                                                <label class="select">
+                                                                    <select id="projeto" name="projeto">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql =  "SELECT codigo, descricao AS 'descricaoProjeto' FROM Ntl.projeto where ativo = 1 order by codigo";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricaoProjeto = ($row['descricaoProjeto']);
+                                                                            echo '<option value=' . $codigo . '>' . $descricaoProjeto . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-md-2">
+                                                                <label class="label">&nbsp;</label>
+                                                                <button id="btnAddProjeto" type="button" class="btn btn-primary">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </button>
+                                                                <button id="btnRemoverProjeto" type="button" class="btn btn-danger">
+                                                                    <i class="fa fa-minus"></i>
+                                                                </button>
+                                                            </section>
+
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableProjeto" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th style="width: 2px"></th>
+                                                                            <th class="text-center">Projeto</th>
+                                                                        
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -242,6 +292,7 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
+        jsonProjetoArray = JSON.parse($("#jsonProjeto").val());
 
         carregaPagina();
 
@@ -266,6 +317,21 @@ include("inc/scripts.php");
                     $(this).dialog("close");
                 }
             }]
+        });
+
+        $("#btnAddProjeto").on("click", function() {
+            var projeto = $("#projeto").val();
+
+            if (!projeto) {
+                smartAlert("Atenção", "Escolha um projeto", "error")
+                return;
+            }
+
+            addProjeto();
+        });
+
+        $("#btnRemoverProjeto").on("click", function() {
+            excluirProjeto();
         });
 
         $("#btnExcluir").on("click", function() {
@@ -312,6 +378,7 @@ include("inc/scripts.php");
                             var piece = data.split("#");
                             var mensagem = piece[0];
                             var out = piece[1];
+                            var $strArrayProjeto = piece[2];
                             piece = out.split("^");
 
                             // Atributos de vale transporte unitário que serão recuperados: 
@@ -324,7 +391,7 @@ include("inc/scripts.php");
                             var abonaAtraso = +piece[5]
                             var imprimeFolha = +piece[6]
                             var planilhaFaturamento = +piece[7]
-                            
+
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
@@ -336,6 +403,10 @@ include("inc/scripts.php");
                             $("#abonaAtraso").val(abonaAtraso);
                             $("#imprimeFolha").val(imprimeFolha);
                             $("#planilhaFaturamento").val(planilhaFaturamento);
+                            $("#jsonProjeto").val($strArrayProjeto);
+
+                            jsonProjetoArray = JSON.parse($("#jsonProjeto").val());
+                            fillTableProjeto();
 
                             return;
 
@@ -346,6 +417,8 @@ include("inc/scripts.php");
         }
         $("#descricao").focus();
     }
+
+
 
     function novo() {
         $(location).attr('href', 'tabelaBasica_lancamentoCadastro.php');
@@ -383,6 +456,117 @@ include("inc/scripts.php");
         );
     }
 
+    function clearFormProjeto() {
+        $("#projeto").val('');
+    }
+
+    function addProjeto() {
+        var item = $("#formProjeto").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataProjeto
+        });
+
+        if (item["sequencialProjeto"] === '') {
+            if (jsonProjetoArray.length === 0) {
+                item["sequencialProjeto"] = 1;
+            } else {
+                item["sequencialProjeto"] = Math.max.apply(Math, jsonProjetoArray.map(function(o) {
+                    return o.sequencialProjeto;
+                })) + 1;
+            }
+            item["projetoId"] = 0;
+        } else {
+            item["sequencialProjeto"] = +item["sequencialProjeto"];
+        }
+
+        var index = -1;
+        $.each(jsonProjetoArray, function(i, obj) {
+            if (+$('#sequencialProjeto').val() === obj.sequencialProjeto) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonProjetoArray.splice(index, 1, item);
+        else
+            jsonProjetoArray.push(item);
+
+        $("#jsonProjeto").val(JSON.stringify(jsonProjetoArray));
+        fillTableProjeto();
+        clearFormProjeto();
+
+    }
+
+    function fillTableProjeto() {
+        $("#tableProjeto tbody").empty();
+        for (var i = 0; i < jsonProjetoArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableProjeto tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonProjetoArray[i].sequencialProjeto + '"><i></i></label></td>'));
+            row.append($('<td class="text-center" onclick="carregaProjeto(' + jsonProjetoArray[i].sequencialProjeto + ');">' + jsonProjetoArray[i].descricaoProjeto + '</td>'));
+
+          
+        }
+    }
+    function processDataProjeto(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "projeto")) {
+            var projeto = $("#projeto").val();
+            if (projeto !== '') {
+                fieldName = "projeto";
+            }
+            return {
+                name: fieldName,
+                value: projeto
+            };
+        }
+
+          if (fieldName !== '' && (fieldId === "descricaoProjeto")) {
+            return {
+                name: fieldName,
+                value: $("#projeto option:selected").text()
+            };
+        }
+
+        return false;
+    }
+
+    function carregaProjeto(sequencialProjeto) {
+        var arr = jQuery.grep(jsonProjetoArray, function(item, i) {
+            return (item.sequencialProjeto === sequencialProjeto);
+        });
+
+        clearFormProjeto();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#projeto").val(item.projeto);
+            
+        }
+    }
+
+    function excluirProjeto() {
+        var arrSequencial = [];
+        $('#tableProjeto input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonProjetoArray.length - 1; i >= 0; i--) {
+                var obj = jsonProjetoArray[i];
+                if (jQuery.inArray(obj.sequencialProjeto, arrSequencial) > -1) {
+                    jsonProjetoArray.splice(i, 1);
+                }
+            }
+            $("#jsonProjeto").val(JSON.stringify(jsonProjetoArray));
+            fillTableProjeto();
+        } else
+            smartAlert("Erro", "Selecione pelo menos 1 Projeto para excluir.", "error");
+    }
+
     function gravar() {
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
@@ -396,6 +580,7 @@ include("inc/scripts.php");
         var abonaAtraso = +$('#abonaAtraso').val();
         var imprimeFolha = +$('#imprimeFolha').val();
         var planilhaFaturamento = +$('#planilhaFaturamento').val();
+        var jsonProjetoArray =  JSON.parse($("#jsonProjeto").val());
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
@@ -411,8 +596,8 @@ include("inc/scripts.php");
         }
 
         //Chama a função de gravar do business de convênio de saúde.
-        gravaLancamento(id, ativo, descricao, sigla, faltaAusencia, abonaAtraso, imprimeFolha, 
-                        planilhaFaturamento,
+        gravaLancamento(id, ativo, descricao, sigla, faltaAusencia, abonaAtraso, imprimeFolha,
+            planilhaFaturamento,jsonProjetoArray,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");

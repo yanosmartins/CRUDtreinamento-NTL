@@ -1,11 +1,11 @@
-function gravaLancamento(id, ativo, descricao, sigla,faltaAusencia,abonaAtraso,imprimeFolha,planilhaFaturamento, callback) {
+function gravaLancamento(id, ativo, descricao, sigla,faltaAusencia,abonaAtraso,imprimeFolha,planilhaFaturamento,jsonProjetoArray, callback) {
     $.ajax({
         url: 'js/sqlscope_tabelaBasicaLancamento.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: "grava", id:id, ativo:ativo, descricao:descricao, sigla:sigla,
                 faltaAusencia:faltaAusencia, abonaAtraso: abonaAtraso, 
-                imprimeFolha: imprimeFolha, planilhaFaturamento: planilhaFaturamento},   
+                imprimeFolha: imprimeFolha,planilhaFaturamento: planilhaFaturamento,jsonProjetoArray:jsonProjetoArray},   
         success: function (data) {
         callback(data);
         } 

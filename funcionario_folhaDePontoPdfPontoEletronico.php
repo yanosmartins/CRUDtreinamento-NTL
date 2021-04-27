@@ -577,8 +577,8 @@ foreach ($ponto as $registro) {
                 $pdf->Cell(30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
                 $pdf->Cell(120, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
                 $pdf->Cell(15, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                $pdf->setX(125.5);
-                $pdf->Cell(85, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                // $pdf->setX(125.5);
+                // $pdf->Cell(85, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
                 $pdf->setX(16);
                 $pdf->Cell(17, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
 
