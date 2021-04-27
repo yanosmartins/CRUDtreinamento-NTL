@@ -12,6 +12,7 @@ session_start();
 $login = $_SESSION['login'];
 $codigoLogin = $_SESSION['codigo'];
 $funcionario = $_SESSION['funcionario'];
+$projeto = $_SESSION['projeto'];
 $login = "'" . $login . "'";
 
 $arrayPermissao = array();

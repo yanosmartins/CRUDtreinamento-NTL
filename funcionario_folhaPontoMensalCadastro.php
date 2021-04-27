@@ -259,10 +259,10 @@ include("inc/nav.php");
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $descricao = $row['descricao'];
-                                                                                if($descricao == 'aberto'){
-                                                                                  echo '<option value="' . $codigo . '" selected>' . $descricao . '</option>';  
-                                                                                }else{
-                                                                                    echo '<option value="' . $codigo . '">' . $descricao . '</option>';  
+                                                                                if ($descricao == 'aberto') {
+                                                                                    echo '<option value="' . $codigo . '" selected>' . $descricao . '</option>';
+                                                                                } else {
+                                                                                    echo '<option value="' . $codigo . '">' . $descricao . '</option>';
                                                                                 }
                                                                             }
                                                                             ?>
@@ -412,7 +412,7 @@ include("inc/nav.php");
                                                                             <option selected value="0"></option>
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
+                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L INNER JOIN Ntl.lancamentoProjeto LP where L.ativo = 1 AND LP.projeto = ". $_SESSION['projeto'] ." order by L.descricao";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
@@ -481,7 +481,19 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                         <footer>
-
+                                            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimplePoint" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                    <span id="ui-id-2" class="ui-dialog-title">
+                                                    </span>
+                                                </div>
+                                                <div id="dlgSimplePoint" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                    <p>O dia selecionado é um final de semana.</p>
+                                                </div>
+                                                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                    <div class="ui-dialog-buttonset">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </footer>
                                 </form>
                             </div>
@@ -629,150 +641,58 @@ include("inc/scripts.php");
             }
         });
 
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function(title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimplePoint').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Confirmar",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    $('#dlgSimplePoint').css('display', 'none');
+                    addPoint();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                    return;
+                }
+            }]
+        });
+
         $("#btnAddPonto").on("click", function() {
 
-            var dia = $("#inputDia").val()
+            var dia = $("#inputDia").val();
+
+            let isWeekend = checkDay(dia);
+            if (isWeekend) {
+
+                $('#dlgSimplePoint').dialog('open');
+
+            } else {
+                addPoint();
+            }
 
             if (!dia) {
                 smartAlert('Atenção', 'Insira um dia para a inserção das horas', 'error')
                 return
             }
 
-            var index = dia - 1;
-
-            var entrada = $("#pointFieldGenerator [name=horaEntrada]")[index]
-            var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
-
-            var inicioAlmoco = $("#pointFieldGenerator [name=inicioAlmoco]")[index]
-            var inputInicioAlmoco = $("#inputInicioAlmoco").val() || '00:00:00'
-
-            var fimAlmoco = $("#pointFieldGenerator [name=fimAlmoco]")[index]
-            var inputFimAlmoco = $("#inputFimAlmoco").val() || '00:00:00'
-
-            var saida = $("#pointFieldGenerator [name=horaSaida]")[index]
-            var inputSaida = $("#inputHoraSaida").val() || '00:00:00'
-
-            var extra = $("#pointFieldGenerator [name=extra]")[index]
-            var inputExtra = $("#inputHoraExtra").val()
-
-            var atraso = $("#pointFieldGenerator [name=atraso]")[index]
-            var inputAtraso = $("#inputAtraso").val()
-
-            var lancamento = $("#pointFieldGenerator select[name=lancamento]")[index]
-
-            var inputLancamento = $("#inputLancamento").val()
-
-
-            //Preparação dos valores para cálculo e aleatorização dos minutos e segundos
-            let separador = $("#expediente option:selected").text();
-            if (!separador) {
-                separador = '00:00 - 00:00';
-            }
-            separador = separador.split("-");
-            separador[0] = separador[0].trim();
-            separador[1] = separador[1].trim();
-
-            if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
-            if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
-
-            const inicioExpediente = separador[0];
-            const fimExpediente = separador[1];
-
-            const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
-            const horaSaida = aleatorizarTempo(inputSaida, fimExpediente)
-
-
-
-            //Começo Cálculo de Hora Extra
-            if (horaSaida != "00:00:00") {
-                const parseHoraEntrada = parse(horaEntrada)
-                const parseHoraSaida = parse(horaSaida)
-                const parseHoraInicio = parse(inicioExpediente)
-                const parseHoraFim = parse(fimExpediente)
-
-                let jornadaModerada = duracao(inicioExpediente, fimExpediente);
-
-                // quantidade de minutos efetivamente trabalhados
-                let jornada = duracao(horaEntrada, horaSaida);
-
-                // diferença entre as jornadas
-                let diff = Math.abs(jornada - jornadaModerada);
-
-                if (diff != 0) {
-                    let horas = Math.floor(diff / 60);
-                    let minutos = diff - (horas * 60);
-
-                    if (horas.toString().length < 2) horas = `0${horas}`;
-                    if (minutos.toString().length < 2) minutos = `0${minutos}`;
-
-                    if (jornada > jornadaModerada) {
-                            inputExtra = (`${horas}:${minutos}`);
-                    } else {
-                            inputAtraso = (`${horas}:${minutos}`);
-                    }
-                }
-            }
-            //Fim Cálculo de Hora Extra
-            //Verificação de Atraso
-
-            separador = inputAtraso.split(':');
-            let h = Number(separador[0]);
-            let m = Number(separador[1]);
-
-            let separadorTolerancia = toleranciaAtraso.split(':');
-            let hTolerancia = Number(separadorTolerancia[0]);
-            let mTolerancia = Number(separadorTolerancia[1]);
-
-
-            //m <= tolerancia Atraso
-            if (m < mTolerancia && h == 0) {
-                inputAtraso = ""
-            }
-
-            //Fim da Verificação de Atraso
-
-            //Verificação de Extra
-            separador = inputExtra.split(':');
-            h = Number(separador[0]);
-            m = Number(separador[1]);
-
-            separadorTolerancia = toleranciaExtra.split(':');
-            hTolerancia = Number(separadorTolerancia[0]);
-            mTolerancia = Number(separadorTolerancia[1]);
-
-            //m <= tolerancia Extra
-            if (m <= mTolerancia && h == 0) {
-                inputExtra = ""
-            }
-
-            //Fim da Verificação de Extra
-
-            // Verificações antes de adicionar o ponto
-            if ((!inputEntrada || inputEntrada == "00:00:00") && !inputLancamento) {
-                smartAlert("Atenção", "A HORA DE ENTRADA deve ser preenchida", "error");
-                return
-            }
-
-            if (!inputExtra && horaSaida != "00:00:00") {
-                smartAlert("Aviso", "O funcionário não tem horas extras", "info");
-            }
-            if (!inputAtraso && horaSaida != "00:00:00") {
-                smartAlert("Aviso", "O funcionário não tem atrasos", "info");
-            }
-
-
-
-            entrada.value = horaEntrada;
-            inicioAlmoco.value = inputInicioAlmoco;
-            fimAlmoco.value = inputFimAlmoco;
-            extra.value = inputExtra || '00:00';
-            atraso.value = inputAtraso || '00:00';
-            saida.value = horaSaida;
-            lancamento.value = inputLancamento;
-
-            abonarAtraso();
-
-            return;
         });
 
         $('#btnPdf').on("click", function() {
@@ -1590,5 +1510,163 @@ include("inc/scripts.php");
             return;
         })
 
+    }
+
+    function checkDay(day) {
+        if (day.length < 2)
+            day = '0'.concat(day);
+
+        let mesAno = $("#mesAno").val();
+        mesAno = mesAno.replace(/\d\d$/g, day);
+        const date = new Date(mesAno);
+        let isWeekend = false;
+        let checkDay = date.getDay();
+        const weekend = [0, 6];
+
+        isWeekend = weekend.includes(checkDay);
+
+        return isWeekend;
+
+    }
+
+    function addPoint() {
+
+        var dia = $("#inputDia").val();
+
+        var index = dia - 1;
+
+        var entrada = $("#pointFieldGenerator [name=horaEntrada]")[index]
+        var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
+
+        var inicioAlmoco = $("#pointFieldGenerator [name=inicioAlmoco]")[index]
+        var inputInicioAlmoco = $("#inputInicioAlmoco").val() || '00:00:00'
+
+        var fimAlmoco = $("#pointFieldGenerator [name=fimAlmoco]")[index]
+        var inputFimAlmoco = $("#inputFimAlmoco").val() || '00:00:00'
+
+        var saida = $("#pointFieldGenerator [name=horaSaida]")[index]
+        var inputSaida = $("#inputHoraSaida").val() || '00:00:00'
+
+        var extra = $("#pointFieldGenerator [name=extra]")[index]
+        var inputExtra = $("#inputHoraExtra").val()
+
+        var atraso = $("#pointFieldGenerator [name=atraso]")[index]
+        var inputAtraso = $("#inputAtraso").val()
+
+        var lancamento = $("#pointFieldGenerator select[name=lancamento]")[index]
+
+        var inputLancamento = $("#inputLancamento").val()
+
+
+        //Preparação dos valores para cálculo e aleatorização dos minutos e segundos
+        let separador = $("#expediente option:selected").text();
+        if (!separador) {
+            separador = '00:00 - 00:00';
+        }
+        separador = separador.split("-");
+        separador[0] = separador[0].trim();
+        separador[1] = separador[1].trim();
+
+        if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
+        if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
+
+        const inicioExpediente = separador[0];
+        const fimExpediente = separador[1];
+
+        const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
+        const horaSaida = aleatorizarTempo(inputSaida, fimExpediente)
+
+
+
+        //Começo Cálculo de Hora Extra
+        if (horaSaida != "00:00:00") {
+            const parseHoraEntrada = parse(horaEntrada)
+            const parseHoraSaida = parse(horaSaida)
+            const parseHoraInicio = parse(inicioExpediente)
+            const parseHoraFim = parse(fimExpediente)
+
+            let jornadaModerada = duracao(inicioExpediente, fimExpediente);
+
+            // quantidade de minutos efetivamente trabalhados
+            let jornada = duracao(horaEntrada, horaSaida);
+
+            // diferença entre as jornadas
+            let diff = Math.abs(jornada - jornadaModerada);
+
+            if (diff != 0) {
+                let horas = Math.floor(diff / 60);
+                let minutos = diff - (horas * 60);
+
+                if (horas.toString().length < 2) horas = `0${horas}`;
+                if (minutos.toString().length < 2) minutos = `0${minutos}`;
+
+                if (jornada > jornadaModerada) {
+                    inputExtra = (`${horas}:${minutos}`);
+                } else {
+                    inputAtraso = (`${horas}:${minutos}`);
+                }
+            }
+        }
+        //Fim Cálculo de Hora Extra
+        //Verificação de Atraso
+
+        separador = inputAtraso.split(':');
+        let h = Number(separador[0]);
+        let m = Number(separador[1]);
+
+        let separadorTolerancia = toleranciaAtraso.split(':');
+        let hTolerancia = Number(separadorTolerancia[0]);
+        let mTolerancia = Number(separadorTolerancia[1]);
+
+
+        //m <= tolerancia Atraso
+        if (m < mTolerancia && h == 0) {
+            inputAtraso = ""
+        }
+
+        //Fim da Verificação de Atraso
+
+        //Verificação de Extra
+        separador = inputExtra.split(':');
+        h = Number(separador[0]);
+        m = Number(separador[1]);
+
+        separadorTolerancia = toleranciaExtra.split(':');
+        hTolerancia = Number(separadorTolerancia[0]);
+        mTolerancia = Number(separadorTolerancia[1]);
+
+        //m <= tolerancia Extra
+        if (m <= mTolerancia && h == 0) {
+            inputExtra = ""
+        }
+
+        //Fim da Verificação de Extra
+
+        // Verificações antes de adicionar o ponto
+        if ((!inputEntrada || inputEntrada == "00:00:00") && !inputLancamento) {
+            smartAlert("Atenção", "A HORA DE ENTRADA deve ser preenchida", "error");
+            return
+        }
+
+        if (!inputExtra && horaSaida != "00:00:00") {
+            smartAlert("Aviso", "O funcionário não tem horas extras", "info");
+        }
+        if (!inputAtraso && horaSaida != "00:00:00") {
+            smartAlert("Aviso", "O funcionário não tem atrasos", "info");
+        }
+
+
+
+        entrada.value = horaEntrada;
+        inicioAlmoco.value = inputInicioAlmoco;
+        fimAlmoco.value = inputFimAlmoco;
+        extra.value = inputExtra || '00:00';
+        atraso.value = inputAtraso || '00:00';
+        saida.value = horaSaida;
+        lancamento.value = inputLancamento;
+
+        abonarAtraso();
+
+        return;
     }
 </script>
