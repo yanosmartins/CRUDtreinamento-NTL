@@ -100,7 +100,7 @@ include("inc/nav.php");
                                                                     <select id="projeto" name="projeto" class="required">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.projeto where ativo = 1 order by codigo";
+                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.projeto where ativo = 1 order by descricao";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
@@ -120,7 +120,7 @@ include("inc/nav.php");
                                                                     <select id="posto" name="posto" class="required">
                                                                         <option></option>
                                                                         <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.posto where ativo = 1 order by codigo";
+                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.posto where ativo = 1 order by descricao";
                                                                         $reposit = new reposit();
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
@@ -1005,12 +1005,27 @@ include("inc/scripts.php");
             recuperarDadosBdi();
         });
 
+        $("#encargo").on("change", function() {
+            recuperarDadosEncargo();
+        });
+
+        $("#insumo").on("change", function() {
+            recuperarDadosInsumo();
+        });
+
         $("#remuneracao").on("change", function() {
             recuperarTipoRemuneracao(1);
         });
 
         $("#remuneracaoPercentual").on("change", function() {
             recuperarTipoRemuneracao(2);
+        });
+
+        $("#projeto").on("change", function() {
+            validarPostoProjeto();
+        });
+        $("#posto").on("change", function() {
+            validarPostoProjeto();
         });
 
         carregaPagina();
@@ -1702,6 +1717,7 @@ include("inc/scripts.php");
         return false;
     }
     var valorTotalRemuneracao;
+
     function calculaValorRemuneracao() {
         valorTotalRemuneracao = 0;
         for (var i = 0; i < jsonRemuneracaoArray.length; i++) {
@@ -1817,7 +1833,7 @@ include("inc/scripts.php");
             salarioPercentualRemuneracao = (salario * (totalRemuneracaoPercentual / 100)) + valorTotalRemuneracao;
             // $("#remuneracaoTotal").val(salarioPercentualRemuneracao.toFixed(2));
             $('#remuneracaoTotal').val(salarioPercentualRemuneracao.toFixed(2).replace(".", ","));
-        }else{
+        } else {
             calculaValorRemuneracao();
         }
     }
@@ -2053,6 +2069,53 @@ include("inc/scripts.php");
         );
     }
 
+    function recuperarDadosEncargo() {
+        var encargo = $("#encargo").val()
+        recuperaDadosEncargo(encargo,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    smartAlert("Aviso", "Erro ao buscar Encargo!", "info");
+                    $("#encargo").focus();
+                    $("#percentual").val("");
+                    return;
+                } else {
+                    // $("#encargo").prop("disabled", false)
+                    // $("#encargo").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    var mensagem = piece[0];
+                    var registros = piece[1].split("^");
+                    var percentual = registros[2];
+                    $("#percentual").val(percentual);
+                }
+            }
+        );
+    }
+
+    function recuperarDadosInsumo() {
+        var insumo = $("#insumo").val();
+        recuperaDadosInsumo(insumo,
+            function(data) {
+                if (data.indexOf('failed') > -1) {
+                    smartAlert("Aviso", "Erro ao buscar Insumo!", "info");
+                    $("#insumo").focus();
+                    $("#insumoValor").val("");
+                    return;
+                } else {
+                    // $("#encargo").prop("disabled", false)
+                    // $("#encargo").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    var mensagem = piece[0];
+                    var registros = piece[1].split("^");
+                    var insumoValor = registros[2];
+                    insumoValor = parseBRL(insumoValor,2);
+                    $("#insumoValor").val(insumoValor);
+                }
+            }
+        );
+    }
+
     function recuperarTipoRemuneracao(percentualOuValor) {
         if (percentualOuValor == 1) {
             var remuneracao = $("#remuneracao").val()
@@ -2085,5 +2148,23 @@ include("inc/scripts.php");
                 }
             }
         );
+    }
+
+    function validarPostoProjeto() {
+        var projeto = $("#projeto").val();
+        var posto = $("#posto").val();
+        if (projeto && posto) {
+            validaPostoProjeto(projeto,posto,
+                function(data) {
+                    if (data.indexOf('failed') > -1) {
+                        smartAlert("Aviso", "Este projeto já possui o posto em aberto!", "info");
+                        $("#posto").val("");
+                        return;
+                    } else {
+                        return;
+                    }
+                }
+            );
+        }
     }
 </script>

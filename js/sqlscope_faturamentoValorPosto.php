@@ -21,11 +21,23 @@ if ($funcao == 'recuperarDadosBdi') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'recuperarDadosEncargo') {
+    call_user_func($funcao);
+}
+
+if ($funcao == 'recuperarDadosInsumo') {
+    call_user_func($funcao);
+}
+
 if ($funcao == 'recuperarTipoRemuneracao') {
     call_user_func($funcao);
 }
 
 if ($funcao == 'fecharValorPosto') {
+    call_user_func($funcao);
+}
+
+if ($funcao == 'validarPostoProjeto') {
     call_user_func($funcao);
 }
 
@@ -510,7 +522,7 @@ function excluirValorPosto()
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
         echo "failed#" . $mensagem . ' ';
-        return; 
+        return;
     }
 
     $id = $_POST["id"];
@@ -574,6 +586,82 @@ function recuperarDadosBdi()
         $descricao . "^" .
         $percentual . "^" .
         $tipo;
+
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out;
+    return;
+}
+
+function recuperarDadosEncargo()
+{
+    if ((empty($_POST["encargo"])) || (!isset($_POST["encargo"])) || (is_null($_POST["encargo"]))) {
+        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    } else {
+        $encargo = (int)$_POST["encargo"];
+    }
+
+    $sql = "SELECT codigo, descricao, ativo, percentual
+    FROM Ntl.encargo
+    WHERE (0=0) AND
+    codigo = " . $encargo;
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $out = "";
+    if ($row = $result[0]) {
+        $codigo = (int)$row['codigo'];
+        $descricao = $row['descricao'];
+        $percentual = $row['percentual'];
+    }
+
+    $out = $codigo . "^" .
+        $descricao . "^" .
+        $percentual;
+
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out;
+    return;
+}
+
+function recuperarDadosInsumo()
+{
+    if ((empty($_POST["insumo"])) || (!isset($_POST["insumo"])) || (is_null($_POST["insumo"]))) {
+        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    } else {
+        $insumo = (int)$_POST["insumo"];
+    }
+
+    $sql = "SELECT codigo, descricao, ativo, valor
+    FROM Ntl.insumo
+    WHERE (0=0) AND
+    codigo = " . $insumo;
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $out = "";
+    if ($row = $result[0]) {
+        $codigo = (int)$row['codigo'];
+        $descricao = $row['descricao'];
+        $valor = $row['valor'];
+    }
+
+    $out = $codigo . "^" .
+        $descricao . "^" .
+        $valor;
 
     if ($out == "") {
         echo "failed#";
@@ -652,4 +740,25 @@ function fecharValorPosto()
 
     echo 'sucess#' . $result;
     return;
+}
+
+function validarPostoProjeto()
+{
+    $posto = +$_POST["posto"];
+    $projeto = +$_POST["projeto"];
+
+    $sql = "SELECT codigo,projeto,posto,situacao 
+            FROM Faturamento.valorPosto
+            WHERE situacao = 'A' AND projeto = $projeto AND posto = $posto AND ativo = 1";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if ($result[0]) {
+        echo "failed#";
+        return;
+    } else {
+        echo "sucess#";
+        return;
+    }
 }
