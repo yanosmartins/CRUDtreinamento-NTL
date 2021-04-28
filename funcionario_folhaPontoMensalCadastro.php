@@ -413,7 +413,7 @@ include("inc/nav.php");
                                                                             <?php
                                                                             $reposit = new reposit();
                                                                             $projeto = $_SESSION['projeto'];
-                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L LEFT JOIN Ntl.lancamentoProjeto LP ON L.codigo = LP.lancamento where L.ativo = 1 AND (LP.projeto = ".$projeto." OR LP.projeto = NULL) order by L.descricao";
+                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L LEFT JOIN Ntl.lancamentoProjeto LP ON L.codigo = LP.lancamento where L.ativo = 1 AND (LP.projeto = " . $projeto . " OR LP.projeto = NULL) order by L.descricao";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
@@ -632,10 +632,8 @@ include("inc/scripts.php");
                 inputEntrada.val(entrada)
 
                 inputSaida.val(saida)
-                if ((extra.trim() != '00:00:00') && (extra.trim() != '00:00'))
-                    inputExtra.val(extra)
-                if ((atraso.trim() != '00:00:00') && (atraso.trim() != '00:00'))
-                    inputAtraso.val(atraso)
+                inputExtra.val(extra)
+                inputAtraso.val(atraso)
                 inputLancamento.val(lancamento)
             } catch (e) {
                 return smartAlert('Atenção', 'Insira um dia válido!', 'error')
