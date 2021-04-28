@@ -1517,7 +1517,8 @@ include("inc/scripts.php");
 
         let mesAno = $("#mesAno").val();
         mesAno = mesAno.replace(/\d\d$/g, day);
-        const date = new Date(mesAno);
+        const aux = mesAno.split('-');
+        const date = new Date(aux[0],(aux[1]-1),aux[2]);
         let isWeekend = false;
         let checkDay = date.getDay();
         const weekend = [0, 6];
