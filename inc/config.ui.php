@@ -386,7 +386,11 @@ if ($condicaoFaturamentoOk) {
         }
 
         if (in_array('VALORPOSTO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['faturamento']['sub']['cadastro']['sub'] += array("projetoPostoFechamento" => array("title" => "Fechamendo Valor Posto", "url" => APP_URL . "/Faturamento_valorPostoFechamentoFiltro.php"));
+            $page_nav['faturamento']['sub']['cadastro']['sub'] += array("projetoPostoFechamento" => array("title" => "Fecha Valor Posto", "url" => APP_URL . "/faturamento_valorPostoFechamentoFiltro.php"));
+        }
+
+        if (in_array('VALORPOSTO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['faturamento']['sub']['cadastro']['sub'] += array("projetoPostoConsulta" => array("title" => "Consulta Valor Posto", "url" => APP_URL . "/faturamento_valorPostoConsultaFiltro.php"));
         }
     }
 
