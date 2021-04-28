@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Valor Posto";
+$page_title = "Consulta Valor Posto";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -37,7 +37,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['faturamento']['sub']['cadastro']['sub']["projetoPosto"]["active"] = true;
+$page_nav['faturamento']['sub']['cadastro']['sub']["projetoPostoConsulta"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -67,7 +67,7 @@ include("inc/nav.php");
                 <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                     <header>
                         <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                        <h2>Projeto Encargo</h2>
+                        <h2>Consulta Valor posto</h2>
                     </header>
                     <div>
                         <div class="widget-body no-padding">
@@ -87,16 +87,16 @@ include("inc/nav.php");
                                             <div class="panel-body no-padding">
                                                 <fieldset>
                                                     <div class="row ">
-                                                        <section class="col col-4">
+                                                        <section class="col col-6">
                                                             <label class="label" for="projeto">Projeto</label>
                                                             <label class="select">
-                                                                <select id="projeto" name="projeto">
-                                                                <option></option>
+                                                                <select id="projeto" class="required" name="projeto">
+                                                                    <option></option>
                                                                     <?php
                                                                     $sql =  "SELECT codigo, numeroCentroCusto, descricao, apelido FROM Ntl.projeto where ativo = 1 order by codigo";
                                                                     $reposit = new reposit();
                                                                     $result = $reposit->RunQuery($sql);
-                                                                    foreach($result as $row) { 
+                                                                    foreach ($result as $row) {
 
                                                                         $row = array_map('mb_strtoupper', $row);
                                                                         $codigo = $row['codigo'];
@@ -109,16 +109,17 @@ include("inc/nav.php");
                                                                 </select><i></i>
                                                             </label>
                                                         </section>
-                                                        <section class="col col-4">
+                                                        <input id="posto" name="posto" type="text" class="hidden" value="">
+                                                        <!-- <section class="col col-4">
                                                             <label class="label" for="posto">Posto</label>
                                                             <label class="select">
-                                                                <select id="posto" name="posto">
+                                                                <select id="posto" class="required" name="posto">
                                                                     <option></option>
                                                                     <?php
                                                                     $sql =  "SELECT codigo,  descricao FROM Ntl.posto where ativo = 1 order by codigo";
                                                                     $reposit = new reposit();
                                                                     $result = $reposit->RunQuery($sql);
-                                                                    foreach($result as $row) { 
+                                                                    foreach ($result as $row) {
 
                                                                         $row = array_map('mb_strtoupper', $row);
                                                                         $codigo = $row['codigo'];
@@ -130,9 +131,9 @@ include("inc/nav.php");
                                                                     ?>
                                                                 </select><i></i>
                                                             </label>
-                                                        </section>
-
-                                                        <section class="col col-2">
+                                                        </section> -->
+                                                        <input id="ativo" name="ativo" type="text" class="hidden" value="">
+                                                        <!-- <section class="col col-2">
                                                             <label class="label" for="ativo">Ativo</label>
                                                             <label class="select">
                                                                 <select id="ativo" name="ativo">
@@ -140,7 +141,7 @@ include("inc/nav.php");
                                                                     <option value="1" selected>Sim</option>
                                                                     <option value="0">Não</option>
                                                                 </select><i></i>
-                                                        </section>
+                                                        </section> -->
                                                     </div>
                                                 </fieldset>
                                             </div>
@@ -148,12 +149,24 @@ include("inc/nav.php");
                                     </div>
                                 </div>
                                 <footer>
+                                    <!-- <button id="fechaValorPosto" type="button" class="btn btn-danger pull-left" aria-hidden="true" title="btn">
+                                        Fechamento
+                                    </button> -->
+                                    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                            <span id="ui-id-2" class="ui-dialog-title">
+                                            </span>
+                                        </div>
+                                        <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                            <p>CONFIRMA O FECHAMENTO ? </p>
+                                        </div>
+                                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                            <div class="ui-dialog-buttonset">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                         <span class="fa fa-search"></span>
-                                    </button>
-
-                                    <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
-                                        <span class="fa fa-file"></span>
                                     </button>
                                 </footer>
                             </form>
@@ -185,6 +198,7 @@ include("inc/scripts.php");
 <!--script src="<?php echo ASSETS_URL; ?>/js/businessTabelaBasica.js" type="text/javascript"></script-->
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
+<script src="<?php echo ASSETS_URL; ?>/js/business_faturamentoValorPosto.js" type="text/javascript"></script>
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
@@ -201,39 +215,88 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
-
 <script>
     $(document).ready(function() {
-
-        $('#percentual').focusout(function() {
-            var percentual, element;
-            element = $(this);
-            element.unmask();
-            percentual = element.val().replace(/\D/g, '');
-            if (percentual.length > 3) {
-                element.mask("99.99");
-            } else {
-                element.mask("9.99?9");
-            }
-        }).trigger('focusout');
-
-
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
-        $('#btnNovo').on("click", function() {
-            $(location).attr('href', 'faturamento_valorPostoCadastro.php');
+
+        $("#fechaValorPosto").on("click", function() {
+            var id = $("#codigo").val();
+            var projeto = $('#projeto').val();
+            if (!projeto) {
+                smartAlert("Atenção", "Selecione um Projeto para Fechar !", "error");
+                $("#projeto").focus();
+                return;
+            }
+
+            if (id !== 0) {
+                $('#dlgSimpleExcluir').dialog('open');
+            }
         });
+
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    fecharValorPosto();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
     });
 
     function listarFiltro() {
         var posto = $('#posto').val();
         var projeto = $('#projeto').val();
-        var ativo = $('#ativo').val();
 
+        if (!projeto) {
+            smartAlert("Atenção", "Informe o projeto", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        var ativo = $('#ativo').val();
         var parametrosUrl = '&posto=' + posto;
         parametrosUrl += '&projeto=' + projeto;
         parametrosUrl += '&ativo=' + ativo;
-        $('#resultadoBusca').load('faturamento_valorPostoFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('faturamento_valorPostoConsultaFiltroListagem.php?' + parametrosUrl);
     }
+
+    function fecharValorPosto() {
+        var projeto = $('#projeto').val();
+        if (projeto === 0) {
+            smartAlert("Atenção", "Selecione um Projeto para Fechar!", "error");
+            return;
+        }
+        fechaValorPosto(projeto, function(data) {
+            if (data.indexOf('failed') > -1) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
+
+                if (mensagem !== "") {
+                    smartAlert("Atenção", mensagem, "error");
+                } else {
+                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                }
+            } else {
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                novo();
+            }
+        });
+    }
+ 
 </script>

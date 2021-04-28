@@ -10,6 +10,8 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Posto</th>
                     <!-- <th class="text-left" style="min-width:30px;">Valor</th> -->
                     <th class="text-left" style="min-width:30px;">Status</th>
+                    <th class="text-left" style="min-width:30px;">Data e hora Fechamento</th>
+                    <th class="text-left" style="min-width:30px;">Usuario</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
@@ -33,12 +35,12 @@ include "js/repositorio.php";
                 }
 
                 $reposit = new reposit();
-                $sql = "SELECT VP.codigo,VP.projeto,P.descricao AS nomeProjeto, VP.posto, PO.descricao AS nomePosto
-                                ,VP.ativo,VP.situacao
+                $sql = "SELECT VP.codigo,VP.projeto,P.descricao AS nomeProjeto, VP.posto, PO.descricao AS nomePosto, VP.situacao,
+                VP.ativo,VP.dataFechamento,VP.usuarioFechamento
                             FROM Faturamento.valorPosto AS VP
                             LEFT JOIN ntl.projeto P ON VP.projeto = P.codigo 
                             LEFT JOIN ntl.posto PO ON VP.posto = PO.codigo
-                            WHERE VP.dataFechamento IS NULL AND VP.situacao = 'A'AND VP.ativo = 1";
+                            WHERE situacao = 'F'";
                 $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
 
@@ -48,14 +50,22 @@ include "js/repositorio.php";
                     $nomePosto = $row['nomePosto'];
                     $ativo = (int)$row['ativo'];
                     $situacao = $row['situacao'];
-                    $valor = "";
-           
-
+                    $usuarioFechamento = (string)$row['usuarioFechamento'];
+                    $dataFechamento = $row['dataFechamento'];
+                    if ($dataFechamento != "") {
+                        $dataFechamento = explode("-", $dataFechamento);
+                        $dataFechamentoDia = explode(" ", $dataFechamento[2]);
+                        $dataFechamentoHoras =  $dataFechamentoDia[1];
+                        $dataFechamentoHoras = explode(".", $dataFechamentoHoras);
+                        $dataFechamento = $dataFechamentoDia[0] . "/" . $dataFechamento[1] . "/" . $dataFechamento[0] . " $dataFechamentoHoras[0] ";
+                    }    
                     echo '<tr>';
-                    echo '<td class="text-left">' . $codigo . '">'  . $nomeProjeto . '</td>';
+                    echo '<td class="text-left">' . $codigo . ' - '  . $nomeProjeto . '</td>';
                     echo '<td class="text-left">' . $nomePosto . '</td>';
                     // echo '<td class="text-left">' . $valor . '</td>';
                     echo '<td class="text-left">' . $situacao . '</td>';
+                    echo '<td class="text-left">' . $dataFechamento . '</td>';
+                    echo '<td class="text-left">' . $usuarioFechamento . '</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {

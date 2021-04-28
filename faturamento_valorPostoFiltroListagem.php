@@ -8,12 +8,12 @@ include "js/repositorio.php";
                 <tr role="row">
                     <th class="text-left" style="min-width:30px;">Projeto</th>
                     <th class="text-left" style="min-width:30px;">Posto</th>
+                    <th class="text-left" style="min-width:30px;">Situação</th>
                     <th class="text-left" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $where = " WHERE (0=0) ";
                 $projeto = $_GET["projeto"];
                 $posto = $_GET["posto"];
                 $ativo = $_GET["ativo"];
@@ -33,10 +33,11 @@ include "js/repositorio.php";
 
                 $reposit = new reposit();
                 $sql = "SELECT VP.codigo,VP.projeto,P.descricao AS nomeProjeto, VP.posto, PO.descricao AS nomePosto
-                                ,VP.ativo
+                                ,VP.ativo,VP.situacao
                             FROM Faturamento.valorPosto AS VP
                             LEFT JOIN ntl.projeto P ON VP.projeto = P.codigo 
-                            LEFT JOIN ntl.posto PO ON VP.posto = PO.codigo";
+                            LEFT JOIN ntl.posto PO ON VP.posto = PO.codigo
+                            WHERE VP.dataFechamento IS NULL AND VP.situacao = 'A'";
                 $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
 
@@ -45,10 +46,11 @@ include "js/repositorio.php";
                     $nomeProjeto = $row['nomeProjeto'];
                     $nomePosto = $row['nomePosto'];
                     $ativo = (int)$row['ativo'];
-
+                    $situacao = $row['situacao'];
                     echo '<tr>';
                     echo '<td class="text-left"><a href="faturamento_valorPostoCadastro.php?codigo=' . $codigo . '">'  . $nomeProjeto . '</a></td>';
                     echo '<td class="text-left">' . $nomePosto . '</td>';
+                    echo '<td class="text-left">' . $situacao . '</td>';
                     if ($ativo == 1) {
                         echo '<td class="text-left">' . 'Sim' . '</td>';
                     } else {

@@ -25,6 +25,10 @@ if ($funcao == 'recuperarTipoRemuneracao') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'fecharValorPosto') {
+    call_user_func($funcao);
+}
+
 return;
 
 function gravaValorPosto()
@@ -386,7 +390,7 @@ function recuperaValorPosto()
         $encargo = (int)$row['encargo'];
         $encargoDescricao = (string)$row['encargoDescricao'];
         $percentual = (float)$row['percentual'];
-        $grupo = (int)$row['grupo'];    
+        $grupo = (int)$row['grupo'];
         $encargoGrupoDescricao = (string)$row['encargoGrupoDescricao'];
 
 
@@ -506,7 +510,7 @@ function excluirValorPosto()
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
         echo "failed#" . $mensagem . ' ';
-        return;
+        return; 
     }
 
     $id = $_POST["id"];
@@ -618,3 +622,34 @@ function recuperarTipoRemuneracao()
     return;
 }
 
+
+function fecharValorPosto()
+{
+    $reposit = new reposit();
+    $possuiPermissao = $reposit->PossuiPermissao("POSTO_ACESSAR|POSTO_EXCLUIR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
+    session_start();
+    $usuario = "'" . $_SESSION['login'] . "'";
+    $projeto = +$_POST["projeto"];
+
+    $sql = "Faturamento.valorPostoFechamento_Atualiza
+            $projeto,
+            $usuario";
+
+    $reposit = new reposit();
+    $result = $reposit->Execprocedure($sql);
+
+    if ($result[0] < 1) {
+        echo ('failed#');
+        return;
+    }
+
+    echo 'sucess#' . $result;
+    return;
+}
