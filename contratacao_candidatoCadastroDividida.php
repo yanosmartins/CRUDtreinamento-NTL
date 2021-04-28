@@ -636,7 +636,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label" for="estado">UF Emissão CTPS</label>
                                                                 <label class="select">
-                                                                    <select id="localCarteiraTrabalho" name="localCarteiraTrabalho">
+                                                                    <select id="localCarteiraTrabalho" name="localCarteiraTrabalho" required class="required">
                                                                         <?php
                                                                         echo populaUf();
                                                                         ?>
@@ -660,7 +660,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label" for="estado">UF RG</label>
                                                                 <label class="select">
-                                                                    <select id="localRg" name="localRg">
+                                                                    <select id="localRg" name="localRg" required class="required">
                                                                         <?php
                                                                         echo populaUf();
                                                                         ?>
