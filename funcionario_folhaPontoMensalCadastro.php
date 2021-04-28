@@ -412,7 +412,8 @@ include("inc/nav.php");
                                                                             <option selected value="0"></option>
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L INNER JOIN Ntl.lancamentoProjeto LP ON L.codigo = LP.lancamento where L.ativo = 1 AND LP.projeto = ". $_SESSION['projeto'] ." order by L.descricao";
+                                                                            $projeto = $_SESSION['projeto'];
+                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L LEFT JOIN Ntl.lancamentoProjeto LP ON L.codigo = LP.lancamento where L.ativo = 1 AND (LP.projeto = ".$projeto." OR LP.projeto = NULL) order by L.descricao";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
