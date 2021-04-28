@@ -523,14 +523,10 @@ function exportar()
         $sql = "Contratacao.exportacao_Atualiza 0,";
         foreach ($arrayCandidatosExportacao as $candidato) {
             foreach ($candidato as $chave => $valor) {
-                if (preg_match("/[^0-9]/", $valor)) {
-                    $sql .= "'" . $valor . "',";
+                if (preg_match("/(^codigo$|^cargo$)/", $chave)) {
+                    $sql .= $valor . ",";
                 } else {
-                    if ($valor == '' || $valor == ' ' || is_null($valor)) {
-                        $sql .= "'" . $valor . "',";
-                    } else {
-                        $sql .= $valor . ",";
-                    }
+                    $sql .= "'" . $valor . "',";
                 }
             }
             $sql = substr($sql, 0, strrpos($sql, ","));

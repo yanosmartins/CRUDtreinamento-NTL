@@ -57,7 +57,7 @@ include("inc/nav.php");
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
                             <h2>Exportação dos Candidatos</h2>
@@ -243,7 +243,7 @@ include("inc/scripts.php");
             let checkboxComIdDosFuncionarios = [];
             // Pega o valor do ID do Funcionário e joga para um array chamado 'checkboxSelecionado'.
             $("input[type='checkbox']").each(function() {
-                debugger;
+                
                 if ($(this).prop("checked")) { //Se o checkbox tiver sido selecionado. 
                     checkboxComIdDosFuncionarios.push(($(this).attr('value'))); //Ele puxa o valor do código do funcionário pra um array.
                 }
@@ -301,7 +301,7 @@ include("inc/scripts.php");
                 if (valor[0] === 'success') {
                     smartAlert("Sucesso", "O arquivo foi gerado com sucesso!", "success");
 
-                    debugger;
+                    
                     let enderecoCaminho = valor[1];
                     $("#caminho").val(enderecoCaminho);
                 } else {
