@@ -12,27 +12,33 @@ h1 {
     /* border: 1px solid black; */
 }
 
-.inicioalmoco, .fimalmoco, .botaoentrada, .botaosaida {
+.btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida,.xxs :active {
     border-radius: 5px;
     height: 80px;
     color: white;
     font-size: 16px;
     font-weight: bold;
+    box-shadow: 7px 5px 5px 0px rgb(129, 129, 129);
+    position:relative;
+    top:5px;
+    
+    
 }
 
-.inicioalmoco {
+.btnInicioAlmoco {
     background-color: #4ae4e9;
 }
 
-.fimalmoco {
+.btnFimAlmoco {
     background-color: #FDD033;
 }
 
-.botaoentrada {
+.btnEntrada {
     background: #0d9a77;
+    
 }
 
-.botaosaida {
+.btnSaida {
     background: #CA2121;
 }
 
@@ -41,9 +47,9 @@ h1 {
 }
 
 @media(max-width:1000px) {
-    .primeirasessao {
-        display: flex;
-        flex-direction: column;
+    .btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida {
+        margin-left: auto;
+        text-align: center;
     }
     .funcionario {
         height: 130px;

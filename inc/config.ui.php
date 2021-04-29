@@ -485,6 +485,9 @@ if ($condicaoFuncionarioOk) {
     if (in_array('FOLHAPONTOMENSAL_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("emitirFolhaPonto" => array("title" => "Folha Mensal", "url" => APP_URL . "/funcionario_folhaDePontoPdf.php?id=" . $funcionario . "&pag=0"));
     }
+    if (in_array('PONTOELETRONICODIARIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['funcionario']['sub'] += array("controlePontoDiario" => array("title" => "Ponto Eletrônico Diario", "url" => APP_URL . "/prototipo_pontoEletronicoDiario.php"));
+    }
     if (array_intersect(array('PONTOELETRONICOMENSALMAXIMO_ACESSAR', 'PONTOELETRONICOMENSALMODERADO_ACESSAR', 'PONTOELETRONICOMENSALMINIMO_ACESSAR'), $arrayPermissao)) {
         $page_nav['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php"));
     }

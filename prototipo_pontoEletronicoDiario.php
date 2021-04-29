@@ -6,12 +6,21 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
+
+//colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
+$condicaoAcessarOK = (in_array('PONTOELETRONICODIARIO_ACESSAR', $arrayPermissao, true));
+
+if ($condicaoAcessarOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
+
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Usuário";
+$page_title = "Ponto Eletrônico Diário";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -24,7 +33,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["controle"]["sub"]["usuarios"]["active"] = true;
+$page_nav['funcionario']['sub']["controlePontoDiario"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -32,7 +41,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Tabela Básica"] = "";
+    $breadcrumbs["Área do Funcionário"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -146,26 +155,33 @@ include("inc/nav.php");
                                                             </div>
 
                                                         </div>
-                                                        <div class="primeirasessao">
-                                                            <div class="col col-xs-12" style="margin-top: 10px; ">
-                                                                <div class="col col-xs-6">
-                                                                    <button type="button" class="btn  btn-block botaoentrada" name="btnEntrada" id="btnEntrada" style="height: 100px; background-color:#4F8D4A;">
-                                                                        <i class="fa fa-sign-in"></i><br>Entrada
-                                                                    </button>
-                                                                    <button type="button" class="btn  btn-block botaoretornopausa" id="btnFimAlmoco" style="background: #FDD033;border-radius: 5px; height:100px; color: white; font-size: 16px; font-weight: bold;">
-                                                                        <i class="fa fa-cutlery"></i><br> Fim almoço
-                                                                    </button>
-                                                                </div>
-                                                                <div class="col col-xs-6">
-                                                                    <button type="button" class="btn  btn-block botaopausa" id="btnInicioAlmoco" style=" background: #2386A6;border-radius: 5px; height:100px;color: white;font-size: 16px;font-weight: bold;">
-                                                                        <i class="fa fa-cutlery "></i><br> Inicio almoço
-                                                                    </button>
-                                                                    <button type="button" class="btn  btn-block botaosaida" id="btnSaida" style="height: 100px;  background-color:#C32E2E;">
-                                                                        <i class="fa fa-sign-out"></i><br>Saida
-                                                                    </button>
-                                                                </div>
+
+                                                        <div class="col col-xs-12" style="margin-top: 15px;">
+
+                                                            <div class="col col-xs-3">
+                                                                <button type="button" class="btn  btn-block btnEntrada" name="btnEntrada" id="btnEntrada" style="height: 100px; background-color:#05ad4f;">
+                                                                    <span class="fa fa-sign-in"></span><br>Entrada
+                                                                </button><br>
                                                             </div>
+                                                            <div class="col col-xs-3">
+                                                                <button type="button" class="btn  btn-block btnInicioAlmoco" id="btnInicioAlmoco" style=" background: #29c4e3; height:100px;">
+                                                                    <span class="fa fa-cutlery "></span><br> Inicio almoço
+                                                                </button><br>
+                                                            </div>
+                                                            <div class="col col-xs-3">
+                                                                <button type="button" class="btn  btn-block btnFimAlmoco" id="btnFimAlmoco" style="background: #d9d216; height:100px; ">
+                                                                    <span class="fa fa-cutlery"></span><br> Fim almoço
+                                                                </button><br>
+                                                            </div>
+                                                            <div class="col col-xs-3">
+                                                                <button type="button" class="btn  btn-block btnSaida" id="btnSaida" style="height: 100px;  background-color:#c42121;">
+                                                                    <span class="fa fa-sign-out"></span><br>Saida
+                                                                </button><br>
+                                                            </div>
+
+
                                                         </div>
+
                                                         <div class="col col-xs-12">
                                                             <div class="col col-md-6"><br>
                                                                 <label class="label" for="lancamento">Ocorrência/Lançamento</label>
@@ -340,7 +356,7 @@ include("inc/scripts.php");
         var horaExtra = $("#horaExtra").val();
         var atraso = $("#atraso").val();
         var lancamento = $("#lancamento").val() || 0;
-        var status = $("#status").val();
+        var status = 1;
 
 
 
@@ -527,6 +543,20 @@ include("inc/scripts.php");
                 var status = piece[9];
 
 
+                if (horaEntrada != "00:00:00") {
+                    $("#btnEntrada").prop('disabled', true);
+                }
+                if (horaSaida != "00:00:00") {
+                    $("#btnSaida").prop('disabled', true);
+                }
+                if (inicioAlmoco != "00:00") {
+                    $("#btnInicioAlmoco").prop('disabled', true);
+                }
+                if (fimAlmoco != "00:00") {
+                    $("#btnFimAlmoco").prop('disabled', true);
+                }
+
+
                 //Atributos de cliente        
                 $("#idFolha").val(idFolha);
                 $("#codigo").val(codigoDetalhe);
@@ -538,6 +568,9 @@ include("inc/scripts.php");
                 $("#atraso").val(atraso);
                 $("#lancamento").val(lancamento);
                 $("#status").val(status);
+
+
+
 
             }
 
