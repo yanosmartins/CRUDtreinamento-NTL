@@ -495,7 +495,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label" for="estado">Estado</label>
                                                                 <label class="select">
-                                                                    <select id="estado" name="estado">
+                                                                    <select id="estado" name="estado" class="required" required>
                                                                         <?php
                                                                         echo populaUf();
                                                                         ?>
@@ -630,11 +630,11 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Data de Expedição</label>
                                                                 <label class="input">
-                                                                    <input id="dataExpedicaoCarteiraTrabalho" name="dataExpedicaoCarteiraTrabalho" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataExpedicaoCarteiraTrabalho')">
+                                                                    <input id="dataExpedicaoCarteiraTrabalho" name="dataExpedicaoCarteiraTrabalho" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataExpedicaoCarteiraTrabalho')" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="estado">UF Emissão CTPS</label>
+                                                                <label class="label" for="localCarteiraTrabalho">UF Emissão CTPS</label>
                                                                 <label class="select">
                                                                     <select id="localCarteiraTrabalho" name="localCarteiraTrabalho" required class="required">
                                                                         <?php
@@ -658,7 +658,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="estado">UF RG</label>
+                                                                <label class="label" for="localRg">UF RG</label>
                                                                 <label class="select">
                                                                     <select id="localRg" name="localRg" required class="required">
                                                                         <?php
@@ -670,7 +670,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Data Emissão RG</label>
                                                                 <label class="input">
-                                                                    <input id="dataEmissaoRg" name="dataEmissaoRg" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataEmissaoRg')">
+                                                                    <input id="dataEmissaoRg" name="dataEmissaoRg" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataEmissaoRg')" required>
                                                                 </label>
                                                             </section>
                                                         </div>

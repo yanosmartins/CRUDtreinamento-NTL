@@ -135,20 +135,20 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-6">
-                                                                <label class="label">Nome Completo</label>
+                                                                <label class="label" for="nomeCompleto">Nome Completo</label>
                                                                 <label class="input"><i></i>
-                                                                    <input id="nomeCompleto" maxlength="255" name="nomeCompleto" class="required" autocomplete="new-password" type="text" value="" onchange="verificaNome('#nomeCompleto')">
+                                                                    <input id="nomeCompleto" maxlength="255" name="nomeCompleto" class="required" required autocomplete="new-password" type="text" value="" onchange="verificaNome('#nomeCompleto')">
                                                                 </label>
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Data Nascimento</label>
+                                                                <label class="label" for="dataNascimento">Data Nascimento</label>
                                                                 <label class="input">
                                                                     <input id="dataNascimento" name="dataNascimento" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Sexo</label>
+                                                                <label class="label" for="sexo">Sexo</label>
                                                                 <label class="select">
                                                                     <select name="sexo" id="sexo" autocomplete="off" class="form-control required" autocomplete="new-password">
                                                                         <option></option>
@@ -162,13 +162,13 @@ include("inc/nav.php");
 
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Nº do País</label>
+                                                                <label class="label" for="numeroPais">Nº do País</label>
                                                                 <label class="input">
                                                                     <input id="numeroPais" name="numeroPais" type="text" autocomplete="new-password" class="readonly" readonly>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-4">
-                                                                <label class="label">País de Nascimento</label>
+                                                                <label class="label" for="paisNascimento">País de Nascimento</label>
                                                                 <label class="select">
                                                                     <select name="paisNascimento" id="paisNascimento" autocomplete="off" class="form-control required" autocomplete="new-password">
                                                                         <option></option>
@@ -217,7 +217,7 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">UF de Nascimento</label>
+                                                                <label class="label" for="ufNascimento">UF de Nascimento</label>
                                                                 <label class="select">
                                                                     <select name="ufNascimento" id="ufNascimento" autocomplete="off" class="form-control required" autocomplete="new-password">
                                                                     </select><i></i>
@@ -230,13 +230,13 @@ include("inc/nav.php");
 
 
                                                             <section class="col col-2">
-                                                                <label class="label">Nº da Cidade</label>
+                                                                <label class="label" for="numeroMunicipio">Nº da Cidade</label>
                                                                 <label class="input">
                                                                     <input id="numeroMunicipio" name="numeroMunicipio" type="text" autocomplete="new-password" class="readonly" readonly>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-4">
-                                                                <label class="label">Cidade de Nascimento</label>
+                                                                <label class="label" for="municipioNascimento">Cidade de Nascimento</label>
                                                                 <label class="select">
                                                                     <select name="municipioNascimento" id="municipioNascimento" autocomplete="off" class="form-control required" autocomplete="new-password">
                                                                     </select><i></i>
@@ -244,14 +244,14 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Naturalidade</label>
+                                                                <label class="label" for="naturalidade">Naturalidade</label>
                                                                 <label class="input">
                                                                     <input id="naturalidade" name="naturalidade" type="text" autocomplete="new-password" class="readonly" readonly>
                                                                 </label>
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Nacionalidade</label>
+                                                                <label class="label" for="nacionalidade">Nacionalidade</label>
                                                                 <label class="input">
                                                                     <input id="nacionalidade" name="nacionalidade" type="text" autocomplete="new-password" class="readonly" readonly>
                                                                 </label>
@@ -260,7 +260,7 @@ include("inc/nav.php");
 
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Raça / Cor</label>
+                                                                <label class="label" for="racaCor">Raça / Cor</label>
                                                                 <label class="select">
                                                                     <select name="racaCor" id="racaCor" autocomplete="off" class="form-control required" autocomplete="new-password">
                                                                         <option></option>
@@ -273,7 +273,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Estado Civíl</label>
+                                                                <label class="label" for="estadoCivil">Estado Civíl</label>
                                                                 <label class="select">
                                                                     <select name="estadoCivil" id="estadoCivil" autocomplete="off" class="form-control required" autocomplete="new-password">
                                                                         <option></option>
@@ -290,13 +290,13 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-3">
-                                                                <label class="label">Nome do Pai</label>
+                                                                <label class="label" for="nomePai">Nome do Pai</label>
                                                                 <label class="input">
                                                                     <input id="nomePai" maxlength="64" name="nomePai" type="text" autocomplete="new-password" class="required" value="" onchange="verificaNome('#nomePai')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3">
-                                                                <label class="label">Nome da Mãe</label>
+                                                                <label class="label" for="nomeMae">Nome da Mãe</label>
                                                                 <label class="input">
                                                                     <input id="nomeMae" maxlength="64" name="nomeMae" type="text" autocomplete="new-password" class="required" value="" onchange="verificaNome('#nomeMae')">
                                                                 </label>
@@ -310,7 +310,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaDadoContato">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaDadoContato" id="verificaDadoContato" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -322,25 +322,25 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Telefone Residêncial</label>
+                                                                <label class="label" for="telefoneResidencial">Telefone Residêncial</label>
                                                                 <label class="input"><i class="icon-append fa fa-phone"></i>
                                                                     <input id="telefoneResidencial" maxlength="64" name="telefoneResidencial" type="text" autocomplete="new-password" data-mask-placeholder="X" data-mask="(99) 9999-9999" class="" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Telefone Celular</label>
+                                                                <label class="label" for="telefoneCelular">Telefone Celular</label>
                                                                 <label class="input"><i class="icon-append fa fa-phone"></i>
                                                                     <input id="telefoneCelular" maxlength="64" name="telefoneCelular" type="text" autocomplete="new-password" class="" value="" data-mask="(99) 99999-9999">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Celular Recado</label>
+                                                                <label class="label" for="outroTelefone">Celular Recado</label>
                                                                 <label class="input"><i class="icon-append fa fa-phone"></i>
                                                                     <input id="outroTelefone" maxlength="64" name="outroTelefone" type="text" autocomplete="new-password" class="" value="" data-mask="(99) 99999-9999">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-4">
-                                                                <label class="label">E-mail</label>
+                                                                <label class="label" for="email">E-mail</label>
                                                                 <label class="input"><i class="icon-append fa fa-envelope"></i>
                                                                     <input id="email" maxlength="64" name="email" type="text" autocomplete="new-password" class="required" value="">
                                                                 </label>
@@ -354,7 +354,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaEndereco">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaEndereco" id="verificaEndereco" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -372,19 +372,19 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="cep">Logradouro</label>
+                                                                <label class="label" for="logradouro">Logradouro</label>
                                                                 <label class="input">
                                                                     <input id="logradouro" name="logradouro" class="required" autocomplete="new-password">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Endereço</label>
+                                                                <label class="label" for="endereco">Endereço</label>
                                                                 <label class="input">
                                                                     <input id="endereco" maxlength="64" name="endereco" type="text" autocomplete="new-password" class="required" value="" onchange="verificaNome('#endereco')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Bairro</label>
+                                                                <label class="label" for="bairro">Bairro</label>
                                                                 <label class="input">
                                                                     <input id="bairro" maxlength="64" name="bairro" type="text" autocomplete="new-password" class="required" value="" onchange="verificaNome('#bairro')">
                                                                 </label>
@@ -393,7 +393,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label" for="estado">Estado</label>
                                                                 <label class="select">
-                                                                    <select id="estado" name="estado">
+                                                                    <select id="estado" name="estado" class="required" required>
                                                                         <?php
                                                                         echo populaUf();
                                                                         ?>
@@ -402,19 +402,19 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Cidade</label>
+                                                                <label class="label" for="cidade">Cidade</label>
                                                                 <label class="input">
                                                                     <input id="cidade" maxlength="64" name="cidade" type="text" autocomplete="new-password" class="required" value="" onchange="verificaNome('#cidade')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Numero</label>
+                                                                <label class="label" for="numero">Numero</label>
                                                                 <label class="input">
                                                                     <input id="numero" maxlength="10" name="numero" type="text" autocomplete="new-password" class="required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Complemento</label>
+                                                                <label class="label" for="complemento">Complemento</label>
                                                                 <label class="input">
                                                                     <input id="complemento" maxlength="64" name="complemento" type="text" autocomplete="new-password" class="" value="">
                                                                 </label>
@@ -428,7 +428,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaDocumento">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaDocumento" id="verificaDocumento" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -440,13 +440,13 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">CPF</label>
+                                                                <label class="label" for="cpf">CPF</label>
                                                                 <label class="input">
                                                                     <input id="cpf" data-mask-placeholder="X" data-mask="999.999.999-99" name="cpf" type="text" class="required" autocomplete="off" onchange="verificaCpf('#cpf')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Primeiro Emprego</label>
+                                                                <label class="label" for="primeiroEmprego">Primeiro Emprego</label>
                                                                 <label class="select">
                                                                     <select name="primeiroEmprego" id="primeiroEmprego" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
@@ -458,7 +458,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Possui PIS</label>
+                                                                <label class="label" for="ctps">Possui PIS</label>
                                                                 <label class="select">
                                                                     <select name="ctps" id="ctps" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
@@ -468,31 +468,31 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">PIS</label>
+                                                                <label class="label" for="pis">PIS</label>
                                                                 <label class="input">
                                                                     <input id="pis" data-mask-placeholder="X" data-mask="999.99999.99-9" name="pis" type="text" class="required" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Carteira de Trabalho</label>
+                                                                <label class="label" for="carteiraTrabalho">Carteira de Trabalho</label>
                                                                 <label class="input">
                                                                     <input id="carteiraTrabalho" name="carteiraTrabalho" type="text" class="required" autocomplete="off" maxlength="10">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Serie</label>
+                                                                <label class="label" for="carteiraTrabalhoSerie">Serie</label>
                                                                 <label class="input">
                                                                     <input id="carteiraTrabalhoSerie" name="carteiraTrabalhoSerie" type="text" class="required" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Data de Expedição</label>
+                                                                <label class="label" for="dataExpedicaoCarteiraTrabalho">Data de Expedição</label>
                                                                 <label class="input">
-                                                                    <input id="dataExpedicaoCarteiraTrabalho" name="dataExpedicaoCarteiraTrabalho" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataExpedicaoCarteiraTrabalho')">
+                                                                    <input id="dataExpedicaoCarteiraTrabalho" name="dataExpedicaoCarteiraTrabalho" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataExpedicaoCarteiraTrabalho')" required>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="estado">UF Emissão CTPS</label>
+                                                                <label class="label" for="localCarteiraTrabalho">UF Emissão CTPS</label>
                                                                 <label class="select">
                                                                     <select id="localCarteiraTrabalho" name="localCarteiraTrabalho" required class="required">
                                                                         <?php
@@ -504,19 +504,19 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">RG</label>
+                                                                <label class="label" for="rg">RG</label>
                                                                 <label class="input">
                                                                     <input id="rg" name="rg" type="text" class="required" autocomplete="off" maxlength="13">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Orgão Emissor RG</label>
+                                                                <label class="label" for="emissorRg">Orgão Emissor RG</label>
                                                                 <label class="input">
                                                                     <input id="emissorRg" name="emissorRg" maxlength="25" type="text" class="required" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="estado">UF RG</label>
+                                                                <label class="label" for="localRg">UF RG</label>
                                                                 <label class="select">
                                                                     <select id="localRg" name="localRg" required class="required">
                                                                         <?php
@@ -526,21 +526,21 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Data Emissão RG</label>
+                                                                <label class="label" for="dataEmissaoRg">Data Emissão RG</label>
                                                                 <label class="input">
-                                                                    <input id="dataEmissaoRg" name="dataEmissaoRg" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataEmissaoRg')">
+                                                                    <input id="dataEmissaoRg" name="dataEmissaoRg" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataEmissaoRg')" required>
                                                                 </label>
                                                             </section>
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">CNH</label>
+                                                                <label class="label" for="cnh">CNH</label>
                                                                 <label class="input">
                                                                     <input id="cnh" name="cnh" type="text" data-mask="99999999999" class="" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Categoria CNH</label>
+                                                                <label class="label" for="categoriaCnh">Categoria CNH</label>
                                                                 <label class="select">
                                                                     <select name="categoriaCnh" id="categoriaCnh" autocomplete="new-password" class="form-control">
                                                                         <option></option>
@@ -552,7 +552,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="estado">UF CNH</label>
+                                                                <label class="label" for="ufCnh">UF CNH</label>
                                                                 <label class="select">
                                                                     <select id="ufCnh" name="ufCnh">
                                                                         <?php
@@ -562,19 +562,19 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Data Emissão CNH</label>
+                                                                <label class="label" for="dataEmissaoCnh">Data Emissão CNH</label>
                                                                 <label class="input">
                                                                     <input id="dataEmissaoCnh" name="dataEmissaoCnh" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataEmissaoCnh')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Data Vencimento CNH</label>
+                                                                <label class="label" for="dataVencimentoCnh">Data Vencimento CNH</label>
                                                                 <label class="input">
                                                                     <input id="dataVencimentoCnh" name="dataVencimentoCnh" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataVencimentoCnh')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Primeira CNH</label>
+                                                                <label class="label" for="primeiraCnh">Primeira CNH</label>
                                                                 <label class="input">
                                                                     <input id="primeiraCnh" name="primeiraCnh" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#primeiraCnh')">
                                                                 </label>
@@ -582,25 +582,25 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Titulo de eleitor</label>
+                                                                <label class="label" for="tituloEleitor">Titulo de eleitor</label>
                                                                 <label class="input">
                                                                     <input id="tituloEleitor" maxlength="12" name="tituloEleitor" type="text" class="" autocomplete="off" onchange="verificaNumero('#tituloEleitor')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Zona</label>
+                                                                <label class="label" for="zonaTituloEleitor">Zona</label>
                                                                 <label class="input">
                                                                     <input id="zonaTituloEleitor" maxlength="3" name="zonaTituloEleitor" type="text" class="" autocomplete="off" onchange="verificaNumero('#zonaTituloEleitor')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Seção</label>
+                                                                <label class="label" for="secaoTituloEleitor">Seção</label>
                                                                 <label class="input">
                                                                     <input id="secaoTituloEleitor" maxlength="4" name="secaoTituloEleitor" type="text" class="" autocomplete="off" onchange="verificaNumero('#secaoTituloEleitor')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Certificado de reservista</label>
+                                                                <label class="label" for="certificadoReservista">Certificado de reservista</label>
                                                                 <label class="input">
                                                                     <input id="certificadoReservista" data-mask="999999999999" name="certificadoReservista" type="text" class="" autocomplete="off">
                                                                 </label>
@@ -615,7 +615,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaEscolaridade">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaEscolaridade" id="verificaEscolaridade" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -627,7 +627,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-4">
-                                                                <label class="label">Grau de Instrução</label>
+                                                                <label class="label" for="grauInstrucao">Grau de Instrução</label>
                                                                 <label class="select">
                                                                     <select name="grauInstrucao" id="grauInstrucao" autocomplete="new-password" class="form-control">
                                                                         <option></option>
@@ -650,19 +650,19 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Em que Grau Parou</label>
+                                                                <label class="label" for="grauParou">Em que Grau Parou</label>
                                                                 <label class="input">
                                                                     <input id="grauParou" maxlength="64" name="grauParou" type="text" autocomplete="new-password" class="" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Ano de Conclusão</label>
+                                                                <label class="label" for="anoConclusao">Ano de Conclusão</label>
                                                                 <label class="input">
                                                                     <input id="anoConclusao" maxlength="64" name="anoConclusao" data-mask="9999" type="text" autocomplete="new-password" class="" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Está Cursando Atualmente</label>
+                                                                <label class="label" for="cursandoAtualmente">Está Cursando Atualmente</label>
                                                                 <label class="select">
                                                                     <select name="cursandoAtualmente" id="cursandoAtualmente" autocomplete="new-password" class="form-control">
                                                                         <option></option>
@@ -672,7 +672,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Hora Estudo</label>
+                                                                <label class="label" for="horarioEstudo">Hora Estudo</label>
                                                                 <label class="input">
                                                                     <input id="horarioEstudo" placeholder="HH:MM" data-mask="99:99" name="horarioEstudo" autocomplete="off" type="text" class="" onchange="validateHhMm(this)">
                                                                 </label>
@@ -680,7 +680,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-8">
-                                                                <label class="label">Nome e Endereço Do Colégio ou Universidade</label>
+                                                                <label class="label" for="nomeEnderecoColegioUniversidade">Nome e Endereço Do Colégio ou Universidade</label>
                                                                 <label class="input">
                                                                     <input id="nomeEnderecoColegioUniversidade" maxlength="64" name="nomeEnderecoColegioUniversidade" type="text" autocomplete="new-password" class="" value="">
                                                                 </label>
@@ -688,7 +688,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-8">
-                                                                <label class="label">Atividades Extracurriculares (Cursos Realizados - Descrever)</label>
+                                                                <label class="label" for="atividadesExtracurriculares">Atividades Extracurriculares (Cursos Realizados - Descrever)</label>
                                                                 <label class="input">
                                                                     <textarea id="atividadesExtracurriculares" name="atividadesExtracurriculares" maxlength="2000" type="text" class="form-control" autocomplete="new-password" rows="4" style="resize:vertical"></textarea>
                                                                 </label>
@@ -702,7 +702,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaDadoConjuge">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaDadoConjuge" id="verificaDadoConjuge" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -715,13 +715,13 @@ include("inc/nav.php");
 
                                                         <div class="row">
                                                             <section class="col col-3">
-                                                                <label class="label">Nome</label>
+                                                                <label class="label" for="nomeConjuge">Nome</label>
                                                                 <label class="input">
                                                                     <input id="nomeConjuge" maxlength="64" name="nomeConjuge" type="text" autocomplete="new-password" class="" value="" onchange="verificaNome('#nomeConjuge')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Data Nascimento</label>
+                                                                <label class="label" for="dataNascimentoConjuge">Data Nascimento</label>
                                                                 <label class="input">
                                                                     <input id="dataNascimentoConjuge" name="dataNascimentoConjuge" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" >
                                                                 </label>
@@ -729,13 +729,13 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Nº do País</label>
+                                                                <label class="label" for="numeroPaisConjuge">Nº do País</label>
                                                                 <label class="input">
                                                                     <input id="numeroPaisConjuge" name="numeroPaisConjuge" type="text" autocomplete="new-password" class="readonly" readonly>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-4">
-                                                                <label class="label">País de Nascimento</label>
+                                                                <label class="label" for="paisNascimentoConjuge">País de Nascimento</label>
                                                                 <label class="select">
                                                                     <select name="paisNascimentoConjuge" id="paisNascimentoConjuge" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -784,7 +784,7 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">UF de Nascimento</label>
+                                                                <label class="label" for="ufNascimentoConjuge">UF de Nascimento</label>
                                                                 <label class="select">
                                                                     <select name="ufNascimentoConjuge" id="ufNascimentoConjuge" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                     </select><i></i>
@@ -797,13 +797,13 @@ include("inc/nav.php");
 
 
                                                             <section class="col col-2">
-                                                                <label class="label">Nº da Cidade</label>
+                                                                <label class="label" for="numeroMunicipioConjuge">Nº da Cidade</label>
                                                                 <label class="input">
                                                                     <input id="numeroMunicipioConjuge" name="numeroMunicipioConjuge" type="text" autocomplete="new-password" class="readonly" readonly>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-4">
-                                                                <label class="label">Cidade de Nascimento</label>
+                                                                <label class="label" for="municipioNascimentoConjuge">Cidade de Nascimento</label>
                                                                 <label class="select">
                                                                     <select name="municipioNascimentoConjuge" id="municipioNascimentoConjuge" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                     </select><i></i>
@@ -811,14 +811,14 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Naturalidade</label>
+                                                                <label class="label" for="naturalidadeConjuge">Naturalidade</label>
                                                                 <label class="input">
                                                                     <input id="naturalidadeConjuge" name="naturalidadeConjuge" type="text" autocomplete="new-password" class="readonly" readonly>
                                                                 </label>
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Nacionalidade</label>
+                                                                <label class="label" for="nacionalidadeConjuge">Nacionalidade</label>
                                                                 <label class="input">
                                                                     <input id="nacionalidadeConjuge" name="nacionalidadeConjuge" type="text" autocomplete="new-password" class="readonly" readonly>
                                                                 </label>
@@ -834,7 +834,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaFilho">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaFilho" id="verificaFilho" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -849,7 +849,7 @@ include("inc/nav.php");
                                                         <div id="formFilho">
                                                             <div class="row">
                                                                 <section class="col col-2">
-                                                                    <label class="label">Possui Filho Menor que 14 anos</label>
+                                                                    <label class="label" for="possuiFilhoMenor14">Possui Filho Menor que 14 anos</label>
                                                                     <label class="select">
                                                                         <select name="possuiFilhoMenor14" id="possuiFilhoMenor14" autocomplete="new-password" class="form-control required" required>
                                                                             <option></option>
@@ -916,7 +916,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaDependente">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaDependente" id="verificaDependente" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -952,7 +952,7 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
-                                                                    <label class="label">Tipo Dependente</label>
+                                                                    <label class="label" for="grauParentescoDependente">Tipo Dependente</label>
                                                                     <label class="select">
                                                                         <select name="grauParentescoDependente" id="grauParentescoDependente" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                             <option></option>
@@ -1002,7 +1002,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Trabalha Atualmente</label>
+                                                                <label class="label" for="trabalhaAtualmente">Trabalha Atualmente</label>
                                                                 <label class="select">
                                                                     <select name="trabalhaAtualmente" id="trabalhaAtualmente" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
@@ -1012,7 +1012,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Está em Seguro Desemprego</label>
+                                                                <label class="label" for="seguroDesemprego">Está em Seguro Desemprego</label>
                                                                 <label class="select">
                                                                     <select name="seguroDesemprego" id="seguroDesemprego" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
@@ -1029,7 +1029,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaBeneficio">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaBeneficio" id="verificaBeneficio" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -1057,7 +1057,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Deseja Assistência Médica</label>
+                                                                <label class="label" for="desejaAssistenciaMedica">Deseja Assistência Médica</label>
                                                                 <label class="select">
                                                                     <select name="desejaAssistenciaMedica" id="desejaAssistenciaMedica" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
@@ -1067,7 +1067,8 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Deseja Assistência Odontológica</label>
+                                                                <label class="label" for="desejaAssistenciaOdontologica
+                                                                ">Deseja Assistência Odontológica</label>
                                                                 <label class="select">
                                                                     <select name="desejaAssistenciaOdontologica" id="desejaAssistenciaOdontologica" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
@@ -1089,7 +1090,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Vale Refeição / Vale Alimentação</label>
+                                                                <label class="label" for="valeRefeicaoValeAlimentacao">Vale Refeição / Vale Alimentação</label>
                                                                 <label class="select">
                                                                     <select name="valeRefeicaoValeAlimentacao" id="valeRefeicaoValeAlimentacao" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
@@ -1106,7 +1107,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaVT">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaVT" id="verificaVT" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -1127,7 +1128,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Deseja Vale Transporte</label>
+                                                                <label class="label" for="desejaVt">Deseja Vale Transporte</label>
                                                                 <label class="select">
                                                                     <select name="desejaVt" id="desejaVt" autocomplete="new-password" class="form-control required">
                                                                         <option value="1">Sim</option>
@@ -1136,7 +1137,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Possui Cartão Transporte</label>
+                                                                <label class="label" for="possuiVt">Possui Cartão Transporte</label>
                                                                 <label class="select">
                                                                     <select name="possuiVt" id="possuiVt" autocomplete="new-password" class="form-control required">
                                                                         <option value="1">Sim</option>
@@ -1145,7 +1146,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Tipo do Cartão</label>
+                                                                <label class="label" for="tipoCartaoVt">Tipo do Cartão</label>
                                                                 <label class="select">
                                                                     <select name="tipoCartaoVt" id="tipoCartaoVt" autocomplete="new-password" class="form-control required">
                                                                         <option value="1">Bilhete Único</option>
@@ -1177,7 +1178,7 @@ include("inc/nav.php");
                                                                 <input id="sequencialTransporte" name="sequencialTransporte" type="hidden" value="">
 
                                                                 <section class="col col-2">
-                                                                    <label class="label">Trajeto</label>
+                                                                    <label class="label" for="trajetoTransporte">Trajeto</label>
                                                                     <label class="select">
                                                                         <select name="trajetoTransporte" id="trajetoTransporte" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                             <option></option>
@@ -1188,7 +1189,7 @@ include("inc/nav.php");
                                                                 </section>
 
                                                                 <section class="col col-2">
-                                                                    <label class="label">Tipo Transporte</label>
+                                                                    <label class="label" for="tipoTransporte">Tipo Transporte</label>
                                                                     <label class="select">
                                                                         <select name="tipoTransporte" id="tipoTransporte" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                             <option></option>
@@ -1257,7 +1258,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaDadoBancario">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaDadoBancario" id="verificaDadoBancario" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -1269,7 +1270,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Possui Conta Bancária</label>
+                                                                <label class="label" for="possuiContaBancaria">Possui Conta Bancária</label>
                                                                 <label class="select">
                                                                     <select name="possuiContaBancaria" id="possuiContaBancaria" autocomplete="new-password" class="form-control required">
                                                                         <option></option>
@@ -1279,7 +1280,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Tipo de conta</label>
+                                                                <label class="label" for="tipoConta">Tipo de conta</label>
                                                                 <label class="select">
                                                                     <select name="tipoConta" id="tipoConta" autocomplete="new-password" class="form-control">
                                                                         <option value="0" selected></option>
@@ -1311,20 +1312,20 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Agência</label>
+                                                                <label class="label" for="agenciaBanco">Agência</label>
                                                                 <label class="input">
                                                                     <input id="agenciaBanco" name="agenciaBanco" maxlength="5" type="text" class="" value="" autocomplete="new-password" onchange="verificaNumero('#agenciaBanco')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1">
-                                                                <label class="label">Digito Agência</label>
+                                                                <label class="label" for="digitoAgenciaBanco">Digito Agência</label>
                                                                 <label class="input">
                                                                     <input id="digitoAgenciaBanco" name="digitoAgenciaBanco" maxlength="2" type="text" class="" value="" autocomplete="new-password" onchange="verificaNumero('#digitoAgenciaBanco')">
                                                                 </label>
                                                             </section>
 
                                                             <section class="col col-1">
-                                                                <label class="label" id="labelVariacao">Variação</label>
+                                                                <label class="label" id="labelVariacao" for="variacao">Variação</label>
                                                                 <label class="select">
                                                                     <select name="variacao" id="variacao" autocomplete="new-password" class="form-control">
                                                                         <option value="0" selected></option>
@@ -1337,13 +1338,13 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Conta</label>
+                                                                <label class="label" for="contaCorrente">Conta</label>
                                                                 <label class="input">
                                                                     <input id="contaCorrente" name="contaCorrente" type="text" class="" maxlength="13" value="" autocomplete="new-password" onchange="verificaNumero('#contaCorrente')">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1">
-                                                                <label class="label">Digito Conta</label>
+                                                                <label class="label" for="digitoContaBanco">Digito Conta</label>
                                                                 <label class="input">
                                                                     <input id="digitoContaBanco" name="digitoContaBanco" maxlength="2" type="text" class="" value="" autocomplete="new-password" onchange="verificaNumero('#digitoContaBanco')">
                                                                 </label>
@@ -1356,7 +1357,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaCargo">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaCargo" id="verificaCargo" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -1368,7 +1369,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-4">
-                                                                <label class="label">Cargo Anterior</label>
+                                                                <label class="label" for="cargo">Cargo Anterior</label>
                                                                 <label class="input">
                                                                     <input id="cargo" name="cargo" maxlength="50" type="text" class="" value="" autocomplete="new-password" onchange="verificaNome('#cargo')">
                                                                 </label>
@@ -1406,7 +1407,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaUniforme">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaUniforme" id="verificaUniforme" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -1418,7 +1419,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-1">
-                                                                <label class="label">Camisa</label>
+                                                                <label class="label" for="numeroCamisa">Camisa</label>
                                                                 <label class="select">
                                                                     <select name="numeroCamisa" id="numeroCamisa" autocomplete="new-password" class="form-control">
                                                                         <option></option>
@@ -1432,19 +1433,19 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1">
-                                                                <label class="label">Calça</label>
+                                                                <label class="label" for="numeroCalca">Calça</label>
                                                                 <label class="input">
                                                                     <input id="numeroCalca" name="numeroCalca" type="text" class="number" data-mask="99" value="" autocomplete="new-password" max="2">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1">
-                                                                <label class="label">Saia</label>
+                                                                <label class="label" for="numeroSaia">Saia</label>
                                                                 <label class="input">
                                                                     <input id="numeroSaia" name="numeroSaia" type="text" class="number" data-mask="99" value="" autocomplete="new-password" maxlength="2">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1">
-                                                                <label class="label">Sapato</label>
+                                                                <label class="label" for="numeroSapato">Sapato</label>
                                                                 <label class="input">
                                                                     <input id="numeroSapato" name="numeroSapato" type="text" class="numeric" data-mask="99" maxlength="2" value="" autocomplete="new-password">
                                                                 </label>
@@ -1459,7 +1460,7 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row" style="display:<?php echo $esconderCandidato ?>">
                                                             <section class="col col-2">
-                                                                <label class="label">STATUS</label>
+                                                                <label class="label" for="verificaAnexoDocumento">STATUS</label>
                                                                 <label class="select">
                                                                     <select name="verificaAnexoDocumento" id="verificaAnexoDocumento" autocomplete="off" class="form-control" autocomplete="new-password">
                                                                         <option></option>
@@ -1492,9 +1493,9 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-6">
-                                                                <label class="label">Foto</label>
+                                                                <label class="label"  for="fotoCandidato">Foto</label>
                                                                 <label class="input input-file">
-                                                                    <span class="button"><input type="file" id="fotoCandidato" name="fotoCandidato[]" multiple>Selecionar
+                                                                    <span class="button"><input type="file" id="fotoCandidato" name="fotoCandidato" multiple>Selecionar
                                                                         documentos</span><input id="fotoCandidatoText" type="text">
                                                                 </label>
                                                             </section>
