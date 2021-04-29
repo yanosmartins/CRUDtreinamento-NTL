@@ -79,7 +79,7 @@ include("inc/nav.php");
                                                             </section> -->
                                                         <!-- <section class="col col-6"> -->
                                                         <button>
-                                                            <a href=".php" class="btn btn-primary btn-xs disabled" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-clock-o fa-2x"></i><br> Bater Ponto </a>
+                                                            <a href="prototipo_pontoEletronicoDiario.php" class="btn btn-primary btn-xs" id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-clock-o fa-2x"></i><br> Bater Ponto </a>
                                                         </button>
                                                         <button>
                                                             <a href="funcionario_folhaPontoMensalCadastro.php" class="btn btn-primary btn-xs " id="buttonFolhaMensal" name="buttonPonto" style="display:inline-grid "><i class="fa fa-calendar fa-2x"></i><br>Ponto Mensal </a>
