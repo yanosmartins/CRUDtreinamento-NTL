@@ -52,6 +52,38 @@ function recuperaDadosBdi(bdi, callback) {
     return;
 }
 
+function recuperaDadosEncargo(encargo, callback) {
+    $.ajax({
+        url: 'js/sqlscope_faturamentoValorPosto.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: 'recuperarDadosEncargo', encargo: encargo }, //valores enviados ao script     
+        async: false,
+        success: function (data) {
+            callback(data);
+        }
+
+    });
+
+    return;
+}
+
+function recuperaDadosInsumo(insumo, callback) {
+    $.ajax({
+        url: 'js/sqlscope_faturamentoValorPosto.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: 'recuperarDadosInsumo', insumo: insumo }, //valores enviados ao script     
+        async: false,
+        success: function (data) {
+            callback(data);
+        }
+
+    });
+
+    return;
+}
+
 function recuperaTipoRemuneracao(remuneracao, callback) {
     $.ajax({
         url: 'js/sqlscope_faturamentoValorPosto.php', //caminho do arquivo a ser executado
@@ -74,6 +106,21 @@ function fechaValorPosto(projeto, callback) {
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'fecharValorPosto', projeto: projeto }, //valores enviados ao script     
+        async: false,
+        success: function (data) {
+            callback(data);
+        }
+
+    });
+    return;
+}
+
+function validaPostoProjeto(projeto,posto, callback) {
+    $.ajax({
+        url: 'js/sqlscope_faturamentoValorPosto.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: 'validarPostoProjeto', projeto: projeto, posto: posto}, //valores enviados ao script     
         async: false,
         success: function (data) {
             callback(data);
