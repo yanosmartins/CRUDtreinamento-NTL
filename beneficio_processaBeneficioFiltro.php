@@ -33,6 +33,7 @@ include("inc/header.php");
 //follow the tree in inc/config.ui.php
 $page_nav["beneficio"]["sub"]["processaBeneficio"]["active"] = true;
 include("inc/nav.php");
+
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
@@ -60,7 +61,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formUsuarioFiltro" method="post">
+                                <form action="" class="smart-form client-form" id="formFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -160,9 +161,10 @@ include("inc/nav.php");
                                                 <font color="darkorange"> <b>Vale Transporte   <b></font>
                                                 <font color="violet"> <b>Férias/Afastamento<b></font>
 
-                                                <button id="processa" type="button" class="btn btn-success" title="processa">
+                                                <!-- <button id="processa" type="button" class="btn btn-warning" title="processa">
                                                     Processar
-                                                </button>
+                                                </button> -->
+                                               
                                                 <button id="btnSearch" type="button" class="btn btn-primary" title="Buscar">
                                                     <i class="fa bg-red fa-search fa-lg  bg-blue-light text-magenta "></i>
                                                 </button>
@@ -196,10 +198,10 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_operacaoProcessaBeneficio.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
+<script src="js/business_beneficioProcessaBeneficio.js"></script>
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
@@ -330,10 +332,12 @@ include("inc/scripts.php");
             $("#funcionarioFiltro").val('');
         });
 
-        $("#btnGravar").on("click", function() {
-            gravar();
+        $('#projetoFiltro').on("change", function() {
+            validarProcessaBeneficio();
         });
-
+        $('#data').on("change", function() {
+            validarProcessaBeneficio();
+        });
     });
 
     function listarFiltro() {
@@ -363,52 +367,24 @@ include("inc/scripts.php");
         $('#resultadoBusca').load('beneficio_processaBeneficioFiltroListagem.php?' + parametrosUrl);
     }
 
-    function gravar() {
-        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
-        // $("#btnGravar").prop('disabled', true);
-        // Variáveis que vão ser gravadas no banco:
-        var id = +$('#codigo').val();
-        var mesAnoReferencia = $('#data').val();
-        var projeto = +$("#projetoId").val();
-        // var ativo = +$('#ativo').val();
-        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        // if (!descricao) {
-        //     smartAlert("Atenção", "Informe a descrição", "error");
-        //     $("#btnGravar").prop('disabled', false);
-        //     return;
-        // }
-
-        // if (!sigla) {
-        //     smartAlert("Atenção", "Informe a Sigla", "error");
-        //     $("#btnGravar").prop('disabled', false);
-        //     return;
-        // }
-
-        //Chama a função de gravar do business de convênio de saúde.
-        gravaProcessaBeneficio(id, mesAnoReferencia, projeto,
-            function(data) {
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        $("#btnGravar").prop('disabled', false);
+    function validarProcessaBeneficio() {
+        var projeto = $("#projetoId").val();
+        var mesAno = $("#data").val();
+        if (projeto && mesAno) {
+            validaProcessaBeneficio(projeto,mesAno,
+                function(data) {
+                    if (data.indexOf('failed') > -1) {
+                        smartAlert("Aviso", "Este projeto já possui o Mes Ano Processado e Gravado!", "info");
+                        $("#projetoId").val("");
+                        $("#projeto").val("");
+                        $("#data").val("");
+                        return;
                     } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                        $("#btnGravar").prop('disabled', false);
+                        return;
                     }
-                    return '';
-                } else {
-                    //Verifica se a função de recuperar os campos foi executada.
-                    var verificaRecuperacao = +$("#verificaRecuperacao").val();
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    // if (verificaRecuperacao === 1) {
-                    //     voltar();
-                    // } else {
-                    novo();
-                    // }
                 }
-            }
-        );
+            );
+        }
     }
+  
 </script>
