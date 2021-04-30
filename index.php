@@ -68,7 +68,7 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <input id="codigo" name="codigo" type="text" class="hidden">
                                                         <!-- <div class="row "> -->
-                                                           <!-- <section class="col col-1">
+                                                        <!-- <section class="col col-1">
                                                               <label class="input">
                                                                     <input id="descricao" name="descricao" class="hidden" autocomplete="off" type="text" class="required" value="" required>
                                                                 </label> 
@@ -215,11 +215,6 @@ include("inc/scripts.php");
 
 <script>
     $(document).ready(function() {
-        // $("#buttonFolhaMensal").on("click", function() {
-        //     window.location = "http://www.google.com";
-        // });
-        //         .botaoTelaIndex:hover  {
-        //     background-color: lightblue;
-        //   }
+        $('span.minifyme').trigger("click");
     });
 </script>
