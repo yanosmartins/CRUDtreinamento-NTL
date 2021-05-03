@@ -111,7 +111,7 @@ function grava()
     $xmlItem = "'" . $xmlItem . "'";
 
 
-    $sql = "Estoque.fornecimentoMaterial_Atualiza
+    $sql = "Estoque.pedidoMaterial_Atualiza
         $codigo,
         $dataMovimento,  
         $clienteFornecedor,
