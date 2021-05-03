@@ -22,7 +22,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Afastamento do Funcionário";
+$page_title = "Consulta Benefício";
 /* ---------------- END PHP Custom Scripts ------------- */
 //include header
 //you can add your custom css in $page_css array.
@@ -31,7 +31,7 @@ $page_css[] = "your_style.css";
 include("inc/header.php");
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["beneficio"]["sub"]["consultaBeneficio"]["active"] = true;
+$page_nav["beneficio"]["sub"]['operacao']["consultaBeneficio"]["active"] = true;
 include("inc/nav.php");
 
 ?>
@@ -78,15 +78,6 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <input id="codigo" name="codigo" type="text" class="hidden" value="">
                                                         <div class="row">
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label">Mês/Ano</label>
-                                                                <label class="input">
-                                                                    <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="data" name="data" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker required" value="">
-                                                                </label>
-                                                            </section>
-                                                        </div>
-                                                        <div class="row">
                                                             <section class="col col-4">
                                                                 <label class="label">Projeto</label>
                                                                 <label class="input">
@@ -95,7 +86,7 @@ include("inc/nav.php");
                                                                     <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3">
+                                                            <section class="col col-4">
                                                                 <label class="label " for="projeto">Projeto Pesquisa</label>
                                                                 <label class="select">
                                                                     <select id="projetoFiltro" name="projetoFiltro" class="required" required>
@@ -104,7 +95,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo,descricao FROM Ntl.projeto WHERE ativo = 1 ORDER BY descricao ";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $id = (int) $row['codigo'];
                                                                             $descricao = $row['descricao'];
@@ -114,38 +105,13 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                        </div>
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label class="label hidden">Funcionário</label>
-                                                                <label class="hidden">
-                                                                    <input id="funcionarioId" type="hidden" value="">
-                                                                    <input id="funcionario" name="funcionarioFiltro" autocomplete="off" class="form-control" placeholder="Digite o nome do Funcionário..." type="text" value="">
-                                                                    <i class="icon-append fa fa-filter"></i>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label">Mês/Ano</label>
+                                                                <label class="input">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                    <input id="data" name="data" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker" value="">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3">
-                                                                <label class="label hidden" for="funcionario">Funcionário Pesquisa</label>
-                                                                <label class="select hidden">
-                                                                    <select id="funcionarioFiltro" name="funcionario">
-                                                                        \ <option value=""></option>
-                                                                        <?php
-                                                                        $reposit = new reposit();
-                                                                        $sql = "SELECT codigo,nome 
-                                                                                FROM Ntl.funcionario 
-                                                                                WHERE ativo = 1 AND dataDemissaoFuncionario IS NULL ORDER BY nome ";
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
-
-                                                                            $id = (int) $row['codigo'];
-                                                                            $nome = $row['nome'];
-                                                                            echo '<option value=' . $id . '>' . $nome . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
-
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -153,24 +119,9 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                        <b>Legenda:   <b>
-                                                <font color="red"> <b>Vale Refeicao/Alimentacao   <b></font>
-                                                <font color="blueviolet"> <b>Bolsa Beneficio   <b></font>
-                                                <font color="green"> <b>Cesta Basica   <b></font>
-                                                <font color="blue"> <b>Plano Saúde   <b></font>
-                                                <font color="darkorange"> <b>Vale Transporte   <b></font>
-                                                <font color="violet"> <b>Férias/Afastamento<b></font>
-
-                                                <!-- <button id="processa" type="button" class="btn btn-warning" title="processa">
-                                                    Processar
-                                                </button> -->
-                                               
-                                                <button id="btnSearch" type="button" class="btn btn-primary" title="Buscar">
-                                                    <i class="fa bg-red fa-search fa-lg  bg-blue-light text-magenta "></i>
-                                                </button>
-                                                <!-- <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                                    <span class="fa fa-floppy-o"></span>
-                                                </button> -->
+                                        <button id="btnSearch" type="button" class="btn btn-primary" title="Buscar">
+                                            <i class="fa bg-red fa-search fa-lg  bg-blue-light text-magenta "></i>
+                                        </button>
                                     </footer>
                                 </form>
                             </div>
@@ -185,20 +136,16 @@ include("inc/nav.php");
     <!-- END MAIN CONTENT -->
 </div>
 <!-- END MAIN PANEL -->
-
 <!-- ==========================CONTENT ENDS HERE ========================== -->
-
 <!-- PAGE FOOTER -->
 <?php
 include("inc/footer.php");
 ?>
 <!-- END PAGE FOOTER -->
-
 <?php
 //include required scripts
 include("inc/scripts.php");
 ?>
-
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <script src="js/business_beneficioProcessaBeneficio.js"></script>
@@ -207,14 +154,11 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.time.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.tooltip.min.js"></script>
-
 <!-- Full Calendar -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/moment/moment.min.js"></script>
 <!--<script src="/js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
-
-
 <script>
     $('body').addClass("minified");
     $(document).ready(function() {
@@ -225,7 +169,6 @@ include("inc/scripts.php");
             $("#projetoId").val('');
             $("#projeto").val('');
         });
-
 
         $("#projeto").autocomplete({
             source: function(request, response) {
@@ -275,116 +218,25 @@ include("inc/scripts.php");
                 .appendTo(ul);
 
         };
-        $("#funcionario").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'js/sqlscope_cadastroFuncionario.php',
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        maxRows: 12,
-                        funcao: "listaFuncionarioAtivoAutoComplete",
-                        descricaoIniciaCom: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                id: item.id,
-                                label: item.nome,
-                                value: item.nome
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 3,
-
-            select: function(event, ui) {
-                $("#funcionarioId").val(ui.item.id);
-                $("#funcionarioFiltro").val(ui.item.nome);
-                var funcionarioId = $("#funcionarioId").val();
-                $("#funcionario").val(funcionarioId)
-                // $("#funcionarioId").val('');
-                $("#funcionarioFiltro").val('');
-            },
-            change: function(event, ui) {
-                if (ui.item === null) {
-                    $("#funcionarioId").val('');
-                    $("#funcionarioFiltro").val('');
-                }
-            }
-        }).data("ui-autocomplete")._renderItem = function(ul, item) {
-            return $("<li>")
-                .append("<a>" + highlight(item.label, this.term) + "</a>")
-                .appendTo(ul);
-        };
+  
 
         $("#projetoFiltro").on("change", function() {
             $("#projetoId").val(+$("#projetoFiltro").val());
             $("#projeto").val($("#projetoFiltro option:selected").text());
             $("#projetoFiltro").val('');
         });
-
-        $("#funcionarioFiltro").on("change", function() {
-            $("#funcionarioId").val(+$("#funcionarioFiltro").val());
-            $("#funcionario").val($("#funcionarioFiltro option:selected").text());
-            $("#funcionarioFiltro").val('');
-        });
-
-        $('#projetoFiltro').on("change", function() {
-            validarProcessaBeneficio();
-        });
-        $('#data').on("change", function() {
-            validarProcessaBeneficio();
-        });
     });
 
     function listarFiltro() {
         var projeto = +$("#projetoId").val();
-        var projetoFiltro = $('#projetoFiltro').val();
         var data = $('#data').val();
-        var funcionario = $("#funcionario").val();
-        var funcionarioFiltro2 = $("#funcionarioFiltro").val();
-        var funcionarioFiltro = $("#funcionarioId").val()
-
-        if (!data) {
-            smartAlert("Atenção", "Informe o Mês / Ano", "error");
-            return;
-        }
-        if (!projetoFiltro && !funcionario && !projeto) {
+  
+        if (!projeto) {
             smartAlert("Atenção", "Informe o Projeto", "error");
             return;
         }
-        if (projetoFiltro == "" && projeto != "") {
-            projetoFiltro = projeto;
-        }
-        if (funcionario == "" && funcionarioFiltro != "") {
-            funcionario = funcionarioFiltro;
-        }
 
-        var parametrosUrl = '&projetoFiltro=' + projetoFiltro + '&data=' + data + '&funcionarioFiltro=' + funcionarioFiltro;
-        $('#resultadoBusca').load('beneficio_processaBeneficioFiltroListagem.php?' + parametrosUrl);
+        var parametrosUrl = '&projeto=' + projeto + '&data=' + data;
+        $('#resultadoBusca').load('beneficio_consultaBeneficioFiltroListagem.php?' + parametrosUrl);
     }
-
-    function validarProcessaBeneficio() {
-        var projeto = $("#projetoId").val();
-        var mesAno = $("#data").val();
-        if (projeto && mesAno) {
-            validaProcessaBeneficio(projeto,mesAno,
-                function(data) {
-                    if (data.indexOf('failed') > -1) {
-                        smartAlert("Aviso", "Este projeto já possui o Mes Ano Processado e Gravado!", "info");
-                        $("#projetoId").val("");
-                        $("#projeto").val("");
-                        $("#data").val("");
-                        return;
-                    } else {
-                        return;
-                    }
-                }
-            );
-        }
-    }
-  
 </script>
