@@ -182,11 +182,6 @@ include("inc/nav.php");
 
                                                         </div>
 
-                                                        <section class="col col-2">
-                                                                    <label class="label" for="lancamento">Lançamento/Ocorrência</label>
-                                                                    
-                                                                </section>
-
                                                         <div class="col col-xs-12">
                                                             <div class="col col-md-6"><br>
                                                                 <label class="label" for="lancamento">Ocorrência/Lançamento</label>
