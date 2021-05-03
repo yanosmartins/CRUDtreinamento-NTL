@@ -4028,6 +4028,20 @@ include("inc/scripts.php");
             return;
         }
 
+        let localCarteiraTrabalho = $("#localCarteiraTrabalho").val();
+
+        if (!localCarteiraTrabalho) {
+            smartAlert("Atenção", "Digite a UF de emissão da CTPS", "error");
+            return;
+        }
+
+        let dataExpedicaoCarteiraTrabalho = $("#dataExpedicaoCarteiraTrabalho").val();
+
+        if (!dataExpedicaoCarteiraTrabalho) {
+            smartAlert("Atenção", "Digite a data de expedição", "error");
+            return;
+        }
+
         let projeto = $("#projeto").val();
         if (projeto == "") {
             smartAlert("Atenção", "Escolha um Projeto", "error");

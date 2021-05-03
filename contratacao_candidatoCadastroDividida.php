@@ -38,7 +38,7 @@ $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 $row = $result[0];
 if ($row) {
-    
+
     $linkUpload = $row['linkUpload'];
 }
 
@@ -2003,7 +2003,7 @@ include("inc/scripts.php");
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <script src="<?php echo ASSETS_URL; ?>/js/gir_script.js" type="text/javascript"></script>
-<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script> 
+<script src="<?php echo ASSETS_URL; ?>/js/business_contratacaoCandidato.js" type="text/javascript"></script>
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
@@ -2220,8 +2220,8 @@ include("inc/scripts.php");
             gravar();
         });
 
-        $('#possuiContaBancaria').on('change',function() {
-        verificaBanco();
+        $('#possuiContaBancaria').on('change', function() {
+            verificaBanco();
         });
 
         $("#desejaVt").on("change", function() {
@@ -2974,15 +2974,15 @@ include("inc/scripts.php");
             getSiglaUfConjuge();
 
         }
-       
+
     });
 
     $("#linkPdfTransporte").on("click", function() {
         abrePdfTransporte();
-        });
+    });
 
-    function verificaBanco(){
-        
+    function verificaBanco() {
+
         var possuiContaBancaria = +$('#possuiContaBancaria').val();
         if (possuiContaBancaria == 1) {
             $("#tipoConta").removeClass('readonly');
@@ -3443,18 +3443,18 @@ include("inc/scripts.php");
                             var mensagem = piece[0];
                             var arrayDocumentos = JSON.parse(piece[1]);
                             for (let index = 0; index < arrayDocumentos.length; index++) {
-                               
+
                                 var nomeArquivo = arrayDocumentos[index].nomeArquivo;
                                 var nomeVisualizacao = nomeArquivo.split("_");
-                                var tipoArquivo = arrayDocumentos[index].tipoArquivo; 
+                                var tipoArquivo = arrayDocumentos[index].tipoArquivo;
                                 var nomeCampo = arrayDocumentos[index].idCampo + "." + tipoArquivo;
                                 var idCampo = arrayDocumentos[index].idCampo + "Link";
-                                var endereco = arrayDocumentos[index].enderecoDocumento; 
+                                var endereco = arrayDocumentos[index].enderecoDocumento;
                                 var diretorio = "<?php echo $linkUpload ?>" + endereco + nomeArquivo;
 
                                 $("#" + idCampo).append("<a href ='" + diretorio + "' target='_blank'>" + nomeVisualizacao[1] + "</a><br>");
 
-                            } 
+                            }
                         }
                     });
             }
@@ -4010,7 +4010,7 @@ include("inc/scripts.php");
         let rg = $("#rg").val();
         let emissorRg = $("#emissorRg").val();
         let cep = $("#cep").val();
-        let endereco = $("#endereco").val();    
+        let endereco = $("#endereco").val();
         let bairro = $("#bairro").val();
         let cidade = $("#cidade").val();
         let numero = $("#numero").val();
@@ -4105,20 +4105,34 @@ include("inc/scripts.php");
             return;
         }
 
-        
+
         let carteiraTrabalho = $("#carteiraTrabalho").val();
 
         if (!carteiraTrabalho) {
             smartAlert("Atenção", "Digite a Carteira de Trabalho", "error");
-            return;    
+            return;
         }
 
         let carteiraTrabalhoSerie = $("#carteiraTrabalhoSerie").val();
 
         if (!carteiraTrabalhoSerie) {
             smartAlert("Atenção", "Digite o campo Serie", "error");
-        return;
-}
+            return;
+        }
+
+        let localCarteiraTrabalho = $("#localCarteiraTrabalho").val();
+
+        if (!localCarteiraTrabalho) {
+            smartAlert("Atenção", "Digite a UF de emissão da CTPS", "error");
+            return;
+        }
+
+        let dataExpedicaoCarteiraTrabalho = $("#dataExpedicaoCarteiraTrabalho").val();
+
+        if (!dataExpedicaoCarteiraTrabalho) {
+            smartAlert("Atenção", "Digite a data de expedição", "error");
+            return;
+        }
 
         let projeto = $("#projeto").val();
         if (projeto == "") {

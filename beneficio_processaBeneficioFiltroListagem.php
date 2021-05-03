@@ -34,15 +34,13 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:70px; color: darkorange"> VT Extra</th>
                     <th class="text-left" style="min-width:35px; color: darkorange">VT Mensal</th>
 
-
-
                 </tr>
             </thead>
             <tbody>
                 <?php
 
 
-                $sql = "SELECT DISTINCT BP.funcionario, FU.nome, BP.codigo, 
+                $sql = "SELECT DISTINCT BP.funcionario, FU.codigo AS codigoFuncionario,FU.nome, BP.codigo, 
                         BP.valorMensalFuncionarioVAVR, BP.valorDiarioFuncionarioVAVR, BP.tipoDescontoVAVR,
                         BP.valorCestaBasica, BP.valorTotalPlanoSaude, BP.tipoDiaUtilVAVR, BP.tipoDiaUtilVT, BP.sindicato,
                         BP.valorDiarioProjetoVAVR, BP.valorDiarioSindicatoVAVR, BP.valorDiarioFuncionarioVAVR, 
@@ -127,10 +125,10 @@ include "js/repositorio.php";
                         LEFT JOIN Ntl.diasUteisPorMunicipio DMF ON DMF.municipio = BP.municipioFerias and DMF.ativo = 1
                         WHERE (0=0) AND BP.tipoDescontoVAVR IS NOT NULL AND BP.ativo = 1 AND FU.dataDemissaoFuncionario IS NULL ";
 
-                if ($_GET['funcionarioFiltro'] != "") {
-                    $funcionario = $_GET["funcionarioFiltro"];
-                    $where = $where . " and BP.funcionario = " . $funcionario;
-                }
+                // if ($_GET['funcionarioFiltro'] != "") {
+                //     $funcionario = $_GET["funcionarioFiltro"];
+                //     $where = $where . " and BP.funcionario = " . $funcionario;
+                // }
 
 
                 if ($_GET["projetoFiltro"] != "") {
@@ -150,9 +148,11 @@ include "js/repositorio.php";
                 $value = explode("/", $mesAno);
                 $mesAno = "'" . $value[1] . "-" . $value[0] . "-" . "01 00:0:00'";
 
+                $arrayRemuneracao = array();
                 foreach ($result1 as $row) {
                     $id = (int) $row['codigo'];
                     $funcionario = $row['nome'];
+                    $codigoFuncionario = (int)$row['codigoFuncionario'];
                     $funcionarioCodigo = (int) $row['funcionario'];
                     $tipoDiaUtilVAVR = (int) $row['tipoDiaUtilVAVR'];
                     $sindicato = (int) $row['sindicato'];
@@ -641,7 +641,7 @@ include "js/repositorio.php";
 
                     $sqlFerias = $reposit->RunQuery($sqlFerias);
 
-                    if($rowFerias = $sqlFerias[0]) {
+                    if ($rowFerias = $sqlFerias[0]) {
                         $diaUtilFerias = (int) $rowFerias['diaUtil'];
                         $mes;
                         // pega os dias UTEIS poor municipio de acordo com mes
@@ -900,6 +900,14 @@ include "js/repositorio.php";
                         $diasTrabalhadosVT = 0;
                     }
 
+                    //condicao valor total mensal VAVR
+                    if ($valorMensalFuncionarioVAVR > 0) {  // se o funcionario possui valor mensal (>0) vai aparecer o total sem calcular por dias trabalhados
+                        $vavrTotal = $valorMensalFuncionarioVAVR + $valorExtraVAVR;
+                    } else {
+                        $vavrTotal = ($valorDiarioFuncionarioVAVR * $diasTrabalhadosVAVR) +  $valorExtraVAVR;
+                    }
+
+
                     echo '<tr >';
                     echo '<td class="text-left">' . $funcionario . '</a></td>';
                     echo '<td class="text-right">' . $valorDiarioFuncionarioVAVR . '</td>';
@@ -918,18 +926,23 @@ include "js/repositorio.php";
                     echo '<td class="text-right">' . $valorMensalFuncionarioVAVR . '</td>';
                     echo '<td class="text-center">' . $descricaoDescontoVAVR . '</td>';
                     echo '<td class="text-right">' . $valorExtraVAVR . '</td>';
-
                     //condicao valor total mensal VAVR
-                    if ($valorMensalFuncionarioVAVR > 0) { // se o funcionario possui valor mensal (>0) vai aparecer o total sem calcular por dias trabalhados
-                        echo '<td class="text-right">' . ($valorMensalFuncionarioVAVR + $valorExtraVAVR) . '</td>';
-                    } else {
-                        echo '<td class="text-right">' . (($valorDiarioFuncionarioVAVR * $diasTrabalhadosVAVR) +  $valorExtraVAVR) . '</td>';
-                    }
-
+                    // if ($valorMensalFuncionarioVAVR > 0) {
+                    //     echo '<td class="text-right">' . ($valorMensalFuncionarioVAVR + $valorExtraVAVR) . '</td>';
+                    // } else {
+                    //     echo '<td class="text-right">' . (($valorDiarioFuncionarioVAVR * $diasTrabalhadosVAVR) +  $valorExtraVAVR) . '</td>';
+                    // }
+                    echo '<td class="text-right">' . $vavrTotal . '</td>';
                     echo '<td class="text-right">' . $totalValorAcrescimoBeneficioIndiretoExtra . '</td>';
-                    echo '<td class="text-right">' . ($totalValorAcrescimoBeneficioIndireto + $totalValorAcrescimoBeneficioIndiretoExtra) . '</td>';
+
+                    $totalAcrescimoBeneficioIndiretoComExtra = $totalValorAcrescimoBeneficioIndireto + $totalValorAcrescimoBeneficioIndiretoExtra;
+
+                    echo '<td class="text-right">' . $totalAcrescimoBeneficioIndiretoComExtra . '</td>';
                     echo '<td class="text-right">' . $valorCestaBasicaExtra . '</td>';
-                    echo '<td class="text-right">' . ($valorCestaBasica +  $valorCestaBasicaExtra) . '</td>';
+
+                    $cestaBasicaExtraComCestaBasica = $valorCestaBasica +  $valorCestaBasicaExtra;
+
+                    echo '<td class="text-right">' . $cestaBasicaExtraComCestaBasica . '</td>';
                     echo '<td class="text-right">' . $valorTotalPlanoSaude . '</td>';
                     echo '<td class="text-right">' . $totalValorAbaterBeneficioIndireto . '</td>';
                     echo '<td class="text-right">' . $valorTotalPlanoSaudeBeneficio . '</td>';
@@ -939,18 +952,62 @@ include "js/repositorio.php";
                     echo '<td class="text-center">' . $totalAusenciasValeTransporte . '</td>';
                     echo '<td class="text-center">' . $diasTrabalhadosVT . '</td>';
                     echo '<td class="text-right">' . $valorExtraVT . '</td>';
-                    echo '<td class="text-right">' . (($valorTotalFuncionarioVT * $diasTrabalhadosVT) + $valorExtraVT) . '</td>';
 
+                    $VTMensal = ($valorTotalFuncionarioVT * $diasTrabalhadosVT) + $valorExtraVT;
+
+                    echo '<td class="text-right">' . $VTMensal . '</td>';
                     // echo '<td class="text-center"><a class="btn btn-primary"style="background-color:#735687 ;border: black" target="_blank" rel="noopener noreferrer" href="http://localhost/NTL/operacao_processaBeneficioRel.php?id=' . $benefioCodigo . '";" value="PDF"><i class="fa fa-file-pdf-o  bg-blue-light text-magenta "></i></a></td>';
                     echo '</tr >';
+
+
+                    $arrayProcessabeneficio[] = array(
+                        "codigoFuncionario" => $codigoFuncionario,
+                        "funcionario" => $funcionario,
+                        "diaUtilVAVR" => $diaUtilVAVR,
+                        "valorDiarioFuncionarioVAVR" => $valorDiarioFuncionarioVAVR,
+                        "totalAusenciaVAVR" => $totalAusenciaVAVR,
+                        "totalFaltasAusenciasComAbatimentoProjetoSindicato" => $totalFaltasAusenciasComAbatimentoProjetoSindicato,
+                        "diaUtilFerias" => $diaUtilFerias,
+                        "afastamentoAbaterVAVR" => $afastamentoAbaterVAVR,
+                        "diasTrabalhadosVAVR" => $diasTrabalhadosVAVR,
+                        "valorMensalFuncionarioVAVR" => $valorMensalFuncionarioVAVR,
+                        "descricaoDescontoVAVR" => $descricaoDescontoVAVR,
+                        "valorExtraVAVR" => $valorExtraVAVR,
+                        "vavrTotal" => $vavrTotal,
+                        "totalValorAcrescimoBeneficioIndiretoExtra" => $totalValorAcrescimoBeneficioIndiretoExtra,
+                        "totalAcrescimoBeneficioIndiretoComExtra" => $totalAcrescimoBeneficioIndiretoComExtra,
+                        "valorCestaBasicaExtra" => $valorCestaBasicaExtra,
+                        "cestaBasicaExtraComCestaBasica" => $cestaBasicaExtraComCestaBasica,
+                        "valorTotalPlanoSaude" => $valorTotalPlanoSaude,
+                        "totalValorAbaterBeneficioIndireto" => $totalValorAbaterBeneficioIndireto,
+                        "valorTotalPlanoSaudeBeneficio" => $valorTotalPlanoSaudeBeneficio,
+                        "valorTotalFuncionarioVT" => $valorTotalFuncionarioVT,
+                        "diaUtilVT" => $diaUtilVT,
+                        "totalFaltasValeTransporte" => $totalFaltasValeTransporte,
+                        "totalAusenciasValeTransporte" => $totalAusenciasValeTransporte,
+                        "diasTrabalhadosVT" => $diasTrabalhadosVT,
+                        "valorExtraVT" => $valorExtraVT,
+                        "VTMensal" => $VTMensal,
+                    );
                 }
+                $strArrayProcessabeneficio = json_encode($arrayProcessabeneficio);
+
 
                 ?>
             </tbody>
         </table>
     </div>
 </div>
+<div class="row smart-form">
+    <footer>
+        <button id="btnGravar" name="btnGravar" type="button" class="btn btn-success" title="grava">
+            Gravar
+        </button>
+    </footer>
+</div>
+
 <!-- PAGE RELATED PLUGIN(S) -->
+<script src="js/business_beneficioProcessaBeneficio.js"></script>
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
 <!--script src="js/plugin/datatables/dataTables.tableTools.min.js"></script-->
@@ -975,6 +1032,10 @@ include "js/repositorio.php";
             tablet: 1024,
             phone: 480
         };
+
+        $("#btnGravar").on("click", function() {
+            gravar();
+        });
 
         /* TABLETOOLS */
         $('#tableSearchResult').dataTable({
@@ -1057,4 +1118,38 @@ include "js/repositorio.php";
 
         /* END TABLETOOLS */
     });
+
+    function gravar() {
+        var JsonArrayProcessabeneficio = <?php echo $strArrayProcessabeneficio ?>;
+        var projeto = <?php echo $projetoFiltro ?>;
+        var mesAno = <?php echo $mesAno ?>;
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
+        $("#btnGravar").prop('disabled', true);
+        // Variáveis que vão ser gravadas no banco:
+        gravaProcessaBeneficio(mesAno, projeto, JSON.stringify(JsonArrayProcessabeneficio),
+            function(data) {
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnGravar").prop('disabled', false);
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                        $("#btnGravar").prop('disabled', false);
+                    }
+                    return '';
+                } else {
+                    //Verifica se a função de recuperar os campos foi executada.
+                    var verificaRecuperacao = +$("#verificaRecuperacao").val();
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    novo();
+                }
+            }
+        );
+    }
+
+    function novo(){
+        $(location).attr('href', 'beneficio_processaBeneficioFiltro.php');
+    }
 </script>
