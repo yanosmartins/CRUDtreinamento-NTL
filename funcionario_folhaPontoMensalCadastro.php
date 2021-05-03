@@ -1653,11 +1653,9 @@ include("inc/scripts.php");
                             break;
                         case 'adicionarPonto':
                             $("#btnAddPonto").removeAttr('disabled');
-
                             break;
                         case 'salvarAlteracoes':
                             $("#btnGravar").removeAttr('disabled');
-
                             break;
                     }
                 }
@@ -1666,23 +1664,22 @@ include("inc/scripts.php");
                 for (let property in alias) {
                     switch (property) {
                         case 'funcionario':
-                            $("#funcionario").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#funcionario").css('touch-action', alias[property]["touch.action"]);
-
+                            $("#funcionario").css('pointer-events', alias[property].pointerEvents);
+                            $("#funcionario").css('touch-action', alias[property].touchAction);
                             break;
                         case 'mesAno':
                             $("#mesAno").removeAttr('readonly');
                             $("#mesAno").removeAttr('style');
                             $("#mesAno").removeClass('readonly');
-                            $("#mesAno").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#mesAno").css('touch-action', alias[property]["touch.action"]);
+                            $("#mesAno").css('pointer-events', alias[property].pointerEvents);
+                            $("#mesAno").css('touch-action', alias[property].touchAction);
                             break;
                         case 'status':
                             $("#status").removeAttr('readonly');
                             $("#status").removeAttr('style');
                             $("#status").removeClass('readonly');
-                            $("#status").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#status").css('touch-action', alias[property]["touch.action"]);
+                            $("#status").css('pointer-events', alias[property].pointerEvents);
+                            $("#status").css('touch-action', alias[property].touchAction);
                             break;
                         case 'dia':
                             $("#inputDia").removeAttr('readonly');
@@ -1733,17 +1730,17 @@ include("inc/scripts.php");
                 for (let property in alias) {
                     switch (property) {
                         case 'funcionario':
-                            $("#funcionario").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#funcionario").css('touch-action', alias[property]["touch.action"]);
+                            $("#funcionario").css('pointer-events', alias[property].pointerEvents);
+                            $("#funcionario").css('touch-action', alias[property].touchAction);
 
                             break;
                         case 'mesAno':
-                            $("#mesAno").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#mesAno").css('touch-action', alias[property]["touch.action"]);
+                            $("#mesAno").css('pointer-events', alias[property].pointerEvents);
+                            $("#mesAno").css('touch-action', alias[property].touchAction);
                             break;
                         case 'status':
-                            $("#status").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#status").css('touch-action', alias[property]["touch.action"]);
+                            $("#status").css('pointer-events', alias[property].pointerEvents);
+                            $("#status").css('touch-action', alias[property].touchAction);
                             break;
                         case 'dia':
                             break;
@@ -1760,8 +1757,8 @@ include("inc/scripts.php");
                         case 'atraso':
                             break;
                         case 'lancamento':
-                            $("#inputLancamento").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#inputLancamento").css('touch-action', alias[property]["touch.action"]);
+                            $("#inputLancamento").css('pointer-events', alias[property].pointerEvents);
+                            $("#inputLancamento").css('touch-action', alias[property].touchAction);
                             break;
                         case 'adicionarPonto':
 
