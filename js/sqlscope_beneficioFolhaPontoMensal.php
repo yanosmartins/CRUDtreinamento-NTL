@@ -5,19 +5,9 @@ include "girComum.php";
 
 $funcao = $_POST["funcao"];
 
-if ($funcao == 'grava') {
-    call_user_func($funcao);
-}
+$pattern = "/(consultarLancamento|grava|recupera|excluir|consultarPermissoes)/i";
 
-if ($funcao == 'recupera') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'excluir') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'verificar') {
+if (preg_match($pattern, $funcao)) {
     call_user_func($funcao);
 }
 
@@ -92,7 +82,7 @@ function grava()
                 }
                 continue;
             }
-            if (in_array($key, ['inicioAlmoco','fimAlmoco','horaExtra', 'atraso'])) {
+            if (in_array($key, ['inicioAlmoco', 'fimAlmoco', 'horaExtra', 'atraso'])) {
                 if ($value == '') {
                     $xmlFolhaPontoMensal .= "<$key>00:00</$key>";
                 } else {
@@ -112,7 +102,7 @@ function grava()
         return;
     }
     $xmlFolhaPontoMensal = "'" . $xmlFolhaPontoMensal . "'";
-    
+
     $sql =
         "Funcionario.folhaPontoMensal_Atualiza 
         $codigo,
@@ -140,7 +130,7 @@ function recupera()
 
     $funcionario = (int)$_POST["funcionario"];
     $mesAno = $_POST["mesAno"];
-    $mesAno = preg_replace("/\d\d$/","01",$mesAno);
+    $mesAno = preg_replace("/\d\d$/", "01", $mesAno);
 
     $data = explode('-', $mesAno);
     $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
@@ -149,7 +139,7 @@ function recupera()
     if (!$funcionario) {
         $funcionario = (int)$_SESSION["funcionario"];
     }
-        $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
+    $sql = "SELECT F.codigo AS 'folha',FU.codigo AS 'funcionario' FROM Funcionario.folhaPontoMensal F
             INNER JOIN Ntl.funcionario FU ON F.funcionario = FU.codigo
             WHERE FU.codigo = $funcionario  AND F.mesAno BETWEEN '$mesAno' AND '$data[0]-$data[1]-$totalDiasMes'";
 
@@ -197,7 +187,7 @@ function recupera()
             $observacao . "^" .
             $mesAno . "^" .
             $toleranciaAtraso . "^" .
-            $toleranciaExtra. "^" .
+            $toleranciaExtra . "^" .
             $status;
     }
 
@@ -267,15 +257,16 @@ function excluir()
     return;
 }
 
-function verificar(){
+function consultarLancamento()
+{
     /*<-->Espaço destinada a variáveis ou funções utilitárias<-->*/
     session_start();
     $reposit = new reposit();
     $lancamento = $_POST['id'];
-    
+
     $search = "abonaAtraso";
     $table = "Ntl.lancamento";
-    $sql = "SELECT ". $search ." FROM ". $table ." WHERE codigo = ". $lancamento ."";
+    $sql = "SELECT " . $search . " FROM " . $table . " WHERE codigo = " . $lancamento . "";
     $result = $reposit->RunQuery($sql);
     /* <-->Função destinada para consultar dados relacionados a página<--> */
     $row = $result[0];
@@ -291,5 +282,97 @@ function verificar(){
 
     echo "sucess#" . "$out#";
     return;
+}
 
+function consultarPermissoes()
+{
+    session_start();
+    $usuario = $_SESSION["login"];
+    $reposit = new reposit();
+    $sql = "SELECT F.nome FROM Ntl.funcionalidade F INNER JOIN Ntl.usuarioFuncionalidade UF 
+    ON F.codigo = UF.funcionalidade
+    INNER JOIN Ntl.usuario U ON U.codigo = UF.usuario WHERE U.login = '" . $usuario . "'";
+
+    $result = $reposit->RunQuery($sql);
+    $permissoes = array();
+    $pattern = "/(PONTOELETRONICOMENSALMAXIMO_GRAVAR|PONTOELETRONICOMENSALMODERADO_GRAVAR|PONTOELETRONICOMENSALMINIMO_GRAVAR)/i";
+    foreach ($result as $row) {
+        if (preg_match($pattern, $row["nome"])) {
+            array_push($permissoes, substr($row["nome"], 0, -7));
+        }
+    }
+
+    $arrayPermissoes = array();
+    foreach ($permissoes as $permissao) {
+        switch ($permissao) {
+            case 'PONTOELETRONICOMENSALMAXIMO':
+                array_push($arrayPermissoes, [
+                    $permissao => [
+                        "funcionario" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "mesAno" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "status" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "dia" => ["readonly" => "false", "class" => ""],
+                        "entrada" => ["readonly" => "false", "class" => ""],
+                        "inicioAlmoco" => ["readonly" => "false", "class" => ""],
+                        "fimAlmoco" => ["readonly" => "false", "class" => ""],
+                        "saida" => ["readonly" => "false", "class" => ""],
+                        "extra" => ["readonly" => "false", "class" => ""],
+                        "atraso" => ["readonly" => "false", "class" => ""],
+                        "lancamento" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "adicionarPonto" => ["disabled" => "false"],
+                        "salvarAlteracoes" => ["disabled" => "false"],
+                    ]
+                ]);
+                break;
+            case 'PONTOELETRONICOMENSALMODERADO':
+                array_push($arrayPermissoes, [
+                    $permissao => [
+                        "funcionario" => ["readonly" => "true", "pointer-events" => "none", "touch-action" => "none", "class" => "readonly"],
+                        "mesAno" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "status" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "dia" => ["readonly" => "false", "class" => ""],
+                        "entrada" => ["readonly" => "false", "class" => ""],
+                        "inicioAlmoco" => ["readonly" => "false", "class" => ""],
+                        "fimAlmoco" => ["readonly" => "false", "class" => ""],
+                        "saida" => ["readonly" => "false", "class" => ""],
+                        "extra" => ["readonly" => "false", "class" => ""],
+                        "atraso" => ["readonly" => "false", "class" => ""],
+                        "lancamento" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "adicionarPonto" => ["disabled" => "false"],
+                        "salvarAlteracoes" => ["disabled" => "false"],
+                    ]
+                ]);
+                break;
+            case 'PONTOELETRONICOMENSALMINIMO':
+                array_push($arrayPermissoes, [
+                    $permissao => [
+                        "funcionario" => ["readonly" => "true", "pointer-events" => "none", "touch-action" => "none", "class" => "readonly"],
+                        "mesAno" => ["readonly" => "true", "pointer-events" => "none", "touch-action" => "none", "class" => "readonly"],
+                        "status" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "dia" => ["readonly" => "true", "class" => "readonly"],
+                        "entrada" => ["readonly" => "true", "class" => "readonly"],
+                        "inicioAlmoco" => ["readonly" => "true", "class" => "readonly"],
+                        "fimAlmoco" => ["readonly" => "true", "class" => "readonly"],
+                        "saida" => ["readonly" => "true", "class" => "readonly"],
+                        "extra" => ["readonly" => "true", "class" => "readonly"],
+                        "atraso" => ["readonly" => "true", "class" => "readonly"],
+                        "lancamento" => ["readonly" => "true", "pointer-events" => "none", "touch-action" => "none", "class" => "readonly"],
+                        "adicionarPonto" => ["disabled" => "true"],
+                        "salvarAlteracoes" => ["disabled" => "true"],
+                    ]
+                ]);
+                break;
+        }
+    }
+
+
+    $out = json_encode($arrayPermissoes);
+
+    if ($out == "") {
+        echo "failed#" . "$out#";
+        return;
+    }
+
+    echo "sucess#" . "$out#";
+    return;
 }

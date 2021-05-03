@@ -41,12 +41,26 @@ function gravaFolhaPontoMensal(folhaPontoInfo,folhaPontoMensalTabela,callback) {
     });
   }
 
-  function  consultarDados(id, callback) {
+  function  consultarLancamento(id, callback) {
     $.ajax({
         url: 'js/sqlscope_beneficioFolhaPontoMensal.php', //caminho do arqivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: 'verificar', id: id}, //valores enviados ao script     
+        data: {funcao: 'consultarLancamento', id: id}, //valores enviados ao script     
+      
+        success: function (data) {
+            callback(data); 
+        }
+        
+    });
+  }
+
+  function  consultarPermissoes(callback) {
+    $.ajax({
+        url: 'js/sqlscope_beneficioFolhaPontoMensal.php', //caminho do arqivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: {funcao: 'consultarPermissoes'}, //valores enviados ao script     
       
         success: function (data) {
             callback(data); 
