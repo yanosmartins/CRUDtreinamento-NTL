@@ -32,25 +32,25 @@ function gravar()
     session_start();
     $usuario = $_SESSION['login'];
     $codigo = $_POST['codigo'];
-    $funcionario = $_POST['funcionario'];
+    $funcionario = (int)$_POST['funcionario'];
     $mesAno = $_POST['mesAno'];
-    $idFolha = $_POST['idFolha'];
-    $status = $_POST['status'];
-    $dia = $_POST['dia'];
+    $idFolha = (int)$_POST['idFolha'];
+    $status = (int)$_POST['status'];
+    $dia = (int)$_POST['dia'];
     $horaEntrada = $_POST['horaEntrada'];
     $horaSaida = $_POST['horaSaida'];
     $inicioAlmoco = $_POST['inicioAlmoco'];
     $fimAlmoco = $_POST['fimAlmoco'];
     $horaExtra = $_POST['horaExtra'];
     $atraso = $_POST['atraso'];
-    $lancamento = $_POST['lancamento'];
+    $lancamento = (int)$_POST['lancamento'];
     $observacao = '';
 
 
     $sql = "SELECT dia,horaEntrada,horaSaida,inicioAlmoco,fimAlmoco,horaExtra,atraso,lancamento
   FROM Funcionario.folhaPontoMensalDetalheDiario WHERE folhaPontoMensal = $idFolha";
 
-    $result = $reposit->RunQuery($sql);
+   $result = $reposit->RunQuery($sql);
 
 
     $xmlFolhaPontoMensal = "";
@@ -92,10 +92,10 @@ function gravar()
 
         for ($i = 0; $i < $totalDias; $i++) {
 
-            $xmlFolhaPontoMensal .= "<$nomeTabela>";
+            $xmlFolhaPontoMensal .= "<$nomeTabela><dia>";
 
 
-
+            $xmlFolhaPontoMensal .=  $i+1 ."</dia>";
             $xmlFolhaPontoMensal .= "<horaEntrada>00:00:00</horaEntrada>";
             $xmlFolhaPontoMensal .= "<inicioAlmoco>00:00</inicioAlmoco>";
             $xmlFolhaPontoMensal .= "<fimAlmoco>00:00</fimAlmoco>";
@@ -113,6 +113,7 @@ function gravar()
         echo "failed#" . $mensagem . ' ';
         return;
     }else{
+        $xml->ponto[$dia-1]->dia=$dia;
         $xml->ponto[$dia-1]->horaEntrada=$horaEntrada;
         $xml->ponto[$dia-1]->inicioAlmoco=$inicioAlmoco;
         $xml->ponto[$dia-1]->fimAlmoco=$fimAlmoco;

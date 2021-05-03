@@ -182,24 +182,30 @@ include("inc/nav.php");
 
                                                         </div>
 
+                                                        <section class="col col-2">
+                                                                    <label class="label" for="lancamento">Lançamento/Ocorrência</label>
+                                                                    
+                                                                </section>
+
                                                         <div class="col col-xs-12">
                                                             <div class="col col-md-6"><br>
                                                                 <label class="label" for="lancamento">Ocorrência/Lançamento</label>
                                                                 <label class="select">
-                                                                    <select id="lancamento" name="lancamento" style="height: 40px;" class="" readonly>
-                                                                        <option></option>
-                                                                        <?php
-                                                                        $reposit = new reposit();
-                                                                        $sql = "select codigo, descricao from Ntl.lancamento where ativo = 1 order by descricao";
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach ($result as $row) {
-                                                                            $codigo = (int) $row['codigo'];
-                                                                            $descricao = $row['descricao'];
-                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
+                                                                        <select id="inputLancamento" name="inputLancamento">
+                                                                            <option selected value="0"></option>
+                                                                            <?php
+                                                                            $reposit = new reposit();
+                                                                            $projeto = $_SESSION['projeto'];
+                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L LEFT JOIN Ntl.lancamentoProjeto LP ON L.codigo = LP.lancamento where L.ativo = 1 AND (LP.projeto = " . $projeto . " OR LP.projeto = NULL) order by L.descricao";
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = (int) $row['codigo'];
+                                                                                $descricao = $row['descricao'];
+                                                                                echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                    </label>
                                                             </div>
                                                             <div class="col col-md-6">
                                                                 <div class="col col-md-6"><br>
@@ -423,7 +429,7 @@ include("inc/scripts.php");
 
         //m <= tolerancia Atraso
         if (m < mTolerancia && h == 0) {
-            atraso = ""
+            atraso = "00:00"
         }
 
         //Fim da Verificação de Atraso
@@ -439,7 +445,7 @@ include("inc/scripts.php");
 
         //m <= tolerancia Extra
         if (m <= mTolerancia && h == 0) {
-            horaExtra = ""
+            horaExtra = "00:00"
         }
 
         //Fim da Verificação de Extra
@@ -537,8 +543,8 @@ include("inc/scripts.php");
                 var horaSaida = piece[3] || '00:00:00';
                 var inicioAlmoco = piece[4] || '00:00';
                 var fimAlmoco = piece[5] || '00:00';
-                var horaExtra = piece[6] || '00:00:00';
-                var atraso = piece[7] || '00:00:00';
+                var horaExtra = piece[6] || '00:00';
+                var atraso = piece[7] || '00:00';
                 var lancamento = piece[8];
                 var status = piece[9];
 
