@@ -327,7 +327,7 @@ function consultarPermissoes()
             case 'PONTOELETRONICOMENSALMODERADO':
                 array_push($arrayPermissoes, [
                     $permissao => [
-                        "funcionario" => ["readonly" => "true", "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
+                        "funcionario" => ["readonly" => "true", "pointerEvents" => "auto", "touchAction" => "auto", "class" => "readonly"],
                         "mesAno" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "status" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "dia" => ["readonly" => "false", "class" => ""],
@@ -346,19 +346,19 @@ function consultarPermissoes()
             case 'PONTOELETRONICOMENSALMINIMO':
                 array_push($arrayPermissoes, [
                     $permissao => [
-                        "funcionario" => ["readonly" => "true", "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
-                        "mesAno" => ["readonly" => "true", "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
+                        "funcionario" => ["readonly" => "true", "pointerEvents" => "auto", "touchAction" => "auto", "class" => "readonly"],
+                        "mesAno" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "status" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "dia" => ["readonly" => "true", "class" => "readonly"],
-                        "entrada" => ["readonly" => "true", "class" => "readonly"],
-                        "inicioAlmoco" => ["readonly" => "true", "class" => "readonly"],
-                        "fimAlmoco" => ["readonly" => "true", "class" => "readonly"],
-                        "saida" => ["readonly" => "true", "class" => "readonly"],
-                        "extra" => ["readonly" => "true", "class" => "readonly"],
-                        "atraso" => ["readonly" => "true", "class" => "readonly"],
-                        "lancamento" => ["readonly" => "true", "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
-                        "adicionarPonto" => ["disabled" => "true"],
-                        "salvarAlteracoes" => ["disabled" => "true"],
+                        "dia" => ["readonly" => "false", "class" => ""],
+                        "entrada" => ["readonly" => "false", "class" => ""],
+                        "inicioAlmoco" => ["readonly" => "false", "class" => ""],
+                        "fimAlmoco" => ["readonly" => "false", "class" => ""],
+                        "saida" => ["readonly" => "false", "class" => ""],
+                        "extra" => ["readonly" => "false", "class" => ""],
+                        "atraso" => ["readonly" => "false", "class" => ""],
+                        "lancamento" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "adicionarPonto" => ["disabled" => "false"],
+                        "salvarAlteracoes" => ["disabled" => "false"],
                     ]
                 ]);
                 break;
