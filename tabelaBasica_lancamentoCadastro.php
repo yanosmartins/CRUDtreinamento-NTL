@@ -180,6 +180,7 @@ include("inc/nav.php");
                                                                     <i class="fa fa-minus"></i>
                                                                 </button>
                                                             </section>
+                                                            </div>
 
                                                             <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
                                                                 <table id="tableProjeto" class="table table-bordered table-striped table-condensed table-hover dataTable">
@@ -195,7 +196,7 @@ include("inc/nav.php");
                                                                 </table>
 
                                                             </div>
-                                                        </div>
+                                                        
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -321,13 +322,16 @@ include("inc/scripts.php");
 
         $("#btnAddProjeto").on("click", function() {
             var projeto = $("#projeto").val();
+            var existe = true;
 
             if (!projeto) {
                 smartAlert("Atenção", "Escolha um projeto", "error")
                 return;
             }
-
-            addProjeto();
+            if (validaProjeto()) {
+                addProjeto();
+            }
+ 
         });
 
         $("#btnRemoverProjeto").on("click", function() {
@@ -499,6 +503,8 @@ include("inc/scripts.php");
 
     }
 
+   
+
     function fillTableProjeto() {
         $("#tableProjeto tbody").empty();
         for (var i = 0; i < jsonProjetoArray.length; i++) {
@@ -566,6 +572,25 @@ include("inc/scripts.php");
         } else
             smartAlert("Erro", "Selecione pelo menos 1 Projeto para excluir.", "error");
     }
+
+    function validaProjeto() {
+		var existeProjeto = false;
+		var achou = false;
+		var sequencial = +$('#sequencialProjeto').val();
+        var projeto = $('#projeto').val();
+		for (i = jsonProjetoArray.length - 1; i >= 0; i--) {
+			if ((jsonProjetoArray[i].projeto === projeto) && (jsonProjetoArray[i].sequencialProjeto !== sequencial)) {
+				existeProjeto = true;
+                break;     
+		}
+	
+	}
+    if (existeProjeto === true) {
+			smartAlert("Erro", "Este projeto ja existe!", "error");
+			return false;
+		}
+    return true;
+}
 
     function gravar() {
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
