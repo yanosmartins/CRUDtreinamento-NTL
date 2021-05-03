@@ -1598,23 +1598,23 @@ include("inc/scripts.php");
                             $("#funcionario").removeAttr('readonly');
                             $("#funcionario").removeAttr('style');
                             $("#funcionario").removeClass('readonly');
-                            $("#funcionario").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#funcionario").css('touch-action', alias[property]["touch.action"]);
+                            $("#funcionario").css('pointer-events', alias[property].pointerEvents);
+                            $("#funcionario").css('touch-action', alias[property].touchAction);
 
                             break;
                         case 'mesAno':
                             $("#mesAno").removeAttr('readonly');
                             $("#mesAno").removeAttr('style');
                             $("#mesAno").removeClass('readonly');
-                            $("#mesAno").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#mesAno").css('touch-action', alias[property]["touch.action"]);
+                            $("#mesAno").css('pointer-events', alias[property].pointerEvents);
+                            $("#mesAno").css('touch-action', alias[property].touchAction);
                             break;
                         case 'status':
                             $("#status").removeAttr('readonly');
                             $("#status").removeAttr('style');
                             $("#status").removeClass('readonly');
-                            $("#status").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#status").css('touch-action', alias[property]["touch.action"]);
+                            $("#status").css('pointer-events', alias[property].pointerEvents);
+                            $("#status").css('touch-action', alias[property].touchAction);
                             break;
                         case 'dia':
                             $("#inputDia").removeAttr('readonly');
@@ -1648,8 +1648,8 @@ include("inc/scripts.php");
                             $("#inputLancamento").removeAttr('readonly');
                             $("#inputLancamento").removeAttr('style');
                             $("#inputLancamento").removeClass('readonly');
-                            $("#inputLancamento").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#inputLancamento").css('touch-action', alias[property]["touch.action"]);
+                            $("#inputLancamento").css('pointer-events', alias[property].pointerEvents);
+                            $("#inputLancamento").css('touch-action', alias[property].touchAction);
                             break;
                         case 'adicionarPonto':
                             $("#btnAddPonto").removeAttr('disabled');
@@ -1715,8 +1715,8 @@ include("inc/scripts.php");
                         case 'lancamento':
                             $("#inputLancamento").removeAttr('readonly');
                             $("#inputLancamento").removeClass('readonly');
-                            $("#inputLancamento").css('pointer-events', alias[property]["pointer-events"]);
-                            $("#inputLancamento").css('touch-action', alias[property]["touch.action"]);
+                            $("#inputLancamento").css('pointer-events', alias[property].pointerEvents);
+                            $("#inputLancamento").css('touch-action', alias[property].touchAction);
                             break;
                         case 'adicionarPonto':
                             $("#btnAddPonto").removeAttr('disabled');

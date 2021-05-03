@@ -308,9 +308,9 @@ function consultarPermissoes()
             case 'PONTOELETRONICOMENSALMAXIMO':
                 array_push($arrayPermissoes, [
                     $permissao => [
-                        "funcionario" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
-                        "mesAno" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
-                        "status" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "funcionario" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "mesAno" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "status" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "dia" => ["readonly" => "false", "class" => ""],
                         "entrada" => ["readonly" => "false", "class" => ""],
                         "inicioAlmoco" => ["readonly" => "false", "class" => ""],
@@ -318,7 +318,7 @@ function consultarPermissoes()
                         "saida" => ["readonly" => "false", "class" => ""],
                         "extra" => ["readonly" => "false", "class" => ""],
                         "atraso" => ["readonly" => "false", "class" => ""],
-                        "lancamento" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "lancamento" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "adicionarPonto" => ["disabled" => "false"],
                         "salvarAlteracoes" => ["disabled" => "false"],
                     ]
@@ -327,9 +327,9 @@ function consultarPermissoes()
             case 'PONTOELETRONICOMENSALMODERADO':
                 array_push($arrayPermissoes, [
                     $permissao => [
-                        "funcionario" => ["readonly" => "true", "pointer-events" => "none", "touch-action" => "none", "class" => "readonly"],
-                        "mesAno" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
-                        "status" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "funcionario" => ["readonly" => "true", "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
+                        "mesAno" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "status" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "dia" => ["readonly" => "false", "class" => ""],
                         "entrada" => ["readonly" => "false", "class" => ""],
                         "inicioAlmoco" => ["readonly" => "false", "class" => ""],
@@ -337,7 +337,7 @@ function consultarPermissoes()
                         "saida" => ["readonly" => "false", "class" => ""],
                         "extra" => ["readonly" => "false", "class" => ""],
                         "atraso" => ["readonly" => "false", "class" => ""],
-                        "lancamento" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "lancamento" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "adicionarPonto" => ["disabled" => "false"],
                         "salvarAlteracoes" => ["disabled" => "false"],
                     ]
@@ -346,9 +346,9 @@ function consultarPermissoes()
             case 'PONTOELETRONICOMENSALMINIMO':
                 array_push($arrayPermissoes, [
                     $permissao => [
-                        "funcionario" => ["readonly" => "true", "pointer-events" => "none", "touch-action" => "none", "class" => "readonly"],
-                        "mesAno" => ["readonly" => "true", "pointer-events" => "none", "touch-action" => "none", "class" => "readonly"],
-                        "status" => ["readonly" => "false", "pointer-events" => "auto", "touch-action" => "auto", "class" => ""],
+                        "funcionario" => ["readonly" => "true", "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
+                        "mesAno" => ["readonly" => "true", "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
+                        "status" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "dia" => ["readonly" => "true", "class" => "readonly"],
                         "entrada" => ["readonly" => "true", "class" => "readonly"],
                         "inicioAlmoco" => ["readonly" => "true", "class" => "readonly"],
@@ -356,7 +356,7 @@ function consultarPermissoes()
                         "saida" => ["readonly" => "true", "class" => "readonly"],
                         "extra" => ["readonly" => "true", "class" => "readonly"],
                         "atraso" => ["readonly" => "true", "class" => "readonly"],
-                        "lancamento" => ["readonly" => "true", "pointer-events" => "none", "touch-action" => "none", "class" => "readonly"],
+                        "lancamento" => ["readonly" => "true", "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
                         "adicionarPonto" => ["disabled" => "true"],
                         "salvarAlteracoes" => ["disabled" => "true"],
                     ]
