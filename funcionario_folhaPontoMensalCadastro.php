@@ -8,49 +8,15 @@ require_once("inc/config.ui.php");
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 
 $condicaoMaximaAcessarOK = (in_array('PONTOELETRONICOMENSALMAXIMO_ACESSAR', $arrayPermissao, true));
-$condicaoMaximaGravarOK = (in_array('PONTOELETRONICOMENSALMAXIMO_GRAVAR', $arrayPermissao, true));
-$condicaoMaximaExcluirOK = (in_array('PONTOELETRONICOMENSALMAXIMO_EXCLUIR', $arrayPermissao, true));
 
 $condicaoModeradaAcessarOK = (in_array('PONTOELETRONICOMENSALMODERADO_ACESSAR', $arrayPermissao, true));
-$condicaoModeradaGravarOK = (in_array('PONTOELETRONICOMENSALMODERADO_GRAVAR', $arrayPermissao, true));
-$condicaoModeradaExcluirOK = (in_array('PONTOELETRONICOMENSALMODERADO_EXCLUIR', $arrayPermissao, true));
 
 $condicaoMinimaAcessarOK = (in_array('PONTOELETRONICOMENSALMINIMO_ACESSAR', $arrayPermissao, true));
-$condicaoMinimaGravarOK = (in_array('PONTOELETRONICOMENSALMINIMO_GRAVAR', $arrayPermissao, true));
-$condicaoMinimaExcluirOK = (in_array('PONTOELETRONICOMENSALMINIMO_EXCLUIR', $arrayPermissao, true));
-
-$esconderCampo = "";
-if ($condicaoMinimaGravarOK) {
-    $esconderCampoMinimo = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
-}
-if ($condicaoModeradaGravarOK) {
-    $esconderCampoModerado = ['display' => 'none', 'disabled' => 'disabled', 'readonly' => 'readonly', 'pointer-events' => 'none', 'touch-action' => 'none'];
-}
-if ($condicaoMaximaGravarOK) {
-    $esconderCampoMinimo = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
-    $esconderCampoModerado = ['display' => '', 'disabled' => '', 'readonly' => '', 'pointer-events' => 'auto', 'touch-action' => 'auto'];
-}
 
 if (($condicaoMaximaAcessarOK == false) && ($condicaoModeradaAcessarOK == false) && ($condicaoMinimaAcessarOK == false)) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
-
-$esconderBtnExcluir = "";
-if (($condicaoMaximaExcluirOK == false) && ($condicaoModeradaExcluirOK == false) && ($condicaoMinimaExcluirOK == false)) {
-    $esconderBtnExcluir = "none";
-}
-
-$esconderBtnGravar = "";
-if (($condicaoModeradaGravarOK == true) || ($condicaoMinimaGravarOK == true)) {
-    $esconderBtnGravar = "none";
-}
-
-if ($condicaoMaximaGravarOK == false) {
-    $esconderBtnGravar = "none";
-}
-
-
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -124,32 +90,19 @@ include("inc/nav.php");
                                                                     <section class="col col-4">
                                                                         <label class="label " for="funcionario">Funcionário</label>
                                                                         <label class="select">
-                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:
-                                                                            <?php
-                                                                            if ($esconderCampoMinimo) {
-                                                                                echo $esconderCampoMinimo['touch-action'];
-                                                                            } else if ($esconderCampoModerado) {
-                                                                                echo $esconderCampoModerado['touch-action'];
-                                                                            }
-                                                                            ?>;pointer-events:
-                                                                            <?php
-                                                                            if ($esconderCampoMinimo) {
-                                                                                echo $esconderCampoMinimo['pointer-events'];
-                                                                            } else if ($esconderCampoModerado) {
-                                                                                echo $esconderCampoModerado['pointer-events'];
-                                                                            }
-                                                                            ?>">
+                                                                            <select id="funcionario" name="funcionario" class="readonly" readonly style="touch-action:none;pointer-events:none">
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo != " . $_SESSION['funcionario'] . " order by nome";
+                                                                                $funcionario = $_SESSION['funcionario'];
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo != " . $funcionario . " order by nome";
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 foreach ($result as $row) {
                                                                                     $codigo = (int) $row['codigo'];
                                                                                     $nome = $row['nome'];
                                                                                     echo '<option value= ' . $codigo . '>' . $nome . '</option>';
                                                                                 }
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $_SESSION['funcionario'];
+                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $funcionario;
 
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 if ($row = $result[0]) {
@@ -167,10 +120,7 @@ include("inc/nav.php");
                                                                     <section class="col col-2">
                                                                         <label class="label" for="mesAno">Mês/Ano</label>
                                                                         <label class="input">
-                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="<?= $esconderCampoMinimo['readonly'] ?>" <?= $esconderCampoMinimo['readonly'] ?> style="pointer-events:
-                                                                            <?= $esconderCampoMinimo['pointer-events'] ?>;
-                                                                            touch-action:
-                                                                            <?= $esconderCampoMinimo['touch-action'] ?>">
+                                                                            <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="readonly" readonly style="pointer-events:none;touch-action:none">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-2">
@@ -251,7 +201,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="status">Status</label>
                                                                     <label class="select">
-                                                                        <select id="status" name="status">
+                                                                        <select id="status" name="status" class="readonly" readonly style="pointer-events: none; touch-action: none">
                                                                             <?php
                                                                             $reposit = new reposit();
                                                                             $sql = "SELECT S.codigo,S.descricao from Ntl.status S  where S.ativo = 1 order by S.codigo";
@@ -259,7 +209,8 @@ include("inc/nav.php");
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $descricao = $row['descricao'];
-                                                                                if ($descricao == 'aberto') {
+                                                                                $pattern = "/^aberto$/i";
+                                                                                if (preg_match($pattern, $descricao)) {
                                                                                     echo '<option value="' . $codigo . '" selected>' . $descricao . '</option>';
                                                                                 } else {
                                                                                     echo '<option value="' . $codigo . '">' . $descricao . '</option>';
@@ -277,16 +228,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Dia</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control required 
-                                                                            <?php
-                                                                            if ($esconderCampoMinimo) {
-                                                                                echo $esconderCampoMinimo['readonly'];
-                                                                            }
-                                                                            ?>" required data-autoclose="true" <?php
-                                                                                                                if ($esconderCampoMinimo) {
-                                                                                                                    echo $esconderCampoMinimo['readonly'];
-                                                                                                                }
-                                                                                                                ?>>
+                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly" readonly data-autoclose="true">
                                                                         </div>
                                                                     </div>
                                                                 </section>
@@ -295,16 +237,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label id="labelHora" class="label">Entrada</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control 
-                                                                            <?php
-                                                                            if ($esconderCampoMinimo) {
-                                                                                echo $esconderCampoMinimo['readonly'];
-                                                                            }
-                                                                            ?>" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" <?php
-                                                                                                                                                    if ($esconderCampoMinimo) {
-                                                                                                                                                        echo $esconderCampoMinimo['readonly'];
-                                                                                                                                                    }
-                                                                                                                                                    ?>>
+                                                                            <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control readonly" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" readonly>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -315,15 +248,7 @@ include("inc/nav.php");
                                                                         <label class="label">Inicio/Almoço</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
                                                                             <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control 
-                                                                            <?php
-                                                                            if ($esconderCampoMinimo) {
-                                                                                echo $esconderCampoMinimo['readonly'];
-                                                                            }
-                                                                            ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php
-                                                                                                                                            if ($esconderCampoMinimo) {
-                                                                                                                                                echo $esconderCampoMinimo['readonly'];
-                                                                                                                                            }
-                                                                                                                                            ?>>
+                                                                            readonly" placeholder="00:00" data-autoclose="true" data-mask="99:99" readonly>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -334,15 +259,7 @@ include("inc/nav.php");
                                                                         <label class="label">Fim/Almoço</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
                                                                             <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control 
-                                                                            <?php
-                                                                            if ($esconderCampoMinimo) {
-                                                                                echo $esconderCampoMinimo['readonly'];
-                                                                            }
-                                                                            ?>" placeholder="00:00" data-autoclose="true" data-mask="99:99" <?php
-                                                                                                                                            if ($esconderCampoMinimo) {
-                                                                                                                                                echo $esconderCampoMinimo['readonly'];
-                                                                                                                                            }
-                                                                                                                                            ?>>
+                                                                            readonly" placeholder="00:00" data-autoclose="true" data-mask="99:99" readonly>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -353,15 +270,7 @@ include("inc/nav.php");
                                                                         <label id="labelHora" class="label">Saída</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
                                                                             <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control 
-                                                                            <?php
-                                                                            if ($esconderCampoMinimo) {
-                                                                                echo $esconderCampoMinimo['readonly'];
-                                                                            }
-                                                                            ?>" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" <?php
-                                                                                                                                                    if ($esconderCampoMinimo) {
-                                                                                                                                                        echo $esconderCampoMinimo['readonly'];
-                                                                                                                                                    }
-                                                                                                                                                    ?>>
+                                                                            readonly" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" readonly>
                                                                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                         </div>
                                                                     </div>
@@ -390,25 +299,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label" for="lancamento">Lançamento/Ocorrência</label>
                                                                     <label class="select">
-                                                                        <select id="inputLancamento" name="inputLancamento" style="touch-action:
-                                                                        <?php
-                                                                        if ($esconderCampoPesado) {
-                                                                            echo $esconderCampoPesado['touch-action'];
-                                                                        }
-                                                                        ?>;pointer-events:
-                                                                        <?php
-                                                                        if ($esconderCampoPesado) {
-                                                                            echo $esconderCampoPesado['pointer-events'];
-                                                                        } ?>" <?php
-                                                                                if ($esconderCampoPesado) {
-                                                                                    echo $esconderCampoPesado['readonly'];
-                                                                                }
-                                                                                ?> class="
-                                                                        <?php
-                                                                        if ($esconderCampoPesado) {
-                                                                            echo $esconderCampoPesado['readonly'];
-                                                                        }
-                                                                        ?>">
+                                                                        <select id="inputLancamento" name="inputLancamento" style="touch-action:none;pointer-events:none" readonly class="readonly">
                                                                             <option selected value="0"></option>
                                                                             <?php
                                                                             $reposit = new reposit();
@@ -420,7 +311,7 @@ include("inc/nav.php");
                                                                             LEFT JOIN 
                                                                             Ntl.projeto P 
                                                                             ON P.codigo = LP.projeto
-                                                                            where L.ativo = 1 AND (P.codigo = ". $projeto ." OR P.codigo IS NULL) order by L.descricao";
+                                                                            where L.ativo = 1 AND (P.codigo = " . $projeto . " OR P.codigo IS NULL) order by L.descricao";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
@@ -443,12 +334,7 @@ include("inc/nav.php");
 
                                                                 <section class="col col-md-2">
                                                                     <label class="label"> </label>
-                                                                    <button id="btnAddPonto" type="button" class="btn btn-primary" style="display:
-                                                                    <?php
-                                                                    if ($esconderCampoPesado) {
-                                                                        echo $esconderCampoPesado['display'];
-                                                                    }
-                                                                    ?>">
+                                                                    <button id="btnAddPonto" type="button" class="btn btn-primary" disabled>
                                                                         <i class="">Adicionar Ponto</i>
                                                                     </button>
                                                                 </section>
@@ -457,12 +343,7 @@ include("inc/nav.php");
 
                                                                 <section class="col col-md-2">
                                                                     <label class=" label"> </label>
-                                                                    <button id="btnGravar" type="button" class="btn btn-success" style="display:
-                                                                    <?php
-                                                                    if ($esconderCampoPesado) {
-                                                                        echo $esconderCampoPesado['display'];
-                                                                    }
-                                                                    ?>">
+                                                                    <button id="btnGravar" type="button" class="btn btn-success" disabled>
                                                                         <i class="">Salvar alterações</i>
                                                                     </button>
                                                                 </section>
@@ -997,6 +878,8 @@ include("inc/scripts.php");
 
                 preencherPonto(JsonFolha);
 
+                getPermissions();
+
                 return;
 
             }
@@ -1492,7 +1375,7 @@ include("inc/scripts.php");
         const lancamento = $("#inputLancamento").val();
         let abonarAtraso = 0;
 
-        consultarDados(lancamento, function(data) {
+        consultarLancamento(lancamento, function(data) {
 
             data = data.replace(/failed/gi, '');
             var piece = data.split("#");
@@ -1525,7 +1408,7 @@ include("inc/scripts.php");
         let mesAno = $("#mesAno").val();
         mesAno = mesAno.replace(/\d\d$/g, day);
         const aux = mesAno.split('-');
-        const date = new Date(aux[0],(aux[1]-1),aux[2]);
+        const date = new Date(aux[0], (aux[1] - 1), aux[2]);
         let isWeekend = false;
         let checkDay = date.getDay();
         const weekend = [0, 6];
@@ -1675,5 +1558,220 @@ include("inc/scripts.php");
         abonarAtraso();
 
         return;
+    }
+
+    function getPermissions() {
+        consultarPermissoes(function(data) {
+            data = data.replace(/failed/gi, '');
+            var piece = data.split("#");
+
+            var mensagem = piece[0];
+            var out = piece[1];
+            if (out == "[]") {
+                smartAlert("Atenção", "Não foi possível verificar a permissão do usuário", "error");
+                return;
+            }
+
+            try {
+                piece = out.split("^");
+
+                let permissoes = JSON.parse(piece[0]);
+                setPage(permissoes);
+
+            } catch (e) {
+                smartAlert("Atenção", "Não foi possível verificar a permissão do usuário", "error")
+            } finally {
+                return;
+            }
+
+        });
+    }
+
+    function setPage(ArrayOfObject = [{}]) {
+
+        ArrayOfObject.forEach((obj, index) => {
+            if (obj.PONTOELETRONICOMENSALMAXIMO) {
+                const alias = obj.PONTOELETRONICOMENSALMAXIMO;
+                for (let property in alias) {
+                    switch (property) {
+                        case 'funcionario':
+                            $("#funcionario").removeAttr('readonly');
+                            $("#funcionario").removeAttr('style');
+                            $("#funcionario").removeClass('readonly');
+                            $("#funcionario").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#funcionario").css('touch-action', alias[property]["touch.action"]);
+
+                            break;
+                        case 'mesAno':
+                            $("#mesAno").removeAttr('readonly');
+                            $("#mesAno").removeAttr('style');
+                            $("#mesAno").removeClass('readonly');
+                            $("#mesAno").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#mesAno").css('touch-action', alias[property]["touch.action"]);
+                            break;
+                        case 'status':
+                            $("#status").removeAttr('readonly');
+                            $("#status").removeAttr('style');
+                            $("#status").removeClass('readonly');
+                            $("#status").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#status").css('touch-action', alias[property]["touch.action"]);
+                            break;
+                        case 'dia':
+                            $("#inputDia").removeAttr('readonly');
+                            $("#inputDia").removeClass('readonly');
+                            break;
+                        case 'entrada':
+                            $("#inputHoraEntrada").removeAttr('readonly');
+                            $("#inputHoraEntrada").removeClass('readonly');
+                            break;
+                        case 'inicioAlmoco':
+                            $("#inputInicioAlmoco").removeAttr('readonly');
+                            $("#inputInicioAlmoco").removeClass('readonly');
+                            break;
+                        case 'fimAlmoco':
+                            $("#inputFimAlmoco").removeAttr('readonly');
+                            $("#inputFimAlmoco").removeClass('readonly');
+                            break;
+                        case 'saida':
+                            $("#inputHoraSaida").removeAttr('readonly');
+                            $("#inputHoraSaida").removeClass('readonly');
+                            break;
+                        case 'extra':
+                            $("#inputHoraExtra").removeAttr('readonly');
+                            $("#inputHoraExtra").removeClass('readonly');
+                            break;
+                        case 'atraso':
+                            $("#inputAtraso").removeAttr('readonly');
+                            $("#inputAtraso").removeClass('readonly');
+                            break;
+                        case 'lancamento':
+                            $("#inputLancamento").removeAttr('readonly');
+                            $("#inputLancamento").removeAttr('style');
+                            $("#inputLancamento").removeClass('readonly');
+                            $("#inputLancamento").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#inputLancamento").css('touch-action', alias[property]["touch.action"]);
+                            break;
+                        case 'adicionarPonto':
+                            $("#btnAddPonto").removeAttr('disabled');
+
+                            break;
+                        case 'salvarAlteracoes':
+                            $("#btnGravar").removeAttr('disabled');
+
+                            break;
+                    }
+                }
+            } else if (obj.PONTOELETRONICOMENSALMODERADO) {
+                const alias = obj.PONTOELETRONICOMENSALMODERADO;
+                for (let property in alias) {
+                    switch (property) {
+                        case 'funcionario':
+                            $("#funcionario").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#funcionario").css('touch-action', alias[property]["touch.action"]);
+
+                            break;
+                        case 'mesAno':
+                            $("#mesAno").removeAttr('readonly');
+                            $("#mesAno").removeAttr('style');
+                            $("#mesAno").removeClass('readonly');
+                            $("#mesAno").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#mesAno").css('touch-action', alias[property]["touch.action"]);
+                            break;
+                        case 'status':
+                            $("#status").removeAttr('readonly');
+                            $("#status").removeAttr('style');
+                            $("#status").removeClass('readonly');
+                            $("#status").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#status").css('touch-action', alias[property]["touch.action"]);
+                            break;
+                        case 'dia':
+                            $("#inputDia").removeAttr('readonly');
+                            $("#inputDia").removeClass('readonly');
+                            break;
+                        case 'entrada':
+                            $("#inputHoraEntrada").removeAttr('readonly');
+                            $("#inputHoraEntrada").removeClass('readonly');
+                            break;
+                        case 'inicioAlmoco':
+                            $("#inputInicioAlmoco").removeAttr('readonly');
+                            $("#inputInicioAlmoco").removeClass('readonly');
+                            break;
+                        case 'fimAlmoco':
+                            $("#inputFimAlmoco").removeAttr('readonly');
+                            $("#inputFimAlmoco").removeClass('readonly');
+                            break;
+                        case 'saida':
+                            $("#inputHoraSaida").removeAttr('readonly');
+                            $("#inputHoraSaida").removeClass('readonly');
+                            break;
+                        case 'extra':
+                            $("#inputHoraExtra").removeAttr('readonly');
+                            $("#inputHoraExtra").removeClass('readonly');
+                            break;
+                        case 'atraso':
+                            $("#inputAtraso").removeAttr('readonly');
+                            $("#inputAtraso").removeClass('readonly');
+                            break;
+                        case 'lancamento':
+                            $("#inputLancamento").removeAttr('readonly');
+                            $("#inputLancamento").removeClass('readonly');
+                            $("#inputLancamento").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#inputLancamento").css('touch-action', alias[property]["touch.action"]);
+                            break;
+                        case 'adicionarPonto':
+                            $("#btnAddPonto").removeAttr('disabled');
+
+                            break;
+                        case 'salvarAlteracoes':
+                            $("#btnGravar").removeAttr('disabled');
+
+                            break;
+                    }
+                }
+            } else if (obj.PONTOELETRONICOMENSALMINIMO) {
+                const alias = obj.PONTOELETRONICOMENSALMINIMO;
+                for (let property in alias) {
+                    switch (property) {
+                        case 'funcionario':
+                            $("#funcionario").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#funcionario").css('touch-action', alias[property]["touch.action"]);
+
+                            break;
+                        case 'mesAno':
+                            $("#mesAno").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#mesAno").css('touch-action', alias[property]["touch.action"]);
+                            break;
+                        case 'status':
+                            $("#status").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#status").css('touch-action', alias[property]["touch.action"]);
+                            break;
+                        case 'dia':
+                            break;
+                        case 'entrada':
+                            break;
+                        case 'inicioAlmoco':
+                            break;
+                        case 'fimAlmoco':
+                            break;
+                        case 'saida':
+                            break;
+                        case 'extra':
+                            break;
+                        case 'atraso':
+                            break;
+                        case 'lancamento':
+                            $("#inputLancamento").css('pointer-events', alias[property]["pointer-events"]);
+                            $("#inputLancamento").css('touch-action', alias[property]["touch.action"]);
+                            break;
+                        case 'adicionarPonto':
+
+                            break;
+                        case 'salvarAlteracoes':
+
+                            break;
+                    }
+                }
+            }
+        })
     }
 </script>
