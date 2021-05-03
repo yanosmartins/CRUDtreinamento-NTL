@@ -186,7 +186,7 @@ include("inc/nav.php");
                                                             <div class="col col-md-6"><br>
                                                                 <label class="label" for="lancamento">Ocorrência/Lançamento</label>
                                                                 <label class="select">
-                                                                        <select id="inputLancamento" name="inputLancamento">
+                                                                        <select id="lancamento" name="lancamento">
                                                                             <option selected value="0"></option>
                                                                             <?php
                                                                             $reposit = new reposit();
@@ -356,7 +356,7 @@ include("inc/scripts.php");
         var fimAlmoco = $("#fimAlmoco").val();
         var horaExtra = $("#horaExtra").val();
         var atraso = $("#atraso").val();
-        var lancamento = $("#lancamento").val() || 0;
+        var lancamento = $("#lancamento").val();
         var status = 1;
 
 
