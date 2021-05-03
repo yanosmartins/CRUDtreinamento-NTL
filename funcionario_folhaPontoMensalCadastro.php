@@ -413,7 +413,14 @@ include("inc/nav.php");
                                                                             <?php
                                                                             $reposit = new reposit();
                                                                             $projeto = $_SESSION['projeto'];
-                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L LEFT JOIN Ntl.lancamentoProjeto LP ON L.codigo = LP.lancamento where L.ativo = 1 AND (LP.projeto = " . $projeto . " OR LP.projeto = NULL) order by L.descricao";
+                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L 
+                                                                            LEFT JOIN 
+                                                                            Ntl.lancamentoProjeto LP 
+                                                                            ON L.codigo = LP.lancamento
+                                                                            LEFT JOIN 
+                                                                            Ntl.projeto P 
+                                                                            ON P.codigo = LP.projeto
+                                                                            where L.ativo = 1 AND (P.codigo = ". $projeto ." OR P.codigo IS NULL) order by L.descricao";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
