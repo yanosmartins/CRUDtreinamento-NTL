@@ -18,20 +18,14 @@ include "js/repositorio.php";
             <tbody>
                 <?php
                 $projeto = $_GET["projeto"];
-                $posto = $_GET["posto"];
-                $ativo = $_GET["ativo"];
-
-                if ($posto != "") {
-                    $where = $where . " AND VP.posto = $posto";
-                }
+                $situacao = $_GET["situacao"];
 
                 if ($projeto != "") {
                     $where = $where . " AND VP.projeto = $projeto ";
                 }
             
-                if ($ativo != "") {
-
-                    $where = $where . " AND VP.ativo = $ativo ";
+                if ($situacao != "") {
+                    $where = $where . " AND VP.situacao = '$situacao' ";
                 }
 
                 $reposit = new reposit();
@@ -40,7 +34,7 @@ include "js/repositorio.php";
                             FROM Faturamento.valorPosto AS VP
                             LEFT JOIN ntl.projeto P ON VP.projeto = P.codigo 
                             LEFT JOIN ntl.posto PO ON VP.posto = PO.codigo
-                            WHERE situacao = 'F'";
+                            WHERE VP.situacao != 'A'";
                 $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
 
@@ -50,6 +44,11 @@ include "js/repositorio.php";
                     $nomePosto = $row['nomePosto'];
                     $ativo = (int)$row['ativo'];
                     $situacao = $row['situacao'];
+                    if($situacao == 'F'){
+                        $situacaoDescricao = 'Fechado';
+                    }else if($situacao == 'C'){
+                        $situacaoDescricao = 'Cancelado';
+                    }
                     $usuarioFechamento = (string)$row['usuarioFechamento'];
                     $dataFechamento = $row['dataFechamento'];
                     if ($dataFechamento != "") {
@@ -63,7 +62,7 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $codigo . ' - '  . $nomeProjeto . '</td>';
                     echo '<td class="text-left">' . $nomePosto . '</td>';
                     // echo '<td class="text-left">' . $valor . '</td>';
-                    echo '<td class="text-left">' . $situacao . '</td>';
+                    echo '<td class="text-left">' . $situacaoDescricao . '</td>';
                     echo '<td class="text-left">' . $dataFechamento . '</td>';
                     echo '<td class="text-left">' . $usuarioFechamento . '</td>';
                     if ($ativo == 1) {
