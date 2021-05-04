@@ -1567,18 +1567,18 @@ include("inc/scripts.php");
 
             var mensagem = piece[0];
             var out = piece[1];
-            if (out == "[]") {
+            if (!out) {
                 smartAlert("Atenção", "Não foi possível verificar a permissão do usuário", "error");
                 return;
             }
 
             try {
-                piece = out.split("^");
-
-                let permissoes = JSON.parse(piece[0]);
+                debugger
+                let permissoes = JSON.parse(out);
                 setPage(permissoes);
 
             } catch (e) {
+                console.error(e)
                 smartAlert("Atenção", "Não foi possível verificar a permissão do usuário", "error")
             } finally {
                 return;
@@ -1587,186 +1587,199 @@ include("inc/scripts.php");
         });
     }
 
-    function setPage(ArrayOfObject = [{}]) {
+    function setPage(obj) {
+        for (permissao in obj) {
+            debugger
+            if (permissao == 'PONTOELETRONICOMENSALMAXIMO') {
+                $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
+                $("#funcionario").removeAttr('style');
+                if (!obj[permissao].funcionario.class)
+                    $("#funcionario").removeClass('readonly');
+                $("#funcionario").css('pointer-events', obj[permissao].funcionario.pointerEvents);
+                $("#funcionario").css('touch-action', obj[permissao].funcionario.touchAction);
 
-        ArrayOfObject.forEach((obj, index) => {
-            if (obj.PONTOELETRONICOMENSALMAXIMO) {
-                const alias = obj.PONTOELETRONICOMENSALMAXIMO;
-                for (let property in alias) {
-                    switch (property) {
-                        case 'funcionario':
-                            $("#funcionario").removeAttr('readonly');
-                            $("#funcionario").removeAttr('style');
-                            $("#funcionario").removeClass('readonly');
-                            $("#funcionario").css('pointer-events', alias[property].pointerEvents);
-                            $("#funcionario").css('touch-action', alias[property].touchAction);
+                $("#mesAno").attr('readonly', obj[permissao].mesAno.readonly);
+                $("#mesAno").removeAttr('style');
+                if (!obj[permissao].mesAno.class)
+                    $("#mesAno").removeClass('readonly');
 
-                            break;
-                        case 'mesAno':
-                            $("#mesAno").removeAttr('readonly');
-                            $("#mesAno").removeAttr('style');
-                            $("#mesAno").removeClass('readonly');
-                            $("#mesAno").css('pointer-events', alias[property].pointerEvents);
-                            $("#mesAno").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'status':
-                            $("#status").removeAttr('readonly');
-                            $("#status").removeAttr('style');
-                            $("#status").removeClass('readonly');
-                            $("#status").css('pointer-events', alias[property].pointerEvents);
-                            $("#status").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'dia':
-                            $("#inputDia").removeAttr('readonly');
-                            $("#inputDia").removeClass('readonly');
-                            break;
-                        case 'entrada':
-                            $("#inputHoraEntrada").removeAttr('readonly');
-                            $("#inputHoraEntrada").removeClass('readonly');
-                            break;
-                        case 'inicioAlmoco':
-                            $("#inputInicioAlmoco").removeAttr('readonly');
-                            $("#inputInicioAlmoco").removeClass('readonly');
-                            break;
-                        case 'fimAlmoco':
-                            $("#inputFimAlmoco").removeAttr('readonly');
-                            $("#inputFimAlmoco").removeClass('readonly');
-                            break;
-                        case 'saida':
-                            $("#inputHoraSaida").removeAttr('readonly');
-                            $("#inputHoraSaida").removeClass('readonly');
-                            break;
-                        case 'extra':
-                            $("#inputHoraExtra").removeAttr('readonly');
-                            $("#inputHoraExtra").removeClass('readonly');
-                            break;
-                        case 'atraso':
-                            $("#inputAtraso").removeAttr('readonly');
-                            $("#inputAtraso").removeClass('readonly');
-                            break;
-                        case 'lancamento':
-                            $("#inputLancamento").removeAttr('readonly');
-                            $("#inputLancamento").removeAttr('style');
-                            $("#inputLancamento").removeClass('readonly');
-                            $("#inputLancamento").css('pointer-events', alias[property].pointerEvents);
-                            $("#inputLancamento").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'adicionarPonto':
-                            $("#btnAddPonto").removeAttr('disabled');
-                            break;
-                        case 'salvarAlteracoes':
-                            $("#btnGravar").removeAttr('disabled');
-                            break;
-                    }
+                $("#status").attr('readonly', obj[permissao].status.readonly);
+                $("#status").removeAttr('style');
+                if (!obj[permissao].status.class)
+                    $("#status").removeClass('readonly');
+                $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
+                $("#status").css('touch-action', obj[permissao].status.touchAction);
+
+                $("#inputDia").attr('readonly', obj[permissao].dia.readonly);
+                if (!obj[permissao].dia.class)
+                    $("#inputDia").removeClass('readonly');
+
+                $("#inputHoraEntrada").attr('readonly', obj[permissao].entrada.readonly);
+                if (!obj[permissao].entrada.class)
+                    $("#inputHoraEntrada").removeClass('readonly');
+
+                $("#inputInicioAlmoco").attr('readonly', obj[permissao].inicioAlmoco.readonly);
+                if (!obj[permissao].inicioAlmoco.class)
+                    $("#inputInicioAlmoco").removeClass('readonly');
+
+                $("#inputFimAlmoco").attr('readonly', obj[permissao].fimAlmoco.readonly);
+                if (!obj[permissao].fimAlmoco.class)
+                    $("#inputFimAlmoco").removeClass('readonly');
+
+                $("#inputHoraSaida").attr('readonly', obj[permissao].saida.readonly);
+                if (!obj[permissao].saida.class)
+                    $("#inputHoraSaida").removeClass('readonly');
+
+                $("#inputHoraExtra").attr('readonly', obj[permissao].extra.readonly);
+                if (!obj[permissao].extra.class)
+                    $("#inputHoraExtra").removeClass('readonly');
+
+                $("#inputAtraso").attr('readonly', obj[permissao].atraso.readonly);
+                if (!obj[permissao].atraso.class)
+                    $("#inputAtraso").removeClass('readonly');
+
+                $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                $("#inputLancamento").removeAttr('style');
+                if (!obj[permissao].lancamento.class)
+                    $("#inputLancamento").removeClass('readonly');
+                $("#inputLancamento").css('pointer-events', obj[permissao].lancamento.pointerEvents);
+                $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
+
+                $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
+
+                $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
+                break;
+            } else if (permissao == 'PONTOELETRONICOMENSALMODERADO') {
+                $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
+                $("#funcionario").removeAttr('style');
+                if (!obj[permissao].funcionario.class)
+                    $("#funcionario").removeClass('readonly');
+                $("#funcionario").css('pointer-events', obj[permissao].funcionario.pointerEvents);
+                $("#funcionario").css('touch-action', obj[permissao].funcionario.touchAction);
+
+                $("#mesAno").attr('readonly', obj[permissao].mesAno.readonly);
+                $("#mesAno").removeAttr('style');
+                if (!obj[permissao].mesAno.class)
+                    $("#mesAno").removeClass('readonly');
+
+
+                let status = $("#status option:selected").text();
+                const pattern = /^fechad(o|a)$/gi
+                if (!pattern.test(status)) {
+                    $("#status").attr('readonly', obj[permissao].status.readonly);
+                    $("#status").removeAttr('style');
+                    if (!obj[permissao].status.class)
+                        $("#status").removeClass('readonly');
+                    $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
+                    $("#status").css('touch-action', obj[permissao].status.touchAction);
+
+                    $("#inputDia").attr('readonly', obj[permissao].dia.readonly);
+                    if (!obj[permissao].dia.class)
+                        $("#inputDia").removeClass('readonly');
+
+                    $("#inputHoraEntrada").attr('readonly', obj[permissao].entrada.readonly);
+                    if (!obj[permissao].entrada.class)
+                        $("#inputHoraEntrada").removeClass('readonly');
+
+                    $("#inputInicioAlmoco").attr('readonly', obj[permissao].inicioAlmoco.readonly);
+                    if (!obj[permissao].inicioAlmoco.class)
+                        $("#inputInicioAlmoco").removeClass('readonly');
+
+                    $("#inputFimAlmoco").attr('readonly', obj[permissao].fimAlmoco.readonly);
+                    if (!obj[permissao].fimAlmoco.class)
+                        $("#inputFimAlmoco").removeClass('readonly');
+
+                    $("#inputHoraSaida").attr('readonly', obj[permissao].saida.readonly);
+                    if (!obj[permissao].saida.class)
+                        $("#inputHoraSaida").removeClass('readonly');
+
+                    $("#inputHoraExtra").attr('readonly', obj[permissao].extra.readonly);
+                    if (!obj[permissao].extra.class)
+                        $("#inputHoraExtra").removeClass('readonly');
+
+                    $("#inputAtraso").attr('readonly', obj[permissao].atraso.readonly);
+                    if (!obj[permissao].atraso.class)
+                        $("#inputAtraso").removeClass('readonly');
+
+                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                    $("#inputLancamento").removeAttr('style');
+                    if (!obj[permissao].lancamento.class)
+                        $("#inputLancamento").removeClass('readonly');
+                    $("#inputLancamento").css('pointer-events', obj[permissao].lancamento.pointerEvents);
+                    $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
+
+                    $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
+
+                    $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
                 }
-            } else if (obj.PONTOELETRONICOMENSALMODERADO) {
-                const alias = obj.PONTOELETRONICOMENSALMODERADO;
-                for (let property in alias) {
-                    switch (property) {
-                        case 'funcionario':
-                            $("#funcionario").css('pointer-events', alias[property].pointerEvents);
-                            $("#funcionario").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'mesAno':
-                            $("#mesAno").removeAttr('readonly');
-                            $("#mesAno").removeAttr('style');
-                            $("#mesAno").removeClass('readonly');
-                            $("#mesAno").css('pointer-events', alias[property].pointerEvents);
-                            $("#mesAno").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'status':
-                            $("#status").removeAttr('readonly');
-                            $("#status").removeAttr('style');
-                            $("#status").removeClass('readonly');
-                            $("#status").css('pointer-events', alias[property].pointerEvents);
-                            $("#status").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'dia':
-                            $("#inputDia").removeAttr('readonly');
-                            $("#inputDia").removeClass('readonly');
-                            break;
-                        case 'entrada':
-                            $("#inputHoraEntrada").removeAttr('readonly');
-                            $("#inputHoraEntrada").removeClass('readonly');
-                            break;
-                        case 'inicioAlmoco':
-                            $("#inputInicioAlmoco").removeAttr('readonly');
-                            $("#inputInicioAlmoco").removeClass('readonly');
-                            break;
-                        case 'fimAlmoco':
-                            $("#inputFimAlmoco").removeAttr('readonly');
-                            $("#inputFimAlmoco").removeClass('readonly');
-                            break;
-                        case 'saida':
-                            $("#inputHoraSaida").removeAttr('readonly');
-                            $("#inputHoraSaida").removeClass('readonly');
-                            break;
-                        case 'extra':
-                            $("#inputHoraExtra").removeAttr('readonly');
-                            $("#inputHoraExtra").removeClass('readonly');
-                            break;
-                        case 'atraso':
-                            $("#inputAtraso").removeAttr('readonly');
-                            $("#inputAtraso").removeClass('readonly');
-                            break;
-                        case 'lancamento':
-                            $("#inputLancamento").removeAttr('readonly');
-                            $("#inputLancamento").removeClass('readonly');
-                            $("#inputLancamento").css('pointer-events', alias[property].pointerEvents);
-                            $("#inputLancamento").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'adicionarPonto':
-                            $("#btnAddPonto").removeAttr('disabled');
+                break;
+            } else if (permissao == 'PONTOELETRONICOMENSALMINIMO') {
+                $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
+                $("#funcionario").removeAttr('style');
+                if (!obj[permissao].funcionario.class)
+                    $("#funcionario").removeClass('readonly');
+                $("#funcionario").css('pointer-events', obj[permissao].funcionario.pointerEvents);
+                $("#funcionario").css('touch-action', obj[permissao].funcionario.touchAction);
 
-                            break;
-                        case 'salvarAlteracoes':
-                            $("#btnGravar").removeAttr('disabled');
+                $("#mesAno").attr('readonly', obj[permissao].mesAno.readonly);
+                $("#mesAno").removeAttr('style');
+                if (!obj[permissao].mesAno.class)
+                    $("#mesAno").removeClass('readonly');
 
-                            break;
-                    }
+
+                let status = $("#status option:selected").text();
+                const pattern = /^fechad(o|a)$/gi
+                if (!pattern.test(status)) {
+                    $("#status").attr('readonly', obj[permissao].status.readonly);
+                    $("#status").removeAttr('style');
+                    if (!obj[permissao].status.class)
+                        $("#status").removeClass('readonly');
+                    $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
+                    $("#status").css('touch-action', obj[permissao].status.touchAction);
+
+
+                    $("#inputDia").attr('readonly', obj[permissao].dia.readonly);
+                    if (!obj[permissao].dia.class)
+                        $("#inputDia").removeClass('readonly');
+
+                    $("#inputHoraEntrada").attr('readonly', obj[permissao].entrada.readonly);
+                    if (!obj[permissao].entrada.class)
+                        $("#inputHoraEntrada").removeClass('readonly');
+
+                    $("#inputInicioAlmoco").attr('readonly', obj[permissao].inicioAlmoco.readonly);
+                    if (!obj[permissao].inicioAlmoco.class)
+                        $("#inputInicioAlmoco").removeClass('readonly');
+
+                    $("#inputFimAlmoco").attr('readonly', obj[permissao].fimAlmoco.readonly);
+                    if (!obj[permissao].fimAlmoco.class)
+                        $("#inputFimAlmoco").removeClass('readonly');
+
+                    $("#inputHoraSaida").attr('readonly', obj[permissao].saida.readonly);
+                    if (!obj[permissao].saida.class)
+                        $("#inputHoraSaida").removeClass('readonly');
+
+                    $("#inputHoraExtra").attr('readonly', obj[permissao].extra.readonly);
+                    if (!obj[permissao].extra.class)
+                        $("#inputHoraExtra").removeClass('readonly');
+
+                    $("#inputAtraso").attr('readonly', obj[permissao].atraso.readonly);
+                    if (!obj[permissao].atraso.class)
+                        $("#inputAtraso").removeClass('readonly');
+
+                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                    $("#inputLancamento").removeAttr('style');
+                    if (!obj[permissao].lancamento.class)
+                        $("#inputLancamento").removeClass('readonly');
+                    $("#inputLancamento").css('pointer-events', obj[permissao].lancamento.pointerEvents);
+                    $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
+
+                    $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
+
+                    $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
                 }
-            } else if (obj.PONTOELETRONICOMENSALMINIMO) {
-                const alias = obj.PONTOELETRONICOMENSALMINIMO;
-                for (let property in alias) {
-                    switch (property) {
-                        case 'funcionario':
-                            $("#funcionario").css('pointer-events', alias[property].pointerEvents);
-                            $("#funcionario").css('touch-action', alias[property].touchAction);
-
-                            break;
-                        case 'mesAno':
-                            $("#mesAno").css('pointer-events', alias[property].pointerEvents);
-                            $("#mesAno").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'status':
-                            $("#status").css('pointer-events', alias[property].pointerEvents);
-                            $("#status").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'dia':
-                            break;
-                        case 'entrada':
-                            break;
-                        case 'inicioAlmoco':
-                            break;
-                        case 'fimAlmoco':
-                            break;
-                        case 'saida':
-                            break;
-                        case 'extra':
-                            break;
-                        case 'atraso':
-                            break;
-                        case 'lancamento':
-                            $("#inputLancamento").css('pointer-events', alias[property].pointerEvents);
-                            $("#inputLancamento").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'adicionarPonto':
-                            break;
-                        case 'salvarAlteracoes':
-                            break;
-                    }
-                }
+                break;
             }
-        })
+        }
+
     }
 </script>
