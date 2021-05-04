@@ -90,12 +90,6 @@ include("inc/nav.php");
                                                         <div id="formCadastro">
                                                             <div class="row">
                                                                 <section class="col col-2">
-                                                                    <label class="label">Lançamento</label>
-                                                                    <label class="input">
-                                                                        <input id="codigo" name="codigo" autocomplete="off" class="form-control readonly" readonly type="text" value="">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
                                                                     <label class="label">Data Movimento</label>
                                                                     <label class="input">
                                                                         <input id="dataMovimento" name="dataMovimento" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
@@ -105,7 +99,7 @@ include("inc/nav.php");
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-12">
-                                                                    <legend><strong>Dados NFe</strong></legend>
+                                                                    <legend><strong>Material Origem</strong></legend>
                                                                 </section>
                                                             </div>
                                                             <div class="row">
@@ -125,23 +119,24 @@ include("inc/nav.php");
                                                                         <i class="icon-append fa fa-filter"></i>
                                                                     </label>
                                                                 </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <legend><strong>Informação Item</strong></legend>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
                                                                 <section class="col col-2">
-                                                                    <label class="label">Quantiidade</label>
-                                                                    <label class="input">
-                                                                        <input id="quantidade" name="quantidade" maxlength="255" min="0" autocomplete="off" class="required" type="number" value="">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="unidade">Unidade Medida</label>
+                                                                    <label class="label" for="situacao">Situação</label>
                                                                     <label class="select">
-                                                                        <select id="unidade" name="unidade" class="readonly" disabled>
+                                                                        <select id="situacao" name="situacao" class="readonly" disabled>
+                                                                            <option></option>
+                                                                            <option value="1">Disponível</option>
+                                                                            <option value="2">Não Disponível</option>
+                                                                            <option value="3">Reservado</option>
+                                                                            <option value="4">Fornecido</option>
+                                                                        </select><i></i>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="unidadeMedida">Unidade Medida</label>
+                                                                    <label class="select">
+                                                                        <select id="unidadeMedida" name="unidadeMedida" class="readonly" disabled>
                                                                             <option></option>
                                                                             <?php
                                                                             $sql =  "SELECT codigo, descricao, sigla FROM Estoque.unidadeItem where ativo = 1 order by sigla";
@@ -156,6 +151,73 @@ include("inc/nav.php");
                                                                             ?>
                                                                         </select><i></i>
                                                                 </section>
+                                                                <section class="col col-4">
+                                                                    <label class="label" for="unidade">Unidade</label>
+                                                                    <label class="select">
+                                                                        <select id="unidade" name="unidade" class="required">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $sql =  "SELECT codigo, descricao FROM Ntl.unidade where ativo = 1 order by descricao";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = $row['codigo'];
+                                                                                $descricao = ($row['descricao']);
+                                                                                echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    <label class="label" for="estoque">Estoque</label>
+                                                                    <label class="select">
+                                                                        <select id="estoque" name="estoque" class="required">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $sql =  "SELECT codigo, descricao FROM Estoque.estoque where ativo = 1 order by descricao";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = $row['codigo'];
+                                                                                $descricao = ($row['descricao']);
+                                                                                echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-2">
+                                                                    <label class="label">Quantiidade em estoque</label>
+                                                                    <label class="input">
+                                                                        <input id="quantidadeEstoque" name="quantidadeEstoque" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Quantiidade</label>
+                                                                    <label class="input">
+                                                                        <input id="quantidade" name="quantidade" maxlength="255" min="0" autocomplete="off" class="required" type="number" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Quantiidade reservada</label>
+                                                                    <label class="input">
+                                                                        <input id="quantidadeReservada" name="quantidadeReservada" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Quantiidade fora de estoque</label>
+                                                                    <label class="input">
+                                                                        <input id="quantidadeForaEstoque" name="quantidadeForaEstoque" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
+                                                                    </label>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-12">
+                                                                    <legend><strong>Material Destino</strong></legend>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
                                                                 <section class="col col-4">
                                                                     <label class="label" for="unidadeDestino">Unidade Destino</label>
                                                                     <label class="select">
@@ -190,130 +252,13 @@ include("inc/nav.php");
                                                                             ?>
                                                                         </select><i></i>
                                                                 </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="consumivel">Consumível</label>
-                                                                    <label class="select">
-                                                                        <select id="consumivel" name="consumivel" class="readonly" disabled>
-                                                                            <option></option>
-                                                                            <option value="1">Sim</option>
-                                                                            <option value="0">Não</option>
-                                                                        </select><i></i>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="autorizacao">Assinatura Retirada</label>
-                                                                    <label class="select">
-                                                                        <select id="autorizacao" name="autorizacao" class="readonly" disabled>
-                                                                            <option></option>
-                                                                            <option value="1">Sim</option>
-                                                                            <option value="0">Não</option>
-                                                                        </select><i></i>
-                                                                </section>
+                                                                
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-12">
-                                                                    <legend><strong>Valores</strong></legend>
+                                                                    <label class="label">Motivo</label>
+                                                                    <textarea id="motivo" name="motivo" class="form-control" rows="3" style="resize:vertical" autocomplete="off"></textarea>
                                                                 </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-2 col-auto">
-                                                                    <label class="label">Unitário</label>
-                                                                    <label class="input"><i class="icon-append fa fa-dollar"></i>
-                                                                        <input id="unitario" name="unitario" class="decimal-2-casas required" type="text" autocomplete="off">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2 col-auto">
-                                                                    <label class="label">Desconto</label>
-                                                                    <label class="input"><i class="icon-append fa fa-dollar"></i>
-                                                                        <input id="desconto" name="desconto" class="decimal-2-casas" type="text" autocomplete="off">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2 col-auto">
-                                                                    <label class="label">Final</label>
-                                                                    <label class="input"><i class="icon-append fa fa-dollar"></i>
-                                                                        <input id="final" name="final" class="decimal-2-casas readonly" readonly type="text" autocomplete="off">
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-12">
-                                                                    <label class="label">Observação</label>
-                                                                    <textarea id="observacao" name="observacao" class="form-control" rows="3" style="resize:vertical" autocomplete="off"></textarea>
-                                                                </section>
-                                                            </div>
-                                                        </div>
-                                                    </fieldset>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseItemEntrada" class="" id="accordionItemEntrada">
-                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        item Entrada Material
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="collapseItemEntrada" class="panel-collapse collapse off">
-                                                <div class="panel-body no-padding">
-                                                    <fieldset>
-
-                                                        <input id="jsonItem" name="jsonItem" type="hidden" value="[]">
-                                                        <div id="formItem">
-
-
-                                                            <div class="row">
-                                                                <section class="col col-4">
-                                                                    <button id="btnAddItem" type="button" class="btn btn-primary" title="Adicionar Item">
-                                                                        <i class="fa fa-plus"></i>
-                                                                    </button>
-                                                                    <button id="btnRemoverItem" type="button" class="btn btn-danger" title="Remover Item">
-                                                                        <i class="fa fa-minus"></i>
-                                                                    </button>
-                                                                </section>
-                                                            </div>
-                                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                <table id="tableItem" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                    <thead>
-                                                                        <tr role="row">
-                                                                            <th></th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Código Material</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Material</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Unidade Destino</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Estoque Destino</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Quantidade</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Vlr. Unitário</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Vlr. Total</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Vlr. Desconto</th>
-                                                                            <th class="text-left" style="min-width: 10px;">
-                                                                                Vlr. Final</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap">TOTAL</td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap">0,00</td>
-                                                                        <td class="text-nowrap"></td>
-                                                                        <td class="text-nowrap">0,00</td>
-
-                                                                    </tbody>
-                                                                </table>
                                                             </div>
                                                         </div>
                                                     </fieldset>
@@ -376,7 +321,8 @@ include("inc/scripts.php");
 ?>
 
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_estoqueEntradaItem.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_fornecimentoMaterial.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_transferenciaMaterial.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -403,8 +349,6 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
-    jsonItemArray = JSON.parse($("#jsonItem").val());
-
     $(document).ready(function() {
 
         carregaPagina();
@@ -464,57 +408,18 @@ include("inc/scripts.php");
             }
         });
 
+        $("#estoque").on("change", function() {
+            let idd = $("#codigoItemId").val();
+            let estoque = $("#estoque").val();
+            recuperaQuantidade(idd, estoque);
+        });
 
-        $("#clienteFornecedor").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'js/sqlscope_cadastroEntradaItem.php',
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        maxRows: 12,
-                        funcao: "listaClienteFornecedorAtivoAutoComplete",
-                        descricaoIniciaCom: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                id: item.id,
-                                label: item.descricao,
-                                value: item.descricao,
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 3,
-
-            select: function(event, ui) {
-                $("#clienteFornecedorId").val(ui.item.id);
-                $("#clienteFornecedorFiltro").val(ui.item.nome);
-                var descricaoId = $("#clienteFornecedorId").val();
-                $("#clienteFornecedor").val(descricaoId)
-                $("#clienteFornecedorFiltro").val('');
-
-            },
-            change: function(event, ui) {
-                if (ui.item === null) {
-                    $("#clienteFornecedorId").val('');
-                    $("#clienteFornecedorFiltro").val('');
-                }
-            }
-        }).data("ui-autocomplete")._renderItem = function(ul, item) {
-            return $("<li>")
-                .append("<a>" + highlight(item.label, this.term) + "</a>")
-                .appendTo(ul);
-        };
 
         $("#codigoItem").autocomplete({
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroEntradaItem.php',
+                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -533,7 +438,10 @@ include("inc/scripts.php");
                                 estoque: item.estoque,
                                 unidadeItem: item.unidadeItem,
                                 consumivel: item.consumivel,
-                                autorizacao: item.autorizacao
+                                autorizacao: item.autorizacao,
+                                quantidade: item.quantidade,
+                                quantidadeReservada: item.quantidadeReservada,
+                                quantidadeFora: item.quantidadeFora
                             };
                         }));
                     }
@@ -555,11 +463,14 @@ include("inc/scripts.php");
                 $("#descricaoItemFiltro").val('');
 
 
-                $("#unidadeDestino").val(ui.item.unidade);
+                $("#unidade").val(ui.item.unidade);
                 popularComboEstoque();
-                $("#estoqueDestino").val(ui.item.estoque);
+                $("#estoque").val(ui.item.estoque);
+                $("#quantidadeEstoque").val(ui.item.quantidade);
+                $("#quantidadeReservada").val(ui.item.quantidadeReservada);
+                $("#quantidadeForaEstoque").val(ui.item.quantidadeFora);
 
-                $("#unidade").val(ui.item.unidadeItem);
+                $("#unidadeMedida").val(ui.item.unidadeItem);
                 $("#consumivel").val(ui.item.consumivel);
                 $("#autorizacao").val(ui.item.autorizacao);
 
@@ -581,7 +492,7 @@ include("inc/scripts.php");
             source: function(request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: 'js/sqlscope_cadastroEntradaItem.php',
+                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -600,7 +511,10 @@ include("inc/scripts.php");
                                 estoque: item.estoque,
                                 unidadeItem: item.unidadeItem,
                                 consumivel: item.consumivel,
-                                autorizacao: item.autorizacao
+                                autorizacao: item.autorizacao,
+                                quantidade: item.quantidade,
+                                quantidadeReservada: item.quantidadeReservada,
+                                quantidadeFora: item.quantidadeFora
                             };
                         }));
                     }
@@ -622,11 +536,14 @@ include("inc/scripts.php");
                 $("#codigoItemFiltro").val('');
 
 
-                $("#unidadeDestino").val(ui.item.unidade);
+                $("#unidade").val(ui.item.unidade);
                 popularComboEstoque();
-                $("#estoqueDestino").val(ui.item.estoque);
+                $("#estoque").val(ui.item.estoque);
+                $("#quantidadeEstoque").val(ui.item.quantidade);
+                $("#quantidadeReservada").val(ui.item.quantidadeReservada);
+                $("#quantidadeForaEstoque").val(ui.item.quantidadeFora);
 
-                $("#unidade").val(ui.item.unidadeItem);
+                $("#unidadeMedida").val(ui.item.unidadeItem);
                 $("#consumivel").val(ui.item.consumivel);
                 $("#autorizacao").val(ui.item.autorizacao);
             },
@@ -682,7 +599,7 @@ include("inc/scripts.php");
             }
         });
 
-        $("#unidadeDestino").on("change", function() {
+        $("#unidade").on("change", function() {
             popularComboEstoque();
         });
 
@@ -841,10 +758,6 @@ include("inc/scripts.php");
                             $("#btnRemoverItem").attr('disabled', true);
                             $("#btnGravar").attr('disabled', true);
 
-                            $("#jsonItem").val(strArrayItem);
-                            jsonItemArray = JSON.parse($("#jsonItem").val());
-                            fillTableItem();
-
                         }
                     }
                 );
@@ -872,20 +785,20 @@ include("inc/scripts.php");
     }
 
     function popularComboEstoque() {
-        var unidadeDestino = $("#unidadeDestino").val()
+        var unidadeDestino = $("#unidade").val()
         populaComboEstoque(unidadeDestino,
             function(data) {
-                var atributoId = '#' + 'estoqueDestino';
+                var atributoId = '#' + 'estoque';
                 if (data.indexOf('failed') > -1) {
                     smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
                     $("#unidade").focus()
-                    $("#estoqueDestino").val("")
-                    $("#estoqueDestino").prop("disabled", true)
-                    $("#estoqueDestino").addClass("readonly")
+                    $("#estoque").val("")
+                    $("#estoque").prop("disabled", true)
+                    $("#estoque").addClass("readonly")
                     return;
                 } else {
-                    $("#estoqueDestino").prop("disabled", false)
-                    $("#estoqueDestino").removeClass("readonly")
+                    $("#estoque").prop("disabled", false)
+                    $("#estoque").removeClass("readonly")
                     data = data.replace(/failed/g, '');
                     var piece = data.split("#");
 
@@ -928,273 +841,30 @@ include("inc/scripts.php");
         );
     }
 
-    //############################################################################## LISTA ITEM INICIO ####################################################################################################################
+    function recuperaQuantidade(idd, estoque) {
+        recuperaQuantidadeEstoque(idd, estoque,
+            function(data) {
+                if (data.indexOf('failed') > -1) {} else {
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    var mensagem = piece[0];
+                    var out = piece[1];
 
-    function fillTableItem() {
-        $("#tableItem tbody").empty();
-        for (var i = 0; i < jsonItemArray.length; i++) {
-            var row = $('<tr />');
-            $("#tableItem tbody").append(row);
-            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonItemArray[i].sequencialItem + '"><i></i></label></td>'));
+                    piece = out.split("^");
+                    quantidade = piece[0];
+                    quantidadeReservada = piece[1];
+                    quantidadeForaEstoque = piece[2];
 
-            var unidadeDestino = $("#unidadeDestino option[value = '" + jsonItemArray[i].unidadeDestino + "']").text();
-            var estoqueDestino = $("#estoqueDestino option[value = '" + jsonItemArray[i].estoqueDestino + "']").text();
+                    $("#quantidadeEstoque").val(quantidade);
+                    $("#quantidadeReservada").val(quantidadeReservada);
+                    $("#quantidadeForaEstoque").val(quantidadeForaEstoque);
 
-            var valorTotalItem = jsonItemArray[i].valorTotalItem;
-            var valorFinalItem = jsonItemArray[i].valorFinalItem;
-
-            var valorTotalItemTable = parseFloat($("#valorTotalItemTable").val());
-            var valorFinalItemTable = parseFloat($("#valorFinalItemTable").val());
-            var valorTotalItemTable = parseFloat(valorTotalItemTable) + parseFloat(valorTotalItem);
-            var valorFinalItemTable = parseFloat(valorFinalItemTable) + parseFloat(valorFinalItem);
-            $("#valorTotalItemTable").val(valorTotalItemTable.toFixed(2));
-            $("#valorFinalItemTable").val(valorFinalItemTable.toFixed(2));
-
-
-            var valorTotalItem = valorTotalItem.replace('.', ",");
-            var valorFinalItem = valorFinalItem.replace('.', ",");
-            var codigo = $("#codigo").val();
-
-            if (codigo === "") {
-                row.append($('<td class="text-nowrap" onclick="carregaItem(' + jsonItemArray[i].sequencialItem + ');">' +
-                    jsonItemArray[i].codigoItemFiltro + '</td>'));
-            } else {
-                row.append($('<td class="text-nowrap">' +
-                    jsonItemArray[i].codigoItemFiltro + '</td>'));
-            }
-
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoItemFiltro + '</td>'));
-            row.append($('<td class="text-nowrap">' + unidadeDestino + '</td>'));
-            row.append($('<td class="text-nowrap">' + estoqueDestino + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].quantidade + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].unitario + '</td>'));
-            row.append($('<td class="text-nowrap">' + valorTotalItem + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].desconto + '</td>'));
-            row.append($('<td class="text-nowrap">' + valorFinalItem + '</td>'));
-        }
-        var row = $('<tr />');
-        $("#tableItem tbody").append(row);
-        row.append($('<td></td>'));
-        row.append($('<td class="text-nowrap">TOTAL</td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap">' + $("#valorTotalItemTable").val() + '</td>'));
-        row.append($('<td class="text-nowrap"></td>'));
-        row.append($('<td class="text-nowrap">' + $("#valorFinalItemTable").val() + '</td>'));
-
-        var valorTotalItemTable = $("#valorTotalItemTable").val('0');
-        var valorFinalItemTable = $("#valorFinalItemTable").val('0');
-
-    }
-
-    function validaItem() {
-
-        var achouData = false;
-        var codigoItem = $('#codigoItem').val();
-        var descricaoItem = $('#descricaoItem').val();
-        var quantidade = $('#quantidade').val();
-        var unidade = $('#unidade').val();
-        var unidadeDestino = $('#unidadeDestino').val();
-        var estoqueDestino = $('#estoqueDestino').val();
-        var unitario = $('#unitario').val();
-        var desconto = $('#desconto').val();
-        var final = $('#final').val();
-        var sequencialItem = $('#sequencialItem').val();
-
-        if (codigoItem === '') {
-            smartAlert("Erro", "Informe o Código Material!", "error");
-            return false;
-        }
-        if (descricaoItem === '') {
-            smartAlert("Erro", "Informe a Descrição Material!", "error");
-            return false;
-        }
-        if (quantidade === '') {
-            smartAlert("Erro", "Informe a Quantidade!", "error");
-            return false;
-        }
-        if (unidade === '') {
-            smartAlert("Erro", "Informe a Unidade!", "error");
-            return false;
-        }
-        if (unidadeDestino === '') {
-            smartAlert("Erro", "Informe a Unidade Destino!", "error");
-            return false;
-        }
-        if (estoqueDestino === '') {
-            smartAlert("Erro", "Informe o Estoque Destino!", "error");
-            return false;
-        }
-        if (unitario === '') {
-            smartAlert("Erro", "Informe o Valor Unitário!", "error");
-            return false;
-        }
-        if (desconto === '') {
-            smartAlert("Erro", "Informe o Desconto!", "error");
-            return false;
-        }
-        if (sequencialItem === '') {
-            for (i = jsonItemArray.length - 1; i >= 0; i--) {
-                if ((jsonItemArray[i].descricaoItemFiltro === descricaoItem) ||
-                    (jsonItemArray[i].descricaoItemFiltro === descricaoItem)) {
-                    achouData = true;
-                    break;
                 }
             }
-        }
-        if (achouData === true) {
-            smartAlert("Erro", "Já existe este Item : (" + descricaoItem + ")", "error");
-            return false;
-        }
-
-        return true;
+        );
     }
 
-    function addItem() {
 
-        validaItem();
-
-        var itemRecuperado = $("#itemRecuperado").val();
-
-        var quantidade = $("#quantidade").val();
-        var unitario = parseFloat($("#unitario").val());
-        var desconto = parseFloat($("#desconto").val());
-        var valorTotalItem = parseFloat($("#valorTotalItem").val());
-        var valorFinalItem = parseFloat($("#valorFinalItem").val());
-
-
-        var valorTotal = parseFloat(quantidade) * parseFloat(unitario);
-        var valorFinal = parseFloat($("#final").val());
-        $("#valorTotalItem").val(valorTotal.toFixed(2));
-        $("#valorFinalItem").val(valorFinal.toFixed(2));
-
-
-        var item = $("#formItem").toObject({
-            mode: 'combine',
-            skipEmpty: false
-        });
-
-        if (item["sequencialItem"] === '') {
-            if (jsonItemArray.length === 0) {
-                item["sequencialItem"] = 1;
-            } else {
-                item["sequencialItem"] = Math.max.apply(Math, jsonItemArray.map(function(o) {
-                    return o.sequencialItem;
-                })) + 1;
-            }
-            item["ItemId"] = 0;
-        } else {
-            item["sequencialItem"] = +item["sequencialItem"];
-        }
-
-        var index = -1;
-        $.each(jsonItemArray, function(i, obj) {
-            if (+$('#sequencialItem').val() === obj.sequencialItem) {
-                index = i;
-                return false;
-            }
-        });
-
-        if (index >= 0)
-            jsonItemArray.splice(index, 1, item);
-        else
-            jsonItemArray.push(item);
-
-        $("#jsonItem").val(JSON.stringify(jsonItemArray));
-        fillTableItem();
-        clearFormItem();
-
-    }
-
-    function processDataItem(node) {
-        // var fieldId = node.getAttribute ? node.getAttribute('id') : '';
-        // var fieldName = node.getAttribute ? node.getAttribute('name') : '';
-
-
-
-        // if (fieldName !== '' && (fieldId === "dataNascimentoFilho")) {
-
-        //     var dataNascimentoFilho = $('#dataNascimentoFilho').val();
-        //     dataNascimentoFilho = dataNascimentoFilho.split("/");
-        //     dataNascimentoFilho = dataNascimentoFilho[2] + "/" + dataNascimentoFilho[1] + "/" + dataNascimentoFilho[0];
-
-        //     return {
-        //         name: fieldName,
-        //         value: dataNascimentoFilho
-        //     };
-        // }
-
-        // return false;
-    }
-
-    function clearFormItem() {
-        $("#codigoItem").val('');
-        $("#descricaoItem").val('');
-        $("#quantidade").val('');
-        // $("#unidadeDestino").val('');
-        // $("#estoqueDestino").val('');
-        $("#unidade").val('');
-        $("#unitario").val('');
-        $("#desconto").val('');
-        $("#final").val('');
-        $("#sequencialItem").val('');
-    }
-
-    function carregaItem(sequencialItem) {
-        var arr = jQuery.grep(jsonItemArray, function(item, i) {
-            return (item.sequencialItem === sequencialItem);
-        });
-
-        clearFormItem();
-
-        if (arr.length > 0) {
-            var item = arr[0];
-            $("#codigoItem").val(item.codigoItemFiltro);
-            $("#descricaoItem").val(item.descricaoItemFiltro);
-            $("#codigoItemId").val(item.codigoItemId);
-            $("#descricaoItemId").val(item.descricaoItemId);
-            $("#quantidade").val(item.quantidade);
-            $("#unidadeDestino").val(item.unidadeDestino);
-            $("#estoqueDestino").val(item.estoqueDestino);
-            $("#unidade").val(item.unidade);
-            $("#unitario").val(item.unitario);
-            $("#desconto").val(item.desconto);
-            $("#final").val(item.final);
-            $("#sequencialItem").val(item.sequencialItem);
-        }
-    }
-
-    function excluirItem() {
-        var arrSequencial = [];
-        $('#tableItem input[type=checkbox]:checked').each(function() {
-            arrSequencial.push(parseInt($(this).val()));
-        });
-        if (arrSequencial.length > 0) {
-            for (i = jsonItemArray.length - 1; i >= 0; i--) {
-                var obj = jsonItemArray[i];
-                if (jQuery.inArray(obj.sequencialItem, arrSequencial) > -1) {
-                    var valorTotal = $('#valorTotalItemTable').val();
-                    var valorTotalItem = jsonItemArray[i].valorTotalItem;
-                    var valorTotal = parseFloat(valorTotal) - parseFloat(valorTotalItem);
-                    $('#valorTotalItemTable').val(valorTotal.toFixed(2));
-                    var valorFinal = $('#valorFinalItemTable').val();
-                    var valorFinalItem = jsonItemArray[i].valorFinalItem;
-                    var valorFinal = parseFloat(valorFinal) - parseFloat(valorFinalItem);
-                    $('#valorFinalItemTable').val(valorFinal.toFixed(2));
-                    jsonItemArray.splice(i, 1);
-                }
-            }
-
-            $("#jsonItem").val(JSON.stringify(jsonItemArray));
-            fillTableItem();
-        } else
-            smartAlert("Erro", "Selecione pelo menos uma informação para excluir.", "error");
-    }
-
-    //############################################################################## LISTA Filho FIM #######################################################################################################################
 
 
     function validaCampoData(campo) {
@@ -1235,35 +905,12 @@ include("inc/scripts.php");
 
     function validaCampos() {
 
-        var clienteFornecedorId = $('#clienteFornecedorId').val();
-        var tipo = $('#tipo option:selected').val();
-        var dataEmissao = $('#dataEmissao').val();
-        var dataEntrega = $('#dataEntrega').val();
-
-        if (clienteFornecedorId === '') {
-            smartAlert("Erro", "Informe o Fornecedor!", "error");
-            $('#clienteFornecedor').focus();
-            return false;
-        }
-        if (tipo === '') {
-            smartAlert("Erro", "Informe o Tipo!", "error");
-            $('#tipo').focus();
-            return false;
-        }
-        if (dataEmissao === '') {
-            smartAlert("Erro", "Informe o Data Emissão!", "error");
-            $('#dataEmissao').focus();
-            return false;
-        }
-        if (dataEntrega === '') {
-            smartAlert("Erro", "Informe o Data Entrada!", "error");
-            $('#dataEntrega').focus();
-            return false;
-        }
-        if (jsonItemArray.length === 0) {
-            smartAlert("Erro", "Nenhum item na lista!", "error");
-            return false;
-        }
+        // var clienteFornecedorId = $('#clienteFornecedorId').val();
+        // if (clienteFornecedorId === '') {
+        //     smartAlert("Erro", "Informe o Fornecedor!", "error");
+        //     $('#clienteFornecedor').focus();
+        //     return false;
+        // }
 
         return true;
     }
@@ -1276,6 +923,6 @@ include("inc/scripts.php");
 
         var form = $('#formEntradaItem')[0];
         var formData = new FormData(form);
-        gravaEntradaItem(formData);
+        gravaTranferenciaMaterial(formData);
     }
 </script>

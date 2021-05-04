@@ -216,9 +216,9 @@ if ($condicaoBeneficioOk) {
             $page_nav['beneficio']['sub']['operacao']['sub'] += array("afastamentoFuncionario" => array("title" => "Afastamento do Funcionário", "url" => APP_URL . "/beneficio_afastamentoFuncionarioFiltro.php")); //SYSCB 
         }
     
-        // if (in_array('CONSULTABENEFICIO_ACESSAR', $arrayPermissao, true)) {
-        //     $page_nav['beneficio']['sub'] += array("consultaBenefício" => array("title" => "Consulta Benefício", "url" => APP_URL . "/beneficio_afastamentoFuncionarioFiltro.php"));
-        // }
+        if (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['operacao']['sub'] += array("consultaBenefício" => array("title" => "Consulta Benefício", "url" => APP_URL . "/beneficio_consultaBeneficioFiltro.php"));
+        }
         if (in_array('FERIAS_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['operacao']['sub'] += array("ferias" => array("title" => "Férias", "url" => APP_URL . "/beneficio_feriasFiltro.php")); //SYSCB 
         }

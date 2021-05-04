@@ -268,6 +268,12 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
+                                                                    <label class="label">Quantiidade não disponivel</label>
+                                                                    <label class="input">
+                                                                        <input id="quantidadeNaoDisponivel" name="quantidadeNaoDisponivel" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
                                                                     <label class="label" for="unidade">Unidade Medida</label>
                                                                     <label class="select">
                                                                         <select id="unidade" name="unidade" class="readonly" disabled>
@@ -285,17 +291,7 @@ include("inc/nav.php");
                                                                             ?>
                                                                         </select><i></i>
                                                                 </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="situacao">Situação</label>
-                                                                    <label class="select">
-                                                                        <select id="situacao" name="situacao" class="readonly" disabled>
-                                                                            <option></option>
-                                                                            <option value="1">Disponível</option>
-                                                                            <option value="2">Não Disponível</option>
-                                                                            <option value="3">Reservado</option>
-                                                                            <option value="4">Fornecido</option>
-                                                                        </select><i></i>
-                                                                </section>
+
                                                             </div>
                                                             <div class="row" id='linha4'>
                                                                 <section class="col col-4">
@@ -330,6 +326,17 @@ include("inc/nav.php");
                                                                                 echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
                                                                             }
                                                                             ?>
+                                                                        </select><i></i>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="situacao">Situação</label>
+                                                                    <label class="select">
+                                                                        <select id="situacao" name="situacao" class="readonly" disabled>
+                                                                            <option></option>
+                                                                            <option value="1">Disponível</option>
+                                                                            <option value="2">Não Disponível</option>
+                                                                            <option value="3">Reservado</option>
+                                                                            <option value="4">Fornecido</option>
                                                                         </select><i></i>
                                                                 </section>
                                                             </div>
@@ -572,6 +579,12 @@ include("inc/scripts.php");
             popularComboEstoque();
         });
 
+        $("#estoqueDestino").on("change", function() {
+            let idd = $("#codigoItemId").val();
+            let estoque = $("#estoqueDestino").val();
+            recuperaQuantidade(idd, estoque);
+        });
+
 
         $("#aprovado").on("change", function() {
             $aprovado = $("#aprovado").val();
@@ -743,12 +756,11 @@ include("inc/scripts.php");
                 $("#unidadeDestino").val(ui.item.unidade);
                 popularComboEstoque();
                 $("#estoqueDestino").val(ui.item.estoque);
+                var estoqueId = $("#estoqueDestino").val();
 
                 $("#unidade").val(ui.item.unidadeItem);
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
-                $("#quantidadeEstoque").val(ui.item.quantidade);
-                $("#quantidadeReservada").val(ui.item.quantidadeReservada);
-                $("#quantidadeForaEstoque").val(ui.item.quantidadeFora);
+                recuperaQuantidade(descricaoId, estoqueId);
 
                 $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
                 $aprovado = $("#aprovado").val();
@@ -804,10 +816,7 @@ include("inc/scripts.php");
                                 estoque: item.estoque,
                                 unidadeItem: item.unidadeItem,
                                 consumivel: item.consumivel,
-                                autorizacao: item.autorizacao,
-                                quantidade: item.quantidade,
-                                quantidadeReservada: item.quantidadeReservada,
-                                quantidadeFora: item.quantidadeFora
+                                autorizacao: item.autorizacao
                             };
                         }));
                     }
@@ -832,12 +841,11 @@ include("inc/scripts.php");
                 $("#unidadeDestino").val(ui.item.unidade);
                 popularComboEstoque();
                 $("#estoqueDestino").val(ui.item.estoque);
+                var estoqueId = $("#estoqueDestino").val();
 
                 $("#unidade").val(ui.item.unidadeItem);
                 $("#unidadeMedidaId").val(ui.item.unidadeItem);
-                $("#quantidadeEstoque").val(ui.item.quantidade);
-                $("#quantidadeReservada").val(ui.item.quantidadeReservada);
-                $("#quantidadeForaEstoque").val(ui.item.quantidadeFora);
+                recuperaQuantidade(descricaoId, estoqueId);
 
                 $("#descricaoUnidadeMedida").val($('#unidade option:selected').text().trim());
 
@@ -871,31 +879,6 @@ include("inc/scripts.php");
         };
 
 
-        // $("#dataEntrega").on("change", function() {
-        //     var dataAtual = moment().format("DD/MM/YYYY");
-        //     var dataEntrega = $("#dataEntrega").val();
-
-        //     //Transformando em um objeto usando moment -> Data Atual
-        //     dataAtual = dataAtual.split("/");
-        //     dataAtual[1] = dataAtual[1] - 1;
-        //     dataAtual = moment([dataAtual[2], dataAtual[1], dataAtual[0]]);
-
-        //     //ransformando em um objeto usando moment -> Data Pregão
-        //     dataEntrega = dataEntrega.split("/");
-        //     dataEntrega[1] = dataEntrega[1] - 1;
-        //     dataEntrega = moment([dataEntrega[2], dataEntrega[1], dataEntrega[0]]);
-
-        //     var diferenca = dataAtual.diff(dataEntrega, 'days');
-
-        //     if (diferenca < 0) {
-        //         smartAlert("Atenção", "A data do pregão não pode ser maior do que o dia de hoje !", "error");
-        //         $("#dataEntrega").val(" ");
-        //         return;
-        //     }
-
-        // });
-
-
         $("#btnNovo").on("click", function() {
             novo();
         });
@@ -924,7 +907,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaEntradaItem(idd,
+                recuperaFornecimentoMaterial(idd,
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
@@ -1050,9 +1033,7 @@ include("inc/scripts.php");
         );
     }
 
-    function recuperaQuantidade() {
-        let idd = $("#codigoItemId").val();
-        let estoque = $("#estoqueDestino").val();
+    function recuperaQuantidade(idd, estoque) {
         recuperaQuantidadeEstoque(idd, estoque,
             function(data) {
                 if (data.indexOf('failed') > -1) {} else {
@@ -1063,8 +1044,14 @@ include("inc/scripts.php");
 
                     piece = out.split("^");
                     quantidade = piece[0];
+                    quantidadeReservada = piece[1];
+                    quantidadeForaEstoque = piece[2];
+                    quantidadeNaoDisponivel = piece[3];
 
                     $("#quantidadeEstoque").val(quantidade);
+                    $("#quantidadeReservada").val(quantidadeReservada);
+                    $("#quantidadeForaEstoque").val(quantidadeForaEstoque);
+                    $("#quantidadeNaoDisponivel").val(quantidadeNaoDisponivel);
 
                 }
             }
@@ -1392,6 +1379,6 @@ include("inc/scripts.php");
 
         var form = $('#formPedidoMaterial')[0];
         var formData = new FormData(form);
-        gravaPedidoMaterial(formData);
+        gravaFornecimentoMaterial(formData);
     }
 </script>
