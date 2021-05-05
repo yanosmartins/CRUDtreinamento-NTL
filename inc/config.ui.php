@@ -489,7 +489,7 @@ if ($condicaoFuncionarioOk) {
         $page_nav['funcionario']['sub'] += array("controlePontoDiario" => array("title" => "Ponto Eletrônico Diario", "url" => APP_URL . "/prototipo_pontoEletronicoDiario.php"));
     }
     if (array_intersect(array('PONTOELETRONICOMENSALMAXIMO_ACESSAR', 'PONTOELETRONICOMENSALMODERADO_ACESSAR', 'PONTOELETRONICOMENSALMINIMO_ACESSAR'), $arrayPermissao)) {
-        $page_nav['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php"));
+        $page_nav['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php?"."funcionario=".$_SESSION["funcionario"]."&"."mesAno=". date("Y-m-01")));
     }
     if (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("geradorFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));

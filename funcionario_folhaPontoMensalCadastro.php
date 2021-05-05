@@ -767,8 +767,12 @@ include("inc/scripts.php");
 
     function carregaFolhaPontoMensal() {
 
-        const mesAno = new Date().toJSON().slice(0, 10).replace(/[0-9]$/g, 01);
-        const funcionario = $("#funcionario option:selected").val();
+        const search = window.location.search.substring(1,window.location.search.length);
+        let [getFuncionario,getMesAno] = search.split('&');
+        getFuncionario = getFuncionario.substring((getFuncionario.indexOf("=")+1),getFuncionario.length);
+        getMesAno = getMesAno.substring((getMesAno.indexOf("=")+1),getMesAno.length);
+        const mesAno = getMesAno || new Date().toJSON().slice(0, 10).replace(/[0-9]$/g, 01);
+        const funcionario = getFuncionario || $("#funcionario option:selected").val();
 
         $('#mesAno').val(mesAno);
 
@@ -1573,7 +1577,7 @@ include("inc/scripts.php");
             }
 
             try {
-                debugger
+                
                 let permissoes = JSON.parse(out);
                 setPage(permissoes);
 
@@ -1589,7 +1593,7 @@ include("inc/scripts.php");
 
     function setPage(obj) {
         for (permissao in obj) {
-            debugger
+            
             if (permissao == 'PONTOELETRONICOMENSALMAXIMO') {
                 $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
                 $("#funcionario").removeAttr('style');
@@ -1607,6 +1611,7 @@ include("inc/scripts.php");
                 $("#status").removeAttr('style');
                 if (!obj[permissao].status.class)
                     $("#status").removeClass('readonly');
+                $("#status").css('display', obj[permissao].status.display);
                 $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
                 $("#status").css('touch-action', obj[permissao].status.touchAction);
 
@@ -1670,6 +1675,7 @@ include("inc/scripts.php");
                     $("#status").removeAttr('style');
                     if (!obj[permissao].status.class)
                         $("#status").removeClass('readonly');
+                    $("#status").css('display', obj[permissao].status.display);
                     $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
                     $("#status").css('touch-action', obj[permissao].status.touchAction);
 
@@ -1734,6 +1740,7 @@ include("inc/scripts.php");
                     $("#status").removeAttr('style');
                     if (!obj[permissao].status.class)
                         $("#status").removeClass('readonly');
+                    $("#status").css('display', obj[permissao].status.display);
                     $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
                     $("#status").css('touch-action', obj[permissao].status.touchAction);
 

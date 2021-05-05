@@ -318,7 +318,7 @@ function consultarPermissoes()
                 $arrayPermissoes[$permissao] = [
                         "funcionario" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "mesAno" => ["readonly" => false, "class" => ""],
-                        "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "","display"=>"block"],
                         "dia" => ["readonly" => false, "class" => ""],
                         "entrada" => ["readonly" => false, "class" => ""],
                         "inicioAlmoco" => ["readonly" => false, "class" => ""],
@@ -335,7 +335,7 @@ function consultarPermissoes()
                 $arrayPermissoes[$permissao] = [
                         "funcionario" => ["readonly" => true, "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
                         "mesAno" => ["readonly" => false, "class" => ""],
-                        "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "","display"=>"none"],
                         "dia" => ["readonly" => false, "class" => ""],
                         "entrada" => ["readonly" => false, "class" => ""],
                         "inicioAlmoco" => ["readonly" => false, "class" => ""],
@@ -352,7 +352,7 @@ function consultarPermissoes()
                 $arrayPermissoes[$permissao] = [
                         "funcionario" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "readonly"],
                         "mesAno" => ["readonly" => true, "class" => ""],
-                        "status" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "status" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "","display"=>"none"],
                         "dia" => ["readonly" => true, "class" => ""],
                         "entrada" => ["readonly" => true, "class" => ""],
                         "inicioAlmoco" => ["readonly" => true, "class" => ""],
