@@ -182,16 +182,50 @@ include("inc/nav.php");
 
                                                         </div>
 
-                                                        <div class="col col-xs-12">
-                                                            <div class="col col-md-6"><br>
+                                                        <div class="col col-xs-10">
+
+                                                            <div class="col col-md-2"><br>
+                                                                <div class="form-group">
+                                                                    <div class="input-group" data-align="top" data-autoclose="true">
+                                                                        <input id="xx" name="xx" type="text" class="hidden" style="height: 40px; border-radius: 0px !important;" data-autoclose="true" value="" readonly>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col col-md-2"><br>
+                                                                <div class="form-group">
+                                                                    <label id="labelHora" class="label">Atraso</label>
+                                                                    <div class="input-group" data-align="top" data-autoclose="true">
+                                                                        <input id="atraso" name="atraso" type="text" class="text-center form-control" style="height: 40px; border-radius: 0px !important;" data-autoclose="true" value="" readonly>
+                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col col-md-2"><br>
+                                                                <div class="form-group">
+                                                                    <label id="labelHora" class="label">Hora Extra</label>
+                                                                    <div class="input-group" data-align="top" data-autoclose="true">
+                                                                        <input id="horaExtra" name="horaExtra" type="text" class="text-center form-control" style="height: 40px; border-radius: 0px !important;" data-autoclose="true" value="" readonly>
+                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col col-md-3"><br>
                                                                 <label class="label" for="lancamento">Ocorrência/Lançamento</label>
                                                                 <label class="select">
-                                                                        <select id="lancamento" name="lancamento">
-                                                                            <option selected value="0"></option>
-                                                                            <?php
+                                                                    <select id="lancamento" name="lancamento" style="height: 40px; border-radius: 0px !important;">
+                                                                        <option selected value="0"></option>
+                                                                        <?php
                                                                             $reposit = new reposit();
                                                                             $projeto = $_SESSION['projeto'];
-                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L LEFT JOIN Ntl.lancamentoProjeto LP ON L.codigo = LP.lancamento where L.ativo = 1 AND (LP.projeto = " . $projeto . " OR LP.projeto = NULL) order by L.descricao";
+                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L 
+                                                                            LEFT JOIN 
+                                                                            Ntl.lancamentoProjeto LP 
+                                                                            ON L.codigo = LP.lancamento
+                                                                            LEFT JOIN 
+                                                                            Ntl.projeto P 
+                                                                            ON P.codigo = LP.projeto
+                                                                            where L.ativo = 1 AND (P.codigo = " . $projeto . " OR P.codigo IS NULL) order by L.descricao";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
@@ -199,37 +233,34 @@ include("inc/nav.php");
                                                                                 echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                             }
                                                                             ?>
-                                                                        </select><i></i>
-                                                                    </label>
+                                                                    </select><i></i>
+                                                                </label>
                                                             </div>
-                                                            <div class="col col-md-6">
-                                                                <div class="col col-md-6"><br>
-                                                                    <div class="form-group">
-                                                                        <label id="labelHora" class="label">Atraso</label>
-                                                                        <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="atraso" name="atraso" type="text" class="text-center form-control" style="height: 40px; border-radius: 0px !important;" placeholder="00:20:38" data-autoclose="true" value="" readonly>
-                                                                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col col-md-6"><br>
-                                                                    <div class="form-group">
-                                                                        <label id="labelHora" class="label">Hora Extra</label>
-                                                                        <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="horaExtra" name="horaExtra" type="text" class="text-center form-control" style="height: 40px; border-radius: 0px !important;" placeholder="00:20:38" data-autoclose="true" value="" readonly>
-                                                                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <input id="mesAno" name="mesAno" type="text" class="hidden">
-                                                                <input id="horaAtual" name="horaAtual" type="text" class="hidden">
-                                                                <input id="horaEntrada" name="horaEntrada" type="text" class="hidden">
-                                                                <input id="horaSaida" name="horaSaida" type="text" class="hidden">
-                                                                <input id="inicioAlmoco" name="inicioAlmoco" type="text" class="hidden">
-                                                                <input id="fimAlmoco" name="fimAlmoco" type="text" class="hidden">
-                                                                <input id="status" name="status" type="text" class="hidden">
+                                                            <div class="col col-3"> 
+                                                                <label class="label" for="lancamento"></label>
+                                                                <button type="button" class="btn  btn-block btnLancamento" id="btnLancamento" style="height: 50px;  background-color:#8B0000;">
+                                                                    <span class="">Lançar Ocorrência</span><br>
+                                                                </button><br>
                                                             </div>
                                                         </div>
+
+
+                                                        <input id="mesAno" name="mesAno" type="text" class="hidden">
+                                                        <input id="horaAtual" name="horaAtual" type="text" class="hidden">
+                                                        <input id="horaEntrada" name="horaEntrada" type="text" class="hidden">
+                                                        <input id="horaSaida" name="horaSaida" type="text" class="hidden">
+                                                        <input id="inicioAlmoco" name="inicioAlmoco" type="text" class="hidden">
+                                                        <input id="fimAlmoco" name="fimAlmoco" type="text" class="hidden">
+                                                        <input id="status" name="status" type="text" class="hidden">
+
+
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <label class="label">Observações</label>
+                                                                <textarea maxlength="500" id="observacao" name="observacao" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
+                                                            </section>
+                                                        </div>
+                                                    </fieldset>
                                                 </div>
                                             </div>
                                         </div>
@@ -334,6 +365,15 @@ include("inc/scripts.php");
             gravar()
         });
 
+        $("#btnLancamento").on("click", function() {
+            var lancamento = $("#lancamento").val()
+           if(lancamento == 0){
+            smartAlert("Atenção", "Selecione um lançamento!", "error");
+            return;
+           }
+            gravar()
+        });
+
         carregaPonto();
     });
 
@@ -357,6 +397,7 @@ include("inc/scripts.php");
         var horaExtra = $("#horaExtra").val();
         var atraso = $("#atraso").val();
         var lancamento = $("#lancamento").val();
+        var observacao = $("#observacao").val();
         var status = 1;
 
 
@@ -450,7 +491,7 @@ include("inc/scripts.php");
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
 
-        gravarPonto(codigo, funcionario, mesAno, idFolha, dia, horaEntrada, horaSaida, inicioAlmoco, fimAlmoco, horaExtra, atraso, lancamento, status,
+        gravarPonto(codigo, funcionario, mesAno, idFolha, dia, horaEntrada, horaSaida, inicioAlmoco, fimAlmoco, horaExtra, atraso, lancamento, observacao, status,
             function(data) {
 
                 if (data.indexOf('sucess') < 0) {

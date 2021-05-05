@@ -12,7 +12,7 @@ h1 {
     /* border: 1px solid black; */
 }
 
-.btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida,.xxs :active {
+.btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida, .btnLancamento,.xxs :active {
     border-radius: 5px;
     height: 80px;
     color: white;
