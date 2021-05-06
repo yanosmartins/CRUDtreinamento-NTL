@@ -242,7 +242,10 @@ include("inc/scripts.php");
         });
 
         $("#btnPontoMensal").on("click", function() {
-            $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php');
+            const id = $('#idFuncionario').val();
+            const folha = $('#codigoFolha').val();
+            const mesAno = $('#mesAno').val();
+            $(location).attr('href', `funcionario_folhaPontoMensalCadastro.php?funcionario=${id}&mesAno=${mesAno}`);
         });
 
         $("#btnFolhaMensal").on("click", function() {
@@ -254,7 +257,6 @@ include("inc/scripts.php");
             const id = $('#idFuncionario').val();
             const folha = $('#codigoFolha').val();
             const mesAno = $('#mesAno').val();
-
             $(location).attr('href', `funcionario_folhaDePontoPdfPontoEletronico.php?id=${id}&folha=${folha}&data=${mesAno}`);
         });
 
