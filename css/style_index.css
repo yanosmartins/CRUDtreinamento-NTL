@@ -14,16 +14,13 @@ h {
 
 .btnBaterPonto, .btnPontoMensal, .btnFolhaMensal, .btnFolhaPreenchida, .btnContracheque, .btnAso,.xxs :active {
     border: none;
-    height: 100px; 
-    width: 150px;
+    height: 80px;
     color: #305d8c;
     font-size: 16px;
     font-weight: bold;
-    /* box-shadow: 7px 5px 5px 0px rgb(129, 129, 129); */
     position:relative;
+    background-color: #ffffff;
     top:5px;
-    background-color:#ffffff00;
-    
     
 }
 
@@ -35,16 +32,17 @@ h {
 
 
 
-@media(max-width:500px) {
+/* @media(max-width:500px) {
     .btnBaterPonto, .btnPontoMensal, .btnFolhaMensal, .btnFolhaPreenchida, .btnContracheque, .btnAso {
-        
-        margin-right: auto;
-        text-align: center;
-        
-    }
-    .funcionario {
+        position:relative;
+        float: left;
+        width: auto;
+        height: auto;
+        cursor: pointer;
+    } */
+    /* .funcionario {
         height: 130px;
         order: 2;
         margin-top: 10px;
     }
-}
+} */

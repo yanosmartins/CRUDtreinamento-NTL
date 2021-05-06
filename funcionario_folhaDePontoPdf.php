@@ -72,7 +72,7 @@ if ($row) {
 }
 
 
-$sql = "SELECT BP.codigo,BP.funcionario,BP.projeto,BP.horaEntrada,BP.horaSaida,BP.horaInicio,BP.horaFim,P.apelido,P.estado,P.cidade,P.municipioFerias,C.descricao,BP.ativo
+$sql = "SELECT BP.codigo,BP.funcionario,BP.projeto,BP.horaEntrada,BP.horaSaida,BP.horaInicio,BP.horaFim,P.apelido,P.estado,P.cidade,P.imprimeCargo,P.municipioFerias,C.descricao,BP.ativo
 FROM Ntl.beneficioProjeto BP
 INNER JOIN Ntl.projeto P ON P.codigo = BP.projeto
 INNER JOIN Ntl.cargo C ON C.ativo = 1 
@@ -83,6 +83,7 @@ $row = $result[0];
 if ($row) {
     $estado = "'" . $row['estado'] . "'";
     $municipioFerias = $row['municipioFerias'];
+    $imprimeCargo = $row['imprimeCargo'];
     $horaEntrada = $row['horaEntrada'];
     $horaSaida = $row['horaSaida'];
     $horaInicio = $row['horaInicio'];
@@ -196,11 +197,12 @@ $pdf->SetFont('Arial', 'B', 8);
 $pdf->setX(67);
 $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Cliente:NTL"), 0, 0, "L", 0);
 
+if($imprimeCargo == 1){
 $pdf->setY(25);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->setX(67);
 $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Cargo: $cargo"), 0, 0, "L", 0);
-
+}
 $pdf->setY(21);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->setX(106);
