@@ -94,22 +94,16 @@ include("inc/nav.php");
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
-                                                                                $funcionario = $_SESSION['funcionario'];
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo != " . $funcionario . " order by nome";
+                                                                                $sql = "SELECT F.codigo, F.nome 
+                                                                                FROM Ntl.funcionario F 
+                                                                                WHERE F.dataDemissaoFuncionario IS NULL 
+                                                                                AND F.ativo = 1 
+                                                                                ORDER BY F.nome";
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 foreach ($result as $row) {
                                                                                     $codigo = (int) $row['codigo'];
                                                                                     $nome = $row['nome'];
                                                                                     echo '<option value= ' . $codigo . '>' . $nome . '</option>';
-                                                                                }
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $funcionario;
-
-                                                                                $result = $reposit->RunQuery($sql);
-                                                                                if ($row = $result[0]) {
-
-                                                                                    $codigo = (int) $row['codigo'];
-                                                                                    $nome = $row['nome'];
-                                                                                    echo '<option value= ' . $codigo . ' selected>' . $nome . '</option>';
                                                                                 }
                                                                                 ?>
                                                                             </select>
@@ -130,8 +124,6 @@ include("inc/nav.php");
                                                                         </button>
                                                                     </section>
 
-
-
                                                                     <section class="col col-2">
                                                                         <label class="select">
                                                                             <select id="ativo" name="ativo" class="hidden" required>
@@ -141,11 +133,11 @@ include("inc/nav.php");
                                                                     </section>
                                                                 </div>
 
-                                                                <div class="row">
+                                                                <!-- <div class="row">
                                                                     <section class="col col-12">
                                                                         <legend><strong></strong></legend>
                                                                     </section>
-                                                                </div>
+                                                                </div> -->
 
                                                             </div>
                                                             <div class="row">
@@ -156,18 +148,14 @@ include("inc/nav.php");
                                                                             <option></option>
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "SELECT codigo, funcionario,horaEntrada,horaSaida from Ntl.beneficioProjeto where ativo = 1 order by codigo";
+                                                                            $sql = "SELECT codigo, funcionario,horaEntrada,horaSaida FROM Ntl.beneficioProjeto WHERE ativo = 1 ORDER BY codigo";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $horaEntrada = $row['horaEntrada'];
                                                                                 $horaSaida = $row['horaSaida'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                if ($funcionario == $_SESSION['funcionario']) {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaEntrada . " - " . $horaSaida . '</option>';
-                                                                                } else {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
-                                                                                }
+                                                                                echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
                                                                             }
                                                                             ?>
                                                                         </select>
@@ -181,18 +169,14 @@ include("inc/nav.php");
                                                                             <option></option>
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "SELECT codigo, funcionario,horaInicio,horaFim from Ntl.beneficioProjeto where ativo = 1 order by codigo";
+                                                                            $sql = "SELECT codigo, funcionario,horaInicio,horaFim FROM Ntl.beneficioProjeto WHERE ativo = 1 ORDER BY codigo";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $horaInicio = $row['horaInicio'];
                                                                                 $horaFim = $row['horaFim'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                if ($funcionario == $_SESSION['funcionario']) {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                } else {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                }
+                                                                                echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
                                                                             }
                                                                             ?>
                                                                         </select>
@@ -204,7 +188,7 @@ include("inc/nav.php");
                                                                         <select id="status" name="status" class="readonly" readonly style="pointer-events: none; touch-action: none">
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "SELECT S.codigo,S.descricao from Ntl.status S  where S.ativo = 1 order by S.codigo";
+                                                                            $sql = "SELECT S.codigo,S.descricao FROM Ntl.status S  WHERE S.ativo = 1 ORDER BY S.codigo";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
@@ -228,7 +212,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Dia</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly" readonly data-autoclose="true">
+                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly" readonly data-autoclose="true" maxlength="2">
                                                                         </div>
                                                                     </div>
                                                                 </section>
@@ -439,6 +423,7 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
+    /*---------------Variaveis e constantes globais-------------*/
     var toleranciaExtra = '05:00';
     var toleranciaAtraso = '05:00';
 
@@ -456,12 +441,12 @@ include("inc/scripts.php");
     const minDate = defaultDate.getFullYear() + '-' + minMonth + '-' + minDay;
     const maxDate = defaultDate.getFullYear() + '-' + maxMonth + '-' + maxDay;
 
+    /*---------------/Variaveis e constantes globais-------------*/
+
     $(document).ready(function() {
 
+        /* Eventos para a chamada da selecionaFolha() */
         $("#funcionario").on("change", function() {
-            var funcionario = $("#funcionario").val();
-            var codigo = $("#expediente option[data-funcionario ='" + funcionario + "']").val();
-            $("#expediente").val(codigo);
             selecionaFolha();
         });
 
@@ -469,12 +454,10 @@ include("inc/scripts.php");
         $("#mesAno").attr('max', maxDate);
 
         $("#mesAno").on("change", function() {
-            var funcionario = $("#funcionario").val();
-            var codigo = $("#expediente option[data-funcionario ='" + funcionario + "']").val();
-            $("#expediente").val(codigo);
             selecionaFolha();
         });
 
+        /* Evento para validar a entrada do dia */
         $('#inputDia').on('keydown', () => {
             const pattern = /(\d|\t)/g
 
@@ -485,49 +468,44 @@ include("inc/scripts.php");
             return $('#inputDia').val(value);
         });
 
+        /* Evento para trazer os dados dos respectivos dias */
         $('#inputDia').on('change', function() {
-            var dia = $("#inputDia").val();
+            let dia = $("#inputDia").val();
             dia = dia.replace(/\D/gi, "");
-            var index = dia - 1;
+            if (!dia) dia = 1;
 
-            var entrada = $("#pointFieldGenerator [name=horaEntrada]");
+            let index = dia--;
+
+            let entrada = $("#pointFieldGenerator input[name=horaEntrada]");
             entrada = entrada[index].value;
 
-            var inputEntrada = $("#inputHoraEntrada")
-
             try {
-                var saida = $("#pointFieldGenerator [name=horaSaida]");
+                let saida = $("#pointFieldGenerator [name=horaSaida]");
                 saida = saida[index].value;
 
-                var inputSaida = $("#inputHoraSaida")
-
-                var extra = $("#pointFieldGenerator [name=extra]");
-
+                let extra = $("#pointFieldGenerator [name=extra]");
                 extra = extra[index].value;
 
-                var inputExtra = $("#inputHoraExtra");
-
-                var atraso = $("#pointFieldGenerator [name=atraso]");
+                let atraso = $("#pointFieldGenerator [name=atraso]");
                 atraso = atraso[index].value;
 
-                var inputAtraso = $("#inputAtraso");
-
-                var lancamento = $("#pointFieldGenerator [name=lancamento]");
+                let lancamento = $("#pointFieldGenerator [name=lancamento]");
                 lancamento = lancamento[index].value;
 
-                var inputLancamento = $("#inputLancamento");
+                $("#inputHoraEntrada").val(entrada);
+                $("#inputHoraSaida").val(saida);
 
-                inputEntrada.val(entrada)
+                $("#inputHoraExtra").val(extra);
+                $("#inputAtraso").val(atraso);
 
-                inputSaida.val(saida)
-                inputExtra.val(extra)
-                inputAtraso.val(atraso)
-                inputLancamento.val(lancamento)
+                $("#inputLancamento").val(lancamento);
+
             } catch (e) {
                 return smartAlert('Atenção', 'Insira um dia válido!', 'error')
             }
         });
 
+        /* Modal para a confirmação de finais de semana */
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -537,7 +515,6 @@ include("inc/scripts.php");
                 }
             }
         }));
-
         $('#dlgSimplePoint').dialog({
             autoOpen: false,
             width: 400,
@@ -562,64 +539,59 @@ include("inc/scripts.php");
             }]
         });
 
+        /* Evento para chamar a addPoint ou o Modal */
         $("#btnAddPonto").on("click", function() {
 
-            var dia = $("#inputDia").val();
-
-            let isWeekend = checkDay(dia);
-            if (isWeekend) {
-
-                $('#dlgSimplePoint').dialog('open');
-
-            } else {
-                addPoint();
-            }
+            let dia = $("#inputDia").val();
 
             if (!dia) {
                 smartAlert('Atenção', 'Insira um dia para a inserção das horas', 'error')
-                return
+                return;
             }
 
+            let isWeekend = checkDay(dia);
+
+            if (isWeekend) {
+                $('#dlgSimplePoint').dialog('open');
+            } else {
+                addPoint();
+            }
+            return;
         });
 
+        /* Evento para chamar a imprimir() */
         $('#btnPdf').on("click", function() {
             imprimir();
         })
 
-        $('#btnNovo').on("click", function() {
-            novo()
-        });
-
+        /* Evento para chamar a gravar() */
         $("#btnGravar").on("click", function() {
             gravar();
         });
 
-        $("#checkAlmoco").on("click", function() {
-            var check = $(".sectionAlmoco")
-            check.each((index, el) => {
-                console.log(typeof el)
-                console.log($(el))
+        // $("#checkAlmoco").on("click", function() {
+        //     var check = $(".sectionAlmoco")
+        //     check.each((index, el) => {
+        //         console.log(typeof el)
+        //         console.log($(el))
 
-                if ($(el).css('display') != 'block') {
+        //         if ($(el).css('display') != 'block') {
 
-                    $(el).css('display', 'block')
-                } else {
-                    $(el).css('display', 'none')
-                }
-            })
-        });
+        //             $(el).css('display', 'block')
+        //         } else {
+        //             $(el).css('display', 'none')
+        //         }
+        //     })
+        // });
 
+        /*Função responsavel pelo carregamento dos dados pessoais e configurações da tela*/
         carregaFolhaPontoMensal();
 
     });
 
-    function novo() {
-        $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php');
-    }
-
+    /* Função reponsável por passar os dados para o back-end para a gravação ou reescrita da folha */
     function gravar() {
 
-        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
         var arrayFolha = $("#pointFieldGenerator input[name='dia']").serializeArray()
@@ -740,91 +712,72 @@ include("inc/scripts.php");
         );
     }
 
-    function excluir() {
-        var id = +$("#codigo").val();
+    /*Função reponsável por trazer os dados pessoais e configurações da folha*/
+    function carregaFolhaPontoMensal() {
 
-        if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+        /*Pega a query da URL e separa seus devidos valores*/
+        const search = window.location.search.substring(1, window.location.search.length);
+        let [getFuncionario, getMesAno] = search.split('&');
+        getFuncionario = getFuncionario.substring((getFuncionario.indexOf("=") + 1), getFuncionario.length);
+        getMesAno = getMesAno.substring((getMesAno.indexOf("=") + 1), getMesAno.length);
+
+        if (!getFuncionario || !getMesAno) {
+            smartAlert("Atenção", "Não foi possível carregar a folha atual", "error");
             return;
         }
 
-        excluirFolhaPontoMensal(id, function(data) {
-            if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
+        const mesAno = getMesAno;
+        const funcionario = getFuncionario;
 
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                }
-            } else {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                voltar();
-            }
-        });
-    }
-
-    function carregaFolhaPontoMensal() {
-
-        const search = window.location.search.substring(1,window.location.search.length);
-        let [getFuncionario,getMesAno] = search.split('&');
-        getFuncionario = getFuncionario.substring((getFuncionario.indexOf("=")+1),getFuncionario.length);
-        getMesAno = getMesAno.substring((getMesAno.indexOf("=")+1),getMesAno.length);
-        const mesAno = getMesAno || new Date().toJSON().slice(0, 10).replace(/[0-9]$/g, 01);
-        const funcionario = getFuncionario || $("#funcionario option:selected").val();
-
+        $('#funcionario').val(funcionario);
         $('#mesAno').val(mesAno);
 
         recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
 
                 data = data.replace(/failed/gi, '');
-                var piece = data.split("#");
+                let piece = data.split("#");
 
-                var mensagem = piece[0];
-                var out = piece[1];
-                var JsonFolha = piece[2];
+                let mensagem = piece[0];
+                let out = piece[1];
+                let JsonFolha = piece[2];
                 piece = out.split("^");
 
                 //funcionando
-                if (out.length >= 0 && out != "") {
-                    var codigo = piece[0];
-                    var funcionario = piece[1];
-                    var observacao = piece[2];
-                    var mesAnoFolhaPonto = piece[3];
-                    toleranciaAtraso = piece[4] || '05:00';
-                    toleranciaExtra = piece[5] || '05:00';
-                    var status = piece[6];
+                let codigo = piece[0] || 0;
+                let funcionario = piece[1];
+                let observacao = piece[2] || "";
+                let mesAnoFolhaPonto = piece[3];
+                toleranciaAtraso = piece[4] || '05:00';
+                toleranciaExtra = piece[5] || '05:00';
+                let status = piece[6] || 0;
 
-                    $("#codigo").val(codigo);
-                    $("#funcionario").val(funcionario);
-                    $("#observacaoFolhaPontoMensal").val(observacao);
-                    $("#mesAno").val(mesAnoFolhaPonto);
-                    $("#status").val(status);
-                } else {
-                    $("#codigo").val(0);
-                    $("#observacaoFolhaPontoMensal").val("");
-                    $("#status").val(0);
-                }
+                $("#codigo").val(codigo);
+                $("#funcionario").val(funcionario);
+                $("#observacaoFolhaPontoMensal").val(observacao);
+                $("#mesAno").val(mesAnoFolhaPonto);
+                $("#status").val(status);
 
                 //funcionando
-                //-------------------
-                var almoco = $('#almoco option:selected').text().trim();
-                almoco = almoco.split("-");
-                almoco[0] = almoco[0].trim();
-                almoco[1] = almoco[1].trim();
+                let almoco = $('#almoco option[data-funcionario="' + funcionario + '"]').val();
+                $('#almoco').val(almoco);
+                let textoAlmoco = $('#almoco option:selected').text().trim();
+                textoAlmoco = textoAlmoco.split("-");
+                textoAlmoco[0] = textoAlmoco[0].trim();
+                textoAlmoco[1] = textoAlmoco[1].trim();
 
-                $("#inputInicioAlmoco").val(almoco[0]);
-                $("#inputFimAlmoco").val(almoco[1]);
-                //-------------------
+                $("#inputInicioAlmoco").val(textoAlmoco[0]);
+                $("#inputFimAlmoco").val(textoAlmoco[1]);
 
+                let expediente = $('#expediente option[data-funcionario="' + funcionario + '"]').val();
+                $('#expediente').val(expediente);
+
+                /*Não mexer até a linha 840 ($('#pointFieldGenerator [name=lancamento]').append(options);)*/
                 const totalDiasMes = diasMes($("#mesAno").val());
                 for (let i = 0; i < totalDiasMes; i++) {
                     generateElements('div', '#pointFieldGenerator', '', '', ['row'], false, '', '', '', false, 'input');
                     $("#pointFieldGenerator").append('<hr/>');
                 };
-
 
                 for (let i = 0; i < 7; i++) {
                     const classList = ['col', 'col-2'];
@@ -871,7 +824,7 @@ include("inc/scripts.php");
                 }, {
                     name: 'atraso'
                 }]);
-                //-------------
+
                 generateElements('section', '#pointFieldGenerator .row', '', '', ['col', 'col-2'], false, '', '', '', false, 'select');
                 generateElements('label', '#pointFieldGenerator .row .col[data-group=select]', '', '', ['label'], false, 'lancamento', 'Lançamento', '', false, 'select');
                 generateElements('label', '#pointFieldGenerator .row .col[data-group=select]', '', '', ['select'], false, '', '', '', false, 'select');
@@ -880,6 +833,7 @@ include("inc/scripts.php");
                 const options = $('#inputLancamento').children('option').clone(true);
                 $('#pointFieldGenerator [name=lancamento]').append(options);
 
+                /*Daqui para baixo pode mexer*/
                 preencherPonto(JsonFolha);
 
                 getPermissions();
@@ -908,26 +862,34 @@ include("inc/scripts.php");
 
                 piece = out.split("^");
 
-                if (out.length >= 0 && out != "") {
-                    var codigo = +piece[0];
-                    var funcionario = piece[1];
-                    var observacao = piece[2];
-                    var mesAnoFolhaPonto = piece[3];
-                    toleranciaAtraso = piece[4] || '05:00';
-                    toleranciaExtra = piece[5] || '05:00';
-                    var status = piece[6];
+                var codigo = +piece[0];
+                var funcionario = piece[1];
+                var observacao = piece[2];
+                var mesAnoFolhaPonto = piece[3];
+                toleranciaAtraso = piece[4] || '05:00';
+                toleranciaExtra = piece[5] || '05:00';
+                var status = piece[6];
 
-                    $("#codigo").val(codigo);
-                    $("#funcionario").val(funcionario);
-                    $("#observacaoFolhaPontoMensal").val(observacao);
-                    $("#mesAno").val(mesAnoFolhaPonto);
-                    $("#status").val(status);
-                } else {
-                    $("#codigo").val(0);
-                    $("#observacaoFolhaPontoMensal").val("");
-                    $("#status").val(0);
-                }
+                $("#codigo").val(codigo) || 0;
+                $("#funcionario").val(funcionario);
+                $("#observacaoFolhaPontoMensal").val(observacao) || "";
+                $("#mesAno").val(mesAnoFolhaPonto);
+                $("#status").val(status) || 0;
 
+                let almoco = $('#almoco option[data-funcionario="' + funcionario + '"]').val();
+                $('#almoco').val(almoco);
+                let textoAlmoco = $('#almoco option:selected').text().trim();
+                textoAlmoco = textoAlmoco.split("-");
+                textoAlmoco[0] = textoAlmoco[0].trim();
+                textoAlmoco[1] = textoAlmoco[1].trim();
+
+                $("#inputInicioAlmoco").val(textoAlmoco[0]);
+                $("#inputFimAlmoco").val(textoAlmoco[1]);
+
+                let expediente = $('#expediente option[data-funcionario="' + funcionario + '"]').val();
+                $('#expediente').val(expediente);
+
+                /*Não mexer até a linha 955 ($('#pointFieldGenerator [name=lancamento]').append(options);)*/
                 deleteElements('#pointFieldGenerator .row');
                 deleteElements('#pointFieldGenerator hr');
 
@@ -983,7 +945,7 @@ include("inc/scripts.php");
                 }, {
                     name: 'atraso'
                 }]);
-                //-------------
+
                 generateElements('section', '#pointFieldGenerator .row', '', '', ['col', 'col-2'], false, '', '', '', false, 'select');
                 generateElements('label', '#pointFieldGenerator .row .col[data-group=select]', '', '', ['label'], false, 'lancamento', 'Lançamento', '', false, 'select');
                 generateElements('label', '#pointFieldGenerator .row .col[data-group=select]', '', '', ['select'], false, '', '', '', false, 'select');
@@ -992,6 +954,7 @@ include("inc/scripts.php");
                 const options = $('#inputLancamento').children('option').clone(true);
                 $('#pointFieldGenerator [name=lancamento]').append(options);
 
+                /*Daqui para baixo pode mexer*/
                 preencherPonto(JsonFolha);
 
                 return;
@@ -1427,7 +1390,12 @@ include("inc/scripts.php");
 
         var dia = $("#inputDia").val();
 
-        var index = dia - 1;
+        if(!dia){
+            smartAlert("Atenção","Insira um dia válido","error");
+            return;
+        }
+
+        var index = dia--;
 
         var entrada = $("#pointFieldGenerator [name=horaEntrada]")[index]
         var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
@@ -1551,12 +1519,12 @@ include("inc/scripts.php");
 
 
 
-        entrada.value = horaEntrada;
-        inicioAlmoco.value = inputInicioAlmoco;
-        fimAlmoco.value = inputFimAlmoco;
+        entrada.value = horaEntrada || "00:00:00";
+        inicioAlmoco.value = inputInicioAlmoco || "00:00";
+        fimAlmoco.value = inputFimAlmoco || "00:00";
         extra.value = inputExtra || '00:00';
         atraso.value = inputAtraso || '00:00';
-        saida.value = horaSaida;
+        saida.value = horaSaida || "00:00:00";
         lancamento.value = inputLancamento;
 
         abonarAtraso();
@@ -1577,7 +1545,7 @@ include("inc/scripts.php");
             }
 
             try {
-                
+
                 let permissoes = JSON.parse(out);
                 setPage(permissoes);
 
@@ -1593,7 +1561,7 @@ include("inc/scripts.php");
 
     function setPage(obj) {
         for (permissao in obj) {
-            
+
             if (permissao == 'PONTOELETRONICOMENSALMAXIMO') {
                 $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
                 $("#funcionario").removeAttr('style');
