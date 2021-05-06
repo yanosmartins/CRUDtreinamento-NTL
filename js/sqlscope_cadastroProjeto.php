@@ -113,6 +113,7 @@ function gravaProjeto()
 
     $limiteEntrada = validaString($projeto['limiteEntrada']);
     $limiteSaida = validaString($projeto['limiteSaida']);
+    $imprimeCargo = $projeto['imprimeCargo'];
     //------------------------PROJETO Telefone------------------
     $strArrayTelefone = $projeto['jsonTelefone'];
     $arrayTelefone = json_decode($strArrayTelefone, true);
@@ -289,7 +290,8 @@ function gravaProjeto()
         $razaoSocial,
         $usuario,
         $limiteEntrada,
-        $limiteSaida";
+        $limiteSaida,
+        $imprimeCargo";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -397,19 +399,17 @@ function recuperaProjeto()
 
         $valorDescontoFolhaVT = $row['valorDescontoFolhaVT'];
         $valorDescontoFolhaVT = validaValorRecupera($valorDescontoFolhaVT);
-
+        //VTFIM 
         $numeroCentroCusto = $row['numeroCentroCusto'];
-
         $descontoFolhaPlanoSaude = $row['descontoFolhaPlanoSaude'];
         $descontoFolhaPlanoSaude = validaValorRecupera($descontoFolhaPlanoSaude);
-
         $valorDescontoFolhaPlanoSaude = $row['valorDescontoFolhaPlanoSaude'];
         $valorDescontoFolhaPlanoSaude = validaValorRecupera($valorDescontoFolhaPlanoSaude);
         $municipioFerias = +$row['municipioFerias'];
         $razaoSocial = $row['razaoSocial'];
-
         $limiteEntrada = (string)$row['limiteEntrada'];
         $limiteSaida = (string)$row['limiteSaida'];
+        $imprimeCargo = (int)$row['imprimeCargo'];
 
         $out = $id . "^" .
             $cnpj . "^" .
@@ -469,7 +469,8 @@ function recuperaProjeto()
             $municipioFerias . "^" . 
             $razaoSocial . "^" . 
             $limiteEntrada . "^" . 
-            $limiteSaida;
+            $limiteSaida . "^" . 
+            $imprimeCargo;
 
         //----------------------Montando o array do Telefone
         $sql = "SELECT * FROM Ntl.projeto SI 
