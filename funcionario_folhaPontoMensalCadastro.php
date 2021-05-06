@@ -182,7 +182,7 @@ include("inc/nav.php");
                                                                         </select>
                                                                     </label>
                                                                 </section>
-                                                                <section class="col col-2">
+                                                                <section id="sectionStatus" class="col col-2">
                                                                     <label class="label" for="status">Status</label>
                                                                     <label class="select">
                                                                         <select id="status" name="status" class="readonly" readonly style="pointer-events: none; touch-action: none">
@@ -706,7 +706,7 @@ include("inc/scripts.php");
                 } else {
                     var piece = data.split("#");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
+                    $("#btnGravar").prop('disabled', false);
                 }
             }
         );
@@ -956,6 +956,8 @@ include("inc/scripts.php");
 
                 /*Daqui para baixo pode mexer*/
                 preencherPonto(JsonFolha);
+
+                getPermissions();
 
                 return;
 
@@ -1390,8 +1392,8 @@ include("inc/scripts.php");
 
         var dia = $("#inputDia").val();
 
-        if(!dia){
-            smartAlert("Atenção","Insira um dia válido","error");
+        if (!dia) {
+            smartAlert("Atenção", "Insira um dia válido", "error");
             return;
         }
 
@@ -1577,9 +1579,10 @@ include("inc/scripts.php");
 
                 $("#status").attr('readonly', obj[permissao].status.readonly);
                 $("#status").removeAttr('style');
-                if (!obj[permissao].status.class)
+                if (!obj[permissao].status.class) {
                     $("#status").removeClass('readonly');
-                $("#status").css('display', obj[permissao].status.display);
+                }
+                $("#sectionStatus").css('display', obj[permissao].status.display);
                 $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
                 $("#status").css('touch-action', obj[permissao].status.touchAction);
 
@@ -1625,8 +1628,9 @@ include("inc/scripts.php");
             } else if (permissao == 'PONTOELETRONICOMENSALMODERADO') {
                 $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
                 $("#funcionario").removeAttr('style');
-                if (!obj[permissao].funcionario.class)
+                if (!obj[permissao].funcionario.class) {
                     $("#funcionario").removeClass('readonly');
+                }
                 $("#funcionario").css('pointer-events', obj[permissao].funcionario.pointerEvents);
                 $("#funcionario").css('touch-action', obj[permissao].funcionario.touchAction);
 
@@ -1637,13 +1641,15 @@ include("inc/scripts.php");
 
 
                 let status = $("#status option:selected").text();
-                const pattern = /^fechad(o|a)$/gi
-                if (!pattern.test(status)) {
+                const pattern = /^fechad(o|a)$/gi;
+                const condition = pattern.test(status);
+                if (!condition) {
                     $("#status").attr('readonly', obj[permissao].status.readonly);
                     $("#status").removeAttr('style');
-                    if (!obj[permissao].status.class)
+                    if (!obj[permissao].status.class) {
                         $("#status").removeClass('readonly');
-                    $("#status").css('display', obj[permissao].status.display);
+                    }
+                    $("#sectionStatus").css('display', obj[permissao].status.display);
                     $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
                     $("#status").css('touch-action', obj[permissao].status.touchAction);
 
@@ -1685,7 +1691,67 @@ include("inc/scripts.php");
                     $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
 
                     $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
+                } else {
+                    $("#status").attr('readonly', true);
+                    $("#status").removeAttr('style');
+                    if (!$("#status").hasClass('readonly')) {
+                        $("#status").addClass('readonly');
+                    }
+                    $("#sectionStatus").css('display', 'none');
+                    $("#status").css('pointer-events', 'none');
+                    $("#status").css('touch-action', 'none');
+
+                    $("#inputDia").attr('readonly', true);
+                    if (!$("#inputDia").hasClass('readonly')){
+                        $("#inputDia").addClass('readonly');
+                    }
+                        
+
+                    $("#inputHoraEntrada").attr('readonly', true);
+                    if (!$("#inputHoraEntrada").hasClass('readonly')){
+                        $("#inputHoraEntrada").addClass('readonly');
+                    }
+                        
+
+                    $("#inputInicioAlmoco").attr('readonly', true);
+                    if (!$("#inputInicioAlmoco").hasClass('readonly')){
+                        $("#inputInicioAlmoco").addClass('readonly');
+                    }
+                        
+
+                    $("#inputFimAlmoco").attr('readonly', true);
+                    if (!$("#inputFimAlmoco").hasClass('readonly')) {
+                        $("#inputFimAlmoco").addClass('readonly');
+                    }
+
+                    $("#inputHoraSaida").attr('readonly', true);
+                    if (!$("#inputHoraSaida").hasClass('readonly')) {
+                        $("#inputHoraSaida").addClass('readonly');
+                    }
+
+                    $("#inputHoraExtra").attr('readonly', true);
+                    if (!$("#inputHoraExtra").hasClass('readonly')) {
+                        $("#inputHoraExtra").addClass('readonly');
+                    }
+
+                    $("#inputAtraso").attr('readonly', true);
+                    if (!$("#inputAtraso").hasClass('readonly')) {
+                        $("#inputAtraso").addClass('readonly');
+                    }
+
+                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                    $("#inputLancamento").removeAttr('style');
+                    if (!$("#inputLancamento").hasClass('readonly')) {
+                        $("#inputLancamento").addClass('readonly');
+                    }
+                    $("#inputLancamento").css('pointer-events', 'none');
+                    $("#inputLancamento").css('touch-action', 'none');
+
+                    $("#btnAddPonto").attr('disabled', true);
+
+                    $("#btnGravar").attr('disabled', true);
                 }
+
                 break;
             } else if (permissao == 'PONTOELETRONICOMENSALMINIMO') {
                 $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
@@ -1703,12 +1769,14 @@ include("inc/scripts.php");
 
                 let status = $("#status option:selected").text();
                 const pattern = /^fechad(o|a)$/gi
-                if (!pattern.test(status)) {
+                const condition = pattern.test(status);
+                if (!condition) {
                     $("#status").attr('readonly', obj[permissao].status.readonly);
                     $("#status").removeAttr('style');
-                    if (!obj[permissao].status.class)
+                    if (!obj[permissao].status.class) {
                         $("#status").removeClass('readonly');
-                    $("#status").css('display', obj[permissao].status.display);
+                    }
+                    $("#sectionStatus").css('display', obj[permissao].status.display);
                     $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
                     $("#status").css('touch-action', obj[permissao].status.touchAction);
 
@@ -1751,7 +1819,67 @@ include("inc/scripts.php");
                     $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
 
                     $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
+                } else {
+                    $("#status").attr('readonly', true);
+                    $("#status").removeAttr('style');
+                    if (!$("#status").hasClass('readonly')) {
+                        $("#status").addClass('readonly');
+                    }
+                    $("#sectionStatus").css('display', 'none');
+                    $("#status").css('pointer-events', 'none');
+                    $("#status").css('touch-action', 'none');
+
+                    $("#inputDia").attr('readonly', true);
+                    if (!$("#inputDia").hasClass('readonly')){
+                        $("#inputDia").addClass('readonly');
+                    }
+                        
+
+                    $("#inputHoraEntrada").attr('readonly', true);
+                    if (!$("#inputHoraEntrada").hasClass('readonly')){
+                        $("#inputHoraEntrada").addClass('readonly');
+                    }
+                        
+
+                    $("#inputInicioAlmoco").attr('readonly', true);
+                    if (!$("#inputInicioAlmoco").hasClass('readonly')){
+                        $("#inputInicioAlmoco").addClass('readonly');
+                    }
+                        
+
+                    $("#inputFimAlmoco").attr('readonly', true);
+                    if (!$("#inputFimAlmoco").hasClass('readonly')) {
+                        $("#inputFimAlmoco").addClass('readonly');
+                    }
+
+                    $("#inputHoraSaida").attr('readonly', true);
+                    if (!$("#inputHoraSaida").hasClass('readonly')) {
+                        $("#inputHoraSaida").addClass('readonly');
+                    }
+
+                    $("#inputHoraExtra").attr('readonly', true);
+                    if (!$("#inputHoraExtra").hasClass('readonly')) {
+                        $("#inputHoraExtra").addClass('readonly');
+                    }
+
+                    $("#inputAtraso").attr('readonly', true);
+                    if (!$("#inputAtraso").hasClass('readonly')) {
+                        $("#inputAtraso").addClass('readonly');
+                    }
+
+                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                    $("#inputLancamento").removeAttr('style');
+                    if (!$("#inputLancamento").hasClass('readonly')) {
+                        $("#inputLancamento").addClass('readonly');
+                    }
+                    $("#inputLancamento").css('pointer-events', 'none');
+                    $("#inputLancamento").css('touch-action', 'none');
+
+                    $("#btnAddPonto").attr('disabled', true);
+
+                    $("#btnGravar").attr('disabled', true);
                 }
+                
                 break;
             }
         }
