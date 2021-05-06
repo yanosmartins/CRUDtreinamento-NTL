@@ -60,10 +60,10 @@ include("inc/nav.php");
                             <h2>Consulta Detalhe Benefício</h2>
                         </header>
                         <div>
-                            <div class="widget-body no-padding">
-                                <form action="" class="smart-form client-form" id="formFiltro" method="post">
+                            <!-- <div class="widget-body no-padding"> -->
+                                <!-- <form action="" class="smart-form client-form" id="formFiltro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
-                                        <div class="panel panel-default">
+                                        <div class="panel panel-default"> -->
                                             <!-- <div class="panel-heading">
                                                 <h4 class="panel-title">
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
@@ -77,27 +77,27 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row"> -->
-                                                            <!-- <section class="col col-2 col-auto">
+                                            <!-- <section class="col col-2 col-auto">
                                                                 <label class="label">Mês/Ano</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
                                                                     <input id="data" name="data" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker" value="">
                                                                 </label>
                                                             </section>  -->
-                                                        <!-- </div>
+                                            <!-- </div>
                                                     </fieldset>
                                                 </div>
                                             </div> -->
-                                        </div>
-                                    </div>
-                                    <footer>
-                                        <button id="btnSearch" type="button" class="btn btn-primary hidden" title="Buscar">
-                                            <i class="fa bg-red fa-search fa-lg  bg-blue-light text-magenta "></i>
-                                        </button>
-                                    </footer>
+                                        <!-- </div> -->
+                                    <!-- </div>
                                 </form>
-                            </div>
+                            </div> -->
                             <div id="resultadoBusca"></div>
+                            <footer>
+                                <button id="btnSearch" type="button" class="btn btn-primary hidden" title="Buscar">
+                                    <i class="fa bg-red fa-search fa-lg  bg-blue-light text-magenta "></i>
+                                </button>
+                            </footer>
                         </div>
                     </div>
                 </article>
@@ -135,7 +135,7 @@ include("inc/scripts.php");
     $('body').addClass("minified");
     $(document).ready(function() {
         // $('#btnSearch').on("click", function() {
-            listarFiltro();
+        listarFiltro();
         // });
     });
 
@@ -149,5 +149,5 @@ include("inc/scripts.php");
             var parametrosUrl = '&codigo=' + codigo;
             $('#resultadoBusca').load('beneficio_consultaBeneficioDetalheFiltroListagem.php?' + parametrosUrl);
         }
-        }
+    }
 </script>

@@ -31,7 +31,7 @@ $page_css[] = "your_style.css";
 include("inc/header.php");
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["beneficio"]["sub"]["consultaBeneficio"]["active"] = true;
+$page_nav["beneficio"]["sub"]["operacao"]["sub"]["processaBeneficio"]["active"] = true;
 include("inc/nav.php");
 
 ?>
