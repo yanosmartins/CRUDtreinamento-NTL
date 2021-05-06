@@ -51,7 +51,7 @@ include "js/repositorio.php";
                     }
 
                     echo '<tr>';
-                    echo '<td class="text-center" onclick=abreModal(); ><a ' . $codigo . '">'  . $mesAno . '</a></td>';
+                    echo '<td class="text-left"><a href="beneficio_consultaBeneficioDetalheFiltro.php?codigo=' . $codigo . '">' . $mesAno . '</a></td>';
                     echo '<td class="text-center">' . $projetoDescricao . '</td>';
                     echo '<td class="text-center">' . $usuarioFechamento . '</td>';
                     echo '<td class="text-center">' . $dataFechamento . '</td>';

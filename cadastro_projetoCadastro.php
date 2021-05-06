@@ -158,7 +158,7 @@ include("inc/nav.php");
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeguroVida" class="collapsed" id="accordionSeguroVida">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Tolerância Atraso
+                                                        Parametros
                                                     </a>
                                                 </h4>
                                             </div>
@@ -166,20 +166,33 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-
-                                                            <section class="col col-1">
+                                                            <section class="col col-12">
+                                                                <legend>Folha de ponto</legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
                                                                 <label id="labelHora" class="label">Limite Entrada</label>
                                                                 <div class="input-group" data-align="top" data-autoclose="true">
                                                                     <input id="limiteEntrada" name="limiteEntrada" type="text" class="text-center form-control required" placeholder="00:00" data-autoclose="true" value="">
                                                                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                 </div>
                                                             </section>
-                                                            <section class="col col-1">
+                                                            <section class="col col-2">
                                                                 <label id="labelHora" class="label">Limite Saida</label>
                                                                 <div class="input-group" data-align="top" data-autoclose="true">
                                                                     <input id="limiteSaida" name="limiteSaida" type="text" class="text-center form-control required" placeholder="00:00" data-autoclose="true" value="">
                                                                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                                 </div>
+                                                            </section>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="imprimeCargo">Imprime Cargo</label>
+                                                                <label class="select">
+                                                                    <select id="imprimeCargo" name="imprimeCargo" class="">
+                                                                        <option value='1' selected>Sim</option>
+                                                                        <option value='0'>Não</option>
+                                                                    </select><i></i>
+                                                                </label>
                                                             </section>
                                                         </div>
                                                     </fieldset>
@@ -1611,6 +1624,7 @@ include("inc/scripts.php");
                             var razaoSocial = piece[55];
                             var limiteEntrada = piece[56];
                             var limiteSaida = piece[57];
+                            var imprimeCargo = piece[58];     
 
                             $("#codigo").val(codigo);
                             $("#cnpj").val(cnpj);
@@ -1681,6 +1695,8 @@ include("inc/scripts.php");
                             $("#razaoSocial").val(razaoSocial);
                             $("#limiteEntrada").val(limiteEntrada);
                             $("#limiteSaida").val(limiteSaida);
+                            $("#imprimeCargo").val(imprimeCargo);
+                       
                             jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
                             jsonEmailArray = JSON.parse($("#jsonEmail").val());
                             jsonFolgaArray = JSON.parse($("#jsonFolga").val());

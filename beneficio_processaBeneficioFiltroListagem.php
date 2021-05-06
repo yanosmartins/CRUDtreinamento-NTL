@@ -965,6 +965,7 @@ include "js/repositorio.php";
                         "funcionario" => $funcionario,
                         "diaUtilVAVR" => $diaUtilVAVR,
                         "valorDiarioFuncionarioVAVR" => $valorDiarioFuncionarioVAVR,
+                        "totalFaltaVAVR" => $totalFaltasVAVR,
                         "totalAusenciaVAVR" => $totalAusenciaVAVR,
                         "totalFaltasAusenciasComAbatimentoProjetoSindicato" => $totalFaltasAusenciasComAbatimentoProjetoSindicato,
                         "diaUtilFerias" => $diaUtilFerias,
