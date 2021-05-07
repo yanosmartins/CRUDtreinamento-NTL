@@ -54,6 +54,7 @@ function grava()
     $notaFiscal = $_POST['notaFiscal'];
     $cep = $_POST['cep'];
     $endereco = $_POST['endereco'];
+    $codigoCliente = "'" . $_POST['codigoCliente'] . "'";
 
     $strArrayTipoItem = $_POST['jsonTipoItemArray'];
     $arrayTipoItem = $strArrayTipoItem;
@@ -189,10 +190,11 @@ function grava()
         "'" .   $cep . "'" . "," .
         "'" .   $endereco . "'"  . "," .
         "'" .   $usuario . "'"  . "," .
+        $codigoCliente . "," .
         $xmlTipoItem . "," .
         $xmlTelefone . "," .
         $xmlEmail;
-
+       
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
@@ -229,9 +231,10 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = "SELECT FO.[codigo], FO.[cnpj], FO.[razaoSocial], FO.[apelido], FO.[ativo], FO.[cep],FO.[logradouro], FO.[numero], FO.[complemento], FO.[bairro], FO.[cidade], FO.[uf], FO.[notaFiscal], FO.[endereco]
-    FROM Ntl.fornecedor FO
-    WHERE (0=0)";
+    $sql = "SELECT FO.[codigo], FO.[cnpj], FO.[razaoSocial], FO.[apelido], FO.[ativo], FO.[cep],FO.[logradouro], FO.[numero], FO.[complemento], FO.[bairro], FO.[cidade], FO.[uf], FO.[notaFiscal],
+                   FO.[endereco],FO.[codigoCliente]
+                    FROM Ntl.fornecedor FO
+                    WHERE (0=0)";
 
     if ($condicaoId) {
         $sql = $sql . " AND FO.[codigo] = " . $fornecedorIdPesquisa . " ";
@@ -257,7 +260,7 @@ function recupera()
         $notaFiscal = $row['notaFiscal'];
         $cep =  $row['cep'];
         $endereco =  $row['endereco'];
-
+        $codigoCliente =  $row['codigoCliente'];
 
         // ARRAY TIPO ITEM // 
         $reposit = "";
@@ -384,7 +387,8 @@ function recupera()
             $uf . "^" .
             $notaFiscal . "^" .
             $cep . "^" .
-            $endereco;
+            $endereco ."^".
+            $codigoCliente;
 
         if ($out == "") {
             echo "failed#";

@@ -1,9 +1,11 @@
-function gravaFornecedor(id,cnpj,razaoSocial,apelido,ativo,logradouro,numero,complemento,bairro,cidade,uf,notaFiscal,cep,endereco,jsonTipoItemArray,jsonTelefoneArray,jsonEmailArray, callback) {
+function gravaFornecedor(id,cnpj,razaoSocial,apelido,ativo,logradouro,numero,complemento,bairro,cidade,uf,notaFiscal,cep,endereco,codigoCliente,jsonTipoItemArray,jsonTelefoneArray,jsonEmailArray, callback) {
     $.ajax({    
         url: 'js/sqlscope_cadastroFornecedor.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", id:id,cnpj:cnpj,razaoSocial:razaoSocial,apelido:apelido,ativo:ativo,logradouro:logradouro,numero:numero,complemento:complemento,bairro:bairro,cidade:cidade,uf:uf,notaFiscal:notaFiscal,cep:cep,endereco:endereco,jsonTipoItemArray:jsonTipoItemArray,jsonTelefoneArray:jsonTelefoneArray,jsonEmailArray:jsonEmailArray}, //valores enviados ao script     
+        data: {funcao: "grava", id:id,cnpj:cnpj,razaoSocial:razaoSocial,apelido:apelido,ativo:ativo,logradouro:logradouro,numero:numero,complemento:complemento,bairro:bairro,
+                cidade:cidade,uf:uf,notaFiscal:notaFiscal,cep:cep,endereco:endereco,codigoCliente:codigoCliente,
+                jsonTipoItemArray:jsonTipoItemArray,jsonTelefoneArray:jsonTelefoneArray,jsonEmailArray:jsonEmailArray}, //valores enviados ao script     
         success: function (data) {
             callback(data);
         }
