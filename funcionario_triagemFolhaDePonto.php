@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PARTICIPARPREGAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PARTICIPARPREGAO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('TRIAGEMPONTOELETRONICO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('TRIAGEMPONTOELETRONICO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Participar de Pregões";
+$page_title = "Triagem Ponto Eletrônico";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['licitacao']['sub']['operacao']['sub']["participarPregao"]["active"] = true;
+$page_nav['funcionario']['sub']["triagemPontoEletronico"]["active"] = true;
 
 include("inc/nav.php");
 ?>
