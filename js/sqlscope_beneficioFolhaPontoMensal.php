@@ -329,6 +329,7 @@ function consultarPermissoes()
                         "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "adicionarPonto" => ["disabled" => false],
                         "salvarAlteracoes" => ["disabled" => false],
+                        "fechar" => ["disabled" => false]
                     ];
                 break;
             case 'PONTOELETRONICOMENSALMODERADO':
@@ -346,6 +347,7 @@ function consultarPermissoes()
                         "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "adicionarPonto" => ["disabled" => false],
                         "salvarAlteracoes" => ["disabled" => false],
+                        "fechar" => ["disabled" => false]
                     ];
                 break;
             case 'PONTOELETRONICOMENSALMINIMO':
@@ -363,6 +365,7 @@ function consultarPermissoes()
                         "lancamento" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "adicionarPonto" => ["disabled" => true],
                         "salvarAlteracoes" => ["disabled" => true],
+                        "fechar" => ["disabled" => false]
                     ];
                 break;
         }
