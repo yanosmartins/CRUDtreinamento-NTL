@@ -367,6 +367,9 @@ include("inc/nav.php");
                                                     </div>
                                                 </div>
                                             </div>
+                                            <button type="button" id="btnFechar" class="btn btn-danger" aria-hidden="true" title="Fechar">
+                                                <i class="">Fechar folha</i>
+                                            </button>
                                         </footer>
                                 </form>
                             </div>
@@ -564,9 +567,13 @@ include("inc/scripts.php");
             imprimir();
         })
 
-        /* Evento para chamar a gravar() */
+        /* Eventos para chamar a gravar() */
         $("#btnGravar").on("click", function() {
             gravar();
+        });
+
+        $("#btnFechar").on("click", function() {
+            fechar();
         });
 
         // $("#checkAlmoco").on("click", function() {
@@ -707,6 +714,141 @@ include("inc/scripts.php");
                     var piece = data.split("#");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     $("#btnGravar").prop('disabled', false);
+                }
+            }
+        );
+    }
+
+    function fechar() {
+
+        $("#btnGravar").prop('disabled', true);
+        $("#btnFechar").prop('disabled', true);
+
+        let arrayFolha = $("#pointFieldGenerator input[name='dia']").serializeArray()
+
+        let arrayDia = arrayFolha.map(folha => {
+            return {
+                dia: Number(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='horaEntrada']").serializeArray()
+        let arrayHoraEntrada = arrayFolha.map(folha => {
+            return {
+                horaEntrada: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='inicioAlmoco']").serializeArray()
+        let arrayInicioAlmoco = arrayFolha.map(folha => {
+            return {
+                inicioAlmoco: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='fimAlmoco']").serializeArray()
+        let arrayFimAlmoco = arrayFolha.map(folha => {
+            return {
+                fimAlmoco: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='horaSaida']").serializeArray()
+        let arrayHoraSaida = arrayFolha.map(folha => {
+            return {
+                horaSaida: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='extra']").serializeArray()
+        let arrayHoraExtra = arrayFolha.map(folha => {
+            return {
+                horaExtra: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='atraso']").serializeArray()
+        let arrayAtraso = arrayFolha.map(folha => {
+            return {
+                atraso: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator select[name='lancamento']");
+        let arrayLancamento = new Array();
+        arrayFolha.each((index, el) => {
+            if ($(el).val() == null)
+                $(el).val(0);
+            let value = Number($(el).val());
+            arrayLancamento.push({
+                lancamento: Number(value)
+            })
+
+        })
+
+        let codigo = Number($("#codigo").val())
+        let ativo = Number($("#ativo").val())
+        let funcionario = Number($("#funcionario").val());
+        let options = $("#status option");
+        let status;
+
+        options.each((index,el)=>{
+            const pattern = /^fechad(o|a)$/gi;
+            const texto = $(el).text();
+            if(pattern.test(texto)){
+                status = $(el).val();
+                return;
+            } 
+        });
+
+        let mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
+        let observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
+
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+        let folhaPontoMensalTabela = arrayDia.map((array, index) => {
+            return {
+                dia: array.dia,
+                horaEntrada: arrayHoraEntrada[index].horaEntrada,
+                horaSaida: arrayHoraSaida[index].horaSaida,
+                inicioAlmoco: arrayInicioAlmoco[index].inicioAlmoco,
+                fimAlmoco: arrayFimAlmoco[index].fimAlmoco,
+                horaExtra: arrayHoraExtra[index].horaExtra,
+                atraso: arrayAtraso[index].atraso,
+                lancamento: arrayLancamento[index].lancamento
+            }
+
+        })
+
+        let folhaPontoInfo = {
+            codigo: Number(codigo),
+            ativo: Number(ativo),
+            funcionario: Number(funcionario),
+            mesAno: String(mesAno),
+            status: Number(status),
+            observacao: String(observacaoFolhaPontoMensal)
+        }
+
+        gravaFolhaPontoMensal(folhaPontoInfo, folhaPontoMensalTabela,
+            function(data) {
+
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnFechar").prop('disabled', false);
+                        return false;
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                        $("#btnFechar").prop('disabled', false);
+                        return false;
+                    }
+                } else {
+                    var piece = data.split("#");
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    const funcionario = $("#funcionario").val();
+                    const mesAno = $("#mesAno").val();
+                    $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php?funcionario='+funcionario+'mesAno='+mesAno);
                 }
             }
         );
@@ -1622,7 +1764,7 @@ include("inc/scripts.php");
                 $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
 
                 $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
-
+                $("#btnFechar").attr('disabled', obj[permissao].fechar.disabled);
                 $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
                 break;
             } else if (permissao == 'PONTOELETRONICOMENSALMODERADO') {
@@ -1689,7 +1831,7 @@ include("inc/scripts.php");
                     $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
 
                     $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
-
+                    $("#btnFechar").attr('disabled', obj[permissao].fechar.disabled);
                     $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
                 } else {
                     $("#status").attr('readonly', true);
@@ -1702,22 +1844,22 @@ include("inc/scripts.php");
                     $("#status").css('touch-action', 'none');
 
                     $("#inputDia").attr('readonly', true);
-                    if (!$("#inputDia").hasClass('readonly')){
+                    if (!$("#inputDia").hasClass('readonly')) {
                         $("#inputDia").addClass('readonly');
                     }
-                        
+
 
                     $("#inputHoraEntrada").attr('readonly', true);
-                    if (!$("#inputHoraEntrada").hasClass('readonly')){
+                    if (!$("#inputHoraEntrada").hasClass('readonly')) {
                         $("#inputHoraEntrada").addClass('readonly');
                     }
-                        
+
 
                     $("#inputInicioAlmoco").attr('readonly', true);
-                    if (!$("#inputInicioAlmoco").hasClass('readonly')){
+                    if (!$("#inputInicioAlmoco").hasClass('readonly')) {
                         $("#inputInicioAlmoco").addClass('readonly');
                     }
-                        
+
 
                     $("#inputFimAlmoco").attr('readonly', true);
                     if (!$("#inputFimAlmoco").hasClass('readonly')) {
@@ -1748,7 +1890,7 @@ include("inc/scripts.php");
                     $("#inputLancamento").css('touch-action', 'none');
 
                     $("#btnAddPonto").attr('disabled', true);
-
+                    $("#btnFechar").attr('disabled', true);
                     $("#btnGravar").attr('disabled', true);
                 }
 
@@ -1817,7 +1959,7 @@ include("inc/scripts.php");
                     $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
 
                     $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
-
+                    $("#btnFechar").attr('disabled', obj[permissao].fechar.disabled);
                     $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
                 } else {
                     $("#status").attr('readonly', true);
@@ -1830,22 +1972,22 @@ include("inc/scripts.php");
                     $("#status").css('touch-action', 'none');
 
                     $("#inputDia").attr('readonly', true);
-                    if (!$("#inputDia").hasClass('readonly')){
+                    if (!$("#inputDia").hasClass('readonly')) {
                         $("#inputDia").addClass('readonly');
                     }
-                        
+
 
                     $("#inputHoraEntrada").attr('readonly', true);
-                    if (!$("#inputHoraEntrada").hasClass('readonly')){
+                    if (!$("#inputHoraEntrada").hasClass('readonly')) {
                         $("#inputHoraEntrada").addClass('readonly');
                     }
-                        
+
 
                     $("#inputInicioAlmoco").attr('readonly', true);
-                    if (!$("#inputInicioAlmoco").hasClass('readonly')){
+                    if (!$("#inputInicioAlmoco").hasClass('readonly')) {
                         $("#inputInicioAlmoco").addClass('readonly');
                     }
-                        
+
 
                     $("#inputFimAlmoco").attr('readonly', true);
                     if (!$("#inputFimAlmoco").hasClass('readonly')) {
@@ -1876,10 +2018,10 @@ include("inc/scripts.php");
                     $("#inputLancamento").css('touch-action', 'none');
 
                     $("#btnAddPonto").attr('disabled', true);
-
+                    $("#btnFechar").attr('disabled', true);
                     $("#btnGravar").attr('disabled', true);
                 }
-                
+
                 break;
             }
         }
