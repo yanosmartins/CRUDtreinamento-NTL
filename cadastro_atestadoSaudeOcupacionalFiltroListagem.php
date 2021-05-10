@@ -35,7 +35,11 @@ include "js/repositorio.php";
                     $dataValidadeAso = date("Y-m-d", strtotime($dataValidadeAso));
                     }
                 }
+                $dataAtual = new dateTime('now'); 
+                
 
+
+             
 
                 if ($codigo > 0) {
                     $where .= $where . " AND codigo = " . $codigo;
@@ -56,6 +60,7 @@ include "js/repositorio.php";
                 if ($dataValidadeAso != "") {
                     $where .= $where . " AND ASO.dataProximoAso = " . "'" . $dataValidadeAso .  "'";
                 }
+                
 
                 $sql = $sql . $where;
                 $reposit = new reposit();
