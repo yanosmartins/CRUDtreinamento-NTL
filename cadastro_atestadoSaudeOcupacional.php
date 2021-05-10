@@ -229,13 +229,13 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2 col-auto">
-                                                                    <label class="label" for="situacao"></label>
+                                                                    <label class="label" for="situacao">Situação</label>
                                                                     <label class="select">
-                                                                        <select id="situacao" name="situacao" readonly class="hidden">
+                                                                        <select id="situacao" name="situacao" class="">
                                                                             <option value='P'>Pendente</option>
                                                                             <option value='F'>Fechado</option>
                                                                             <option value='A'>Aberto</option>
-                                                                        </select>
+                                                                        </select><i></i>
                                                                     </label>
                                                                 </section>
                                                                 <!-- <section class="col col-2">
@@ -442,9 +442,9 @@ include("inc/scripts.php");
 
         });
 
-        // $("#btnRemoverDataAso").on("click", function() {
-        //     excluirDataAso();
-        // });
+        $("#btnRemoverDataAso").on("click", function() {
+            excluirDataAso();
+        });
 
         $("#btnNovo").on("click", function() {
             novo();
@@ -496,7 +496,7 @@ include("inc/scripts.php");
                             var dataAgendamento = piece[12]
                             var cargoId = piece[13];
                             var projetoId = piece[14];
-                            
+
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
                             $("#matricula").val(matricula);
@@ -514,12 +514,24 @@ include("inc/scripts.php");
                             $("#jsonDataAso").val($strArrayDataAso);
                             $("#cargoId").val(cargoId);
                             $("#projetoId").val(projetoId);
-                            
-                            
-                            
+                            diasAtrasoTesteDois = $("#dataProximoAso").val();
+
                             jsonDataAsoArray = JSON.parse($("#jsonDataAso").val());
                             fillTableDataAso();
 
+                            const dataTeste = new Date();
+                            let dataProximo = $("#dataProximoAso").val();
+                            let aux = dataProximo.split("/");
+                            dataProximo = new Date(aux[2], aux[1] - 1, aux[0])
+                            let diasAtrasoTeste = $("#diasAtraso").val();
+
+                            if (dataTeste > dataProximo) {
+                                const diff = dataTeste.getDate() - dataProximo.getDate()
+                                if (diff >= 1)
+                                    $("#diasAtraso").val(diff)
+                            } else {
+                                $("#diasAtraso").val('')
+                            }
 
                             return;
                         }
@@ -620,7 +632,7 @@ include("inc/scripts.php");
             $("#tableDataAso tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonDataAsoArray[i].sequencialDataAso + '"><i></i></label></td>'));
             row.append($('<td class="text-center" >' + jsonDataAsoArray[i].dataProximoAsoLista + '</td>'));
-            row.append($('<td class="text-center" >' + jsonDataAsoArray[i].dataRealizacaoAso + '</td>'));
+            row.append($('<td class="text-center" onclick="carregaDataAso(' + jsonDataAsoArray[i].sequencialDataAso + ');">' + jsonDataAsoArray[i].dataRealizacaoAso + '</td>'));
             row.append($('<td class="text-center" >' + jsonDataAsoArray[i].situacao + '</td>'));
 
         }
@@ -641,14 +653,14 @@ include("inc/scripts.php");
             };
         }
 
-        if (fieldName !== '' && (fieldId === "realizacaoDataAso")) {
-            var realizacaoDataAso = $("#realizacaoDataAso").val();
-            if (realizacaoDataAso !== '') {
-                fieldName = "realizacaoDataAso";
+        if (fieldName !== '' && (fieldId === "dataRealizacaoAso")) {
+            var dataRealizacaoAso = $("#dataRealizacaoAso").val();
+            if (dataRealizacaoAso !== '') {
+                fieldName = "dataRealizacaoAso";
             }
             return {
                 name: fieldName,
-                value: realizacaoDataAso
+                value: dataRealizacaoAso
             };
         }
 
@@ -675,8 +687,8 @@ include("inc/scripts.php");
 
         if (arr.length > 0) {
             var item = arr[0];
-            $("#dataProximoAso").val(item.dataProximoAso);
-            $("#realizacaoDataAso").val(item.realizacaoDataAso);
+            $("#dataProximoAsoLista").val(item.dataProximoAsoLista);
+            $("#dataRealizacaoAso").val(item.dataRealizacaoAso);
             $("#situacao").val(item.situacao);
 
         }
@@ -814,6 +826,7 @@ include("inc/scripts.php");
                     $("#idade").val(idade);
                     $("#cargoId").val(cargoId);
                     $("#projetoId").val(projetoId);
+
 
                 }
             }
