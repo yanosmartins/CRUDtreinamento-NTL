@@ -353,18 +353,18 @@ function consultarPermissoes()
             case 'PONTOELETRONICOMENSALMINIMO':
                 $arrayPermissoes[$permissao] = [
                         "funcionario" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "readonly"],
-                        "mesAno" => ["readonly" => true, "class" => ""],
+                        "mesAno" => ["readonly" => false, "class" => ""],
                         "status" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "","display"=>"none"],
-                        "dia" => ["readonly" => true, "class" => ""],
+                        "dia" => ["readonly" => false, "class" => ""],
                         "entrada" => ["readonly" => true, "class" => ""],
                         "inicioAlmoco" => ["readonly" => true, "class" => ""],
                         "fimAlmoco" => ["readonly" => true, "class" => ""],
                         "saida" => ["readonly" => true, "class" => ""],
                         "extra" => ["readonly" => true, "class" => ""],
                         "atraso" => ["readonly" => true, "class" => ""],
-                        "lancamento" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "adicionarPonto" => ["disabled" => true],
-                        "salvarAlteracoes" => ["disabled" => true],
+                        "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "adicionarPonto" => ["disabled" => false],
+                        "salvarAlteracoes" => ["disabled" => false],
                         "fechar" => ["disabled" => false]
                     ];
                 break;
