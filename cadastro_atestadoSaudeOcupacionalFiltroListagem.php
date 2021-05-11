@@ -17,11 +17,10 @@ include "js/repositorio.php";
             </thead>
             <tbody>
                 <?php
-
-                $sql = "SELECT ASO.codigo,ASO.funcionario,P.descricao,F.nome,ASO.projeto,ASO.ativo,ASO.dataProximoAso FROM funcionario.atestadoSaudeOcupacional ASO
+                $hoje = date('Y-m-d');
+                $sql = "SELECT ASO.codigo,ASO.funcionario,P.descricao,F.nome,ASO.projeto,ASO.ativo,ASO.dataProximoAso,DATEDIFF(yy,ASO.dataNascimento,'$hoje') AS 'idade',DATEDIFF(dd,ASO.dataProximoAso,'$hoje') AS 'diasAtraso' FROM funcionario.atestadoSaudeOcupacional ASO
                  INNER JOIN ntl.funcionario F ON F.codigo = ASO.funcionario
                  INNER JOIN ntl.projeto P ON P.codigo = ASO.projeto WHERE (0 = 0)  ";
-
 
                 $codigo = (int)$_GET["codigo"];
                 $funcionario = (int)$_GET["funcionario"];
@@ -29,18 +28,16 @@ include "js/repositorio.php";
                 $ativo = $_GET["ativo"];
                 $dataValidadeAso = $_GET["dataValidadeAso"];
                 $campo = $dataValidadeAso;
+                $idadeInicio = $_GET["idadeInicio"];
+                $idadeFim = $_GET["idadeFim"];
+                $vencido = $_GET["vencido"];
+
                 if ($campo === $dataValidadeAso) {
                     if($campo != "") {
                     $dataValidadeAso = str_replace('/', '-', $dataValidadeAso);
                     $dataValidadeAso = date("Y-m-d", strtotime($dataValidadeAso));
                     }
                 }
-                $dataAtual = new dateTime('now'); 
-                
-
-
-             
-
                 if ($codigo > 0) {
                     $where .= $where . " AND codigo = " . $codigo;
                 }
@@ -60,6 +57,20 @@ include "js/repositorio.php";
                 if ($dataValidadeAso != "") {
                     $where .= $where . " AND ASO.dataProximoAso = " . "'" . $dataValidadeAso .  "'";
                 }
+                if($idadeInicio > 0 && $idadeFim >0){
+                    $where .= $where . " AND DATEDIFF(yy,ASO.dataNascimento,'$hoje') BETWEEN " . "'" . $idadeInicio .  "'" . "AND" .  "'" . $idadeFim .  "'";
+
+                }  else if($idadeInicio > 0) {
+                    $where .= $where . " AND DATEDIFF(yy,ASO.dataNascimento,'$hoje') > " . "'" . $idadeInicio .  "'";
+                }else if($idadeFim > 0) {
+                    $where .= $where . " AND DATEDIFF(yy,ASO.dataNascimento,'$hoje') < " . "'" . $idadeFim .  "'";
+                }
+                if($vencido == 1) {
+                    $where .= $where . " AND DATEDIFF(dd,ASO.dataProximoAso,'$hoje') > " . "'" . 0 .  "'";
+                } 
+                if ($vencido == 2){
+                    $where .= $where . " AND DATEDIFF(dd,ASO.dataProximoAso,'$hoje') < " . "'" . 0 .  "'";
+                }
                 
 
                 $sql = $sql . $where;
@@ -72,7 +83,12 @@ include "js/repositorio.php";
                     $projeto = (string)$row['descricao'];
                     $ativo = $row['ativo'];
                     $dataValidadeAso = $row['dataProximoAso'];
-
+                    $idade = $row['idade'];
+                    $diasAtraso = $row['diasAtraso'];
+                    
+                    if($diasAtraso < 0) {
+                        $diasAtraso = 0;
+                    }
                     if ($ativo == 1) {
                         $ativo = "Sim";
                     } else {
@@ -88,9 +104,9 @@ include "js/repositorio.php";
                     echo '<tr >';
                     echo '<td class="text-left"><a href="cadastro_atestadoSaudeOcupacional.php?codigo=' . $id . '">' . $nomeFuncionario . '</a></td>';
                     echo '<td class="text-left">' . $projeto . '</td>';
-                    echo '<td class="text-left">' .  '</td>';
+                    echo '<td class="text-left">' . $idade .  '</td>';
                     echo '<td class="text-left">' . $dataValidadeAso . '</td>';
-                    echo '<td class="text-left">' . '</td>';
+                    echo '<td class="text-left">' . $diasAtraso .'</td>';
                     echo '<td class="text-left">' . $ativo . '</td>';
                     echo '</tr >';
                 }

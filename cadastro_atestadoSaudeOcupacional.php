@@ -28,6 +28,9 @@ if ($condicaoGestorOK === false) {
     $esconderGestor = "none";
 }
 
+session_start();
+$id = $_SESSION['funcionario'];
+
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
@@ -99,7 +102,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL order by nome";
+                                                                        $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL AND codigo = " . $id;
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigoFuncionario = (int) $row['codigo'];
@@ -176,14 +179,14 @@ include("inc/nav.php");
                                                                 <label class="label" for="dataUltimoAso">Data do ultimo ASO</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataUltimoAso" name="dataUltimoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="dataUltimoAso" name="dataUltimoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label" for="dataProximoAso">Data de validade ASO</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataProximoAso" name="dataProximoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="dataProximoAso" name="dataProximoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1 col-auto">
@@ -240,7 +243,7 @@ include("inc/nav.php");
                                                                             <option value='P'>Pendente</option>
                                                                             <option value='F'>Fechado</option>
                                                                             <option value='A'>Aberto</option>
-                                                                        </select>
+                                                                        </select><i></i>
                                                                     </label>
                                                                 </section>
                                                                 <!-- <section class="col col-2">

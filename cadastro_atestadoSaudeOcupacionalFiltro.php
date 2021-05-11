@@ -245,13 +245,17 @@ include("inc/scripts.php");
         var ativo = $("#ativo").val();
         var dataValidadeAso = $("#dataValidadeAso").val();
         var vencido = $("#vencido").val();
-       
+        var idadeInicio = +$("#idadeInicio").val();
+        var idadeFim = +$("#idadeFim").val();
+
         var parametrosUrl;
         parametrosUrl = '&funcionario=' + funcionario +
             '&projeto=' + projeto +
             '&ativo=' + ativo +
             '&dataValidadeAso=' + dataValidadeAso +
-            '&vencido=' + vencido;
+            '&vencido=' + vencido +
+            '&idadeInicio=' + idadeInicio +
+            '&idadeFim=' + idadeFim;
            
         $('#resultadoBusca').load('cadastro_atestadoSaudeOcupacionalFiltroListagem.php?' + parametrosUrl);
     }
