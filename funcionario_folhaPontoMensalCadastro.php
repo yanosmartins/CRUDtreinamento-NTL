@@ -848,7 +848,7 @@ include("inc/scripts.php");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     const funcionario = $("#funcionario").val();
                     const mesAno = $("#mesAno").val();
-                    $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php?funcionario='+funcionario+'mesAno='+mesAno);
+                    $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php?funcionario='+funcionario+'&mesAno='+mesAno);
                 }
             }
         );
