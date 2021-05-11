@@ -5,9 +5,10 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-$condicaoAcessarOK = (in_array('CODIGOITEM_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('CODIGOITEM_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('CODIGOITEM_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('ASO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('ASO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('ASO_EXCLUIR', $arrayPermissao, true));
+$condicaoGestorOK = (in_array('ASO_GESTOR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -21,6 +22,10 @@ if ($condicaoExcluirOK === false) {
 $esconderBtnGravar = "";
 if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
+}
+$esconderGestor = "";
+if ($condicaoGestorOK === false) {
+    $esconderGestor = "none";
 }
 
 /* ---------------- PHP Custom Scripts ---------
@@ -229,13 +234,13 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2 col-auto">
-                                                                    <label class="label" for="situacao">Situação</label>
+                                                                    <label class="label" for="situacao"style= "display:<?php echo $esconderGestor ?>">Situação</label>
                                                                     <label class="select">
-                                                                        <select id="situacao" name="situacao" class="">
+                                                                        <select id="situacao" name="situacao" readonly  style= "display:<?php echo $esconderGestor ?>">
                                                                             <option value='P'>Pendente</option>
                                                                             <option value='F'>Fechado</option>
                                                                             <option value='A'>Aberto</option>
-                                                                        </select><i></i>
+                                                                        </select>
                                                                     </label>
                                                                 </section>
                                                                 <!-- <section class="col col-2">

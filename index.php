@@ -263,5 +263,8 @@ include("inc/scripts.php");
         $("#btnContracheque").on("click", function() {
             $(location).attr('href', 'http://www.contrachequeweb.com.br/ntl/');
         });
+        $("#btnAso").on("click", function() {
+            $(location).attr('href', 'cadastro_atestadoSaudeOcupacional.php');
+        });
     });
 </script>
