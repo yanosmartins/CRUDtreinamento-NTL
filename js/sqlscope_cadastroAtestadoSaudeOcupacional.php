@@ -100,7 +100,7 @@ function grava()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("FERIADO_ACESSAR|FERIADO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("ASO_ACESSAR|ASO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";

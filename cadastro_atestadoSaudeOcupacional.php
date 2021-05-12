@@ -100,7 +100,7 @@ include("inc/nav.php");
                                                                 <label class="label " for="funcionario">Funcionário</label>
                                                                 <label class="select">
                                                                     <select id="funcionario" name="funcionario" <?php echo $funcionario ?> class="required <?php echo $funcionario ?>">
-                                                                        
+
                                                                         <?php
 
                                                                         session_start();
@@ -257,10 +257,11 @@ include("inc/nav.php");
                                                                     <label class="label" for="situacao" style="display:<?php echo $esconderGestor ?>">Situação</label>
                                                                     <label class="select">
                                                                         <select id="situacao" name="situacao" readonly style="display:<?php echo $esconderGestor ?>">
-                                                                            <option value='P'>Pendente</option>
-                                                                            <option value='F'>Fechado</option>
+
                                                                             <option value='A'>Aberto</option>
-                                                                        </select>
+                                                                            <option value='F'>Fechado</option>
+                                                                            <option value='P'>Pendente</option>
+                                                                        </select><i></i>
                                                                     </label>
                                                                 </section>
                                                                 <!-- <section class="col col-2">
@@ -422,20 +423,7 @@ include("inc/scripts.php");
         });
 
         $("#dataProximoAso").on("change", function() {
-            const data = new Date();
-            let dataProximo = $("#dataProximoAso").val();
-            let aux = dataProximo.split("/");
-            dataProximo = new Date(aux[2], aux[1] - 1, aux[0])
-            let diasAtrasoTeste = $("#diasAtraso").val();
-
-            if (data > dataProximo) {
-                const diff = data.getDate() - dataProximo.getDate()
-                if (diff >= 1)
-                    $("#diasAtraso").val(diff)
-            } else {
-                $("#diasAtraso").val('')
-            }
-            return
+            recuperarValidadeAso();
         })
 
         $("#btnExcluir").on("click", function() {
@@ -462,7 +450,38 @@ include("inc/scripts.php");
                 smartAlert("Atenção", "Escolha um DataAso", "error")
                 return;
             } else {
-                addDataAso();
+                let situacao = $("#situacao").val();
+                if (situacao == 'F') {
+                    let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val()
+                    $("#dataUltimoAso").val(dataRealizacaoAsoValor)
+                    if ((idade < 18) || (idade > 45)) {
+                        let idade = $("#idade").val();
+                        aux = dataRealizacaoAsoValor.split('/')
+                        aux[2] = Number(aux[2]) + 1
+                        dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                    } else {
+                        aux = dataRealizacaoAsoValor.split('/')
+                        aux[2] = Number(aux[2]) + 2
+                        dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                    }
+                    $("#dataProximoAso").val(dataRealizacaoAsoValor)
+                    addDataAso();
+                } else {
+                    let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val()
+                    if ((idade < 18) || (idade > 45)) {
+                        let idade = $("#idade").val();
+                        aux = dataRealizacaoAsoValor.split('/')
+                        aux[2] = Number(aux[2]) + 1
+                        dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                    } else {
+                        aux = dataRealizacaoAsoValor.split('/')
+                        aux[2] = Number(aux[2]) + 2
+                        dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                    }
+                    $("#dataProximoAso").val(dataRealizacaoAsoValor)
+                    addDataAso();
+                }
+
             }
 
         });
@@ -484,6 +503,7 @@ include("inc/scripts.php");
         });
         carregaPagina();
         recuperarDadosFuncionario();
+        recuperarValidadeAso();
     });
 
     function carregaPagina() {
@@ -558,6 +578,7 @@ include("inc/scripts.php");
                             } else {
                                 $("#diasAtraso").val('')
                             }
+
 
                             if (dataUltimoAso != "") {
                                 <?php $funcionario = "readonly" ?>
@@ -634,6 +655,7 @@ include("inc/scripts.php");
             item["sequencialDataAso"] = +item["sequencialDataAso"];
         }
         item.dataProximoAsoLista = $("#dataProximoAso").val()
+
         var index = -1;
         $.each(jsonDataAsoArray, function(i, obj) {
             if (+$('#sequencialDataAso').val() === obj.sequencialDataAso) {
@@ -662,7 +684,12 @@ include("inc/scripts.php");
             $("#tableDataAso tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonDataAsoArray[i].sequencialDataAso + '"><i></i></label></td>'));
             row.append($('<td class="text-center" >' + jsonDataAsoArray[i].dataProximoAsoLista + '</td>'));
-            row.append($('<td class="text-center" onclick="carregaDataAso(' + jsonDataAsoArray[i].sequencialDataAso + ');">' + jsonDataAsoArray[i].dataRealizacaoAso + '</td>'));
+            let situacao = $("#situacao").val()
+            if (situacao == 'F') {
+                row.append($('<td class="text-center" >' + jsonDataAsoArray[i].dataRealizacaoAso + '</td>'));
+            } else {
+                row.append($('<td class="text-center" onclick="carregaDataAso(' + jsonDataAsoArray[i].sequencialDataAso + ');">' + jsonDataAsoArray[i].dataRealizacaoAso + '</td>'));
+            }
             row.append($('<td class="text-center" >' + jsonDataAsoArray[i].situacao + '</td>'));
 
         }
@@ -781,7 +808,9 @@ include("inc/scripts.php");
 
 
 
-        // if (!autorizacao) {
+
+
+        // if (dataAgendamento) {
         //     smartAlert("Atenção", "Informe se o item precisa de assinatura", "error");
         //     $("#btnGravar").prop('disabled', false);
         //     return;
@@ -820,7 +849,7 @@ include("inc/scripts.php");
             function(data) {
                 var atributoId = '#' + 'estoqueDestino';
                 if (data.indexOf('failed') > -1) {
-                    smartAlert("Aviso", "Erro ao buscar funcionario!", "info");
+
                     $("#funcionario").focus()
                     // $("#matricula").val("")
                     return;
@@ -861,5 +890,22 @@ include("inc/scripts.php");
                 }
             }
         );
+    }
+
+    function recuperarValidadeAso() {
+        const data = new Date();
+        let dataProximo = $("#dataProximoAso").val();
+        let aux = dataProximo.split("/");
+        dataProximo = new Date(aux[2], aux[1] - 1, aux[0])
+        let diasAtrasoTeste = $("#diasAtraso").val();
+
+        if (data > dataProximo) {
+            const diff = data.getDate() - dataProximo.getDate()
+            if (diff >= 1)
+                $("#diasAtraso").val(diff)
+        } else {
+            $("#diasAtraso").val('')
+        }
+        return
     }
 </script>
