@@ -356,11 +356,25 @@ include("inc/nav.php");
                                         <footer>
                                             <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimplePoint" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                    <span id="ui-id-2" class="ui-dialog-title">
+                                                    <span id="ui-id-1" class="ui-dialog-title">
                                                     </span>
                                                 </div>
                                                 <div id="dlgSimplePoint" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
                                                     <p>O dia selecionado é um final de semana.</p>
+                                                </div>
+                                                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                    <div class="ui-dialog-buttonset">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- --------------------------------------------- -->
+                                            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleClose" aria-labelledby="ui-id-2" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                    <span id="ui-id-2" class="ui-dialog-title">
+                                                    </span>
+                                                </div>
+                                                <div id="dlgSimpleClose" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                    <p>Após o fechamento da folha não será possível realizar alterações. Deseja confirmar o fechamento da folha?</p>
                                                 </div>
                                                 <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
                                                     <div class="ui-dialog-buttonset">
@@ -477,7 +491,7 @@ include("inc/scripts.php");
             dia = dia.replace(/\D/gi, "");
             if (!dia) dia = 1;
 
-            let index = dia--;
+            let index = dia - 1;
 
             let entrada = $("#pointFieldGenerator input[name=horaEntrada]");
             entrada = entrada[index].value;
@@ -518,6 +532,7 @@ include("inc/scripts.php");
                 }
             }
         }));
+
         $('#dlgSimplePoint').dialog({
             autoOpen: false,
             width: 400,
@@ -531,6 +546,30 @@ include("inc/scripts.php");
                     $(this).dialog("close");
                     $('#dlgSimplePoint').css('display', 'none');
                     addPoint();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                    return;
+                }
+            }]
+        });
+
+        $('#dlgSimpleClose').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Confirmar",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    $('#dlgSimpleClose').css('display', 'none');
+                    fechar();
                 }
             }, {
                 html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
@@ -573,7 +612,7 @@ include("inc/scripts.php");
         });
 
         $("#btnFechar").on("click", function() {
-            fechar();
+            $('#dlgSimpleClose').dialog('open');
         });
 
         // $("#checkAlmoco").on("click", function() {
@@ -1539,7 +1578,7 @@ include("inc/scripts.php");
             return;
         }
 
-        var index = dia--;
+        var index = dia - 1;
 
         var entrada = $("#pointFieldGenerator [name=horaEntrada]")[index]
         var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
