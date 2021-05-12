@@ -104,7 +104,7 @@ function grava()
     $xmlTelefone = "";
     $nomeXml = "ArrayOfFuncionarioTelefone";
     $nomeTabela = "fornecedorTelefone";
-    if (sizeof($arrayTelefone) > 0) {
+    if ($arrayTelefone) {
         $xmlTelefone = '<?xml version="1.0"?>';
         $xmlTelefone = $xmlTelefone . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
 
@@ -141,7 +141,7 @@ function grava()
     $xmlEmail = "";
     $nomeXml = "ArrayOfFuncionarioEmail";
     $nomeTabela = "fornecedorEmail";
-    if (sizeof($arrayEmail) > 0) {
+    if ($arrayEmail) {
         $xmlEmail = '<?xml version="1.0"?>';
         $xmlEmail = $xmlEmail . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
 
