@@ -108,24 +108,29 @@ include("inc/nav.php");
                                                                     <h4>Bem vindo, <span id="#"><?php
                                                                                                 $reposit = new reposit();
 
-                                                                                                $mesAtual = strftime('%Y-%m-01 00:00:00.000', strtotime('today'));
+                                                                                                $mesAtual = strftime('%Y-%m-01', strtotime('today'));
+
 
                                                                                                 $sql = "SELECT F.codigo, F.nome, FO.mesAno,FO.codigo as codigoFolha, FO.funcionario
                                                                                                 FROM Ntl.funcionario F
                                                                                                 LEFT JOIN Funcionario.folhaPontoMensal FO ON FO.funcionario = F.codigo
-                                                                                                WHERE F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $_SESSION['funcionario'] . "AND FO.mesAno = '$mesAtual'";
-
+                                                                                                WHERE F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $_SESSION['funcionario'] . " AND FO.mesAno = '$mesAtual'";
                                                                                                 $result = $reposit->RunQuery($sql);
+
+                                                                                                if ($row != $result[0]) {
+                                                                                                    $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL AND codigo = " . $_SESSION['funcionario'];
+                                                                                                     $result = $reposit->RunQuery($sql);
+                                                                                                }
+                                                                                                
                                                                                                 if ($row = $result[0]) {
 
                                                                                                     $codigoFolha = $row['codigoFolha'];
-                                                                                                    $mesAno = $row['mesAno'];
-                                                                                                    $codigo = (int) $row['codigo'];
+                                                                                                    
+                                                                                                    $codigo = $row['codigo'];
                                                                                                     $nome = $row['nome'];
-                                                                                                    echo '<option id="funcionario" name="funcionario" value= ' . $codigo . ' selected>' . $nome . '</option>';
-                                                                                                    echo '<input id="mesAno" name="mesAno" value =' . $mesAno  . '  class="hidden">';
-                                                                                                    echo '<input id="idFuncionario" name="idFuncionario" value =' . $codigo  . '  class="hidden">';
-                                                                                                    echo '<input id="codigoFolha" name="codigoFolha" value =' . $codigoFolha  . '  class="hidden">';
+                                                                                                    echo "<option id=\"funcionario\" name=\"funcionario\" value= \"" . $codigo . "\" selected>" . $nome . "</option>" .
+                                                                                                        "<input id=\"mesAno\" name=\"mesAno\" value =\"" . $mesAtual  . "\"  class=\"hidden\">" .
+                                                                                                        "<input id=\"codigoFolha\" name=\"codigoFolha\" value =\"" . $codigoFolha  . "\"  class=\"hidden\">";
                                                                                                 }
                                                                                                 ?>
                                                                         </span></h4>
@@ -243,7 +248,7 @@ include("inc/scripts.php");
         });
 
         $("#btnPontoMensal").on("click", function() {
-            const id = $('#idFuncionario').val();
+            const id = $('#funcionario').val();
             const folha = $('#codigoFolha').val();
             const mesAno = $('#mesAno').val();
             $(location).attr('href', `funcionario_folhaPontoMensalCadastro.php?funcionario=${id}&mesAno=${mesAno}`);
@@ -255,9 +260,12 @@ include("inc/scripts.php");
         });
 
         $("#btnFolhaPreenchida").on("click", function() {
-            const id = $('#idFuncionario').val();
+            const id = $('#funcionario').val();
             const folha = $('#codigoFolha').val();
             const mesAno = $('#mesAno').val();
+            if (!folha) {
+                smartAlert("Atenção", "Funcionário não tem folha Preenchida", "error");
+            }
             $(location).attr('href', `funcionario_folhaDePontoPdfPontoEletronico.php?id=${id}&folha=${folha}&data=${mesAno}`);
         });
 
