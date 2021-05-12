@@ -122,12 +122,13 @@ include("inc/nav.php");
                                                                                                     $mesAno = $row['mesAno'];
                                                                                                     $codigo = (int) $row['codigo'];
                                                                                                     $nome = $row['nome'];
-                                                                                                    echo '<option id="funcionario" name="funcionario" value= ' . $codigo . ' selected>' . $nome . '</option>' .
-                                                                                                        '<input id="mesAno" name="mesAno" value =' . $mesAno  . '  class="hidden">'.
-                                                                                                        '<input id="idFuncionario" name="idFuncionario" value =' . $codigo  . '  class="hidden">'. 
-                                                                                                        '<input id="codigoFolha" name="codigoFolha" value =' . $codigoFolha  . '  class="hidden">';
+                                                                                                    echo '<option id="funcionario" name="funcionario" value= ' . $codigo . ' selected>' . $nome . '</option>';
+                                                                                                    echo '<input id="mesAno" name="mesAno" value =' . $mesAno  . '  class="hidden">';
+                                                                                                    echo '<input id="idFuncionario" name="idFuncionario" value =' . $codigo  . '  class="hidden">';
+                                                                                                    echo '<input id="codigoFolha" name="codigoFolha" value =' . $codigoFolha  . '  class="hidden">';
                                                                                                 }
-                                                                                                ?></span></h4>
+                                                                                                ?>
+                                                                        </span></h4>
                                                                 </div>
 
 
