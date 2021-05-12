@@ -167,7 +167,7 @@ include("inc/nav.php");
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnFolhaPreenchida" id="btnFolhaPreenchida">
+                                                                <button type="button" class="btn  btn-block btnFolhaPreenchida" disabled = "disabled" id="btnFolhaPreenchida">
                                                                     <span class="fa fa-file-text fa-2x"></span><br>Folha Mensal <br> Preenchida
                                                                 </button><br>
                                                             </div>
