@@ -24,12 +24,13 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 $esconderGestor = "";
+$funcionario = "";
 if ($condicaoGestorOK === false) {
     $esconderGestor = "none";
+    $funcionario = "readonly";
 }
 
-session_start();
-$id = $_SESSION['funcionario'];
+
 
 /* ---------------- PHP Custom Scripts ---------
 
@@ -98,9 +99,25 @@ include("inc/nav.php");
                                                             <section class="col col-4">
                                                                 <label class="label " for="funcionario">Funcionário</label>
                                                                 <label class="select">
-                                                                    <select id="funcionario" name="funcionario" class="required">
-                                                                        <option></option>
+                                                                    <select id="funcionario" name="funcionario" <?php echo $funcionario ?> class="required <?php echo $funcionario ?>">
+                                                                        
                                                                         <?php
+
+                                                                        session_start();
+                                                                        $id = $_SESSION['funcionario'];
+                                                                        if (!$id) {
+                                                                            echo '<option></option>';
+                                                                            $reposit = new reposit();
+                                                                            $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL order by nome";
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigoFuncionario = (int) $row['codigo'];
+                                                                                $nome = $row['nome'];
+
+                                                                                echo '<option value=' . $codigoFuncionario . '>' . $nome . '</option>';
+                                                                            }
+                                                                        }
+
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL AND codigo = " . $id;
                                                                         $result = $reposit->RunQuery($sql);
@@ -237,13 +254,13 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2 col-auto">
-                                                                    <label class="label" for="situacao"style= "display:<?php echo $esconderGestor ?>">Situação</label>
+                                                                    <label class="label" for="situacao" style="display:<?php echo $esconderGestor ?>">Situação</label>
                                                                     <label class="select">
-                                                                        <select id="situacao" name="situacao" readonly  style= "display:<?php echo $esconderGestor ?>">
+                                                                        <select id="situacao" name="situacao" readonly style="display:<?php echo $esconderGestor ?>">
                                                                             <option value='P'>Pendente</option>
                                                                             <option value='F'>Fechado</option>
                                                                             <option value='A'>Aberto</option>
-                                                                        </select><i></i>
+                                                                        </select>
                                                                     </label>
                                                                 </section>
                                                                 <!-- <section class="col col-2">
@@ -466,6 +483,7 @@ include("inc/scripts.php");
             voltar();
         });
         carregaPagina();
+        recuperarDadosFuncionario();
     });
 
     function carregaPagina() {
@@ -539,6 +557,10 @@ include("inc/scripts.php");
                                     $("#diasAtraso").val(diff)
                             } else {
                                 $("#diasAtraso").val('')
+                            }
+
+                            if (dataUltimoAso != "") {
+                                <?php $funcionario = "readonly" ?>
                             }
 
                             return;
