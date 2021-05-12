@@ -152,7 +152,7 @@ include("inc/nav.php");
                                                         <div class="col col-md-10">
 
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnBaterPonto" name="btnBaterPonto" id="btnBaterPonto">
+                                                                <button type="button" class="btn  btn-block btnBaterPonto" name="btnBaterPonto" disabled = "disabled" id="btnBaterPonto">
                                                                     <span class="fa fa-clock-o fa-2x"></span><br>Bater Ponto
                                                                 </button><br>
                                                             </div>
