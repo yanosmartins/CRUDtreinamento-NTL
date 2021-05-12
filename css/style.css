@@ -26,27 +26,27 @@ h1 {
 }
 
 .btnInicioAlmoco {
-    background-color: #4ae4e9;
+    background: #29c4e3;
 }
 
 .btnFimAlmoco {
-    background-color: #FDD033;
+    background: #d9d216;
 }
 
 .btnEntrada {
-    background: #0d9a77;
+    background-color:#05ad4f;
     
 }
 
 .btnSaida {
-    background: #CA2121;
+     background-color:#c42121;
 }
 
 .diaHoje {
     padding: 5px 15px 30px 15px;
 }
 
-@media(max-width:1000px) {
+/* @media(max-width:1000px) {
     .btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida {
        position:relative;
         float: left;
@@ -64,4 +64,4 @@ h1 {
         order: 2;
         margin-top: 10px;
     }
-}
+} */
