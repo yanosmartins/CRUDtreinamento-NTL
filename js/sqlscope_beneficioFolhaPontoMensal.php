@@ -352,7 +352,7 @@ function consultarPermissoes()
                 break;
             case 'PONTOELETRONICOMENSALMINIMO':
                 $arrayPermissoes[$permissao] = [
-                        "funcionario" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "readonly"],
+                        "funcionario" => ["readonly" => true, "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
                         "mesAno" => ["readonly" => false, "class" => ""],
                         "status" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "","display"=>"none"],
                         "dia" => ["readonly" => false, "class" => ""],
