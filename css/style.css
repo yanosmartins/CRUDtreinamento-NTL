@@ -12,7 +12,7 @@ h1 {
     /* border: 1px solid black; */
 }
 
-.btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida,.xxs :active {
+.btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida, .btnLancamento,.xxs :active {
     border-radius: 5px;
     height: 80px;
     color: white;
@@ -48,8 +48,16 @@ h1 {
 
 @media(max-width:1000px) {
     .btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida {
-        margin-left: auto;
-        text-align: center;
+       position:relative;
+        float: left;
+        width: 20%;
+        height: 40px;
+        display: block;
+        left: 20%;
+        border-radius: 4px;
+        line-height: 8px;
+        cursor: pointer;
+
     }
     .funcionario {
         height: 130px;

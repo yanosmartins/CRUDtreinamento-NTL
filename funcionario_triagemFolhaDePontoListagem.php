@@ -6,85 +6,70 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Mês Ano</th>
-                    <th class="text-left" style="min-width:30px;">Projeto</th>
-                    <th class="text-left" style="min-width:30px;">Usuario Fechamento</th>
-                    <th class="text-left" style="min-width:30px;">Data Fechamento</th>
+                    <th class="text-left" style="min-width:110px;">Funcionário</th>
+                    <th class="text-left" style="min-width:55px;">Mês/Ano</th>
+                    <th class="text-left" style="min-width:55px;">Status</th>
+
                 </tr>
             </thead>
             <tbody>
                 <?php
 
+                $sql = "SELECT F.codigo as 'folha',FU.codigo as 'funcionario', FU.nome as 'nomeFuncionario', F.mesAno, S.descricao as 'status'FROM Funcionario.folhaPontoMensal F 
+                INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
+                LEFT JOIN Ntl.status S ON S.codigo = F.status ";
+
+                $where = " WHERE (0 = 0) ";
+
+                if ($_POST["funcionario"] != "") {
+                    $funcionario = (int)$_POST["funcionario"];
+                    $where = $where . " AND ( FU.codigo = $funcionario)";
+                }
+
+                if ($_POST["mesAno"] != "") {
+                    $mesAno = $_POST["mesAno"];
+                    $where = $where . " AND F.mesAno = '" . $mesAno . "'";
+                }
+
+                if ($_POST["status"] != "") {
+                    $status = (int)$_POST["status"];
+                    $where = $where . " AND S.codigo = " . $status;
+                }
+
+                $orderBy = " ORDER BY FU.nome ASC";
+
+                $sql .= $where . $orderBy;
                 $reposit = new reposit();
-                $sql = "SELECT PB.codigo, PB.mesAno, PB.projeto,P.descricao,P.apelido, PB.usuarioFechamento,PB.dataFechamento
-                        FROM Beneficio.processaBeneficio AS PB
-                        LEFT JOIN ntl.projeto AS P ON PB.projeto = P.codigo";
-                $where = " WHERE (0=0) ";
-
-
-                if ($_GET["mesAno"] != "") {
-                    $mesAno = $_GET["mesAno"];
-                    $where = $where . " AND ( mesAno like '%' + " . "replace('" . $mesAno . "',' ','%') + " . "'%')";
-                }
-
-                if ($_GET["projeto"] != "") {
-                    $projeto = $_GET["projeto"];
-                    $where = $where . " AND projeto = $projeto";
-                }
-
-                $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
 
                 foreach ($result as $row) {
-                    $codigo = (int) $row['codigo'];
-                    $mesAno = (string) $row['mesAno'];
-                    $projetoDescricao = (string) $row['apelido'];
-                    $usuarioFechamento = (string) $row['usuarioFechamento'];
-                    $dataFechamento = (string)$row['dataFechamento'];
+                    $folha = $row['folha'];
+                    $funcionario = $row['funcionario'];
+                    $nomeFuncionario = $row['nomeFuncionario'];
+                    $mesAno = $row['mesAno'];
+                    $status = $row['status'];
+                    $aux = explode(" ", $mesAno);
+                    $mesAno = $aux[0];
+                    $aux = explode("-",$mesAno);
+                    $mostrarMesAno = "$aux[2]/$aux[1]/$aux[0]";
 
-                    if ($dataFechamento != "") {
-                        $dataFechamento = explode("-", $dataFechamento);
-                        $dataFechamentoDia = explode(" ", $dataFechamento[2]);
-                        // $dataFechamentoHoras =  $dataFechamentoDia[1];
-                        // $dataFechamentoHoras = explode(".", $dataFechamentoHoras);
-                        $dataFechamento = $dataFechamentoDia[0] . "/" . $dataFechamento[1] . "/" . $dataFechamento[0];
-                    }
-
-                    echo '<tr>';
-                    echo '<td class="text-left"><a target="_blank" href="beneficio_consultaBeneficioDetalheFiltro.php?codigo=' . $codigo . '">' . $mesAno . '</a></td>';
-                    echo '<td class="text-center">' . $projetoDescricao . '</td>';
-                    echo '<td class="text-center">' . $usuarioFechamento . '</td>';
-                    echo '<td class="text-center">' . $dataFechamento . '</td>';
-                    echo '</tr>';
+                    echo '<tr >';
+                    echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="funcionario_folhaPontoMensalCadastro.php?' . 'funcionario=' . $funcionario . '&' . 'mesAno=' . $mesAno . '">' . $nomeFuncionario . '</a></td>';
+                    echo '<td class="text-left">' . $mostrarMesAno . '</td>';
+                    echo '<td class="text-left">' . $status . '</td>';
                 }
                 ?>
             </tbody>
         </table>
     </div>
 </div>
-<div class="modal fade" id="parametroLinkModalPanel" data-backdrop="static" tabindex="-1" role="dialog">
-    <div class="modal-dialog" style="width:75%;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title"> Calculo por grupo</h4>
-            </div>
-            <div class="modal-footer">
-
-            </div>
-        </div>
-    </div>
-</div>
 <!-- PAGE RELATED PLUGIN(S) -->
-
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
-<script src="js/plugin/datatables/dataTables.tableTools.min.js"></script>
+<!--script src="js/plugin/datatables/dataTables.tableTools.min.js"></script-->
 <script src="js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
-<script src="js/plugin/datatables/sorting/date-eu.js"></script>
+
 <link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css" />
 
 <script type="text/javascript" src="js/plugin/JSZip-2.5.0/jszip.min.js"></script>
@@ -95,6 +80,7 @@ include "js/repositorio.php";
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.print.min.js"></script>
 
+
 <script>
     $(document).ready(function() {
         var responsiveHelper_datatable_tabletools = undefined;
@@ -103,10 +89,6 @@ include "js/repositorio.php";
             tablet: 1024,
             phone: 480
         };
-
-        function abreModal() {
-            $('#parametroLinkModalPanel').modal();
-        }
 
         /* TABLETOOLS */
         $('#tableSearchResult').dataTable({
@@ -139,6 +121,7 @@ include "js/repositorio.php";
                     "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
+            "aaSorting": [],
             "buttons": [
                 //{extend: 'copy', className: 'btn btn-default'},
                 //{extend: 'csv', className: 'btn btn-default'},
@@ -157,8 +140,7 @@ include "js/repositorio.php";
             "preDrawCallback": function() {
                 // Initialize the responsive datatables helper once.
                 if (!responsiveHelper_datatable_tabletools) {
-                    responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($(
-                        '#tableSearchResult'), breakpointDefinition);
+                    responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#tableSearchResult'), breakpointDefinition);
                 }
             },
             "rowCallback": function(nRow) {
@@ -166,11 +148,7 @@ include "js/repositorio.php";
             },
             "drawCallback": function(oSettings) {
                 responsiveHelper_datatable_tabletools.respond();
-            },
-            "columnDefs": [{
-                "type": 'date-eu',
-                "targets": [0, 3]
-            }],
+            }
         });
 
         /* END TABLETOOLS */

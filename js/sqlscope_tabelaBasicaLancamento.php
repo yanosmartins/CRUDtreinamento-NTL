@@ -90,7 +90,7 @@ function grava()
         $xmlProjeto = "'" . $xmlProjeto . "'";
     } else {
 
-        $xmlProjeto = "'" . '<?xml version="1.0"?>' . '<' . "ArrayOfProjeto" . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">' . "</ArrayOfTipoItem>" . "'";
+        $xmlProjeto = "'" . '<?xml version="1.0"?>' . '<' . "ArrayOfProjeto" . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">' . "</ArrayOfProjeto>" . "'";
     }
 
     $sql = "Ntl.lancamento_Atualiza

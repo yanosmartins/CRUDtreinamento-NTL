@@ -1,9 +1,9 @@
-function gravarPonto(codigo,funcionario, mesAno, idFolha, dia, horaEntrada, horaSaida, inicioAlmoco, fimAlmoco, horaExtra, atraso, lancamento,status, callback) {
+function gravarPonto(codigo,funcionario, mesAno, idFolha, dia, horaEntrada, horaSaida, inicioAlmoco, fimAlmoco, horaExtra, atraso, lancamento, observacao, status, callback) {
     $.ajax({
         url: 'js/sqlscope_prototipoPontoEletronicoDiario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: 'gravar', codigo: codigo,funcionario:funcionario,mesAno:mesAno,idFolha:idFolha,horaSaida:horaSaida,inicioAlmoco:inicioAlmoco,fimAlmoco:fimAlmoco,horaExtra:horaExtra,atraso:atraso,lancamento:lancamento, horaEntrada:horaEntrada, dia:dia, status:status },
+        data: { funcao: 'gravar', codigo: codigo,funcionario:funcionario,mesAno:mesAno,idFolha:idFolha,horaSaida:horaSaida,inicioAlmoco:inicioAlmoco,fimAlmoco:fimAlmoco,horaExtra:horaExtra,atraso:atraso,lancamento:lancamento, horaEntrada:horaEntrada, dia:dia, observacao:observacao, status:status },
 
         success: function (data) {
             callback(data);

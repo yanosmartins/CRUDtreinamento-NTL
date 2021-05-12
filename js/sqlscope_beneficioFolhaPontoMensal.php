@@ -318,7 +318,7 @@ function consultarPermissoes()
                 $arrayPermissoes[$permissao] = [
                         "funcionario" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "mesAno" => ["readonly" => false, "class" => ""],
-                        "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "","display"=>"block"],
                         "dia" => ["readonly" => false, "class" => ""],
                         "entrada" => ["readonly" => false, "class" => ""],
                         "inicioAlmoco" => ["readonly" => false, "class" => ""],
@@ -329,13 +329,14 @@ function consultarPermissoes()
                         "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "adicionarPonto" => ["disabled" => false],
                         "salvarAlteracoes" => ["disabled" => false],
+                        "fechar" => ["disabled" => false]
                     ];
                 break;
             case 'PONTOELETRONICOMENSALMODERADO':
                 $arrayPermissoes[$permissao] = [
                         "funcionario" => ["readonly" => true, "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
                         "mesAno" => ["readonly" => false, "class" => ""],
-                        "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "","display"=>"none"],
                         "dia" => ["readonly" => false, "class" => ""],
                         "entrada" => ["readonly" => false, "class" => ""],
                         "inicioAlmoco" => ["readonly" => false, "class" => ""],
@@ -346,23 +347,25 @@ function consultarPermissoes()
                         "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                         "adicionarPonto" => ["disabled" => false],
                         "salvarAlteracoes" => ["disabled" => false],
+                        "fechar" => ["disabled" => false]
                     ];
                 break;
             case 'PONTOELETRONICOMENSALMINIMO':
                 $arrayPermissoes[$permissao] = [
-                        "funcionario" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "readonly"],
-                        "mesAno" => ["readonly" => true, "class" => ""],
-                        "status" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "dia" => ["readonly" => true, "class" => ""],
+                        "funcionario" => ["readonly" => true, "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
+                        "mesAno" => ["readonly" => false, "class" => ""],
+                        "status" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "","display"=>"none"],
+                        "dia" => ["readonly" => false, "class" => ""],
                         "entrada" => ["readonly" => true, "class" => ""],
                         "inicioAlmoco" => ["readonly" => true, "class" => ""],
                         "fimAlmoco" => ["readonly" => true, "class" => ""],
                         "saida" => ["readonly" => true, "class" => ""],
                         "extra" => ["readonly" => true, "class" => ""],
                         "atraso" => ["readonly" => true, "class" => ""],
-                        "lancamento" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "adicionarPonto" => ["disabled" => true],
-                        "salvarAlteracoes" => ["disabled" => true],
+                        "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                        "adicionarPonto" => ["disabled" => false],
+                        "salvarAlteracoes" => ["disabled" => false],
+                        "fechar" => ["disabled" => false]
                     ];
                 break;
         }
