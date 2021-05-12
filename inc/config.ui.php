@@ -475,7 +475,7 @@ if ($condicaoMensageriaOk) {
     }
 }
 
-$condicaoFuncionarioOk = (in_array('FUNCIONARIO_ACESSAR', $arrayPermissao, true));
+$condicaoFuncionarioOk = (in_array('AREAFUNCIONARIO_ACESSAR', $arrayPermissao, true));
 if ($condicaoFuncionarioOk) {
     $page_nav['funcionario'] = array("title" => "Área do Funcionário", "icon" => "fa fa-user");
     $page_nav['funcionario']['sub'] = array();
