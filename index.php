@@ -264,7 +264,8 @@ include("inc/scripts.php");
             const folha = $('#codigoFolha').val();
             const mesAno = $('#mesAno').val();
             if (!folha) {
-                smartAlert("Atenção", "Funcionário não tem folha Preenchida", "error");
+                smartAlert("Atenção", "Funcionário não tem folha Preenchida deste Mês", "error");
+                return
             }
             $(location).attr('href', `funcionario_folhaDePontoPdfPontoEletronico.php?id=${id}&folha=${folha}&data=${mesAno}`);
         });
