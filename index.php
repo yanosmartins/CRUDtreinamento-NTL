@@ -119,19 +119,26 @@ include("inc/nav.php");
 
                                                                                                 if ($row != $result[0]) {
                                                                                                     $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL AND codigo = " . $_SESSION['funcionario'];
-                                                                                                     $result = $reposit->RunQuery($sql);
+                                                                                                    $result = $reposit->RunQuery($sql);
                                                                                                 }
-                                                                                                
+
                                                                                                 if ($row = $result[0]) {
 
                                                                                                     $codigoFolha = $row['codigoFolha'];
-                                                                                                    
+
                                                                                                     $codigo = $row['codigo'];
                                                                                                     $nome = $row['nome'];
                                                                                                     echo "<option id=\"funcionario\" name=\"funcionario\" value= \"" . $codigo . "\" selected>" . $nome . "</option>" .
                                                                                                         "<input id=\"mesAno\" name=\"mesAno\" value =\"" . $mesAtual  . "\"  class=\"hidden\">" .
                                                                                                         "<input id=\"codigoFolha\" name=\"codigoFolha\" value =\"" . $codigoFolha  . "\"  class=\"hidden\">";
                                                                                                 }
+
+                                                                                                $sql = "SELECT dataUltimoAso FROM Funcionario.atestadoSaudeOcupacional WHERE funcionario = " . $_SESSION['funcionario'] . "";
+                                                                                                $result = $reposit->RunQuery($sql);
+                                                                                                if ($row = $result[0]) {
+                                                                                                    $ultimoAso = $row['dataUltimoAso'];
+                                                                                                }
+                                                                                                echo "<input id=\"ultimoAso\" name=\"ultimoAso\" value =\"" . $ultimoAso  . "\"  class=\"hidden\">";
                                                                                                 ?>
                                                                         </span></h4>
                                                                 </div>
@@ -152,7 +159,7 @@ include("inc/nav.php");
                                                         <div class="col col-md-10">
 
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnBaterPonto" name="btnBaterPonto" disabled = "disabled" id="btnBaterPonto">
+                                                                <button type="button" class="btn  btn-block btnBaterPonto" name="btnBaterPonto" id="btnBaterPonto">
                                                                     <span class="fa fa-clock-o fa-2x"></span><br>Bater Ponto
                                                                 </button><br>
                                                             </div>
@@ -167,7 +174,7 @@ include("inc/nav.php");
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnFolhaPreenchida" disabled = "disabled" id="btnFolhaPreenchida">
+                                                                <button type="button" class="btn  btn-block btnFolhaPreenchida" disabled="disabled" id="btnFolhaPreenchida">
                                                                     <span class="fa fa-file-text fa-2x"></span><br>Folha Mensal <br> Preenchida
                                                                 </button><br>
                                                             </div>
@@ -274,6 +281,11 @@ include("inc/scripts.php");
             $(location).attr('href', 'http://www.contrachequeweb.com.br/ntl/');
         });
         $("#btnAso").on("click", function() {
+            const ultimoAso = $('#ultimoAso').val();
+            if(!ultimoAso){
+                smartAlert("Atenção", "O Funcionário não tem data de último ASO", "error");
+                return
+            }
             $(location).attr('href', 'cadastro_atestadoSaudeOcupacional.php');
         });
     });
