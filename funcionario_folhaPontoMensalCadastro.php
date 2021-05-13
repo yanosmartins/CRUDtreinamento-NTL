@@ -924,6 +924,16 @@ include("inc/scripts.php");
                 let JsonFolha = piece[2];
                 piece = out.split("^");
 
+                let statusText;
+                let status = $("#status option");
+                status.each((index,el)=>{
+                    let texto = $(el).text();
+                    let pattern = /abert(o|a)/gi;
+                    if(pattern.test(texto)){
+                        statusText = $(el).val();
+                    }
+                });
+                
                 //funcionando
                 let codigo = piece[0] || 0;
                 let funcionario = piece[1];
@@ -931,7 +941,7 @@ include("inc/scripts.php");
                 let mesAnoFolhaPonto = piece[3];
                 toleranciaAtraso = piece[4] || '05:00';
                 toleranciaExtra = piece[5] || '05:00';
-                let status = piece[6] || 0;
+                status = piece[6] || statusText;
 
                 $("#codigo").val(codigo);
                 $("#funcionario").val(funcionario);
