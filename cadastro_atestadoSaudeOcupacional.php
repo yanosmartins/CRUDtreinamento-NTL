@@ -117,14 +117,12 @@ include("inc/nav.php");
                                                                                 echo '<option value=' . $codigoFuncionario . '>' . $nome . '</option>';
                                                                             }
                                                                         }
-
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL AND codigo = " . $id;
+                                                                        $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL AND codigo =" . $id;
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigoFuncionario = (int) $row['codigo'];
                                                                             $nome = $row['nome'];
-
                                                                             echo '<option value=' . $codigoFuncionario . '>' . $nome . '</option>';
                                                                         }
                                                                         ?>
@@ -207,18 +205,21 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1 col-auto">
-                                                                <label class="label" for="idade">dias atraso</label>
+                                                                <label class="label" for="diasAtraso">dias atraso</label>
                                                                 <label class="input">
                                                                     <input id="diasAtraso" name="diasAtraso" type="text" readonly class="" maxlength="5" autocomplete="off">
                                                                 </label>
                                                             </section>
+
                                                             <section class="col col-2">
                                                                 <label class="label" for="dataAgendamento">Data de Agendamento</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
                                                                     <input id="dataAgendamento" name="dataAgendamento" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                          
                                                                 </label>
                                                             </section>
+
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -261,7 +262,7 @@ include("inc/nav.php");
                                                                             <option value='A'>Aberto</option>
                                                                             <option value='F'>Fechado</option>
                                                                             <option value='P'>Pendente</option>
-                                                                        </select><i></i>
+                                                                       </select>
                                                                     </label>
                                                                 </section>
                                                                 <!-- <section class="col col-2">
@@ -284,7 +285,7 @@ include("inc/nav.php");
                                                                 <button id="btnAddDataAso" type="button" class="btn btn-primary">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
-                                                                <button id="btnRemoverDataAso" type="button" class="btn btn-danger">
+                                                                <button id="btnRemoverDataAso" type="button" class="btn btn-danger" style="display:<?php echo $esconderGestor ?>">
                                                                     <i class="fa fa-minus"></i>
                                                                 </button>
                                                             </section>
@@ -451,8 +452,11 @@ include("inc/scripts.php");
                 return;
             } else {
                 let situacao = $("#situacao").val();
+                var dataIdade = new Date();
+
                 if (situacao == 'F') {
                     let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val()
+
                     $("#dataUltimoAso").val(dataRealizacaoAsoValor)
                     if ((idade < 18) || (idade > 45)) {
                         let idade = $("#idade").val();
@@ -468,6 +472,7 @@ include("inc/scripts.php");
                     addDataAso();
                 } else {
                     let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val()
+
                     if ((idade < 18) || (idade > 45)) {
                         let idade = $("#idade").val();
                         aux = dataRealizacaoAsoValor.split('/')
@@ -479,6 +484,7 @@ include("inc/scripts.php");
                         dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
                     }
                     $("#dataProximoAso").val(dataRealizacaoAsoValor)
+
                     addDataAso();
                 }
 
@@ -487,7 +493,9 @@ include("inc/scripts.php");
         });
 
         $("#btnRemoverDataAso").on("click", function() {
-            excluirDataAso();
+
+             excluirDataAso();
+           
         });
 
         $("#btnNovo").on("click", function() {
@@ -502,7 +510,7 @@ include("inc/scripts.php");
             voltar();
         });
         carregaPagina();
-        recuperarDadosFuncionario();
+        recuperarDadosFuncionarioASO();
         recuperarValidadeAso();
     });
 
@@ -682,10 +690,10 @@ include("inc/scripts.php");
         for (var i = 0; i < jsonDataAsoArray.length; i++) {
             var row = $('<tr />');
             $("#tableDataAso tbody").append(row);
-            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonDataAsoArray[i].sequencialDataAso + '"><i></i></label></td>'));
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox " value="' + jsonDataAsoArray[i].sequencialDataAso + '"><i></i></label></td>'));
             row.append($('<td class="text-center" >' + jsonDataAsoArray[i].dataProximoAsoLista + '</td>'));
             let situacao = $("#situacao").val()
-            if (situacao == 'F') {
+            if ((situacao == 'F') || (jsonDataAsoArray[i].situacao == 'F')) {
                 row.append($('<td class="text-center" >' + jsonDataAsoArray[i].dataRealizacaoAso + '</td>'));
             } else {
                 row.append($('<td class="text-center" onclick="carregaDataAso(' + jsonDataAsoArray[i].sequencialDataAso + ');">' + jsonDataAsoArray[i].dataRealizacaoAso + '</td>'));
@@ -744,6 +752,7 @@ include("inc/scripts.php");
 
         if (arr.length > 0) {
             var item = arr[0];
+            $("#sequencialDataAso").val(item.sequencialDataAso);
             $("#dataProximoAsoLista").val(item.dataProximoAsoLista);
             $("#dataRealizacaoAso").val(item.dataRealizacaoAso);
             $("#situacao").val(item.situacao);
@@ -886,6 +895,70 @@ include("inc/scripts.php");
                     $("#cargoId").val(cargoId);
                     $("#projetoId").val(projetoId);
 
+
+                }
+            }
+        );
+    }
+    
+
+    
+
+
+    function recuperarDadosFuncionarioASO() {
+        var funcionario = $("#funcionario").val()
+        recuperaDadosFuncionarioASO(funcionario,
+            function(data) {
+                var atributoId = '#' + 'estoqueDestino';
+                if (data.indexOf('failed') > -1) {
+
+                    $("#funcionario").focus()
+                    // $("#matricula").val("")
+                    return;
+                } else {
+                    $("#funcionario").prop("disabled", false)
+                    $("#funcionario").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    var mensagem = piece[0];
+                    var registros = piece[1].split("^"); 
+                    var $strArrayDataAso = piece[2];
+                    var matricula = registros[2];
+                    var cargo = registros[3];
+                    var projeto = registros[4];
+                    var sexo = registros[5];
+                    var dataNascimento = registros[6];
+                    var dataAdmissao = registros[8];
+                    var idade = registros[7];
+                    var cargoId = registros[9];
+                    var projetoId = registros[10];
+                    var dataUltimoAso = registros[11];
+                    var dataValidadeAso = registros[12];
+                    var dataAgendamento = registros[13];
+                    
+
+
+                    $("#matricula").val(matricula);
+                    $("#cargo").val(cargo);
+                    $("#projeto").val(projeto);
+
+                    if (sexo == 'M') {
+                        sexo = 'Masculino'
+                    } else {
+                        sexo = 'Feminino'
+                    }
+                    $("#sexo").val(sexo);
+                    $("#dataNascimento").val(dataNascimento);
+                    $("#dataAdmissao").val(dataAdmissao);
+                    $("#idade").val(idade);
+                    $("#cargoId").val(cargoId);
+                    $("#projetoId").val(projetoId);
+                    $("#dataUltimoAso").val(dataUltimoAso);
+                    $("#dataProximoAso").val(dataValidadeAso);
+                    $("#dataAgendamento").val(dataAgendamento);
+                    $("#jsonDataAso").val($strArrayDataAso);
+                    jsonDataAsoArray = JSON.parse($("#jsonDataAso").val());
+                    fillTableDataAso();
 
                 }
             }
