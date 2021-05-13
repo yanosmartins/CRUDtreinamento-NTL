@@ -421,7 +421,8 @@ class reposit
             session_start();
         }
         $usuario = $_SESSION['login'];
-
+        $grupo = $_SESSION['grupo'];
+        
         $conf = explode("|", $config); // Aqui explodimos e jogamos em array
 
         $possuiPermissao = 0;
@@ -431,6 +432,20 @@ class reposit
             $codigoUsuario = $row['codigo'];
             $tipoUsuario = $row['tipoUsuario'];
 
+            if ($grupo) {
+                $sql= "SELECT F.CODIGO FROM Ntl.funcionalidade F WHERE (f.nome = '". $conf[0] . "' OR f.nome = '" . $conf[1] . "') ";
+                $sql = $sql . " EXCEPT ";
+                $sql = $sql . " SELECT usuf.funcionalidade FROM Ntl.usuarioGrupoFuncionalidade usuf INNER JOIN Ntl.funcionalidade faux on faux.codigo = usuf.funcionalidade ";
+                $sql = $sql . " AND (faux.nome = '" . $conf[0] . "' OR faux.nome = '" . $conf[1] . "') ";
+                $sql = $sql . " WHERE usuf.usuarioGrupo=" . $grupo . " ";
+
+                $result = $this->RunQuery($sql);
+                if (empty($result)) {
+                    $possuiPermissao = 1;
+                }
+                return $possuiPermissao;
+            }
+
             if ($tipoUsuario === "C") {
                 $sql= "SELECT F.CODIGO FROM Ntl.funcionalidade F WHERE (f.nome = '". $conf[0] . "' OR f.nome = '" . $conf[1] . "') ";
                 $sql = $sql . " EXCEPT ";
@@ -439,7 +454,7 @@ class reposit
                 $sql = $sql . " WHERE usuf.usuario=" . $codigoUsuario . " ";
 
                 $result = $this->RunQuery($sql);
-                if ($GLOBALS["rows"] === 0) {
+                if (empty($result)) {
                     $possuiPermissao = 1;
                 }
             }

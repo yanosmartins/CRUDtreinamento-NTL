@@ -23,6 +23,7 @@ function validaSenha()
     if ($row = $result[0]) {
         $codigo = $row['codigo'];
         $funcionario = $row['funcionario'];
+        $grupo = $row['grupo'];
         $nome = $row['nome'];
         $senhaBanco = $row['senha'];
         $reposit->FechaConexao();
@@ -43,6 +44,7 @@ function validaSenha()
             $_SESSION['codigo'] = $codigo;
             $_SESSION['funcionario'] = $funcionario;
             $_SESSION['projeto'] = $projeto;
+            $_SESSION['grupo'] = $grupo;
 
             define("login", $login);
             session_write_close();
