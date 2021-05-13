@@ -34,6 +34,7 @@ function gravar()
     $codigo = $_POST['codigo'];
     $funcionario = (int)$_POST['funcionario'];
     $mesAno = $_POST['mesAno'];
+    $mesAno = preg_replace("/\d\d$/", "01", $mesAno);
     $idFolha = (int)$_POST['idFolha'];
     $status = (int)$_POST['status'];
     $dia = (int)$_POST['dia'];
