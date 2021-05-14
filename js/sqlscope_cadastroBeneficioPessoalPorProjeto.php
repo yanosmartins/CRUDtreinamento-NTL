@@ -223,6 +223,8 @@ function gravaBeneficio()
     $horaFim = "'" .$beneficio['horaFim']. "'" ;
     $horaSaida = "'" .$beneficio['horaSaida']. "'" ;
 
+    $produtoVAVR = $beneficio['produtoVAVR'];
+
 
     //############################# INICIO DO XML DE VT ##############################//
     $strArrayValeTransporte = $beneficio['jsonValeTransporte'];
@@ -545,7 +547,8 @@ function gravaBeneficio()
         $horaInicio,
         $horaFim,
         $horaSaida,
-        $departamento";
+        $departamento,
+        $produtoVAVR";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -680,6 +683,8 @@ function recuperaBeneficio()
         $horaInicio = $row['horaInicio'];
         $horaFim = $row['horaFim'];
         $horaSaida = $row['horaSaida'];
+
+        $produtoVAVR = $row['produtoVAVR'];
 
 
 
@@ -1093,7 +1098,8 @@ function recuperaBeneficio()
             $horaInicio . "^" .
             $horaFim . "^" .
             $horaSaida . "^" .
-            $departamento;
+            $departamento . "^" .
+            $produtoVAVR;
 
         if ($out == "") {
             echo "failed#";
