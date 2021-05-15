@@ -167,7 +167,7 @@ if ($condicaoCadastroOk) {
 
 $condicaoBeneficioOk = (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true));
 if ($condicaoBeneficioOk) {
-    $page_nav['beneficio'] = array("title" => "Departamento Pessoal", "icon" => "fa fa-folder-open");
+    $page_nav['beneficio'] = array("title" => "Departamento Pessoal", "icon" => "fa fa-archive");
     $page_nav['beneficio']['sub'] = array();
 
     if (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true)) {
@@ -237,7 +237,7 @@ if ($condicaoBeneficioOk) {
 $condicaoRHOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
 $condicaoContratacaoOk = false;
 if ($condicaoRHOk) {
-    $page_nav['recursoshumanos'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
+    $page_nav['recursoshumanos'] = array("title" => "Recursos Humanos", "icon" => "fa fa-users");
     $page_nav['recursoshumanos']['sub'] = array();
     $condicaoContratacaoOk = true;
 
