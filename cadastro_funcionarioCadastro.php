@@ -110,7 +110,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select codigo, apelido  from Ntl.sindicato where situacao=1 order by descricao ";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = (int) $row['codigo'];
                                                                             $sindicato = $row['apelido'];
 
@@ -130,7 +130,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select codigo, descricao  from Ntl.cargo where ativo=1 order by descricao";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
                                                                             $codigo = (int) $row['codigo'];
                                                                             $sindicato = $row['descricao'];
 
@@ -261,7 +261,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
@@ -313,7 +313,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
@@ -366,7 +366,7 @@ include("inc/nav.php");
                                                                             $reposit = new reposit();
                                                                             $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                             $result = $reposit->RunQuery($sql);
-                                                                            foreach($result as $row) {
+                                                                            foreach ($result as $row) {
 
                                                                                 $sigla = $row['sigla'];
                                                                                 echo '<option value=' . $sigla . '>' . $sigla . '</option>';
@@ -463,7 +463,7 @@ include("inc/nav.php");
                                                                         $reposit = new reposit();
                                                                         $sql = "select * from Ntl.unidadeFederacao order by sigla";
                                                                         $result = $reposit->RunQuery($sql);
-                                                                        foreach($result as $row) {
+                                                                        foreach ($result as $row) {
 
                                                                             $sigla = $row['sigla'];
                                                                             echo '<option value=' . $sigla . '>' . $sigla . '</option>';
@@ -742,6 +742,53 @@ include("inc/nav.php");
                                             </div>
                                         </div>
 
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseEspecializacao" class="collapsed" id="accordionEspecializacao">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Especialização
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseEspecializacao" class="panel-collapse collapse">
+                                                <div class="panel-body no-padding">
+
+                                                    <fieldset autocomplete="off">
+
+                                                        <div class="row">
+                                                            <section class="col col-4">
+                                                                <label class="label " for="especialização">Especialização</label>
+                                                                <label class="select">
+                                                                    <select id="especialização" name="especialização">">
+                                                                        <option value=""></option>
+                                                                        <?php
+
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo,descricao from Ntl.especializacao where ativo = 1";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                        }
+
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+
+
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                     <footer>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
@@ -843,7 +890,7 @@ include("inc/scripts.php");
         $("#rgDependente").mask("99.999.999-9");
         $("#cep").mask("99999-999");
         $("#pisPasep").mask("999.9999.999-9");
-      
+
         $("#serieCarteiraTrabalho").mask("999-9");
         $("#rg").mask("99.999.999-9");
 
@@ -958,7 +1005,7 @@ include("inc/scripts.php");
 
         });
 
-        
+
         //   VALIDAÇÕES DOS NOMES 
         $("#nome").on("change", function() {
             verificaNome("#nome");
