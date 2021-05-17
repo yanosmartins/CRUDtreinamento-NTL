@@ -53,7 +53,7 @@ include "js/repositorio.php";
                 //         FROM Beneficio.processaBeneficioDetalhe WHERE processaBeneficio = $codigo";
                 // $where = " WHERE (0=0) ";
 
-                $sql = "SELECT PB.projeto,P.descricao,PB.mesAno,PB.codigo,PBD.processaBeneficio,PBD.codigoFuncionario,PBD.funcionario,PBD.diaUtilVAVR,PBD.valorDiarioFuncionarioVAVR,PBD.totalFaltaVAVR,PBD.totalAusenciaVAVR,
+                $sql = "SELECT PB.projeto,P.descricao,PB.mesAno,PB.codigo AS codigoConsultaBeneficio,PBD.processaBeneficio,PBD.codigoFuncionario,PBD.funcionario,PBD.diaUtilVAVR,PBD.valorDiarioFuncionarioVAVR,PBD.totalFaltaVAVR,PBD.totalAusenciaVAVR,
                         PBD.totalFaltasAusenciasComAbatimentoProjetoSindicato,PBD.diaUtilFerias,PBD.afastamentoAbaterVAVR,PBD.diasTrabalhadosVAVR,PBD.valorMensalFuncionarioVAVR,
                         PBD.descricaoDescontoVAVR,PBD.valorExtraVAVR,PBD.vavrTotal,PBD.totalValorAcrescimoBeneficioIndiretoExtra,
                         PBD.totalAcrescimoBeneficioIndiretoComExtra,PBD.valorCestaBasicaExtra,PBD.cestaBasicaExtraComCestaBasica,PBD.valorTotalPlanoSaude,PBD.totalValorAbaterBeneficioIndireto,
@@ -68,7 +68,7 @@ include "js/repositorio.php";
 
                 foreach ($result as $row) {
 
-                    $codigo = (int) $row['codigo'];
+                    $codigoConsultaBeneficio = (int) $row['codigoConsultaBeneficio'];
                     $processaBeneficio = (int) $row['processaBeneficio'];
                     $codigoFuncionario = (int) $row['codigoFuncionario'];
                     $funcionario = (string) $row['funcionario'];
@@ -142,6 +142,9 @@ include "js/repositorio.php";
     <?php
     echo '<h1>' . '<b>Projeto: </b>' . $projetoDescricao . ' - <b>Mês/Ano: </b>' . $mesAno . '</h1>';
     ?>
+    <button id="btnExcelSodexo" name="btnExcelSodexo" type="button" class="btn btn-success" title="grava">
+        Gerar Excel Sodexo
+    </button>
 </div>
 
 <!-- PAGE RELATED PLUGIN(S) -->
@@ -168,6 +171,13 @@ include "js/repositorio.php";
             tablet: 1024,
             phone: 480
         };
+     
+        $("#btnExcelSodexo").on("click", function() {
+            var codigoConsultaBeneficio = <?php echo $codigoConsultaBeneficio ?>;
+            // $(location).attr('href', 'beneficio_excelBeneficioTeste.php?codigo=' + codigoConsultaBeneficio);
+            $(location).attr('href', `beneficio_excelBeneficioTeste.php?id=${codigoConsultaBeneficio}`);
+        });
+
 
         /* TABLETOOLS */
         $('#tableSearchResult').dataTable({
@@ -232,4 +242,8 @@ include "js/repositorio.php";
 
         /* END TABLETOOLS */
     });
+
+    // function gerarExcel() {
+    //     $('#resultadoBusca').load('beneficio_consultaBeneficioDetalheFiltroListagem.php?' + parametrosUrl);
+    // }
 </script>
