@@ -1,0 +1,12 @@
+{
+    "name": "ntl/chamado-ntl",
+    "authors": [
+        {
+            "name": "Danilomd",
+            "email": "danilomdaim@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.17"
+    }
+}

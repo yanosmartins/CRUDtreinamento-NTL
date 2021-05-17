@@ -771,6 +771,24 @@ include("inc/nav.php");
 																	</select><i></i>
 																</label>
 															</section>
+															<section class="col col-4 ">
+																<label class="label " for="produtoVAVR">Produto VAVR</label>
+																<label class="select">
+																	<select id="produtoVAVR" name="produtoVAVR" class="" >
+																		<option></option>
+																		<?php
+																		$reposit = new reposit();
+																		$sql = "SELECT codigo, nome FROM Beneficio.produtoBeneficio WHERE ativo = 1 ORDER BY nome";
+																		$result = $reposit->RunQuery($sql);
+																		foreach ($result as $row) {
+																			$id = $row['codigo'];
+																			$nome = $row['nome'];
+																			echo '<option value=' . $id . '>' . $nome . '</option>';
+																		}
+																		?>
+																	</select><i></i>
+																</label>
+															</section>
 														</div>
 														<div class="row">
 
@@ -2868,6 +2886,7 @@ include("inc/scripts.php");
 							var horaFim = piece[82];
 							var horaSaida = piece[83];
 							var departamento = piece[84];
+							var produtoVAVR = piece[85];
 
 
 							$("#codigo").val(codigo);
@@ -2972,6 +2991,7 @@ include("inc/scripts.php");
 							$("#horaSaida").val(horaSaida);
 
 							$("#departamento").val(departamento);
+							$("#produtoVAVR").val(produtoVAVR);
 
 							jsonValeTransporteArray = JSON.parse($("#jsonValeTransporte").val());
 							jsonPlanoSaudeArray = JSON.parse($("#jsonPlanoSaude").val());

@@ -1,0 +1,48 @@
+h {
+    font-weight: bold;
+}
+
+.funcionario {
+    height: 165px;
+    color: #3A3633;
+    border-radius: 5px;
+    text-align: left;
+    box-sizing: border-box;
+    background: white;
+    /* border: 1px solid black; */
+}
+
+.btnBaterPonto, .btnPontoMensal, .btnFolhaMensal, .btnFolhaPreenchida, .btnContracheque, .btnAso,.xxs :active {
+    border: none;
+    height: 80px;
+    color: #305d8c;
+    font-size: 16px;
+    font-weight: bold;
+    position:relative;
+    background-color: #ffffff;
+    top:5px;
+    
+}
+
+
+.diaHoje {
+    padding: 5px 15px 30px 15px;
+}
+
+
+
+
+/* @media(max-width:500px) {
+    .btnBaterPonto, .btnPontoMensal, .btnFolhaMensal, .btnFolhaPreenchida, .btnContracheque, .btnAso {
+        position:relative;
+        float: left;
+        width: auto;
+        height: auto;
+        cursor: pointer;
+    } */
+    /* .funcionario {
+        height: 130px;
+        order: 2;
+        margin-top: 10px;
+    }
+} */

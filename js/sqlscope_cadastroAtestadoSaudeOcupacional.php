@@ -16,9 +16,6 @@ if ($funcao == 'recupera') {
 if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
-if ($funcao == 'popularComboMunicipio') {
-    call_user_func($funcao);
-}
 
 if ($funcao == 'pesquisaData') {
     call_user_func($funcao);
@@ -27,6 +24,11 @@ if ($funcao == 'pesquisaData') {
 if ($funcao == 'recuperarDadosFuncionario') {
     call_user_func($funcao);
 }
+
+if ($funcao == 'recuperarDadosFuncionarioASO') {
+    call_user_func($funcao);
+}
+
 
 return;
 
@@ -61,11 +63,11 @@ function recuperarDadosFuncionario()
         $projeto = $row['projeto'];
         $sexo = $row['sexo'];
         $dataNascimento = $row['dataNascimento'];
-        $dataAdmissao = $row['dataAdmissao'];
         $dataNascimentoTeste = new DateTime($dataNascimento);
         $dataAtual = new DateTime();
         $difData = date_diff($dataAtual, $dataNascimentoTeste);
         $idade = $difData->format('%y');
+        $dataAdmissao = $row['dataAdmissao'];
         $cargoId = $row['codigoCargo'];
         $projetoId = $row['codigoProjeto'];
     }
@@ -84,8 +86,8 @@ function recuperarDadosFuncionario()
         $projeto . "^" .
         $sexo . "^" .
         $dataNascimentoFormatada . "^" .
-        $dataAdmissaoFormatada . "^" .
         $idade. "^" .
+        $dataAdmissaoFormatada . "^" .
         $cargoId . "^" .
         $projetoId;
 
@@ -99,11 +101,130 @@ function recuperarDadosFuncionario()
 }
 
 
+function recuperarDadosFuncionarioASO()
+{
+    if ((empty($_POST["funcionario"])) || (!isset($_POST["funcionario"])) || (is_null($_POST["funcionario"]))) {
+        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    } else {
+        $funcionario = (int)$_POST["funcionario"];
+    }
+
+    $sql = "SELECT F.codigo AS 'codigoFuncionario',C.codigo AS 'codigoCargo',P.codigo AS 'codigoProjeto', ASO.codigo,F.nome AS 'nome',ASO.matricula AS 'matricula',C.descricao AS 'cargo',P.descricao AS 'projeto',ASO.sexo AS 'sexo',
+    ASO.dataNascimento AS 'dataNascimento',ASO.dataAdmissao AS 'dataAdmissao',ASO.dataUltimoAso AS 'dataUltimoAso',ASO.dataProximoAso AS 'dataValidadeAso',
+    ASO.dataAgendamento AS 'dataAgendamento',ASOD.dataProximoAsoLista AS 'dataProximoAsoLista',ASOD.dataRealizacaoAso AS 'dataRealizacaoAso',
+    ASOD.situacao AS 'situacao' from funcionario.atestadoSaudeOcupacional ASO
+    INNER JOIN funcionario.atestadoSaudeOcupacionalDetalhe ASOD ON ASO.codigo = ASOD.atestadoSaudeOcupacional
+    INNER JOIN ntl.funcionario F ON ASO.funcionario = F.codigo
+    INNER JOIN ntl.cargo C ON ASO.cargo = C.codigo
+    INNER JOIN ntl.projeto P ON ASO.projeto = P.codigo
+    WHERE C.ativo = 1 AND P.ativo = 1 AND F.codigo = $funcionario AND F.ativo = 1 AND ASO.ativo = 1";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $out = "";
+    if ($row = $result[0]) {
+        $codigo = (int) $row['codigoFuncionario'];
+        $nome = $row['nome'];
+        $matricula = $row['matricula'];
+        $cargo = $row['cargo'];
+        $projeto = $row['projeto'];
+        $sexo = $row['sexo'];
+        $dataNascimento = $row['dataNascimento'];
+        $dataNascimentoTeste = new DateTime($dataNascimento);
+        $dataAtual = new DateTime();
+        $difData = date_diff($dataAtual, $dataNascimentoTeste);
+        $idade = $difData->format('%y');
+        $dataAdmissao = $row['dataAdmissao'];
+        $cargoId = $row['codigoCargo'];
+        $projetoId = $row['codigoProjeto'];
+        $dataUltimoAso =$row['dataUltimoAso'];
+        $dataValidadeAso = $row['dataValidadeAso'];
+        $dataAgendamento = $row['dataAgendamento'];
+    }
+
+    if ($dataNascimento != "") {
+        $dataNascimentoFormatada = formataDataRecuperacao($dataNascimento);
+    };
+    if ($dataAdmissao != "") {
+        $dataAdmissaoFormatada = formataDataRecuperacao($dataAdmissao);
+    };
+    if ($dataUltimoAso != "") {
+        $dataUltimoAsoFormatada = formataDataRecuperacao($dataUltimoAso);
+    };
+    if ($dataValidadeAso != "") {
+        $dataValidadeAsoFormatada = formataDataRecuperacao($dataValidadeAso);
+    };
+    if ($dataAgendamento != "") {
+        $dataAgendamentoFormatada = formataDataRecuperacao($dataAgendamento);
+    };
+
+    $reposit = "";
+$result = "";
+$sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.situacao FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
+INNER JOIN  funcionario.atestadoSaudeOcupacional ASO ON ASOD.atestadoSaudeOcupacional = ASO.codigo
+WHERE ASO.funcionario = $funcionario";
+$reposit = new reposit();
+$result = $reposit->RunQuery($sql);
+
+$contadorDataAso = 0;
+$arrayDataAso = array();
+foreach ($result as $row) {
+    $dataProximoAsoLista = $row['dataProximoAsoLista'];
+    $dataRealizacaoAso = (string)$row['dataRealizacaoAso'];
+    $situacao = (string)$row['situacao'];
+
+    $dataProximoAsoLista = explode("-", $dataProximoAsoLista);
+    $diadataProximoAsoLista = explode(" ", $dataProximoAsoLista[2]);
+    $dataProximoAsoLista = $diadataProximoAsoLista[0] . "/" . $dataProximoAsoLista[1] . "/" . $dataProximoAsoLista[0];
+
+    $dataRealizacaoAso = explode("-", $dataRealizacaoAso);
+    $diadataRealizacaoAso = explode(" ", $dataRealizacaoAso[2]);
+    $dataRealizacaoAso = $diadataRealizacaoAso[0] . "/" . $dataRealizacaoAso[1] . "/" . $dataRealizacaoAso[0];
+
+    $contadorDataAso = $contadorDataAso + 1;
+    $arrayDataAso[] = array(
+        "sequencialDataAso" => $contadorDataAso,
+        "dataProximoAsoLista" => $dataProximoAsoLista,
+        "dataRealizacaoAso" => $dataRealizacaoAso,
+        "situacao" => $situacao
+    );
+}
+
+$strArrayDataAso = json_encode($arrayDataAso);
+
+
+    $out = $codigo . "^" .
+        $nome . "^" .
+        $matricula . "^" .
+        $cargo . "^" .
+        $projeto . "^" .
+        $sexo . "^" .
+        $dataNascimentoFormatada . "^" .
+        $idade. "^" .
+        $dataAdmissaoFormatada . "^" .
+        $cargoId . "^" .
+        $projetoId . "^" . 
+        $dataUltimoAsoFormatada . "^" .  
+        $dataValidadeAsoFormatada . "^" .
+        $dataAgendamentoFormatada;
+
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out . "#" . $strArrayDataAso;
+    return;
+}
+
 function grava()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("FERIADO_ACESSAR|FERIADO_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("ASO_ACESSAR|ASO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -155,6 +276,23 @@ function grava()
                 $xmlDataAso = $xmlDataAso . "<" . $nomeTabela . ">";
                 foreach ($chave as $campo => $valor) {
 
+                
+                    if ($campo === "dataProximoAsoLista") {
+                        if ($valor == "") {
+                            $valor = 'NULL';
+                            return $valor;
+                        }
+                        $valor = str_replace('/', '-', $valor);
+                        $valor = date("Y-m-d", strtotime($valor));
+                    }
+                    if ($campo === "dataRealizacaoAso") {
+                        if ($valor == "") {
+                            $valor = 'NULL';
+                            return $valor;
+                        }
+                        $valor = str_replace('/', '-', $valor);
+                        $valor = date("Y-m-d", strtotime($valor));
+                    }
                     if (($campo === "sequencialDataAso")) {
                         continue;
                     }
@@ -220,42 +358,137 @@ function grava()
 
 function recupera()
 {
-    $condicaoId = !((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"])));
-    $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
-
-    if (($condicaoId === false) && ($condicaoLogin === false)) {
+    if ((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"]))) {
         $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
         echo "failed#" . $mensagem . ' ';
         return;
+    } else {
+        $id = (int)$_POST["id"];
     }
 
-    if (($condicaoId === true) && ($condicaoLogin === true)) {
-        $mensagem = "Somente 1 parâmetro de pesquisa deve ser informado.";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    }
+    $sql = "SELECT ASO.codigo, ASO.funcionario,C.codigo AS 'cargoId',P.codigo AS 'projetoId', F.matricula,F.nome,P.descricao AS 'projetoNome',C.descricao AS 'cargoNome',F.sexo,
+    ASO.dataAdmissao, ASO.dataNascimento, ASO.dataAgendamento, ASO.dataProximoAso, ASO.dataUltimoAso,ASO.ativo FROM funcionario.atestadoSaudeOcupacional ASO
+        INNER JOIN ntl.funcionario F ON F.codigo = ASO.funcionario
+        INNER JOIN ntl.cargo C ON C.codigo = ASO.cargo
+        INNER JOIN ntl.projeto P ON P.codigo = ASO.projeto
+    WHERE ASO.codigo = " . $id;
 
-    if ($condicaoId) {
-        $usuarioIdPesquisa = $_POST["id"];
-    }
+$reposit = new reposit();
+$result = $reposit->RunQuery($sql);
 
-    if ($condicaoLogin) {
-        $loginPesquisa = $_POST["loginPesquisa"];
-    }
+$out = "";
+if ($row = $result[0]) {
+    $codigo = (int) $row['codigo'];
+    $matricula = $row['matricula'];
+    $funcionario = $row['funcionario'];
+    $cargo = $row['cargoNome'];
+    $projeto = $row['projetoNome'];
+    $sexo = $row['sexo'];
+    $dataNascimento = $row['dataNascimento'];
+    $dataNascimentoTeste = new DateTime($dataNascimento);
+    $dataAtual = new DateTime();
+    $difData = date_diff($dataAtual, $dataNascimentoTeste);
+    $idade = $difData->format('%y');
+    $dataAdmissao = $row['dataAdmissao'];
+    $ativo = $row['ativo'];
+    $dataProximoAso = $row['dataProximoAso'];
+    $dataUltimoAso = $row['dataUltimoAso'];
+    $dataAgendamento = $row['dataAgendamento'];
+    $cargoId = $row['cargoId'];
+    $projetoId = $row['projetoId'];
+    
+}
 
-    $sql =  "SELECT F.codigo, F.tipoFeriado , F.ativo, F.descricao,M.codigo as codigoMunicipio, M.descricao as municipio, F.unidadeFederacao, F.data FROM Ntl.feriado F
-                LEFT JOIN Ntl.municipio M ON M.codigo = F.municipio  WHERE (0=0)";
+if ($dataNascimento != "") {
+    $dataNascimentoFormatada = formataDataRecuperacao($dataNascimento);
+};
+if ($dataAdmissao != "") {
+    $dataAdmissaoFormatada = formataDataRecuperacao($dataAdmissao);
+};
 
-    if ($condicaoId) {
-        $sql = $sql . " AND F.codigo = " . $usuarioIdPesquisa . " ";
-    }
+if ($dataProximoAso != "") {
+    $dataProximoAsoFormatada = formataDataRecuperacao($dataProximoAso);
+};
+
+if ($dataUltimoAso != "") {
+    $dataUltimoAsoFormatada = formataDataRecuperacao($dataUltimoAso);
+};
 
 
-    $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
+if ($dataAgendamento != "") {
+    $dataAgendamentoFormatada = formataDataRecuperacao($dataAgendamento);
+};
 
-    $feriado = $result[0];
-    echo json_encode($feriado);
+if ($sexo == "M") {
+    $sexo = "Masculino";
+} else {
+    $sexo = "Feminino";
+}
+
+
+// XML DATA ASO
+$reposit = "";
+$result = "";
+$sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.situacao FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
+INNER JOIN  funcionario.atestadoSaudeOcupacional ASO ON ASOD.atestadoSaudeOcupacional = ASO.codigo
+WHERE ASO.codigo = $id";
+$reposit = new reposit();
+$result = $reposit->RunQuery($sql);
+
+$contadorDataAso = 0;
+$arrayDataAso = array();
+foreach ($result as $row) {
+    $dataProximoAsoLista = $row['dataProximoAsoLista'];
+    $dataRealizacaoAso = (string)$row['dataRealizacaoAso'];
+    $situacao = (string)$row['situacao'];
+
+    
+if ($dataProximoAsoLista != "") {
+    $dataProximoAsoLista = formataDataRecuperacao($dataProximoAsoLista);
+};
+
+if ($dataRealizacaoAso != "") {
+    $dataRealizacaoAso = formataDataRecuperacao($dataRealizacaoAso);
+};
+
+    $contadorDataAso = $contadorDataAso + 1;
+    $arrayDataAso[] = array(
+        "sequencialDataAso" => $contadorDataAso,
+        "dataProximoAsoLista" => $dataProximoAsoLista,
+        "dataRealizacaoAso" => $dataRealizacaoAso,
+        "situacao" => $situacao
+    );
+}
+
+
+
+$strArrayDataAso = json_encode($arrayDataAso);
+
+
+
+$out = $codigo . "^" .
+    $funcionario . "^" .
+    $matricula . "^" .
+    $cargo . "^" .
+    $projeto . "^" .
+    $sexo . "^" .
+    $dataNascimentoFormatada . "^" .
+    $idade. "^" .
+    $dataAdmissaoFormatada . "^" .
+    $ativo  . "^" .
+    $dataUltimoAsoFormatada . "^" .
+    $dataProximoAsoFormatada . "^" .
+   $dataAgendamentoFormatada . "^" .
+   $cargoId . "^" .
+   $projetoId;
+
+if ($out == "") {
+    echo "failed#";
+    return;
+}
+
+echo "sucess#" . $out . "#" . $strArrayDataAso;
+return;
 }
 
 function excluir()
@@ -278,7 +511,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('Ntl.feriado' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->update('funcionario.atestadoSaudeOcupacional' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');
@@ -290,32 +523,6 @@ function excluir()
 }
 
 
-function popularComboMunicipio()
-{
-    $id = filter_input(INPUT_POST, 'codigo');
-
-    $reposit = new reposit();
-    $sql = "SELECT codigo, descricao FROM Ntl.municipio WHERE (0=0) AND unidadeFederacao = '$id' AND ativo = 1";
-    $result = $reposit->RunQuery($sql);
-    $out = "";
-    $contador = 0;
-
-    foreach ($result as $row) {
-        $id = $row['codigo'];
-        $descricao = $row['descricao'];
-
-        $out .=  $id . "^" . $descricao . "|";
-
-        $contador = $contador + 1;
-    }
-
-    if ($out == "") {
-        echo "failed#";
-        return;
-    }
-    echo "sucess#" . $contador . "#" . $out;
-    return;
-}
 
 /* Esta função verifica no banco se uma data já existe. 
     *  Se existir, ela gera um painel de alerta que pergunta

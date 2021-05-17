@@ -132,16 +132,16 @@ include("inc/nav.php");
                                                                 </select><i></i>
                                                             </label>
                                                         </section> -->
-                                                        <input id="ativo" name="ativo" type="text" class="hidden" value="">
-                                                        <!-- <section class="col col-2">
-                                                            <label class="label" for="ativo">Ativo</label>
+                                                        <!-- <input id="ativo" name="ativo" type="text" class="hidden" value=""> -->
+                                                        <section class="col col-2">
+                                                            <label class="label" for="situacao">Ativo</label>
                                                             <label class="select">
-                                                                <select id="ativo" name="ativo">
+                                                                <select id="situacao" name="situacao">
                                                                     <option></option>
-                                                                    <option value="1" selected>Sim</option>
-                                                                    <option value="0">Não</option>
+                                                                    <option value="F" selected>Fechado</option>
+                                                                    <option value="C">Cancelado</option>
                                                                 </select><i></i>
-                                                        </section> -->
+                                                        </section>
                                                     </div>
                                                 </fieldset>
                                             </div>
@@ -269,10 +269,10 @@ include("inc/scripts.php");
             return;
         }
 
-        var ativo = $('#ativo').val();
+        var situacao = $('#situacao').val();
         var parametrosUrl = '&posto=' + posto;
         parametrosUrl += '&projeto=' + projeto;
-        parametrosUrl += '&ativo=' + ativo;
+        parametrosUrl += '&situacao=' + situacao;
         $('#resultadoBusca').load('faturamento_valorPostoConsultaFiltroListagem.php?' + parametrosUrl);
     }
 

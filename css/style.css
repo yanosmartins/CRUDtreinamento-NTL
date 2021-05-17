@@ -12,7 +12,7 @@ h1 {
     /* border: 1px solid black; */
 }
 
-.btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida,.xxs :active {
+.btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida, .btnLancamento,.xxs :active {
     border-radius: 5px;
     height: 80px;
     color: white;
@@ -26,34 +26,42 @@ h1 {
 }
 
 .btnInicioAlmoco {
-    background-color: #4ae4e9;
+    background: #29c4e3;
 }
 
 .btnFimAlmoco {
-    background-color: #FDD033;
+    background: #d9d216;
 }
 
 .btnEntrada {
-    background: #0d9a77;
+    background-color:#05ad4f;
     
 }
 
 .btnSaida {
-    background: #CA2121;
+     background-color:#c42121;
 }
 
 .diaHoje {
     padding: 5px 15px 30px 15px;
 }
 
-@media(max-width:1000px) {
+/* @media(max-width:1000px) {
     .btnInicioAlmoco, .btnFimAlmoco, .btnEntrada, .btnSaida {
-        margin-left: auto;
-        text-align: center;
+       position:relative;
+        float: left;
+        width: 20%;
+        height: 40px;
+        display: block;
+        left: 20%;
+        border-radius: 4px;
+        line-height: 8px;
+        cursor: pointer;
+
     }
     .funcionario {
         height: 130px;
         order: 2;
         margin-top: 10px;
     }
-}
+} */

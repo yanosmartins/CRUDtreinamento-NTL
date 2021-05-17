@@ -114,7 +114,7 @@ include "js/repositorio.php";
 
                         BP.totalValorAcrescimoBeneficioIndireto,BP.totalValorAbaterBeneficioIndireto,BP.municipioFerias,S.descontoFeriasRefeicao AS sindicatoDescontaFerias,
                         S.descontarFeriasCestaBasica as sindicatoDescontaCestaBasicaFerias,S.descontoValeRefeicao AS sindicatoDescontoVAVR,
-                        P.descontoVAVR AS projetoDescontoVAVR, P.descontoFeriasVAVR AS projetoDescontaFerias, BP.escalaFerias, BP.escalaFeriasVAVR
+                        P.descontoVAVR AS projetoDescontoVAVR, P.descontoFeriasVAVR AS projetoDescontaFerias, BP.escalaFerias, BP.escalaFeriasVAVR,BP.produtoVAVR,PB.codigoBeneficio
                         
                         FROM Ntl.beneficioProjeto BP 
                         INNER JOIN Ntl.funcionario FU ON BP.funcionario = FU.codigo 
@@ -123,6 +123,7 @@ include "js/repositorio.php";
                         LEFT JOIN Ntl.diasUteisPorMunicipio DMVAVR ON DMVAVR.municipio = BP.municipioDiasUteisVAVR and DMVAVR.ativo = 1
                         LEFT JOIN Ntl.diasUteisPorMunicipio DMVT ON DMVT.municipio = BP.municipioDiasUteisVT and DMVT.ativo = 1
                         LEFT JOIN Ntl.diasUteisPorMunicipio DMF ON DMF.municipio = BP.municipioFerias and DMF.ativo = 1
+                        LEFT JOIN Beneficio.produtoBeneficio PB ON BP.produtoVAVR = PB.codigo 
                         WHERE (0=0) AND BP.tipoDescontoVAVR IS NOT NULL AND BP.ativo = 1 AND FU.dataDemissaoFuncionario IS NULL ";
 
                 // if ($_GET['funcionarioFiltro'] != "") {
@@ -152,6 +153,8 @@ include "js/repositorio.php";
                 foreach ($result1 as $row) {
                     $id = (int) $row['codigo'];
                     $funcionario = $row['nome'];
+                    $produtoVAVR = $row['produtoVAVR'];
+                    $codigoBeneficio = $row['codigoBeneficio'];
                     $codigoFuncionario = (int)$row['codigoFuncionario'];
                     $funcionarioCodigo = (int) $row['funcionario'];
                     $tipoDiaUtilVAVR = (int) $row['tipoDiaUtilVAVR'];
@@ -965,6 +968,7 @@ include "js/repositorio.php";
                         "funcionario" => $funcionario,
                         "diaUtilVAVR" => $diaUtilVAVR,
                         "valorDiarioFuncionarioVAVR" => $valorDiarioFuncionarioVAVR,
+                        "totalFaltaVAVR" => $totalFaltasVAVR,
                         "totalAusenciaVAVR" => $totalAusenciaVAVR,
                         "totalFaltasAusenciasComAbatimentoProjetoSindicato" => $totalFaltasAusenciasComAbatimentoProjetoSindicato,
                         "diaUtilFerias" => $diaUtilFerias,
@@ -988,6 +992,8 @@ include "js/repositorio.php";
                         "diasTrabalhadosVT" => $diasTrabalhadosVT,
                         "valorExtraVT" => $valorExtraVT,
                         "VTMensal" => $VTMensal,
+                        "produtoVAVR" => $produtoVAVR,
+                        "codigoBeneficio" => $codigoBeneficio,
                     );
                 }
                 $strArrayProcessabeneficio = json_encode($arrayProcessabeneficio);

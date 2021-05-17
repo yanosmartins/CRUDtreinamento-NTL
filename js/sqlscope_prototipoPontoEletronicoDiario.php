@@ -34,17 +34,18 @@ function gravar()
     $codigo = $_POST['codigo'];
     $funcionario = (int)$_POST['funcionario'];
     $mesAno = $_POST['mesAno'];
+    $mesAno = preg_replace("/\d\d$/", "01", $mesAno);
     $idFolha = (int)$_POST['idFolha'];
     $status = (int)$_POST['status'];
     $dia = (int)$_POST['dia'];
-    $horaEntrada = $_POST['horaEntrada'];
-    $horaSaida = $_POST['horaSaida'];
-    $inicioAlmoco = $_POST['inicioAlmoco'];
-    $fimAlmoco = $_POST['fimAlmoco'];
-    $horaExtra = $_POST['horaExtra'];
-    $atraso = $_POST['atraso'];
+    $horaEntrada = (string)$_POST['horaEntrada'];
+    $horaSaida = (string)$_POST['horaSaida'];
+    $inicioAlmoco = (string)$_POST['inicioAlmoco'];
+    $fimAlmoco = (string)$_POST['fimAlmoco'];
+    $horaExtra = (string)$_POST['horaExtra'];
+    $atraso = (string)$_POST['atraso'];
     $lancamento = (int)$_POST['lancamento'];
-    $observacao = '';
+    $observacao = (string)$_POST['observacao'];;
 
 
     $sql = "SELECT dia,horaEntrada,horaSaida,inicioAlmoco,fimAlmoco,horaExtra,atraso,lancamento

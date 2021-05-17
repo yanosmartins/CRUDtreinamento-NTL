@@ -6,83 +6,76 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Projeto</th>
-                    <th class="text-left" style="min-width:30px;">Posto</th>
-                    <!-- <th class="text-left" style="min-width:30px;">Valor</th> -->
-                    <th class="text-left" style="min-width:30px;">Status</th>
-                    <th class="text-left" style="min-width:30px;">Data e hora Fechamento</th>
-                    <th class="text-left" style="min-width:30px;">Usuario</th>
-                    <th class="text-left" style="min-width:30px;">Ativo</th>
+                    <th class="text-left" style="min-width:30px;">Nome</th>
+                    <th class="text-left" style="min-width:35px;">Fornecedor</th>
+                    <th class="text-left" style="min-width:35px;">Código Beneficio</th>
+                    <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $projeto = $_GET["projeto"];
-                $situacao = $_GET["situacao"];
 
-                if ($projeto != "") {
-                    $where = $where . " AND VP.projeto = $projeto ";
+                $descricaoFiltro = "";
+                $ativoFiltro = "";
+                $where = " WHERE (0 = 0)";
+
+                if ($_GET["descricaoFiltro"] != "") {
+                    $descricaoFiltro = $_GET["descricaoFiltro"];
+                    $where = $where . " AND PB.nome like '%' + " . "replace('" . $descricaoFiltro . "',' ','%') + " . "'%'";
                 }
-            
-                if ($situacao != "") {
-                    $where = $where . " AND VP.situacao = '$situacao' ";
+
+                if ($_GET["ativoFiltro"] != "") {
+                    $ativoFiltro = $_GET["ativoFiltro"];
+                    $where = $where . " AND PB.ativo = $ativoFiltro";
                 }
+
+                $sql = "SELECT PB.codigo,PB.nome,PB.codigoBeneficio,PB.fornecedor,F.apelido 
+                        FROM Beneficio.produtoBeneficio as PB
+                        LEFT JOIN Ntl.Fornecedor AS F ON F.codigo = PB.fornecedor";
+                $sql = $sql . $where;
 
                 $reposit = new reposit();
-                $sql = "SELECT VP.codigo,VP.projeto,P.descricao AS nomeProjeto, VP.posto, PO.descricao AS nomePosto, VP.situacao,
-                VP.ativo,VP.dataFechamento,VP.usuarioFechamento
-                            FROM Faturamento.valorPosto AS VP
-                            LEFT JOIN ntl.projeto P ON VP.projeto = P.codigo 
-                            LEFT JOIN ntl.posto PO ON VP.posto = PO.codigo
-                            WHERE VP.situacao != 'A'";
-                $sql = $sql . $where;
                 $result = $reposit->RunQuery($sql);
 
                 foreach ($result as $row) {
-                    $codigo = $row['codigo'];
-                    $nomeProjeto = $row['nomeProjeto'];
-                    $nomePosto = $row['nomePosto'];
-                    $ativo = (int)$row['ativo'];
-                    $situacao = $row['situacao'];
-                    if($situacao == 'F'){
-                        $situacaoDescricao = 'Fechado';
-                    }else if($situacao == 'C'){
-                        $situacaoDescricao = 'Cancelado';
+                    $id = (int) $row['codigo'];
+                    $nome = $row['nome'];
+                    $codigoBeneficio = $row['codigoBeneficio'];
+                    $fornecedor = $row['apelido'];
+                    $ativo = (int) $row['ativo'];
+                  
+                    if($tipo == 'S'){
+                        $tipo = 'Salário';
+                    }else if($tipo == 'A'){
+                        $tipo = 'Adicional';
                     }
-                    $usuarioFechamento = (string)$row['usuarioFechamento'];
-                    $dataFechamento = $row['dataFechamento'];
-                    if ($dataFechamento != "") {
-                        $dataFechamento = explode("-", $dataFechamento);
-                        $dataFechamentoDia = explode(" ", $dataFechamento[2]);
-                        $dataFechamentoHoras =  $dataFechamentoDia[1];
-                        $dataFechamentoHoras = explode(".", $dataFechamentoHoras);
-                        $dataFechamento = $dataFechamentoDia[0] . "/" . $dataFechamento[1] . "/" . $dataFechamento[0] . " $dataFechamentoHoras[0] ";
-                    }    
-                    echo '<tr>';
-                    echo '<td class="text-left">' . $codigo . ' - '  . $nomeProjeto . '</td>';
-                    echo '<td class="text-left">' . $nomePosto . '</td>';
-                    // echo '<td class="text-left">' . $valor . '</td>';
-                    echo '<td class="text-left">' . $situacaoDescricao . '</td>';
-                    echo '<td class="text-left">' . $dataFechamento . '</td>';
-                    echo '<td class="text-left">' . $usuarioFechamento . '</td>';
+                    //Modifica os valores booleanos por Sim e Não. 
+                    //Ativo
                     if ($ativo == 1) {
-                        echo '<td class="text-left">' . 'Sim' . '</td>';
+                        $descricaoAtivo = "Sim";
                     } else {
-                        echo '<td class="text-left">' . 'Não' . '</td>';
+                        $descricaoAtivo = "Não";
                     }
-                    echo '</tr>';
+
+                    echo '<tr >';
+                    echo '<td class="text-left"><a href="beneficio_produtoBeneficioCadastro.php?codigo=' . $id . '">' . $nome . '</a></td>';
+                    echo '<td class="text-left">' . $fornecedor . '</td>';
+                    echo '<td class="text-left">' . $codigoBeneficio . '</td>';
+                    echo '<td class="text-left">' . $descricaoAtivo . '</td>';
+                    echo '</tr >';
                 }
                 ?>
             </tbody>
         </table>
     </div>
 </div>
-<!-- PAGE RELATED PLUIN(S) -->
+<!-- PAGE RELATED PLUGIN(S) -->
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
-<script src="js/plugin/datatables/dataTables.tableTools.min.js"></script>
+<!--script src="js/plugin/datatables/dataTables.tableTools.min.js"></script-->
 <script src="js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+
 <link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css" />
 
 <script type="text/javascript" src="js/plugin/JSZip-2.5.0/jszip.min.js"></script>
@@ -92,6 +85,7 @@ include "js/repositorio.php";
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.flash.min.js"></script>
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="js/plugin/Buttons-1.5.2/js/buttons.print.min.js"></script>
+
 
 <script>
     $(document).ready(function() {
@@ -151,8 +145,7 @@ include "js/repositorio.php";
             "preDrawCallback": function() {
                 // Initialize the responsive datatables helper once.
                 if (!responsiveHelper_datatable_tabletools) {
-                    responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($(
-                        '#tableSearchResult'), breakpointDefinition);
+                    responsiveHelper_datatable_tabletools = new ResponsiveDatatablesHelper($('#tableSearchResult'), breakpointDefinition);
                 }
             },
             "rowCallback": function(nRow) {

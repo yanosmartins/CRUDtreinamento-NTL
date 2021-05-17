@@ -167,7 +167,7 @@ if ($condicaoCadastroOk) {
 
 $condicaoBeneficioOk = (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true));
 if ($condicaoBeneficioOk) {
-    $page_nav['beneficio'] = array("title" => "Departamento Pessoal", "icon" => "fa fa-folder-open");
+    $page_nav['beneficio'] = array("title" => "Departamento Pessoal", "icon" => "fa fa-archive");
     $page_nav['beneficio']['sub'] = array();
 
     if (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true)) {
@@ -237,7 +237,7 @@ if ($condicaoBeneficioOk) {
 $condicaoRHOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
 $condicaoContratacaoOk = false;
 if ($condicaoRHOk) {
-    $page_nav['recursoshumanos'] = array("title" => "Recursos Humanos", "icon" => "fa fa-fax");
+    $page_nav['recursoshumanos'] = array("title" => "Recursos Humanos", "icon" => "fa fa-users");
     $page_nav['recursoshumanos']['sub'] = array();
     $condicaoContratacaoOk = true;
 
@@ -475,7 +475,7 @@ if ($condicaoMensageriaOk) {
     }
 }
 
-$condicaoFuncionarioOk = true;
+$condicaoFuncionarioOk = (in_array('AREAFUNCIONARIO_ACESSAR', $arrayPermissao, true));
 if ($condicaoFuncionarioOk) {
     $page_nav['funcionario'] = array("title" => "Área do Funcionário", "icon" => "fa fa-user");
     $page_nav['funcionario']['sub'] = array();
@@ -489,7 +489,10 @@ if ($condicaoFuncionarioOk) {
         $page_nav['funcionario']['sub'] += array("controlePontoDiario" => array("title" => "Ponto Eletrônico Diario", "url" => APP_URL . "/prototipo_pontoEletronicoDiario.php"));
     }
     if (array_intersect(array('PONTOELETRONICOMENSALMAXIMO_ACESSAR', 'PONTOELETRONICOMENSALMODERADO_ACESSAR', 'PONTOELETRONICOMENSALMINIMO_ACESSAR'), $arrayPermissao)) {
-        $page_nav['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php"));
+        $page_nav['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php?"."funcionario=".$_SESSION["funcionario"]."&"."mesAno=". date("Y-m-01")));
+    }
+    if (in_array('TRIAGEMPONTOELETRONICO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['funcionario']['sub'] += array("triagemPontoEletronico" => array("title" => "Triagem Ponto Eletrônico", "url" => APP_URL . "/funcionario_triagemFolhaDePonto.php"));
     }
     if (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("geradorFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));

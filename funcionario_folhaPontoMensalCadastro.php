@@ -94,22 +94,16 @@ include("inc/nav.php");
                                                                                 <option></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
-                                                                                $funcionario = $_SESSION['funcionario'];
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo != " . $funcionario . " order by nome";
+                                                                                $sql = "SELECT F.codigo, F.nome 
+                                                                                FROM Ntl.funcionario F 
+                                                                                WHERE F.dataDemissaoFuncionario IS NULL 
+                                                                                AND F.ativo = 1 
+                                                                                ORDER BY F.nome";
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 foreach ($result as $row) {
                                                                                     $codigo = (int) $row['codigo'];
                                                                                     $nome = $row['nome'];
                                                                                     echo '<option value= ' . $codigo . '>' . $nome . '</option>';
-                                                                                }
-                                                                                $sql = "select F.codigo, F.nome from Ntl.funcionario F where F.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $funcionario;
-
-                                                                                $result = $reposit->RunQuery($sql);
-                                                                                if ($row = $result[0]) {
-
-                                                                                    $codigo = (int) $row['codigo'];
-                                                                                    $nome = $row['nome'];
-                                                                                    echo '<option value= ' . $codigo . ' selected>' . $nome . '</option>';
                                                                                 }
                                                                                 ?>
                                                                             </select>
@@ -130,8 +124,6 @@ include("inc/nav.php");
                                                                         </button>
                                                                     </section>
 
-
-
                                                                     <section class="col col-2">
                                                                         <label class="select">
                                                                             <select id="ativo" name="ativo" class="hidden" required>
@@ -141,11 +133,11 @@ include("inc/nav.php");
                                                                     </section>
                                                                 </div>
 
-                                                                <div class="row">
+                                                                <!-- <div class="row">
                                                                     <section class="col col-12">
                                                                         <legend><strong></strong></legend>
                                                                     </section>
-                                                                </div>
+                                                                </div> -->
 
                                                             </div>
                                                             <div class="row">
@@ -156,18 +148,14 @@ include("inc/nav.php");
                                                                             <option></option>
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "SELECT codigo, funcionario,horaEntrada,horaSaida from Ntl.beneficioProjeto where ativo = 1 order by codigo";
+                                                                            $sql = "SELECT codigo, funcionario,horaEntrada,horaSaida FROM Ntl.beneficioProjeto WHERE ativo = 1 ORDER BY codigo";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $horaEntrada = $row['horaEntrada'];
                                                                                 $horaSaida = $row['horaSaida'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                if ($funcionario == $_SESSION['funcionario']) {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaEntrada . " - " . $horaSaida . '</option>';
-                                                                                } else {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
-                                                                                }
+                                                                                echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
                                                                             }
                                                                             ?>
                                                                         </select>
@@ -181,30 +169,26 @@ include("inc/nav.php");
                                                                             <option></option>
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "SELECT codigo, funcionario,horaInicio,horaFim from Ntl.beneficioProjeto where ativo = 1 order by codigo";
+                                                                            $sql = "SELECT codigo, funcionario,horaInicio,horaFim FROM Ntl.beneficioProjeto WHERE ativo = 1 ORDER BY codigo";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $horaInicio = $row['horaInicio'];
                                                                                 $horaFim = $row['horaFim'];
                                                                                 $funcionario = $row['funcionario'];
-                                                                                if ($funcionario == $_SESSION['funcionario']) {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                } else {
-                                                                                    echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                }
+                                                                                echo '<option data-funcionario="' . $funcionario . '" value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
                                                                             }
                                                                             ?>
                                                                         </select>
                                                                     </label>
                                                                 </section>
-                                                                <section class="col col-2">
+                                                                <section id="sectionStatus" class="col col-2">
                                                                     <label class="label" for="status">Status</label>
                                                                     <label class="select">
                                                                         <select id="status" name="status" class="readonly" readonly style="pointer-events: none; touch-action: none">
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "SELECT S.codigo,S.descricao from Ntl.status S  where S.ativo = 1 order by S.codigo";
+                                                                            $sql = "SELECT S.codigo,S.descricao FROM Ntl.status S  WHERE S.ativo = 1 ORDER BY S.codigo";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
@@ -228,7 +212,7 @@ include("inc/nav.php");
                                                                     <div class="form-group">
                                                                         <label class="label">Dia</label>
                                                                         <div class="input-group" data-align="top" data-autoclose="true">
-                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly" readonly data-autoclose="true">
+                                                                            <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly" readonly data-autoclose="true" maxlength="2">
                                                                         </div>
                                                                     </div>
                                                                 </section>
@@ -372,7 +356,7 @@ include("inc/nav.php");
                                         <footer>
                                             <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimplePoint" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                    <span id="ui-id-2" class="ui-dialog-title">
+                                                    <span id="ui-id-1" class="ui-dialog-title">
                                                     </span>
                                                 </div>
                                                 <div id="dlgSimplePoint" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
@@ -383,6 +367,23 @@ include("inc/nav.php");
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!-- --------------------------------------------- -->
+                                            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleClose" aria-labelledby="ui-id-2" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                    <span id="ui-id-2" class="ui-dialog-title">
+                                                    </span>
+                                                </div>
+                                                <div id="dlgSimpleClose" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                    <p>Após o fechamento da folha não será possível realizar alterações. Deseja confirmar o fechamento da folha?</p>
+                                                </div>
+                                                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                    <div class="ui-dialog-buttonset">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" id="btnFechar" class="btn btn-danger" aria-hidden="true" title="Fechar">
+                                                <i class="">Fechar folha</i>
+                                            </button>
                                         </footer>
                                 </form>
                             </div>
@@ -439,6 +440,7 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
+    /*---------------Variaveis e constantes globais-------------*/
     var toleranciaExtra = '05:00';
     var toleranciaAtraso = '05:00';
 
@@ -456,12 +458,12 @@ include("inc/scripts.php");
     const minDate = defaultDate.getFullYear() + '-' + minMonth + '-' + minDay;
     const maxDate = defaultDate.getFullYear() + '-' + maxMonth + '-' + maxDay;
 
+    /*---------------/Variaveis e constantes globais-------------*/
+
     $(document).ready(function() {
 
+        /* Eventos para a chamada da selecionaFolha() */
         $("#funcionario").on("change", function() {
-            var funcionario = $("#funcionario").val();
-            var codigo = $("#expediente option[data-funcionario ='" + funcionario + "']").val();
-            $("#expediente").val(codigo);
             selecionaFolha();
         });
 
@@ -469,12 +471,10 @@ include("inc/scripts.php");
         $("#mesAno").attr('max', maxDate);
 
         $("#mesAno").on("change", function() {
-            var funcionario = $("#funcionario").val();
-            var codigo = $("#expediente option[data-funcionario ='" + funcionario + "']").val();
-            $("#expediente").val(codigo);
             selecionaFolha();
         });
 
+        /* Evento para validar a entrada do dia */
         $('#inputDia').on('keydown', () => {
             const pattern = /(\d|\t)/g
 
@@ -485,49 +485,44 @@ include("inc/scripts.php");
             return $('#inputDia').val(value);
         });
 
+        /* Evento para trazer os dados dos respectivos dias */
         $('#inputDia').on('change', function() {
-            var dia = $("#inputDia").val();
+            let dia = $("#inputDia").val();
             dia = dia.replace(/\D/gi, "");
-            var index = dia - 1;
+            if (!dia) dia = 1;
 
-            var entrada = $("#pointFieldGenerator [name=horaEntrada]");
+            let index = dia - 1;
+
+            let entrada = $("#pointFieldGenerator input[name=horaEntrada]");
             entrada = entrada[index].value;
 
-            var inputEntrada = $("#inputHoraEntrada")
-
             try {
-                var saida = $("#pointFieldGenerator [name=horaSaida]");
+                let saida = $("#pointFieldGenerator [name=horaSaida]");
                 saida = saida[index].value;
 
-                var inputSaida = $("#inputHoraSaida")
-
-                var extra = $("#pointFieldGenerator [name=extra]");
-
+                let extra = $("#pointFieldGenerator [name=extra]");
                 extra = extra[index].value;
 
-                var inputExtra = $("#inputHoraExtra");
-
-                var atraso = $("#pointFieldGenerator [name=atraso]");
+                let atraso = $("#pointFieldGenerator [name=atraso]");
                 atraso = atraso[index].value;
 
-                var inputAtraso = $("#inputAtraso");
-
-                var lancamento = $("#pointFieldGenerator [name=lancamento]");
+                let lancamento = $("#pointFieldGenerator [name=lancamento]");
                 lancamento = lancamento[index].value;
 
-                var inputLancamento = $("#inputLancamento");
+                $("#inputHoraEntrada").val(entrada);
+                $("#inputHoraSaida").val(saida);
 
-                inputEntrada.val(entrada)
+                $("#inputHoraExtra").val(extra);
+                $("#inputAtraso").val(atraso);
 
-                inputSaida.val(saida)
-                inputExtra.val(extra)
-                inputAtraso.val(atraso)
-                inputLancamento.val(lancamento)
+                $("#inputLancamento").val(lancamento);
+
             } catch (e) {
                 return smartAlert('Atenção', 'Insira um dia válido!', 'error')
             }
         });
 
+        /* Modal para a confirmação de finais de semana */
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -562,64 +557,87 @@ include("inc/scripts.php");
             }]
         });
 
+        $('#dlgSimpleClose').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Confirmar",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    $('#dlgSimpleClose').css('display', 'none');
+                    fechar();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                    return;
+                }
+            }]
+        });
+
+        /* Evento para chamar a addPoint ou o Modal */
         $("#btnAddPonto").on("click", function() {
 
-            var dia = $("#inputDia").val();
-
-            let isWeekend = checkDay(dia);
-            if (isWeekend) {
-
-                $('#dlgSimplePoint').dialog('open');
-
-            } else {
-                addPoint();
-            }
+            let dia = $("#inputDia").val();
 
             if (!dia) {
                 smartAlert('Atenção', 'Insira um dia para a inserção das horas', 'error')
-                return
+                return;
             }
 
+            let isWeekend = checkDay(dia);
+
+            if (isWeekend) {
+                $('#dlgSimplePoint').dialog('open');
+            } else {
+                addPoint();
+            }
+            return;
         });
 
+        /* Evento para chamar a imprimir() */
         $('#btnPdf').on("click", function() {
             imprimir();
         })
 
-        $('#btnNovo').on("click", function() {
-            novo()
-        });
-
+        /* Eventos para chamar a gravar() */
         $("#btnGravar").on("click", function() {
             gravar();
         });
 
-        $("#checkAlmoco").on("click", function() {
-            var check = $(".sectionAlmoco")
-            check.each((index, el) => {
-                console.log(typeof el)
-                console.log($(el))
-
-                if ($(el).css('display') != 'block') {
-
-                    $(el).css('display', 'block')
-                } else {
-                    $(el).css('display', 'none')
-                }
-            })
+        $("#btnFechar").on("click", function() {
+            $('#dlgSimpleClose').dialog('open');
         });
 
+        // $("#checkAlmoco").on("click", function() {
+        //     var check = $(".sectionAlmoco")
+        //     check.each((index, el) => {
+        //         console.log(typeof el)
+        //         console.log($(el))
+
+        //         if ($(el).css('display') != 'block') {
+
+        //             $(el).css('display', 'block')
+        //         } else {
+        //             $(el).css('display', 'none')
+        //         }
+        //     })
+        // });
+
+        /*Função responsavel pelo carregamento dos dados pessoais e configurações da tela*/
         carregaFolhaPontoMensal();
 
     });
 
-    function novo() {
-        $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php');
-    }
-
+    /* Função reponsável por passar os dados para o back-end para a gravação ou reescrita da folha */
     function gravar() {
 
-        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
 
         var arrayFolha = $("#pointFieldGenerator input[name='dia']").serializeArray()
@@ -734,93 +752,223 @@ include("inc/scripts.php");
                 } else {
                     var piece = data.split("#");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
+                    $("#btnGravar").prop('disabled', false);
                 }
             }
         );
     }
 
-    function excluir() {
-        var id = +$("#codigo").val();
+    function fechar() {
 
-        if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
+        $("#btnGravar").prop('disabled', true);
+        $("#btnFechar").prop('disabled', true);
+
+        let arrayFolha = $("#pointFieldGenerator input[name='dia']").serializeArray()
+
+        let arrayDia = arrayFolha.map(folha => {
+            return {
+                dia: Number(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='horaEntrada']").serializeArray()
+        let arrayHoraEntrada = arrayFolha.map(folha => {
+            return {
+                horaEntrada: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='inicioAlmoco']").serializeArray()
+        let arrayInicioAlmoco = arrayFolha.map(folha => {
+            return {
+                inicioAlmoco: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='fimAlmoco']").serializeArray()
+        let arrayFimAlmoco = arrayFolha.map(folha => {
+            return {
+                fimAlmoco: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='horaSaida']").serializeArray()
+        let arrayHoraSaida = arrayFolha.map(folha => {
+            return {
+                horaSaida: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='extra']").serializeArray()
+        let arrayHoraExtra = arrayFolha.map(folha => {
+            return {
+                horaExtra: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator input[name='atraso']").serializeArray()
+        let arrayAtraso = arrayFolha.map(folha => {
+            return {
+                atraso: String(folha.value)
+            }
+        })
+
+        arrayFolha = $("#pointFieldGenerator select[name='lancamento']");
+        let arrayLancamento = new Array();
+        arrayFolha.each((index, el) => {
+            if ($(el).val() == null)
+                $(el).val(0);
+            let value = Number($(el).val());
+            arrayLancamento.push({
+                lancamento: Number(value)
+            })
+
+        })
+
+        let codigo = Number($("#codigo").val())
+        let ativo = Number($("#ativo").val())
+        let funcionario = Number($("#funcionario").val());
+        let options = $("#status option");
+        let status;
+
+        options.each((index,el)=>{
+            const pattern = /^fechad(o|a)$/gi;
+            const texto = $(el).text();
+            if(pattern.test(texto)){
+                status = $(el).val();
+                return;
+            } 
+        });
+
+        let mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
+        let observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
+
+        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
+        let folhaPontoMensalTabela = arrayDia.map((array, index) => {
+            return {
+                dia: array.dia,
+                horaEntrada: arrayHoraEntrada[index].horaEntrada,
+                horaSaida: arrayHoraSaida[index].horaSaida,
+                inicioAlmoco: arrayInicioAlmoco[index].inicioAlmoco,
+                fimAlmoco: arrayFimAlmoco[index].fimAlmoco,
+                horaExtra: arrayHoraExtra[index].horaExtra,
+                atraso: arrayAtraso[index].atraso,
+                lancamento: arrayLancamento[index].lancamento
+            }
+
+        })
+
+        let folhaPontoInfo = {
+            codigo: Number(codigo),
+            ativo: Number(ativo),
+            funcionario: Number(funcionario),
+            mesAno: String(mesAno),
+            status: Number(status),
+            observacao: String(observacaoFolhaPontoMensal)
+        }
+
+        gravaFolhaPontoMensal(folhaPontoInfo, folhaPontoMensalTabela,
+            function(data) {
+
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#btnFechar").prop('disabled', false);
+                        return false;
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                        $("#btnFechar").prop('disabled', false);
+                        return false;
+                    }
+                } else {
+                    var piece = data.split("#");
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    const funcionario = $("#funcionario").val();
+                    const mesAno = $("#mesAno").val();
+                    $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php?funcionario='+funcionario+'&mesAno='+mesAno);
+                }
+            }
+        );
+    }
+
+    /*Função reponsável por trazer os dados pessoais e configurações da folha*/
+    function carregaFolhaPontoMensal() {
+
+        /*Pega a query da URL e separa seus devidos valores*/
+        const search = window.location.search.substring(1, window.location.search.length);
+        let [getFuncionario, getMesAno] = search.split('&');
+        getFuncionario = getFuncionario.substring((getFuncionario.indexOf("=") + 1), getFuncionario.length);
+        getMesAno = getMesAno.substring((getMesAno.indexOf("=") + 1), getMesAno.length);
+
+        if (!getFuncionario || !getMesAno) {
+            smartAlert("Atenção", "Não foi possível carregar a folha atual", "error");
             return;
         }
 
-        excluirFolhaPontoMensal(id, function(data) {
-            if (data.indexOf('failed') > -1) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
+        const mesAno = getMesAno;
+        const funcionario = getFuncionario;
 
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-                }
-            } else {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                voltar();
-            }
-        });
-    }
-
-    function carregaFolhaPontoMensal() {
-
-        const mesAno = new Date().toJSON().slice(0, 10).replace(/[0-9]$/g, 01);
-        const funcionario = $("#funcionario option:selected").val();
-
+        $('#funcionario').val(funcionario);
         $('#mesAno').val(mesAno);
 
         recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
 
                 data = data.replace(/failed/gi, '');
-                var piece = data.split("#");
+                let piece = data.split("#");
 
-                var mensagem = piece[0];
-                var out = piece[1];
-                var JsonFolha = piece[2];
+                let mensagem = piece[0];
+                let out = piece[1];
+                let JsonFolha = piece[2];
                 piece = out.split("^");
 
+                let statusText;
+                let status = $("#status option");
+                status.each((index,el)=>{
+                    let texto = $(el).text();
+                    let pattern = /abert(o|a)/gi;
+                    if(pattern.test(texto)){
+                        statusText = $(el).val();
+                    }
+                });
+                
                 //funcionando
-                if (out.length >= 0 && out != "") {
-                    var codigo = piece[0];
-                    var funcionario = piece[1];
-                    var observacao = piece[2];
-                    var mesAnoFolhaPonto = piece[3];
-                    toleranciaAtraso = piece[4] || '05:00';
-                    toleranciaExtra = piece[5] || '05:00';
-                    var status = piece[6];
+                let codigo = piece[0] || 0;
+                let funcionario = piece[1];
+                let observacao = piece[2] || "";
+                let mesAnoFolhaPonto = piece[3];
+                toleranciaAtraso = piece[4] || '05:00';
+                toleranciaExtra = piece[5] || '05:00';
+                status = piece[6] || statusText;
 
-                    $("#codigo").val(codigo);
-                    $("#funcionario").val(funcionario);
-                    $("#observacaoFolhaPontoMensal").val(observacao);
-                    $("#mesAno").val(mesAnoFolhaPonto);
-                    $("#status").val(status);
-                } else {
-                    $("#codigo").val(0);
-                    $("#observacaoFolhaPontoMensal").val("");
-                    $("#status").val(0);
-                }
+                $("#codigo").val(codigo);
+                $("#funcionario").val(funcionario);
+                $("#observacaoFolhaPontoMensal").val(observacao);
+                $("#mesAno").val(mesAnoFolhaPonto);
+                $("#status").val(status);
 
                 //funcionando
-                //-------------------
-                var almoco = $('#almoco option:selected').text().trim();
-                almoco = almoco.split("-");
-                almoco[0] = almoco[0].trim();
-                almoco[1] = almoco[1].trim();
+                let almoco = $('#almoco option[data-funcionario="' + funcionario + '"]').val();
+                $('#almoco').val(almoco);
+                let textoAlmoco = $('#almoco option:selected').text().trim();
+                textoAlmoco = textoAlmoco.split("-");
+                textoAlmoco[0] = textoAlmoco[0].trim();
+                textoAlmoco[1] = textoAlmoco[1].trim();
 
-                $("#inputInicioAlmoco").val(almoco[0]);
-                $("#inputFimAlmoco").val(almoco[1]);
-                //-------------------
+                $("#inputInicioAlmoco").val(textoAlmoco[0]);
+                $("#inputFimAlmoco").val(textoAlmoco[1]);
 
+                let expediente = $('#expediente option[data-funcionario="' + funcionario + '"]').val();
+                $('#expediente').val(expediente);
+
+                /*Não mexer até a linha 840 ($('#pointFieldGenerator [name=lancamento]').append(options);)*/
                 const totalDiasMes = diasMes($("#mesAno").val());
                 for (let i = 0; i < totalDiasMes; i++) {
                     generateElements('div', '#pointFieldGenerator', '', '', ['row'], false, '', '', '', false, 'input');
                     $("#pointFieldGenerator").append('<hr/>');
                 };
-
 
                 for (let i = 0; i < 7; i++) {
                     const classList = ['col', 'col-2'];
@@ -867,7 +1015,7 @@ include("inc/scripts.php");
                 }, {
                     name: 'atraso'
                 }]);
-                //-------------
+
                 generateElements('section', '#pointFieldGenerator .row', '', '', ['col', 'col-2'], false, '', '', '', false, 'select');
                 generateElements('label', '#pointFieldGenerator .row .col[data-group=select]', '', '', ['label'], false, 'lancamento', 'Lançamento', '', false, 'select');
                 generateElements('label', '#pointFieldGenerator .row .col[data-group=select]', '', '', ['select'], false, '', '', '', false, 'select');
@@ -876,6 +1024,7 @@ include("inc/scripts.php");
                 const options = $('#inputLancamento').children('option').clone(true);
                 $('#pointFieldGenerator [name=lancamento]').append(options);
 
+                /*Daqui para baixo pode mexer*/
                 preencherPonto(JsonFolha);
 
                 getPermissions();
@@ -904,26 +1053,34 @@ include("inc/scripts.php");
 
                 piece = out.split("^");
 
-                if (out.length >= 0 && out != "") {
-                    var codigo = +piece[0];
-                    var funcionario = piece[1];
-                    var observacao = piece[2];
-                    var mesAnoFolhaPonto = piece[3];
-                    toleranciaAtraso = piece[4] || '05:00';
-                    toleranciaExtra = piece[5] || '05:00';
-                    var status = piece[6];
+                var codigo = +piece[0];
+                var funcionario = piece[1];
+                var observacao = piece[2];
+                var mesAnoFolhaPonto = piece[3];
+                toleranciaAtraso = piece[4] || '05:00';
+                toleranciaExtra = piece[5] || '05:00';
+                var status = piece[6];
 
-                    $("#codigo").val(codigo);
-                    $("#funcionario").val(funcionario);
-                    $("#observacaoFolhaPontoMensal").val(observacao);
-                    $("#mesAno").val(mesAnoFolhaPonto);
-                    $("#status").val(status);
-                } else {
-                    $("#codigo").val(0);
-                    $("#observacaoFolhaPontoMensal").val("");
-                    $("#status").val(0);
-                }
+                $("#codigo").val(codigo) || 0;
+                $("#funcionario").val(funcionario);
+                $("#observacaoFolhaPontoMensal").val(observacao) || "";
+                $("#mesAno").val(mesAnoFolhaPonto);
+                $("#status").val(status) || 0;
 
+                let almoco = $('#almoco option[data-funcionario="' + funcionario + '"]').val();
+                $('#almoco').val(almoco);
+                let textoAlmoco = $('#almoco option:selected').text().trim();
+                textoAlmoco = textoAlmoco.split("-");
+                textoAlmoco[0] = textoAlmoco[0].trim();
+                textoAlmoco[1] = textoAlmoco[1].trim();
+
+                $("#inputInicioAlmoco").val(textoAlmoco[0]);
+                $("#inputFimAlmoco").val(textoAlmoco[1]);
+
+                let expediente = $('#expediente option[data-funcionario="' + funcionario + '"]').val();
+                $('#expediente').val(expediente);
+
+                /*Não mexer até a linha 955 ($('#pointFieldGenerator [name=lancamento]').append(options);)*/
                 deleteElements('#pointFieldGenerator .row');
                 deleteElements('#pointFieldGenerator hr');
 
@@ -979,7 +1136,7 @@ include("inc/scripts.php");
                 }, {
                     name: 'atraso'
                 }]);
-                //-------------
+
                 generateElements('section', '#pointFieldGenerator .row', '', '', ['col', 'col-2'], false, '', '', '', false, 'select');
                 generateElements('label', '#pointFieldGenerator .row .col[data-group=select]', '', '', ['label'], false, 'lancamento', 'Lançamento', '', false, 'select');
                 generateElements('label', '#pointFieldGenerator .row .col[data-group=select]', '', '', ['select'], false, '', '', '', false, 'select');
@@ -988,7 +1145,10 @@ include("inc/scripts.php");
                 const options = $('#inputLancamento').children('option').clone(true);
                 $('#pointFieldGenerator [name=lancamento]').append(options);
 
+                /*Daqui para baixo pode mexer*/
                 preencherPonto(JsonFolha);
+
+                getPermissions();
 
                 return;
 
@@ -1423,6 +1583,11 @@ include("inc/scripts.php");
 
         var dia = $("#inputDia").val();
 
+        if (!dia) {
+            smartAlert("Atenção", "Insira um dia válido", "error");
+            return;
+        }
+
         var index = dia - 1;
 
         var entrada = $("#pointFieldGenerator [name=horaEntrada]")[index]
@@ -1547,12 +1712,12 @@ include("inc/scripts.php");
 
 
 
-        entrada.value = horaEntrada;
-        inicioAlmoco.value = inputInicioAlmoco;
-        fimAlmoco.value = inputFimAlmoco;
+        entrada.value = horaEntrada || "00:00:00";
+        inicioAlmoco.value = inputInicioAlmoco || "00:00";
+        fimAlmoco.value = inputFimAlmoco || "00:00";
         extra.value = inputExtra || '00:00';
         atraso.value = inputAtraso || '00:00';
-        saida.value = horaSaida;
+        saida.value = horaSaida || "00:00:00";
         lancamento.value = inputLancamento;
 
         abonarAtraso();
@@ -1567,18 +1732,18 @@ include("inc/scripts.php");
 
             var mensagem = piece[0];
             var out = piece[1];
-            if (out == "[]") {
+            if (!out) {
                 smartAlert("Atenção", "Não foi possível verificar a permissão do usuário", "error");
                 return;
             }
 
             try {
-                piece = out.split("^");
 
-                let permissoes = JSON.parse(piece[0]);
+                let permissoes = JSON.parse(out);
                 setPage(permissoes);
 
             } catch (e) {
+                console.error(e)
                 smartAlert("Atenção", "Não foi possível verificar a permissão do usuário", "error")
             } finally {
                 return;
@@ -1587,186 +1752,328 @@ include("inc/scripts.php");
         });
     }
 
-    function setPage(ArrayOfObject = [{}]) {
+    function setPage(obj) {
+        for (permissao in obj) {
 
-        ArrayOfObject.forEach((obj, index) => {
-            if (obj.PONTOELETRONICOMENSALMAXIMO) {
-                const alias = obj.PONTOELETRONICOMENSALMAXIMO;
-                for (let property in alias) {
-                    switch (property) {
-                        case 'funcionario':
-                            $("#funcionario").removeAttr('readonly');
-                            $("#funcionario").removeAttr('style');
-                            $("#funcionario").removeClass('readonly');
-                            $("#funcionario").css('pointer-events', alias[property].pointerEvents);
-                            $("#funcionario").css('touch-action', alias[property].touchAction);
+            if (permissao == 'PONTOELETRONICOMENSALMAXIMO') {
+                $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
+                $("#funcionario").removeAttr('style');
+                if (!obj[permissao].funcionario.class)
+                    $("#funcionario").removeClass('readonly');
+                $("#funcionario").css('pointer-events', obj[permissao].funcionario.pointerEvents);
+                $("#funcionario").css('touch-action', obj[permissao].funcionario.touchAction);
 
-                            break;
-                        case 'mesAno':
-                            $("#mesAno").removeAttr('readonly');
-                            $("#mesAno").removeAttr('style');
-                            $("#mesAno").removeClass('readonly');
-                            $("#mesAno").css('pointer-events', alias[property].pointerEvents);
-                            $("#mesAno").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'status':
-                            $("#status").removeAttr('readonly');
-                            $("#status").removeAttr('style');
-                            $("#status").removeClass('readonly');
-                            $("#status").css('pointer-events', alias[property].pointerEvents);
-                            $("#status").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'dia':
-                            $("#inputDia").removeAttr('readonly');
-                            $("#inputDia").removeClass('readonly');
-                            break;
-                        case 'entrada':
-                            $("#inputHoraEntrada").removeAttr('readonly');
-                            $("#inputHoraEntrada").removeClass('readonly');
-                            break;
-                        case 'inicioAlmoco':
-                            $("#inputInicioAlmoco").removeAttr('readonly');
-                            $("#inputInicioAlmoco").removeClass('readonly');
-                            break;
-                        case 'fimAlmoco':
-                            $("#inputFimAlmoco").removeAttr('readonly');
-                            $("#inputFimAlmoco").removeClass('readonly');
-                            break;
-                        case 'saida':
-                            $("#inputHoraSaida").removeAttr('readonly');
-                            $("#inputHoraSaida").removeClass('readonly');
-                            break;
-                        case 'extra':
-                            $("#inputHoraExtra").removeAttr('readonly');
-                            $("#inputHoraExtra").removeClass('readonly');
-                            break;
-                        case 'atraso':
-                            $("#inputAtraso").removeAttr('readonly');
-                            $("#inputAtraso").removeClass('readonly');
-                            break;
-                        case 'lancamento':
-                            $("#inputLancamento").removeAttr('readonly');
-                            $("#inputLancamento").removeAttr('style');
-                            $("#inputLancamento").removeClass('readonly');
-                            $("#inputLancamento").css('pointer-events', alias[property].pointerEvents);
-                            $("#inputLancamento").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'adicionarPonto':
-                            $("#btnAddPonto").removeAttr('disabled');
-                            break;
-                        case 'salvarAlteracoes':
-                            $("#btnGravar").removeAttr('disabled');
-                            break;
-                    }
+                $("#mesAno").attr('readonly', obj[permissao].mesAno.readonly);
+                $("#mesAno").removeAttr('style');
+                if (!obj[permissao].mesAno.class)
+                    $("#mesAno").removeClass('readonly');
+
+                $("#status").attr('readonly', obj[permissao].status.readonly);
+                $("#status").removeAttr('style');
+                if (!obj[permissao].status.class) {
+                    $("#status").removeClass('readonly');
                 }
-            } else if (obj.PONTOELETRONICOMENSALMODERADO) {
-                const alias = obj.PONTOELETRONICOMENSALMODERADO;
-                for (let property in alias) {
-                    switch (property) {
-                        case 'funcionario':
-                            $("#funcionario").css('pointer-events', alias[property].pointerEvents);
-                            $("#funcionario").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'mesAno':
-                            $("#mesAno").removeAttr('readonly');
-                            $("#mesAno").removeAttr('style');
-                            $("#mesAno").removeClass('readonly');
-                            $("#mesAno").css('pointer-events', alias[property].pointerEvents);
-                            $("#mesAno").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'status':
-                            $("#status").removeAttr('readonly');
-                            $("#status").removeAttr('style');
-                            $("#status").removeClass('readonly');
-                            $("#status").css('pointer-events', alias[property].pointerEvents);
-                            $("#status").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'dia':
-                            $("#inputDia").removeAttr('readonly');
-                            $("#inputDia").removeClass('readonly');
-                            break;
-                        case 'entrada':
-                            $("#inputHoraEntrada").removeAttr('readonly');
-                            $("#inputHoraEntrada").removeClass('readonly');
-                            break;
-                        case 'inicioAlmoco':
-                            $("#inputInicioAlmoco").removeAttr('readonly');
-                            $("#inputInicioAlmoco").removeClass('readonly');
-                            break;
-                        case 'fimAlmoco':
-                            $("#inputFimAlmoco").removeAttr('readonly');
-                            $("#inputFimAlmoco").removeClass('readonly');
-                            break;
-                        case 'saida':
-                            $("#inputHoraSaida").removeAttr('readonly');
-                            $("#inputHoraSaida").removeClass('readonly');
-                            break;
-                        case 'extra':
-                            $("#inputHoraExtra").removeAttr('readonly');
-                            $("#inputHoraExtra").removeClass('readonly');
-                            break;
-                        case 'atraso':
-                            $("#inputAtraso").removeAttr('readonly');
-                            $("#inputAtraso").removeClass('readonly');
-                            break;
-                        case 'lancamento':
-                            $("#inputLancamento").removeAttr('readonly');
-                            $("#inputLancamento").removeClass('readonly');
-                            $("#inputLancamento").css('pointer-events', alias[property].pointerEvents);
-                            $("#inputLancamento").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'adicionarPonto':
-                            $("#btnAddPonto").removeAttr('disabled');
+                $("#sectionStatus").css('display', obj[permissao].status.display);
+                $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
+                $("#status").css('touch-action', obj[permissao].status.touchAction);
 
-                            break;
-                        case 'salvarAlteracoes':
-                            $("#btnGravar").removeAttr('disabled');
+                $("#inputDia").attr('readonly', obj[permissao].dia.readonly);
+                if (!obj[permissao].dia.class)
+                    $("#inputDia").removeClass('readonly');
 
-                            break;
-                    }
+                $("#inputHoraEntrada").attr('readonly', obj[permissao].entrada.readonly);
+                if (!obj[permissao].entrada.class)
+                    $("#inputHoraEntrada").removeClass('readonly');
+
+                $("#inputInicioAlmoco").attr('readonly', obj[permissao].inicioAlmoco.readonly);
+                if (!obj[permissao].inicioAlmoco.class)
+                    $("#inputInicioAlmoco").removeClass('readonly');
+
+                $("#inputFimAlmoco").attr('readonly', obj[permissao].fimAlmoco.readonly);
+                if (!obj[permissao].fimAlmoco.class)
+                    $("#inputFimAlmoco").removeClass('readonly');
+
+                $("#inputHoraSaida").attr('readonly', obj[permissao].saida.readonly);
+                if (!obj[permissao].saida.class)
+                    $("#inputHoraSaida").removeClass('readonly');
+
+                $("#inputHoraExtra").attr('readonly', obj[permissao].extra.readonly);
+                if (!obj[permissao].extra.class)
+                    $("#inputHoraExtra").removeClass('readonly');
+
+                $("#inputAtraso").attr('readonly', obj[permissao].atraso.readonly);
+                if (!obj[permissao].atraso.class)
+                    $("#inputAtraso").removeClass('readonly');
+
+                $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                $("#inputLancamento").removeAttr('style');
+                if (!obj[permissao].lancamento.class)
+                    $("#inputLancamento").removeClass('readonly');
+                $("#inputLancamento").css('pointer-events', obj[permissao].lancamento.pointerEvents);
+                $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
+
+                $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
+                $("#btnFechar").attr('disabled', obj[permissao].fechar.disabled);
+                $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
+                break;
+            } else if (permissao == 'PONTOELETRONICOMENSALMODERADO') {
+                $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
+                $("#funcionario").removeAttr('style');
+                if (!obj[permissao].funcionario.class) {
+                    $("#funcionario").removeClass('readonly');
                 }
-            } else if (obj.PONTOELETRONICOMENSALMINIMO) {
-                const alias = obj.PONTOELETRONICOMENSALMINIMO;
-                for (let property in alias) {
-                    switch (property) {
-                        case 'funcionario':
-                            $("#funcionario").css('pointer-events', alias[property].pointerEvents);
-                            $("#funcionario").css('touch-action', alias[property].touchAction);
+                $("#funcionario").css('pointer-events', obj[permissao].funcionario.pointerEvents);
+                $("#funcionario").css('touch-action', obj[permissao].funcionario.touchAction);
 
-                            break;
-                        case 'mesAno':
-                            $("#mesAno").css('pointer-events', alias[property].pointerEvents);
-                            $("#mesAno").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'status':
-                            $("#status").css('pointer-events', alias[property].pointerEvents);
-                            $("#status").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'dia':
-                            break;
-                        case 'entrada':
-                            break;
-                        case 'inicioAlmoco':
-                            break;
-                        case 'fimAlmoco':
-                            break;
-                        case 'saida':
-                            break;
-                        case 'extra':
-                            break;
-                        case 'atraso':
-                            break;
-                        case 'lancamento':
-                            $("#inputLancamento").css('pointer-events', alias[property].pointerEvents);
-                            $("#inputLancamento").css('touch-action', alias[property].touchAction);
-                            break;
-                        case 'adicionarPonto':
-                            break;
-                        case 'salvarAlteracoes':
-                            break;
+                $("#mesAno").attr('readonly', obj[permissao].mesAno.readonly);
+                $("#mesAno").removeAttr('style');
+                if (!obj[permissao].mesAno.class)
+                    $("#mesAno").removeClass('readonly');
+
+
+                let status = $("#status option:selected").text();
+                const pattern = /^fechad(o|a)$/gi;
+                const condition = pattern.test(status);
+                if (!condition) {
+                    $("#status").attr('readonly', obj[permissao].status.readonly);
+                    $("#status").removeAttr('style');
+                    if (!obj[permissao].status.class) {
+                        $("#status").removeClass('readonly');
                     }
+                    $("#sectionStatus").css('display', obj[permissao].status.display);
+                    $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
+                    $("#status").css('touch-action', obj[permissao].status.touchAction);
+
+                    $("#inputDia").attr('readonly', obj[permissao].dia.readonly);
+                    if (!obj[permissao].dia.class)
+                        $("#inputDia").removeClass('readonly');
+
+                    $("#inputHoraEntrada").attr('readonly', obj[permissao].entrada.readonly);
+                    if (!obj[permissao].entrada.class)
+                        $("#inputHoraEntrada").removeClass('readonly');
+
+                    $("#inputInicioAlmoco").attr('readonly', obj[permissao].inicioAlmoco.readonly);
+                    if (!obj[permissao].inicioAlmoco.class)
+                        $("#inputInicioAlmoco").removeClass('readonly');
+
+                    $("#inputFimAlmoco").attr('readonly', obj[permissao].fimAlmoco.readonly);
+                    if (!obj[permissao].fimAlmoco.class)
+                        $("#inputFimAlmoco").removeClass('readonly');
+
+                    $("#inputHoraSaida").attr('readonly', obj[permissao].saida.readonly);
+                    if (!obj[permissao].saida.class)
+                        $("#inputHoraSaida").removeClass('readonly');
+
+                    $("#inputHoraExtra").attr('readonly', obj[permissao].extra.readonly);
+                    if (!obj[permissao].extra.class)
+                        $("#inputHoraExtra").removeClass('readonly');
+
+                    $("#inputAtraso").attr('readonly', obj[permissao].atraso.readonly);
+                    if (!obj[permissao].atraso.class)
+                        $("#inputAtraso").removeClass('readonly');
+
+                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                    $("#inputLancamento").removeAttr('style');
+                    if (!obj[permissao].lancamento.class)
+                        $("#inputLancamento").removeClass('readonly');
+                    $("#inputLancamento").css('pointer-events', obj[permissao].lancamento.pointerEvents);
+                    $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
+
+                    $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
+                    $("#btnFechar").attr('disabled', obj[permissao].fechar.disabled);
+                    $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
+                } else {
+                    $("#status").attr('readonly', true);
+                    $("#status").removeAttr('style');
+                    if (!$("#status").hasClass('readonly')) {
+                        $("#status").addClass('readonly');
+                    }
+                    $("#sectionStatus").css('display', 'none');
+                    $("#status").css('pointer-events', 'none');
+                    $("#status").css('touch-action', 'none');
+
+                    $("#inputDia").attr('readonly', true);
+                    if (!$("#inputDia").hasClass('readonly')) {
+                        $("#inputDia").addClass('readonly');
+                    }
+
+
+                    $("#inputHoraEntrada").attr('readonly', true);
+                    if (!$("#inputHoraEntrada").hasClass('readonly')) {
+                        $("#inputHoraEntrada").addClass('readonly');
+                    }
+
+
+                    $("#inputInicioAlmoco").attr('readonly', true);
+                    if (!$("#inputInicioAlmoco").hasClass('readonly')) {
+                        $("#inputInicioAlmoco").addClass('readonly');
+                    }
+
+
+                    $("#inputFimAlmoco").attr('readonly', true);
+                    if (!$("#inputFimAlmoco").hasClass('readonly')) {
+                        $("#inputFimAlmoco").addClass('readonly');
+                    }
+
+                    $("#inputHoraSaida").attr('readonly', true);
+                    if (!$("#inputHoraSaida").hasClass('readonly')) {
+                        $("#inputHoraSaida").addClass('readonly');
+                    }
+
+                    $("#inputHoraExtra").attr('readonly', true);
+                    if (!$("#inputHoraExtra").hasClass('readonly')) {
+                        $("#inputHoraExtra").addClass('readonly');
+                    }
+
+                    $("#inputAtraso").attr('readonly', true);
+                    if (!$("#inputAtraso").hasClass('readonly')) {
+                        $("#inputAtraso").addClass('readonly');
+                    }
+
+                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                    $("#inputLancamento").removeAttr('style');
+                    if (!$("#inputLancamento").hasClass('readonly')) {
+                        $("#inputLancamento").addClass('readonly');
+                    }
+                    $("#inputLancamento").css('pointer-events', 'none');
+                    $("#inputLancamento").css('touch-action', 'none');
+
+                    $("#btnAddPonto").attr('disabled', true);
+                    $("#btnFechar").attr('disabled', true);
+                    $("#btnGravar").attr('disabled', true);
                 }
+
+                break;
+            } else if (permissao == 'PONTOELETRONICOMENSALMINIMO') {
+                $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
+                $("#funcionario").removeAttr('style');
+                if (!obj[permissao].funcionario.class)
+                    $("#funcionario").removeClass('readonly');
+                $("#funcionario").css('pointer-events', obj[permissao].funcionario.pointerEvents);
+                $("#funcionario").css('touch-action', obj[permissao].funcionario.touchAction);
+
+                $("#mesAno").attr('readonly', obj[permissao].mesAno.readonly);
+                $("#mesAno").removeAttr('style');
+                if (!obj[permissao].mesAno.class)
+                    $("#mesAno").removeClass('readonly');
+
+
+                let status = $("#status option:selected").text();
+                const pattern = /^fechad(o|a)$/gi
+                const condition = pattern.test(status);
+                if (!condition) {
+                    $("#status").attr('readonly', obj[permissao].status.readonly);
+                    $("#status").removeAttr('style');
+                    if (!obj[permissao].status.class) {
+                        $("#status").removeClass('readonly');
+                    }
+                    $("#sectionStatus").css('display', obj[permissao].status.display);
+                    $("#status").css('pointer-events', obj[permissao].status.pointerEvents);
+                    $("#status").css('touch-action', obj[permissao].status.touchAction);
+
+
+                    $("#inputDia").attr('readonly', obj[permissao].dia.readonly);
+                    if (!obj[permissao].dia.class)
+                        $("#inputDia").removeClass('readonly');
+
+                    $("#inputHoraEntrada").attr('readonly', obj[permissao].entrada.readonly);
+                    if (!obj[permissao].entrada.class)
+                        $("#inputHoraEntrada").removeClass('readonly');
+
+                    $("#inputInicioAlmoco").attr('readonly', obj[permissao].inicioAlmoco.readonly);
+                    if (!obj[permissao].inicioAlmoco.class)
+                        $("#inputInicioAlmoco").removeClass('readonly');
+
+                    $("#inputFimAlmoco").attr('readonly', obj[permissao].fimAlmoco.readonly);
+                    if (!obj[permissao].fimAlmoco.class)
+                        $("#inputFimAlmoco").removeClass('readonly');
+
+                    $("#inputHoraSaida").attr('readonly', obj[permissao].saida.readonly);
+                    if (!obj[permissao].saida.class)
+                        $("#inputHoraSaida").removeClass('readonly');
+
+                    $("#inputHoraExtra").attr('readonly', obj[permissao].extra.readonly);
+                    if (!obj[permissao].extra.class)
+                        $("#inputHoraExtra").removeClass('readonly');
+
+                    $("#inputAtraso").attr('readonly', obj[permissao].atraso.readonly);
+                    if (!obj[permissao].atraso.class)
+                        $("#inputAtraso").removeClass('readonly');
+
+                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                    $("#inputLancamento").removeAttr('style');
+                    if (!obj[permissao].lancamento.class)
+                        $("#inputLancamento").removeClass('readonly');
+                    $("#inputLancamento").css('pointer-events', obj[permissao].lancamento.pointerEvents);
+                    $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
+
+                    $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
+                    $("#btnFechar").attr('disabled', obj[permissao].fechar.disabled);
+                    $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
+                } else {
+                    $("#status").attr('readonly', true);
+                    $("#status").removeAttr('style');
+                    if (!$("#status").hasClass('readonly')) {
+                        $("#status").addClass('readonly');
+                    }
+                    $("#sectionStatus").css('display', 'none');
+                    $("#status").css('pointer-events', 'none');
+                    $("#status").css('touch-action', 'none');
+
+                    $("#inputDia").attr('readonly', true);
+                    if (!$("#inputDia").hasClass('readonly')) {
+                        $("#inputDia").addClass('readonly');
+                    }
+
+
+                    $("#inputHoraEntrada").attr('readonly', true);
+                    if (!$("#inputHoraEntrada").hasClass('readonly')) {
+                        $("#inputHoraEntrada").addClass('readonly');
+                    }
+
+
+                    $("#inputInicioAlmoco").attr('readonly', true);
+                    if (!$("#inputInicioAlmoco").hasClass('readonly')) {
+                        $("#inputInicioAlmoco").addClass('readonly');
+                    }
+
+
+                    $("#inputFimAlmoco").attr('readonly', true);
+                    if (!$("#inputFimAlmoco").hasClass('readonly')) {
+                        $("#inputFimAlmoco").addClass('readonly');
+                    }
+
+                    $("#inputHoraSaida").attr('readonly', true);
+                    if (!$("#inputHoraSaida").hasClass('readonly')) {
+                        $("#inputHoraSaida").addClass('readonly');
+                    }
+
+                    $("#inputHoraExtra").attr('readonly', true);
+                    if (!$("#inputHoraExtra").hasClass('readonly')) {
+                        $("#inputHoraExtra").addClass('readonly');
+                    }
+
+                    $("#inputAtraso").attr('readonly', true);
+                    if (!$("#inputAtraso").hasClass('readonly')) {
+                        $("#inputAtraso").addClass('readonly');
+                    }
+
+                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
+                    $("#inputLancamento").removeAttr('style');
+                    if (!$("#inputLancamento").hasClass('readonly')) {
+                        $("#inputLancamento").addClass('readonly');
+                    }
+                    $("#inputLancamento").css('pointer-events', 'none');
+                    $("#inputLancamento").css('touch-action', 'none');
+
+                    $("#btnAddPonto").attr('disabled', true);
+                    $("#btnFechar").attr('disabled', true);
+                    $("#btnGravar").attr('disabled', true);
+                }
+
+                break;
             }
-        })
+        }
+
     }
 </script>

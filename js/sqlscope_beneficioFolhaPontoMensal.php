@@ -148,48 +148,53 @@ function recupera()
 
     if ($row = $result[0]) {
         $folha = $row['folha'];
-        $funcionario = $row['funcionario'];
     }
 
-    $sql =
-        "SELECT F.codigo, FU.codigo AS 'funcionario', F.mesAno, F.status, F.observacao, P.limiteEntrada AS 'limiteAtraso', P.limiteSaida AS 'limiteExtra'
+    $observacao = "";
+    $toleranciaAtraso = "05:00";
+    $toleranciaExtra = "05:00";
+    $status = null;
+
+    if ($folha) {
+        $sql =
+            "SELECT F.codigo, FU.codigo AS 'funcionario', F.mesAno, F.status, F.observacao, P.limiteEntrada AS 'limiteAtraso', P.limiteSaida AS 'limiteExtra'
         FROM Funcionario.folhaPontoMensal F
         INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
         LEFT JOIN Ntl.beneficioProjeto BP ON FU.codigo = BP.funcionario 
         LEFT JOIN Ntl.projeto P ON P.codigo = BP.projeto
         WHERE (0=0) AND F.codigo = " . $folha;
 
-    $result = $reposit->RunQuery($sql);
+        $result = $reposit->RunQuery($sql);
+
+        if ($row = $result[0]) {
+            $mesAno = trim($row['mesAno']);
+
+            if ($mesAno != "") {
+                $data = explode(' ', $mesAno);
+                $mesAno = $data[0];
+            } else {
+                $mesAno = "";
+            }
+
+            $observacao = trim($row['observacao']);
+            $status = (int)trim($row['status']);
+            $toleranciaAtraso = trim($row['limiteAtraso']);
+            $toleranciaExtra = trim($row['limiteExtra']);
+        }
+    } else {
+        $folha = 0;
+    }
 
     $out = "";
-    if ($row = $result[0]) {
 
-        $folha = trim($row['codigo']);
-        $funcionario = trim($row['funcionario']);
-
-        $mesAno = trim($row['mesAno']);
-
-        if ($mesAno != "") {
-            $data = explode(' ', $mesAno);
-            $mesAno = $data[0];
-        } else {
-            $mesAno = "";
-        }
-
-        $observacao = trim($row['observacao']);
-        $status = (int)trim($row['status']);
-        $toleranciaAtraso = trim($row['limiteAtraso']);
-        $toleranciaExtra = trim($row['limiteExtra']);
-
-        $out =
-            $folha . "^" .
-            $funcionario . "^" .
-            $observacao . "^" .
-            $mesAno . "^" .
-            $toleranciaAtraso . "^" .
-            $toleranciaExtra . "^" .
-            $status;
-    }
+    $out =
+        $folha . "^" .
+        $funcionario . "^" .
+        $observacao . "^" .
+        $mesAno . "^" .
+        $toleranciaAtraso . "^" .
+        $toleranciaExtra . "^" .
+        $status;
 
     if ($out == "") {
         echo "failed#" . "$out#";
@@ -207,20 +212,67 @@ function recupera()
 
     foreach ($result as $row) {
 
+        $dia = $row["dia"];
+        if($dia == ""){
+            $dia = 1;
+        }
+        $horaEntrada = $row["horaEntrada"];
+        if($horaEntrada == ""){
+            $horaEntrada = "00:00:00";
+        }
+        $inicioAlmoco = $row["inicioAlmoco"];
+        if($inicioAlmoco == ""){
+            $inicioAlmoco = "00:00";
+        }
+        $fimAlmoco = $row["fimAlmoco"];
+        if($fimAlmoco == ""){
+            $fimAlmoco = "00:00";
+        }
+        $horaSaida = $row["horaSaida"];
+        if($horaSaida == ""){
+            $horaSaida = "00:00:00";
+        }
+        $horaExtra = $row["horaExtra"];
+        if($horaExtra == ""){
+            $horaExtra = "00:00";
+        }
+        $atraso = $row["atraso"];
+        if($atraso == ""){
+            $atraso = "00:00";
+        }
+        $lancamento = $row["lancamento"];
+        if($lancamento == ""){
+            $lancamento = 0;
+        }
+
         $arrayRow = array(
-            "dia"           =>  $row["dia"],
-            "entrada"       =>  $row["horaEntrada"],
-            "inicioAlmoco"  =>  $row["inicioAlmoco"],
-            "fimAlmoco"     =>  $row["fimAlmoco"],
-            "saida"         =>  $row["horaSaida"],
-            "horaExtra"     =>  $row["horaExtra"],
-            "atraso"        =>  $row["atraso"],
-            "lancamento"    =>  $row["lancamento"]
+            "dia"           =>  $dia,
+            "entrada"       =>  $horaEntrada,
+            "inicioAlmoco"  =>  $inicioAlmoco,
+            "fimAlmoco"     =>  $fimAlmoco,
+            "saida"         =>  $horaSaida,
+            "horaExtra"     =>  $horaExtra,
+            "atraso"        =>  $atraso,
+            "lancamento"    =>  $lancamento
         );
 
         array_push($arrayPonto, $arrayRow);
     }
 
+    if(!$arrayPonto){
+        $arrayRow = array(
+            "dia"           =>  1,
+            "entrada"       =>  "00:00:00",
+            "inicioAlmoco"  =>  "00:00",
+            "fimAlmoco"     =>  "00:00",
+            "saida"         =>  "00:00:00",
+            "horaExtra"     =>  "00:00",
+            "atraso"        =>  "00:00",
+            "lancamento"    =>  0
+        );
+
+        array_push($arrayPonto, $arrayRow);
+    }
     $jsonFolha = json_encode($arrayPonto);
 
     echo "sucess#" . "$out#" . $jsonFolha;
@@ -289,9 +341,18 @@ function consultarPermissoes()
     session_start();
     $usuario = $_SESSION["login"];
     $reposit = new reposit();
-    $sql = "SELECT F.nome FROM Ntl.funcionalidade F INNER JOIN Ntl.usuarioFuncionalidade UF 
-    ON F.codigo = UF.funcionalidade
-    INNER JOIN Ntl.usuario U ON U.codigo = UF.usuario WHERE U.login = '" . $usuario . "'";
+    $sql =
+        "SELECT F.nome FROM Ntl.funcionalidade F 
+        INNER JOIN Ntl.usuarioFuncionalidade UF 
+        ON F.codigo = UF.funcionalidade
+        INNER JOIN Ntl.usuario U 
+        ON U.codigo = UF.usuario 
+        WHERE U.login = '" . $usuario . "' 
+    UNION 
+	SELECT F.nome FROM Ntl.funcionalidade F 
+        INNER JOIN Ntl.usuarioGrupoFuncionalidade GF 
+        ON F.codigo = GF.funcionalidade 
+        INNER JOIN Ntl.usuario U ON U.grupo = GF.grupo";
 
     $result = $reposit->RunQuery($sql);
     $permissoes = array();
@@ -306,61 +367,58 @@ function consultarPermissoes()
     foreach ($permissoes as $permissao) {
         switch ($permissao) {
             case 'PONTOELETRONICOMENSALMAXIMO':
-                array_push($arrayPermissoes, [
-                    $permissao => [
-                        "funcionario" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "mesAno" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "status" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "dia" => ["readonly" => "false", "class" => ""],
-                        "entrada" => ["readonly" => "false", "class" => ""],
-                        "inicioAlmoco" => ["readonly" => "false", "class" => ""],
-                        "fimAlmoco" => ["readonly" => "false", "class" => ""],
-                        "saida" => ["readonly" => "false", "class" => ""],
-                        "extra" => ["readonly" => "false", "class" => ""],
-                        "atraso" => ["readonly" => "false", "class" => ""],
-                        "lancamento" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "adicionarPonto" => ["disabled" => "false"],
-                        "salvarAlteracoes" => ["disabled" => "false"],
-                    ]
-                ]);
+                $arrayPermissoes[$permissao] = [
+                    "funcionario" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                    "mesAno" => ["readonly" => false, "class" => ""],
+                    "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "", "display" => "block"],
+                    "dia" => ["readonly" => false, "class" => ""],
+                    "entrada" => ["readonly" => false, "class" => ""],
+                    "inicioAlmoco" => ["readonly" => false, "class" => ""],
+                    "fimAlmoco" => ["readonly" => false, "class" => ""],
+                    "saida" => ["readonly" => false, "class" => ""],
+                    "extra" => ["readonly" => false, "class" => ""],
+                    "atraso" => ["readonly" => false, "class" => ""],
+                    "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                    "adicionarPonto" => ["disabled" => false],
+                    "salvarAlteracoes" => ["disabled" => false],
+                    "fechar" => ["disabled" => false]
+                ];
                 break;
             case 'PONTOELETRONICOMENSALMODERADO':
-                array_push($arrayPermissoes, [
-                    $permissao => [
-                        "funcionario" => ["readonly" => "true", "pointerEvents" => "auto", "touchAction" => "auto", "class" => "readonly"],
-                        "mesAno" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "status" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "dia" => ["readonly" => "false", "class" => ""],
-                        "entrada" => ["readonly" => "false", "class" => ""],
-                        "inicioAlmoco" => ["readonly" => "false", "class" => ""],
-                        "fimAlmoco" => ["readonly" => "false", "class" => ""],
-                        "saida" => ["readonly" => "false", "class" => ""],
-                        "extra" => ["readonly" => "false", "class" => ""],
-                        "atraso" => ["readonly" => "false", "class" => ""],
-                        "lancamento" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "adicionarPonto" => ["disabled" => "false"],
-                        "salvarAlteracoes" => ["disabled" => "false"],
-                    ]
-                ]);
+                $arrayPermissoes[$permissao] = [
+                    "funcionario" => ["readonly" => true, "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
+                    "mesAno" => ["readonly" => false, "class" => ""],
+                    "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "", "display" => "none"],
+                    "dia" => ["readonly" => false, "class" => ""],
+                    "entrada" => ["readonly" => false, "class" => ""],
+                    "inicioAlmoco" => ["readonly" => false, "class" => ""],
+                    "fimAlmoco" => ["readonly" => false, "class" => ""],
+                    "saida" => ["readonly" => false, "class" => ""],
+                    "extra" => ["readonly" => false, "class" => ""],
+                    "atraso" => ["readonly" => false, "class" => ""],
+                    "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                    "adicionarPonto" => ["disabled" => false],
+                    "salvarAlteracoes" => ["disabled" => false],
+                    "fechar" => ["disabled" => false]
+                ];
                 break;
             case 'PONTOELETRONICOMENSALMINIMO':
-                array_push($arrayPermissoes, [
-                    $permissao => [
-                        "funcionario" => ["readonly" => "true", "pointerEvents" => "auto", "touchAction" => "auto", "class" => "readonly"],
-                        "mesAno" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "status" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "dia" => ["readonly" => "false", "class" => ""],
-                        "entrada" => ["readonly" => "false", "class" => ""],
-                        "inicioAlmoco" => ["readonly" => "false", "class" => ""],
-                        "fimAlmoco" => ["readonly" => "false", "class" => ""],
-                        "saida" => ["readonly" => "false", "class" => ""],
-                        "extra" => ["readonly" => "false", "class" => ""],
-                        "atraso" => ["readonly" => "false", "class" => ""],
-                        "lancamento" => ["readonly" => "false", "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                        "adicionarPonto" => ["disabled" => "false"],
-                        "salvarAlteracoes" => ["disabled" => "false"],
-                    ]
-                ]);
+                $arrayPermissoes[$permissao] = [
+                    "funcionario" => ["readonly" => true, "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
+                    "mesAno" => ["readonly" => false, "class" => ""],
+                    "status" => ["readonly" => true, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "", "display" => "none"],
+                    "dia" => ["readonly" => false, "class" => ""],
+                    "entrada" => ["readonly" => true, "class" => ""],
+                    "inicioAlmoco" => ["readonly" => true, "class" => ""],
+                    "fimAlmoco" => ["readonly" => true, "class" => ""],
+                    "saida" => ["readonly" => true, "class" => ""],
+                    "extra" => ["readonly" => true, "class" => ""],
+                    "atraso" => ["readonly" => true, "class" => ""],
+                    "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
+                    "adicionarPonto" => ["disabled" => false],
+                    "salvarAlteracoes" => ["disabled" => false],
+                    "fechar" => ["disabled" => false]
+                ];
                 break;
         }
     }

@@ -8,6 +8,10 @@ if ($funcao == 'recuperaCep') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'recuperaCepTipoLogradouro') {
+    call_user_func($funcao);
+}
+
 return;
 
 function recuperaCep() {
@@ -60,4 +64,47 @@ function busca_cep($cep) {
     }
     parse_str($resultado, $retorno);
     return $retorno;
+}
+
+function recuperaCepTipoLogradouro() {
+//  para solicitacao do sodexo foi preciso fazer uma funcao que retorna os tipos de logradouro se alterasse a antiga traria impacto a outras telas que 
+// não possuem tipo logradouro
+    if (empty($_POST["cep"])) {
+//        $mensagem = "Selecione uma registro.";
+//        echo "failed#".$mensagem.' ';
+//        echo "failed#";
+        return;
+    }
+
+    $cep = $_POST["cep"];
+
+    $out = '';
+    $resultado_busca = busca_cep($cep);
+
+    switch ($resultado_busca['resultado']) {
+        case '2':
+            //somente traz cidade e uf
+            $out = "^^^^";
+            break;
+        case '1':
+            $tipoLogradouro = mb_convert_encoding($resultado_busca['tipo_logradouro'], 'UTF-8', 'HTML-ENTITIES');
+            $logradouro = mb_convert_encoding($resultado_busca['logradouro'], 'UTF-8', 'HTML-ENTITIES');
+            $bairro = mb_convert_encoding($resultado_busca['bairro'], 'UTF-8', 'HTML-ENTITIES');
+            $bairro = str_replace("'", " ", $bairro);
+            $cidade = mb_convert_encoding($resultado_busca['cidade'], 'UTF-8', 'HTML-ENTITIES');
+            $uf = mb_convert_encoding(trim($resultado_busca['uf']), 'UTF-8', 'HTML-ENTITIES');
+
+            $out = $tipoLogradouro  . "^" .  $logradouro . "^" . $bairro . "^" . $cidade . "^" . $uf;
+            break;
+        default:
+            $out = "^^^^";
+            break;
+    }
+    if ($out == "") {
+        echo "failed#";
+    }
+    if ($out != '') {
+        echo "sucess#" . $out . "";
+    }
+    return;
 }
