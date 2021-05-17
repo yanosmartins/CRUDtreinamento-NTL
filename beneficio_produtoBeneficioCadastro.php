@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 include_once("populaTabela/popula.php");
 
-$condicaoAcessarOK = (in_array('REMUNERACAO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('REMUNERACAO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('REMUNERACAO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PRODUTOBENEFICIO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PRODUTOBENEFICIO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('PRODUTOBENEFICIO_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);

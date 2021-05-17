@@ -51,6 +51,7 @@ function grava()
     $uf = "'" . $_POST['uf'] . "'";
     $cidade = "'" . $_POST['cidade'] . "'";
     $bairro = "'" . $_POST['bairro'] . "'";
+    $grauRisco = (int)$_POST['grauRisco'];
 
     $sql = "Ntl.empresa_Atualiza
         $codigo,
@@ -67,7 +68,8 @@ function grava()
         $uf,
         $cidade,
         $bairro,
-        $usuario";
+        $usuario,
+        $grauRisco";
 
     $reposit = new reposit();
 
@@ -91,7 +93,7 @@ function recupera()
     }
 
     $sql = "SELECT codigo, ativo, nome,codigoDepartamento,nomeDepartamento, responsavelRecebimento,
-            cep,tipoLogradouro,logradouro,numero,complemento,bairro,cidade,uf
+            cep,tipoLogradouro,logradouro,numero,complemento,bairro,cidade,uf,grauRisco
             FROM Ntl.empresa WHERE (0=0) AND codigo = " . $id;
 
     $reposit = new reposit();
@@ -114,6 +116,7 @@ function recupera()
     $bairro = $row['bairro'];
     $cidade = $row['cidade'];
     $uf = $row['uf'];
+    $grauRisco = $row['grauRisco'];
 
 
     $out =  $id . "^" .
@@ -129,7 +132,8 @@ function recupera()
         $complemento . "^" .
         $bairro . "^" .
         $cidade . "^" .
-        $uf; 
+        $uf . "^" .
+        $grauRisco; 
 
 
     if ($out == "") {

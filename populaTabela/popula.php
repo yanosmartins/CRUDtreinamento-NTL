@@ -435,3 +435,13 @@ function populaTipoRemuneracao()
            
 END;
 }
+
+function populaGrauRisco()
+{
+    return <<<END
+            <option></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+           
+END;
+}

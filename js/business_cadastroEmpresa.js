@@ -1,5 +1,5 @@
 function gravaEmpresa(codigo,ativo,nome,codigoDepartamento,nomeDepartamento,responsavelRecebimento,
-  cep,tipoLogradouro,logradouro,numero,complemento,uf,cidade,bairro, callback) {
+  cep,tipoLogradouro,logradouro,numero,complemento,uf,cidade,bairro,grauRisco, callback) {
   $.ajax({
     url: 'js/sqlscope_cadastroEmpresa.php',
     dataType: 'html', //tipo do retorno
@@ -8,6 +8,7 @@ function gravaEmpresa(codigo,ativo,nome,codigoDepartamento,nomeDepartamento,resp
       funcao: 'grava',
       codigo: codigo,ativo: ativo,nome: nome,codigoDepartamento: codigoDepartamento,nomeDepartamento: nomeDepartamento,responsavelRecebimento: responsavelRecebimento,
       cep: cep,tipoLogradouro: tipoLogradouro,logradouro: logradouro,numero: numero,complemento: complemento,uf: uf,cidade: cidade,bairro: bairro,
+      grauRisco: grauRisco,
     }, //valores enviados ao script
     success: function (data) {
       callback(data)
