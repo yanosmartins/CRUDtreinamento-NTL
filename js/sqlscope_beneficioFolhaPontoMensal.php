@@ -4,10 +4,15 @@ include "repositorio.php";
 include "girComum.php";
 
 $funcao = $_POST["funcao"];
+$_GET["funcao"];
+$_REQUEST[""];
+$_FILES[""];
 
-$pattern = "/(consultarLancamento|grava|recupera|excluir|consultarPermissoes)/i";
+$pattern = "/(consultarLancamento|grava|recupera|excluir|consultarPermissoes|enviarFolha)/i";
 
-if (preg_match($pattern, $funcao)) {
+$condicao = preg_match($pattern, $funcao);
+
+if ($condicao) {
     call_user_func($funcao);
 }
 
@@ -213,35 +218,35 @@ function recupera()
     foreach ($result as $row) {
 
         $dia = $row["dia"];
-        if($dia == ""){
+        if ($dia == "") {
             $dia = 1;
         }
         $horaEntrada = $row["horaEntrada"];
-        if($horaEntrada == ""){
+        if ($horaEntrada == "") {
             $horaEntrada = "00:00:00";
         }
         $inicioAlmoco = $row["inicioAlmoco"];
-        if($inicioAlmoco == ""){
+        if ($inicioAlmoco == "") {
             $inicioAlmoco = "00:00";
         }
         $fimAlmoco = $row["fimAlmoco"];
-        if($fimAlmoco == ""){
+        if ($fimAlmoco == "") {
             $fimAlmoco = "00:00";
         }
         $horaSaida = $row["horaSaida"];
-        if($horaSaida == ""){
+        if ($horaSaida == "") {
             $horaSaida = "00:00:00";
         }
         $horaExtra = $row["horaExtra"];
-        if($horaExtra == ""){
+        if ($horaExtra == "") {
             $horaExtra = "00:00";
         }
         $atraso = $row["atraso"];
-        if($atraso == ""){
+        if ($atraso == "") {
             $atraso = "00:00";
         }
         $lancamento = $row["lancamento"];
-        if($lancamento == ""){
+        if ($lancamento == "") {
             $lancamento = 0;
         }
 
@@ -259,7 +264,7 @@ function recupera()
         array_push($arrayPonto, $arrayRow);
     }
 
-    if(!$arrayPonto){
+    if (!$arrayPonto) {
         $arrayRow = array(
             "dia"           =>  1,
             "entrada"       =>  "00:00:00",
@@ -433,4 +438,33 @@ function consultarPermissoes()
 
     echo "sucess#" . "$out#";
     return;
+}
+
+function enviarFolha()
+{
+
+    $dir_temp = "uploads";
+    $dir_name = "pontos-eletronicos";
+    $dir_name = $dir_temp . DIRECTORY_SEPARATOR . $dir_name;
+
+
+    if (!is_dir($dir_temp)) {
+        mkdir($dir_temp);
+        mkdir($dir_name);
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $file = $_FILES["fileUpload"];
+
+        if ($file["error"]) {
+            return "failed#" . "Error: " . $file["error"] . "#";
+        }
+
+        if (move_uploaded_file($file["tmp_name"], $dir_name . "pontoEletronico" . "-" . date("Y-m-d"))) {
+
+            return "sucess#" . "Upload realizado com sucesso!" . "#";
+        } else {
+            return "failed#" . "Não foi possível realizar o upload." . "#";
+        }
+    }
 }

@@ -204,6 +204,16 @@ include("inc/nav.php");
                                                                         </select><i></i>
                                                                     </label>
                                                                 </section>
+                                                                <section class="col col-md-4">
+                                                                    <label class="label"> </label>
+                                                                    <input type="file" name="fileUpload" id="fileUpload" accept="application/pdf">
+                                                                </section>
+                                                                <section class="col col-md-2">
+                                                                    <label class="label"> </label>
+                                                                    <button type="button" id="btnEnviarArquivo" class="btn btn-danger" aria-hidden="true">
+                                                                        <i class="">Enviar PDF</i>
+                                                                    </button>
+                                                                </section>
                                                             </div>
 
                                                             <div class="row">
@@ -606,6 +616,10 @@ include("inc/scripts.php");
             imprimir();
         })
 
+        $('#btnEnviarArquivo').on("click", function() {
+            enviarPDF();
+        })
+
         /* Eventos para chamar a gravar() */
         $("#btnGravar").on("click", function() {
             gravar();
@@ -831,13 +845,13 @@ include("inc/scripts.php");
         let options = $("#status option");
         let status;
 
-        options.each((index,el)=>{
+        options.each((index, el) => {
             const pattern = /^fechad(o|a)$/gi;
             const texto = $(el).text();
-            if(pattern.test(texto)){
+            if (pattern.test(texto)) {
                 status = $(el).val();
                 return;
-            } 
+            }
         });
 
         let mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
@@ -887,7 +901,7 @@ include("inc/scripts.php");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     const funcionario = $("#funcionario").val();
                     const mesAno = $("#mesAno").val();
-                    $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php?funcionario='+funcionario+'&mesAno='+mesAno);
+                    $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php?funcionario=' + funcionario + '&mesAno=' + mesAno);
                 }
             }
         );
@@ -926,14 +940,14 @@ include("inc/scripts.php");
 
                 let statusText;
                 let status = $("#status option");
-                status.each((index,el)=>{
+                status.each((index, el) => {
                     let texto = $(el).text();
                     let pattern = /abert(o|a)/gi;
-                    if(pattern.test(texto)){
+                    if (pattern.test(texto)) {
                         statusText = $(el).val();
                     }
                 });
-                
+
                 //funcionando
                 let codigo = piece[0] || 0;
                 let funcionario = piece[1];
@@ -2075,5 +2089,30 @@ include("inc/scripts.php");
             }
         }
 
+    }
+
+    function enviarPDF() {
+        const file = $("#fileUpload")[0].files[0];
+        $("#btnEnviarArquivo").prop('disabled', true);
+        enviarArquivo(file, function(data) {
+            if (data.indexOf('sucess') < 0) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
+                if (mensagem !== "") {
+                    smartAlert("Atenção", mensagem, "error");
+                    $("#btnEnviarArquivo").prop('disabled', false);
+                    return false;
+                } else {
+                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                    $("#btnEnviarArquivo").prop('disabled', false);
+                    return false;
+                }
+            } else {
+                var piece = data.split("#");
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                $("#btnEnviarArquivo").prop('disabled', false);
+                return true;
+            }
+        })
     }
 </script>
