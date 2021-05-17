@@ -2,7 +2,7 @@
                 dataDemissaoFuncionario, dataCancelamentoPlanoSaude, pisPasep, numeroCarteiraTrabalho, serieCarteiraTrabalho, ufCarteiraTrabalho,  
                 dataExpedicaoCarteiraTrabalho, rg, dataEmissaoRG, orgaoEmissorRG, cnh, categoriaCNH, ufCNH, dataEmissaoCNH, 
                 dataVencimentoCNH, primeiraHabilitacaoCNH, cep, logradouro, numeroLogradouro, complemento, 
-                ufLogradouro, cidade, bairro, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, ufIdentidade, callback) {
+                ufLogradouro, cidade, bairro, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, ufIdentidade, especializacao, callback) {
     $.ajax({
         url: 'js/sqlscope_cadastroFuncionario.php',
         dataType: 'html', //tipo do retorno
@@ -15,7 +15,7 @@
             dataEmissaoCNH:dataEmissaoCNH,dataVencimentoCNH:dataVencimentoCNH, primeiraHabilitacaoCNH:primeiraHabilitacaoCNH,
             cep:cep, logradouro:logradouro, numeroLogradouro:numeroLogradouro, 
             complemento:complemento,  ufLogradouro:ufLogradouro, cidade:cidade, bairro:bairro, jsonTelefoneArray:jsonTelefoneArray,
-            jsonEmailArray:jsonEmailArray, jsonDependenteArray:jsonDependenteArray, ufIdentidade:ufIdentidade
+            jsonEmailArray:jsonEmailArray, jsonDependenteArray:jsonDependenteArray, ufIdentidade:ufIdentidade, especializacao:especializacao
         },   
         success: function (data) {
         callback(data);

@@ -760,9 +760,9 @@ include("inc/nav.php");
 
                                                         <div class="row">
                                                             <section class="col col-4">
-                                                                <label class="label " for="especialização">Especialização</label>
+                                                                <label class="label " for="especializacao">Especializacao</label>
                                                                 <label class="select">
-                                                                    <select id="especialização" name="especialização">">
+                                                                    <select id="especializacao" name="especializacao">">
                                                                         <option value=""></option>
                                                                         <?php
 
@@ -1168,6 +1168,7 @@ include("inc/scripts.php");
                         var cidade = piece[31];
                         var bairro = piece[32];
                         var ufIdentidade = piece[33];
+                        var especializacao = piece[34];
 
                         $("#codigo").val(codigo);
                         $("#ativo").val(ativo);
@@ -1203,6 +1204,7 @@ include("inc/scripts.php");
                         $("#bairro").val(bairro);
                         $("#cidade").val(cidade);
                         $("#ufIdentidade").val(ufIdentidade);
+                        $("#especializacao").val(especializacao);
                         $("#verificaRecuperacao").val(1);
 
                         //Arrays  
@@ -1371,6 +1373,7 @@ include("inc/scripts.php");
         var dataAdmissaoFuncionario = $("#dataAdmissao").val();
         var dataDemissaoFuncionario = $("#dataDemissao").val();
         var dataCancelamentoPlanoSaude = $("#dataCancelamentoPlanoSaude").val();
+        var especializacao = $("#especializacao").val();
 
         //Documentos Pessoais
         var pisPasep = $("#pisPasep").val();
@@ -1544,7 +1547,7 @@ include("inc/scripts.php");
             dataDemissaoFuncionario, dataCancelamentoPlanoSaude, pisPasep, numeroCarteiraTrabalho, serieCarteiraTrabalho, ufCarteiraTrabalho, dataExpedicaoCarteiraTrabalho,
             rg, dataEmissaoRG, orgaoEmissorRG, cnh, categoriaCNH, ufCNH, dataEmissaoCNH, dataVencimentoCNH, primeiraHabilitacaoCNH,
             cep, logradouro, numeroLogradouro, complemento, ufLogradouro, cidade, bairro, jsonTelefoneArray, jsonEmailArray,
-            jsonDependenteArray, ufIdentidade,
+            jsonDependenteArray, ufIdentidade, especializacao,
             function(data) {
                 if (data.indexOf('failed') > -1) {
                     var piece = data.split("#");

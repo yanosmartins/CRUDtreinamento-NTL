@@ -50,6 +50,7 @@ function grava()
     $cpf = formatarString($_POST['cpf']);
     $matricula = formatarString($_POST['matricula']);
     $sexo = formatarString($_POST['sexo']);
+    $especializacao = ($_POST['especializacao']);
 
     $dataNascimento = formatarDATA($_POST['dataNascimento']);
     $dataAdmissaoFuncionario = formatarData($_POST['dataAdmissaoFuncionario']);
@@ -232,6 +233,7 @@ function grava()
                         $cidade,
                         $bairro,
                         $ufIdentidade,
+                        $especializacao,
                         $xmlTelefone,
                         $xmlEmail,
                         $xmlDependente,
@@ -321,6 +323,7 @@ function recupera()
         $dataAdmissaoFuncionario =  $row['dataAdmissaoFuncionario'];
         $dataDemissaoFuncionario =  $row['dataDemissaoFuncionario'];
         $dataCancelamentoPlanoSaude =  $row['dataCancelamentoPlanoSaude'];
+        $especializacao = $row['especializacao'];
 
 
         //Accordion de Documentos Pessoais
@@ -548,6 +551,7 @@ function recupera()
             $cidade  . "^" .
             $bairro . "^" .
             $ufIdentidade . "^" .
+            $especializacao."^" .
             $strArrayTelefone . "^" .
             $strArrayEmail;;
 
