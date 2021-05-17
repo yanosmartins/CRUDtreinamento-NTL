@@ -99,6 +99,9 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('ESCALA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("escala" => array("title" => "Escala", "url" => APP_URL . "/tabelaBasica_escalaFiltro.php")); //SYSCC  
     }
+    if (in_array('ESPECIALIZACAO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("especializacao" => array("title" => "Especialização", "url" => APP_URL . "/tabelaBasica_especializacaoFiltro.php")); //SYSCB 
+    }
 
     if (in_array('GRUPO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/tabelaBasica_grupoFiltro.php")); //SYSGC //Faturamento
