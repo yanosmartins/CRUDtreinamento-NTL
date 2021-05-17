@@ -95,14 +95,10 @@ include "js/repositorio.php";
 
                 if ($_POST["dataInicial"] != "") {
                     $dataInicial = $_POST["dataInicial"];
-                    $data = explode("/", $dataInicial);
-                    $data = $data[2] . "-" . $data[1] . "-" . $data[0];
                     $where = $where . " AND PM.dataCadastramento >= CONVERT(DATETIME,'".$dataInicial." 00:00:00', 103) ";
                 }
                 if ($_POST["dataFinal"] != "") {
                     $dataFinal = $_POST["dataFinal"];
-                    $data = explode("/", $dataFinal);
-                    $data = $data[2] . "-" . $data[1] . "-" . $data[0];
                     $where = $where . " AND PM.dataCadastramento <= CONVERT(DATETIME,'".$dataFinal." 23:59:59', 103) ";
                 }
 

@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Pedido Material";
+$page_title = "Saída Material";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['estoque']['sub']['operacao']['sub']['pedidoMaterial']["active"]  = true;
+$page_nav['estoque']['sub']['operacao']['sub']['saidaMaterial']["active"]  = true;
 
 
 include("inc/nav.php");
@@ -61,7 +61,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Pedido Material</h2>
+                            <h2>Saída Material</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -81,14 +81,21 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-6">
-                                                                <label class="label">Solicitante</label>
-                                                                <label class="input">
-                                                                    <input id="solicitanteId" name="solicitanteId" type="hidden" value="">
-                                                                    <input id="solicitante" name="solicitanteFiltro" autocomplete="off" class="form-control " placeholder="Digite o nome do solicitante..." type="text" value="">
-                                                                    <i class="icon-append fa fa-filter"></i>
-                                                                </label>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="filtrarPor">Filtrar por</label>
+                                                                <label class="select">
+                                                                    <select id="filtrarPor" name="filtrarPor" class="">
+                                                                        <option value="0">Material</option>
+                                                                        <option value="1">Saída</option>
+                                                                    </select><i></i>
                                                             </section>
+                                                        </div>
+                                                        <div class="row">
+                                                                <section class="col col-12">
+                                                                    <legend><strong></strong></legend>
+                                                                </section>
+                                                            </div>
+                                                        <div class="row">
                                                             <section class="col col-6">
                                                                 <label class="label">Cliente/Fornecedor</label>
                                                                 <label class="input">
@@ -97,31 +104,24 @@ include("inc/nav.php");
                                                                     <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
-                                                        </div>
-                                                        <div class="row">
-                                                            <section class="col col-6">
-                                                                <label class="label" for="projeto">Projeto</label>
-                                                                <label class="select">
-                                                                    <select id="projeto" name="projeto" class="">
-                                                                        <option></option>
-                                                                        <?php
-                                                                        $sql =  "SELECT codigo, descricao FROM Ntl.projeto where ativo = 1 order by descricao";
-                                                                        $reposit = new reposit();
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach ($result as $row) {
-                                                                            $codigo = $row['codigo'];
-                                                                            $descricao = ($row['descricao']);
-                                                                            echo '<option value=' . $codigo . '>  ' . $descricao . ' </option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                            </section>
-                                                            <section class="col col-6">
-                                                                <label class="label">Responsavel Fornecimento</label>
+                                                            <section class="col col-2">
+                                                                <label class="label">Número NF</label>
                                                                 <label class="input">
-                                                                    <input id="responsavelFornecimentoId" name="responsavelFornecimentoId" type="hidden" value="">
-                                                                    <input id="responsavelFornecimento" name="responsavelFornecimentoFiltro" autocomplete="off" class="form-control " placeholder="Digite o nome do solicitante..." type="text" value="">
-                                                                    <i class="icon-append fa fa-filter"></i>
+                                                                    <input id="numero" name="numero" maxlength="255" autocomplete="off" class="" type="text" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Emissão – Inicio</label>
+                                                                <label class="input">
+                                                                    <input id="dataInicialEmissao" name="dataInicialEmissao" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Emissão – Fim</label>
+                                                                <label class="input">
+                                                                    <input id="dataFinalEmissao" name="dataFinalEmissao" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                    <i class="icon-append fa fa-calendar"></i>
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -142,40 +142,89 @@ include("inc/nav.php");
                                                                     <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Data Inicial</label>
+                                                            <section class="col col-2" id="sectionDataEntradaInicial">
+                                                                <label class="label">Data de Entrada – Inicio</label>
                                                                 <label class="input">
-                                                                    <input id="dataInicial" name="dataInicial" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                    <input id="dataEntradaInicial" name="dataEntradaInicial" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                     <i class="icon-append fa fa-calendar"></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Data Final</label>
+                                                            <section class="col col-2" id="sectionDataEntradaFinal">
+                                                                <label class="label">Data de Entrada – Fim</label>
                                                                 <label class="input">
-                                                                    <input id="dataFinal" name="dataFinal" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
+                                                                    <input id="dataEntradaFinal" name="dataEntradaFinal" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                     <i class="icon-append fa fa-calendar"></i>
                                                                 </label>
+                                                            </section>
+                                                            <section class="col col-2" id="sectionFechado" hidden>
+                                                                <label class="label" for="fechado">Fechado</label>
+                                                                <label class="select">
+                                                                    <select id="fechado" name="fechado" class="">
+                                                                        <option></option>
+                                                                        <option value="1">Sim</option>
+                                                                        <option value="2">Não</option>
+                                                                    </select><i></i>
                                                             </section>
                                                         </div>
                                                         <div class="row">
-                                                            <section class="col col-2" id="sectionAprovado">
-                                                                <label class="label" for="aprovado">Aprovado</label>
+                                                            <section class="col col-3">
+                                                                <label class="label" for="localizacaoItem">Unidade</label>
                                                                 <label class="select">
-                                                                    <select id="aprovado" name="aprovado" class="">
+                                                                    <select id="unidade" name="unidade" class="">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao FROM Ntl.unidade WHERE ativo = 1 ORDER BY descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $id = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label" for="estoque">Estoque</label>
+                                                                <label class="select">
+                                                                    <select id="estoque" name="estoque" class="readonly" disabled>
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao FROM Estoque.estoque WHERE ativo = 1 ORDER BY descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $id = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $id . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2" id="sectionSituacao">
+                                                                <label class="label" for="situacao">Situação</label>
+                                                                <label class="select">
+                                                                    <select id="situacao" name="situacao" class="">
                                                                         <option></option>
-                                                                        <option value="0">Não</option>
-                                                                        <option value="1">Sim</option>
+                                                                        <option value="1">Entrada</option>
+                                                                        <option value="4">Entrada por transferência</option>
+                                                                        <option value="6">Entrada por doação</option>
                                                                     </select><i></i>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label" for="tipo">Tipo</label>
+                                                            <section class="col col-2" id="sectionSituacaoItem">
+                                                                <label class="label" for="situacaoItem">Situação Item</label>
                                                                 <label class="select">
-                                                                    <select id="tipo" name="tipo" class="">
+                                                                    <select id="situacaoItem" name="situacaoItem" class="">
                                                                         <option></option>
-                                                                        <option value="3">Resrvado</option>
-                                                                        <option value="4">Pendente</option>
+                                                                        <option value="1">Disponível</option>
+                                                                        <option value="2">Não Disponível</option>
+                                                                        <!-- <option value="3">Reservado</option>
+                                                                        <option value="4">Fornecido</option> -->
                                                                     </select><i></i>
                                                             </section>
+
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -189,7 +238,6 @@ include("inc/nav.php");
                                         <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="<?= $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>
-
                                     </footer>
                                 </form>
                             </div>
@@ -217,6 +265,8 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
+<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroCodigoItem.js" type="text/javascript"></script>
+
 <!--script src="<?php echo ASSETS_URL; ?>/js/businessTabelaBasica.js" type="text/javascript"></script-->
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -250,99 +300,38 @@ include("inc/scripts.php");
             novo();
         });
 
-        $("#data").on("change", function() {
-            validaCampoData("#data");
+        $("#unidade").on("change", function() {
+            popularComboEstoque()
         });
-
-        $("#solicitante").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        maxRows: 12,
-                        funcao: "listaSolicitanteAtivoAutoComplete",
-                        descricaoIniciaCom: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                id: item.id,
-                                label: item.descricao,
-                                value: item.descricao,
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 3,
-
-            select: function(event, ui) {
-                $("#solicitanteId").val(ui.item.id);
-                $("#solicitanteFiltro").val(ui.item.nome);
-                var descricaoId = $("#solicitanteId").val();
-                $("#solicitante").val(descricaoId)
-                $("#solicitanteFiltro").val('');
-
-            },
-            change: function(event, ui) {
-                if (ui.item === null) {
-                    $("#solicitanteId").val('');
-                    $("#solicitanteFiltro").val('');
-                }
+        $("#filtrarPor").on("change", function() {
+            let filtrarPor = $("#filtrarPor").val();
+            if (filtrarPor == 1){
+                $("#sectionDataEntradaInicial").attr('hidden', true);
+                $("#sectionDataEntradaInicial").addClass('hidden');
+                $("#sectionDataEntradaFinal").attr('hidden', true);
+                $("#sectionDataEntradaFinal").addClass('hidden');
+                $("#sectionSituacao").attr('hidden', true);
+                $("#sectionSituacao").addClass('hidden');
+                $("#sectionSituacaoItem").attr('hidden', true);
+                $("#sectionSituacaoItem").addClass('hidden');
+                $("#sectionFechado").attr('hidden', false);
+                $("#sectionFechado").removeClass('hidden');
+                listarFiltro();
             }
-        }).data("ui-autocomplete")._renderItem = function(ul, item) {
-            return $("<li>")
-                .append("<a>" + highlight(item.label, this.term) + "</a>")
-                .appendTo(ul);
-        };
-
-        $("#responsavelFornecimento").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        maxRows: 12,
-                        funcao: "listaSolicitanteAtivoAutoComplete",
-                        descricaoIniciaCom: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                id: item.id,
-                                label: item.descricao,
-                                value: item.descricao,
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 3,
-
-            select: function(event, ui) {
-                $("#responsavelFornecimentoId").val(ui.item.id);
-                $("#responsavelFornecimentoFiltro").val(ui.item.nome);
-                var descricaoId = $("#responsavelFornecimentoId").val();
-                $("#responsavelFornecimento").val(descricaoId)
-                $("#responsavelFornecimentoFiltro").val('');
-
-            },
-            change: function(event, ui) {
-                if (ui.item === null) {
-                    $("#responsavelFornecimentoId").val('');
-                    $("#responsavelFornecimentoFiltro").val('');
-                }
+            if (filtrarPor == 0){
+                $("#sectionDataEntradaInicial").attr('hidden', false);
+                $("#sectionDataEntradaInicial").removeClass('hidden');
+                $("#sectionDataEntradaFinal").attr('hidden', false);
+                $("#sectionDataEntradaFinal").removeClass('hidden');
+                $("#sectionSituacao").attr('hidden', false);
+                $("#sectionSituacao").removeClass('hidden');
+                $("#sectionSituacaoItem").attr('hidden', false);
+                $("#sectionSituacaoItem").removeClass('hidden');
+                $("#sectionFechado").attr('hidden', true);
+                $("#sectionFechado").removeClass('hidden');
+                listarFiltro();
             }
-        }).data("ui-autocomplete")._renderItem = function(ul, item) {
-            return $("<li>")
-                .append("<a>" + highlight(item.label, this.term) + "</a>")
-                .appendTo(ul);
-        };
+        });
 
         $("#clienteFornecedor").autocomplete({
             source: function(request, response) {
@@ -507,32 +496,96 @@ include("inc/scripts.php");
     });
 
     function novo() {
-        $(location).attr('href', 'estoque_pedidoMaterialCadastro.php');
+        $(location).attr('href', 'estoque_saidaMaterialCadastro.php');
+    }
+
+    function popularComboEstoque() {
+        var unidade = +$("#unidade").val()
+        $("#grupoItem").val("")
+        $("#grupoItem").prop("disabled", true)
+        $("#grupoItem").addClass("readonly")
+        if (unidade != 0) {
+            populaComboEstoque(unidade,
+                function(data) {
+                    var atributoId = '#' + 'estoque';
+                    if (data.indexOf('failed') > -1) {
+                        smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
+                        $("#unidade").focus()
+                        $("#estoque").val("")
+                        $("#estoque").prop("disabled", true)
+                        $("#estoque").addClass("readonly")
+                        return;
+                    } else {
+                        $("#estoque").prop("disabled", false)
+                        $("#estoque").removeClass("readonly")
+                        data = data.replace(/failed/g, '');
+                        var piece = data.split("#");
+
+                        var mensagem = piece[0];
+                        var qtdRegs = piece[1];
+                        var arrayRegistros = piece[2].split("|");
+                        var registro = "";
+
+                        $(atributoId).html('');
+                        $(atributoId).append('<option></option>');
+
+                        for (var i = 0; i < qtdRegs; i++) {
+                            registro = arrayRegistros[i].split("^");
+                            $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
+                        }
+                    }
+                }
+            );
+        }
     }
 
     function listarFiltro() {
-        var clienteFornecedorId = $('#clienteFornecedorId').val();
-        var solicitanteId = $('#solicitanteId').val();
-        var projeto = $('#projeto').val();
-        var responsavelFornecimentoId = $('#responsavelFornecimentoId').val();
-        var dataInicial = $('#dataInicial').val();
-        var dataFinal = $('#dataFinal').val();
-        var aprovado = $('#aprovado').val();
-        var tipo = $('#tipo').val();
         var codigoItemId = $('#codigoItemId').val();
+        var situacao = $('#situacao').val();
+        var situacaoItem = $('#situacaoItem').val();
+        var unidade = $('#unidade').val();
+        var estoque = $('#estoque').val();
+        var clienteFornecedorId = $('#clienteFornecedorId').val();
+        var numero = $('#numero').val();
+        var dataInicialEmissao = $('#dataInicialEmissao').val();
+        var dataFinalEmissao = $('#dataFinalEmissao').val();
+        var dataEntradaInicial = $('#dataEntradaInicial').val();
+        var dataEntradaFinal = $('#dataEntradaFinal').val();
+        var filtrarPor = $('#filtrarPor').val();
+
+        if (filtrarPor == 0) {
+            $('#resultadoBusca').load('estoque_saidaMaterialMFiltroListagem.php?', {
+                codigoItemId: codigoItemId,
+                situacao: situacao,
+                situacaoItem: situacaoItem,
+                unidade: unidade,
+                estoque: estoque,
+                clienteFornecedorId: clienteFornecedorId,
+                numero: numero,
+                dataEmissaoNFInicial: dataInicialEmissao,
+                dataEmissaoNFFinal: dataFinalEmissao,
+                dataEntradaInicial: dataEntradaInicial,
+                dataEntradaFinal: dataEntradaFinal
+
+            });
+        }
+        if (filtrarPor == 1) {
+            $('#resultadoBusca').load('estoque_saidaMaterialSFiltroListagem.php?', {
+                codigoItemId: codigoItemId,
+                situacao: situacao,
+                situacaoItem: situacaoItem,
+                unidade: unidade,
+                estoque: estoque,
+                clienteFornecedorId: clienteFornecedorId,
+                numero: numero,
+                dataEmissaoNFInicial: dataInicialEmissao,
+                dataEmissaoNFFinal: dataFinalEmissao,
+                dataEntradaInicial: dataEntradaInicial,
+                dataEntradaFinal: dataEntradaFinal
+
+            });
+        }
 
 
-        $('#resultadoBusca').load('estoque_pedidoMaterialFiltroListagem.php?', {
-            clienteFornecedorId: clienteFornecedorId,
-            solicitanteId: solicitanteId,
-            projeto: projeto,
-            responsavelFornecimentoId: responsavelFornecimentoId,
-            dataInicial: dataInicial,
-            dataFinal: dataFinal,
-            aprovado: aprovado,
-            tipo: tipo,
-            codigoItemId: codigoItemId
-
-        });
     }
 </script>

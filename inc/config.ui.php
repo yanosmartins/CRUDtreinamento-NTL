@@ -528,6 +528,10 @@ if ($condicaoEstoqueOk) {
         if (in_array('UNIDADEITEM_ACESSAR', $arrayPermissao, true)) {
             $page_nav['estoque']['sub']['tabela']['sub'] += array("unidadeItem" => array("title" => "Unidade do item", "url" => APP_URL . "/tabelaBasica_unidadeItemFiltro.php"));
         }
+
+        if (in_array('UNIDADEITEM_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['estoque']['sub']['tabela']['sub'] += array("naturezaOperacao" => array("title" => "Natureza Operação", "url" => APP_URL . "/tabelaBasica_naturezaOperacaoFiltro.php"));
+        }
     }
 
     if (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true)) {
@@ -562,6 +566,12 @@ if ($condicaoEstoqueOk) {
         }
         if (in_array('DEVOLUCAOMATERIAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['estoque']['sub']['operacao']['sub'] += array("devolucaoMaterial" => array("title" => "Devolução Material", "url" => APP_URL . "/estoque_devolucaoMaterialFiltro.php"));
+        }
+        if (in_array('DEVOLUCAOMATERIAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['estoque']['sub']['operacao']['sub'] += array("transferenciaMaterial" => array("title" => "Transferência Material", "url" => APP_URL . "/estoque_transferenciaMaterialCadastro.php"));
+        }
+        if (in_array('DEVOLUCAOMATERIAL_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['estoque']['sub']['operacao']['sub'] += array("saidaMaterial" => array("title" => "Saída Material", "url" => APP_URL . "/estoque_saidaMaterialFiltro.php"));
         }
 
     }
