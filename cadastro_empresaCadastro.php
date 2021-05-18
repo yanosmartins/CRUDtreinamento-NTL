@@ -1,8 +1,9 @@
 <?php
 //Inicializa a página
 require_once("inc/init.php");
-
+include_once("populaTabela/popula.php");
 //Requer a configuração de UI (nav, ribbon, etc.)
+require_once("inc/config.ui.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de perminssão sempre abaixo de require_once("inc/config.ui.php");
@@ -117,6 +118,16 @@ include("inc/nav.php");
                                   <input id="responsavelRecebimento" name="responsavelRecebimento" style="text-align: left;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
+                              <section class="col col-2">
+                                <label class="label " for="grauRisco">Grau Risco</label>
+                                <label class="select ">
+                                  <select id="grauRisco" name="grauRisco" class="">
+                                    <?php
+                                    echo populaGrauRisco();
+                                    ?>
+                                  </select><i></i>
+                                </label>
+                              </section>
                             </div>
                             <div class="row">
                               <section class="col col-2">
@@ -127,7 +138,7 @@ include("inc/nav.php");
                               </section>
                             </div>
                             <div class="row">
-                            <section class="col col-2">
+                              <section class="col col-2">
                                 <label class="label" for="tipoLogradouro">Tipo Logradouro</label>
                                 <label class="input">
                                   <input class="required" id="tipoLogradouro" name="tipoLogradouro" maxlength="255" autocomplete="off">
@@ -271,28 +282,28 @@ include("inc/scripts.php");
     $("#cep").mask("99999-999");
 
     $("#cep").on("focusout", function() {
-            var cep = $("#cep").val();
-            var funcao = 'recuperaCepTipoLogradouro';
+      var cep = $("#cep").val();
+      var funcao = 'recuperaCepTipoLogradouro';
 
-            $.ajax({
-                method: 'POST',
-                url: 'js/sqlscope.php',
-                data: {
-                    funcao,
-                    cep
-                },
-                success: function(data) {
-                    var status = data.split('#');
-                    var piece = status[1].split('^');
-                    $("#tipoLogradouro").val(piece[0]);
-                    $("#logradouro").val(piece[1]);
-                    $("#bairro").val(piece[2]);
-                    $("#cidade").val(piece[3]);
-                    $("#ufLogradouro").val(piece[4]);
-                    return;
-                }
-            });
-        });
+      $.ajax({
+        method: 'POST',
+        url: 'js/sqlscope.php',
+        data: {
+          funcao,
+          cep
+        },
+        success: function(data) {
+          var status = data.split('#');
+          var piece = status[1].split('^');
+          $("#tipoLogradouro").val(piece[0]);
+          $("#logradouro").val(piece[1]);
+          $("#bairro").val(piece[2]);
+          $("#cidade").val(piece[3]);
+          $("#ufLogradouro").val(piece[4]);
+          return;
+        }
+      });
+    });
 
     $("#btnGravar").on("click", function() {
       gravar();
@@ -325,6 +336,7 @@ include("inc/scripts.php");
     var uf = $("#ufLogradouro").val();
     var cidade = $("#cidade").val();
     var bairro = $("#bairro").val();
+    var grauRisco = $("#grauRisco").val();
 
     // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
     if (!nome) {
@@ -341,7 +353,7 @@ include("inc/scripts.php");
       smartAlert("Erro", "Informe o nome Departamento.", "error");
       return;
     }
-    
+
     if (!responsavelRecebimento) {
       smartAlert("Erro", "Informe o Responsavel Recebimento.", "error");
       return;
@@ -371,20 +383,20 @@ include("inc/scripts.php");
       smartAlert("Erro", "Informe o numero.", "error");
       return;
     }
-    
+
     if (!cidade) {
       smartAlert("Erro", "Informe o cidade.", "error");
       return;
     }
-       
+
     if (!bairro) {
       smartAlert("Erro", "Informe o bairro.", "error");
       return;
     }
 
 
-    gravaEmpresa(codigo,ativo,nome,codigoDepartamento,nomeDepartamento,responsavelRecebimento,
-     cep,tipoLogradouro,logradouro,numero,complemento,uf,cidade,bairro,
+    gravaEmpresa(codigo, ativo, nome, codigoDepartamento, nomeDepartamento, responsavelRecebimento,
+      cep, tipoLogradouro, logradouro, numero, complemento, uf, cidade, bairro, grauRisco,
       function(data) {
 
         if (data.indexOf('sucess') < 0) {
@@ -440,6 +452,8 @@ include("inc/scripts.php");
             var bairro = piece[11];
             var cidade = piece[12];
             var uf = piece[13];
+            var grauRisco = piece[14];
+
 
             $("#codigo").val(codigo);
             $("#ativo").val(ativo);
@@ -455,6 +469,7 @@ include("inc/scripts.php");
             $("#bairro").val(bairro);
             $("#cidade").val(cidade);
             $("#ufLogradouro").val(uf);
+            $("#grauRisco").val(grauRisco);
           }
         );
       }

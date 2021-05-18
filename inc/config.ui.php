@@ -141,6 +141,9 @@ if ($condicaoCadastroOk) {
     if (in_array('FERIADO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("feriado" => array("title" => "Feriado", "url" => APP_URL . "/cadastro_feriadoFiltro.php")); //SYSCB 
     }
+       if (in_array('EMPRESA_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['cadastro']['sub'] += array("empresa" => array("title" => "Empresa", "url" => APP_URL . "/cadastro_empresaCadastro.php?codigo=1")); //SYSCB 
+    }
     if (in_array('FORNECEDOR_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("fornecedor" => array("title" => "Fornecedor", "url" => APP_URL . "/cadastro_fornecedorFiltro.php")); //SYSCB
     }
@@ -197,10 +200,13 @@ if ($condicaoBeneficioOk) {
         if (in_array('CONVENIOSAUDE_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['cadastro']['sub'] += array("convenioSaude" => array("title" => "Convênio de Saúde", "url" => APP_URL . "/cadastro_convenioSaudeFiltro.php"));
         }
-   
 
         if (in_array('PRODUTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['cadastro']['sub'] += array("produto" => array("title" => "Produto", "url" => APP_URL . "/cadastro_produtoFiltro.php")); //SYSCB
+        }
+
+        if (in_array('PRODUTOBENEFICIO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['cadastro']['sub'] += array("produtoBeneficio" => array("title" => "Produto Beneficio", "url" => APP_URL . "/beneficio_produtoBeneficioFiltro.php")); //SYSCB
         }
 
         if (in_array('VALETRANSPORTEUNITARIO_ACESSAR', $arrayPermissao, true)) {
