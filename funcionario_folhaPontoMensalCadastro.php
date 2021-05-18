@@ -2093,8 +2093,20 @@ include("inc/scripts.php");
 
     function enviarPDF() {
         const file = $("#fileUpload")[0].files[0];
+        const funcionario = $("#funcionario").val();
+        const data = new Date()
+        const formData = new FormData();
+
+        formData.append('funcionario', funcionario);
+        formData.append('file', file, `${data.getFullYear()}${data.getMonth()}${data.getDate()}${data.getMilliseconds()}.pdf`);
+
+        for (let value of formData) {
+            console.table(value)
+        }
+
         $("#btnEnviarArquivo").prop('disabled', true);
-        enviarArquivo(file, function(data) {
+
+        enviarArquivo(formData, function(data) {
             if (data.indexOf('sucess') < 0) {
                 var piece = data.split("#");
                 var mensagem = piece[1];

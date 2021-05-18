@@ -4,9 +4,6 @@ include "repositorio.php";
 include "girComum.php";
 
 $funcao = $_POST["funcao"];
-$_GET["funcao"];
-$_REQUEST[""];
-$_FILES[""];
 
 $pattern = "/(consultarLancamento|grava|recupera|excluir|consultarPermissoes|enviarFolha)/i";
 
@@ -443,28 +440,64 @@ function consultarPermissoes()
 function enviarFolha()
 {
 
-    $dir_temp = "uploads";
-    $dir_name = "pontos-eletronicos";
-    $dir_name = $dir_temp . DIRECTORY_SEPARATOR . $dir_name;
+    session_start();
+    $usuario = $_SESSION['login'];
+
+    //=========UPLOAD=========//
+
+    $dir_uploads = ".." . DIRECTORY_SEPARATOR . "uploads";
+    $dir_pontos = DIRECTORY_SEPARATOR . "pontos_eletronicos";
+    $dir_total = $dir_uploads . $dir_pontos;
 
 
-    if (!is_dir($dir_temp)) {
-        mkdir($dir_temp);
-        mkdir($dir_name);
+    if (!is_dir($dir_uploads)) {
+        mkdir($dir_uploads);
     }
 
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $file = $_FILES["fileUpload"];
+    if (!is_dir($dir_total)) {
+        mkdir($dir_total);
+    }
 
-        if ($file["error"]) {
-            return "failed#" . "Error: " . $file["error"] . "#";
-        }
+    $out = "";
+    $funcionario = $_POST["funcionario"];
+    $file = $_FILES["file"];
 
-        if (move_uploaded_file($file["tmp_name"], $dir_name . "pontoEletronico" . "-" . date("Y-m-d"))) {
+    if ($file["error"]) {
+        $out = "Error: " . $file["error"] . "#";
+        echo "failed#" . $out;
+        return;
+    }
 
-            return "sucess#" . "Upload realizado com sucesso!" . "#";
-        } else {
-            return "failed#" . "Não foi possível realizar o upload." . "#";
-        }
+    $file_name = $funcionario . "_" . date("Ymd_Hisu") . ".pdf";
+    $file_path = $dir_total . DIRECTORY_SEPARATOR . $file_name;
+
+    if (move_uploaded_file($file["tmp_name"], $file_path)) {
+        $out = "Upload realizado com sucesso!#";
+    } else {
+        $out = "Não foi possível realizar o upload.#";
+        echo "failed#" . $out;
+        return;
+    }
+
+    //=========SQL=========//
+
+    $reposit = new reposit();
+
+    $sql = "Funcionario.logUploadFolhaPonto_Atualiza
+    '$file_path',
+    '$funcionario',
+    '$usuario'
+    ";
+
+    $result = $reposit->Execprocedure($sql);
+
+    if ($result < 1) {
+        unlink($file_path);
+        $out = "Não foi possível realizar o upload.#";
+        echo "failed#".$out;
+        return;
+    } else {
+        echo "sucess#" . $out;
+        return;
     }
 }
