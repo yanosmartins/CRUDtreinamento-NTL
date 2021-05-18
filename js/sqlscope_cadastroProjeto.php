@@ -227,6 +227,44 @@ function gravaProjeto()
     $xmlFolga = "'" . $xmlFolga . "'";
 
 
+    //responsavel
+
+    //Inicio do Json Encargo
+    $strJsonResponsavel = $projeto["jsonResponsavel"];
+    $arrayJsonResponsavel = json_decode($strJsonResponsavel, true);
+    $xmlJsonResponsavel = "";
+    $nomeXml = "ArrayOfResponsavel";
+    $nomeTabela = "projetoResponsavel";
+    if (sizeof($arrayJsonResponsavel) > 0) {
+        $xmlJsonResponsavel = '<?xml version="1.0"?>';
+        $xmlJsonResponsavel = $xmlJsonResponsavel . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        foreach ($arrayJsonResponsavel as $chave) {
+            $xmlJsonResponsavel = $xmlJsonResponsavel . "<" . $nomeTabela . ">";
+            foreach ($chave as $campo => $valor) {
+                if (($campo === "sequencialResponsavel")) {
+                    continue;
+                }
+                if (($campo === "responsavelLoginDescricao")) {
+                    continue;
+                }
+                $xmlJsonResponsavel = $xmlJsonResponsavel . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+            }
+            $xmlJsonResponsavel = $xmlJsonResponsavel . "</" . $nomeTabela . ">";
+        }
+        $xmlJsonResponsavel = $xmlJsonResponsavel . "</" . $nomeXml . ">";
+    } else {
+        $xmlJsonResponsavel = '<?xml version="1.0"?>';
+        $xmlJsonResponsavel = $xmlJsonResponsavel . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlJsonResponsavel = $xmlJsonResponsavel . "</" . $nomeXml . ">";
+    }
+    $xml = simplexml_load_string($xmlJsonResponsavel);
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML de telefone";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+    $xmlJsonResponsavel = "'" . $xmlJsonResponsavel . "'";
+    //Fim do Json Encargo
 
     $sql = "Ntl.projeto_Atualiza
         $codigo,
@@ -291,7 +329,8 @@ function gravaProjeto()
         $usuario,
         $limiteEntrada,
         $limiteSaida,
-        $imprimeCargo";
+        $imprimeCargo,
+        $xmlJsonResponsavel";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -320,7 +359,7 @@ function recuperaProjeto()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
         $id = +$row['codigo'];
         $cnpj = $row['cnpj'];
@@ -445,31 +484,31 @@ function recuperaProjeto()
             $descontoFolhaVAVR . "^" .
             $valorDescontoFolhaVAVR . "^" .
 
-            $diaUtilJaneiroVT . "^" . 
-            $diaUtilFevereiroVT . "^" . 
-            $diaUtilMarcoVT . "^" . 
-            $diaUtilAbrilVT . "^" . 
+            $diaUtilJaneiroVT . "^" .
+            $diaUtilFevereiroVT . "^" .
+            $diaUtilMarcoVT . "^" .
+            $diaUtilAbrilVT . "^" .
             $diaUtilMaioVT . "^" .
-            $diaUtilJunhoVT . "^" . 
-            $diaUtilJulhoVT . "^" . 
-            $diaUtilAgostoVT . "^" . 
+            $diaUtilJunhoVT . "^" .
+            $diaUtilJulhoVT . "^" .
+            $diaUtilAgostoVT . "^" .
             $diaUtilSetembroVT . "^" .
-            $diaUtilOutubroVT . "^" . 
-            $diaUtilNovembroVT . "^" . 
+            $diaUtilOutubroVT . "^" .
+            $diaUtilNovembroVT . "^" .
             $diaUtilDezembroVT . "^" .
-            $descontoVT . "^" . 
-            $descontoFeriasVT . "^" . 
-            $valorDiarioVT . "^" .  
-            $valorMensalVT . "^" . 
-            $descontoFolhaVT . "^" .  
-            $valorDescontoFolhaVT . "^" .  
-            $numeroCentroCusto . "^" .  
-            $descontoFolhaPlanoSaude . "^" .  
-            $valorDescontoFolhaPlanoSaude . "^" . 
-            $municipioFerias . "^" . 
-            $razaoSocial . "^" . 
-            $limiteEntrada . "^" . 
-            $limiteSaida . "^" . 
+            $descontoVT . "^" .
+            $descontoFeriasVT . "^" .
+            $valorDiarioVT . "^" .
+            $valorMensalVT . "^" .
+            $descontoFolhaVT . "^" .
+            $valorDescontoFolhaVT . "^" .
+            $numeroCentroCusto . "^" .
+            $descontoFolhaPlanoSaude . "^" .
+            $valorDescontoFolhaPlanoSaude . "^" .
+            $municipioFerias . "^" .
+            $razaoSocial . "^" .
+            $limiteEntrada . "^" .
+            $limiteSaida . "^" .
             $imprimeCargo;
 
         //----------------------Montando o array do Telefone
@@ -480,7 +519,7 @@ function recuperaProjeto()
         $result = $reposit->RunQuery($sql);
         $contadorTelefone = 0;
         $arrayTelefone = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
 
             $telefoneId = $row['codigo'];
             $telefone = $row['telefone'];
@@ -520,7 +559,7 @@ function recuperaProjeto()
 
         $contadorEmail = 0;
         $arrayEmail = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
 
             $emailId = $row['codigo'];
             $email = $row['email'];
@@ -552,7 +591,7 @@ function recuperaProjeto()
 
         $contadorFolga = 0;
         $arrayFolga = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
 
             $folgaId = $row['codigo'];
             $descricaoFolga = $row['descricaoFolga'];
@@ -599,11 +638,38 @@ function recuperaProjeto()
         }
         $strArrayFolga = json_encode($arrayFolga);
 
+        //----------------------Montando o array do Responsavel
+        $sql = "SELECT  R.codigo,R.projeto,R.responsavelLogin,U.login
+                 FROM Ntl.projeto P 
+                INNER JOIN Ntl.projetoResponsavel R ON P.codigo = R.projeto 
+                LEFT JOIN Ntl.usuario U ON U.codigo = R.responsavelLogin
+                WHERE P.codigo = " . $id;
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+        $contadorResponsavel = 0;
+        $arrayResponsavel = array();
+        foreach ($result as $row) {
+
+            $responsavelId = $row['codigo'];
+            $responsavelLogin = $row['responsavelLogin'];
+            $login = $row['login'];
+
+            $contadorResponsavel = $contadorResponsavel + 1;
+            $arrayResponsavel[] = array(
+                "sequencialResponsavel" => $contadorResponsavel,
+                "responsavelId" => $responsavelId,
+                "responsavelLogin" => $responsavelLogin,
+                "responsavelLoginDescricao" => $login
+            );
+        }
+        $strArrayResponsavel = json_encode($arrayResponsavel);
+
+
         if ($out == "") {
             echo "failed#";
             return;
         } else {
-            echo "sucess#" . $out . "#" . $strArrayTelefone . "#" . $strArrayEmail . "#" . $strArrayFolga;
+            echo "sucess#" . $out . "#" . $strArrayTelefone . "#" . $strArrayEmail . "#" . $strArrayFolga . '#' . $strArrayResponsavel;
             return;
         }
     }
@@ -630,7 +696,7 @@ function excluirProjeto()
         return;
     }
 
-    
+
     $reposit = new reposit();
     $result = $reposit->update('Ntl.projeto' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
@@ -664,7 +730,7 @@ function listaProjetoAtivoAutoComplete()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    foreach($result as $row) {
+    foreach ($result as $row) {
         $id = $row['codigo'];
         $descricao = $row["descricao"];
         $contador = $contador + 1;
