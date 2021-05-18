@@ -133,13 +133,22 @@ include("inc/nav.php");
                                                             </section>
                                                             
                                                             <section class="col col-2">
-                                                                <label class="label" for="dataValidadeAso">Validade ASO </label>
+                                                                <label class="label" for="dataValidadeAsoInicio">Validade ASO Inicio</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataValidadeAso" name="dataValidadeAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="dataValidadeAsoInicio" name="dataValidadeAsoInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            
+
+                                                            <section class="col col-2">
+                                                                <label class="label" for="dataValidadeAsoFim">Validade ASO Fim</label>
+                                                                <label class="input">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                    <input id="dataValidadeAsoFim" name="dataValidadeAsoFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                </label>
+                                                            </section>
+                                                            </div>
+                                                            <div class="row">
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="vencido"> Dias vencido</label>
                                                                 <label class="select">
@@ -149,14 +158,12 @@ include("inc/nav.php");
                                                                         <option value='2'>Não</option>
                                                                     </select><i></i>
                                                                     </section>
-                                                            </div>
-                                                            <div class="row">
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo" class="" required>
-                                                                    <option ></option>
-                                                                        <option value='1'>Sim</option>
+                                                                    <option></option>
+                                                                        <option value='1' selected>Sim</option>
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>
                                                                 </label>
@@ -243,7 +250,8 @@ include("inc/scripts.php");
         var funcionario = +$('#funcionario').val();
         var projeto = +$("#projeto").val();
         var ativo = $("#ativo").val();
-        var dataValidadeAso = $("#dataValidadeAso").val();
+        var dataValidadeAsoInicio = $("#dataValidadeAsoInicio").val();
+        var dataValidadeAsoFim = $("#dataValidadeAsoFim").val();
         var vencido = $("#vencido").val();
         var idadeInicio = +$("#idadeInicio").val();
         var idadeFim = +$("#idadeFim").val();
@@ -252,7 +260,8 @@ include("inc/scripts.php");
         parametrosUrl = '&funcionario=' + funcionario +
             '&projeto=' + projeto +
             '&ativo=' + ativo +
-            '&dataValidadeAso=' + dataValidadeAso +
+            '&dataValidadeAsoInicio=' + dataValidadeAsoInicio +
+            '&dataValidadeAsoFim=' + dataValidadeAsoFim +
             '&vencido=' + vencido +
             '&idadeInicio=' + idadeInicio +
             '&idadeFim=' + idadeFim;

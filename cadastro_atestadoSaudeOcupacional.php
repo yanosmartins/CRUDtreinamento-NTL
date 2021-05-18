@@ -25,9 +25,11 @@ if ($condicaoGravarOK === false) {
 }
 $esconderGestor = "";
 $funcionario = "";
+$esconderData = "datepicker";
 if ($condicaoGestorOK === false) {
     $esconderGestor = "none";
     $funcionario = "readonly";
+    $esconderData = "readonly";
 }
 
 
@@ -215,8 +217,8 @@ include("inc/nav.php");
                                                                 <label class="label" for="dataAgendamento">Data de Agendamento</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataAgendamento" name="dataAgendamento" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
-                                                          
+                                                                    <input id="dataAgendamento" name="dataAgendamento" <?php echo $funcionario ?> type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="<?php echo $esconderData ?>" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off" style="touch-action: none;">
+
                                                                 </label>
                                                             </section>
 
@@ -245,7 +247,7 @@ include("inc/nav.php");
                                                             <div id="formDataAso" class="col-sm-12">
                                                                 <input id="dataAsoId" name="dataAsoId" type="hidden" value="">
                                                                 <input id="sequencialDataAso" name="sequencialDataAso" type="hidden" value="">
-
+                                                                <input id="descricaoTipoExame" name="descricaoTipoExame" type="hidden" value="">
 
                                                                 <section class="col col-2">
                                                                     <label class="label" for="dataRealizacaoAso">Data da realização do ASO</label>
@@ -255,16 +257,29 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2 col-auto">
-                                                                    <label class="label" for="situacao" style="display:<?php echo $esconderGestor ?>">Situação</label>
+                                                                    <label class="label" for="tipoExame">Tipo do exame</label>
+                                                                    <label class="select">
+                                                                        <select id="tipoExame" name="tipoExame">
+
+                                                                            <option value='1'>Exame Admissional</option>
+                                                                            <option value='2'>Exame Periódico</option>
+                                                                            <option value='3'>Mudança de Risco Ocupacional</option>
+                                                                            <option value='4'>Retorno ao Trabalho</option>
+                                                                        </select><i></i>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2 col-auto" style="display:<?php echo $esconderGestor ?>">
+                                                                    <label class="label" for="situacao">Situação</label>
                                                                     <label class="select">
                                                                         <select id="situacao" name="situacao" readonly style="display:<?php echo $esconderGestor ?>">
 
                                                                             <option value='A'>Aberto</option>
                                                                             <option value='F'>Fechado</option>
                                                                             <option value='P'>Pendente</option>
-                                                                       </select>
+                                                                        </select><i></i>
                                                                     </label>
                                                                 </section>
+                                                                
                                                                 <!-- <section class="col col-2">
                                                                 <label class="label" for="comprovanteAso">Comprovante do ASO</label>
                                                                 <label class="input">
@@ -295,8 +310,9 @@ include("inc/nav.php");
                                                                 <thead>
                                                                     <tr role="row">
                                                                         <th style="width: 2px"></th>
-                                                                        <th class="text-center">Data da validade ASO</th>
                                                                         <th class="text-center">Data da realização do ASO</th>
+                                                                        <th class="text-center">Data da validade ASO</th>
+                                                                        <th class="text-center">Tipo do exame</th>
                                                                         <th class="text-center">Situação</th>
 
                                                                     </tr>
@@ -304,9 +320,6 @@ include("inc/nav.php");
                                                                 <tbody>
                                                                 </tbody>
                                                             </table>
-
-                                                        </div>
-                                                        <div class="row">
 
                                                         </div>
                                                     </fieldset>
@@ -452,39 +465,59 @@ include("inc/scripts.php");
                 return;
             } else {
                 let situacao = $("#situacao").val();
-                var dataIdade = new Date();
+                var idade = $("#idade").val();
 
                 if (situacao == 'F') {
-                    let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val()
 
+                    let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val()
                     $("#dataUltimoAso").val(dataRealizacaoAsoValor)
+
                     if ((idade < 18) || (idade > 45)) {
-                        let idade = $("#idade").val();
-                        aux = dataRealizacaoAsoValor.split('/')
-                        aux[2] = Number(aux[2]) + 1
-                        dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        calculaIdadeFutura();
+                        if ((idade < 18) && (quantos_anos > 18)) {
+                            aux = dataRealizacaoAsoValor.split('/')
+                            aux[2] = Number(aux[2]) + 2
+                            dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        } else {
+                            aux = dataRealizacaoAsoValor.split('/')
+                            aux[2] = Number(aux[2]) + 1
+                            dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        }
                     } else {
                         aux = dataRealizacaoAsoValor.split('/')
                         aux[2] = Number(aux[2]) + 2
                         dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
                     }
+
                     $("#dataProximoAso").val(dataRealizacaoAsoValor)
                     addDataAso();
+
                 } else {
                     let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val()
-
                     if ((idade < 18) || (idade > 45)) {
-                        let idade = $("#idade").val();
-                        aux = dataRealizacaoAsoValor.split('/')
-                        aux[2] = Number(aux[2]) + 1
-                        dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        calculaIdadeFutura();
+                        if ((idade < 18) && (quantos_anos > 18)) {
+                            aux = dataRealizacaoAsoValor.split('/')
+                            aux[2] = Number(aux[2]) + 2
+                            dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        } else {
+                            aux = dataRealizacaoAsoValor.split('/')
+                            aux[2] = Number(aux[2]) + 1
+                            dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        }
                     } else {
-                        aux = dataRealizacaoAsoValor.split('/')
-                        aux[2] = Number(aux[2]) + 2
-                        dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        calculaIdadeFutura();
+                        if (quantos_anos > 45) {
+                            aux = dataRealizacaoAsoValor.split('/')
+                            aux[2] = Number(aux[2]) + 1
+                            dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        } else {
+                            aux = dataRealizacaoAsoValor.split('/')
+                            aux[2] = Number(aux[2]) + 2
+                            dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        }
                     }
                     $("#dataProximoAso").val(dataRealizacaoAsoValor)
-
                     addDataAso();
                 }
 
@@ -493,9 +526,7 @@ include("inc/scripts.php");
         });
 
         $("#btnRemoverDataAso").on("click", function() {
-
-             excluirDataAso();
-           
+            excluirDataAso();
         });
 
         $("#btnNovo").on("click", function() {
@@ -641,6 +672,7 @@ include("inc/scripts.php");
         $("#dataRealizacaoAso").val('');
         $("#dataProximoAsoLista").val('');
         $("#situacao").val('');
+        $("#tipoExame").val('');
     }
 
     function addDataAso() {
@@ -691,13 +723,16 @@ include("inc/scripts.php");
             var row = $('<tr />');
             $("#tableDataAso tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox " value="' + jsonDataAsoArray[i].sequencialDataAso + '"><i></i></label></td>'));
-            row.append($('<td class="text-center" >' + jsonDataAsoArray[i].dataProximoAsoLista + '</td>'));
             let situacao = $("#situacao").val()
             if ((situacao == 'F') || (jsonDataAsoArray[i].situacao == 'F')) {
                 row.append($('<td class="text-center" >' + jsonDataAsoArray[i].dataRealizacaoAso + '</td>'));
             } else {
                 row.append($('<td class="text-center" onclick="carregaDataAso(' + jsonDataAsoArray[i].sequencialDataAso + ');">' + jsonDataAsoArray[i].dataRealizacaoAso + '</td>'));
             }
+            row.append($('<td class="text-center" >' + jsonDataAsoArray[i].dataProximoAsoLista + '</td>'));
+
+            row.append($('<td class="text-center" >' + jsonDataAsoArray[i].descricaoTipoExame + '</td>'));
+
             row.append($('<td class="text-center" >' + jsonDataAsoArray[i].situacao + '</td>'));
 
         }
@@ -740,6 +775,17 @@ include("inc/scripts.php");
             };
         }
 
+        if (fieldName !== '' && (fieldId === "descricaoTipoExame")) {
+            var descricaoTipoExame = $("#tipoExame option:selected").text();
+            if (descricaoTipoExame !== '') {
+                fieldName = "descricaoTipoExame";
+            }
+            return {
+                name: fieldName,
+                value: descricaoTipoExame
+            };
+        }
+
         return false;
     }
 
@@ -755,7 +801,9 @@ include("inc/scripts.php");
             $("#sequencialDataAso").val(item.sequencialDataAso);
             $("#dataProximoAsoLista").val(item.dataProximoAsoLista);
             $("#dataRealizacaoAso").val(item.dataRealizacaoAso);
+            $("#tipoExame").val(item.tipoExame);
             $("#situacao").val(item.situacao);
+            
 
         }
     }
@@ -768,6 +816,9 @@ include("inc/scripts.php");
         if (arrSequencial.length > 0) {
             for (i = jsonDataAsoArray.length - 1; i >= 0; i--) {
                 var obj = jsonDataAsoArray[i];
+                if ((obj.sequencialDataAso == arrSequencial) && (obj.situacao == 'F')) {
+                    return;
+                };
                 if (jQuery.inArray(obj.sequencialDataAso, arrSequencial) > -1) {
                     jsonDataAsoArray.splice(i, 1);
                 }
@@ -900,9 +951,9 @@ include("inc/scripts.php");
             }
         );
     }
-    
 
-    
+
+
 
 
     function recuperarDadosFuncionarioASO() {
@@ -921,7 +972,7 @@ include("inc/scripts.php");
                     data = data.replace(/failed/g, '');
                     var piece = data.split("#");
                     var mensagem = piece[0];
-                    var registros = piece[1].split("^"); 
+                    var registros = piece[1].split("^");
                     var $strArrayDataAso = piece[2];
                     var matricula = registros[2];
                     var cargo = registros[3];
@@ -935,7 +986,7 @@ include("inc/scripts.php");
                     var dataUltimoAso = registros[11];
                     var dataValidadeAso = registros[12];
                     var dataAgendamento = registros[13];
-                    
+
 
 
                     $("#matricula").val(matricula);
@@ -980,5 +1031,35 @@ include("inc/scripts.php");
             $("#diasAtraso").val('')
         }
         return
+    }
+
+    function calculaIdadeFutura(anoAniversario, mesAniversario, diaAniversario, anoFuturo, mesFuturo, diaFuturo) {
+
+        dataValidadeAsoIdade = $("#dataProximoAso").val();
+        aux = dataValidadeAsoIdade.split('/')
+        diaFuturo = aux[0];
+        mesFuturo = aux[1];
+        anoFuturo = aux[2];
+
+        ano_atual = anoFuturo,
+            mes_atual = Number(mesFuturo) + 1,
+            dia_atual = diaFuturo,
+
+            dataNascimentoIdade = $("#dataNascimento").val();
+        aux = dataNascimentoIdade.split('/')
+        diaAniversario = aux[0];
+        mesAniversario = aux[1];
+        anoAniversario = aux[2];
+
+        ano_aniversario = +anoAniversario,
+            mes_aniversario = +mesAniversario,
+            dia_aniversario = +diaAniversario,
+
+            quantos_anos = ano_atual - ano_aniversario;
+
+        if (mes_atual < mes_aniversario || mes_atual == mes_aniversario && dia_atual < dia_aniversario) {
+            quantos_anos--;
+        }
+        return quantos_anos < 0 ? 0 : quantos_anos;
     }
 </script>

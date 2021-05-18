@@ -26,18 +26,28 @@ include "js/repositorio.php";
                 $funcionario = (int)$_GET["funcionario"];
                 $projeto = (int)$_GET["projeto"];
                 $ativo = $_GET["ativo"];
-                $dataValidadeAso = $_GET["dataValidadeAso"];
-                $campo = $dataValidadeAso;
+                $dataValidadeAsoInicio = $_GET["dataValidadeAsoInicio"];
+                $dataValidadeAsoFim = $_GET["dataValidadeAsoFim"];
+                $campo1 = $dataValidadeAsoInicio;
+                $campo2 = $dataValidadeAsoFim;
                 $idadeInicio = $_GET["idadeInicio"];
                 $idadeFim = $_GET["idadeFim"];
                 $vencido = $_GET["vencido"];
 
-                if ($campo === $dataValidadeAso) {
-                    if($campo != "") {
-                    $dataValidadeAso = str_replace('/', '-', $dataValidadeAso);
-                    $dataValidadeAso = date("Y-m-d", strtotime($dataValidadeAso));
+                if ($campo1 === $dataValidadeAsoInicio) {
+                    if($campo1 != "") {
+                    $dataValidadeAsoInicio = str_replace('/', '-', $dataValidadeAsoInicio);
+                    $dataValidadeAsoInicio = date("Y-m-d", strtotime($dataValidadeAsoInicio));
                     }
                 }
+
+                if ($campo2 === $dataValidadeAsoFim) {
+                    if($campo2 != "") {
+                    $dataValidadeAsoFim = str_replace('/', '-', $dataValidadeAsoFim);
+                    $dataValidadeAsoFim = date("Y-m-d", strtotime($dataValidadeAsoFim));
+                    }
+                }
+
                 if ($codigo > 0) {
                     $where .= $where . " AND codigo = " . $codigo;
                 }
@@ -53,9 +63,13 @@ include "js/repositorio.php";
                 if ($ativo != "") {
                     $where .= $where . " AND ASO.ativo = " . $ativo;
                 }
-
-                if ($dataValidadeAso != "") {
-                    $where .= $where . " AND ASO.dataProximoAso = " . "'" . $dataValidadeAso .  "'";
+               
+                if (($dataValidadeAsoInicio != "") && ($dataValidadeAsoFim != "")) {
+                    $where .= $where . " AND ASO.dataProximoAso BETWEEN " . "'" . $dataValidadeAsoInicio .  "'" . "AND" .  "'" . $dataValidadeAsoFim .  "'";
+                } else if ($dataValidadeAsoInicio != ""){
+                    $where .= $where . " AND ASO.dataProximoAso > " . "'" . $dataValidadeAsoInicio .  "'";
+                } else if ($dataValidadeAsoFim != "") {
+                    $where .= $where . " AND ASO.dataProximoAso < " . "'" . $dataValidadeAsoFim .  "'";
                 }
                 if($idadeInicio > 0 && $idadeFim >0){
                     $where .= $where . " AND DATEDIFF(yy,ASO.dataNascimento,'$hoje') BETWEEN " . "'" . $idadeInicio .  "'" . "AND" .  "'" . $idadeFim .  "'";
@@ -66,13 +80,11 @@ include "js/repositorio.php";
                     $where .= $where . " AND DATEDIFF(yy,ASO.dataNascimento,'$hoje') < " . "'" . $idadeFim .  "'";
                 }
                 if($vencido == 1) {
-                    $where .= $where . " AND DATEDIFF(dd,ASO.dataProximoAso,'$hoje') > " . "'" . 0 .  "'";
+                    $where .= $where . " AND DATEDIFF(dd,'$hoje',ASO.dataProximoAso) < " . 0;
                 } 
                 if ($vencido == 2){
-                    $where .= $where . " AND DATEDIFF(dd,ASO.dataProximoAso,'$hoje') < " . "'" . 0 .  "'";
+                    $where .= $where . " AND DATEDIFF(dd,'$hoje',ASO.dataProximoAso) > " . 0;
                 }
-                
-
                 $sql = $sql . $where;
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
