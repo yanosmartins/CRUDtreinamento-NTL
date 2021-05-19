@@ -91,7 +91,7 @@ function atualizar(form, callback) {
   form.append('funcao', 'atualizarStatus')
   $.ajax({
     url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
-    dataType: 'html',
+    processData:false,
     data: form,
     type: 'post',
     success: function (data) {
