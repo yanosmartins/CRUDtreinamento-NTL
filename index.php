@@ -286,7 +286,7 @@ include("inc/scripts.php");
                 smartAlert("Atenção", "O Funcionário não tem data de último ASO", "error");
                 return
             }
-            $(location).attr('href', 'cadastro_atestadoSaudeOcupacional.php');
+            $(location).attr('href', 'funcionario_atestadoSaudeOcupacional.php');
         });
     });
 </script>
