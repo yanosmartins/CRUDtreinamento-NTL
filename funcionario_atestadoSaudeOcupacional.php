@@ -51,7 +51,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['estoque']['sub']['cadastro']['sub']['codigoItem']["active"] = true;
+$page_nav["funcionario"]["sub"]["atestadoSaudeOcupacional"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -279,7 +279,7 @@ include("inc/nav.php");
                                                                         </select><i></i>
                                                                     </label>
                                                                 </section>
-                                                                
+
                                                                 <!-- <section class="col col-2">
                                                                 <label class="label" for="comprovanteAso">Comprovante do ASO</label>
                                                                 <label class="input">
@@ -380,7 +380,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/business_cadastroAtestadoSaudeOcupacional.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_atestadoSaudeOcupacional.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -469,12 +469,17 @@ include("inc/scripts.php");
 
                 if (situacao == 'F') {
 
-                    let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val()
+                    let dataRealizacaoAsoTeste = $("#dataRealizacaoAso").val()
+                    let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val();
                     $("#dataUltimoAso").val(dataRealizacaoAsoValor)
 
                     if ((idade < 18) || (idade > 45)) {
+                        aux = dataRealizacaoAsoTeste.split('/')
+                        aux[2] = Number(aux[2]) + 1
+                        dataRealizacaoAsoTeste = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        $("#dataProximoAso").val(dataRealizacaoAsoTeste)
                         calculaIdadeFutura();
-                        if ((idade < 18) && (quantos_anos > 18)) {
+                        if ((idade < 18) && (quantos_anos >= 18)) {
                             aux = dataRealizacaoAsoValor.split('/')
                             aux[2] = Number(aux[2]) + 2
                             dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
@@ -484,19 +489,35 @@ include("inc/scripts.php");
                             dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
                         }
                     } else {
-                        aux = dataRealizacaoAsoValor.split('/')
+                        aux = dataRealizacaoAsoTeste.split('/')
                         aux[2] = Number(aux[2]) + 2
-                        dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        dataRealizacaoAsoTeste = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        $("#dataProximoAso").val(dataRealizacaoAsoTeste)
+                        calculaIdadeFutura();
+                        if (quantos_anos > 45) {
+                            aux = dataRealizacaoAsoValor.split('/')
+                            aux[2] = Number(aux[2]) + 1
+                            dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        } else {
+                            aux = dataRealizacaoAsoValor.split('/')
+                            aux[2] = Number(aux[2]) + 2
+                            dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        }
                     }
 
                     $("#dataProximoAso").val(dataRealizacaoAsoValor)
                     addDataAso();
 
                 } else {
-                    let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val()
+                    let dataRealizacaoAsoTeste = $("#dataRealizacaoAso").val();
+                    let dataRealizacaoAsoValor = $("#dataRealizacaoAso").val();
                     if ((idade < 18) || (idade > 45)) {
+                        aux = dataRealizacaoAsoTeste.split('/')
+                        aux[2] = Number(aux[2]) + 1
+                        dataRealizacaoAsoTeste = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        $("#dataProximoAso").val(dataRealizacaoAsoTeste)
                         calculaIdadeFutura();
-                        if ((idade < 18) && (quantos_anos > 18)) {
+                        if ((idade < 18) && (quantos_anos >= 18)) {
                             aux = dataRealizacaoAsoValor.split('/')
                             aux[2] = Number(aux[2]) + 2
                             dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
@@ -506,6 +527,10 @@ include("inc/scripts.php");
                             dataRealizacaoAsoValor = `${aux[0]}/${aux[1]}/${aux[2]}`
                         }
                     } else {
+                        aux = dataRealizacaoAsoTeste.split('/')
+                        aux[2] = Number(aux[2]) + 2
+                        dataRealizacaoAsoTeste = `${aux[0]}/${aux[1]}/${aux[2]}`
+                        $("#dataProximoAso").val(dataRealizacaoAsoTeste)
                         calculaIdadeFutura();
                         if (quantos_anos > 45) {
                             aux = dataRealizacaoAsoValor.split('/')
@@ -632,11 +657,11 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'cadastro_atestadoSaudeOcupacional.php');
+        $(location).attr('href', 'funcionario_atestadoSaudeOcupacional.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'cadastro_atestadoSaudeOcupacionalFiltro.php');
+        $(location).attr('href', 'funcionario_atestadoSaudeOcupacionalFiltro.php');
     }
 
     function excluir() {
@@ -803,7 +828,7 @@ include("inc/scripts.php");
             $("#dataRealizacaoAso").val(item.dataRealizacaoAso);
             $("#tipoExame").val(item.tipoExame);
             $("#situacao").val(item.situacao);
-            
+
 
         }
     }

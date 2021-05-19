@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["sindicato"]["active"] = true;
+$page_nav["beneficio"]["sub"]["triagem"]["sub"]["relatorioValidade"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -119,38 +119,55 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                         
                                                             <section class="col col-2">
-                                                                <label class="label" for="dataRealizacaoAso">Data Realização ASO </label>
+                                                                <label class="label" for="idadeInicio">Idade inicio</label>
+                                                                <label class="input">
+                                                                    <input id="idadeInicio" name="idadeInicio" class="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label" for="idadeFim">Idade Fim</label>
+                                                                <label class="input">
+                                                                    <input id="idadeFim" name="idadeFim" class="">
+                                                                </label>
+                                                            </section>
+                                                            
+                                                            <section class="col col-2">
+                                                                <label class="label" for="dataValidadeAsoInicio">Validade ASO Inicio</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataRealizacaoAso" name="dataRealizacaoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="dataValidadeAsoInicio" name="dataValidadeAsoInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
 
-                                                            
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label" for="situacao">Situação</label>
-                                                                <label class="select">
-                                                                    <select id="situacao" name="situacao" class="" >
-                                                                    <option></option>
-                                                                        <option value='P'>Pendente</option>
-                                                                        <option value='F'>Fechado</option>
-                                                                        <option value='A' selected>Aberto</option>
-                                                                    </select><i></i>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="dataValidadeAsoFim">Validade ASO Fim</label>
+                                                                <label class="input">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                    <input id="dataValidadeAsoFim" name="dataValidadeAsoFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                           
-                                                            <!-- <section class="col col-2 col-auto">
+                                                            </div>
+                                                            <div class="row">
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="vencido"> Dias vencido</label>
+                                                                <label class="select">
+                                                                    <select id="vencido" name="vencido" class="">
+                                                                    <option></option>
+                                                                        <option value='1'>Sim</option>
+                                                                        <option value='2'>Não</option>
+                                                                    </select><i></i>
+                                                                    </section>
+                                                            <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo" class="" required>
-                                                                    <option ></option>
-                                                                        <option value='1'>Sim</option>
+                                                                    <option></option>
+                                                                        <option value='1' selected>Sim</option>
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>
                                                                 </label>
-                                                            </section> -->
+                                                            </section>
                                                             </div>
                                                       
                                                     </fieldset>
@@ -162,9 +179,7 @@ include("inc/nav.php");
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo Atendimento" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file"></span>
-                                        </button>
+                                       
                                     </footer>
                                 </form>
                             </div>
@@ -226,21 +241,29 @@ include("inc/scripts.php");
     });
 
     function novo() {
-        $(location).attr('href', 'cadastro_atestadoSaudeOcupacional.php');
+        $(location).attr('href', 'funcionario_atestadoSaudeOcupacional.php');
     }
 
     function listarFiltro() {
         var funcionario = +$('#funcionario').val();
         var projeto = +$("#projeto").val();
-        var dataRealizacaoAso = $("#dataRealizacaoAso").val();
-        var situacao = $("#situacao").val();
-       
+        var ativo = $("#ativo").val();
+        var dataValidadeAsoInicio = $("#dataValidadeAsoInicio").val();
+        var dataValidadeAsoFim = $("#dataValidadeAsoFim").val();
+        var vencido = $("#vencido").val();
+        var idadeInicio = +$("#idadeInicio").val();
+        var idadeFim = +$("#idadeFim").val();
+
         var parametrosUrl;
         parametrosUrl = '&funcionario=' + funcionario +
             '&projeto=' + projeto +
-            '&dataRealizacaoAso=' + dataRealizacaoAso +
-            '&situacao=' + situacao;
+            '&ativo=' + ativo +
+            '&dataValidadeAsoInicio=' + dataValidadeAsoInicio +
+            '&dataValidadeAsoFim=' + dataValidadeAsoFim +
+            '&vencido=' + vencido +
+            '&idadeInicio=' + idadeInicio +
+            '&idadeFim=' + idadeFim;
            
-        $('#resultadoBusca').load('cadastro_atestadoSaudeOcupacionalFiltroListagemTriagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('funcionario_atestadoSaudeOcupacionalFiltroListagem.php?' + parametrosUrl);
     }
 </script>

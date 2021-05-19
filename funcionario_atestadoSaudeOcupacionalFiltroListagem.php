@@ -114,7 +114,7 @@ include "js/repositorio.php";
                     
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="cadastro_atestadoSaudeOcupacional.php?codigo=' . $id . '">' . $nomeFuncionario . '</a></td>';
+                    echo '<td class="text-left"><a href="funcionario_atestadoSaudeOcupacional.php?codigo=' . $id . '">' . $nomeFuncionario . '</a></td>';
                     echo '<td class="text-left">' . $projeto . '</td>';
                     echo '<td class="text-left">' . $idade .  '</td>';
                     echo '<td class="text-left">' . $dataValidadeAso . '</td>';
