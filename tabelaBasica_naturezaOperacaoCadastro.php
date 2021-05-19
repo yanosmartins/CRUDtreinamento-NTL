@@ -5,9 +5,9 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-$condicaoAcessarOK = (in_array('FABRICANTE_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('FABRICANTE_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('FABRICANTE_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('NATUREZAOPERACAO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('NATUREZAOPERACAO_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('NATUREZAOPERACAO_EXCLUIR', $arrayPermissao, true));
 
 
 if ($condicaoAcessarOK == false) {

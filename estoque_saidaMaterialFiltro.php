@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PEDIDOMATERIAL_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PEDIDOMATERIAL_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('SAIDAMATERIAL_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('SAIDAMATERIAL_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -157,12 +157,11 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2" id="sectionFechado" hidden>
-                                                                <label class="label" for="fechado">Fechado</label>
+                                                                <label class="label" for="status">Status</label>
                                                                 <label class="select">
-                                                                    <select id="fechado" name="fechado" class="">
-                                                                        <option></option>
-                                                                        <option value="1">Sim</option>
-                                                                        <option value="2">Não</option>
+                                                                    <select id="status" name="status" class="">
+                                                                        <option value="0">Aberto</option>
+                                                                        <option value="1">Fechado</option>
                                                                     </select><i></i>
                                                             </section>
                                                         </div>
@@ -552,6 +551,7 @@ include("inc/scripts.php");
         var dataEntradaInicial = $('#dataEntradaInicial').val();
         var dataEntradaFinal = $('#dataEntradaFinal').val();
         var filtrarPor = $('#filtrarPor').val();
+        var status = $('#status').val();
 
         if (filtrarPor == 0) {
             $('#resultadoBusca').load('estoque_saidaMaterialMFiltroListagem.php?', {
@@ -581,7 +581,8 @@ include("inc/scripts.php");
                 dataEmissaoNFInicial: dataInicialEmissao,
                 dataEmissaoNFFinal: dataFinalEmissao,
                 dataEntradaInicial: dataEntradaInicial,
-                dataEntradaFinal: dataEntradaFinal
+                dataEntradaFinal: dataEntradaFinal,
+                status : status
 
             });
         }

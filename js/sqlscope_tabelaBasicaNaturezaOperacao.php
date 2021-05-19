@@ -24,7 +24,7 @@ function grava()
     $reposit = new reposit(); //Abre a conexão.
 
     // Verifica permissões
-    $possuiPermissao = $reposit->PossuiPermissao("FABRICANTE_ACESSAR|FABRICANTE_GRAVAR");
+    $possuiPermissao = $reposit->PossuiPermissao("NATUREZAOPERACAO_ACESSAR|NATUREZAOPERACAO_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para gravar!";
@@ -115,7 +115,7 @@ function recupera()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("FABRICANTE_ACESSAR|FABRICANTE_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("NATUREZAOPERACAO_ACESSAR|NATUREZAOPERACAO_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
