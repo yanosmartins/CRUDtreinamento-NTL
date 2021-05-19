@@ -141,7 +141,7 @@ if ($condicaoCadastroOk) {
     if (in_array('FERIADO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("feriado" => array("title" => "Feriado", "url" => APP_URL . "/cadastro_feriadoFiltro.php")); //SYSCB 
     }
-       if (in_array('EMPRESA_ACESSAR', $arrayPermissao, true)) {
+    if (in_array('EMPRESA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['cadastro']['sub'] += array("empresa" => array("title" => "Empresa", "url" => APP_URL . "/cadastro_empresaCadastro.php?codigo=1")); //SYSCB 
     }
     if (in_array('FORNECEDOR_ACESSAR', $arrayPermissao, true)) {
@@ -220,11 +220,11 @@ if ($condicaoBeneficioOk) {
     if (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['beneficio']['sub']['operacao'] = array("title" => "Operações");
         $page_nav['beneficio']['sub']['operacao']['sub'] = array();
-        
+
         if (in_array('AFASTAMENTOFUNCIONARIO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['operacao']['sub'] += array("afastamentoFuncionario" => array("title" => "Afastamento do Funcionário", "url" => APP_URL . "/beneficio_afastamentoFuncionarioFiltro.php")); //SYSCB 
         }
-    
+
         if (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['operacao']['sub'] += array("consultaBenefício" => array("title" => "Consulta Benefício", "url" => APP_URL . "/beneficio_consultaBeneficioFiltro.php"));
         }
@@ -239,6 +239,19 @@ if ($condicaoBeneficioOk) {
         }
         if (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['operacao']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
+        }
+    }
+
+    if (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['beneficio']['sub']['triagem'] = array("title" => "Triagem");
+        $page_nav['beneficio']['sub']['triagem']['sub'] = array();
+
+
+        if (in_array('ASO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['triagem']['sub'] += array("filtroTriagem" => array("title" => "Triagem ASO", "url" => APP_URL . "/funcionario_atestadoSaudeOcupacionalFiltroTriagem.php"));
+        }
+        if (in_array('ASO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['triagem']['sub'] += array("relatorioValidade" => array("title" => "Relatório de Validade", "url" => APP_URL . "/funcionario_atestadoSaudeOcupacionalFiltro.php"));
         }
     }
 }
@@ -262,7 +275,7 @@ if ($condicaoRHOk) {
     if ($condicaoContratacaoOk) { // a pedido do marcio no dia 18/02/21 foi pedido para colocar tudo referente a contratacao dentro de rh em um "novo modulo"
         $page_nav['recursoshumanos']['sub']['contratacao'] = array("title" => "Contratação", "icon" => "fa fa-fax");
         $page_nav['recursoshumanos']['sub']['contratacao']['sub'] = array();
-       
+
         if (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("candidato" => array("title" => "Triagem", "url" => APP_URL . "/contratacao_candidatoFiltro.php"));
         }
@@ -498,7 +511,7 @@ if ($condicaoFuncionarioOk) {
         $page_nav['funcionario']['sub'] += array("controlePontoDiario" => array("title" => "Ponto Eletrônico Diario", "url" => APP_URL . "/prototipo_pontoEletronicoDiario.php"));
     }
     if (array_intersect(array('PONTOELETRONICOMENSALMAXIMO_ACESSAR', 'PONTOELETRONICOMENSALMODERADO_ACESSAR', 'PONTOELETRONICOMENSALMINIMO_ACESSAR'), $arrayPermissao)) {
-        $page_nav['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php?"."funcionario=".$_SESSION["funcionario"]."&"."mesAno=". date("Y-m-01")));
+        $page_nav['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php?" . "funcionario=" . $_SESSION["funcionario"] . "&" . "mesAno=" . date("Y-m-01")));
     }
     if (in_array('TRIAGEMPONTOELETRONICO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("triagemPontoEletronico" => array("title" => "Triagem Ponto Eletrônico", "url" => APP_URL . "/funcionario_triagemFolhaDePonto.php"));
@@ -508,6 +521,17 @@ if ($condicaoFuncionarioOk) {
     }
     if (in_array('FOLHAPONTOPROJETO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("emitirFolhaPorProjeto" => array("title" => "Gerador Folha de Ponto por Projeto", "url" => APP_URL . "/funcionario_folhaDePontoPorProjeto.php"));
+    }
+
+    $sql = "SELECT dataUltimoAso FROM Funcionario.atestadoSaudeOcupacional WHERE funcionario = " . $funcionario . "";
+    $result = $reposit->RunQuery($sql);
+    if ($row = $result[0]) {
+        $ultimoAso = $row['dataUltimoAso'];
+    }
+    if ($ultimoAso != "") {
+        if (in_array('ASO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['funcionario']['sub'] += array("atestadoSaudeOcupacional" => array("title" => "Atestado de Saude Ocupacional", "url" => APP_URL . "/funcionario_atestadoSaudeOcupacional.php"));
+        }
     }
 }
 
@@ -585,7 +609,6 @@ if ($condicaoEstoqueOk) {
         if (in_array('DEVOLUCAOMATERIAL_ACESSAR', $arrayPermissao, true)) {
             $page_nav['estoque']['sub']['operacao']['sub'] += array("saidaMaterial" => array("title" => "Saída Material", "url" => APP_URL . "/estoque_saidaMaterialFiltro.php"));
         }
-
     }
 
     if (in_array('ESTOQUE_ACESSAR', $arrayPermissao, true)) {

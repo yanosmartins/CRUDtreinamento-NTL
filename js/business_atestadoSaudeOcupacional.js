@@ -1,7 +1,7 @@
  function gravaASO(id,funcionario, matricula,cargo,projeto,sexo,dataNascimento,dataAdmissao,dataAgendamento,
     dataUltimoAso,dataProximoAso,ativo,jsonDataAsoArray, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroAtestadoSaudeOcupacional.php',
+        url: 'js/sqlscope_atestadoSaudeOcupacional.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: "grava",id:id,funcionario:funcionario,matricula:matricula,cargo:cargo,projeto:projeto,sexo:sexo,dataNascimento:dataNascimento,
@@ -15,7 +15,7 @@
 
 function recuperaASO(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroAtestadoSaudeOcupacional.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_atestadoSaudeOcupacional.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'recupera', id: id}, //valores enviados ao script      
@@ -30,7 +30,7 @@ function recuperaASO(id, callback) {
 
 function excluirASO(id, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroAtestadoSaudeOcupacional.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_atestadoSaudeOcupacional.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {funcao: 'excluir', id: id}, //valores enviados ao script      
@@ -42,7 +42,7 @@ function excluirASO(id, callback) {
 
 function recuperaDadosFuncionario(funcionario, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroAtestadoSaudeOcupacional.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_atestadoSaudeOcupacional.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'recuperarDadosFuncionario', funcionario: funcionario }, //valores enviados ao script     
@@ -60,7 +60,7 @@ function recuperaDadosFuncionario(funcionario, callback) {
 
 function recuperaDadosFuncionarioASO(funcionario, callback) {
     $.ajax({
-        url: 'js/sqlscope_cadastroAtestadoSaudeOcupacional.php', //caminho do arquivo a ser executado
+        url: 'js/sqlscope_atestadoSaudeOcupacional.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'recuperarDadosFuncionarioASO', funcionario: funcionario }, //valores enviados ao script     

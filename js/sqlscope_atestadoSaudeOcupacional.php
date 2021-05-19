@@ -114,7 +114,7 @@ function recuperarDadosFuncionarioASO()
     $sql = "SELECT F.codigo AS 'codigoFuncionario',C.codigo AS 'codigoCargo',P.codigo AS 'codigoProjeto', ASO.codigo,F.nome AS 'nome',ASO.matricula AS 'matricula',C.descricao AS 'cargo',P.descricao AS 'projeto',ASO.sexo AS 'sexo',
     ASO.dataNascimento AS 'dataNascimento',ASO.dataAdmissao AS 'dataAdmissao',ASO.dataUltimoAso AS 'dataUltimoAso',ASO.dataProximoAso AS 'dataValidadeAso',
     ASO.dataAgendamento AS 'dataAgendamento',ASOD.dataProximoAsoLista AS 'dataProximoAsoLista',ASOD.dataRealizacaoAso AS 'dataRealizacaoAso',
-    ASOD.situacao AS 'situacao' from funcionario.atestadoSaudeOcupacional ASO
+    ASOD.situacao AS 'situacao',ASOD.tipoExame AS 'tipoExame' from funcionario.atestadoSaudeOcupacional ASO
     INNER JOIN funcionario.atestadoSaudeOcupacionalDetalhe ASOD ON ASO.codigo = ASOD.atestadoSaudeOcupacional
     INNER JOIN ntl.funcionario F ON ASO.funcionario = F.codigo
     INNER JOIN ntl.cargo C ON ASO.cargo = C.codigo
@@ -143,6 +143,7 @@ function recuperarDadosFuncionarioASO()
         $dataUltimoAso = $row['dataUltimoAso'];
         $dataValidadeAso = $row['dataValidadeAso'];
         $dataAgendamento = $row['dataAgendamento'];
+        
     }
 
     if ($dataNascimento != "") {
@@ -163,7 +164,7 @@ function recuperarDadosFuncionarioASO()
 
     $reposit = "";
     $result = "";
-    $sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.situacao FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
+    $sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.situacao,ASOD.tipoExame FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
 INNER JOIN  funcionario.atestadoSaudeOcupacional ASO ON ASOD.atestadoSaudeOcupacional = ASO.codigo
 WHERE ASO.funcionario = $funcionario";
     $reposit = new reposit();
@@ -175,6 +176,7 @@ WHERE ASO.funcionario = $funcionario";
         $dataProximoAsoLista = $row['dataProximoAsoLista'];
         $dataRealizacaoAso = (string)$row['dataRealizacaoAso'];
         $situacao = (string)$row['situacao'];
+        $tipoExame = (int)$row['tipoExame'];
 
         $dataProximoAsoLista = explode("-", $dataProximoAsoLista);
         $diadataProximoAsoLista = explode(" ", $dataProximoAsoLista[2]);
@@ -184,12 +186,27 @@ WHERE ASO.funcionario = $funcionario";
         $diadataRealizacaoAso = explode(" ", $dataRealizacaoAso[2]);
         $dataRealizacaoAso = $diadataRealizacaoAso[0] . "/" . $dataRealizacaoAso[1] . "/" . $dataRealizacaoAso[0];
 
+        if ($tipoExame == 1) {
+            $descricaoTipoExame = 'Exame Admissional';
+        }
+        if ($tipoExame == 2) {
+            $descricaoTipoExame = 'Exame Periódico';
+        }
+        if ($tipoExame == 3) {
+            $descricaoTipoExame = 'Mudança de Risco Ocupacional';
+        }
+        if ($tipoExame == 4) {
+            $descricaoTipoExame = 'Retorno ao trabalho';
+        }
+
         $contadorDataAso = $contadorDataAso + 1;
         $arrayDataAso[] = array(
             "sequencialDataAso" => $contadorDataAso,
             "dataProximoAsoLista" => $dataProximoAsoLista,
             "dataRealizacaoAso" => $dataRealizacaoAso,
-            "situacao" => $situacao
+            "situacao" => $situacao,
+            "descricaoTipoExame" => $tipoExame,
+            "descricaoTipoExame" => $descricaoTipoExame,
         );
     }
 
