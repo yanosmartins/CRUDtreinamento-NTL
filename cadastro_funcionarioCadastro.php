@@ -742,7 +742,6 @@ include("inc/nav.php");
                                             </div>
                                         </div>
 
-
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
@@ -755,38 +754,76 @@ include("inc/nav.php");
                                             </div>
                                             <div id="collapseEspecializacao" class="panel-collapse collapse">
                                                 <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <input id="jsonEspecializacao" name="jsonEspecializacao" type="hidden" value="[]">
+                                                        <div id="formEspecializacao" class="col-sm-6">
+                                                            <input id="especializacaoId" name="especializacaoId" type="hidden" value="">
+                                                            <input id="sequencialEspecializacao" name="sequencialEspecializacao" type="hidden" value="">
+                                                            <input id="especializacaoDescricao" name="especializacaoDescricao" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
 
-                                                    <fieldset autocomplete="off">
+                                                                    <section class="col col-4">
+                                                                        <label class="label " for="especializacao">Especialização</label>
+                                                                        <label class="select">
+                                                                            <select id="especializacao" name="especializacao">
+                                                                                <option value=""></option>
+                                                                                <?php
 
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label class="label " for="especializacao">Especializacao</label>
-                                                                <label class="select">
-                                                                    <select id="especializacao" name="especializacao">">
-                                                                        <option value=""></option>
-                                                                        <?php
+                                                                                $reposit = new reposit();
+                                                                                $sql = "SELECT codigo,descricao from Ntl.especializacao where ativo = 1";
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = (int) $row['codigo'];
+                                                                                    $descricao = $row['descricao'];
 
-                                                                        $reposit = new reposit();
-                                                                        $sql = "SELECT codigo,descricao from Ntl.especializacao where ativo = 1";
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach ($result as $row) {
-                                                                            $codigo = (int) $row['codigo'];
-                                                                            $descricao = $row['descricao'];
+                                                                                    echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                }
 
-                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
-                                                                        }
+                                                                                ?>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
 
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
+                                                                    <section class="col col-4">
+                                                                        <label class="label">Observações</label>
+                                                                        <textarea maxlength="500" id="observacao" name="observacao" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
+                                                                    </section>
+
+
+                                                                    <section class="col col-md-4">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddEspecializacao" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverEspecializacao" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableEspecializacao" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th></th>
+                                                                            <th class="text-left" style="min-width: 500%;">Especialização</th>
+                                                                            <th class="text-left" style="min-width: 500%;">Observação</th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
-
 
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
+
+
 
 
                                     </div>
@@ -880,6 +917,7 @@ include("inc/scripts.php");
         jsonDependenteArray = JSON.parse($("#jsonDependente").val());
         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         jsonEmailArray = JSON.parse($("#jsonEmail").val());
+        jsonEspecializacaoArray = JSON.parse($("#jsonEspecializacao").val());
 
 
         carregaPagina();
@@ -1104,6 +1142,15 @@ include("inc/scripts.php");
         $("#btnRemoverDependente").on("click", function() {
             excluirDependente();
         });
+        $("#btnAddEspecializacao").on("click", function() {
+            if (validaEspecializacao()) {
+                addEspecializacao();
+            }
+        });
+        $("#btnRemoverEspecializacao").on("click", function() {
+            removerEspecializacao();
+        });
+
         $("#btnGravar").on("click", function() {
             gravar();
         });
@@ -1132,6 +1179,7 @@ include("inc/scripts.php");
                         var $strArrayTelefone = piece[2];
                         var $strArrayEmail = piece[3];
                         var $strArrayDependente = piece[4];
+                        var $strArrayEspecializacao = piece[5];
 
                         piece = out.split("^");
                         var codigo = +piece[0];
@@ -1168,7 +1216,6 @@ include("inc/scripts.php");
                         var cidade = piece[31];
                         var bairro = piece[32];
                         var ufIdentidade = piece[33];
-                        var especializacao = piece[34];
 
                         $("#codigo").val(codigo);
                         $("#ativo").val(ativo);
@@ -1204,21 +1251,23 @@ include("inc/scripts.php");
                         $("#bairro").val(bairro);
                         $("#cidade").val(cidade);
                         $("#ufIdentidade").val(ufIdentidade);
-                        $("#especializacao").val(especializacao);
                         $("#verificaRecuperacao").val(1);
 
                         //Arrays  
                         $("#jsonTelefone").val($strArrayTelefone);
                         $("#jsonEmail").val($strArrayEmail);
                         $("#jsonDependente").val($strArrayDependente);
+                        $("#jsonEspecializacao").val($strArrayEspecializacao);
 
                         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
                         jsonEmailArray = JSON.parse($("#jsonEmail").val());
                         jsonDependenteArray = JSON.parse($("#jsonDependente").val());
+                        jsonEspecializacaoArray = JSON.parse($("#jsonEspecializacao").val());
 
                         fillTableTelefone();
                         fillTableEmail();
                         fillTableDependente();
+                        fillTableEspecializacao();
                         initializeDecimalBehaviour();
 
 
@@ -1373,7 +1422,6 @@ include("inc/scripts.php");
         var dataAdmissaoFuncionario = $("#dataAdmissao").val();
         var dataDemissaoFuncionario = $("#dataDemissao").val();
         var dataCancelamentoPlanoSaude = $("#dataCancelamentoPlanoSaude").val();
-        var especializacao = $("#especializacao").val();
 
         //Documentos Pessoais
         var pisPasep = $("#pisPasep").val();
@@ -1410,6 +1458,7 @@ include("inc/scripts.php");
         var jsonTelefoneArray = $("#jsonTelefone").val();
         var jsonEmailArray = $("#jsonEmail").val();
         var jsonDependenteArray = $("#jsonDependente").val();
+        var jsonEspecializacaoArray = $("#jsonEspecializacao").val();
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!nome) {
@@ -1547,7 +1596,7 @@ include("inc/scripts.php");
             dataDemissaoFuncionario, dataCancelamentoPlanoSaude, pisPasep, numeroCarteiraTrabalho, serieCarteiraTrabalho, ufCarteiraTrabalho, dataExpedicaoCarteiraTrabalho,
             rg, dataEmissaoRG, orgaoEmissorRG, cnh, categoriaCNH, ufCNH, dataEmissaoCNH, dataVencimentoCNH, primeiraHabilitacaoCNH,
             cep, logradouro, numeroLogradouro, complemento, ufLogradouro, cidade, bairro, jsonTelefoneArray, jsonEmailArray,
-            jsonDependenteArray, ufIdentidade, especializacao,
+            jsonDependenteArray, jsonEspecializacaoArray, ufIdentidade,
             function(data) {
                 if (data.indexOf('failed') > -1) {
                     var piece = data.split("#");
@@ -2197,4 +2246,163 @@ include("inc/scripts.php");
     }
 
     //############################################################################## LISTA DEPENDENTE FIM #######################################################################################################################
+    //############################################################################## LISTA ESPECIALIZACAO INICO #######################################################################################################################
+
+    function fillTableEspecializacao() {
+        $("#tableEspecializacao tbody").empty();
+        for (var i = 0; i < jsonEspecializacaoArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableEspecializacao tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonEspecializacaoArray[i].sequencialEspecializacao + '"><i></i></label></td>'));
+            row.append($('<td class="text-nowrap" onclick="carregaEspecializacao(' + jsonEspecializacaoArray[i].sequencialEspecializacao + ');">' + jsonEspecializacaoArray[i].especializacaoDescricao + '</td>'));
+            row.append($('<td class="" (' + jsonEspecializacaoArray[i].sequencialEspecializacao + ');">' + jsonEspecializacaoArray[i].observacao + '</td>'));
+        }
+    }
+
+    function validaEspecializacao() {
+        var existe = false;
+        var achou = false;
+        var especializacao = $('#especializacao').val();
+        var observacao = $('#observacao').val();
+        var sequencial = +$('#sequencialEspecializacao').val();
+        var especializacaoMarcado = 1;
+
+        if (!especializacao) {
+            smartAlert("Erro", "Informe a Especialização.", "error");
+            return false;
+        }
+
+
+        for (i = jsonEspecializacaoArray.length - 1; i >= 0; i--) {
+            if (especializacaoMarcado === 1) {
+                if ((jsonEspecializacaoArray[i].especializacao == 1) && (jsonEspecializacaoArray[i].sequencialEspecializacao !== sequencial)) {
+                    achou = true;
+                    break;
+                }
+            }
+            if (!especializacao) {
+                if ((jsonEspecializacaoArray[i].logradouro === especializacao) && (jsonEspecializacaoArray[i].sequencialEspecializacao !== sequencial)) {
+                    existe = true;
+                    break;
+                }
+            }
+
+        }
+        if (existe === true) {
+            smartAlert("Erro", "Especialização já cadastrada.", "error");
+            return false;
+        }
+        if ((achou === true) && (especializacaoMarcado === 1)) {
+            smartAlert("Erro", "ja existe esse item na lista", "error");
+            return false;
+        }
+        return true;
+    }
+
+    function addEspecializacao() {
+        var item = $("#formEspecializacao").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataEspecializacao
+        });
+
+        if (item["sequencialEspecializacao"] === '') {
+            if (jsonEspecializacaoArray.length === 0) {
+                item["sequencialEspecializacao"] = 1;
+            } else {
+                item["sequencialEspecializacao"] = Math.max.apply(Math, jsonEspecializacaoArray.map(function(o) {
+                    return o.sequencialEspecializacao;
+                })) + 1;
+            }
+            item["responsavelId"] = 0;
+        } else {
+            item["sequencialEspecializacao"] = +item["sequencialEspecializacao"];
+        }
+
+        var index = -1;
+        $.each(jsonEspecializacaoArray, function(i, obj) {
+            if (+$('#sequencialEspecializacao').val() === obj.sequencialEspecializacao) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonEspecializacaoArray.splice(index, 1, item);
+        else
+            jsonEspecializacaoArray.push(item);
+
+        $("#jsonEspecializacao").val(JSON.stringify(jsonEspecializacaoArray));
+        fillTableEspecializacao();
+        clearFormEspecializacao();
+    }
+
+    function processDataEspecializacao(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "especializacao")) {
+            var especializacao = $("#especializacao").val();
+            if (especializacao !== '') {
+                fieldName = "especializacao";
+            }
+            return {
+                name: fieldName,
+                value: especializacao
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "especializacaoDescricao")) {
+            return {
+                name: fieldName,
+                value: $("#especializacao option:selected").text()
+            };
+        }
+
+        return false;
+    }
+
+    function clearFormEspecializacao() {
+        $("#especializacao").val('');
+        $("#especializacaoId").val('');
+        $("#sequencialEspecializacao").val('');
+        $("#observacao").val('');
+    }
+
+    function carregaEspecializacao(sequencialEspecializacao) {
+        var arr = jQuery.grep(jsonEspecializacaoArray, function(item, i) {
+            return (item.sequencialEspecializacao === sequencialEspecializacao);
+        });
+
+        clearFormEspecializacao();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#especializacaoId").val(item.especializacaoId);
+            $("#especializacao").val(item.especializacao);
+            $("#sequencialEspecializacao").val(item.sequencialEspecializacao);
+            $("#observacao").val(item.observacao);
+        }
+
+    }
+
+    function removerEspecializacao() {
+        var arrSequencial = [];
+        $('#tableEspecializacao input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+
+        if (arrSequencial.length > 0) {
+            for (i = jsonEspecializacaoArray.length - 1; i >= 0; i--) {
+                var obj = jsonEspecializacaoArray[i];
+                if (jQuery.inArray(obj.sequencialEspecializacao, arrSequencial) > -1) {
+                    jsonEspecializacaoArray.splice(i, 1);
+                }
+            }
+            $("#jsonEspecializacao").val(JSON.stringify(jsonEspecializacaoArray));
+            fillTableEspecializacao();
+        } else
+            smartAlert("Erro", "Selecione pelo menos 1 especialização para excluir.", "error");
+    }
+    //############################################################################## LISTA ESPECIALIZACAO FIM #######################################################################################################################
 </script>
