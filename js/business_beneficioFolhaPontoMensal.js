@@ -73,17 +73,29 @@ function consultarPermissoes(callback) {
 }
 
 function enviarArquivo(form, callback) {
-  form.append('funcao','enviarFolha');
+  form.append('funcao', 'enviarFolha')
   $.ajax({
     url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
     cache: false,
     data: form,
     processData: false,
     contentType: false,
-    type: 'post', //valores enviados ao script
-
+    type: 'post',
     success: function (data) {
       callback(data)
     },
+  })
+}
+
+function atualizar(form, callback) {
+  form.append('funcao', 'atualizarStatus')
+  $.ajax({
+    url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
+    dataType: 'html',
+    data: form,
+    type: 'post',
+    success: function (data) {
+      callback(data)
+    }
   })
 }

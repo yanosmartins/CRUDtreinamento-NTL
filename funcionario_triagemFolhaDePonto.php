@@ -91,7 +91,7 @@ include("inc/nav.php");
                                                                         Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $codigo = +$row['codigo'];
+                                                                            $codigo = (int)$row['codigo'];
                                                                             $nome = $row['nome'];
                                                                             echo '<option value=' . $codigo . '>' . $nome . '</option>';
                                                                         }
@@ -117,7 +117,7 @@ include("inc/nav.php");
                                                                         foreach ($result as $row) {
                                                                             $codigo = (int) $row['codigo'];
                                                                             $descricao = $row['descricao'];
-                                                                            $pattern = "/^pendente$/i";
+                                                                            $pattern = "/^fechad(o|a)$/i";
                                                                             if (preg_match($pattern, $descricao)) {
                                                                                 echo '<option value="' . $codigo . '" selected>' . $descricao . '</option>';
                                                                             } else {

@@ -204,16 +204,7 @@ include("inc/nav.php");
                                                                         </select><i></i>
                                                                     </label>
                                                                 </section>
-                                                                <section class="col col-md-4">
-                                                                    <label class="label"> </label>
-                                                                    <input type="file" name="fileUpload" id="fileUpload" accept="application/pdf">
-                                                                </section>
-                                                                <section class="col col-md-2">
-                                                                    <label class="label"> </label>
-                                                                    <button type="button" id="btnEnviarArquivo" class="btn btn-danger" aria-hidden="true">
-                                                                        <i class="">Enviar PDF</i>
-                                                                    </button>
-                                                                </section>
+
                                                             </div>
 
                                                             <div class="row">
@@ -357,6 +348,20 @@ include("inc/nav.php");
                                                                     <textarea maxlength="500" id="observacaoFolhaPontoMensal" name="observacaoFolhaPontoMensal" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
                                                                 </section>
                                                             </div>
+                                                            <div class="row">
+                                                                <section class="col col-md-4">
+                                                                    <input type="file" name="fileUpload" id="fileUpload" accept="application/pdf"><i></i>
+                                                                    <label class="label"></label>
+                                                                    <div class="progress">
+                                                                        <div class="progress-bar" role="progressbar" id="progressBar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                                                    </div>
+                                                                </section>
+                                                                <section class="col col-md-2">
+                                                                    <button type="button" id="btnEnviarArquivo" class="btn btn-danger" aria-hidden="true">
+                                                                        <i class="">Enviar PDF</i>
+                                                                    </button>
+                                                                </section>
+                                                            </div>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -391,8 +396,21 @@ include("inc/nav.php");
                                                     </div>
                                                 </div>
                                             </div>
+
+
                                             <button type="button" id="btnFechar" class="btn btn-danger" aria-hidden="true" title="Fechar">
                                                 <i class="">Fechar folha</i>
+                                            </button>
+
+                                            <button type="button" id="btnReabrirPendencia" class="btn btn-warning" aria-hidden="true" title="Reabrir folha" style="display: none;">
+                                                <i class="">Reabrir com pendências</i>
+                                            </button>
+
+                                            <button type="button" id="btnValidarGestor" class="btn btn-success" aria-hidden="true" title="Validar como Gestor" style="display: none;">
+                                                <i class="">Validar como Gestor</i>
+                                            </button>
+                                            <button type="button" id="btnValidarRH" class="btn btn-info" aria-hidden="true" title="Validar como RH" style="display: none;">
+                                                <i class="">Validar como RH</i>
                                             </button>
                                         </footer>
                                 </form>
@@ -618,6 +636,62 @@ include("inc/scripts.php");
 
         $('#btnEnviarArquivo').on("click", function() {
             enviarPDF();
+        })
+
+        //altera status
+
+        $("#btnReabrirPendencia").on("click", function() {
+            const btn = $("#btnReabrirPendencia").attr("id");
+
+            let status;
+            $("#status option").each((index, el) => {
+                const text = $(el).text()
+                const pattern = /^pendente$/gi
+                const test = pattern.test(text)
+
+                if (test) {
+                    status = $(el).val();
+                    return
+                }
+            })
+
+            updateStatus(btn, status)
+        })
+
+        $("#btnValidarGestor").on("click", function() {
+            const btn = $("#btnValidarGestor").attr("id");
+
+            let status;
+            $("#status option").each((index, el) => {
+                const text = $(el).text()
+                const pattern = /^validad(o|a) ?(pelo|por)? ?(o|a)?gestor$/gi
+                const test = pattern.test(text)
+
+                if (test) {
+                    status = $(el).val();
+                    return
+                }
+            })
+
+            updateStatus(btn, status)
+        })
+
+        $("#btnValidarRH").on("click", function() {
+            const btn = $("#btnValidarRH").attr("id");
+
+            let status;
+            $("#status option").each((index, el) => {
+                const text = $(el).text()
+                const pattern = /^validad(o|a) ?(pelo|por)? ?(o|a)?(r|recursos?) ?(h|humanos?)$/gi
+                const test = pattern.test(text)
+
+                if (test) {
+                    status = $(el).val();
+                    return
+                }
+            })
+
+            updateStatus(btn, status)
         })
 
         /* Eventos para chamar a gravar() */
@@ -1829,6 +1903,10 @@ include("inc/scripts.php");
                 $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
                 $("#btnFechar").attr('disabled', obj[permissao].fechar.disabled);
                 $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
+
+                $("#btnValidarGestor").css('display', obj[permissao].validarGestor.display);
+                $("#btnValidarRH").css('display', obj[permissao].validarRH.display);
+                $("#btnReabrirPendencia").css('display', obj[permissao].reabrirPendencia.display);
                 break;
             } else if (permissao == 'PONTOELETRONICOMENSALMODERADO') {
                 $("#funcionario").attr('readonly', obj[permissao].funcionario.readonly);
@@ -1847,8 +1925,14 @@ include("inc/scripts.php");
 
                 let status = $("#status option:selected").text();
                 const pattern = /^fechad(o|a)$/gi;
+                const pattern2 = /^validad(o|a) ?(pelo|por)? ?(o|a)?gestor$/gi;
+                const pattern3 = /^validad(o|a) ?(pelo|por)? ?(o|a)?(r|recursos?) ?(h|humanos?)$/gi;
+
                 const condition = pattern.test(status);
-                if (!condition) {
+                const condition2 = pattern2.test(status);
+                const condition3 = pattern3.test(status);
+
+                if (!condition && !condition2 && !condition3) {
                     $("#status").attr('readonly', obj[permissao].status.readonly);
                     $("#status").removeAttr('style');
                     if (!obj[permissao].status.class) {
@@ -1974,8 +2058,14 @@ include("inc/scripts.php");
 
                 let status = $("#status option:selected").text();
                 const pattern = /^fechad(o|a)$/gi
+                const pattern2 = /^validad(o|a) ?(pelo|por)? ?(o|a)?gestor$/gi;
+                const pattern3 = /^validad(o|a) ?(pelo|por)? ?(o|a)?(r|recursos?) ?(h|humanos?)$/gi;
+
                 const condition = pattern.test(status);
-                if (!condition) {
+                const condition2 = pattern2.test(status);
+                const condition3 = pattern3.test(status);
+
+                if (!condition && !condition2 && !condition3) {
                     $("#status").attr('readonly', obj[permissao].status.readonly);
                     $("#status").removeAttr('style');
                     if (!obj[permissao].status.class) {
@@ -2123,6 +2213,36 @@ include("inc/scripts.php");
                 var piece = data.split("#");
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                 $("#btnEnviarArquivo").prop('disabled', false);
+                return true;
+            }
+        })
+    }
+
+    function updateStatus(btn, status) {
+        const codigo = $("#codigo").val();
+        const idBtn = "#" + btn;
+        const form = new FormData();
+        formData.append('codigo', codigo);
+        formData.append('status', status);
+        $(idBtn).prop('disabled', true);
+
+        atualizar(form, function(data) {
+            if (data.indexOf('sucess') < 0) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
+                if (mensagem !== "") {
+                    smartAlert("Atenção", mensagem, "error");
+                    $(idBtn).prop('disabled', false);
+                    return false;
+                } else {
+                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                    $(idBtn).prop('disabled', false);
+                    return false;
+                }
+            } else {
+                var piece = data.split("#");
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                $(idBtn).prop('disabled', false);
                 return true;
             }
         })

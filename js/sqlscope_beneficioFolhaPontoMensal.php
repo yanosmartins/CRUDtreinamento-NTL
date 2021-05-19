@@ -5,7 +5,7 @@ include "girComum.php";
 
 $funcao = $_POST["funcao"];
 
-$pattern = "/(consultarLancamento|grava|recupera|excluir|consultarPermissoes|enviarFolha)/i";
+$pattern = "/(consultarLancamento|grava|recupera|excluir|consultarPermissoes|enviarFolha|atualizarStatus)/i";
 
 $condicao = preg_match($pattern, $funcao);
 
@@ -383,7 +383,10 @@ function consultarPermissoes()
                     "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
                     "adicionarPonto" => ["disabled" => false],
                     "salvarAlteracoes" => ["disabled" => false],
-                    "fechar" => ["disabled" => false]
+                    "fechar" => ["disabled" => false],
+                    "validarGestor"=>["display" => 'inline-block'],
+                    "validarRH"=>["display" => 'inline-block'],
+                    "reabrirPendencia"=>["display" => 'inline-block']
                 ];
                 break;
             case 'PONTOELETRONICOMENSALMODERADO':
@@ -494,7 +497,31 @@ function enviarFolha()
     if ($result < 1) {
         unlink($file_path);
         $out = "Não foi possível realizar o upload.#";
-        echo "failed#".$out;
+        echo "failed#" . $out;
+        return;
+    } else {
+        echo "sucess#" . $out;
+        return;
+    }
+}
+
+function atualizarStatus()
+{
+    session_start();
+    $usuario = $_SESSION['login'];
+
+    $codigo = $_POST["codigo"];
+    $status = $_POST["status"];
+
+    $reposit = new reposit();
+
+    $result = $reposit->Update("Funcionario.folhaPontoMensal " . "|" .
+        " status = " . $status . " , " . " usuarioAlteracao = '" . $usuario . "' , " . " dataAlteracao = GETDATE() " . "|" . " codigo = " . $codigo);
+
+    $out = "";
+    if ($result < 1) {
+        $out = "";
+        echo "failed#" . $out;
         return;
     } else {
         echo "sucess#" . $out;
