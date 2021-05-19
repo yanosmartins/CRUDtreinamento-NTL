@@ -2231,7 +2231,7 @@ include("inc/scripts.php");
                 var piece = data.split("#");
                 var mensagem = piece[1];
                 if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
+                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
                     $(idBtn).prop('disabled', false);
                     return false;
                 } else {

@@ -518,13 +518,14 @@ function atualizarStatus()
     $result = $reposit->Update("Funcionario.folhaPontoMensal " . "|" .
         " status = " . $status . " , " . " usuarioAlteracao = '" . $usuario . "' , " . " dataAlteracao = GETDATE() " . "|" . " codigo = " . $codigo);
 
-    $out = "";
+    $out = " #";
     if ($result < 1) {
-        $out = "";
-        echo "failed#" . $out;
+        $out = "Erro ao efetuar a operação";
+        echo "failed#" . "$out#";
         return;
     } else {
-        echo "sucess#" . $out;
+        $out = "Operação bem sucedida";
+        echo "sucess#" . "$out#";
         return;
     }
 }
