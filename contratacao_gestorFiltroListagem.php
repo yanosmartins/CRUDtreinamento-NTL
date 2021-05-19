@@ -63,7 +63,7 @@ include "js/repositorio.php";
                     $verificadoPeloGestor = $_POST["verificadoPeloGestor"];
 
                     if ($verificadoPeloGestor == "Sim") {
-                        $where = $where . " AND (CF.verificadoPeloGestor = 1)";
+                        $where = $where . " AND CF.verificadoPeloGestor = 1 AND CF.verificadoPeloRh IS NULL";
                     } else {
                         $where = $where . " AND (CF.verificadoPeloGestor IS NULL OR CF.verificadoPeloGestor = 0) ";
                     }

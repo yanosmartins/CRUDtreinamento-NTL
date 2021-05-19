@@ -33,7 +33,7 @@ include "js/repositorio.php";
                 LEFT JOIN Contratacao.exportacao E ON E.candidato = CF.candidato
                 WHERE verificadoPeloGestor = 1";
 
-                $where = " AND (0 = 0) AND (CF.ativo IS NULL OR CF.ativo = 1) AND (E.situacao = 0 OR E.situacao IS NULL)";
+                $where = " AND (0 = 0) AND (CF.ativo IS NULL OR CF.ativo = 1) ";
 
                 if ($_POST["nome"] != "") {
                     $candidato = $_POST["nome"];
@@ -55,9 +55,9 @@ include "js/repositorio.php";
                 if ($_POST["verificadoPeloRh"] != "") {
                     $verificadoPeloRh = $_POST["verificadoPeloRh"];
                     if ($verificadoPeloRh == "1") {
-                        $where = $where . " AND (CF.verificadoPeloRh = 1)";
+                        $where = $where . " AND (CF.verificadoPeloRh = 1) AND (E.situacao = 1)";
                     } else {
-                        $where = $where . " AND (CF.verificadoPeloRh IS NULL ) ";
+                        $where = $where . " AND CF.verificadoPeloRh IS NULL AND (E.situacao = 0 OR E.situacao IS NULL)";
                     }
                 }
 
