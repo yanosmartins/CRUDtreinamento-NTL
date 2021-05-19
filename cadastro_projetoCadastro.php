@@ -1217,6 +1217,74 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- responsavel pelo projeto -->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseCobertura" class="collapsed" id="accordionCobertura">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Gestor Responsavel pelo projeto
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseCobertura" class="panel-collapse collapse">
+                                                <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <input id="jsonResponsavel" name="jsonResponsavel" type="hidden" value="[]">
+                                                        <div id="formResponsavel" class="col-sm-6">
+                                                        <input id="sequencialResponsavel" name="sequencialResponsavel" type="hidden" value="">
+                                                        <input id="responsavelLoginDescricao" name="responsavelLoginDescricao" type="hidden" value="">
+                                                        <input id="responsavelId" name="responsavelId" type="hidden" value="">
+
+                                                        <div class="row">
+                                                            <section class="col col-8">
+                                                                <label class="label">Login</label>
+                                                                <label class="select">
+                                                                    <select id="responsavelLogin" name="responsavelLogin">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $sql = "SELECT U.codigo, U.login 
+                                                                                FROM Ntl.usuario U WHERE ativo = 1";
+                                                                        $reposit = new reposit();
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $login = ($row['login']);
+                                                                            echo '<option value=' . $codigo . '>' . $login . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-md-2">
+                                                                <label class="label">&nbsp;</label>
+                                                                <button id="btnAddResponsavel" type="button" class="btn btn-primary">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </button>
+                                                                <button id="btnRemoverResponsavel" type="button" class="btn btn-danger">
+                                                                    <i class="fa fa-minus"></i>
+                                                                </button>
+                                                            </section>
+                                                        </div>
+                                                        <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                            <table id="tableResponsavel" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                <thead>
+                                                                    <tr role="row">
+                                                                        <th style="width: 2px"></th>
+                                                                        <th class="text-center">Login</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <footer>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
@@ -1298,6 +1366,7 @@ include("inc/scripts.php");
         jsonEmailArray = JSON.parse($(
             "#jsonEmail").val());
         jsonFolgaArray = JSON.parse($("#jsonFolga").val());
+        jsonResponsavelArray = JSON.parse($("#jsonResponsavel").val());
 
         $("#cnpj").mask("99.999.999/9999-99", {
             placeholder: "X"
@@ -1536,6 +1605,19 @@ include("inc/scripts.php");
         $("#limiteEntrada").mask("99:99");
         $("#limiteSaida").mask("99:99");
 
+
+        //responsavel
+        $("#btnAddResponsavel").on("click", function() {
+            if (validaResponsavel())
+                addResponsavel();
+        });
+
+        $("#btnRemoverResponsavel").on("click", function() {
+            excluirResponsavel();
+        });
+
+        //responsavel
+
         carregaPagina();
 
     });
@@ -1558,6 +1640,7 @@ include("inc/scripts.php");
                             var $strArrayTelefone = piece[2];
                             var $strArrayEmail = piece[3];
                             var $strArrayFolga = piece[4];
+                            var strArrayResponsavel = piece[5];
 
                             piece = out.split("^");
                             var codigo = +piece[0];
@@ -1624,7 +1707,7 @@ include("inc/scripts.php");
                             var razaoSocial = piece[55];
                             var limiteEntrada = piece[56];
                             var limiteSaida = piece[57];
-                            var imprimeCargo = piece[58];     
+                            var imprimeCargo = piece[58];
 
                             $("#codigo").val(codigo);
                             $("#cnpj").val(cnpj);
@@ -1696,14 +1779,17 @@ include("inc/scripts.php");
                             $("#limiteEntrada").val(limiteEntrada);
                             $("#limiteSaida").val(limiteSaida);
                             $("#imprimeCargo").val(imprimeCargo);
-                       
+                            $("#jsonResponsavel").val(strArrayResponsavel);
+
                             jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
                             jsonEmailArray = JSON.parse($("#jsonEmail").val());
                             jsonFolgaArray = JSON.parse($("#jsonFolga").val());
+                            jsonResponsavelArray = JSON.parse($("#jsonResponsavel").val());
 
                             fillTableTelefone();
                             fillTableEmail();
                             fillTableFolga();
+                            fillTableResponsavel();
                             initializeDecimalBehaviour();
 
                         }
@@ -2479,6 +2565,147 @@ include("inc/scripts.php");
             $(valor).val('');
             return false;
         }
+        return true;
+    }
+
+    // responsavel
+
+    function clearFormResponsavel() {
+        $("#responsavelId").val('');
+        $("#responsavelLogin").val('');
+        $("#sequencialResponsavel").val('');
+    }
+
+    function addResponsavel() {
+        var item = $("#formResponsavel").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataResponsavel
+        });
+
+        if (item["sequencialResponsavel"] === '') {
+            if (jsonResponsavelArray.length === 0) {
+                item["sequencialResponsavel"] = 1;
+            } else {
+                item["sequencialResponsavel"] = Math.max.apply(Math, jsonResponsavelArray.map(function(o) {
+                    return o.sequencialResponsavel;
+                })) + 1;
+            }
+            item["responsavelId"] = 0;
+        } else {
+            item["sequencialResponsavel"] = +item["sequencialResponsavel"];
+        }
+
+        var index = -1;
+        $.each(jsonResponsavelArray, function(i, obj) {
+            if (+$('#sequencialResponsavel').val() === obj.sequencialResponsavel) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonResponsavelArray.splice(index, 1, item);
+        else
+            jsonResponsavelArray.push(item);
+
+        $("#jsonResponsavel").val(JSON.stringify(jsonResponsavelArray));
+        fillTableResponsavel();
+        clearFormResponsavel();
+    }
+
+    function excluirResponsavel() {
+        var arrSequencial = [];
+        $('#tableResponsavel input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonResponsavelArray.length - 1; i >= 0; i--) {
+                var obj = jsonResponsavelArray[i];
+                if (jQuery.inArray(obj.sequencialResponsavel, arrSequencial) > -1) {
+                    jsonResponsavelArray.splice(i, 1);
+                }
+            }
+            $("#jsonResponsavel").val(JSON.stringify(jsonResponsavelArray));
+            fillTableResponsavel();
+        } else
+            smartAlert("Erro", "Selecione pelo menos 1 Responsavel para excluir.", "error");
+    }
+
+    function fillTableResponsavel() {
+        $("#tableResponsavel tbody").empty();
+        for (var i = 0; i < jsonResponsavelArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableResponsavel tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonResponsavelArray[i].sequencialResponsavel + '"><i></i></label></td>'));
+            row.append($('<td class="text-left" onclick="carregaResponsavel(' + jsonResponsavelArray[i].sequencialResponsavel + ');">' + jsonResponsavelArray[i].responsavelLoginDescricao + '</td>'));
+        }
+    }
+
+    function processDataResponsavel(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "responsavelLogin")) {
+            var responsavelLogin = $("#responsavelLogin").val();
+            if (responsavelLogin !== '') {
+                fieldName = "responsavelLogin";
+            }
+            return {
+                name: fieldName,
+                value: responsavelLogin
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "responsavelLoginDescricao")) {
+            return {
+                name: fieldName,
+                value: $("#responsavelLogin option:selected").text()
+            };
+        }
+
+        return false;
+    }
+
+    function carregaResponsavel(sequencialResponsavel) {
+        var arr = jQuery.grep(jsonResponsavelArray, function(item, i) {
+            return (item.sequencialResponsavel === sequencialResponsavel);
+        });
+
+        clearFormResponsavel();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#responsavelId").val(item.responsavelId);
+            $("#responsavelLogin").val(item.responsavelLogin);
+            $("#sequencialResponsavel").val(item.sequencialResponsavel);
+        }
+    }
+
+     
+
+    function validaResponsavel() {
+        var achouResponsavel = false;
+        var responsavelLogin = $('#responsavelLogin').val();
+        var sequencial = +$('#sequencialResponsavel').val();
+        if (!responsavelLogin) {
+            smartAlert("Erro", "Informe o responsavel", "error");
+            return false;
+        }
+        for (i = jsonResponsavelArray.length - 1; i >= 0; i--) {
+            if (responsavelLogin !== "") {
+                if ((jsonResponsavelArray[i].responsavelLogin === responsavelLogin) && (jsonResponsavelArray[i].sequencialResponsavel !== sequencial)) {
+                    achouResponsavel = true;
+                    break;
+                }
+            }
+        }
+
+        if (achouResponsavel === true) {
+            smartAlert("Erro", "Já existe o Responsável na lista.", "error");
+            return false;
+        }
+
         return true;
     }
 </script>

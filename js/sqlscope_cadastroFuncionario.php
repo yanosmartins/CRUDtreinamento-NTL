@@ -50,7 +50,6 @@ function grava()
     $cpf = formatarString($_POST['cpf']);
     $matricula = formatarString($_POST['matricula']);
     $sexo = formatarString($_POST['sexo']);
-    $especializacao = ($_POST['especializacao']);
 
     $dataNascimento = formatarDATA($_POST['dataNascimento']);
     $dataAdmissaoFuncionario = formatarData($_POST['dataAdmissaoFuncionario']);
@@ -198,6 +197,48 @@ function grava()
 
     // ',' .  $xmlDependente .
 
+    //------------------------Funcionário  Especializacao------------------
+    $strArrayEspecializacao = $_POST['jsonEspecializacaoArray'];
+    $arrayEspecializacao = json_decode($strArrayEspecializacao, true);
+    $xmlEspecializacao = "";
+    $nomeXml = "ArrayOfFuncionarioEspecializacao";
+    $nomeTabela = "funcionarioEspecializacao";
+    if (sizeof($arrayEspecializacao) > 0) {
+        $xmlEspecializacao = '<?xml version="1.0"?>';
+        $xmlEspecializacao = $xmlEspecializacao . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+
+        foreach ($arrayEspecializacao as $chave) {
+            $xmlEspecializacao = $xmlEspecializacao . "<" . $nomeTabela . ">";
+            foreach ($chave as $campo => $valor) {
+                if (($campo === "sequencialEspecializacao")) {
+                    continue;
+                }
+                if ($campo == "observacao") {
+                    $xmlEspecializacao = $xmlEspecializacao . "<" . $campo . '>"' .$valor. '"</' . $campo . ">";
+                } else {
+                    $xmlEspecializacao = $xmlEspecializacao . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+                }
+            }
+            $xmlEspecializacao = $xmlEspecializacao . "</" . $nomeTabela . ">";
+        }
+        $xmlEspecializacao = $xmlEspecializacao . "</" . $nomeXml . ">";
+    } else {
+        $xmlEspecializacao = '<?xml version="1.0"?>';
+        $xmlEspecializacao = $xmlEspecializacao . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlEspecializacao = $xmlEspecializacao . "</" . $nomeXml . ">";
+    }
+    $xml = simplexml_load_string($xmlEspecializacao);
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML de telefone";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+    $xmlEspecializacao = "'" . $xmlEspecializacao . "'";
+
+
+
+
+
     $sql = "Ntl.funcionario_Atualiza 
                         $id,
                         $ativo,
@@ -233,10 +274,10 @@ function grava()
                         $cidade,
                         $bairro,
                         $ufIdentidade,
-                        $especializacao,
                         $xmlTelefone,
                         $xmlEmail,
                         $xmlDependente,
+                        $xmlEspecializacao,
                         $usuario";
 
     // $sql = 'Ntl.funcionario_Atualiza ';
@@ -308,7 +349,7 @@ function recupera()
 
     $out = "";
 
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
 
         //Accordion Dados
         $id = +$row['codigo'];
@@ -323,7 +364,6 @@ function recupera()
         $dataAdmissaoFuncionario =  $row['dataAdmissaoFuncionario'];
         $dataDemissaoFuncionario =  $row['dataDemissaoFuncionario'];
         $dataCancelamentoPlanoSaude =  $row['dataCancelamentoPlanoSaude'];
-        $especializacao = $row['especializacao'];
 
 
         //Accordion de Documentos Pessoais
@@ -407,7 +447,7 @@ function recupera()
 
         $contadorTelefone = 0;
         $arrayTelefone = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $telefoneId = $row['codigo'];
             $telefone = $row['telefone'];
             $principal = +$row['principal'];
@@ -450,7 +490,7 @@ function recupera()
 
         $contadorEmail = 0;
         $arrayEmail = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $emailId = $row['codigo'];
             $email = $row['email'];
             $principal = +$row['principal'];
@@ -487,7 +527,7 @@ function recupera()
 
         $contadorDependente = 0;
         $arrayDependente = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $dependenteId = $row['codigo'];
             $nomeDependente = $row['nomeDependente'];
             $dataNascimentoDependente = $row['dataNascimentoDependente'];
@@ -516,6 +556,37 @@ function recupera()
 
 
         $strArrayDependente = json_encode($arrayDependente);
+
+
+        //----------------------Montando o array do Especializacao
+
+        $reposit = "";
+        $result = "";
+        $sql = "SELECT *,E.descricao, FE.observacao FROM Ntl.funcionario F 
+        INNER JOIN Ntl.funcionarioEspecializacao FE ON F.codigo = FE.funcionario
+        INNER JOIN Ntl.especializacao E ON FE.especializacao = E.codigo WHERE F.codigo = " . $id;
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+
+        $contadorEspecializacao = 0;
+        $arrayEspecializacao = array();
+        foreach ($result as $row) {
+            $especializacao = $row['codigo'];
+            $especializacaoDescricao = $row['descricao'];
+            $observacao = $row['observacao'];
+
+            $contadorEspecializacao = $contadorEspecializacao + 1;
+            $arrayEspecializacao[] = array(
+                "sequencialEspecializacao" => $contadorEspecializacao,
+                "especializacao" => $especializacao,
+                "especializacaoDescricao" => $especializacaoDescricao,
+                "observacao" => $observacao
+
+            );
+        }
+
+        $strArrayEspecializacao = json_encode($arrayEspecializacao);
+
 
         $out = $id . "^" .
             $ativo . "^" .
@@ -551,9 +622,8 @@ function recupera()
             $cidade  . "^" .
             $bairro . "^" .
             $ufIdentidade . "^" .
-            $especializacao."^" .
             $strArrayTelefone . "^" .
-            $strArrayEmail;;
+            $strArrayEmail;
 
 
 
@@ -561,7 +631,7 @@ function recupera()
             echo "failed#";
         }
         if ($out != '') {
-            echo "sucess#" . $out . "#" . $strArrayTelefone  . "#" . $strArrayEmail . "#" . $strArrayDependente;
+            echo "sucess#" . $out . "#" . $strArrayTelefone  . "#" . $strArrayEmail . "#" . $strArrayDependente . "#" . $strArrayEspecializacao;
         }
         return;
     }
@@ -615,7 +685,7 @@ function listaFuncionarioAtivoAutoComplete()
     $result = $reposit->RunQuery($sql);
     $contador = 0;
     $array = array();
-    foreach($result as $row) {
+    foreach ($result as $row) {
         $id = $row['codigo'];
         $descricao = $row["nome"];
         $contador = $contador + 1;

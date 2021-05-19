@@ -5,30 +5,30 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-$condicaoAcessarOK = (in_array('ASO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('ASO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('ASO_EXCLUIR', $arrayPermissao, true));
-$condicaoGestorOK = (in_array('ASO_GESTOR', $arrayPermissao, true));
+// $condicaoAcessarOK = (in_array('ASO_ACESSAR', $arrayPermissao, true));
+// $condicaoGravarOK = (in_array('ASO_GRAVAR', $arrayPermissao, true));
+// $condicaoExcluirOK = (in_array('ASO_EXCLUIR', $arrayPermissao, true));
+// $condicaoGestorOK = (in_array('ASO_GESTOR', $arrayPermissao, true));
 
-if ($condicaoAcessarOK == false) {
-    unset($_SESSION['login']);
-    header("Location:login.php");
-}
+// if ($condicaoAcessarOK == false) {
+//     unset($_SESSION['login']);
+//     header("Location:login.php");
+// }
 
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
-}
-$esconderGestor = "";
-$funcionario = "";
-if ($condicaoGestorOK === false) {
-    $esconderGestor = "none";
-    $funcionario = "readonly";
-}
+// $esconderBtnExcluir = "";
+// if ($condicaoExcluirOK === false) {
+//     $esconderBtnExcluir = "none";
+// }
+// $esconderBtnGravar = "";
+// if ($condicaoGravarOK === false) {
+//     $esconderBtnGravar = "none";
+// }
+// $esconderGestor = "";
+// $funcionario = "";
+// if ($condicaoGestorOK === false) {
+//     $esconderGestor = "none";
+//     $funcionario = "readonly";
+// }
 
 
 

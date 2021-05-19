@@ -86,7 +86,7 @@ function recuperarDadosFuncionario()
         $projeto . "^" .
         $sexo . "^" .
         $dataNascimentoFormatada . "^" .
-        $idade. "^" .
+        $idade . "^" .
         $dataAdmissaoFormatada . "^" .
         $cargoId . "^" .
         $projetoId;
@@ -140,7 +140,7 @@ function recuperarDadosFuncionarioASO()
         $dataAdmissao = $row['dataAdmissao'];
         $cargoId = $row['codigoCargo'];
         $projetoId = $row['codigoProjeto'];
-        $dataUltimoAso =$row['dataUltimoAso'];
+        $dataUltimoAso = $row['dataUltimoAso'];
         $dataValidadeAso = $row['dataValidadeAso'];
         $dataAgendamento = $row['dataAgendamento'];
     }
@@ -162,38 +162,38 @@ function recuperarDadosFuncionarioASO()
     };
 
     $reposit = "";
-$result = "";
-$sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.situacao FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
+    $result = "";
+    $sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.situacao FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
 INNER JOIN  funcionario.atestadoSaudeOcupacional ASO ON ASOD.atestadoSaudeOcupacional = ASO.codigo
 WHERE ASO.funcionario = $funcionario";
-$reposit = new reposit();
-$result = $reposit->RunQuery($sql);
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
 
-$contadorDataAso = 0;
-$arrayDataAso = array();
-foreach ($result as $row) {
-    $dataProximoAsoLista = $row['dataProximoAsoLista'];
-    $dataRealizacaoAso = (string)$row['dataRealizacaoAso'];
-    $situacao = (string)$row['situacao'];
+    $contadorDataAso = 0;
+    $arrayDataAso = array();
+    foreach ($result as $row) {
+        $dataProximoAsoLista = $row['dataProximoAsoLista'];
+        $dataRealizacaoAso = (string)$row['dataRealizacaoAso'];
+        $situacao = (string)$row['situacao'];
 
-    $dataProximoAsoLista = explode("-", $dataProximoAsoLista);
-    $diadataProximoAsoLista = explode(" ", $dataProximoAsoLista[2]);
-    $dataProximoAsoLista = $diadataProximoAsoLista[0] . "/" . $dataProximoAsoLista[1] . "/" . $dataProximoAsoLista[0];
+        $dataProximoAsoLista = explode("-", $dataProximoAsoLista);
+        $diadataProximoAsoLista = explode(" ", $dataProximoAsoLista[2]);
+        $dataProximoAsoLista = $diadataProximoAsoLista[0] . "/" . $dataProximoAsoLista[1] . "/" . $dataProximoAsoLista[0];
 
-    $dataRealizacaoAso = explode("-", $dataRealizacaoAso);
-    $diadataRealizacaoAso = explode(" ", $dataRealizacaoAso[2]);
-    $dataRealizacaoAso = $diadataRealizacaoAso[0] . "/" . $dataRealizacaoAso[1] . "/" . $dataRealizacaoAso[0];
+        $dataRealizacaoAso = explode("-", $dataRealizacaoAso);
+        $diadataRealizacaoAso = explode(" ", $dataRealizacaoAso[2]);
+        $dataRealizacaoAso = $diadataRealizacaoAso[0] . "/" . $dataRealizacaoAso[1] . "/" . $dataRealizacaoAso[0];
 
-    $contadorDataAso = $contadorDataAso + 1;
-    $arrayDataAso[] = array(
-        "sequencialDataAso" => $contadorDataAso,
-        "dataProximoAsoLista" => $dataProximoAsoLista,
-        "dataRealizacaoAso" => $dataRealizacaoAso,
-        "situacao" => $situacao
-    );
-}
+        $contadorDataAso = $contadorDataAso + 1;
+        $arrayDataAso[] = array(
+            "sequencialDataAso" => $contadorDataAso,
+            "dataProximoAsoLista" => $dataProximoAsoLista,
+            "dataRealizacaoAso" => $dataRealizacaoAso,
+            "situacao" => $situacao
+        );
+    }
 
-$strArrayDataAso = json_encode($arrayDataAso);
+    $strArrayDataAso = json_encode($arrayDataAso);
 
 
     $out = $codigo . "^" .
@@ -203,11 +203,11 @@ $strArrayDataAso = json_encode($arrayDataAso);
         $projeto . "^" .
         $sexo . "^" .
         $dataNascimentoFormatada . "^" .
-        $idade. "^" .
+        $idade . "^" .
         $dataAdmissaoFormatada . "^" .
         $cargoId . "^" .
-        $projetoId . "^" . 
-        $dataUltimoAsoFormatada . "^" .  
+        $projetoId . "^" .
+        $dataUltimoAsoFormatada . "^" .
         $dataValidadeAsoFormatada . "^" .
         $dataAgendamentoFormatada;
 
@@ -247,6 +247,7 @@ function grava()
         $ativo = (int) $_POST["ativo"];
     }
 
+
     //Variáveis que estão sendo passadas.
     session_start();
     $usuario = $_SESSION['login'];  //Pegando o nome do usuário mantido pela sessão.
@@ -262,6 +263,18 @@ function grava()
     $dataAgendamento = formatarData($_POST['dataAgendamento']);
     $ativo =  $_POST['ativo'];
 
+
+    $reposit = "";
+    $result = "";
+    $sql = "SELECT codigo FROM Funcionario.atestadoSaudeOcupacional WHERE funcionario = " . $funcionario;
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    if((empty($result))|| ($result < 1)) {
+    } else {
+        $row = $result[0];
+        $codigoFolha = $row['codigo'];
+       $id = $codigoFolha;
+    };
     $strArrayDataAso = $_POST['jsonDataAsoArray'];
     $arrayDataAso = $strArrayDataAso;
     if (!is_null($strArrayDataAso)) {
@@ -276,7 +289,7 @@ function grava()
                 $xmlDataAso = $xmlDataAso . "<" . $nomeTabela . ">";
                 foreach ($chave as $campo => $valor) {
 
-                
+
                     if ($campo === "dataProximoAsoLista") {
                         if ($valor == "") {
                             $valor = 'NULL';
@@ -294,6 +307,9 @@ function grava()
                         $valor = date("Y-m-d", strtotime($valor));
                     }
                     if (($campo === "sequencialDataAso")) {
+                        continue;
+                    }
+                    if (($campo === "descricaoTipoExame")) {
                         continue;
                     }
 
@@ -339,12 +355,12 @@ function grava()
         . $sexo . ","
         . $dataNascimento . ","
         . $dataAdmissao . ","
-        . $dataUltimoAso . "," 
-        . $dataProximoAso . "," 
+        . $dataUltimoAso . ","
+        . $dataProximoAso . ","
         . $dataAgendamento  . ","
         . $ativo  . ","
-        . $usuario . "," 
-        .$xmlDataAso . "";
+        . $usuario . ","
+        . $xmlDataAso . "";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -373,122 +389,135 @@ function recupera()
         INNER JOIN ntl.projeto P ON P.codigo = ASO.projeto
     WHERE ASO.codigo = " . $id;
 
-$reposit = new reposit();
-$result = $reposit->RunQuery($sql);
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
 
-$out = "";
-if ($row = $result[0]) {
-    $codigo = (int) $row['codigo'];
-    $matricula = $row['matricula'];
-    $funcionario = $row['funcionario'];
-    $cargo = $row['cargoNome'];
-    $projeto = $row['projetoNome'];
-    $sexo = $row['sexo'];
-    $dataNascimento = $row['dataNascimento'];
-    $dataNascimentoTeste = new DateTime($dataNascimento);
-    $dataAtual = new DateTime();
-    $difData = date_diff($dataAtual, $dataNascimentoTeste);
-    $idade = $difData->format('%y');
-    $dataAdmissao = $row['dataAdmissao'];
-    $ativo = $row['ativo'];
-    $dataProximoAso = $row['dataProximoAso'];
-    $dataUltimoAso = $row['dataUltimoAso'];
-    $dataAgendamento = $row['dataAgendamento'];
-    $cargoId = $row['cargoId'];
-    $projetoId = $row['projetoId'];
-    
-}
+    $out = "";
+    if ($row = $result[0]) {
+        $codigo = (int) $row['codigo'];
+        $matricula = $row['matricula'];
+        $funcionario = $row['funcionario'];
+        $cargo = $row['cargoNome'];
+        $projeto = $row['projetoNome'];
+        $sexo = $row['sexo'];
+        $dataNascimento = $row['dataNascimento'];
+        $dataNascimentoTeste = new DateTime($dataNascimento);
+        $dataAtual = new DateTime();
+        $difData = date_diff($dataAtual, $dataNascimentoTeste);
+        $idade = $difData->format('%y');
+        $dataAdmissao = $row['dataAdmissao'];
+        $ativo = $row['ativo'];
+        $dataProximoAso = $row['dataProximoAso'];
+        $dataUltimoAso = $row['dataUltimoAso'];
+        $dataAgendamento = $row['dataAgendamento'];
+        $cargoId = $row['cargoId'];
+        $projetoId = $row['projetoId'];
+    }
 
-if ($dataNascimento != "") {
-    $dataNascimentoFormatada = formataDataRecuperacao($dataNascimento);
-};
-if ($dataAdmissao != "") {
-    $dataAdmissaoFormatada = formataDataRecuperacao($dataAdmissao);
-};
+    if ($dataNascimento != "") {
+        $dataNascimentoFormatada = formataDataRecuperacao($dataNascimento);
+    };
+    if ($dataAdmissao != "") {
+        $dataAdmissaoFormatada = formataDataRecuperacao($dataAdmissao);
+    };
 
-if ($dataProximoAso != "") {
-    $dataProximoAsoFormatada = formataDataRecuperacao($dataProximoAso);
-};
+    if ($dataProximoAso != "") {
+        $dataProximoAsoFormatada = formataDataRecuperacao($dataProximoAso);
+    };
 
-if ($dataUltimoAso != "") {
-    $dataUltimoAsoFormatada = formataDataRecuperacao($dataUltimoAso);
-};
-
-
-if ($dataAgendamento != "") {
-    $dataAgendamentoFormatada = formataDataRecuperacao($dataAgendamento);
-};
-
-if ($sexo == "M") {
-    $sexo = "Masculino";
-} else {
-    $sexo = "Feminino";
-}
+    if ($dataUltimoAso != "") {
+        $dataUltimoAsoFormatada = formataDataRecuperacao($dataUltimoAso);
+    };
 
 
-// XML DATA ASO
-$reposit = "";
-$result = "";
-$sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.situacao FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
+    if ($dataAgendamento != "") {
+        $dataAgendamentoFormatada = formataDataRecuperacao($dataAgendamento);
+    };
+
+    if ($sexo == "M") {
+        $sexo = "Masculino";
+    } else {
+        $sexo = "Feminino";
+    }
+
+
+    // XML DATA ASO
+    $reposit = "";
+    $result = "";
+    $sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.tipoExame,ASOD.situacao FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
 INNER JOIN  funcionario.atestadoSaudeOcupacional ASO ON ASOD.atestadoSaudeOcupacional = ASO.codigo
 WHERE ASO.codigo = $id";
-$reposit = new reposit();
-$result = $reposit->RunQuery($sql);
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
 
-$contadorDataAso = 0;
-$arrayDataAso = array();
-foreach ($result as $row) {
-    $dataProximoAsoLista = $row['dataProximoAsoLista'];
-    $dataRealizacaoAso = (string)$row['dataRealizacaoAso'];
-    $situacao = (string)$row['situacao'];
+    $contadorDataAso = 0;
+    $arrayDataAso = array();
+    foreach ($result as $row) {
+        $dataProximoAsoLista = $row['dataProximoAsoLista'];
+        $dataRealizacaoAso = (string)$row['dataRealizacaoAso'];
+        $situacao = (string)$row['situacao'];
+        $tipoExame = (int) $row['tipoExame'];
 
-    
-if ($dataProximoAsoLista != "") {
-    $dataProximoAsoLista = formataDataRecuperacao($dataProximoAsoLista);
-};
+        if ($dataProximoAsoLista != "") {
+            $dataProximoAsoLista = formataDataRecuperacao($dataProximoAsoLista);
+        };
 
-if ($dataRealizacaoAso != "") {
-    $dataRealizacaoAso = formataDataRecuperacao($dataRealizacaoAso);
-};
+        if ($dataRealizacaoAso != "") {
+            $dataRealizacaoAso = formataDataRecuperacao($dataRealizacaoAso);
+        };
+        if ($tipoExame == 1) {
+            $descricaoTipoExame = 'Exame Admissional';
+        }
+        if ($tipoExame == 2) {
+            $descricaoTipoExame = 'Exame Periódico';
+        }
+        if ($tipoExame == 3) {
+            $descricaoTipoExame = 'Mudança de Risco Ocupacional';
+        }
+        if ($tipoExame == 4) {
+            $descricaoTipoExame = 'Retorno ao trabalho';
+        }
 
-    $contadorDataAso = $contadorDataAso + 1;
-    $arrayDataAso[] = array(
-        "sequencialDataAso" => $contadorDataAso,
-        "dataProximoAsoLista" => $dataProximoAsoLista,
-        "dataRealizacaoAso" => $dataRealizacaoAso,
-        "situacao" => $situacao
-    );
-}
+        $contadorDataAso = $contadorDataAso + 1;
+        $arrayDataAso[] = array(
+            "sequencialDataAso" => $contadorDataAso,
+            "dataProximoAsoLista" => $dataProximoAsoLista,
+            "dataRealizacaoAso" => $dataRealizacaoAso,
+            "descricaoTipoExame" => $tipoExame,
+            "descricaoTipoExame" => $descricaoTipoExame,
+            "situacao" => $situacao
+        );
+    }
 
 
 
-$strArrayDataAso = json_encode($arrayDataAso);
+    $strArrayDataAso = json_encode($arrayDataAso);
 
 
 
-$out = $codigo . "^" .
-    $funcionario . "^" .
-    $matricula . "^" .
-    $cargo . "^" .
-    $projeto . "^" .
-    $sexo . "^" .
-    $dataNascimentoFormatada . "^" .
-    $idade. "^" .
-    $dataAdmissaoFormatada . "^" .
-    $ativo  . "^" .
-    $dataUltimoAsoFormatada . "^" .
-    $dataProximoAsoFormatada . "^" .
-   $dataAgendamentoFormatada . "^" .
-   $cargoId . "^" .
-   $projetoId;
+    $out = $codigo . "^" .
+        $funcionario . "^" .
+        $matricula . "^" .
+        $cargo . "^" .
+        $projeto . "^" .
+        $sexo . "^" .
+        $dataNascimentoFormatada . "^" .
+        $idade . "^" .
+        $dataAdmissaoFormatada . "^" .
+        $ativo  . "^" .
+        $dataUltimoAsoFormatada . "^" .
+        $dataProximoAsoFormatada . "^" .
+        $dataAgendamentoFormatada . "^" .
+        $cargoId . "^" .
+        $projetoId;
 
-if ($out == "") {
-    echo "failed#";
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out . "#" . $strArrayDataAso;
     return;
-}
-
-echo "sucess#" . $out . "#" . $strArrayDataAso;
-return;
 }
 
 function excluir()

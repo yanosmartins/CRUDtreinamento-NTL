@@ -133,9 +133,10 @@ include("inc/nav.php");
                                                                 <label class="label" for="situacao">Situação</label>
                                                                 <label class="select">
                                                                     <select id="situacao" name="situacao" class="" >
+                                                                    <option></option>
                                                                         <option value='P'>Pendente</option>
                                                                         <option value='F'>Fechado</option>
-                                                                        <option value='A'>Aberto</option>
+                                                                        <option value='A' selected>Aberto</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
