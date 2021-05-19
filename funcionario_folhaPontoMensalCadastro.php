@@ -2222,8 +2222,8 @@ include("inc/scripts.php");
         const codigo = $("#codigo").val();
         const idBtn = "#" + btn;
         const form = new FormData();
-        formData.append('codigo', codigo);
-        formData.append('status', status);
+        form.append('codigo', codigo);
+        form.append('status', status);
         $(idBtn).prop('disabled', true);
 
         atualizar(form, function(data) {
