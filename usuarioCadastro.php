@@ -140,6 +140,15 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label">Restaurar senha</label>
+                                                                <label class="select">
+                                                                    <select id="restaurarSenha" name="restaurarSenha">
+                                                                        <option value="1" >Sim</option> 
+                                                                        <option value="0">Não</option> 
+                                                                    </select><i></i> 
+                                                                </label> 
+                                                            </section> 
                                                         </div>
                                                     </fieldset>
                                                 </div>                                                        
@@ -441,6 +450,7 @@ include("inc/scripts.php");
         var funcionario = $("#funcionario").val();
         var senhaConfirma = $("#senhaConfirma").val();
         var tipoUsuario = "C";
+        var restaurarSenha = $("#restaurarSenha").val();
         if (login === "") {
             smartAlert("Atenção", "Informe o login !", "error");
             $("#login").focus();
@@ -491,7 +501,7 @@ include("inc/scripts.php");
                 }
             }
         }
-        gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario,funcionario);
+        gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario,funcionario,restaurarSenha);
     }
 </script>
 

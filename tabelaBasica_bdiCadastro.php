@@ -361,17 +361,16 @@ include("inc/scripts.php");
             //Atributos de cliente 
             debugger;
             var codigo = parseInt(piece[0]);
-            var descricao = piece[1];
-            var percentual = piece[2];
-            var ativo = piece[3];
-            var tipo = piece[4];
+            var codigoUsuario = piece[0];
+            var restaurarSenha = piece[1];
+          
 
             //Atributos de cliente        
             $("#codigo").val(codigo);
-            $("#descricao").val(descricao);
-            $("#percentual").val(percentual);
-            $("#ativo").val(ativo);
-            $("#tipo").val(tipo);
+            // $("#descricao").val(descricao);
+            // $("#percentual").val(percentual);
+            // $("#ativo").val(ativo);
+            // $("#tipo").val(tipo);
 
           }
 
