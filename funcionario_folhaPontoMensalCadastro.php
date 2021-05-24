@@ -63,7 +63,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form action="javascript:gravar()" class="smart-form client-form" id="formFolhaPontoMensalCadastro" method="post">
+                                <form class="smart-form client-form" id="formFolhaPontoMensalCadastro" method="post">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -348,21 +348,84 @@ include("inc/nav.php");
                                                                     <textarea maxlength="500" id="observacaoFolhaPontoMensal" name="observacaoFolhaPontoMensal" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
                                                                 </section>
                                                             </div>
-                                                            <div class="row">
-                                                                <section class="col col-md-4">
-                                                                    <input type="file" name="fileUpload" id="fileUpload" accept="application/pdf"><i></i>
-                                                                    <label class="label"></label>
-                                                                    <div class="progress">
-                                                                        <div class="progress-bar" role="progressbar" id="progressBar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                                                                    </div>
-                                                                </section>
-                                                                <section class="col col-md-2">
-                                                                    <button type="button" id="btnEnviarArquivo" class="btn btn-danger" aria-hidden="true">
-                                                                        <i class="">Enviar PDF</i>
-                                                                    </button>
-                                                                </section>
+
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- ############################################################# -->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseUploadFolha" class="collapsed" id="accordionUploadFolha">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Upload da folha assinada
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseUploadFolha" class="panel-collapse collapse in">
+                                                <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <input id="jsonUploadFolha" name="jsonUploadFolha" type="hidden" value="[]">
+                                                        <div id="formUploadFolha" class="col col-sm-12">
+                                                            <input id="uploadFolhaId" name="uploadFolhaId" type="hidden" value="">
+                                                            <input id="sequencialUploadFolha" name="sequencialUploadFolha" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-md-4">
+                                                                        <label class="label">Arquivo</label>
+                                                                        <div class="form-control input">
+                                                                            <input type="file" name="fileUploadFolha" id="fileUploadFolha" accept="application/pdf">
+                                                                        </div>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label" for="dataReferenteUpload">Data referente</label>
+                                                                        <label class="input">
+                                                                            <i class="icon-append fa fa-calendar"></i>
+                                                                            <input id="dataReferenteUpload" name="dataReferenteUpload" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa">
+                                                                        </label>
+                                                                    </section>
+                                                                    <input type="text" name="dataUpload" id="dataUpload" hidden class="hidden">
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddUploadFolha" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverUploadFolha" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableUploadFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th></th>
+                                                                            <th class="text-left" style="min-width: 100%;">Arquivo</th>
+                                                                            <th class="text-left">Mês referente</th>
+                                                                            <th class="text-left">Data de upload</th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-md-4">
+                                                                        <button id="enviarUploads" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-file-pdf-o" style="font-size:2rem"></i><i style="padding-left: 5px;">Enviar PDF</i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
                                                             </div>
                                                         </div>
+
                                                     </fieldset>
                                                 </div>
 
@@ -466,7 +529,6 @@ include("inc/scripts.php");
 
 <script src="js/plugin/clockpicker/clockpicker.min.js"></script>
 
-
 <script language="JavaScript" type="text/javascript">
     /*---------------Variaveis e constantes globais-------------*/
     var toleranciaExtra = '05:00';
@@ -485,6 +547,8 @@ include("inc/scripts.php");
 
     const minDate = defaultDate.getFullYear() + '-' + minMonth + '-' + minDay;
     const maxDate = defaultDate.getFullYear() + '-' + maxMonth + '-' + maxDay;
+
+    jsonUploadFolhaArray = JSON.parse($("#jsonUploadFolha").val());
 
     /*---------------/Variaveis e constantes globais-------------*/
 
@@ -634,12 +698,15 @@ include("inc/scripts.php");
             imprimir();
         })
 
-        $('#btnEnviarArquivo').on("click", function() {
+        /* ALTERAR AQUI! */
+        /* =================================================== */
+        /* =================================================== */
+        /* =================================================== */
+        $('#enviarUploads').on("click", function() {
             enviarPDF();
         })
 
         //altera status
-
         $("#btnReabrirPendencia").on("click", function() {
             const btn = $("#btnReabrirPendencia").attr("id");
 
@@ -703,20 +770,22 @@ include("inc/scripts.php");
             $('#dlgSimpleClose').dialog('open');
         });
 
-        // $("#checkAlmoco").on("click", function() {
-        //     var check = $(".sectionAlmoco")
-        //     check.each((index, el) => {
-        //         console.log(typeof el)
-        //         console.log($(el))
+        /* Eventos para chamar a addUploadFolha e excluirUploadFolha() */
+        $("#btnAddUploadFolha").on("click", function() {
+            if (validaUploadFolha())
+                addUploadFolha();
+        });
 
-        //         if ($(el).css('display') != 'block') {
+        $("#btnRemoverUploadFolha").on("click", function() {
+            excluirUploadFolha();
+        });
 
-        //             $(el).css('display', 'block')
-        //         } else {
-        //             $(el).css('display', 'none')
-        //         }
-        //     })
-        // });
+        $("#dataReferenteUpload").on("change", function() {
+            let dataReferente = $("#dataReferenteUpload").val();
+            dataReferente = dataReferente.replace(/^\d{2}/, '01')
+            $("#dataReferenteUpload").val(dataReferente);
+            return
+        });
 
         /*Função responsavel pelo carregamento dos dados pessoais e configurações da tela*/
         carregaFolhaPontoMensal();
@@ -2181,22 +2250,33 @@ include("inc/scripts.php");
 
     }
 
-    function enviarPDF() {
-        const file = $("#fileUpload")[0].files[0];
-        const funcionario = $("#funcionario").val();
-        const data = new Date()
-        const formData = new FormData();
+    async function enviarPDF() {
 
-        formData.append('funcionario', funcionario);
-        formData.append('file', file, `${data.getFullYear()}${data.getMonth()}${data.getDate()}${data.getMilliseconds()}.pdf`);
+        const files = [];
+        const datas = [];
+        const ob = {};
+        jsonUploadFolhaArray.forEach(obj => {
+            for (let prop in obj) {
+                if (obj[prop] instanceof File) files.push(obj[prop])
+                else ob[prop] = obj[prop]
+            }
+            datas.push(ob)
+        })
 
-        for (let value of formData) {
-            console.table(value)
+        const base64 = [];
+        for (let file of files) {
+            base64.push(await fileToBase64(file))
         }
 
-        $("#btnEnviarArquivo").prop('disabled', true);
+        const jsonData = datas.map((obj, index) => {
+            obj.fileUploadFolha = base64[index]
+            return obj
+        })
 
-        enviarArquivo(formData, function(data) {
+        debugger
+        console.log(jsonData)
+
+        enviarArquivo(jsonData, function(data) {
             if (data.indexOf('sucess') < 0) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -2247,4 +2327,176 @@ include("inc/scripts.php");
             }
         })
     }
+
+    //====================================//
+    //====================================//
+    function fillTableUploadFolha() {
+        $("#tableUploadFolha tbody").empty();
+        for (var i = 0; i < jsonUploadFolhaArray.length; i++) {
+
+            var row = $('<tr />');
+            $("#tableUploadFolha tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonUploadFolhaArray[i].sequencialUploadFolha + '"><i></i></label></td>'));
+
+            var fileUploadFolha = jsonUploadFolhaArray[i].fileUploadFolha;
+
+            row.append($('<td class="text-nowrap" onclick="carregaUploadFolha(' + jsonUploadFolhaArray[i].sequencialUploadFolha + ');">' + fileUploadFolha.name + '</td>'));
+
+            var dataReferenteUpload = jsonUploadFolhaArray[i].dataReferenteUpload;
+            row.append($('<td class="text-nowrap">' + dataReferenteUpload + '</td>'));
+
+            var dataUpload = jsonUploadFolhaArray[i].dataUpload;
+            row.append($('<td class="text-nowrap">' + dataUpload + '</td>'));
+        }
+    }
+
+    function validaUploadFolha() {
+
+        const fileUploadFolha = $('#fileUploadFolha').prop('files')[0];
+
+        if (!fileUploadFolha) {
+            smartAlert("Erro", "Informe o arquivo!", "error");
+            return false;
+        }
+
+        const dataReferenteUpload = $('#dataReferenteUpload').val();
+
+        if (!dataReferenteUpload) {
+            smartAlert("Erro", "Informe a data à qual o arquivo pertence!", "error");
+            return false;
+        }
+
+        return true;
+    }
+
+    function addUploadFolha() {
+
+        var item = $("#formUploadFolha").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataUploadFolha
+        });
+
+        if (item["sequencialUploadFolha"] === '') {
+            if (jsonUploadFolhaArray.length === 0) {
+                item["sequencialUploadFolha"] = 1;
+            } else {
+                item["sequencialUploadFolha"] = Math.max.apply(Math, jsonUploadFolhaArray.map(function(o) {
+                    return o.sequencialUploadFolha;
+                })) + 1;
+            }
+            item["uploadFolhaId"] = 0;
+        } else {
+            item["sequencialUploadFolha"] = +item["sequencialUploadFolha"];
+        }
+
+        var index = -1;
+        $.each(jsonUploadFolhaArray, function(i, obj) {
+            if (+$('#sequencialUploadFolha').val() === obj.sequencialUploadFolha) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonUploadFolhaArray.splice(index, 1, item);
+        else
+            jsonUploadFolhaArray.push(item);
+
+        $("#jsonUploadFolha").val(JSON.stringify(jsonUploadFolhaArray));
+        fillTableUploadFolha();
+        clearFormUploadFolha();
+    }
+
+    function processDataUploadFolha(node) {
+
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+
+        if (fieldName !== '' && (fieldId === "fileUploadFolha")) {
+
+            return {
+                name: fieldName,
+                value: $("#fileUploadFolha").prop('files')[0]
+            };
+        }
+
+
+        if (fieldName !== '' && (fieldId === "dataReferenteUpload")) {
+
+            var dataReferenteUpload = $('#dataReferenteUpload').val();
+
+            return {
+                name: fieldName,
+                value: dataReferenteUpload
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "dataUpload")) {
+
+            var dataUpload = new Date().toLocaleDateString('pt-BR')
+
+            return {
+                name: fieldName,
+                value: dataUpload
+            };
+        }
+
+        return false;
+    }
+
+    function clearFormUploadFolha() {
+        $("#fileUploadFolha").val('');
+        $("#dataReferenteUpload").val('');
+        $("#uploadFolhaId").val('');
+        $("#dataUpload").val('');
+        $("#sequencialUploadFolha").val('');
+    }
+
+    function carregaUploadFolha(sequencialUploadFolha) {
+        var arr = jQuery.grep(jsonUploadFolhaArray, function(item, i) {
+            return (item.sequencialUploadFolha === sequencialUploadFolha);
+        });
+
+        clearFormUploadFolha();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            let list = new DataTransfer();
+            list.items.add(item.fileUploadFolha)
+            $("#fileUploadFolha").prop('files', list.files)[0];
+            $("#dataReferenteUpload").val(item.dataReferenteUpload);
+            $("#uploadFolhaId").val(item.uploadFolhaId);
+            $("#dataUpload").val(item.dataUpload);
+            $("#sequencialUploadFolha").val(item.sequencialUploadFolha);
+        }
+    }
+
+    function excluirUploadFolha() {
+        var arrSequencial = [];
+        $('#tableUploadFolha input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonUploadFolhaArray.length - 1; i >= 0; i--) {
+                var obj = jsonUploadFolhaArray[i];
+                if (jQuery.inArray(obj.sequencialUploadFolha, arrSequencial) > -1) {
+                    jsonUploadFolhaArray.splice(i, 1);
+                }
+            }
+            $("#jsonUploadFolha").val(JSON.stringify(jsonUploadFolhaArray));
+            fillTableUploadFolha();
+        } else
+            smartAlert("Erro", "Selecione pelo menos um arquivo para excluir.", "error");
+    }
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    };
 </script>

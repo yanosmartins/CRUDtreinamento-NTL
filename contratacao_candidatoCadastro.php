@@ -3894,7 +3894,6 @@ include("inc/scripts.php");
         }
     }
 
-
     function excluirTransporte() {
         var arrSequencial = [];
         $('#tableTransporte input[type=checkbox]:checked').each(function() {

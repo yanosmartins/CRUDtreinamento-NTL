@@ -1,5 +1,7 @@
 <?php
 
+use PhpOffice\PhpSpreadsheet\Shared\OLE\PPS\File;
+
 include "repositorio.php";
 include "girComum.php";
 
@@ -384,9 +386,9 @@ function consultarPermissoes()
                     "adicionarPonto" => ["disabled" => false],
                     "salvarAlteracoes" => ["disabled" => false],
                     "fechar" => ["disabled" => false],
-                    "validarGestor"=>["display" => 'inline-block'],
-                    "validarRH"=>["display" => 'inline-block'],
-                    "reabrirPendencia"=>["display" => 'inline-block']
+                    "validarGestor" => ["display" => 'inline-block'],
+                    "validarRH" => ["display" => 'inline-block'],
+                    "reabrirPendencia" => ["display" => 'inline-block']
                 ];
                 break;
             case 'PONTOELETRONICOMENSALMODERADO':
@@ -445,87 +447,126 @@ function enviarFolha()
 
     session_start();
     $usuario = $_SESSION['login'];
+    $funcionario = $_SESSION["funcionario"];
+    $jsonData = $_POST["jsonData"];
 
-    //=========UPLOAD=========//
-
-    $dir_uploads = ".." . DIRECTORY_SEPARATOR . "uploads";
-    $dir_pontos = DIRECTORY_SEPARATOR . "pontos_eletronicos";
-    $dir_total = $dir_uploads . $dir_pontos;
-
-
-    if (!is_dir($dir_uploads)) {
-        mkdir($dir_uploads);
-    }
-
-    if (!is_dir($dir_total)) {
-        mkdir($dir_total);
-    }
-
-    $out = "";
-    $funcionario = $_POST["funcionario"];
-    $file = $_FILES["file"];
-
-    if ($file["error"]) {
-        $out = "Error: " . $file["error"] . "#";
-        echo "failed#" . $out;
+    if (!$funcionario) {
+        $out = "failed#";
         return;
     }
 
-    $file_name = $funcionario . "_" . date("Ymd_Hisu") . ".pdf";
-    $file_path = $dir_total . DIRECTORY_SEPARATOR . $file_name;
+    $uploadsPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . "uploads";
+    $pontosEletronicosPath = $uploadsPath . DIRECTORY_SEPARATOR . "pontos_eletronicos";
+    $funcionarioPath = $pontosEletronicosPath . DIRECTORY_SEPARATOR . $funcionario;
 
-    if (move_uploaded_file($file["tmp_name"], $file_path)) {
-        $out = "Upload realizado com sucesso!#";
-    } else {
-        $out = "Não foi possível realizar o upload.#";
-        echo "failed#" . $out;
-        return;
+    if (!is_dir($uploadsPath)) {
+        mkdir($uploadsPath);
     }
+
+    if (!is_dir($pontosEletronicosPath)) {
+        mkdir($pontosEletronicosPath);
+    }
+
+    if (!is_dir($funcionarioPath)) {
+        mkdir($funcionarioPath);
+    }
+
+    $datasReferentes = array();
+    $datasUploads = array();
+
+    $filesContent = array();
+    foreach ($jsonData as $array) {
+        foreach ($array as $key => $value) {
+            if ($key == "fileUploadFolha") {
+                if ( strpos( $value , ',')!== false ) {
+                    @list ( $encode ,$value ) = explode ( ',' , $value );
+                }
+                array_push($filesContent, base64_decode($value,true));
+            } else if ($key == "dataReferenteUpload") {
+                $aux = explode("/", $value);
+                $value = $aux[2] . "-" . $aux[1] . "-" . $aux[0];
+                array_push($datasReferentes, $value);
+            } else if ($key == "dataUpload") {
+                $aux = explode("/", $value);
+                $value = $aux[2] . "-" . $aux[1] . "-" . $aux[0];
+                array_push($datasUploads, $value);
+            }
+        }
+    }
+
+    $i = 0;
+    $pathArray = array();
+
+    foreach ($filesContent as $file) {
+
+        //Passa o base64 decodificado para uma variavel que se refe ao conteudo
+        $pdfContent = $file;
+
+        $extension = ".pdf";
+        $filename = $funcionario . "_" . str_replace("-", "", $datasReferentes[$i]) . "_" . str_replace("-", "", $datasUploads[$i]) . "_" . date("su") . $extension;
+        $path = $funcionarioPath . DIRECTORY_SEPARATOR . $filename;
+
+        array_push($pathArray,$path);
+        //Cria um arquivo de escrita e leitura
+        $pdf = fopen($path, 'w+');
+
+        //Escreve no arquivo criado
+        fwrite($pdf, $pdfContent);
+
+        //Fecha o arquivo
+        fclose($pdf);
+        $i++;
+    }
+
+    //=========XML=========//
+    
 
     //=========SQL=========//
 
     $reposit = new reposit();
 
-    $sql = "Funcionario.logUploadFolhaPonto_Atualiza
-    '$file_path',
-    '$funcionario',
-    '$usuario'
-    ";
+    // $sql = "Funcionario.logUploadFolhaPonto_Atualiza
+    //     '$file_path',
+    //     '$funcionario',
+    //     '$usuario'
+    //     ";
 
-    $result = $reposit->Execprocedure($sql);
+//     $result = $reposit->Execprocedure($sql);
 
-    if ($result < 1) {
-        unlink($file_path);
-        $out = "Não foi possível realizar o upload.#";
-        echo "failed#" . $out;
-        return;
-    } else {
-        echo "sucess#" . $out;
-        return;
-    }
-}
+//     if ($result < 1) {
+//         foreach ($file_path as $delete) {
+//             unlink($delete);
+//         }
+//         $out = "Não foi possível realizar o upload.#";
+//         echo "failed#" . $out;
+//         return;
+//     } else {
+//         echo "sucess#" . $out;
+//         return;
+//     }
+// }
 
-function atualizarStatus()
-{
-    session_start();
-    $usuario = $_SESSION['login'];
+// function atualizarStatus()
+// {
+//     session_start();
+//     $usuario = $_SESSION['login'];
 
-    $codigo = $_POST["codigo"];
-    $status = $_POST["status"];
+//     $codigo = $_POST["codigo"];
+//     $status = $_POST["status"];
 
-    $reposit = new reposit();
+//     $reposit = new reposit();
 
-    $result = $reposit->Update("Funcionario.folhaPontoMensal " . "|" .
-        " status = " . $status . " , " . " usuarioAlteracao = '" . $usuario . "' , " . " dataAlteracao = GETDATE() " . "|" . " codigo = " . $codigo);
+//     $result = $reposit->Update("Funcionario.folhaPontoMensal " . "|" .
+//         " status = " . $status . " , " . " usuarioAlteracao = '" . $usuario . "' , " . " dataAlteracao = GETDATE() " . "|" . " codigo = " . $codigo);
 
-    $out = " #";
-    if ($result < 1) {
-        $out = "Erro ao efetuar a operação";
-        echo "failed#" . "$out#";
-        return;
-    } else {
-        $out = "Operação bem sucedida";
-        echo "sucess#" . "$out#";
-        return;
-    }
+//     $out = " #";
+//     if ($result < 1) {
+//         $out = "Erro ao efetuar a operação";
+//         echo "failed#" . "$out#";
+//         return;
+//     } else {
+//         $out = "Operação bem sucedida";
+//         echo "sucess#" . "$out#";
+//         return;
+//     }
 }

@@ -72,14 +72,12 @@ function consultarPermissoes(callback) {
   })
 }
 
-function enviarArquivo(form, callback) {
-  form.append('funcao', 'enviarFolha')
+function enviarArquivo(jsonData , callback) {
   $.ajax({
     url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
     cache: false,
-    data: form,
-    processData: false,
-    contentType: false,
+    dataType:'json',
+    data: {jsonData,funcao : 'enviarFolha'},
     type: 'post',
     success: function (data) {
       callback(data)
