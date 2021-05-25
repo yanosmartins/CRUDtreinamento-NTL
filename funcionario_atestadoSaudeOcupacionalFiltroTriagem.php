@@ -81,7 +81,7 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                        <section class="col col-3">
+                                                        <section class="col col-4">
                                                                 <label class="label " for="funcionario">Funcionário</label>
                                                                 <label class="select">
                                                                     <select id="funcionario" name="funcionario" class="">
@@ -100,7 +100,7 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
+                                                            <section class="col col-4">
                                                                 <label class="label " for="projeto">Projeto</label>
                                                                 <label class="select">
                                                                     <select id="projeto" name="projeto" class="">

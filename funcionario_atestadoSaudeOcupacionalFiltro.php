@@ -81,7 +81,7 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                        <section class="col col-3">
+                                                        <section class="col col-4">
                                                                 <label class="label " for="funcionario">Funcionário</label>
                                                                 <label class="select">
                                                                     <select id="funcionario" name="funcionario" class="">
@@ -100,7 +100,7 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
+                                                            <section class="col col-4">
                                                                 <label class="label " for="projeto">Projeto</label>
                                                                 <label class="select">
                                                                     <select id="projeto" name="projeto" class="">
@@ -119,19 +119,7 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label" for="idadeInicio">Idade inicio</label>
-                                                                <label class="input">
-                                                                    <input id="idadeInicio" name="idadeInicio" class="">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-1">
-                                                                <label class="label" for="idadeFim">Idade Fim</label>
-                                                                <label class="input">
-                                                                    <input id="idadeFim" name="idadeFim" class="">
-                                                                </label>
-                                                            </section>
-                                                            
+                                                         
                                                             <section class="col col-2">
                                                                 <label class="label" for="dataValidadeAsoInicio">Validade ASO Inicio</label>
                                                                 <label class="input">
@@ -149,8 +137,20 @@ include("inc/nav.php");
                                                             </section>
                                                             </div>
                                                             <div class="row">
+                                                            <section class="col col-1">
+                                                                <label class="label" for="idadeInicio">Idade inicio</label>
+                                                                <label class="input">
+                                                                    <input id="idadeInicio" name="idadeInicio" class="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-1">
+                                                                <label class="label" for="idadeFim">Idade Fim</label>
+                                                                <label class="input">
+                                                                    <input id="idadeFim" name="idadeFim" class="">
+                                                                </label>
+                                                            </section>
                                                             <section class="col col-2 col-auto">
-                                                                <label class="label" for="vencido"> Dias vencido</label>
+                                                                <label class="label" for="vencido">Vencido</label>
                                                                 <label class="select">
                                                                     <select id="vencido" name="vencido" class="">
                                                                     <option></option>
@@ -158,6 +158,8 @@ include("inc/nav.php");
                                                                         <option value='2'>Não</option>
                                                                     </select><i></i>
                                                                     </section>
+                                                          
+                                                            
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
