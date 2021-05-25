@@ -223,8 +223,10 @@ function gravaBeneficio()
     $horaFim = "'" .$beneficio['horaFim']. "'" ;
     $horaSaida = "'" .$beneficio['horaSaida']. "'" ;
 
-    $produtoVAVR = $beneficio['produtoVAVR'];
-
+    $produtoVAVR = (int)$beneficio['produtoVAVR'];
+    if($produtoVAVR == 0){
+        $produtoVAVR = 'NULL';
+    }
 
     //############################# INICIO DO XML DE VT ##############################//
     $strArrayValeTransporte = $beneficio['jsonValeTransporte'];
