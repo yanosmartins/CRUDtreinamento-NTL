@@ -196,20 +196,20 @@ include("inc/nav.php");
                                                                 <label class="label" for="dataUltimoAso">Data do ultimo ASO</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataUltimoAso" name="dataUltimoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="dataUltimoAso" name="dataUltimoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy"  readonly class="readonly" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label" for="dataProximoAso">Data de validade ASO</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataProximoAso" name="dataProximoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="dataProximoAso" name="dataProximoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="readonly " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1 col-auto">
                                                                 <label class="label" for="diasAtraso">dias atraso</label>
                                                                 <label class="input">
-                                                                    <input id="diasAtraso" name="diasAtraso" type="text" readonly class="" maxlength="5" autocomplete="off">
+                                                                    <input id="diasAtraso" name="diasAtraso" type="text" readonly class="readonly" maxlength="5" autocomplete="off">
                                                                 </label>
                                                             </section>
 
@@ -260,7 +260,7 @@ include("inc/nav.php");
                                                                     <label class="label" for="tipoExame">Tipo do exame</label>
                                                                     <label class="select">
                                                                         <select id="tipoExame" name="tipoExame">
-
+                                                                            <option></option>
                                                                             <option value='1'>Exame Admissional</option>
                                                                             <option value='2'>Exame Periódico</option>
                                                                             <option value='3'>Mudança de Risco Ocupacional</option>
@@ -458,10 +458,14 @@ include("inc/scripts.php");
 
         $("#btnAddDataAso").on("click", function() {
             var DataAso = $("#dataRealizacaoAso").val();
+            var tipoExame = $("#tipoExame").val();
             var existe = true;
-
+            if (!tipoExame) {
+                smartAlert("Atenção", "Preencha o campo tipo do exame", "error")
+                return; 
+            }
             if (!DataAso) {
-                smartAlert("Atenção", "Escolha um DataAso", "error")
+                smartAlert("Atenção", "Preencha o campo data Aso", "error")
                 return;
             } else {
                 let situacao = $("#situacao").val();
@@ -547,6 +551,8 @@ include("inc/scripts.php");
                 }
 
             }
+
+            
 
         });
 
