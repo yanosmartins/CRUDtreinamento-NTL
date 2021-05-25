@@ -7,7 +7,7 @@ include "girComum.php";
 
 $funcao = $_POST["funcao"];
 
-$pattern = "/(consultarLancamento|grava|recupera|excluir|consultarPermissoes|enviarFolha|atualizarStatus)/i";
+$pattern = "/(consultarLancamento|grava|recupera|excluir|consultarPermissoes|enviarFolha|recuperaPDF|atualizarStatus)/i";
 
 $condicao = preg_match($pattern, $funcao);
 
@@ -503,7 +503,7 @@ function enviarFolha()
         $pdfContent = $file;
 
         $extension = ".pdf";
-        $filename = $funcionario . "_" . str_replace("-", "", $datasReferentes[$i]). $extension;
+        $filename = $funcionario . "_" . str_replace("-", "", $datasReferentes[$i]) . $extension;
         $path = $funcionarioPath . DIRECTORY_SEPARATOR . $filename;
 
         array_push($pathArray, $path);
@@ -536,14 +536,13 @@ function enviarFolha()
         $xmlUploadFolha = $xmlUploadFolha . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
         foreach ($pathArray as $path) {
             $xmlUploadFolha = $xmlUploadFolha . "<" . $nomeTabela . ">";
-                $xmlUploadFolha = $xmlUploadFolha . "<path>" . $path . "</path>";
-                $xmlUploadFolha = $xmlUploadFolha . "<funcionario>" . $funcionario . "</funcionario>";
-                $xmlUploadFolha = $xmlUploadFolha . "<dataReferente>" . $datasReferentes[$j] . "</dataReferente>";
-                $xmlUploadFolha = $xmlUploadFolha . "<dataUpload>" . $datasUploads[$j] . "</dataUpload>";
-                $xmlUploadFolha = $xmlUploadFolha . "<usuarioCadastro>" . $usuario . "</usuarioCadastro>";
-                $xmlUploadFolha = $xmlUploadFolha . "</" . $nomeTabela . ">";
-                $j++;
-            }
+            $xmlUploadFolha = $xmlUploadFolha . "<path>" . $path . "</path>";
+            $xmlUploadFolha = $xmlUploadFolha . "<dataReferente>" . $datasReferentes[$j] . "</dataReferente>";
+            $xmlUploadFolha = $xmlUploadFolha . "<dataUpload>" . $datasUploads[$j] . "</dataUpload>";
+            $xmlUploadFolha = $xmlUploadFolha . "<usuarioCadastro>" . $usuario . "</usuarioCadastro>";
+            $xmlUploadFolha = $xmlUploadFolha . "</" . $nomeTabela . ">";
+            $j++;
+        }
         $xmlUploadFolha = $xmlUploadFolha . "</" . $nomeXml . ">";
     } else {
         $xmlUploadFolha = '<?xml version="1.0"?>';
@@ -563,6 +562,7 @@ function enviarFolha()
     $reposit = new reposit();
 
     $sql = "Funcionario.logUploadFolhaPonto_Atualiza
+        $funcionario,
         $xmlUploadFolha";
 
     $result = $reposit->Execprocedure($sql);
@@ -579,6 +579,65 @@ function enviarFolha()
         echo "sucess#" . $out;
         return;
     }
+}
+
+function recuperaPDF()
+{
+    session_start();
+
+    $funcionario = $_SESSION['funcionario'];
+
+    $reposit = new reposit();
+    $sql = "SELECT filePath AS 'path', dataReferente AS 'dataReferenteUpload', dataCadastro AS 'dataUpload' FROM Funcionario.logUploadFolhaPonto";
+    $where = " WHERE (0=0) AND ";
+    $where .= "funcionario = " . $funcionario;
+
+    $sql .= $where;
+
+    $result = $reposit->RunQuery($sql);
+    $out = "";
+
+    if ($result < 1) {
+        echo "failed#" . "$out#";
+        return;
+    }
+
+    $uploadArray = array();
+    $pathArray = array();
+    $i = 0;
+
+    foreach ($result as $row) {
+        $path = $row["path"];
+        $dataReferenteUpload = $row['dataReferenteUpload'];
+        $sequencialUploadFolha = $i + 1;
+        $dataUpload = $row['dataUpload'];
+
+        array_push($pathArray, $path);
+        array_push(
+            $uploadArray,
+            [
+
+                "dataReferenteUpload" => $dataReferenteUpload,
+                "dataUpload" => $dataUpload,
+                "sequencialUploadFolha" => $sequencialUploadFolha
+
+            ]
+        );
+        $i++;
+    }
+
+    $i = 0;
+    foreach ($pathArray as $path) {
+        $content = file_get_contents($path);
+        $base64 = "data:application/pdf;base64," . base64_encode($content);
+
+        $uploadArray[$i]["fileUploadFolha"] = $base64;
+        $i++;
+    }
+
+    $jsonUpload = json_encode($uploadArray);
+    echo "success#" . "$out#" . $jsonUpload . "#";
+    return;
 }
 
 function atualizarStatus()

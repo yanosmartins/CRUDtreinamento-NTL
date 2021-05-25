@@ -789,6 +789,7 @@ include("inc/scripts.php");
 
         /*Função responsavel pelo carregamento dos dados pessoais e configurações da tela*/
         carregaFolhaPontoMensal();
+        recuperaUpload();
 
     });
 
@@ -2254,8 +2255,8 @@ include("inc/scripts.php");
 
         const files = [];
         const datas = [];
-        const ob = {};
         jsonUploadFolhaArray.forEach(obj => {
+            const ob = {};
             for (let prop in obj) {
                 if (obj[prop] instanceof File) files.push(obj[prop])
                 else ob[prop] = obj[prop]
@@ -2272,9 +2273,6 @@ include("inc/scripts.php");
             obj.fileUploadFolha = base64[index]
             return obj
         })
-
-        debugger
-        console.log(jsonData)
 
         enviarArquivo(jsonData, function(data) {
             if (data.indexOf('sucess') < 0) {
@@ -2499,4 +2497,20 @@ include("inc/scripts.php");
             reader.onerror = error => reject(error);
         });
     };
+
+    function recuperaUpload() {
+        recuperaArquivo(function(data) {
+            debugger
+            data = data.replace(/failed/g, '');
+            let piece = data.split("#");
+
+            //Atributos de Cliente
+            let mensagem = piece[0];
+            let out = piece[1];
+            debugger;
+            let JsonUpload = piece[2];
+
+            piece = out.split("^");
+        })
+    }
 </script>

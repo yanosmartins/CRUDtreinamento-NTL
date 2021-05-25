@@ -85,6 +85,19 @@ function enviarArquivo(jsonData , callback) {
   })
 }
 
+function recuperaArquivo( callback) {
+  $.ajax({
+    url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
+    cache: false,
+    dataType:'json',
+    data: {funcao : 'recuperaPDF'},
+    type: 'post',
+    success: function (data) {
+      callback(data)
+    },
+  })
+}
+
 function atualizar(form, callback) {
   form.append('funcao', 'atualizarStatus')
   $.ajax({
