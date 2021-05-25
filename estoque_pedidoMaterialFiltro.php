@@ -240,8 +240,6 @@ include("inc/scripts.php");
 <script>
     $(document).ready(function() {
 
-        listarFiltro();
-
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });

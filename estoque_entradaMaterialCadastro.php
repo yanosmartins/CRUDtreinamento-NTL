@@ -189,6 +189,9 @@ include("inc/nav.php");
                                                                 <input id="valorFinalItem" name="valorFinalItem" type="hidden" value="0">
                                                                 <input id="valorTotalItemTable" name="valorTotalItemTable" type="hidden" value="0">
                                                                 <input id="valorFinalItemTable" name="valorFinalItemTable" type="hidden" value="0">
+                                                                <input id="descricaoEstoque" name="descricaoEstoque" type="hidden" value="0">
+                                                                <input id="descricaoUnidade" name="descricaoUnidade" type="hidden" value="0">
+                                                                <input id="unidadeMedidaId" name="unidadeMedidaId" type="hidden" value="0">
                                                                 <!-- <section class="col col-2">
                                                                     <label class="label" for="codigoItem">Código Material</label>
                                                                     <label class="select">
@@ -627,8 +630,13 @@ include("inc/scripts.php");
                 $("#unidadeDestino").val(ui.item.unidade);
                 popularComboEstoque();
                 $("#estoqueDestino").val(ui.item.estoque);
+                var descricaoUnidade = $("#unidadeDestino option:selected").text();
+                var descricaoEstoque = $("#estoqueDestino option:selected").text();
+                $("#descricaoEstoque").val(descricaoEstoque);
+                $("#descricaoUnidade").val(descricaoUnidade);
 
                 $("#unidade").val(ui.item.unidadeItem);
+                $("#unidadeMedidaId").val(ui.item.unidadeItem);
                 $("#consumivel").val(ui.item.consumivel);
                 $("#autorizacao").val(ui.item.autorizacao);
 
@@ -694,8 +702,13 @@ include("inc/scripts.php");
                 $("#unidadeDestino").val(ui.item.unidade);
                 popularComboEstoque();
                 $("#estoqueDestino").val(ui.item.estoque);
+                var descricaoUnidade = $("#unidadeDestino option:selected").text();
+                var descricaoEstoque = $("#estoqueDestino option:selected").text();
+                $("#descricaoEstoque").val(descricaoEstoque);
+                $("#descricaoUnidade").val(descricaoUnidade);
 
                 $("#unidade").val(ui.item.unidadeItem);
+                $("#unidadeMedidaId").val(ui.item.unidadeItem);
                 $("#consumivel").val(ui.item.consumivel);
                 $("#autorizacao").val(ui.item.autorizacao);
             },
@@ -772,6 +785,10 @@ include("inc/scripts.php");
             desconto = desconto.replace(/,/g, ".");
 
             var total = (parseFloat(unitario) * parseFloat(quantidade)) - parseFloat(desconto);
+            total = total.toFixed(2);
+            total = total.toString();
+            total = total.replace(".", ",");
+
             $("#final").val(total);
             $("#final").focusout();
 
@@ -793,6 +810,10 @@ include("inc/scripts.php");
             desconto = desconto.replace(/,/g, ".");
 
             var total = (parseFloat(unitario) * parseFloat(quantidade)) - parseFloat(desconto);
+            total = total.toFixed(2);
+            total = total.toString();
+            total = total.replace(".", ",");
+
             $("#final").val(total);
             $("#final").focusout();
 
@@ -813,6 +834,10 @@ include("inc/scripts.php");
             desconto = desconto.replace(/,/g, ".");
 
             var total = (parseFloat(unitario) * parseFloat(quantidade)) - parseFloat(desconto);
+            total = total.toFixed(2);
+            total = total.toString();
+            total = total.replace(".", ",");
+
             $("#final").val(total);
             $("#final").focusout();
 
@@ -1006,9 +1031,6 @@ include("inc/scripts.php");
             $("#tableItem tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonItemArray[i].sequencialItem + '"><i></i></label></td>'));
 
-            var unidadeDestino = $("#unidadeDestino option[value = '" + jsonItemArray[i].unidadeDestino + "']").text();
-            var estoqueDestino = $("#estoqueDestino option[value = '" + jsonItemArray[i].estoqueDestino + "']").text();
-
             var valorTotalItem = jsonItemArray[i].valorTotalItem;
             var valorFinalItem = jsonItemArray[i].valorFinalItem;
 
@@ -1033,8 +1055,8 @@ include("inc/scripts.php");
             }
 
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoItemFiltro + '</td>'));
-            row.append($('<td class="text-nowrap">' + unidadeDestino + '</td>'));
-            row.append($('<td class="text-nowrap">' + estoqueDestino + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoUnidade + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoEstoque + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].quantidade + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].unitario + '</td>'));
             row.append($('<td class="text-nowrap">' + valorTotalItem + '</td>'));
@@ -1136,7 +1158,10 @@ include("inc/scripts.php");
 
 
         var valorTotal = parseFloat(quantidade) * parseFloat(unitario);
-        var valorFinal = parseFloat($("#final").val());
+        var valorFinal = $("#final").val();
+        valorFinal = valorFinal.replace(".", "");
+        valorFinal = valorFinal.replace(",", ".");
+        var valorFinal = parseFloat(valorFinal);
         $("#valorTotalItem").val(valorTotal.toFixed(2));
         $("#valorFinalItem").val(valorFinal.toFixed(2));
 
@@ -1228,7 +1253,7 @@ include("inc/scripts.php");
             $("#quantidade").val(item.quantidade);
             $("#unidadeDestino").val(item.unidadeDestino);
             $("#estoqueDestino").val(item.estoqueDestino);
-            $("#unidade").val(item.unidade);
+            $("#unidade").val(item.unidadeMedidaId);
             $("#unitario").val(item.unitario);
             $("#desconto").val(item.desconto);
             $("#final").val(item.final);
@@ -1339,12 +1364,12 @@ include("inc/scripts.php");
 
     function gravar() {
 
-        if (!validaCampos()) {
-            return;
-        }
+        if (validaCampos()) {
+            $("#btnGravar").attr('disabled', true);
 
-        var form = $('#formEntradaItem')[0];
-        var formData = new FormData(form);
-        gravaEntradaItem(formData);
+            var form = $('#formEntradaItem')[0];
+            var formData = new FormData(form);
+            gravaEntradaItem(formData);
+        }
     }
 </script>

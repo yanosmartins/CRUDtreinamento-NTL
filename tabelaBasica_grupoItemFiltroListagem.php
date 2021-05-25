@@ -33,6 +33,7 @@ include "js/repositorio.php";
                     $descricao = $_GET["descricao"];
                     $where = $where . " AND ( GI.descricao = $descricao)";
                 }
+                
 
                 if ($_GET["unidade"] != "") {
                     $unidade = $_GET["unidade"];
