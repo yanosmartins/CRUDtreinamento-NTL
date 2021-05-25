@@ -196,7 +196,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="dataUltimoAso">Data do ultimo ASO</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataUltimoAso" name="dataUltimoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy"  readonly class="readonly" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="dataUltimoAso" name="dataUltimoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="readonly" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -280,12 +280,12 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
 
-                                                                <!-- <section class="col col-2">
-                                                                <label class="label" for="comprovanteAso">Comprovante do ASO</label>
-                                                                <label class="input">
-                                                                    <input id="comprovanteAso" name="comprovanteAso" type="text"  autocomplete="off">
-                                                                </label>
-                                                            </section> -->
+                                                                <section class="col col-md-4">
+                                                                    <label class="label">Comprovante Aso</label>
+                                                                    <div class="form-control input">
+                                                                        <input type="file" name="fileUploadAso" id="fileUploadAso" accept="application/pdf">
+                                                                    </div>
+                                                                </section>
                                                                 <section class="col col-2">
                                                                     <label class="label" for="dataProximoAsoLista"></label>
                                                                     <label class="input">
@@ -314,6 +314,7 @@ include("inc/nav.php");
                                                                         <th class="text-center">Data da validade ASO</th>
                                                                         <th class="text-center">Tipo do exame</th>
                                                                         <th class="text-center">Situação</th>
+                                                                        <th class="text-center">Comprovante Aso</th>
 
                                                                     </tr>
                                                                 </thead>
@@ -462,7 +463,7 @@ include("inc/scripts.php");
             var existe = true;
             if (!tipoExame) {
                 smartAlert("Atenção", "Preencha o campo tipo do exame", "error")
-                return; 
+                return;
             }
             if (!DataAso) {
                 smartAlert("Atenção", "Preencha o campo data Aso", "error")
@@ -552,7 +553,7 @@ include("inc/scripts.php");
 
             }
 
-            
+
 
         });
 
@@ -702,6 +703,7 @@ include("inc/scripts.php");
     function clearFormDataAso() {
         $("#dataRealizacaoAso").val('');
         $("#dataProximoAsoLista").val('');
+        $("#fileUploadAso").val('');
         $("#situacao").val('');
         $("#tipoExame").val('');
     }
@@ -766,6 +768,10 @@ include("inc/scripts.php");
 
             row.append($('<td class="text-center" >' + jsonDataAsoArray[i].situacao + '</td>'));
 
+            var fileUploadAso = jsonDataAsoArray[i].fileUploadAso;
+
+            row.append($('<td class="text-center" >' + jsonDataAsoArray[i].fileUploadAso.name + '</td>'));
+
         }
     }
 
@@ -806,6 +812,17 @@ include("inc/scripts.php");
             };
         }
 
+        if (fieldName !== '' && (fieldId === "tipoExame")) {
+            var tipoExame = $("#tipoExame").val();
+            if (tipoExame !== '') {
+                fieldName = "tipoExame";
+            }
+            return {
+                name: fieldName,
+                value: tipoExame
+            };
+        }
+
         if (fieldName !== '' && (fieldId === "descricaoTipoExame")) {
             var descricaoTipoExame = $("#tipoExame option:selected").text();
             if (descricaoTipoExame !== '') {
@@ -814,6 +831,13 @@ include("inc/scripts.php");
             return {
                 name: fieldName,
                 value: descricaoTipoExame
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "fileUploadAso")) {
+            return {
+                name: fieldName,
+                value: $("#fileUploadAso").prop('files')[0]
             };
         }
 
@@ -829,11 +853,15 @@ include("inc/scripts.php");
 
         if (arr.length > 0) {
             var item = arr[0];
+            let list = new DataTransfer();
+            list.items.add(item.fileUploadAso)
+            $("#fileUploadAso").prop('files', list.files)[0];
             $("#sequencialDataAso").val(item.sequencialDataAso);
             $("#dataProximoAsoLista").val(item.dataProximoAsoLista);
             $("#dataRealizacaoAso").val(item.dataRealizacaoAso);
             $("#tipoExame").val(item.tipoExame);
             $("#situacao").val(item.situacao);
+            $("#fileUploadAso").val(item.fileUploadAso);
 
 
         }
@@ -847,8 +875,8 @@ include("inc/scripts.php");
         if (arrSequencial.length > 0) {
             for (i = jsonDataAsoArray.length - 1; i >= 0; i--) {
                 var obj = jsonDataAsoArray[i];
-                if ((obj.sequencialDataAso == arrSequencial) && (obj.situacao == 'F')) {
-                    return;
+                if (((obj.sequencialDataAso == arrSequencial) && (obj.situacao == 'F')) || (obj.situacao == 'F')) {
+                    continue;
                 };
                 if (jQuery.inArray(obj.sequencialDataAso, arrSequencial) > -1) {
                     jsonDataAsoArray.splice(i, 1);

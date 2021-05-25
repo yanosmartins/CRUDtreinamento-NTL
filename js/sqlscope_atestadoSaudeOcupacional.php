@@ -205,7 +205,7 @@ WHERE ASO.funcionario = $funcionario";
             "dataProximoAsoLista" => $dataProximoAsoLista,
             "dataRealizacaoAso" => $dataRealizacaoAso,
             "situacao" => $situacao,
-            "descricaoTipoExame" => $tipoExame,
+            "tipoExame" => $tipoExame,
             "descricaoTipoExame" => $descricaoTipoExame,
         );
     }
@@ -500,7 +500,7 @@ WHERE ASO.codigo = $id";
             "sequencialDataAso" => $contadorDataAso,
             "dataProximoAsoLista" => $dataProximoAsoLista,
             "dataRealizacaoAso" => $dataRealizacaoAso,
-            "descricaoTipoExame" => $tipoExame,
+            "tipoExame" => $tipoExame,
             "descricaoTipoExame" => $descricaoTipoExame,
             "situacao" => $situacao
         );
