@@ -289,7 +289,6 @@ include("inc/scripts.php");
 <script>
     $(document).ready(function() {
 
-        listarFiltro();
 
         $('#btnSearch').on("click", function() {
             listarFiltro();
@@ -315,7 +314,6 @@ include("inc/scripts.php");
                 $("#sectionSituacaoItem").addClass('hidden');
                 $("#sectionFechado").attr('hidden', false);
                 $("#sectionFechado").removeClass('hidden');
-                listarFiltro();
             }
             if (filtrarPor == 0){
                 $("#sectionDataEntradaInicial").attr('hidden', false);
@@ -328,7 +326,6 @@ include("inc/scripts.php");
                 $("#sectionSituacaoItem").removeClass('hidden');
                 $("#sectionFechado").attr('hidden', true);
                 $("#sectionFechado").removeClass('hidden');
-                listarFiltro();
             }
         });
 

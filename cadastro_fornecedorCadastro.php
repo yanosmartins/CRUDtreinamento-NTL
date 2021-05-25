@@ -208,7 +208,7 @@ include("inc/nav.php");
                                                                         <select id="tipoItem" name="tipoItem" class="form-control">
                                                                             <option style="display:none;" value="">Selecione</option>
                                                                             <?php
-                                                                            $sql =  "SELECT codigo, descricao FROM estoque.tipoItem  where ativo = 1  order by codigo";
+                                                                            $sql =  "SELECT codigo, descricao FROM estoque.tipoItem  where ativo = 1  order by descricao";
                                                                             $reposit = new reposit();
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
@@ -229,7 +229,7 @@ include("inc/nav.php");
                                                                         <select id="fabricante" name="fabricante" class="form-control">
                                                                             <option style="display:none;" value="">Selecione</option>
                                                                             <?php
-                                                                            $sql =  "SELECT codigo, descricao FROM estoque.fabricante  where ativo = 1  order by codigo";
+                                                                            $sql =  "SELECT codigo, descricao FROM estoque.fabricante  where ativo = 1  order by descricao";
                                                                             $reposit = new reposit();
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {

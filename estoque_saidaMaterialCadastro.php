@@ -1324,9 +1324,13 @@ include("inc/scripts.php");
     function gravar() {
 
         if (validaCampos()) {
+
+            $("#btnGravar").attr('disabled', true);
+
             var form = $('#formSaidaMaterial')[0];
             var formData = new FormData(form);
             gravaSaidaMaterial(formData);
+
         };
 
     }
