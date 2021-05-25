@@ -198,6 +198,7 @@ include("inc/nav.php");
                                     </div>
 
                                 </form>
+
                             </div>
                         </div>
                     </div>
@@ -206,6 +207,42 @@ include("inc/nav.php");
         </section>
         <!-- end widget grid -->
 
+    </div>
+    <div class="modal fade" id="parametroLinkModalPanel" data-backdrop="static" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="height:90%; ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button> -->
+                    <h4 class="modal-title"> Alterar senha</h4>
+                </div>
+                <div id="parametroLinkModalBody" class="modal-body smart-form" style="min-height:290px;">
+                    <section class="col col-12">
+                        <label class="label">Senha</label>
+                        <label class="input">
+                            <input id="senha" maxlength="20" name="senha" type="password" class="required" value="">
+                        </label>
+                    </section>
+                    <section class="col col-12">
+                        <label class="label">Confirma Senha</label>
+                        <label class="input">
+                            <input id="senhaConfirma" maxlength="20" name="senhaConfirma" type="password" class="required" value="">
+                        </label>
+                    </section>
+                    <section class="col col-12">
+                        <button type="button" id="btnAlterarSenha" class="btn btn-success" aria-hidden="true" title="btnAlterarSenha" style="display:<?php echo $esconderBtnGravar ?>">
+                            <b>ALTERAR SENHA</b>
+                        </button>
+                    </section>
+                </div>
+
+
+                <!-- <div class="modal-footer">
+                   
+                </div> -->
+            </div>
+        </div>
     </div>
     <!-- END MAIN CONTENT -->
 
@@ -227,6 +264,7 @@ include("inc/scripts.php");
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
+<script src="<?php echo ASSETS_URL; ?>/js/businessUsuario.js" type="text/javascript"></script>
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.cust.min.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/flot/jquery.flot.resize.min.js"></script>
@@ -282,11 +320,85 @@ include("inc/scripts.php");
         });
         $("#btnAso").on("click", function() {
             const ultimoAso = $('#ultimoAso').val();
-            if(!ultimoAso){
+            if (!ultimoAso) {
                 smartAlert("Atenção", "O Funcionário não tem data de último ASO", "error");
                 return
             }
             $(location).attr('href', 'funcionario_atestadoSaudeOcupacional.php');
         });
+        $('#parametroLinkModalPanel').on('hide.bs.modal', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        $("#btnAlterarSenha").on("click", function() {
+            var senha = $('#senha').val();
+            var senhaConfirma = $('#senhaConfirma').val();
+            if (!senha || !senhaConfirma) {
+                smartAlert("Atenção", "Informe sua senha", "error");
+                return;
+            }
+            gravarNovaSenha();
+        });
+
+        carregaPagina();
     });
+
+    function carregaPagina() {
+        recuperaDadosUsuario(
+            function(data) {
+                data = data.replace(/failed/g, '');
+                var piece = data.split("#");
+
+                //Atributos de Cliente
+                var mensagem = piece[0];
+                var out = piece[1];
+
+                piece = out.split("^");
+                console.table(piece);
+                //Atributos de cliente 
+                var codigo = parseInt(piece[0]);
+                var restaurarSenha = +piece[1];
+
+                if (restaurarSenha) {
+                    $('#parametroLinkModalPanel').modal();
+                }
+
+                //Atributos de cliente        
+                // $("#codigo").val(codigo);
+                // $("#descricao").val(descricao);
+            }
+        );
+    }
+
+    function gravarNovaSenha() {
+
+        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
+        $("#gravarNovaSenha").prop('disabled', true);
+        var senhaConfirma = $("#senhaConfirma").val();
+        var senha = $("#senha").val();
+
+        gravaNovaSenha(senha, senhaConfirma,
+            function(data) {
+
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[1];
+                    if (mensagem !== "") {
+                        smartAlert("Atenção", mensagem, "error");
+                        $("#senha").val('');
+                        $("#senhaConfirma").val('');
+                        return false;
+                    } else {
+                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                        return false;
+                    }
+                } else {
+                    var piece = data.split("#");
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    $(location).attr('href', 'login.php');
+                }
+            }
+        );
+    }
 </script>

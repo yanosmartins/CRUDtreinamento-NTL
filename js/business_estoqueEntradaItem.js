@@ -11,6 +11,7 @@ function gravaEntradaItem(formData) {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success"); 
                 voltar(); 
             } else {
+                $("#btnGravar").attr('disabled', false);
                 smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error"); 
             }
         }, error: function (xhr, er) {

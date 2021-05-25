@@ -6,9 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PEDIDOMATERIAL_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PEDIDOMATERIAL_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('PEDIDOMATERIAL_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('SAIDAMATERIAL_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('SAIDAMATERIAL_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,16 +19,10 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
-
 session_start();
 $id = $_SESSION['funcionario'];
 
-$arraySelecionados = $_POST['arrayEstoqueMovimentoSel'];
-
+$arrayEstoqueMovimentoSel = "'" . $_POST['arrayEstoqueMovimentoSel'] . "'";
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
@@ -94,6 +87,7 @@ include("inc/nav.php");
                                                         <input id="jsonItem" name="jsonItem" type="hidden" value="[]">
                                                         <div id="formItem">
                                                             <div class="row">
+                                                                <input id="pagina" name="pagina" type="hidden" value="SAIDASELECIONADO">
                                                                 <input id="ItemId" name="ItemId" type="hidden" value="">
                                                                 <input id="sequencialItem" name="sequencialItem" type="hidden" value="">
                                                                 <input id="unidadeMedidaId" name="unidadeMedidaId" type="hidden" value="">
@@ -192,6 +186,24 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
+                                                                    <label class="label" for="naturezaOperacao">Natureza Operação</label>
+                                                                    <label class="select">
+                                                                        <input id="naturezaOperacaoId" name="naturezaOperacaoId" type="hidden" value="">
+                                                                        <select id="naturezaOperacao" name="naturezaOperacao" class="required">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $sql =  "SELECT codigo, descricao FROM Estoque.naturezaOperacao where ativo = 1 order by descricao";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = $row['codigo'];
+                                                                                $descricao = ($row['descricao']);
+                                                                                echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                </section>
+                                                                <section class="col col-2">
                                                                     <label class="label">Número da nota</label>
                                                                     <label class="input">
                                                                         <input id="notaFiscal" name="notaFiscal" maxlength="255" autocomplete="off" class="" type="text" value="">
@@ -216,7 +228,6 @@ include("inc/nav.php");
                                                                 <table id="tableItem" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                     <thead>
                                                                         <tr role="row">
-                                                                            <th></th>
                                                                             <th class="text-left" style="min-width: 10px;">
                                                                                 Código Material</th>
                                                                             <th class="text-left" style="min-width: 10px;">
@@ -231,9 +242,7 @@ include("inc/nav.php");
                                                                                 Fornecedor</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody>
-                                                                    
-                                                                    </tbody>
+                                                                    <tbody></tbody>
                                                                 </table>
                                                             </div>
                                                         </div>
@@ -386,6 +395,66 @@ include("inc/scripts.php");
         });
 
 
+        $("#clienteFornecedor").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'js/sqlscope_cadastroFornecimentoMaterial.php',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        maxRows: 12,
+                        funcao: "listaClienteFornecedorAtivoAutoComplete",
+                        descricaoIniciaCom: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                id: item.id,
+                                label: item.descricao,
+                                value: item.descricao,
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 3,
+
+            select: function(event, ui) {
+                $("#clienteFornecedorId").val(ui.item.id);
+                $("#clienteFornecedorFiltro").val(ui.item.nome);
+                var descricaoId = $("#clienteFornecedorId").val();
+                $("#clienteFornecedor").val(descricaoId)
+                $("#clienteFornecedorFiltro").val('');
+
+            },
+            change: function(event, ui) {
+                if (ui.item === null) {
+                    $("#clienteFornecedorId").val('');
+                    $("#clienteFornecedorFiltro").val('');
+                }
+            }
+        }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#notaFiscal").on("change", function() {
+            $notaFiscal = $("#notaFiscal").val();
+
+            if ($notaFiscal != '') {
+                if (jsonItemArray.length != 0) {
+                    for (i = jsonItemArray.length - 1; i >= 0; i--) {
+                        jsonItemArray[i].situacaoId = 3;
+                        $("#jsonItem").val(JSON.stringify(jsonItemArray));
+                    }
+                }
+            }
+            fillTableItem();
+        });
+
+
         $("#btnNovo").on("click", function() {
             novo();
         });
@@ -398,7 +467,8 @@ include("inc/scripts.php");
 
     function carregaPagina() {
 
-        $("#jsonItem").val(<?php $arraySelecionados ?>);
+        let arrayItem = <?php echo $arrayEstoqueMovimentoSel ?>;
+        $("#jsonItem").val(arrayItem);
         jsonItemArray = JSON.parse($("#jsonItem").val());
         fillTableItem();
 
@@ -419,33 +489,13 @@ include("inc/scripts.php");
         for (var i = 0; i < jsonItemArray.length; i++) {
             var row = $('<tr />');
             $("#tableItem tbody").append(row);
-            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonItemArray[i].sequencialItem + '"><i></i></label></td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].codigoItem + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].material + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].estoqueDescricao + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].notaFiscal + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].valor + '</td>'));
+            row.append($('<td class="text-nowrap">' + jsonItemArray[i].fornecedor + '</td>'));
 
-            var unidadeDestino = $("#unidadeDestino option[value = '" + jsonItemArray[i].unidadeDestino + "']").text();
-            var estoqueDestino = $("#estoqueDestino option[value = '" + jsonItemArray[i].estoqueDestino + "']").text();
-            var situacao = $("#situacao option[value = '" + jsonItemArray[i].situacaoId + "']").text();
-
-            var codigo = $("#codigo").val();
-
-            if (codigo === "") {
-                row.append($('<td class="text-nowrap" onclick="carregaItem(' + jsonItemArray[i].sequencialItem + ');">' +
-                    jsonItemArray[i].codigoItemFiltro + '</td>'));
-            } else {
-                row.append($('<td class="text-nowrap">' +
-                    jsonItemArray[i].codigoItemFiltro + '</td>'));
-            }
-
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoItemFiltro + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].descricaoUnidadeMedida + '</td>'));
-            row.append($('<td class="text-nowrap">' + unidadeDestino + '</td>'));
-            row.append($('<td class="text-nowrap">' + estoqueDestino + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].quantidade + '</td>'));
-            row.append($('<td class="text-nowrap">' + situacao + '</td>'));
-
-            if (codigo != "") {
-                $("#motivoTabela").removeClass('hidden', true);
-                row.append($('<td class="">' + jsonItemArray[i].motivo + '</td>'));
-            }
         }
     }
 
@@ -490,9 +540,13 @@ include("inc/scripts.php");
 
     function validaCampos() {
 
+        var codigo = $('#codigo').val();
         var clienteFornecedorId = $('#clienteFornecedorId').val();
         var projeto = $('#projeto option:selected').val();
         var solicitanteId = $('#solicitanteId').val();
+        var naturezaOperacao = $('#naturezaOperacao').val();
+        var notaFiscal = $('#notaFiscal').val();
+        var dataEmissaoNF = $('#dataEmissaoNF').val();
 
         if (solicitanteId === '') {
             smartAlert("Erro", "Informe o Solicitante!", "error");
@@ -507,6 +561,21 @@ include("inc/scripts.php");
         if (clienteFornecedorId === '') {
             smartAlert("Erro", "Informe o Fornecedor!", "error");
             $('#clienteFornecedor').focus();
+            return false;
+        }
+        if (naturezaOperacao === '') {
+            smartAlert("Erro", "Informe a Natureza da Operação!", "error");
+            $('#naturezaOperacao').focus();
+            return false;
+        }
+        if ((codigo != '') && (notaFiscal === '')) {
+            smartAlert("Erro", "Informe a Nota Fical!", "error");
+            $('#notaFiscal').focus();
+            return false;
+        }
+        if ((codigo != '') && (dataEmissaoNF === '')) {
+            smartAlert("Erro", "Informe a data de emissão da Nota Fical!", "error");
+            $('#dataEmissaoNF').focus();
             return false;
         }
         if (jsonItemArray.length === 0) {

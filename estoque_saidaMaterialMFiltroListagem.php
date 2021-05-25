@@ -18,8 +18,11 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:60px;">Data Entrega</th>
                     <th class="text-left" style="min-width:60px;">Situação Movimento</th>
                     <th class="text-left" style="min-width:30px;">Situação Item</th>
-                    <th class="text-left hidden" style="min-width:30px;"></th>
-                    <th class="text-left hidden" style="min-width:30px;"></th>
+                    <th class="text-left hidden" style="min-width:20px;"></th>
+                    <th class="text-left hidden" style="min-width:20px;"></th>
+                    <th class="text-left hidden" style="min-width:20px;"></th>
+                    <th class="text-left hidden" style="min-width:20px;"></th>
+                    <th class="text-left hidden" style="min-width:20px;"></th>
                 </tr>
             </thead>
             <tbody>
@@ -106,6 +109,7 @@ include "js/repositorio.php";
                     $sequencialItem += 1;
                     $id = $row['codigo'];
                     $estoque = $row['estoque'];
+                    $unidade = $row['unidade'];
                     $descricaoEstoque = $row['descricaoEstoque'];
                     $pedidoMaterial = $row['pedidoMaterial'];
                     $material = $row['material'];
@@ -171,8 +175,11 @@ include "js/repositorio.php";
                     echo '<td class="text-justify">' . $descricaoDataEntrada . '</td>';
                     echo '<td class="text-justify">' . $descricaoSituacao . '</td>';
                     echo '<td class="text-justify">' . $descricaoSituacaoItem . '</td>';
-                    echo '<td class="text-justify hidden">' . $id . '</td>';
+                    echo '<td class="text-justify hidden">' . $estoque . '</td>';
+                    echo '<td class="text-justify hidden">' . $unidade . '</td>';
                     echo '<td class="text-justify hidden">' . $valorItem . '</td>';
+                    echo '<td class="text-justify hidden">' . $material . '</td>';
+                    echo '<td class="text-justify hidden">' . $id . '</td>';
                 }
                 ?>
             </tbody>
@@ -276,21 +283,26 @@ include "js/repositorio.php";
     });
 
     function executarSaidaMaterialEstoque() {
-
+        var arrayEstoqueMovimento = [];
         var arrSelecionados = $('#tableSearchResult').DataTable().rows((i, data, tr) => $(tr).find('input').prop('checked')).data().toArray();
         debugger;
 
         for (var i = 0; i < arrSelecionados.length; i++) {
-            var arrayEstoqueMovimento = {
+            arrayEstoqueMovimento.push({
                 'sequencialItem': i,
                 'codigoItem': arrSelecionados[i][2],
                 'material': arrSelecionados[i][3],
-                'estoque': arrSelecionados[i][1],
+                'estoqueDescricao': arrSelecionados[i][1],
                 'notaFiscal': arrSelecionados[i][4],
-                'valor': arrSelecionados[i][11],
+                'valor': arrSelecionados[i][12],
                 'fornecedor': arrSelecionados[i][5],
-                'codigoMovimento': arrSelecionados[i][10]
-            }
+                'estoque': arrSelecionados[i][10],
+                'unidade': arrSelecionados[i][11],
+                'codigoItemId': arrSelecionados[i][13],
+                'codigoMovimento': arrSelecionados[i][14],
+                'quantidade': 1, 
+                'situacaoItem' : 1
+            });
         };
 
         if (arrSelecionados.length > 0) {

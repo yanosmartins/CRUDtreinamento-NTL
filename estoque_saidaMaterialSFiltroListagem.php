@@ -62,9 +62,11 @@ include "js/repositorio.php";
                     $where = $where . " AND ( SM.notaFiscal = $numero)";
                 }
                 
-                if ($_POST["fechado"] != "") {
-                    $fechado = (int)$_POST["fechado"];
-                    $where = $where . " AND ( SM.fechado = $fechado)";
+                if ($_POST["status"] != "") {
+                    $status = (int)$_POST["status"];
+                    $where = $where . " AND ( SM.fechado = $status)";
+                }else{
+                    $where = $where . " AND ( SM.fechado = 0)";
                 }
                 if ($_POST["unidade"] != "") {
                     $unidade = (int)$_POST["unidade"];

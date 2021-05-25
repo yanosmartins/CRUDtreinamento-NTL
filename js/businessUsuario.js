@@ -1,9 +1,9 @@
-function gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario, funcionario) {
+function gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario, funcionario,restaurarSenha) {
     $.ajax({
         url: 'js/sqlscopeUsuario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", id:id, ativo:ativo, login:login, senha:senha, senhaConfirma:senhaConfirma, tipoUsuario:tipoUsuario, funcionario:funcionario}, //valores enviados ao script     
+        data: {funcao: "grava", id:id, ativo:ativo, login:login, senha:senha, senhaConfirma:senhaConfirma, tipoUsuario:tipoUsuario, funcionario:funcionario,restaurarSenha:restaurarSenha}, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -62,11 +62,13 @@ function recuperaUsuario(id) {
                 var ativo = +piece[2];
                 var tipoUsuario = piece[3];
                 var funcionario = +piece[4];
+                var restaurarSenha = +piece[5];
                
                 $("#codigo").val(codigo);
                 $("#login").val(login);
                 $("#ativo").val(ativo);
                 $("#funcionario").val(funcionario);
+                $("#restaurarSenha").val(restaurarSenha);
                 if (ativo === 1) {
                     $('#ativo').prop('checked', true);
                 } else {
@@ -116,3 +118,36 @@ function excluirUsuario(id) {
         }
     });
 }
+
+function recuperaDadosUsuario(callback) {
+    $.ajax({
+      url: 'js/sqlscopeUsuario.php', //caminho do arquivo a ser executado
+      dataType: 'html', //tipo do retorno
+      type: 'post', //metodo de envio
+      data: { funcao: 'recuperarDadosUsuario'}, //valores enviados ao script
+  
+      success: function (data) {
+        callback(data)
+      },
+    })
+  
+    return
+  }
+
+
+  function gravaNovaSenha(senha, senhaConfirma,callback) {
+    $.ajax({
+      url: 'js/sqlscopeUsuario.php',
+      dataType: 'html', //tipo do retorno
+      type: 'post', //metodo de envio
+      data: {
+        funcao: 'gravarNovaSenha',
+        senha: senha,
+        senhaConfirma: senhaConfirma,
+      }, //valores enviados ao script
+      success: function (data) {
+        callback(data)
+      },
+    })
+  }
+  

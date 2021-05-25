@@ -309,7 +309,7 @@ function recuperaQuantidadeEstoque()
 
     $reposit = new reposit();
 
-    $sql = "SELECT quantidade = (SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacao IN (1, 4, 6) AND situacaoItem = 1 AND material = " . $id . " AND estoque = " . $estoque . ")-
+    $sql = "SELECT quantidade = (SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacao IN (1, 4, 6) AND situacaoItem IN (1,5) AND material = " . $id . " AND estoque = " . $estoque . ")-
     ("."SELECT COUNT(codigo) AS quantidade FROM Estoque.estoqueMovimento WHERE situacao IN (2, 3, 5) AND situacaoItem IS NULL AND material = " . $id . " AND estoque = " . $estoque . ")";
     $result = $reposit->RunQuery($sql);
     if ($row = $result[0]) {

@@ -204,8 +204,8 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
 
         var parametrosUrl = '&estoque=' + estoque;
-        var parametrosUrl = '&localizacaoItem=' + localizacaoItem;
-        parametrosUrl = '&ativo=' + ativo;
+        var parametrosUrl = parametrosUrl + '&localizacaoItem=' + localizacaoItem;
+        var parametrosUrl = parametrosUrl + '&ativo=' + ativo;
         $('#resultadoBusca').load('tabelaBasica_localizacaoItemFiltroListagem.php?' + parametrosUrl);
     }
 </script>

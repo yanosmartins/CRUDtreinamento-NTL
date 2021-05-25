@@ -17,6 +17,14 @@ if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'recuperarDadosUsuario') {
+    call_user_func($funcao);
+}
+
+if ($funcao == 'gravarNovaSenha') {
+    call_user_func($funcao);
+}
+
 return;
 
 function grava()
@@ -51,7 +59,7 @@ function grava()
     $nome = "'" . $nome . "'";
 
     $funcionario = (int)$_POST['funcionario'];
-    if($funcionario == 0){
+    if ($funcionario == 0) {
         $funcionario = 'NULL';
     }
 
@@ -173,7 +181,9 @@ function grava()
         return;
     }
 
-    $sql = "Ntl.usuario_Atualiza " . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . "," . $funcionario . " ";
+    $restaurarSenha = (int)$_POST['restaurarSenha'];
+
+    $sql = "Ntl.usuario_Atualiza " . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . "," . $funcionario . "," . $restaurarSenha . " ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -211,7 +221,7 @@ function recupera()
         $loginPesquisa = $_POST["loginPesquisa"];
     }
 
-    $sql = " SELECT USU.codigo,USU.[login],USU.ativo,tipoUsuario,funcionario
+    $sql = " SELECT USU.codigo,USU.[login],USU.ativo,tipoUsuario,funcionario,restaurarSenha
              FROM Ntl.usuario USU WHERE (0 = 0) ";
 
     if ($condicaoId) {
@@ -226,19 +236,21 @@ function recupera()
     $result = $reposit->RunQuery($sql);
 
     $out = "";
-    if($row = $result[0]) {
+    if ($row = $result[0]) {
         $id = +$row['codigo'];
         $login = $row['login'];
         $ativo = +$row['ativo'];
         $tipoUsuario = $row['tipoUsuario'];
         $funcionario = +$row['funcionario'];
+        $restaurarSenha = +$row['restaurarSenha'];
     }
 
     $out =   $id . "^" .
         $login . "^" .
         $ativo . "^" .
         $tipoUsuario . "^" .
-        $funcionario;
+        $funcionario . "^" .
+        $restaurarSenha;
 
     if ($out == "") {
         echo "failed#";
@@ -301,3 +313,118 @@ function validaUsuario($login)
     }
 }
 
+function recuperarDadosUsuario()
+{
+
+    session_start();
+    $codigoLogin = $_SESSION['codigo'];
+
+    $sql = "SELECT codigo, login, ativo, restaurarSenha
+    FROM Ntl.usuario
+    WHERE (0=0) AND
+    codigo = " . $codigoLogin;
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $out = "";
+    if ($row = $result[0]) {
+        $codigo = (int)$row['codigo'];
+        $restaurarSenha = $row['restaurarSenha'];
+    }
+
+    $out = $codigo . "^" .
+        $restaurarSenha;
+
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out;
+    return;
+}
+
+
+function gravarNovaSenha()
+{
+    $reposit = new reposit();
+    $senhaConfirma = $_POST["senhaConfirma"];
+    $senha = $_POST["senha"];
+
+    if ((empty($_POST['senhaConfirma'])) || (!isset($_POST['senhaConfirma'])) || (is_null($_POST['senhaConfirma']))) {
+        $senhaConfirma = null;
+    }
+    if ((empty($_POST['senha'])) || (!isset($_POST['senha'])) || (is_null($_POST['senha']))) {
+        $senha = null;
+    }
+
+    if ((!is_null($senhaConfirma)) or (!is_null($senha))) {
+        $comum = new comum();
+        $validouSenha = 1;
+        if (!is_null($senha)) {
+            $validouSenha = $comum->validaSenha($senha);
+        }
+        if ($validouSenha === 0) {
+            if ($senhaConfirma !== $senha) {
+                $mensagem = "A confirmação da senha deve ser igual a senha.";
+                echo "failed#" . $mensagem . ' ';
+                return;
+            } else {
+                $comum = new comum();
+                $senhaCript = $comum->criptografia($senha);
+                $senha = "'" . $senhaCript . "'";
+            }
+        } else {
+            switch ($validouSenha) {
+                case 1:
+                    $mensagem = "Senha não pode conter espaços.";
+                    break;
+                case 2:
+                    $mensagem = "Senha deve possuir no mínimo 7 caracter.";
+                    break;
+                case 3:
+                    $mensagem = "Senha ultrapassou de 15 caracteres.";
+                    break;
+                case 4:
+                    $mensagem = "Senha deve possuir no mínimo um caractér númerico.";
+                    break;
+                case 5:
+                    $mensagem = "Senha deve possuir no mínimo um caractér alfabético.";
+                    break;
+                case 6:
+                    $mensagem = "Senha deve possuir no mínimo um caracter especial.\nSão válidos : ! # $ & * - + ? . ; , : ] [ ( )";
+                    break;
+                case 7:
+                    $mensagem = "Senha não pode ter caracteres acentuados.";
+                    break;
+            }
+            echo "failed#" . $mensagem . ' ';
+            return;
+        }
+    }
+
+    session_start();
+    $login= "'" .  $_SESSION['login'] . "'";
+    $usuario =  $login;
+
+    $id = $_SESSION['codigo'];
+    $funcionario = $_SESSION['funcionario'];
+    $ativo = 1;
+    $tipoUsuario = 'C';
+    $restaurarSenha = 0;
+
+        $sql = "Ntl.usuario_Atualiza " . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . "," . $funcionario . "," . $restaurarSenha . " ";
+
+    $reposit = new reposit();
+    $result = $reposit->Execprocedure($sql);
+
+    $ret = 'sucess#';
+    
+    if ($result < 1) {
+        $ret = 'failed#';
+    }
+
+    echo $ret;
+    return;
+}

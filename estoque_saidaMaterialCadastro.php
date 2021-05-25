@@ -6,9 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('PEDIDOMATERIAL_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('PEDIDOMATERIAL_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('PEDIDOMATERIAL_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('SAIDAMATERIAL_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('SAIDAMATERIAL_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,10 +19,6 @@ if ($condicaoGravarOK === false) {
     $esconderBtnGravar = "none";
 }
 
-$esconderBtnExcluir = "";
-if ($condicaoExcluirOK === false) {
-    $esconderBtnExcluir = "none";
-}
 
 session_start();
 $id = $_SESSION['funcionario'];
@@ -91,6 +86,7 @@ include("inc/nav.php");
                                                         <div id="formCadastro">
                                                             <div class="row">
                                                                 <input id="tipo" name="tipo" type="hidden" value="0">
+                                                                <input id="pagina" name="pagina" type="hidden" value="SAIDA">
                                                                 <section class="col col-2">
                                                                     <label class="label">Código</label>
                                                                     <label class="input">
@@ -408,8 +404,6 @@ include("inc/nav.php");
                                                                                 Quantidade</th>
                                                                             <th class="text-left" style="min-width: 10px;">
                                                                                 Situação</th>
-                                                                            <th id="motivoTabela" class="text-left hidden" style="min-width: 10px;">
-                                                                                Motivo</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody></tbody>
@@ -1032,15 +1026,15 @@ include("inc/scripts.php");
         for (var i = 0; i < jsonItemArray.length; i++) {
             var row = $('<tr />');
             $("#tableItem tbody").append(row);
+            var codigo = $("#codigo").val();
             if (codigo === "") {
                 row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonItemArray[i].sequencialItem + '"><i></i></label></td>'));
-            } 
+            }
 
             var unidadeDestino = $("#unidadeDestino option[value = '" + jsonItemArray[i].unidadeDestino + "']").text();
             var estoqueDestino = $("#estoqueDestino option[value = '" + jsonItemArray[i].estoqueDestino + "']").text();
             var situacao = $("#situacao option[value = '" + jsonItemArray[i].situacaoId + "']").text();
 
-            var codigo = $("#codigo").val();
 
             if (codigo === "") {
                 row.append($('<td class="text-nowrap" onclick="carregaItem(' + jsonItemArray[i].sequencialItem + ');">' +
@@ -1057,10 +1051,6 @@ include("inc/scripts.php");
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].quantidade + '</td>'));
             row.append($('<td class="text-nowrap">' + situacao + '</td>'));
 
-            // if (codigo != "") {
-            //     $("#motivoTabela").removeClass('hidden', true);
-            //     row.append($('<td class="">' + jsonItemArray[i].motivo + '</td>'));
-            // }
         }
     }
 
@@ -1334,9 +1324,13 @@ include("inc/scripts.php");
     function gravar() {
 
         if (validaCampos()) {
+
+            $("#btnGravar").attr('disabled', true);
+
             var form = $('#formSaidaMaterial')[0];
             var formData = new FormData(form);
             gravaSaidaMaterial(formData);
+
         };
 
     }

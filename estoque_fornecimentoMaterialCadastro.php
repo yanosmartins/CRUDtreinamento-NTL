@@ -1377,6 +1377,8 @@ include("inc/scripts.php");
 
     function gravar() {
 
+        $("#btnGravar").attr('disabled', true);
+
         var form = $('#formPedidoMaterial')[0];
         var formData = new FormData(form);
         gravaFornecimentoMaterial(formData);

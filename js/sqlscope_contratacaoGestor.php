@@ -69,11 +69,12 @@ function grava()
     $dataFinal = validaData($_POST['dataFinal']);
     $ativo = 1;
 
-    if ($verificadoPeloGestor == 'Sim') {
-        $verificadoPeloGestor = 1;
-    } else {
-        $verificadoPeloGestor = 0;
-    }
+    // if ($verificadoPeloGestor == 'Sim') { //Desabilitei pois a logica não fez sentido algum e está prejudicando o andamento da tela 19/06/2020
+    //     $verificadoPeloGestor = 1;
+    // } else {
+    //     $verificadoPeloGestor = 0;
+    // }
+    $verificadoPeloGestor = 1; // se ele gravou é por que preencheu todos os campos. sem necessidar da validacao acima
 
     $sql = "Contratacao.controleGestor_Atualiza 
         $codigo,

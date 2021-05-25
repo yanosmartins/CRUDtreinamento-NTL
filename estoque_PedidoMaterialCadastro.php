@@ -1242,10 +1242,14 @@ include("inc/scripts.php");
 
     function gravar() {
 
-        validaCampos();
+        if (validaCampos()) {
 
-        var form = $('#formPedidoMaterial')[0];
-        var formData = new FormData(form);
-        gravaPedidoMaterial(formData);
+            $("#btnGravar").attr('disabled', true);
+
+            var form = $('#formPedidoMaterial')[0];
+            var formData = new FormData(form);
+            gravaPedidoMaterial(formData);
+        };
+
     }
 </script>

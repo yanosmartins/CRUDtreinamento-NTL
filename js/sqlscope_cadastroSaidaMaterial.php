@@ -40,11 +40,11 @@ function grava()
     $clienteFornecedor = (int)$_POST['clienteFornecedorId'] ?: 'NULL';
     $solicitante = (int)$_POST['solicitanteId'] ?: 'NULL';
     $projeto = (int)$_POST['projeto'] ?: 'NULL';
-    $notaFiscal = $_POST['notaFiscal'] ?: 'NULL';
+    $notaFiscal = validaString($_POST['notaFiscal']) ?: 'NULL';
     $dataEmissaoNF = validaData($_POST['dataEmissaoNF']);
     $motivo = validaString($_POST['motivo']);
 
-    if ($codigo != '') {
+    if ($codigo != 0) {
         $naturezaOperacao = $_POST['naturezaOperacaoId'];
     } else {
         $naturezaOperacao = $_POST['naturezaOperacao'];
@@ -87,23 +87,45 @@ function grava()
     }
     $xmlItem = "'" . $xmlItem . "'";
 
+    $pagina = $_POST['pagina'];
 
-    $sql = "Estoque.saidaMaterial_Atualiza
-        $codigo,
-        $dataMovimento,  
-        $clienteFornecedor,
-        $solicitante,
-        $projeto,
-        $notaFiscal,
-        $dataEmissaoNF,
-        $naturezaOperacao,
-        $motivo,
-        $usuario, 
-        $xmlItem
-        ";
+    switch ($pagina) {
+        case 'SAIDA':
+            $sql = "Estoque.saidaMaterial_Atualiza
+            $codigo,
+            $dataMovimento,  
+            $clienteFornecedor,
+            $solicitante,
+            $projeto,
+            $notaFiscal,
+            $dataEmissaoNF,
+            $naturezaOperacao,
+            $motivo,
+            $usuario, 
+            $xmlItem
+            ";
+            break;
+
+        case 'SAIDASELECIONADO':
+            $sql = "Estoque.saidaMaterialSelecionado_Atualiza
+            $codigo,
+            $dataMovimento,  
+            $clienteFornecedor,
+            $solicitante,
+            $projeto,
+            $notaFiscal,
+            $dataEmissaoNF,
+            $naturezaOperacao,
+            $motivo,
+            $usuario, 
+            $xmlItem
+            ";
+            break;
+    }
+
 
     $reposit = new reposit();
-    //$result = $reposit->Execprocedure($sql);
+    $result = $reposit->Execprocedure($sql);
 
     $ret = 'success';
     if ($result < 1) {
@@ -157,7 +179,7 @@ function recupera()
         //Montando array de itens 
         $reposit = "";
         $result = "";
-        $sql = "SELECT SMI.codigo,SMI.saidaMaterial, SMI.material, CI.codigoItem, SMI.estoque,
+        $sql = "SELECT DISTINCT SMI.codigo,SMI.saidaMaterial, SMI.material, CI.codigoItem, SMI.estoque,
                 E.descricao AS descricaoEstoque, SMI.quantidade, CI.descricaoItem, SMI.unidade,
                 U.descricao AS descricaoUnidade, CI.unidadeItem, UI.descricao AS descricaoUnidadeItem,
                 saldo = (SELECT  count(material) 
@@ -186,7 +208,7 @@ function recupera()
             $unidade = $row['unidade'];
             $descricaoUnidade = $row['descricaoUnidade'];
             $descricaoUnidadeMedida = $row['descricaoUnidadeItem'];
-            $situacao = 5;
+            $situacao = 3;
             $saldo = $row['saldo'];
 
 
@@ -214,7 +236,7 @@ function recupera()
         //Montando array de itens 
         $reposit = "";
         $result = "";
-        $sql = "SELECT SMI.codigo,SMI.saidaMaterial, SMI.material, CI.codigoItem, SMI.estoque,
+        $sql = "SELECT DISTINCT SMI.codigo,SMI.saidaMaterial, SMI.material, CI.codigoItem, SMI.estoque,
                 E.descricao AS descricaoEstoque, SMI.quantidade, CI.descricaoItem, SMI.unidade,
                 U.descricao AS descricaoUnidade, CI.unidadeItem, UI.descricao AS descricaoUnidadeItem,
                 saldo = (SELECT  count(material) 
