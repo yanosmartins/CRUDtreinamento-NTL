@@ -478,10 +478,10 @@ function enviarFolha()
     foreach ($jsonData as $array) {
         foreach ($array as $key => $value) {
             if ($key == "fileUploadFolha") {
-                if ( strpos( $value , ',')!== false ) {
-                    @list ( $encode ,$value ) = explode ( ',' , $value );
+                if (strpos($value, ',') !== false) {
+                    @list($encode, $value) = explode(',', $value);
                 }
-                array_push($filesContent, base64_decode($value,true));
+                array_push($filesContent, base64_decode($value, true));
             } else if ($key == "dataReferenteUpload") {
                 $aux = explode("/", $value);
                 $value = $aux[2] . "-" . $aux[1] . "-" . $aux[0];
@@ -503,70 +503,105 @@ function enviarFolha()
         $pdfContent = $file;
 
         $extension = ".pdf";
-        $filename = $funcionario . "_" . str_replace("-", "", $datasReferentes[$i]) . "_" . str_replace("-", "", $datasUploads[$i]) . "_" . date("su") . $extension;
+        $filename = $funcionario . "_" . str_replace("-", "", $datasReferentes[$i]). $extension;
         $path = $funcionarioPath . DIRECTORY_SEPARATOR . $filename;
 
-        array_push($pathArray,$path);
+        array_push($pathArray, $path);
+
         //Cria um arquivo de escrita e leitura
-        $pdf = fopen($path, 'w+');
+        try {
+            $pdf = fopen($path, 'w+');
 
-        //Escreve no arquivo criado
-        fwrite($pdf, $pdfContent);
+            //Escreve no arquivo criado
+            fwrite($pdf, $pdfContent);
+        } catch (Exception $e) {
+            $out = "Não foi possível realizar o upload.#";
+            return;
+        } finally {
+            if ($pdf)
+                fclose($pdf);
+        }
 
-        //Fecha o arquivo
-        fclose($pdf);
         $i++;
     }
 
     //=========XML=========//
-    
+    $xmlUploadFolha = "";
+    $nomeXml = "ArrayOfUploadFolha";
+    $nomeTabela = "folha";
+    $j = 0;
+
+    if (sizeof($pathArray) > 0) {
+        $xmlUploadFolha = '<?xml version="1.0"?>';
+        $xmlUploadFolha = $xmlUploadFolha . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        foreach ($pathArray as $path) {
+            $xmlUploadFolha = $xmlUploadFolha . "<" . $nomeTabela . ">";
+                $xmlUploadFolha = $xmlUploadFolha . "<path>" . $path . "</path>";
+                $xmlUploadFolha = $xmlUploadFolha . "<funcionario>" . $funcionario . "</funcionario>";
+                $xmlUploadFolha = $xmlUploadFolha . "<dataReferente>" . $datasReferentes[$j] . "</dataReferente>";
+                $xmlUploadFolha = $xmlUploadFolha . "<dataUpload>" . $datasUploads[$j] . "</dataUpload>";
+                $xmlUploadFolha = $xmlUploadFolha . "<usuarioCadastro>" . $usuario . "</usuarioCadastro>";
+                $xmlUploadFolha = $xmlUploadFolha . "</" . $nomeTabela . ">";
+                $j++;
+            }
+        $xmlUploadFolha = $xmlUploadFolha . "</" . $nomeXml . ">";
+    } else {
+        $xmlUploadFolha = '<?xml version="1.0"?>';
+        $xmlUploadFolha = $xmlUploadFolha . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlUploadFolha = $xmlUploadFolha . "</" . $nomeXml . ">";
+    }
+    $xml = simplexml_load_string($xmlUploadFolha);
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML de telefone";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+    $xmlUploadFolha = "'" . $xmlUploadFolha . "'";
 
     //=========SQL=========//
 
     $reposit = new reposit();
 
-    // $sql = "Funcionario.logUploadFolhaPonto_Atualiza
-    //     '$file_path',
-    //     '$funcionario',
-    //     '$usuario'
-    //     ";
+    $sql = "Funcionario.logUploadFolhaPonto_Atualiza
+        $xmlUploadFolha";
 
-//     $result = $reposit->Execprocedure($sql);
+    $result = $reposit->Execprocedure($sql);
 
-//     if ($result < 1) {
-//         foreach ($file_path as $delete) {
-//             unlink($delete);
-//         }
-//         $out = "Não foi possível realizar o upload.#";
-//         echo "failed#" . $out;
-//         return;
-//     } else {
-//         echo "sucess#" . $out;
-//         return;
-//     }
-// }
+    if ($result < 1) {
+        foreach ($pathArray as $delete) {
+            unlink($delete);
+        }
 
-// function atualizarStatus()
-// {
-//     session_start();
-//     $usuario = $_SESSION['login'];
+        $out = "Não foi possível realizar o upload.#";
+        echo "failed#" . $out;
+        return;
+    } else {
+        echo "sucess#" . $out;
+        return;
+    }
+}
 
-//     $codigo = $_POST["codigo"];
-//     $status = $_POST["status"];
+function atualizarStatus()
+{
+    session_start();
+    $usuario = $_SESSION['login'];
 
-//     $reposit = new reposit();
+    $codigo = $_POST["codigo"];
+    $status = $_POST["status"];
 
-//     $result = $reposit->Update("Funcionario.folhaPontoMensal " . "|" .
-//         " status = " . $status . " , " . " usuarioAlteracao = '" . $usuario . "' , " . " dataAlteracao = GETDATE() " . "|" . " codigo = " . $codigo);
+    $reposit = new reposit();
 
-//     $out = " #";
-//     if ($result < 1) {
-//         $out = "Erro ao efetuar a operação";
-//         echo "failed#" . "$out#";
-//         return;
-//     } else {
-//         $out = "Operação bem sucedida";
-//         echo "sucess#" . "$out#";
-//         return;
-//     }
+    $result = $reposit->Update("Funcionario.folhaPontoMensal " . "|" .
+        " status = " . $status . " , " . " usuarioAlteracao = '" . $usuario . "' , " . " dataAlteracao = GETDATE() " . "|" . " codigo = " . $codigo);
+
+    $out = " #";
+    if ($result < 1) {
+        $out = "Erro ao efetuar a operação";
+        echo "failed#" . "$out#";
+        return;
+    } else {
+        $out = "Operação bem sucedida";
+        echo "sucess#" . "$out#";
+        return;
+    }
 }
