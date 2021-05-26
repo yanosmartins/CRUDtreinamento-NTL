@@ -217,7 +217,14 @@ include("inc/nav.php");
                     </button> -->
                     <h4 class="modal-title"> Alterar senha</h4>
                 </div>
-                <div id="parametroLinkModalBody" class="modal-body smart-form" style="min-height:290px;">
+                <div id="parametroLinkModalBody" class="modal-body smart-form" style="min-height:350px;">
+                    <section class="col col-auto">
+                        <p>-Senha não pode conter espaços.</p>
+                        <p>-Senha deve possuir no mínimo 7 e no máximo 15.</p>
+                        <p>-Senha deve possuir caracter especial ! # $ & * - + ? . ; , : ] [ ( )</p>
+                        <p>-Senha deve possuir no mínimo um caractér númerico e um caractér alfabético.</p>
+                        <p>-Senha não pode ter caracteres acentuados.</p>
+                    </section>
                     <section class="col col-12">
                         <label class="label">Senha</label>
                         <label class="input">

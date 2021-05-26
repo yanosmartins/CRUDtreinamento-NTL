@@ -228,6 +228,11 @@ function gravaBeneficio()
         $produtoVAVR = 'NULL';
     }
 
+    $produtoBeneficioIndireto = (int)$beneficio['produtoBeneficioIndireto'];
+    if($produtoBeneficioIndireto == 0){
+        $produtoBeneficioIndireto = 'NULL';
+    }
+
     //############################# INICIO DO XML DE VT ##############################//
     $strArrayValeTransporte = $beneficio['jsonValeTransporte'];
     $arrayValeTransporte = json_decode($strArrayValeTransporte, true);
@@ -550,7 +555,8 @@ function gravaBeneficio()
         $horaFim,
         $horaSaida,
         $departamento,
-        $produtoVAVR";
+        $produtoVAVR,
+        $produtoBeneficioIndireto";
 
     $result = $reposit->Execprocedure($sql);
 
@@ -687,6 +693,7 @@ function recuperaBeneficio()
         $horaSaida = $row['horaSaida'];
 
         $produtoVAVR = $row['produtoVAVR'];
+        $produtoBeneficioIndireto = $row['produtoBeneficioIndireto'];
 
 
 
@@ -1101,7 +1108,8 @@ function recuperaBeneficio()
             $horaFim . "^" .
             $horaSaida . "^" .
             $departamento . "^" .
-            $produtoVAVR;
+            $produtoVAVR . "^" .
+            $produtoBeneficioIndireto;
 
         if ($out == "") {
             echo "failed#";
