@@ -2364,6 +2364,18 @@ include("inc/scripts.php");
             return false;
         }
 
+        if (dataReferenteUpload) {
+            jsonUploadFolhaArray.forEach((obj) => {
+                if (dataReferenteUpload == obj.dataReferenteUpload) {
+                    smartAlert("Erro", "Não é possível inserir dois documentos da mesma data no sistema!", "error");
+                    return false;
+                }
+
+            })
+            return false
+        }
+
+
         return true;
     }
 
@@ -2499,18 +2511,44 @@ include("inc/scripts.php");
     };
 
     function recuperaUpload() {
-        recuperaArquivo(function(data) {
-            debugger
+        recuperaArquivo(async function(data) {
             data = data.replace(/failed/g, '');
             let piece = data.split("#");
 
-            //Atributos de Cliente
             let mensagem = piece[0];
             let out = piece[1];
-            debugger;
-            let JsonUpload = piece[2];
+            let JsonUpload = JSON.parse(piece[2]);
 
-            piece = out.split("^");
+            const files = []
+            const jsonUploadFolha = []
+            //OK
+            for (obj of JsonUpload) {
+                files.push(new File([(await fetch(obj.fileUploadFolha)).blob()], obj.fileName, {
+                    type: "application/pdf"
+                }))
+            }
+
+            JsonUpload.forEach((obj, index) => {
+                let dataReferente = obj.dataReferenteUpload.split(" ")
+                let aux = dataReferente[0].split("-")
+                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                dataReferente = aux
+
+                let dataUpload = obj.dataUpload.split(" ")
+                aux = dataUpload[0].split("-")
+                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                dataUpload = aux
+
+                jsonUploadFolha.push({
+                    dataReferenteUpload: dataReferente,
+                    dataUpload: dataUpload,
+                    sequencialUploadFolha: obj.sequencialUploadFolha,
+                    fileUploadFolha: files[index]
+                })
+            })
+
+            jsonUploadFolhaArray = jsonUploadFolha
+            fillTableUploadFolha()
         })
     }
 </script>

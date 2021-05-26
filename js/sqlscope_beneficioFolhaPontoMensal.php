@@ -497,6 +497,9 @@ function enviarFolha()
     $i = 0;
     $pathArray = array();
 
+    $relativePathArray = array();
+    $fileNameArray = array();
+
     foreach ($filesContent as $file) {
 
         //Passa o base64 decodificado para uma variavel que se refe ao conteudo
@@ -508,6 +511,11 @@ function enviarFolha()
 
         array_push($pathArray, $path);
 
+        $start = stripos($path, DIRECTORY_SEPARATOR . "uploads");
+        $recorte = explode($filename,substr($path, $start));
+        array_push($relativePathArray,"." . $recorte[0]);
+        array_push($fileNameArray, $filename);
+
         //Cria um arquivo de escrita e leitura
         try {
             $pdf = fopen($path, 'w+');
@@ -516,6 +524,7 @@ function enviarFolha()
             fwrite($pdf, $pdfContent);
         } catch (Exception $e) {
             $out = "Não foi possível realizar o upload.#";
+            echo "failed#".$out;
             return;
         } finally {
             if ($pdf)
@@ -534,9 +543,11 @@ function enviarFolha()
     if (sizeof($pathArray) > 0) {
         $xmlUploadFolha = '<?xml version="1.0"?>';
         $xmlUploadFolha = $xmlUploadFolha . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-        foreach ($pathArray as $path) {
+        foreach ($relativePathArray as $path) {
             $xmlUploadFolha = $xmlUploadFolha . "<" . $nomeTabela . ">";
             $xmlUploadFolha = $xmlUploadFolha . "<path>" . $path . "</path>";
+            $xmlUploadFolha = $xmlUploadFolha . "<name>" . $fileNameArray[$j] . "</name>";
+            $xmlUploadFolha = $xmlUploadFolha . "<type>" . "application/pdf" . "</type>";
             $xmlUploadFolha = $xmlUploadFolha . "<dataReferente>" . $datasReferentes[$j] . "</dataReferente>";
             $xmlUploadFolha = $xmlUploadFolha . "<dataUpload>" . $datasUploads[$j] . "</dataUpload>";
             $xmlUploadFolha = $xmlUploadFolha . "<usuarioCadastro>" . $usuario . "</usuarioCadastro>";
@@ -588,7 +599,7 @@ function recuperaPDF()
     $funcionario = $_SESSION['funcionario'];
 
     $reposit = new reposit();
-    $sql = "SELECT filePath AS 'path', dataReferente AS 'dataReferenteUpload', dataCadastro AS 'dataUpload' FROM Funcionario.logUploadFolhaPonto";
+    $sql = "SELECT filePath AS 'path',fileName AS 'name', fileType AS 'type', dataReferente AS 'dataReferenteUpload', dataCadastro AS 'dataUpload' FROM Funcionario.logUploadFolhaPonto";
     $where = " WHERE (0=0) AND ";
     $where .= "funcionario = " . $funcionario;
 
@@ -608,6 +619,8 @@ function recuperaPDF()
 
     foreach ($result as $row) {
         $path = $row["path"];
+        $name = $row["name"];
+        $type = $row["type"];
         $dataReferenteUpload = $row['dataReferenteUpload'];
         $sequencialUploadFolha = $i + 1;
         $dataUpload = $row['dataUpload'];
@@ -616,7 +629,8 @@ function recuperaPDF()
         array_push(
             $uploadArray,
             [
-
+                "fileName" => $name,
+                "fileType" => $type,
                 "dataReferenteUpload" => $dataReferenteUpload,
                 "dataUpload" => $dataUpload,
                 "sequencialUploadFolha" => $sequencialUploadFolha
@@ -628,7 +642,8 @@ function recuperaPDF()
 
     $i = 0;
     foreach ($pathArray as $path) {
-        $content = file_get_contents($path);
+        $path = dirname(__DIR__) . substr($path,1);
+        $content = file_get_contents($path . $uploadArray[$i]["fileName"]);
         $base64 = "data:application/pdf;base64," . base64_encode($content);
 
         $uploadArray[$i]["fileUploadFolha"] = $base64;
@@ -636,7 +651,10 @@ function recuperaPDF()
     }
 
     $jsonUpload = json_encode($uploadArray);
-    echo "success#" . "$out#" . $jsonUpload . "#";
+
+    $out = "Operação realizada com sucesso!";
+
+    echo "success#" . "$out#" . $jsonUpload;
     return;
 }
 
