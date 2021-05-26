@@ -774,7 +774,7 @@ include("inc/nav.php");
 															<section class="col col-4 ">
 																<label class="label " for="produtoVAVR">Produto VAVR</label>
 																<label class="select">
-																	<select id="produtoVAVR" name="produtoVAVR" class="" >
+																	<select id="produtoVAVR" name="produtoVAVR" class="">
 																		<option></option>
 																		<?php
 																		$reposit = new reposit();
@@ -1096,6 +1096,29 @@ include("inc/nav.php");
 														<input id="descricaoBeneficio" name="descricaoBeneficio" type="hidden" value="">
 
 														<div class="row">
+														<section class="col col-4 ">
+																<label class="label " for="produtoBeneficioIndireto">Produto benefício indireto</label>
+																<label class="select">
+																	<select id="produtoBeneficioIndireto" name="produtoBeneficioIndireto" class="">
+																		<option></option>
+																		<?php
+																		$reposit = new reposit();
+																		$sql = "SELECT codigo, nome FROM Beneficio.produtoBeneficio WHERE ativo = 1 ORDER BY nome";
+																		$result = $reposit->RunQuery($sql);
+																		foreach ($result as $row) {
+																			$id = $row['codigo'];
+																			$nome = $row['nome'];
+																			echo '<option value=' . $id . '>' . $nome . '</option>';
+																		}
+																		?>
+																	</select><i></i>
+																</label>
+															</section>			
+														</div>
+														<div class="row">
+															<section class="col col-12">
+																<legend>Distribuição benefício indireto</legend>
+															</section>
 															<section class="col col-3">
 																<label class="label" for="valorBolsaBeneficioSindicato">Valor Bolsa Benefício Sindicato</label>
 																<label class="input"><i class="icon-append fa fa-usd"></i>
@@ -2887,6 +2910,7 @@ include("inc/scripts.php");
 							var horaSaida = piece[83];
 							var departamento = piece[84];
 							var produtoVAVR = piece[85];
+							var produtoBeneficioIndireto = piece[86];
 
 
 							$("#codigo").val(codigo);
@@ -2992,6 +3016,7 @@ include("inc/scripts.php");
 
 							$("#departamento").val(departamento);
 							$("#produtoVAVR").val(produtoVAVR);
+							$("#produtoBeneficioIndireto").val(produtoBeneficioIndireto);
 
 							jsonValeTransporteArray = JSON.parse($("#jsonValeTransporte").val());
 							jsonPlanoSaudeArray = JSON.parse($("#jsonPlanoSaude").val());
