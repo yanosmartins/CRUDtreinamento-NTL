@@ -1,11 +1,10 @@
- function gravaASO(id,funcionario, matricula,cargo,projeto,sexo,dataNascimento,dataAdmissao,dataAgendamento,
-    dataUltimoAso,dataProximoAso,ativo,jsonDataAsoArray, callback) {
+ function gravaASO(dataAso,jsonData, callback) {
     $.ajax({
         url: 'js/sqlscope_atestadoSaudeOcupacional.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava",id:id,funcionario:funcionario,matricula:matricula,cargo:cargo,projeto:projeto,sexo:sexo,dataNascimento:dataNascimento,
-        dataAdmissao:dataAdmissao,dataAgendamento:dataAgendamento,dataUltimoAso:dataUltimoAso,dataProximoAso:dataProximoAso,ativo:ativo,jsonDataAsoArray:jsonDataAsoArray,
+        cache: false, 
+        data: {funcao: "grava",dataAso:dataAso,jsonData:jsonData,
         },   
         success: function (data) {
         callback(data);
