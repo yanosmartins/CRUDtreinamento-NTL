@@ -145,6 +145,9 @@ include "js/repositorio.php";
     <button id="btnExcelSodexo" name="btnExcelSodexo" type="button" class="btn btn-success" title="grava">
         Gerar Excel Sodexo
     </button>
+    <button id="btnExcelSodexoBeneficioIndireto" name="btnExcelSodexoBeneficioIndireto" type="button" class="btn btn-success" title="grava">
+        Sodexo Benefício Indireto
+    </button>
 </div>
 
 <!-- PAGE RELATED PLUGIN(S) -->
@@ -178,6 +181,11 @@ include "js/repositorio.php";
             $(location).attr('href', `beneficio_excelBeneficioTeste.php?id=${codigoConsultaBeneficio}`);
         });
 
+        $("#btnExcelSodexoBeneficioIndireto").on("click", function() {
+            var codigoConsultaBeneficio = <?php echo $codigoConsultaBeneficio ?>;
+            // $(location).attr('href', 'beneficio_excelBeneficioTeste.php?codigo=' + codigoConsultaBeneficio);
+            $(location).attr('href', `beneficio_excelBeneficioIndireto.php?id=${codigoConsultaBeneficio}`);
+        });
 
         /* TABLETOOLS */
         $('#tableSearchResult').dataTable({

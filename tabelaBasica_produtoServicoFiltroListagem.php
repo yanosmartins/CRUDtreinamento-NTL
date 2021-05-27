@@ -1,97 +1,59 @@
 <?php
-include "js/repositorio.php";
+    include "js/repositorio.php"; 
 ?>
 <div class="table-container">
     <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Fornecedor</th>
-                    <th class="text-left" style="min-width:30px;">CNPJ</th>
-                    <th class="text-left" style="min-width:30px;">Ativo</th>
-                    <th class="text-left" style="min-width:35px;">NF</th>
-                    <th class="text-left" style="min-width:35px;">Cliente/Fornecedor</th>
-
+                    <th class="text-left" style="min-width:30px;">Produto / Serviço</th>
+                     <th class="text-left" style="min-width:35px;">Ativo</th>
+                   
                 </tr>
             </thead>
             <tbody>
-                <?php
-                $apelido = "";
-                $cnpj = "";
-                $ativo = "";
-                $notaFiscal = "";
-               
-                $where = "where (0 = 0)";
-
-                $sql = "SELECT codigo,cnpj,apelido, ativo, notaFiscal,clienteFornecedor
-                        FROM Ntl.fornecedor ";
-                 
-              
-                if ($_GET["apelido"] != "") {
-                    $apelido = $_GET["apelido"];
-                    $where = $where . " AND(apelido like '%' + " . "replace('" . $apelido . "',' ','%') + " . "'%')";
-                }
-
-                if ($_GET["cnpj"] != "") {
-                    $cnpj = $_GET["cnpj"];
-                    $where = $where . " AND (cnpj like '%' + " . "replace('" . $cnpj . "',' ','%') + " . "'%')";
-                }
-
-    
-                if ($_GET["ativo"] != "") {
-                    $ativo = $_GET["ativo"];
-                    $where = $where . " AND [ativo] = " . $ativo;
-                }
-
-                if ($_GET["notaFiscal"] != "") {
-                    $notaFiscal = $_GET["notaFiscal"];
-                    $where = $where . " AND [notaFiscal] = " . $notaFiscal;
-                }
-
-                if ($_GET["clienteFornecedor"] != "") {
-                    $clienteFornecedor = $_GET["clienteFornecedor"];
-                    $where = $where . " AND [clienteFornecedor] = " . "'" . $clienteFornecedor . "'";
-                }
-                $sql .=$where;
-                $reposit = new reposit();
-                $result = $reposit->RunQuery($sql);
-
-                foreach($result as $row) {
-                    $id = (int) $row['codigo'];
-                    $cnpj = (string)$row['cnpj'];
-                    $apelido = (string)$row['apelido'];
-                    $ativo = $row['ativo'];
-                    $notaFiscal = $row['notaFiscal'];
-                    $clienteFornecedor = $row['clienteFornecedor'];
-     
-                    if ($ativo == 1) {
-                        $ativo = "Sim";
-                    } else {
-                        $ativo = "Não";
+                <?php 
+                
+                    $descricaoFiltro = "";
+                    $tipoFiltro = "";
+                    $ativoFiltro = "";
+                    $where = " WHERE (0 = 0)";
+                     
+                    if ($_GET["descricaoFiltro"] != "") {
+                        $descricaoFiltro = $_GET["descricaoFiltro"];
+                        $where = $where." AND descricao like '%' + "."replace('".$descricaoFiltro."',' ','%') + "."'%'";
                     }
 
-                    if ($notaFiscal == 1) {
-                        $notaFiscal = "Sim";
-                    } else {
-                        $notaFiscal = "Não";
-                    }
+                     if ($_GET["ativoFiltro"] != "") {
+                        $ativoFiltro = $_GET["ativoFiltro"];
+                        $where = $where." AND ativo = $ativoFiltro";
+                    } 
+                    
+                    $sql = "SELECT codigo,descricao,ativo FROM Ntl.produtoServico";
+                    $sql = $sql.$where;
+                    
+                    $reposit = new reposit();                                       
+                    $result=$reposit->RunQuery($sql);
 
-                    if ($clienteFornecedor == 'C') {
-                        $clienteFornecedor = "Cliente";
-                    } else if($clienteFornecedor == 'F') {
-                        $clienteFornecedor = "Fornecedor";
-                    }else{
-                        $clienteFornecedor = "Não informado";
-                    }
+                    foreach($result as $row) {
+                        $id = (int) $row['codigo'];
+                        $descricao = $row['descricao'];
+                        $ativo = (int)$row['ativo'];
+                        
+                        //Modifica os valores booleanos por Sim e Não. 
+                        //Ativo
+                        if ($ativo==1){
+                            $descricaoAtivo = "Sim";
+                        }
+                        else{
+                            $descricaoAtivo = "Não";                            
+                        }
 
-                    echo '<tr >';
-                    echo '<td class="text-left"><a href="cadastro_fornecedorCadastro.php?codigo=' . $id . '">' . $apelido . '</a></td>';
-                    echo '<td class="text-left">' . $cnpj . '</td>';
-                    echo '<td class="text-left">' . $ativo . '</td>';
-                    echo '<td class="text-left">' . $notaFiscal . '</td>';
-                    echo '<td class="text-left">' . $clienteFornecedor . '</td>';
-                    echo '</tr >';
-                }
+                        echo '<tr >'; 
+                        echo '<td class="text-left"><a href="tabelaBasica_produtoServicoCadastro.php?codigo='.$id.'">'.$descricao.'</a></td>';
+                        echo '<td class="text-left">'.$descricaoAtivo.'</td>';
+                        echo '</tr >';
+                    }
                 ?>               
             </tbody>
         </table>        
@@ -105,7 +67,7 @@ include "js/repositorio.php";
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css"/>
-
+ 
 <script type="text/javascript" src="js/plugin/JSZip-2.5.0/jszip.min.js"></script>
 <script type="text/javascript" src="js/plugin/pdfmake-0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="js/plugin/pdfmake-0.1.36/vfs_fonts.js"></script>
@@ -160,10 +122,10 @@ include "js/repositorio.php";
                 //{extend: 'csv', className: 'btn btn-default'},
                 {extend: 'excel', className: 'btn btn-default'},
                 {extend: 'pdf', className: 'btn btn-default'},
-                        //{extend: 'print', className: 'btn btn-default'}
+                //{extend: 'print', className: 'btn btn-default'}
             ],
             "autoWidth": true,
-
+            
             "preDrawCallback": function () {
                 // Initialize the responsive datatables helper once.
                 if (!responsiveHelper_datatable_tabletools) {

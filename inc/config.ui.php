@@ -114,6 +114,10 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
     }
+    
+    if (in_array('PRODUTOSERVICO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['tabelaBasica']['sub'] += array("produtoServico" => array("title" => "Produto Serviço", "url" => APP_URL . "/tabelaBasica_produtoServicoFiltro.php")); //SYSGC //Faturamento
+    }
 
     if (in_array('MUNICIPIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("municipio" => array("title" => "Município", "url" => APP_URL . "/tabelaBasica_municipioFiltro.php")); //SYSCB 
