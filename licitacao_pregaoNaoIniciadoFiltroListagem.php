@@ -177,6 +177,7 @@ include "js/repositorio.php";
 <!--script src="js/plugin/datatables/dataTables.tableTools.min.js"></script-->
 <script src="js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+<script src="js/plugin/datatables/sorting/date-eu.js"></script>
 
 <link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css" />
 
@@ -256,7 +257,11 @@ include "js/repositorio.php";
             },
             "drawCallback": function(oSettings) {
                 responsiveHelper_datatable_tabletools.respond();
-            }
+            },
+            "columnDefs": [{
+                "type": 'date-eu',
+                "targets": [4,11]
+            }],
         });
 
         /* END TABLETOOLS */
