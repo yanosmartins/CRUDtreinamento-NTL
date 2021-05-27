@@ -55,6 +55,11 @@ function grava()
     $cep = $_POST['cep'];
     $endereco = $_POST['endereco'];
     $codigoCliente = "'" . $_POST['codigoCliente'] . "'";
+    $clienteFornecedor = "'" . $_POST['clienteFornecedor'] . "'";
+
+    $codigoDepartamento = "'" . $_POST['codigoDepartamento'] . "'";
+    $nomeDepartamento = "'" . $_POST['nomeDepartamento'] . "'";
+    $responsavelRecebimento = "'" . $_POST['responsavelRecebimento'] . "'";
 
     $strArrayTipoItem = $_POST['jsonTipoItemArray'];
     $arrayTipoItem = $strArrayTipoItem;
@@ -172,6 +177,42 @@ function grava()
     }
     $xmlEmail = "'" . $xmlEmail . "'";
 
+
+    //Inicio do Json ProdutoServico
+    $strArrayProdutoServico = $_POST['jsonProdutoServicoArray'];
+    $arrayProdutoServico = $strArrayProdutoServico;
+    $xmlProdutoServico = "";
+    $nomeXml = "ArrayOfFornecedorProdutoServico";
+    $nomeTabela = "fornecedorProdutoServico";
+    if ($arrayProdutoServico) {
+        $xmlProdutoServico = '<?xml version="1.0"?>';
+        $xmlProdutoServico = $xmlProdutoServico . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        foreach ($arrayProdutoServico as $chave) {
+            $xmlProdutoServico = $xmlProdutoServico . "<" . $nomeTabela . ">";
+            foreach ($chave as $campo => $valor) {
+                if (($campo === "sequencialProdutoServico")) {
+                    continue;
+                }
+                $xmlProdutoServico = $xmlProdutoServico . "<" . $campo . ">" . $valor . "</" . $campo . ">";
+            }
+            $xmlProdutoServico = $xmlProdutoServico . "</" . $nomeTabela . ">";
+        }
+        $xmlProdutoServico = $xmlProdutoServico . "</" . $nomeXml . ">";
+    } else {
+        $xmlProdutoServico = '<?xml version="1.0"?>';
+        $xmlProdutoServico = $xmlProdutoServico . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+        $xmlProdutoServico = $xmlProdutoServico . "</" . $nomeXml . ">";
+    }
+    $xml = simplexml_load_string($xmlProdutoServico);
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML de telefone";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+    $xmlProdutoServico = "'" . $xmlProdutoServico . "'";
+    //Fim do Json ProdutoServico
+
+
     $ativo = 1;
 
     $sql = "Ntl.fornecedor_Atualiza " .
@@ -193,8 +234,13 @@ function grava()
         $codigoCliente . "," .
         $xmlTipoItem . "," .
         $xmlTelefone . "," .
-        $xmlEmail;
-       
+        $xmlEmail . "," .
+        $xmlProdutoServico . "," .
+        $clienteFornecedor . "," .
+        $codigoDepartamento . "," .
+        $nomeDepartamento . "," .
+        $responsavelRecebimento;
+
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
@@ -232,7 +278,7 @@ function recupera()
     }
 
     $sql = "SELECT FO.[codigo], FO.[cnpj], FO.[razaoSocial], FO.[apelido], FO.[ativo], FO.[cep],FO.[logradouro], FO.[numero], FO.[complemento], FO.[bairro], FO.[cidade], FO.[uf], FO.[notaFiscal],
-                   FO.[endereco],FO.[codigoCliente]
+                   FO.[endereco],FO.[codigoCliente],FO.[clienteFornecedor],FO.[codigoDepartamento],FO.[nomeDepartamento],FO.[responsavelRecebimento]
                     FROM Ntl.fornecedor FO
                     WHERE (0=0)";
 
@@ -261,6 +307,11 @@ function recupera()
         $cep =  $row['cep'];
         $endereco =  $row['endereco'];
         $codigoCliente =  $row['codigoCliente'];
+        $clienteFornecedor =  $row['clienteFornecedor'];
+
+        $codigoDepartamento =  $row['codigoDepartamento'];
+        $nomeDepartamento =  $row['nomeDepartamento'];
+        $responsavelRecebimento =  $row['responsavelRecebimento'];
 
         // ARRAY TIPO ITEM // 
         $reposit = "";
@@ -324,7 +375,7 @@ function recupera()
             } else {
                 $telefonePrincipalText = "Não";
             }
-            
+
             $contadorTelefone = $contadorTelefone + 1;
             $arrayTelefone[] = array(
                 "sequencialTel" => $contadorTelefone,
@@ -335,7 +386,7 @@ function recupera()
                 "telefoneWpp" => $telefoneWpp
             );
         }
-   
+
         $strArrayTelefone = json_encode($arrayTelefone);
 
 
@@ -344,8 +395,8 @@ function recupera()
         $reposit = "";
         $result = "";
         $sql = "SELECT FE.fornecedor,FE.email,FE.emailPrincipal,F.codigo
-    FROM ntl.fornecedorEmail FE INNER JOIN ntl.fornecedor F ON F.codigo = FE.fornecedor
-    WHERE F.codigo = $id";
+                FROM ntl.fornecedorEmail FE INNER JOIN ntl.fornecedor F ON F.codigo = FE.fornecedor
+                WHERE F.codigo = $id";
 
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
@@ -357,12 +408,12 @@ function recupera()
             $email = (string)$row['email'];
             $emailPrincipal = (string)$row['emailPrincipal'];
 
-            
-        if ($emailPrincipal == 1) {
-            $emailPrincipalText = "Sim";
-        } else {
-            $emailPrincipalText = "Não";
-        }
+
+            if ($emailPrincipal == 1) {
+                $emailPrincipalText = "Sim";
+            } else {
+                $emailPrincipalText = "Não";
+            }
 
             $contadorEmail = $contadorEmail + 1;
             $arrayEmail[] = array(
@@ -373,6 +424,37 @@ function recupera()
             );
         }
         $strArrayEmail = json_encode($arrayEmail);
+
+        // //----------------------Montando o array de produtoServico
+
+        $reposit = "";
+        $result = "";
+        $sql = "  SELECT FPS.codigo,FPS.fornecedor,FPS.produtoServico,PS.descricao AS produtoServicoDescricao
+                    FROM Ntl.fornecedorProdutoServico FPS  
+                    LEFT JOIN Ntl.produtoServico PS ON PS.codigo = FPS.produtoServico
+                    WHERE FPS.fornecedor = $id";
+
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+
+        $contadorProdutoServico = 0;
+        $arrayProdutoServico = array();
+        foreach ($result as $row) {
+            $produtoServicoId = (int)$row['codigo'];
+            $produtoServico = (int)$row['produtoServico'];
+            $produtoServicoDescricao = (string)$row['produtoServicoDescricao'];
+
+            $contadorProdutoServico = $contadorProdutoServico + 1;
+            $arrayProdutoServico[] = array(
+                "sequencialProdutoServico" => $contadorProdutoServico,
+                "produtoServicoId" => $produtoServicoId,
+                "produtoServico" => $produtoServico,
+                "descricaoProdutoServico" => $produtoServicoDescricao,
+            );
+        }
+
+        $strArrayProdutoServico = json_encode($arrayProdutoServico);
+        //------------------------Fim do Array produtoServico
 
         $out = $id . "^" .
             $cnpj . "^" .
@@ -387,14 +469,18 @@ function recupera()
             $uf . "^" .
             $notaFiscal . "^" .
             $cep . "^" .
-            $endereco ."^".
-            $codigoCliente;
+            $endereco . "^" .
+            $codigoCliente . "^" .
+            $clienteFornecedor . "^" .
+            $codigoDepartamento . "^" .
+            $nomeDepartamento . "^" .
+            $responsavelRecebimento;
 
         if ($out == "") {
             echo "failed#";
         }
         if ($out != '') {
-            echo "sucess#" . $out . "#" . $strArrayTipoItem . "#" . $strArrayTelefone . "#" . $strArrayEmail;
+            echo "sucess#" . $out . "#" . $strArrayTipoItem . "#" . $strArrayTelefone . "#" . $strArrayEmail . "#" . $strArrayProdutoServico;
         }
 
         return;

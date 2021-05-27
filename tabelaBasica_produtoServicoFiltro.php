@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('FORNECEDOR_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('FORNECEDOR_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('PRODUTOSERVICO_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('PRODUTOSERVICO_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -20,11 +20,10 @@ if ($condicaoGravarOK === false) {
 }
 
 /* ---------------- PHP Custom Scripts ---------
-
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Fornecedor";
+$page_title = "Grupo";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,31 +35,32 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["cadastro"]["sub"]["fornecedor"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["produtoServico"]["active"] = true;
 
 include("inc/nav.php");
 ?>
 <!-- ==========================CONTENT STARTS HERE ========================== -->
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-<?php
-//configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
-//$breadcrumbs["New Crumb"] => "http://url.com"
-$breadcrumbs["Tabela Básica"] = "";
-include("inc/ribbon.php");
-?>
+    <?php
+    //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
+    //$breadcrumbs["New Crumb"] => "http://url.com"
+    $breadcrumbs["Tabela Básica"] = "";
+    include("inc/ribbon.php");
+    ?>
 
     <!-- MAIN CONTENT -->
     <div id="content">
 
         <!-- widget grid -->
-        <section id="widget-grid" class="">                
+        <section id="widget-grid" class="">
+
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Fornecedor</h2>
+                            <h2>Produto / Serviço </h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -79,60 +79,34 @@ include("inc/ribbon.php");
                                             <div id="collapseFiltro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">  
-                                                            <section class="col col-3 col-auto">
-                                                                <label class="label" for="apelido">Fornecedor</label>
+                                                        <div class="row">
+                                                            <section class="col col-5 col-auto">
+                                                                <label class="label" for="descricao">Descriçao</label>
                                                                 <label class="input">
-                                                                    <input id="apelido" name="apelido" type="text" autocomplete="off">
+                                                                    <input id="descricao" maxlength="50" name="descricao" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3 col-auto">
-                                                                <label class="label" for="cnpj">CNPJ</label>
-                                                                <label class="input">
-                                                                    <input id="cnpj" name="cnpj" type="text" autocomplete="off">
-                                                                </label>
-                                                            </section>
-                                                               <section class="col col-2 col-auto">
-                                                                <label class="label">Ativo</label>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
                                                                         <option></option>
-                                                                        <option value="1" selected>Sim</option> 
-                                                                        <option value="0">Não</option> 
-                                                                    </select><i></i> 
-                                                                </label> 
-                                                            </section> 
-                                                            <section class="col col-2 ">
-                                                                <label class="label">Cliente/Fornecedor</label>
-                                                                <label class="select">
-                                                                    <select id="clienteFornecedor" name="clienteFornecedor" class="">
-                                                                        <option></option>
-                                                                        <option value="C">Cliente</option>
-                                                                        <option value="F">Fornecedor</option>
+                                                                        <option value='1' selected>Sim</option>
+                                                                        <option value='0'>Não</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-1 col-auto">
-                                                                <label class="label">NF</label>
-                                                                <label class="select">
-                                                                    <select id="notaFiscal" name="notaFiscal">
-                                                                        <option></option>
-                                                                        <option value="1" selected>Sim</option> 
-                                                                        <option value="0">Não</option> 
-                                                                    </select><i></i> 
-                                                                </label> 
-                                                            </section> 
                                                         </div>
-                                                    </fieldset> 
+                                                    </fieldset>
                                                 </div>
-                                            </div>   
+                                            </div>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <footer>
-                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                        <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar" >
                                             <span class="fa fa-search"></span>
                                         </button>
-                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file"></span>
                                         </button>
                                     </footer>
@@ -142,7 +116,7 @@ include("inc/ribbon.php");
                         </div>
                     </div>
                 </article>
-            </div>                          
+            </div>
         </section>
         <!-- end widget grid -->
     </div>
@@ -181,33 +155,31 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>
 
-
 <script>
-       $(document).ready(function () {
-         $('#btnSearch').on("click", function () {
+    $(document).ready(function() {
+        $('#btnSearch').on("click", function() {
             listarFiltro();
         });
-        $('#btnNovo').on("click", function () {
-           novo();
+        $('#btnNovo').on("click", function() {
+            novo();
         });
     });
 
-    function novo() {
-        $(location).attr('href', 'cadastro_fornecedorCadastro.php');
-    }
-   
     function listarFiltro() {
-        var cnpj = $('#cnpj').val();
-        var apelido = $('#apelido').val();
-        var ativo = $('#ativo').val();
-        var notaFiscal = $('#notaFiscal').val();
-        var clienteFornecedor = $('#clienteFornecedor').val();
-           
-         
-        var parametrosUrl = '&cnpj=' + cnpj + '&apelido=' + apelido + '&ativo=' + ativo + '&notaFiscal=' + notaFiscal + '&clienteFornecedor=' + clienteFornecedor;
-        $('#resultadoBusca').load('cadastro_fornecedorFiltroListagem.php?' + parametrosUrl);
+
+        var descricaoFiltro = $('#descricao').val();
+        var ativoFiltro = $('#ativo').val();
+
+        if (descricaoFiltro !== "") {
+            descricaoFiltro = descricaoFiltro.replace(/^\s+|\s+$/g, "");
+            descricaoFiltro = encodeURIComponent(descricaoFiltro);
+        }
+
+        var parametrosUrl = '&descricaoFiltro=' + descricaoFiltro + '&ativoFiltro=' + ativoFiltro;
+        $('#resultadoBusca').load('tabelaBasica_produtoServicoFiltroListagem.php?' + parametrosUrl);
     }
-    
-   
-    
-</script>    
+
+    function novo() {
+        $(location).attr('href', 'tabelaBasica_produtoServicoCadastro.php');
+    }
+</script>

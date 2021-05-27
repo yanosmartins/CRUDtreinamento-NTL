@@ -47,7 +47,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Fornecedor</h2>
+                            <h2>Cliente/Fornecedor</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -68,20 +68,26 @@ include("inc/nav.php");
                                                     <input id="verificaRecuperacao" name="verificaRecuperacao" type="text" readonly class="hidden" value="">
                                                     <fieldset>
                                                         <div class="row">
-
                                                             <input id="codigo" name="codigo" type="text" readonly class="hidden" value="">
-
                                                             <section class="col col-3">
                                                                 <label class="label">CNPJ</label>
                                                                 <label class="input">
                                                                     <input id="cnpj" name="cnpj" autocomplete="off" placeholder="XX.XXX.XXX/XXXX-XX" type="text" class=" required">
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-4">
                                                                 <label class="label">Razão Social</label>
                                                                 <label class="input">
                                                                     <input id="razaoSocial" maxlength="70" name="razaoSocial" autocomplete="off" placeholder="Digite a Razao Social" type="text" class=" required">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2 ">
+                                                                <label class="label">Cliente/Fornecedor</label>
+                                                                <label class="select">
+                                                                    <select id="clienteFornecedor" name="clienteFornecedor" class="required">
+                                                                        <option value="C">Cliente</option>
+                                                                        <option value="F">Fornecedor</option>
+                                                                    </select><i></i>
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -98,7 +104,6 @@ include("inc/nav.php");
                                                                     <input id="codigoCliente" maxlength="50" name="codigoCliente" autocomplete="off" type="text" class="">
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2 ">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
@@ -133,7 +138,6 @@ include("inc/nav.php");
 
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-1">
                                                                 <label class="label">Número</label>
                                                                 <label class="input">
@@ -147,7 +151,6 @@ include("inc/nav.php");
 
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2">
                                                                 <label class="label">Bairro</label>
                                                                 <label class="input">
@@ -162,7 +165,6 @@ include("inc/nav.php");
 
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-1">
                                                                 <label class="label">UF</label>
                                                                 <label class="input">
@@ -170,7 +172,6 @@ include("inc/nav.php");
 
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-1">
                                                                 <label class="label">NF</label>
                                                                 <label class="select">
@@ -181,8 +182,8 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
+                                                    </fieldset>
                                                 </div>
-                                                </fieldset>
                                             </div>
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
@@ -190,7 +191,7 @@ include("inc/nav.php");
                                                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseGrupoDeItem" class="collapsed" id="accordionDadosContrato">
                                                             <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                             <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                            Grupo de Item
+                                                            Tipo de Item
                                                         </a>
                                                     </h4>
                                                 </div>
@@ -199,14 +200,12 @@ include("inc/nav.php");
                                                         <input id="jsonTipoItem" name="jsonTipoItem" type="hidden" value="[]">
                                                         <fieldset id="formGrupoDeItem">
                                                             <input id="sequencialTipoItem" name="sequencialTipoItem" type="hidden" value="">
-
-                                                            <br>
                                                             <div class="row">
                                                                 <section class="col col-3">
                                                                     <label class="label">Tipo Item</label>
                                                                     <label class="select">
                                                                         <select id="tipoItem" name="tipoItem" class="form-control">
-                                                                            <option style="display:none;" value="">Selecione</option>
+                                                                            <option></option>
                                                                             <?php
                                                                             $sql =  "SELECT codigo, descricao FROM estoque.tipoItem  where ativo = 1  order by descricao";
                                                                             $reposit = new reposit();
@@ -222,12 +221,11 @@ include("inc/nav.php");
                                                                         </select><i></i>
                                                                     </label>
                                                                 </section>
-
                                                                 <section class="col col-3">
                                                                     <label class="label">Fabricante</label>
                                                                     <label class="select">
                                                                         <select id="fabricante" name="fabricante" class="form-control">
-                                                                            <option style="display:none;" value="">Selecione</option>
+                                                                            <option></option>
                                                                             <?php
                                                                             $sql =  "SELECT codigo, descricao FROM estoque.fabricante  where ativo = 1  order by descricao";
                                                                             $reposit = new reposit();
@@ -243,7 +241,6 @@ include("inc/nav.php");
                                                                         </select><i></i>
                                                                     </label>
                                                                 </section>
-
                                                                 <section class="col col-5">
                                                                     <label class="label">Observação</label>
                                                                     <label class="input">
@@ -251,8 +248,6 @@ include("inc/nav.php");
 
                                                                     </label>
                                                                 </section>
-
-
                                                                 <section class="col col-4">
 
                                                                     <button id="btnAddGrupoDeItem" type="button" class="btn btn-primary" title="Adicionar Item">
@@ -262,13 +257,11 @@ include("inc/nav.php");
                                                                         <i class="fa fa-minus"></i>
                                                                     </button>
                                                                 </section>
-
                                                             </div>
                                                             <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
                                                                 <table id="tableGrupoDeItem" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                     <thead>
                                                                         <tr role="row">
-
                                                                             <th class="text-left" style="min-width: 10px;"></th>
                                                                             <th class="text-left" style="min-width: 10px;">Tipo Item</th>
                                                                             <th class="text-left" style="min-width: 10px;">Fabricante</th>
@@ -400,35 +393,138 @@ include("inc/nav.php");
                                                     </div>
                                                 </div>
                                             </div>
-
-
-                                            <footer>
-                                                <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
-                                                    <span class="fa fa-trash"></span>
-                                                </button>
-                                                <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
-                                                    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                        <span id="ui-id-2" class="ui-dialog-title">
-                                                        </span>
-                                                    </div>
-                                                    <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                        <p>CONFIRMA A EXCLUSÃO ? </p>
-                                                    </div>
-                                                    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                                        <div class="ui-dialog-buttonset">
-                                                        </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseDadosParaExcel" class="collapsed" id="accordionDadosParaExcel">
+                                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                            Dados para excel Sodexo
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapseDadosParaExcel" class="panel-collapse collapse">
+                                                    <div class="panel-body no-padding">
+                                                        <fieldset>
+                                                            <div class="row">
+                                                                <section class="col col-4">
+                                                                    <label class="label">Codigo Departamento</label>
+                                                                    <label class="input">
+                                                                        <input id="codigoDepartamento" name="codigoDepartamento" style="text-align: left;" type="text" class="" autocomplete="off">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    <label class="label">Nome Departamento</label>
+                                                                    <label class="input">
+                                                                        <input id="nomeDepartamento" name="nomeDepartamento" style="text-align: left;" type="text" class="" autocomplete="off">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    <label class="label">Responsavel Recebimento</label>
+                                                                    <label class="input">
+                                                                        <input id="responsavelRecebimento" name="responsavelRecebimento" style="text-align: left;" type="text" class="" autocomplete="off">
+                                                                    </label>
+                                                                </section>
+                                                            </div>
+                                                        </fieldset>
                                                     </div>
                                                 </div>
-                                                <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
-                                                    <span class="fa fa-floppy-o"></span>
-                                                </button>
-                                                <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                                    <span class="fa fa-file-o"></span>
-                                                </button>
-                                                <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                                    <span class="fa fa-backward "></span>
-                                                </button>
-                                            </footer>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseProdutoServico" class="collapsed" id="accordionProdutoServico">
+                                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                            Produto/Serviço
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapseProdutoServico" class="panel-collapse collapse">
+                                                    <div class="panel-body no-padding">
+                                                        <fieldset>
+                                                            <input id="jsonProdutoServico" name="jsonProdutoServico" type="hidden" value="[]">
+                                                            <div id="formProdutoServico" class="col-sm-12">
+                                                                <input id="produtoServicoId" name="produtoServicoId" type="hidden" value="">
+                                                                <input id="sequencialProdutoServico" name="sequencialProdutoServico" type="hidden" value="">
+                                                                <input id="descricaoProdutoServico" name="descricaoProdutoServico" type="hidden" value="">
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <section class="col col-5">
+                                                                            <label class="label">Produto/Servico</label>
+                                                                            <label class="select">
+                                                                                <select id="produtoServico" name="produtoServico">
+                                                                                    <option></option>
+                                                                                    <?php
+                                                                                    $sql =  "SELECT codigo, descricao FROM Ntl.produtoServico where ativo = 1 order by descricao";
+                                                                                    $reposit = new reposit();
+                                                                                    $result = $reposit->RunQuery($sql);
+                                                                                    foreach ($result as $row) {
+                                                                                        $codigo = $row['codigo'];
+                                                                                        $descricao = ($row['descricao']);
+                                                                                        echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                                    }
+                                                                                    ?>
+                                                                                </select><i></i>
+                                                                            </label>
+                                                                        </section>
+                                                                        <section class="col col-md-2">
+                                                                            <label class="label">&nbsp;</label>
+                                                                            <button id="btnAddProdutoServico" type="button" class="btn btn-primary">
+                                                                                <i class="fa fa-plus"></i>
+                                                                            </button>
+                                                                            <button id="btnRemoverProdutoServico" type="button" class="btn btn-danger">
+                                                                                <i class="fa fa-minus"></i>
+                                                                            </button>
+                                                                        </section>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                    <table id="tableProdutoServico" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                        <thead>
+                                                                            <tr role="row">
+                                                                                <th style="width: 2px"></th>
+                                                                                <th class="text-center" style="min-width: 500%;">Descrição</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <footer>
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                            <span class="fa fa-trash"></span>
+                                        </button>
+                                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                                <span id="ui-id-2" class="ui-dialog-title">
+                                                </span>
+                                            </div>
+                                            <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                <p>CONFIRMA A EXCLUSÃO ? </p>
+                                            </div>
+                                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                                <div class="ui-dialog-buttonset">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <span class="fa fa-floppy-o"></span>
+                                        </button>
+                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                            <span class="fa fa-file-o"></span>
+                                        </button>
+                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                            <span class="fa fa-backward "></span>
+                                        </button>
+                                    </footer>
                                 </form>
                             </div>
                         </div>
@@ -492,10 +588,11 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
-    jsonTipoItemArray = JSON.parse($("#jsonTipoItem").val());
-    jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
-    jsonEmailArray = JSON.parse($("#jsonEmail").val());
     $(document).ready(function() {
+        jsonTipoItemArray = JSON.parse($("#jsonTipoItem").val());
+        jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+        jsonEmailArray = JSON.parse($("#jsonEmail").val());
+        jsonProdutoServicoArray = JSON.parse($("#jsonProdutoServico").val());
 
         $("#telefone").mask("(99) 9999-9999?9").on("focusout", function() {
             var len = this.value.replace(/\D/g, '').length;
@@ -606,6 +703,21 @@ include("inc/scripts.php");
         $("#cep").on("change", function() {
             var cep = $("#cep").val().replace(/\D/g, '');
             buscaCep(cep);
+        });
+        //Lista ProdutoServico
+        $("#btnAddProdutoServico").on("click", function() {
+            var produtoServico = $("#produtoServico").val();
+            if (!produtoServico) {
+                smartAlert("Atenção", "Escolha um produto serviço", "error")
+                return;
+            }
+            if (validaProdutoServico()) {
+                addProdutoServico();
+            }
+        });
+
+        $("#btnRemoverProdutoServico").on("click", function() {
+            excluirProdutoServico();
         });
 
         carregaPagina();
@@ -1239,6 +1351,7 @@ include("inc/scripts.php");
                             var $strArrayTipoItem = piece[2];
                             var $strArrayTelefone = piece[3];
                             var $strArrayEmail = piece[4];
+                            var strArrayProdutoServico = piece[5];
                             piece = out.split("^");
 
                             var codigo = +piece[0];
@@ -1256,6 +1369,10 @@ include("inc/scripts.php");
                             var cep = piece[12];
                             var endereco = piece[13];
                             var codigoCliente = piece[14];
+                            var clienteFornecedor = piece[15];
+                            var codigoDepartamento = piece[16];
+                            var nomeDepartamento = piece[17];
+                            var responsavelRecebimento = piece[18];
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
 
@@ -1277,6 +1394,12 @@ include("inc/scripts.php");
                             $("#jsonTelefone").val($strArrayTelefone);
                             $("#jsonEmail").val($strArrayEmail);
                             $("#codigoCliente").val(codigoCliente);
+                            $("#clienteFornecedor").val(clienteFornecedor);
+                            $("#jsonProdutoServico").val(strArrayProdutoServico);
+
+                            $("#codigoDepartamento").val(codigoDepartamento);
+                            $("#nomeDepartamento").val(nomeDepartamento);
+                            $("#responsavelRecebimento").val(responsavelRecebimento);
 
                             jsonTipoItemArray = JSON.parse($("#jsonTipoItem").val());
                             fillTableGrupoDeItem();
@@ -1284,6 +1407,8 @@ include("inc/scripts.php");
                             fillTableTelefone();
                             jsonEmailArray = JSON.parse($("#jsonEmail").val());
                             fillTableEmail();
+                            jsonProdutoServicoArray = JSON.parse($("#jsonProdutoServico").val());
+                            fillTableProdutoServico();
                             return;
 
                         }
@@ -1353,6 +1478,11 @@ include("inc/scripts.php");
         var jsonTipoItemArray = JSON.parse($("#jsonTipoItem").val());
         var jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         var jsonEmailArray = JSON.parse($("#jsonEmail").val());
+        var clienteFornecedor = $("#clienteFornecedor").val();
+        var jsonProdutoServicoArray = JSON.parse($("#jsonProdutoServico").val());
+        var codigoDepartamento = $("#codigoDepartamento").val();
+        var nomeDepartamento = $("#nomeDepartamento").val();
+        var responsavelRecebimento = $("#responsavelRecebimento").val();
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!cnpj) {
@@ -1384,8 +1514,14 @@ include("inc/scripts.php");
             $("#btnGravar").prop('disabled', false);
             return;
         }
+        if (!clienteFornecedor) {
+            smartAlert("Atenção", "Informe se é Cliente ou Fornecedor", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
 
-        gravaFornecedor(id, cnpj, razaoSocial, apelido, ativo, logradouro, numero, complemento, bairro, cidade, uf, notaFiscal, cep, endereco,codigoCliente, jsonTipoItemArray, jsonTelefoneArray, jsonEmailArray,
+        gravaFornecedor(id, cnpj, razaoSocial, apelido, ativo, logradouro, numero, complemento, bairro, cidade, uf, notaFiscal,
+            cep, endereco, codigoCliente, jsonTipoItemArray, jsonTelefoneArray, jsonEmailArray, clienteFornecedor, jsonProdutoServicoArray,codigoDepartamento,nomeDepartamento,responsavelRecebimento,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -1413,4 +1549,146 @@ include("inc/scripts.php");
 
         );
     }
+
+
+    // produtoServico
+    function clearFormProdutoServico() {
+        $("#produtoServico").val('');
+        $("#produtoServicoId").val('');
+        $("#sequencialProdutoServico").val('');
+    }
+
+    function addProdutoServico() {
+        var item = $("#formProdutoServico").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataProdutoServico
+        });
+
+        if (item["sequencialProdutoServico"] === '') {
+            if (jsonProdutoServicoArray.length === 0) {
+                item["sequencialProdutoServico"] = 1;
+            } else {
+                item["sequencialProdutoServico"] = Math.max.apply(Math, jsonProdutoServicoArray.map(function(o) {
+                    return o.sequencialProdutoServico;
+                })) + 1;
+            }
+            item["produtoServicoId"] = 0;
+        } else {
+            item["sequencialProdutoServico"] = +item["sequencialProdutoServico"];
+        }
+
+        var index = -1;
+        $.each(jsonProdutoServicoArray, function(i, obj) {
+            if (+$('#sequencialProdutoServico').val() === obj.sequencialProdutoServico) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonProdutoServicoArray.splice(index, 1, item);
+        else
+            jsonProdutoServicoArray.push(item);
+
+        $("#jsonProdutoServico").val(JSON.stringify(jsonProdutoServicoArray));
+        fillTableProdutoServico();
+        clearFormProdutoServico();
+
+    }
+
+
+    function fillTableProdutoServico() {
+        $("#tableProdutoServico tbody").empty();
+        salario = 0;
+        for (var i = 0; i < jsonProdutoServicoArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableProdutoServico tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonProdutoServicoArray[i].sequencialProdutoServico + '"><i></i></label></td>'));
+            row.append($('<td class="text-left" onclick="carregaProdutoServico(' + jsonProdutoServicoArray[i].sequencialProdutoServico + ');">' + jsonProdutoServicoArray[i].descricaoProdutoServico + '</td>'));
+        }
+    }
+
+    function processDataProdutoServico(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "produtoServico")) {
+            var produtoServico = $("#produtoServico").val();
+            if (produtoServico !== '') {
+                fieldName = "produtoServico";
+            }
+            return {
+                name: fieldName,
+                value: produtoServico
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "descricaoProdutoServico")) {
+            return {
+                name: fieldName,
+                value: $("#produtoServico option:selected").text()
+            };
+        }
+
+        return false;
+    }
+
+    function carregaProdutoServico(sequencialProdutoServico) {
+        var arr = jQuery.grep(jsonProdutoServicoArray, function(item, i) {
+            return (item.sequencialProdutoServico === sequencialProdutoServico);
+        });
+
+        clearFormProdutoServico();
+
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#produtoServico").val(item.produtoServico);
+            $("#sequencialProdutoServico").val(item.sequencialProdutoServico);
+        }
+    }
+
+    function excluirProdutoServico() {
+        var arrSequencial = [];
+        $('#tableProdutoServico input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonProdutoServicoArray.length - 1; i >= 0; i--) {
+                var obj = jsonProdutoServicoArray[i];
+                if (jQuery.inArray(obj.sequencialProdutoServico, arrSequencial) > -1) {
+                    jsonProdutoServicoArray.splice(i, 1);
+                }
+            }
+            $("#jsonProdutoServico").val(JSON.stringify(jsonProdutoServicoArray));
+            fillTableProdutoServico();
+        } else
+            smartAlert("Erro", "Selecione pelo menos 1 Produto Serviço para excluir.", "error");
+    }
+
+    function validaProdutoServico() {
+        var existe = false;
+        var achou = false;
+        var produtoServico = +$('#produtoServico').val();
+        var sequencial = +$('#sequencialProdutoServico').val();
+
+        if (!produtoServico) {
+            smartAlert("Erro", "Informe um produto/serviço.", "error");
+            return false;
+        }
+
+        for (i = jsonProdutoServicoArray.length - 1; i >= 0; i--) {
+            if ((+jsonProdutoServicoArray[i].produtoServico === produtoServico) && (jsonProdutoServicoArray[i].sequencialProdutoServico !== sequencial)) {
+                existe = true;
+                break;
+            }
+        }
+        if (existe === true) {
+            smartAlert("Erro", "Produto/serviço já cadastrado.", "error");
+            return false;
+        }
+        return true;
+    }
+
+    // produtoServico fim
 </script>
