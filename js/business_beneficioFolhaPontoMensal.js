@@ -76,7 +76,7 @@ function enviarArquivo(jsonData , callback) {
   $.ajax({
     url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
     cache: false,
-    dataType:'json',
+    dataType:'html',
     data: {jsonData,funcao : 'enviarFolha'},
     type: 'post',
     success: function (data) {
