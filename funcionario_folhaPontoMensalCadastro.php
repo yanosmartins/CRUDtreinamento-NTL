@@ -2365,14 +2365,12 @@ include("inc/scripts.php");
         }
 
         if (dataReferenteUpload) {
-            jsonUploadFolhaArray.forEach((obj) => {
+            for (obj of jsonUploadFolhaArray) {
                 if (dataReferenteUpload == obj.dataReferenteUpload) {
                     smartAlert("Erro", "Não é possível inserir dois documentos da mesma data no sistema!", "error");
                     return false;
                 }
-
-            })
-            return false
+            }
         }
 
 
@@ -2523,9 +2521,13 @@ include("inc/scripts.php");
             const jsonUploadFolha = []
             //OK
             for (obj of JsonUpload) {
-                files.push(new File([(await fetch(obj.fileUploadFolha)).blob()], obj.fileName, {
+                debugger
+                let file = await fetch(obj.fileUploadFolha)
+                file = await file.blob()
+                file = new File([file], obj.fileName, {
                     type: "application/pdf"
-                }))
+                })
+                files.push(file)
             }
 
             JsonUpload.forEach((obj, index) => {
