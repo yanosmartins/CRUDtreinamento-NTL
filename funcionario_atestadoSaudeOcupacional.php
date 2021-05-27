@@ -196,7 +196,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="dataUltimoAso">Data do ultimo ASO</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="dataUltimoAso" name="dataUltimoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy"  readonly class="readonly" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="dataUltimoAso" name="dataUltimoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="readonly" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -259,7 +259,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2 col-auto">
                                                                     <label class="label" for="tipoExame">Tipo do exame</label>
                                                                     <label class="select">
-                                                                        <select id="tipoExame" name="tipoExame">
+                                                                        <select id="tipoExame" name="tipoExame" class="required">
                                                                             <option></option>
                                                                             <option value='1'>Exame Admissional</option>
                                                                             <option value='2'>Exame Periódico</option>
@@ -267,6 +267,12 @@ include("inc/nav.php");
                                                                             <option value='4'>Retorno ao Trabalho</option>
                                                                         </select><i></i>
                                                                     </label>
+                                                                </section>
+                                                                <section class="col col-md-4">
+                                                                    <label class="label">Comprovante Aso</label>
+                                                                    <div class="form-control input">
+                                                                        <input type="file" name="fileUploadAso" id="fileUploadAso" accept="application/pdf" class="required">
+                                                                    </div>
                                                                 </section>
                                                                 <section class="col col-2 col-auto" style="display:<?php echo $esconderGestor ?>">
                                                                     <label class="label" for="situacao">Situação</label>
@@ -280,12 +286,7 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
 
-                                                                <!-- <section class="col col-2">
-                                                                <label class="label" for="comprovanteAso">Comprovante do ASO</label>
-                                                                <label class="input">
-                                                                    <input id="comprovanteAso" name="comprovanteAso" type="text"  autocomplete="off">
-                                                                </label>
-                                                            </section> -->
+                                                              
                                                                 <section class="col col-2">
                                                                     <label class="label" for="dataProximoAsoLista"></label>
                                                                     <label class="input">
@@ -314,6 +315,7 @@ include("inc/nav.php");
                                                                         <th class="text-center">Data da validade ASO</th>
                                                                         <th class="text-center">Tipo do exame</th>
                                                                         <th class="text-center">Situação</th>
+                                                                        <th class="text-center">Comprovante Aso</th>
 
                                                                     </tr>
                                                                 </thead>
@@ -460,14 +462,7 @@ include("inc/scripts.php");
             var DataAso = $("#dataRealizacaoAso").val();
             var tipoExame = $("#tipoExame").val();
             var existe = true;
-            if (!tipoExame) {
-                smartAlert("Atenção", "Preencha o campo tipo do exame", "error")
-                return; 
-            }
-            if (!DataAso) {
-                smartAlert("Atenção", "Preencha o campo data Aso", "error")
-                return;
-            } else {
+            if (validaDataAso()) {
                 let situacao = $("#situacao").val();
                 var idade = $("#idade").val();
 
@@ -552,8 +547,6 @@ include("inc/scripts.php");
 
             }
 
-            
-
         });
 
         $("#btnRemoverDataAso").on("click", function() {
@@ -577,41 +570,41 @@ include("inc/scripts.php");
     });
 
     function carregaPagina() {
-        var urlx = window.document.URL.toString();
-        var params = urlx.split("?");
+        const urlx = window.document.URL.toString();
+        const params = urlx.split("?");
         if (params.length === 2) {
-            var id = params[1];
-            var idx = id.split("=");
-            var idd = idx[1];
+            const id = params[1];
+            const idx = id.split("=");
+            const idd = idx[1];
             if (idd !== "") {
                 recuperaASO(idd,
-                    function(data) {
+                    async function(data) {
                         if (data.indexOf('failed') > -1) {
                             return;
                         } else {
                             data = data.replace(/failed/g, '');
-                            var piece = data.split("#");
-                            var mensagem = piece[0];
-                            var out = piece[1];
-                            var $strArrayDataAso = piece[2];
+                            let piece = data.split("#");
+                            const mensagem = piece[0];
+                            const out = piece[1];
+                            let JsonUpload = JSON.parse(piece[2]);
                             piece = out.split("^");
 
-                            // Atributos de vale transporte unitário que serão recuperados: 
-                            var codigo = +piece[0];
-                            var funcionario = piece[1];
-                            var matricula = piece[2];
-                            var cargo = piece[3];
-                            var projeto = piece[4];
-                            var sexo = piece[5];
-                            var dataNascimento = piece[6];
-                            var idade = piece[7]
-                            var dataAdmissao = piece[8]
-                            var ativo = piece[9]
-                            var dataUltimoAso = piece[10]
-                            var dataProximoAso = piece[11]
-                            var dataAgendamento = piece[12]
-                            var cargoId = piece[13];
-                            var projetoId = piece[14];
+                            const codigo = +piece[0];
+                            const funcionario = piece[1];
+                            const matricula = piece[2];
+                            const cargo = piece[3];
+                            const projeto = piece[4];
+                            const sexo = piece[5];
+                            const dataNascimento = piece[6];
+                            const idade = piece[7]
+                            const dataAdmissao = piece[8]
+                            const ativo = piece[9];
+                            const dataUltimoAso = piece[10]
+                            const dataProximoAso = piece[11]
+                            const dataAgendamento = piece[12]
+                            const cargoId = piece[13];
+                            const projetoId = piece[14];
+                            
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
@@ -627,12 +620,46 @@ include("inc/scripts.php");
                             $("#dataUltimoAso").val(dataUltimoAso);
                             $("#dataProximoAso").val(dataProximoAso);
                             $("#dataAgendamento").val(dataAgendamento);
-                            $("#jsonDataAso").val($strArrayDataAso);
                             $("#cargoId").val(cargoId);
                             $("#projetoId").val(projetoId);
-                            diasAtrasoTesteDois = $("#dataProximoAso").val();
 
-                            jsonDataAsoArray = JSON.parse($("#jsonDataAso").val());
+                            const files = []
+                            const jsonUploadAso = []
+                            //OK
+                            for (obj of JsonUpload) {
+                                let file = await fetch(obj.fileUploadAso)
+                                file = await file.blob()
+                                file = new File([file], obj.fileName, {
+                                    type: "application/pdf"
+                                })
+                                files.push(file)
+                            }
+
+                            JsonUpload.forEach((obj, index) => {
+                                let dataRealizacaoAso = obj.dataRealizacaoAso.split(" ")
+                                let aux = dataRealizacaoAso[0].split("-")
+                                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                                dataRealizacaoAso = aux
+
+                                let dataProximoAsoLista = obj.dataProximoAsoLista.split(" ")
+                                aux = dataProximoAsoLista[0].split("-")
+                                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                                dataProximoAsoLista = aux
+
+                                let tipoExame = obj.tipoExame
+
+                                jsonUploadAso.push({
+                                    dataRealizacaoAso: dataRealizacaoAso,
+                                    dataProximoAsoLista: dataProximoAsoLista,
+                                    sequencialDataAso: obj.sequencialDataAso,
+                                    situacao: obj.situacao,
+                                    tipoExame: obj.tipoExame,
+                                    descricaoTipoExame : obj.descricaoTipoExame,
+                                    fileUploadAso: files[index]
+                                })
+                            })
+
+                            jsonDataAsoArray = jsonUploadAso
                             fillTableDataAso();
 
                             const dataTeste = new Date();
@@ -702,6 +729,7 @@ include("inc/scripts.php");
     function clearFormDataAso() {
         $("#dataRealizacaoAso").val('');
         $("#dataProximoAsoLista").val('');
+        $("#fileUploadAso").val('');
         $("#situacao").val('');
         $("#tipoExame").val('');
     }
@@ -766,6 +794,10 @@ include("inc/scripts.php");
 
             row.append($('<td class="text-center" >' + jsonDataAsoArray[i].situacao + '</td>'));
 
+            var fileUploadAso = jsonDataAsoArray[i].fileUploadAso;
+
+            row.append($('<td class="text-center" >' + jsonDataAsoArray[i].fileUploadAso.name + '</td>'));
+
         }
     }
 
@@ -806,6 +838,17 @@ include("inc/scripts.php");
             };
         }
 
+        if (fieldName !== '' && (fieldId === "tipoExame")) {
+            var tipoExame = $("#tipoExame").val();
+            if (tipoExame !== '') {
+                fieldName = "tipoExame";
+            }
+            return {
+                name: fieldName,
+                value: tipoExame
+            };
+        }
+
         if (fieldName !== '' && (fieldId === "descricaoTipoExame")) {
             var descricaoTipoExame = $("#tipoExame option:selected").text();
             if (descricaoTipoExame !== '') {
@@ -814,6 +857,13 @@ include("inc/scripts.php");
             return {
                 name: fieldName,
                 value: descricaoTipoExame
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "fileUploadAso")) {
+            return {
+                name: fieldName,
+                value: $("#fileUploadAso").prop('files')[0]
             };
         }
 
@@ -828,12 +878,17 @@ include("inc/scripts.php");
         clearFormDataAso();
 
         if (arr.length > 0) {
+
             var item = arr[0];
+            let list = new DataTransfer();
+            list.items.add(item.fileUploadAso)
+            $("#fileUploadAso").prop('files', list.files)[0];
             $("#sequencialDataAso").val(item.sequencialDataAso);
             $("#dataProximoAsoLista").val(item.dataProximoAsoLista);
             $("#dataRealizacaoAso").val(item.dataRealizacaoAso);
             $("#tipoExame").val(item.tipoExame);
             $("#situacao").val(item.situacao);
+
 
 
         }
@@ -847,8 +902,8 @@ include("inc/scripts.php");
         if (arrSequencial.length > 0) {
             for (i = jsonDataAsoArray.length - 1; i >= 0; i--) {
                 var obj = jsonDataAsoArray[i];
-                if ((obj.sequencialDataAso == arrSequencial) && (obj.situacao == 'F')) {
-                    return;
+                if (((obj.sequencialDataAso == arrSequencial) && (obj.situacao == 'F')) || (obj.situacao == 'F')) {
+                    continue;
                 };
                 if (jQuery.inArray(obj.sequencialDataAso, arrSequencial) > -1) {
                     jsonDataAsoArray.splice(i, 1);
@@ -861,57 +916,85 @@ include("inc/scripts.php");
     }
 
     function validaDataAso() {
-        var existeDataAso = false;
-        var achou = false;
-        var sequencial = +$('#sequencialDataAso').val();
-        var DataAso = $('#DataAso').val();
-        for (i = jsonDataAsoArray.length - 1; i >= 0; i--) {
-            if ((jsonDataAsoArray[i].DataAso === DataAso) && (jsonDataAsoArray[i].sequencialDataAso !== sequencial)) {
-                existeDataAso = true;
-                break;
-            }
 
+        const dataRealizacaoAso = $('#dataRealizacaoAso').val();
+
+        if (!dataRealizacaoAso) {
+            smartAlert("Erro", "Informe a data da realização do Aso!", "error");
+            return false;
         }
-        if (existeDataAso === true) {
-            smartAlert("Erro", "Esta Data ja existe!", "error");
+
+        const tipoExame = $('#tipoExame').val();
+
+        if (!tipoExame) {
+            smartAlert("Erro", "Informe o tipo do Exame!", "error");
+            return false;
+        }
+
+        const fileUploadAso = $('#fileUploadAso').prop('files')[0];
+
+        if (!fileUploadAso) {
+            smartAlert("Erro", "Informe o comprovante do Aso!", "error");
             return false;
         }
         return true;
     }
 
-    function gravar() {
+    async function gravar() {
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnGravar").prop('disabled', true);
         // Variáveis que vão ser gravadas no banco:
-        var id = +$('#codigo').val();
-        var funcionario = $('#funcionario').val();
-        var matricula = $('#matricula').val();
-        var cargo = $('#cargoId').val();
-        var projeto = $('#projetoId').val();
-        var sexo = $('#sexo').val();
-        var dataNascimento = $('#dataNascimento').val();
-        var dataAdmissao = $('#dataAdmissao').val();
-        var dataAgendamento = $('#dataAgendamento').val();
-        var dataUltimoAso = $('#dataUltimoAso').val();
-        var dataProximoAso = $('#dataProximoAso').val();
-        var ativo = $('#ativo').val();
-        var jsonDataAsoArray = JSON.parse($("#jsonDataAso").val());
+        const id = +$('#codigo').val();
+        const funcionario = $('#funcionario').val();
+        const matricula = $('#matricula').val();
+        const cargo = $('#cargoId').val();
+        const projeto = $('#projetoId').val();
+        const sexo = $('#sexo').val();
+        const dataNascimento = $('#dataNascimento').val();
+        const dataAdmissao = $('#dataAdmissao').val();
+        const dataAgendamento = $('#dataAgendamento').val();
+        const dataUltimoAso = $('#dataUltimoAso').val();
+        const dataProximoAso = $('#dataProximoAso').val();
+        const ativo = $('#ativo').val();
 
+        const dataAso = {
+            id,
+            funcionario,
+            matricula,
+            cargo,
+            projeto,
+            sexo,
+            dataNascimento,
+            dataAdmissao,
+            dataAgendamento,
+            dataUltimoAso,
+            dataProximoAso,
+            ativo
+        }
 
+        const files = [];
+        const datas = [];
+        jsonDataAsoArray.forEach(obj => {
+            const ob = {};
+            for (let prop in obj) {
+                if (obj[prop] instanceof File) files.push(obj[prop])
+                else ob[prop] = obj[prop]
+            }
+            datas.push(ob)
+        })
 
+        const base64 = [];
+        for (let file of files) {
+            base64.push(await fileToBase64(file))
+        }
 
-
-        // if (dataAgendamento) {
-        //     smartAlert("Atenção", "Informe se o item precisa de assinatura", "error");
-        //     $("#btnGravar").prop('disabled', false);
-        //     return;
-        // }
-
-
+        const jsonData = datas.map((obj, index) => {
+            obj.fileUploadAso = base64[index]
+            return obj
+        })
 
         //Chama a função de gravar do business de convênio de saúde.
-        gravaASO(id, funcionario, matricula, cargo, projeto, sexo, dataNascimento, dataAdmissao, dataAgendamento,
-            dataUltimoAso, dataProximoAso, ativo, jsonDataAsoArray,
+        gravaASO(dataAso, jsonData,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -990,7 +1073,7 @@ include("inc/scripts.php");
     function recuperarDadosFuncionarioASO() {
         var funcionario = $("#funcionario").val()
         recuperaDadosFuncionarioASO(funcionario,
-            function(data) {
+            async function(data) {
                 var atributoId = '#' + 'estoqueDestino';
                 if (data.indexOf('failed') > -1) {
 
@@ -1000,48 +1083,105 @@ include("inc/scripts.php");
                 } else {
                     $("#funcionario").prop("disabled", false)
                     $("#funcionario").removeClass("readonly")
-                    data = data.replace(/failed/g, '');
-                    var piece = data.split("#");
-                    var mensagem = piece[0];
-                    var registros = piece[1].split("^");
-                    var $strArrayDataAso = piece[2];
-                    var matricula = registros[2];
-                    var cargo = registros[3];
-                    var projeto = registros[4];
-                    var sexo = registros[5];
-                    var dataNascimento = registros[6];
-                    var dataAdmissao = registros[8];
-                    var idade = registros[7];
-                    var cargoId = registros[9];
-                    var projetoId = registros[10];
-                    var dataUltimoAso = registros[11];
-                    var dataValidadeAso = registros[12];
-                    var dataAgendamento = registros[13];
+                            data = data.replace(/failed/g, '');
+                            let piece = data.split("#");
+                            const mensagem = piece[0];
+                            const out = piece[1];
+                            let JsonUpload = JSON.parse(piece[2]);
+                            piece = out.split("^");
+
+                            const codigo = +piece[0];
+                            const funcionario = piece[1];
+                            const matricula = piece[2];
+                            const cargo = piece[3];
+                            const projeto = piece[4];
+                            const sexo = piece[5];
+                            const dataNascimento = piece[6];
+                            const idade = piece[7]
+                            const dataAdmissao = piece[8]
+                            const ativo = piece[9]
+                            const dataUltimoAso = piece[10]
+                            const dataProximoAso = piece[11]
+                            const dataAgendamento = piece[12]
+                            const cargoId = piece[13];
+                            const projetoId = piece[14];
+
+                            //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
+                            $("#codigo").val(codigo);
+                            $("#funcionario").val(funcionario);
+                            $("#matricula").val(matricula);
+                            $("#cargo").val(cargo);
+                            $("#projeto").val(projeto);
+                            $("#sexo").val(sexo);
+                            $("#dataNascimento").val(dataNascimento);
+                            $("#idade").val(idade);
+                            $("#ativo").val(ativo);
+                            $("#dataAdmissao").val(dataAdmissao);
+                            $("#dataUltimoAso").val(dataUltimoAso);
+                            $("#dataProximoAso").val(dataProximoAso);
+                            $("#dataAgendamento").val(dataAgendamento);
+                            $("#cargoId").val(cargoId);
+                            $("#projetoId").val(projetoId);
+
+                            const files = []
+                            const jsonUploadAso = []
+                            //OK
+                            for (obj of JsonUpload) {
+                                let file = await fetch(obj.fileUploadAso)
+                                file = await file.blob()
+                                file = new File([file], obj.fileName, {
+                                    type: "application/pdf"
+                                })
+                                files.push(file)
+                            }
+
+                            JsonUpload.forEach((obj, index) => {
+                                let dataRealizacaoAso = obj.dataRealizacaoAso.split(" ")
+                                let aux = dataRealizacaoAso[0].split("-")
+                                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                                dataRealizacaoAso = aux
+
+                                let dataProximoAsoLista = obj.dataProximoAsoLista.split(" ")
+                                aux = dataProximoAsoLista[0].split("-")
+                                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                                dataProximoAsoLista = aux
+
+                                let tipoExame = obj.tipoExame
+
+                                jsonUploadAso.push({
+                                    dataRealizacaoAso: dataRealizacaoAso,
+                                    dataProximoAsoLista: dataProximoAsoLista,
+                                    sequencialDataAso: obj.sequencialDataAso,
+                                    situacao: obj.situacao,
+                                    tipoExame: obj.tipoExame,
+                                    descricaoTipoExame : obj.descricaoTipoExame,
+                                    fileUploadAso: files[index]
+                                })
+                            })
+
+                            jsonDataAsoArray = jsonUploadAso
+                            fillTableDataAso();
+
+                            const dataTeste = new Date();
+                            let dataProximo = $("#dataProximoAso").val();
+                            let aux = dataProximo.split("/");
+                            dataProximo = new Date(aux[2], aux[1] - 1, aux[0])
+                            let diasAtrasoTeste = $("#diasAtraso").val();
+
+                            if (dataTeste > dataProximo) {
+                                const diff = dataTeste.getDate() - dataProximo.getDate()
+                                if (diff >= 1)
+                                    $("#diasAtraso").val(diff)
+                            } else {
+                                $("#diasAtraso").val('')
+                            }
 
 
+                            if (dataUltimoAso != "") {
+                                <?php $funcionario = "readonly" ?>
+                            }
 
-                    $("#matricula").val(matricula);
-                    $("#cargo").val(cargo);
-                    $("#projeto").val(projeto);
-
-                    if (sexo == 'M') {
-                        sexo = 'Masculino'
-                    } else {
-                        sexo = 'Feminino'
-                    }
-                    $("#sexo").val(sexo);
-                    $("#dataNascimento").val(dataNascimento);
-                    $("#dataAdmissao").val(dataAdmissao);
-                    $("#idade").val(idade);
-                    $("#cargoId").val(cargoId);
-                    $("#projetoId").val(projetoId);
-                    $("#dataUltimoAso").val(dataUltimoAso);
-                    $("#dataProximoAso").val(dataValidadeAso);
-                    $("#dataAgendamento").val(dataAgendamento);
-                    $("#jsonDataAso").val($strArrayDataAso);
-                    jsonDataAsoArray = JSON.parse($("#jsonDataAso").val());
-                    fillTableDataAso();
-
+                            return;
                 }
             }
         );
@@ -1093,4 +1233,13 @@ include("inc/scripts.php");
         }
         return quantos_anos < 0 ? 0 : quantos_anos;
     }
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    };
 </script>

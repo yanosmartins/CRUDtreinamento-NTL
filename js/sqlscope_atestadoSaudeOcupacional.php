@@ -114,7 +114,7 @@ function recuperarDadosFuncionarioASO()
     $sql = "SELECT F.codigo AS 'codigoFuncionario',C.codigo AS 'codigoCargo',P.codigo AS 'codigoProjeto', ASO.codigo,F.nome AS 'nome',ASO.matricula AS 'matricula',C.descricao AS 'cargo',P.descricao AS 'projeto',ASO.sexo AS 'sexo',
     ASO.dataNascimento AS 'dataNascimento',ASO.dataAdmissao AS 'dataAdmissao',ASO.dataUltimoAso AS 'dataUltimoAso',ASO.dataProximoAso AS 'dataValidadeAso',
     ASO.dataAgendamento AS 'dataAgendamento',ASOD.dataProximoAsoLista AS 'dataProximoAsoLista',ASOD.dataRealizacaoAso AS 'dataRealizacaoAso',
-    ASOD.situacao AS 'situacao',ASOD.tipoExame AS 'tipoExame' from funcionario.atestadoSaudeOcupacional ASO
+    ASOD.situacao AS 'situacao',ASOD.tipoExame AS 'tipoExame', ASO.ativo AS 'ativo' from funcionario.atestadoSaudeOcupacional ASO
     INNER JOIN funcionario.atestadoSaudeOcupacionalDetalhe ASOD ON ASO.codigo = ASOD.atestadoSaudeOcupacional
     INNER JOIN ntl.funcionario F ON ASO.funcionario = F.codigo
     INNER JOIN ntl.cargo C ON ASO.cargo = C.codigo
@@ -126,8 +126,8 @@ function recuperarDadosFuncionarioASO()
 
     $out = "";
     if ($row = $result[0]) {
-        $codigo = (int) $row['codigoFuncionario'];
-        $nome = $row['nome'];
+        $codigo = (int) $row['codigo'];
+        $nome = $row['codigoFuncionario'];
         $matricula = $row['matricula'];
         $cargo = $row['cargo'];
         $projeto = $row['projeto'];
@@ -138,6 +138,7 @@ function recuperarDadosFuncionarioASO()
         $difData = date_diff($dataAtual, $dataNascimentoTeste);
         $idade = $difData->format('%y');
         $dataAdmissao = $row['dataAdmissao'];
+        $ativo = $row['ativo'];
         $cargoId = $row['codigoCargo'];
         $projetoId = $row['codigoProjeto'];
         $dataUltimoAso = $row['dataUltimoAso'];
@@ -162,55 +163,85 @@ function recuperarDadosFuncionarioASO()
         $dataAgendamentoFormatada = formataDataRecuperacao($dataAgendamento);
     };
 
-    $reposit = "";
-    $result = "";
-    $sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.situacao,ASOD.tipoExame FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
-INNER JOIN  funcionario.atestadoSaudeOcupacional ASO ON ASOD.atestadoSaudeOcupacional = ASO.codigo
-WHERE ASO.funcionario = $funcionario";
     $reposit = new reposit();
+    $sql = "SELECT ASOD.filePath AS 'path',ASOD.fileName AS 'name', ASOD.fileType AS 'type', ASOD.dataRealizacaoAso AS 'dataRealizacaoAso', ASOD.dataProximoAsoLista AS 'dataProximoAsoLista',ASOD.situacao AS 'situacao', ASOD.tipoExame AS 'tipoExame' FROM Funcionario.atestadoSaudeOcupacionalDetalhe ASOD
+    INNER JOIN funcionario.atestadoSaudeOcupacional ASO ON ASO.codigo = atestadoSaudeOcupacional";
+    $where = " WHERE (0=0) AND ";
+    $where .= "ASO.funcionario = " . $funcionario;
+
+    $sql .= $where;
+
     $result = $reposit->RunQuery($sql);
+    $out = "";
 
-    $contadorDataAso = 0;
-    $arrayDataAso = array();
-    foreach ($result as $row) {
-        $dataProximoAsoLista = $row['dataProximoAsoLista'];
-        $dataRealizacaoAso = (string)$row['dataRealizacaoAso'];
-        $situacao = (string)$row['situacao'];
-        $tipoExame = (int)$row['tipoExame'];
-
-        $dataProximoAsoLista = explode("-", $dataProximoAsoLista);
-        $diadataProximoAsoLista = explode(" ", $dataProximoAsoLista[2]);
-        $dataProximoAsoLista = $diadataProximoAsoLista[0] . "/" . $dataProximoAsoLista[1] . "/" . $dataProximoAsoLista[0];
-
-        $dataRealizacaoAso = explode("-", $dataRealizacaoAso);
-        $diadataRealizacaoAso = explode(" ", $dataRealizacaoAso[2]);
-        $dataRealizacaoAso = $diadataRealizacaoAso[0] . "/" . $dataRealizacaoAso[1] . "/" . $dataRealizacaoAso[0];
-
-        if ($tipoExame == 1) {
-            $descricaoTipoExame = 'Exame Admissional';
-        }
-        if ($tipoExame == 2) {
-            $descricaoTipoExame = 'Exame Periódico';
-        }
-        if ($tipoExame == 3) {
-            $descricaoTipoExame = 'Mudança de Risco Ocupacional';
-        }
-        if ($tipoExame == 4) {
-            $descricaoTipoExame = 'Retorno ao trabalho';
-        }
-
-        $contadorDataAso = $contadorDataAso + 1;
-        $arrayDataAso[] = array(
-            "sequencialDataAso" => $contadorDataAso,
-            "dataProximoAsoLista" => $dataProximoAsoLista,
-            "dataRealizacaoAso" => $dataRealizacaoAso,
-            "situacao" => $situacao,
-            "descricaoTipoExame" => $tipoExame,
-            "descricaoTipoExame" => $descricaoTipoExame,
-        );
+    if ($result < 1) {
+        echo "failed#" . "$out#";
+        return;
     }
 
-    $strArrayDataAso = json_encode($arrayDataAso);
+    $uploadArray = array();
+    $pathArray = array();
+    $i = 0;
+
+    foreach ($result as $row) {
+        $path = $row["path"];
+        $name = $row["name"];
+        $type = $row["type"];
+        $dataRealizacaoAso = $row['dataRealizacaoAso'];
+        $sequencialDataAso = $i + 1;
+        $dataProximoAsoLista = $row['dataProximoAsoLista'];
+        $situacao = $row['situacao'];
+        $tipoExame = $row['tipoExame'];
+
+        if ($tipoExame == 1) {
+            $descricaoTipoExame = "Exame Admissional";
+        }
+        if ($tipoExame == 2) {
+            $descricaoTipoExame = "Exame Periódico";
+        }
+        if ($tipoExame == 3) {
+            $descricaoTipoExame = "Mudança de Risco Ocupacional";
+        }
+        if ($tipoExame == 4) {
+            $descricaoTipoExame = "Retorno ao Trabalho";
+        }
+
+        if ($sexo == 'M') {
+            $sexo = "Masculino";
+        } else {
+            $sexo = "Feminino";
+        }
+        
+
+        array_push($pathArray, $path);
+        array_push(
+            $uploadArray,
+            [
+                "fileName" => $name,
+                "fileType" => $type,
+                "dataRealizacaoAso" => $dataRealizacaoAso,
+                "dataProximoAsoLista" => $dataProximoAsoLista,
+                "situacao" => $situacao,
+                "tipoExame" => $tipoExame,
+                "descricaoTipoExame" => $descricaoTipoExame,
+                "sequencialDataAso" => $sequencialDataAso
+
+            ]
+        );
+        $i++;
+    }
+
+    $i = 0;
+    foreach ($pathArray as $path) {
+        $path = dirname(__DIR__) . substr($path,1);
+        $content = file_get_contents($path . $uploadArray[$i]["fileName"]);
+        $base64 = "data:application/pdf;base64," . base64_encode($content);
+
+        $uploadArray[$i]["fileUploadAso"] = $base64;
+        $i++;
+    }
+
+    $jsonUpload = json_encode($uploadArray);
 
 
     $out = $codigo . "^" .
@@ -222,18 +253,19 @@ WHERE ASO.funcionario = $funcionario";
         $dataNascimentoFormatada . "^" .
         $idade . "^" .
         $dataAdmissaoFormatada . "^" .
-        $cargoId . "^" .
-        $projetoId . "^" .
+        $ativo . "^" .
         $dataUltimoAsoFormatada . "^" .
         $dataValidadeAsoFormatada . "^" .
-        $dataAgendamentoFormatada;
+        $dataAgendamentoFormatada  . "^" .
+        $cargoId . "^" .
+        $projetoId;
 
     if ($out == "") {
         echo "failed#";
         return;
     }
 
-    echo "sucess#" . $out . "#" . $strArrayDataAso;
+    echo "sucess#" . $out . "#" . $jsonUpload;
     return;
 }
 
@@ -268,17 +300,18 @@ function grava()
     //Variáveis que estão sendo passadas.
     session_start();
     $usuario = $_SESSION['login'];  //Pegando o nome do usuário mantido pela sessão.
-    $funcionario = (int)$_POST['funcionario'];
-    $matricula = (int)$_POST['matricula'];
-    $cargo = (int)$_POST['cargo'];
-    $projeto = (int) $_POST['projeto'];
-    $sexo = (string) $_POST['sexo'];
-    $dataNascimento = formatarData($_POST['dataNascimento']);
-    $dataAdmissao = formatarData($_POST['dataAdmissao']);
-    $dataUltimoAso = formatarData($_POST['dataUltimoAso']);
-    $dataProximoAso = formatarData($_POST['dataProximoAso']);
-    $dataAgendamento = formatarData($_POST['dataAgendamento']);
-    $ativo =  $_POST['ativo'];
+    $dataAso = $_POST['dataAso'];
+    $funcionario = (int)$dataAso['funcionario'];
+    $matricula = (int)$dataAso['matricula'];
+    $cargo = (int)$dataAso['cargo'];
+    $projeto = (int) $dataAso['projeto'];
+    $sexo = (string) $dataAso['sexo'];
+    $dataNascimento = formatarData($dataAso['dataNascimento']);
+    $dataAdmissao = formatarData($dataAso['dataAdmissao']);
+    $dataUltimoAso = formatarData($dataAso['dataUltimoAso']);
+    $dataProximoAso = formatarData($dataAso['dataProximoAso']);
+    $dataAgendamento = formatarData($dataAso['dataAgendamento']);
+    $ativo =  $dataAso['ativo'];
 
 
     $reposit = "";
@@ -292,67 +325,140 @@ function grava()
         $codigoFolha = $row['codigo'];
        $id = $codigoFolha;
     };
-    $strArrayDataAso = $_POST['jsonDataAsoArray'];
+    // INICIO UPLOAD //
+
+    $jsonData = $_POST["jsonData"];
+
+    if (!$funcionario) {
+        $out = "failed#";
+        return;
+    }
+
+    $uploadsPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . "uploads";
+    $asoPath = $uploadsPath . DIRECTORY_SEPARATOR . "aso";
+    $funcionarioPath = $asoPath . DIRECTORY_SEPARATOR . $funcionario;
+
+    if (!is_dir($uploadsPath)) {
+        mkdir($uploadsPath);
+    }
+
+    if (!is_dir($asoPath)) {
+        mkdir($asoPath);
+    }
+
+    if (!is_dir($funcionarioPath)) {
+        mkdir($funcionarioPath);
+    }
+
+    $dataRealizacaoAso = array();
+    $dataProximoAsoLista = array();
+    $tipoExame = array();
+    $situacao = array();
+
+    $filesContent = array();
+    foreach ($jsonData as $array) {
+        foreach ($array as $key => $value) {
+            if ($key == "fileUploadAso") {
+                if (strpos($value, ',') !== false) {
+                    @list($encode, $value) = explode(',', $value);
+                }
+                array_push($filesContent, base64_decode($value, true));
+            } else if ($key == "dataRealizacaoAso") {
+                $aux = explode("/", $value);
+                $value = $aux[2] . "-" . $aux[1] . "-" . $aux[0];
+                array_push($dataRealizacaoAso, $value);
+            } else if ($key == "dataProximoAsoLista") {
+                $aux = explode("/", $value);
+                $value = $aux[2] . "-" . $aux[1] . "-" . $aux[0];
+                array_push($dataProximoAsoLista, $value);
+            }else if ($key == "tipoExame") {
+                array_push($tipoExame, $value);
+            }else if ($key == "situacao") {
+                array_push($situacao, $value);
+            }
+        }
+    }
+
+    $i = 0;
+    $pathArray = array();
+
+    $relativePathArray = array();
+    $fileNameArray = array();
+
+    foreach ($filesContent as $file) {
+
+        //Passa o base64 decodificado para uma variavel que se refe ao conteudo
+        $pdfContent = $file;
+
+        $extension = ".pdf";
+        $filename = $funcionario . "_" . str_replace("-", "", $dataRealizacaoAso[$i]) . $extension;
+        $path = $funcionarioPath . DIRECTORY_SEPARATOR . $filename;
+
+        array_push($pathArray, $path);
+
+        $start = stripos($path, DIRECTORY_SEPARATOR . "uploads");
+        $recorte = explode($filename,substr($path, $start));
+        array_push($relativePathArray,"." . $recorte[0]);
+        array_push($fileNameArray, $filename);
+
+        //Cria um arquivo de escrita e leitura
+        try {
+            $pdf = fopen($path, 'w+');
+
+            //Escreve no arquivo criado
+            fwrite($pdf, $pdfContent);
+        } catch (Exception $e) {
+            $out = "Não foi possível realizar o upload.#";
+            echo "failed#".$out;
+            return;
+        } finally {
+            if ($pdf)
+                fclose($pdf);
+        }
+
+        $i++;
+    }
+
+    //FIM UPLOAD//
+
+    // INICIO XML //
+    $strArrayDataAso = $_POST['jsonData'];
     $arrayDataAso = $strArrayDataAso;
     if (!is_null($strArrayDataAso)) {
         $xmlDataAso = "";
         $nomeXml = "ArrayOfDataAso";
         $nomeTabela = "atestadoSaudeOcupacionalDetalhe";
-        if (sizeof($arrayDataAso) > 0) {
-            $xmlDataAso = '<?xml version="1.0"?>';
-            $xmlDataAso = $xmlDataAso . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-
-            foreach ($arrayDataAso as $chave) {
-                $xmlDataAso = $xmlDataAso . "<" . $nomeTabela . ">";
-                foreach ($chave as $campo => $valor) {
-
-
-                    if ($campo === "dataProximoAsoLista") {
-                        if ($valor == "") {
-                            $valor = 'NULL';
-                            return $valor;
-                        }
-                        $valor = str_replace('/', '-', $valor);
-                        $valor = date("Y-m-d", strtotime($valor));
-                    }
-                    if ($campo === "dataRealizacaoAso") {
-                        if ($valor == "") {
-                            $valor = 'NULL';
-                            return $valor;
-                        }
-                        $valor = str_replace('/', '-', $valor);
-                        $valor = date("Y-m-d", strtotime($valor));
-                    }
-                    if (($campo === "sequencialDataAso")) {
-                        continue;
-                    }
-                    if (($campo === "descricaoTipoExame")) {
-                        continue;
-                    }
-
-                    $xmlDataAso = $xmlDataAso . "<" . $campo . ">" . $valor . "</" . $campo . ">";
-                }
-                $xmlDataAso = $xmlDataAso . "</" . $nomeTabela . ">";
-            }
-            $xmlDataAso = $xmlDataAso . "</" . $nomeXml . ">";
-        } else {
-            $xmlDataAso = '<?xml version="1.0"?>';
-            $xmlDataAso = $xmlDataAso . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
-            $xmlDataAso = $xmlDataAso . "</" . $nomeXml . ">";
+    if (sizeof($pathArray) > 0) {
+        $xmlDataAso = '<?xml version="1.0"?>';
+        $xmlDataAso = $xmlDataAso . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema%22%3E">';
+        $j = 0;
+        foreach ($relativePathArray as $path) {
+            $xmlDataAso = $xmlDataAso . "<" . $nomeTabela . ">";
+            $xmlDataAso = $xmlDataAso . "<path>" . $path . "</path>";
+            $xmlDataAso = $xmlDataAso . "<name>" . $fileNameArray[$j] . "</name>";
+            $xmlDataAso = $xmlDataAso . "<type>" . "application/pdf" . "</type>";
+            $xmlDataAso = $xmlDataAso . "<dataRealizacaoAso>" . $dataRealizacaoAso[$j] . "</dataRealizacaoAso>";
+            $xmlDataAso = $xmlDataAso . "<dataProximoAsoLista>" . $dataProximoAsoLista[$j] . "</dataProximoAsoLista>";
+            $xmlDataAso = $xmlDataAso . "<tipoExame>" . $tipoExame[$j] . "</tipoExame>";
+            $xmlDataAso = $xmlDataAso . "<situacao>" . $situacao[$j] . "</situacao>";
+            $xmlDataAso = $xmlDataAso . "</" . $nomeTabela . ">";
+            $j++;
         }
-
-        $xml = simplexml_load_string($xmlDataAso);
-
-        if ($xml === false) {
-            $mensagem = "Erro na criação do XML de Data ASO";
-            echo "failed#" . $mensagem . ' ';
-            return;
-        }
-        $xmlDataAso = "'" . $xmlDataAso . "'";
+        $xmlDataAso = $xmlDataAso . "</" . $nomeXml . ">";
     } else {
-
-        $xmlDataAso = "'" . '<?xml version="1.0"?>' . '<' . "ArrayOfDataAso" . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">' . "</ArrayOfDataAso>" . "'";
+        $xmlDataAso = '<?xml version="1.0"?>';
+        $xmlDataAso = $xmlDataAso . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema%22%3E';
+        $xmlDataAso = $xmlDataAso . "</" . $nomeXml . ">";
     }
+    $xml = simplexml_load_string($xmlDataAso);
+    if ($xml === false) {
+        $mensagem = "Erro na criação do XML de Aso";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+    $xmlDataAso = "'" . $xmlDataAso . "'";
+
+    // FIM XML//
 
 
 
@@ -387,6 +493,7 @@ function grava()
     }
     echo $ret;
     return;
+}
 }
 
 function recupera()
@@ -456,61 +563,82 @@ function recupera()
     } else {
         $sexo = "Feminino";
     }
+    // XML UPLOAD
 
-
-    // XML DATA ASO
-    $reposit = "";
-    $result = "";
-    $sql = "SELECT ASOD.dataProximoAsoLista, ASOD.dataRealizacaoAso, ASOD.tipoExame,ASOD.situacao FROM funcionario.atestadoSaudeOcupacionalDetalhe ASOD
-INNER JOIN  funcionario.atestadoSaudeOcupacional ASO ON ASOD.atestadoSaudeOcupacional = ASO.codigo
-WHERE ASO.codigo = $id";
     $reposit = new reposit();
+    $sql = "SELECT filePath AS 'path',fileName AS 'name', fileType AS 'type', dataRealizacaoAso AS 'dataRealizacaoAso', dataProximoAsoLista AS 'dataProximoAsoLista',situacao AS 'situacao', tipoExame AS 'tipoExame' FROM Funcionario.atestadoSaudeOcupacionalDetalhe";
+    $where = " WHERE (0=0) AND ";
+    $where .= "atestadoSaudeOcupacional = " . $id;
+
+    $sql .= $where;
+
     $result = $reposit->RunQuery($sql);
+    $out = "";
 
-    $contadorDataAso = 0;
-    $arrayDataAso = array();
-    foreach ($result as $row) {
-        $dataProximoAsoLista = $row['dataProximoAsoLista'];
-        $dataRealizacaoAso = (string)$row['dataRealizacaoAso'];
-        $situacao = (string)$row['situacao'];
-        $tipoExame = (int) $row['tipoExame'];
-
-        if ($dataProximoAsoLista != "") {
-            $dataProximoAsoLista = formataDataRecuperacao($dataProximoAsoLista);
-        };
-
-        if ($dataRealizacaoAso != "") {
-            $dataRealizacaoAso = formataDataRecuperacao($dataRealizacaoAso);
-        };
-        if ($tipoExame == 1) {
-            $descricaoTipoExame = 'Exame Admissional';
-        }
-        if ($tipoExame == 2) {
-            $descricaoTipoExame = 'Exame Periódico';
-        }
-        if ($tipoExame == 3) {
-            $descricaoTipoExame = 'Mudança de Risco Ocupacional';
-        }
-        if ($tipoExame == 4) {
-            $descricaoTipoExame = 'Retorno ao trabalho';
-        }
-
-        $contadorDataAso = $contadorDataAso + 1;
-        $arrayDataAso[] = array(
-            "sequencialDataAso" => $contadorDataAso,
-            "dataProximoAsoLista" => $dataProximoAsoLista,
-            "dataRealizacaoAso" => $dataRealizacaoAso,
-            "descricaoTipoExame" => $tipoExame,
-            "descricaoTipoExame" => $descricaoTipoExame,
-            "situacao" => $situacao
-        );
+    if ($result < 1) {
+        echo "failed#" . "$out#";
+        return;
     }
 
+    $uploadArray = array();
+    $pathArray = array();
+    $i = 0;
 
+    foreach ($result as $row) {
+        $path = $row["path"];
+        $name = $row["name"];
+        $type = $row["type"];
+        $dataRealizacaoAso = $row['dataRealizacaoAso'];
+        $sequencialDataAso = $i + 1;
+        $dataProximoAsoLista = $row['dataProximoAsoLista'];
+        $situacao = $row['situacao'];
+        $tipoExame = $row['tipoExame'];
 
-    $strArrayDataAso = json_encode($arrayDataAso);
+        if ($tipoExame == 1) {
+            $descricaoTipoExame = "Exame Admissional";
+        }
+        if ($tipoExame == 2) {
+            $descricaoTipoExame = "Exame Periódico";
+        }
+        if ($tipoExame == 3) {
+            $descricaoTipoExame = "Mudança de Risco Ocupacional";
+        }
+        if ($tipoExame == 4) {
+            $descricaoTipoExame = "Retorno ao Trabalho";
+        }
+        
 
+        array_push($pathArray, $path);
+        array_push(
+            $uploadArray,
+            [
+                "fileName" => $name,
+                "fileType" => $type,
+                "dataRealizacaoAso" => $dataRealizacaoAso,
+                "dataProximoAsoLista" => $dataProximoAsoLista,
+                "situacao" => $situacao,
+                "tipoExame" => $tipoExame,
+                "descricaoTipoExame" => $descricaoTipoExame,
+                "sequencialDataAso" => $sequencialDataAso
 
+            ]
+        );
+        $i++;
+    }
+
+    $i = 0;
+    foreach ($pathArray as $path) {
+        $path = dirname(__DIR__) . substr($path,1);
+        $content = file_get_contents($path . $uploadArray[$i]["fileName"]);
+        $base64 = "data:application/pdf;base64," . base64_encode($content);
+
+        $uploadArray[$i]["fileUploadAso"] = $base64;
+        $i++;
+    }
+
+    $jsonUpload = json_encode($uploadArray);
+
+    // FIM XML UPLOAD
 
     $out = $codigo . "^" .
         $funcionario . "^" .
@@ -533,7 +661,7 @@ WHERE ASO.codigo = $id";
         return;
     }
 
-    echo "sucess#" . $out . "#" . $strArrayDataAso;
+    echo "success#" . "$out#" . $jsonUpload;
     return;
 }
 
@@ -643,10 +771,9 @@ function formatarData($value)
 }
 
 //Transforma uma data Y-M-D para D-M-Y. 
-function formataDataRecuperacao($campo)
-{
-    $campo = explode("-", $campo);
-    $diaCampo = explode(" ", $campo[2]);
-    $campo = $diaCampo[0] . "/" . $campo[1] . "/" . $campo[0];
+function formataDataRecuperacao($campo){
+    $campo = explode(" ", $campo);
+    $diaCampo = explode("-", $campo[0]);
+    $campo = $diaCampo[2] . "/" . $diaCampo[1] . "/" . $diaCampo[0];
     return $campo;
 }
