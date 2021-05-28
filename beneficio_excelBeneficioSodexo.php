@@ -26,7 +26,7 @@ $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 
 $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
-$inputFileName = './planilhaSodexo.xlsx';
+$inputFileName = 'planilhas/planilhaSodexo.xlsx';
 /** Load $inputFileName to a Spreadsheet Object  **/
 $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
 
@@ -37,16 +37,15 @@ $sheet = $spreadsheet->getSheetByName("Dados dos Beneficiários-Cartão");
 // $sheet = $spreadsheet->getActiveSheet(); // Pega a página ativa da planilha
 $i = 8;
 foreach ($result as $row) {
+        $projeto = $row['projeto'];
         $codigoCliente = $row['codigoCliente'];
         $nomeFuncionario = $row['funcionario'];
         $matricula = $row['matricula'];
         $dataNascimento = $row['dataNascimento'];
         $codigoDepartamento = $row['codigoDepartamento'];
-
         $dataNascimento = explode("-", $dataNascimento);
         $diaCampo = explode(" ", $dataNascimento[2]);
         $dataNascimento = $diaCampo[0] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
-
         $cpf = $row['cpf'];
         $vavrTotal = $row['vavrTotal'];
         if($vavrTotal == 0){
@@ -73,9 +72,11 @@ foreach ($result as $row) {
 
 // inicio Dados Empresa
 $sheetDadosEmpresa = $spreadsheet->getSheetByName("Dados da Empresa");
-$sqlEmpresa = "SELECT codigo,ativo,nome,codigoDepartamento,nomeDepartamento,responsavelRecebimento,cep,tipoLogradouro,logradouro,numero,complemento,bairro,
-cidade,uf
-FROM ntl.Ntl.empresa";
+$sqlEmpresa = "SELECT E.codigo,E.ativo,E.nome,E.cep,E.tipoLogradouro,E.logradouro,E.numero,E.complemento,E.bairro,
+                E.cidade,E.uf,P.fornecedorVAVR,F.codigoCliente,F.nomeDepartamento,F.codigoDepartamento,F.responsavelRecebimento
+                FROM Ntl.empresa AS E
+		LEFT JOIN Ntl.projeto AS P ON P.codigo = $projeto
+                LEFT JOIN Ntl.fornecedor AS F ON F.codigo = P.fornecedorVAVR";
 $resultEmpresa = $reposit->RunQuery($sqlEmpresa);
 
 if($rowEmpresa = $resultEmpresa[0]){
@@ -83,6 +84,7 @@ if($rowEmpresa = $resultEmpresa[0]){
         $codigoDepartamento = $rowEmpresa['codigoDepartamento'];
         $nomeDepartamento = $rowEmpresa['nomeDepartamento'];
         $responsavelRecebimento = $rowEmpresa['responsavelRecebimento'];
+        $codigoClienteProjeto = $rowEmpresa['codigoCliente'];
         $tipoLogradouro = $rowEmpresa['tipoLogradouro'];
         $logradouro = $rowEmpresa['logradouro'];
         $numero = $rowEmpresa['numero'];
@@ -92,7 +94,7 @@ if($rowEmpresa = $resultEmpresa[0]){
         $uf = $rowEmpresa['uf'];
         $cep = $rowEmpresa['cep'];
 
-        $sheetDadosEmpresa->setCellValue('A8', $codigoCliente);
+        $sheetDadosEmpresa->setCellValue('A8', $codigoClienteProjeto);
         $sheetDadosEmpresa->setCellValue('B8', $codigoDepartamento);
         $sheetDadosEmpresa->setCellValue('C8', $nomeDepartamento);
         $sheetDadosEmpresa->setCellValue('D8', $responsavelRecebimento);

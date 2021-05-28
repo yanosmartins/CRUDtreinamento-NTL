@@ -178,7 +178,7 @@ include "js/repositorio.php";
         $("#btnExcelSodexo").on("click", function() {
             var codigoConsultaBeneficio = <?php echo $codigoConsultaBeneficio ?>;
             // $(location).attr('href', 'beneficio_excelBeneficioTeste.php?codigo=' + codigoConsultaBeneficio);
-            $(location).attr('href', `beneficio_excelBeneficioTeste.php?id=${codigoConsultaBeneficio}`);
+            $(location).attr('href', `beneficio_excelBeneficioSodexo.php?id=${codigoConsultaBeneficio}`);
         });
 
         $("#btnExcelSodexoBeneficioIndireto").on("click", function() {
