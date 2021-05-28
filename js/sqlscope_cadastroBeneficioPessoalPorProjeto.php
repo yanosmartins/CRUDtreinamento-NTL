@@ -731,11 +731,11 @@ function recuperaBeneficio()
 
 
             $funcionarioPlanoSaude = +$row['funcionario'];
-            $convenio = +$row['convenio'];
-            $cobranca = +$row['cobranca'];
-            $idade = +$row['idade'];
+            $convenio = (int)$row['convenio'];
+            $cobranca = (int)$row['cobranca'];
+            $idade = (int)$row['idade'];
 
-            $produto = +$row['produto'];
+            $produto = (int)$row['produto'];
 
 
             $percentualDescontoSindicato = $row['percentualDescontoSindicato'];

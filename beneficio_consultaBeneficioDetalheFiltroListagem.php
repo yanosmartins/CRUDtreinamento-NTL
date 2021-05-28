@@ -176,14 +176,14 @@ include "js/repositorio.php";
         };
      
         $("#btnExcelSodexo").on("click", function() {
+            $("#btnExcelSodexo").prop('disabled', true);
             var codigoConsultaBeneficio = <?php echo $codigoConsultaBeneficio ?>;
-            // $(location).attr('href', 'beneficio_excelBeneficioTeste.php?codigo=' + codigoConsultaBeneficio);
             $(location).attr('href', `beneficio_excelBeneficioSodexo.php?id=${codigoConsultaBeneficio}`);
         });
 
         $("#btnExcelSodexoBeneficioIndireto").on("click", function() {
+            $("#btnExcelSodexoBeneficioIndireto").prop('disabled', true);
             var codigoConsultaBeneficio = <?php echo $codigoConsultaBeneficio ?>;
-            // $(location).attr('href', 'beneficio_excelBeneficioTeste.php?codigo=' + codigoConsultaBeneficio);
             $(location).attr('href', `beneficio_excelBeneficioIndireto.php?id=${codigoConsultaBeneficio}`);
         });
 

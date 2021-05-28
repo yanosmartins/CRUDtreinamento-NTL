@@ -12,8 +12,7 @@ $sql = "SELECT PB.projeto,PB.mesAno,P.descricao,PB.mesAno,PB.codigo AS codigoCon
         PBD.descricaoDescontoVAVR,PBD.valorExtraVAVR,PBD.vavrTotal,PBD.totalValorAcrescimoBeneficioIndiretoExtra,
         PBD.totalAcrescimoBeneficioIndiretoComExtra,PBD.valorCestaBasicaExtra,PBD.cestaBasicaExtraComCestaBasica,PBD.valorTotalPlanoSaude,PBD.totalValorAbaterBeneficioIndireto,
         PBD.valorTotalPlanoSaudeBeneficio,PBD.valorTotalFuncionarioVT,PBD.diaUtilVT,PBD.totalFaltasValeTransporte,PBD.totalAusenciasValeTransporte,PBD.diasTrabalhadosVT,PBD.valorExtraVT,PBD.VTMensal, 
-        F.ativo AS situacaoFuncionario,F.cpf,F.matricula,F.dataNascimento,PBD.codigoBeneficio,PBD.produtoVAVR,FO.codigoCliente,E.codigoDepartamento,
-        BP.produtoBeneficioIndireto
+        F.ativo AS situacaoFuncionario,F.cpf,F.matricula,F.dataNascimento,PBD.codigoBeneficio,PBD.produtoVAVR,PBD.produtoBeneficioIndireto,PBD.codigoBeneficioIndireto,FO.codigoCliente,E.codigoDepartamento
         FROM Beneficio.processaBeneficio PB
         LEFT JOIN Beneficio.processaBeneficioDetalhe PBD ON PBD.processaBeneficio = PB.codigo
         LEFT JOIN Ntl.projeto P ON PB.projeto = P.codigo 
@@ -38,25 +37,24 @@ $sheet = $spreadsheet->getSheetByName("Dados dos Beneficiários-Cartão");
 // $sheet = $spreadsheet->getActiveSheet(); // Pega a página ativa da planilha
 $i = 8;
 foreach ($result as $row) {
+        $projeto = $row['projeto'];
         $codigoCliente = $row['codigoCliente'];
         $nomeFuncionario = $row['funcionario'];
         $matricula = $row['matricula'];
         $dataNascimento = $row['dataNascimento'];
         $codigoDepartamento = $row['codigoDepartamento'];
-
         $dataNascimento = explode("-", $dataNascimento);
         $diaCampo = explode(" ", $dataNascimento[2]);
         $dataNascimento = $diaCampo[0] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
-
         $cpf = $row['cpf'];
-        $totalAcrescimoBeneficioIndiretoComExtra = $row['totalAcrescimoBeneficioIndiretoComExtra'];
-        if($totalAcrescimoBeneficioIndiretoComExtra == 0){
+        $totalBeneficioIndireto = $row['totalAcrescimoBeneficioIndiretoComExtra'];
+        if($totalBeneficioIndireto == 0){
                 $situacaoFuncionario = 'Inativo';
         }else{
                 $situacaoFuncionario = 'Ativo';
         }
         $mesAno = $row['mesAno'];
-        $codigoBeneficio = $row['codigoBeneficio'];
+        $codigoBeneficio = $row['codigoBeneficioIndireto'];
         // $vavrTotal = number_format($vavrTotal, 2, ',', '.');
         $sheet->setCellValue('A' . $i, $codigoCliente);
         $sheet->setCellValue('B' . $i, $codigoDepartamento);
@@ -66,7 +64,7 @@ foreach ($result as $row) {
         $sheet->setCellValue('G' . $i, $cpf);      
         $sheet->setCellValue('H' . $i, $dataNascimento);    
         $sheet->setCellValue('J' . $i, 1);   
-        $sheet->setCellValue('L' . $i, $vavrTotal);  
+        $sheet->setCellValue('L' . $i, $totalBeneficioIndireto);  
         $sheet->setCellValue('O' . $i, $mesAno);  
         $sheet->setCellValue('K' . $i, $codigoBeneficio);  
         $i++;
@@ -74,9 +72,11 @@ foreach ($result as $row) {
 
 // inicio Dados Empresa
 $sheetDadosEmpresa = $spreadsheet->getSheetByName("Dados da Empresa");
-$sqlEmpresa = "SELECT codigo,ativo,nome,codigoDepartamento,nomeDepartamento,responsavelRecebimento,cep,tipoLogradouro,logradouro,numero,complemento,bairro,
-cidade,uf
-FROM ntl.Ntl.empresa";
+$sqlEmpresa = "SELECT E.codigo,E.ativo,E.nome,E.cep,E.tipoLogradouro,E.logradouro,E.numero,E.complemento,E.bairro,
+                E.cidade,E.uf,P.fornecedorVAVR,F.codigoCliente,F.nomeDepartamento,F.codigoDepartamento,F.responsavelRecebimento
+                FROM Ntl.empresa AS E
+		LEFT JOIN Ntl.projeto AS P ON P.codigo = $projeto
+                LEFT JOIN Ntl.fornecedor AS F ON F.codigo = P.fornecedorVAVR";
 $resultEmpresa = $reposit->RunQuery($sqlEmpresa);
 
 if($rowEmpresa = $resultEmpresa[0]){
@@ -84,6 +84,7 @@ if($rowEmpresa = $resultEmpresa[0]){
         $codigoDepartamento = $rowEmpresa['codigoDepartamento'];
         $nomeDepartamento = $rowEmpresa['nomeDepartamento'];
         $responsavelRecebimento = $rowEmpresa['responsavelRecebimento'];
+        $codigoClienteProjeto = $rowEmpresa['codigoCliente'];
         $tipoLogradouro = $rowEmpresa['tipoLogradouro'];
         $logradouro = $rowEmpresa['logradouro'];
         $numero = $rowEmpresa['numero'];
@@ -93,7 +94,7 @@ if($rowEmpresa = $resultEmpresa[0]){
         $uf = $rowEmpresa['uf'];
         $cep = $rowEmpresa['cep'];
 
-        $sheetDadosEmpresa->setCellValue('A8', $codigoCliente);
+        $sheetDadosEmpresa->setCellValue('A8', $codigoClienteProjeto);
         $sheetDadosEmpresa->setCellValue('B8', $codigoDepartamento);
         $sheetDadosEmpresa->setCellValue('C8', $nomeDepartamento);
         $sheetDadosEmpresa->setCellValue('D8', $responsavelRecebimento);
@@ -123,7 +124,7 @@ $sheet3 = $spreadsheet->getSheetByName("Dados dos Beneficiários-V.T.");
 // $sheet2->setCellValue('C10', 'DEV');
 
 $writer = new Xlsx($spreadsheet);
-$fileName = 'BeneficioIndireto.xlsx';
+$fileName = 'BeneficioIndiretoSodexo.xlsx';
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
         $writer->save('php://output');
