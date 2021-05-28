@@ -29,11 +29,11 @@ include "js/repositorio.php";
                     $where = $where . " AND ( GI.estoque = $estoque)";
                 }
 
+                
                 if ($_GET["descricao"] != "") {
                     $descricao = $_GET["descricao"];
-                    $where = $where . " AND ( GI.descricao = $descricao)";
+                    $where = $where . " AND ( GI.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
-                
 
                 if ($_GET["unidade"] != "") {
                     $unidade = $_GET["unidade"];

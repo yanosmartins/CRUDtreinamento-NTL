@@ -25,6 +25,14 @@ if ($funcao == 'populaComboEstoque') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'listaCodigoAtivoAutoComplete') {
+    call_user_func($funcao);
+}
+
+if ($funcao == 'listaFabricanteAtivoAutoComplete') {
+    call_user_func($funcao);
+}
+
 return;
 
 function grava()
@@ -223,4 +231,80 @@ function populaComboEstoque()
         echo "failed#";
         return;
     }
+}
+
+function listaCodigoAtivoAutoComplete()
+{
+    $condicaoDescricao = !((empty($_POST["descricaoIniciaCom"])) || (!isset($_POST["descricaoIniciaCom"])) || (is_null($_POST["descricaoIniciaCom"])));
+
+    if ($condicaoDescricao === false) {
+        return;
+    }
+
+    if ($condicaoDescricao) {
+        $descricaoPesquisa = $_POST["descricaoIniciaCom"];
+    }
+
+    if ($condicaoDescricao == "") {
+        $id = 0;
+    }
+
+    $reposit = new reposit();
+    $sql = "SELECT codigo, codigoItem FROM Estoque.codigoItem WHERE (0=0) AND ativo = 1 
+    AND codigoItem LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY codigoItem";
+    $result = $reposit->RunQuery($sql);
+    $contador = 0;
+    $array = array();
+    foreach ($result as $row) {
+        $id = (int)$row['codigo'];
+        $codigoItem = $row["codigoItem"];
+
+        $contador = $contador + 1;
+        $array[] = array(
+            "id" => $id,
+            "descricao" => $codigoItem
+        );
+    }
+
+    $strArray = json_encode($array);
+
+    echo $strArray;
+
+    return;
+}
+
+function listaFabricanteAtivoAutoComplete()
+{
+    $condicaoDescricao = !((empty($_POST["descricaoIniciaCom"])) || (!isset($_POST["descricaoIniciaCom"])) || (is_null($_POST["descricaoIniciaCom"])));
+
+    if ($condicaoDescricao === false) {
+        return;
+    }
+
+    if ($condicaoDescricao) {
+        $descricaoPesquisa = $_POST["descricaoIniciaCom"];
+    }
+
+    if ($condicaoDescricao == "") {
+        $id = 0;
+    }
+
+    $reposit = new reposit();
+    $sql = "SELECT codigo, codigoFabricante FROM Estoque.codigoItem WHERE (0=0) AND ativo = 1 
+    AND codigoFabricante LIKE '%" . $descricaoPesquisa . "%'COLLATE Latin1_general_CI_AI ORDER BY codigoFabricante";
+    $result = $reposit->RunQuery($sql);
+    $contador = 0;
+    $array = array();
+    foreach ($result as $row) {
+        $id = $row['codigo'];
+        $descricao = $row["codigoFabricante"];
+        $contador = $contador + 1;
+        $array[] = array("id" => $id, "descricao" => $descricao);
+    }
+
+    $strArray = json_encode($array);
+
+    echo $strArray;
+
+    return;
 }

@@ -1,7 +1,7 @@
 function gravaTranferenciaMaterial(formData) {
     formData.append('funcao', 'grava');
     $.ajax({ 
-        url: 'js/sqlscope_cadastrotranferenciaMaterial.php',
+        url: 'js/sqlscope_cadastroTranferenciaMaterial.php',
         type: 'post',
         data: formData,
         processData: false,

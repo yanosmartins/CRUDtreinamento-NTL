@@ -61,6 +61,7 @@ function gravaProjeto()
     $cidade = validaString($projeto['cidade']);
     $estado = validaString($projeto['estado']);
     $ativo = 1;
+    $fornecedorObrigatorio = (int)$projeto['fornecedorObrigatorio'];
 
     //#########     DIAS ÚTEIS VAVR ##########//
     $diaUtilJaneiroVAVR     = validaNumero($projeto['diaUtilJaneiroVA']);
@@ -330,6 +331,7 @@ function gravaProjeto()
         $limiteEntrada,
         $limiteSaida,
         $imprimeCargo,
+        $fornecedorObrigatorio,
         $xmlJsonResponsavel";
 
     $reposit = new reposit();
@@ -378,6 +380,7 @@ function recuperaProjeto()
         $cidade = $row['cidade'];
         $estado = $row['estado'];
         $ativo = +$row['ativo'];
+        $fornecedorObrigatorio = +$row['fornecedorObrigatorio'];
 
 
 
@@ -509,7 +512,8 @@ function recuperaProjeto()
             $razaoSocial . "^" .
             $limiteEntrada . "^" .
             $limiteSaida . "^" .
-            $imprimeCargo;
+            $imprimeCargo . "^" .
+            $fornecedorObrigatorio;
 
         //----------------------Montando o array do Telefone
         $sql = "SELECT * FROM Ntl.projeto SI 

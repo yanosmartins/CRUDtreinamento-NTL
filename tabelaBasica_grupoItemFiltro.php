@@ -88,27 +88,7 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <div class="row ">
 
-                                                            <section class="col col-2">
-                                                                <label class="label">Estoque</label>
-                                                                <label class="select">
-                                                                    <select id="estoque" name="estoque" style="text-align: right;" type="text" autocomplete="off">
-                                                                        <option value=""></option>
-                                                                        <?php
-                                                                        $reposit = new reposit();
 
-                                                                        $sql = "SELECT codigo, descricao FROM Estoque.estoque WHERE ativo = 1";
-
-                                                                        $result = $reposit->RunQuery($sql);
-
-                                                                        foreach ($result as $row) {
-                                                                            $codigoEstoque = $row["codigo"];
-                                                                            $descricaoEstoque = $row["descricao"];
-                                                                            echo "<option value=\"$codigoEstoque\">$descricaoEstoque</option>";
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
                                                             <section class="col col-2">
                                                                 <label class="label" for="localizacaoItem">Unidade</label>
                                                                 <label class="select">
@@ -127,17 +107,38 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Estoque</label>
+                                                                <label class="select">
+                                                                    <select id="estoque" name="estoque" style="text-align: right;" type="text" autocomplete="off">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+
+                                                                        $sql = "SELECT codigo, descricao FROM Estoque.estoque WHERE ativo = 1 ORDER BY descricao";
+
+                                                                        $result = $reposit->RunQuery($sql);
+
+                                                                        foreach ($result as $row) {
+                                                                            $codigoEstoque = $row["codigo"];
+                                                                            $descricaoEstoque = $row["descricao"];
+                                                                            echo "<option value=\"$codigoEstoque\">$descricaoEstoque</option>";
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                             <section class="col col-3">
                                                                 <label class="label">Descrição</label>
                                                                 <label class="input">
-                                                                    <input id="descricao" name="descricao" style="text-align: right;" type="text" autocomplete="off">
+                                                                    <input id="descricao" name="descricao" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
 
                                                             <section class="col col-2">
                                                                 <label class="label">Ativo</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" style="text-align: right;" type="text" autocomplete="off">
+                                                                    <select id="ativo" name="ativo" type="text" autocomplete="off">
                                                                         <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>

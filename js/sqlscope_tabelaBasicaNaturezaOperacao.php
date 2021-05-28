@@ -35,6 +35,7 @@ function grava()
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
     $codigo = (int)$_POST['id'];
+    $tipo = (int)$_POST['tipo'];
     $descricao = "'" . $_POST['descricao'] . "'";
     if (validaNaturezaOperacao($descricao) && $codigo == 0) {
         echo "failed#" . "Fabricante já cadastrado!";
@@ -44,6 +45,7 @@ function grava()
 
     $sql = "Estoque.naturezaOperacao_Atualiza
             $codigo,
+            $tipo,
             $ativo,
             $descricao,
             $usuario";

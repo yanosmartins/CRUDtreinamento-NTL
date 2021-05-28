@@ -303,8 +303,7 @@ include("inc/scripts.php");
       smartAlert("Erro", "Informe a descrição.", "error");
       return;
     }
-
-
+    
     gravaGrupoItem(codigo, estoque, descricao, unidade,
       function(data) {
 

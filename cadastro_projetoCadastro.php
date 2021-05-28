@@ -110,7 +110,16 @@ include("inc/nav.php");
                                                                     <input id="descricao" maxlength="70" name="descricao" autocomplete="off" placeholder="Digite a descrição do projeto" type="text" class=" required">
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="fornecedorObrigatorio">Preencher Fornecedor na Ent. Material</label>
+                                                                <label class="select">
+                                                                    <select id="fornecedorObrigatorio" name="fornecedorObrigatorio" class="required">
+                                                                        <option value="0">Não</option>
+                                                                        <option value="1">Sim</option>
+                                                                    </select><i></i>
+                                                            </section>
                                                         </div>
+
                                                         <div class="row">
 
 
@@ -1234,52 +1243,52 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <input id="jsonResponsavel" name="jsonResponsavel" type="hidden" value="[]">
                                                         <div id="formResponsavel" class="col-sm-6">
-                                                        <input id="sequencialResponsavel" name="sequencialResponsavel" type="hidden" value="">
-                                                        <input id="responsavelLoginDescricao" name="responsavelLoginDescricao" type="hidden" value="">
-                                                        <input id="responsavelId" name="responsavelId" type="hidden" value="">
+                                                            <input id="sequencialResponsavel" name="sequencialResponsavel" type="hidden" value="">
+                                                            <input id="responsavelLoginDescricao" name="responsavelLoginDescricao" type="hidden" value="">
+                                                            <input id="responsavelId" name="responsavelId" type="hidden" value="">
 
-                                                        <div class="row">
-                                                            <section class="col col-8">
-                                                                <label class="label">Login</label>
-                                                                <label class="select">
-                                                                    <select id="responsavelLogin" name="responsavelLogin">
-                                                                        <option></option>
-                                                                        <?php
-                                                                        $sql = "SELECT U.codigo, U.login 
+                                                            <div class="row">
+                                                                <section class="col col-8">
+                                                                    <label class="label">Login</label>
+                                                                    <label class="select">
+                                                                        <select id="responsavelLogin" name="responsavelLogin">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $sql = "SELECT U.codigo, U.login 
                                                                                 FROM Ntl.usuario U WHERE ativo = 1";
-                                                                        $reposit = new reposit();
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach ($result as $row) {
-                                                                            $codigo = $row['codigo'];
-                                                                            $login = ($row['login']);
-                                                                            echo '<option value=' . $codigo . '>' . $login . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-md-2">
-                                                                <label class="label">&nbsp;</label>
-                                                                <button id="btnAddResponsavel" type="button" class="btn btn-primary">
-                                                                    <i class="fa fa-plus"></i>
-                                                                </button>
-                                                                <button id="btnRemoverResponsavel" type="button" class="btn btn-danger">
-                                                                    <i class="fa fa-minus"></i>
-                                                                </button>
-                                                            </section>
-                                                        </div>
-                                                        <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                            <table id="tableResponsavel" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                <thead>
-                                                                    <tr role="row">
-                                                                        <th style="width: 2px"></th>
-                                                                        <th class="text-center">Login</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = $row['codigo'];
+                                                                                $login = ($row['login']);
+                                                                                echo '<option value=' . $codigo . '>' . $login . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-md-2">
+                                                                    <label class="label">&nbsp;</label>
+                                                                    <button id="btnAddResponsavel" type="button" class="btn btn-primary">
+                                                                        <i class="fa fa-plus"></i>
+                                                                    </button>
+                                                                    <button id="btnRemoverResponsavel" type="button" class="btn btn-danger">
+                                                                        <i class="fa fa-minus"></i>
+                                                                    </button>
+                                                                </section>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableResponsavel" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th style="width: 2px"></th>
+                                                                            <th class="text-center">Login</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -1708,6 +1717,7 @@ include("inc/scripts.php");
                             var limiteEntrada = piece[56];
                             var limiteSaida = piece[57];
                             var imprimeCargo = piece[58];
+                            var fornecedorObrigatorio = piece[59];
 
                             $("#codigo").val(codigo);
                             $("#cnpj").val(cnpj);
@@ -1724,6 +1734,7 @@ include("inc/scripts.php");
                             $("#cidade").val(cidade);
                             $("#estado").val(estado);
                             $("#ativo").val(ativo);
+                            $("#fornecedorObrigatorio").val(fornecedorObrigatorio);
 
                             $("#jsonTelefone").val($strArrayTelefone);
                             $("#jsonEmail").val($strArrayEmail);
@@ -2682,7 +2693,7 @@ include("inc/scripts.php");
         }
     }
 
-     
+
 
     function validaResponsavel() {
         var achouResponsavel = false;

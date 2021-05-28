@@ -20,7 +20,7 @@ include "js/repositorio.php";
                 <?php
                 $where = " WHERE (0=0) ";
                 $codigoItem = $_GET["codigoItem"];
-                $codigoFabricante = $_GET["codigoFabricante"];
+                $codigoFabricante = "'".$_GET["codigoFabricante"]."'";
                 $descricaoItem = $_GET["descricaoItem"];
                 $estoque = $_GET["estoque"];
                 $unidade = $_GET["unidade"];
@@ -29,10 +29,10 @@ include "js/repositorio.php";
                 $ativo = $_GET["ativo"];
 
                 if ($codigoItem != "") {
-                    $where = $where . " and (CI.codigoItem like '%' + " . "replace('" . $codigoItem . "',' ','%') + " . "'%')";
+                    $where = $where . " AND CI.codigo = $codigoItem";
                 }
                 if ($codigoFabricante != "") {
-                    $where = $where . " and (CI.codigoFabricante like '%' + " . "replace('" . $codigoFabricante . "',' ','%') + " . "'%')";
+                    $where = $where . " AND CI.codigoFabricante = $codigoFabricante";
                 }
                 if ($descricaoItem != "") {
                     $where = $where . " and (CI.descricaoItem like '%' + " . "replace('" . $descricaoItem . "',' ','%') + " . "'%')";
