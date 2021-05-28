@@ -193,7 +193,7 @@ include("inc/nav.php");
                                                                         <select id="naturezaOperacao" name="naturezaOperacao" class="required">
                                                                             <option></option>
                                                                             <?php
-                                                                            $sql =  "SELECT codigo, descricao FROM Estoque.naturezaOperacao where ativo = 1 order by descricao";
+                                                                            $sql =  "SELECT codigo, descricao FROM Estoque.naturezaOperacao where ativo = 1 AND tipo = 2 order by descricao";
                                                                             $reposit = new reposit();
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {

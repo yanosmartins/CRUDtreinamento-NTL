@@ -40,6 +40,12 @@ function grava()
     $unidade =  (int) $_POST['unidade'];
     $ativo = 1;
 
+    if (validaGrupoItem($descricao, $estoque)) {
+        $mensagem = "Já existe este item neste estoque.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
     $sql = "Estoque.grupoItem_Atualiza
             $codigo, 
             $estoque,
@@ -144,4 +150,19 @@ function excluir()
 
     echo 'sucess#' . $result;
     return;
+}
+
+function validaGrupoItem($descricao, $estoque)
+{
+    $sql = "SELECT codigo,[descricao],ativo FROM Estoque.grupoItem
+    WHERE [descricao] LIKE $descricao AND [estoque] = $estoque AND ativo = 1";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if ($result[0]) {
+        return true;
+    } else {
+        return false;
+    }
 }

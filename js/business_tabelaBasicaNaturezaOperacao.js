@@ -1,9 +1,9 @@
-function gravaFuncao(id, ativo, descricao, callback) {
+function gravaFuncao(id, ativo, descricao,tipo, callback) {
     $.ajax({
         url: 'js/sqlscope_tabelaBasicaNaturezaOperacao.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", id:id, ativo:ativo, descricao:descricao},   
+        data: {funcao: "grava", id:id, ativo:ativo, descricao:descricao, tipo:tipo},   
         success: function (data) {
         callback(data);
         } 

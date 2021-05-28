@@ -86,6 +86,14 @@ include("inc/nav.php");
                                                                     <input id="descricao" name="descricao" type="text" class="required" maxlength="200" required autocomplete="off">
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="tipo">Tipo de NF</label>
+                                                                <label class="select">
+                                                                    <select id="tipo" name="tipo" class="required">
+                                                                        <option value="1">Entrada</option>
+                                                                        <option value="2">Saída</option>
+                                                                    </select><i></i>
+                                                            </section>
                                                             <section class="col col-2 col-auto">
                                                                 <!-- <label class="label" for="ativo">Ativo</label> -->
                                                                 <label class="select">
@@ -315,6 +323,7 @@ include("inc/scripts.php");
         var id = +$('#codigo').val();
         var descricao = $('#descricao').val().trim().replace(/'/g, " ");
         var ativo = +$('#ativo').val();
+        var tipo = +$('#tipo').val();
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
         if (!descricao) {
@@ -322,11 +331,16 @@ include("inc/scripts.php");
             $("#btnGravar").prop('disabled', false);
             return;
         }
+        if (!tipo) {
+            smartAlert("Atenção", "Informe o tipo NF", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
 
         ativo = 1;
 
         //Chama a função de gravar do business de convênio de saúde.
-        gravaFuncao(id, ativo, descricao,
+        gravaFuncao(id, ativo, descricao, tipo,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");

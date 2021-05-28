@@ -60,6 +60,18 @@ function populaComboEstoque(unidadeDestino, callback) {
     return;
 }
 
+function recuperaFornecedorObrigatorio(callback) {
+    $.ajax({
+        url: 'js/sqlscope_cadastroEntradaItem.php',
+        dataType: 'html', 
+        type: 'post',
+        data: {funcao: 'recuperaFornecedorObrigatorio'},      
+        success: function (data) {
+            callback(data); 
+        }
+    });
+}
+
 function excluirEntradaItem(codigo, callback) {
     $.ajax({
         url: 'js/sqlscope_cadastroEntradaItem.php', 

@@ -25,7 +25,6 @@ if ($condicaoExcluirOK === false) {
     $esconderBtnExcluir = "none";
 }
 
-
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
@@ -109,11 +108,11 @@ include("inc/nav.php");
                                                                 </section>
                                                             </div>
                                                             <div class="row">
-                                                                <section class="col col-4">
+                                                                <section class="col col-6">
                                                                     <label class="label">Cliente/Fornecedor</label>
                                                                     <label class="input">
                                                                         <input id="clienteFornecedorId" name="clienteFornecedorId" type="hidden" value="">
-                                                                        <input id="clienteFornecedor" name="clienteFornecedorFiltro" autocomplete="off" class="form-control required" placeholder="Digite o codigo..." type="text" value="">
+                                                                        <input id="clienteFornecedor" name="clienteFornecedorFiltro" autocomplete="off" class="form-control" placeholder="Digite o codigo..." type="text" value="">
                                                                         <i class="icon-append fa fa-filter"></i>
                                                                     </label>
                                                                 </section>
@@ -139,6 +138,27 @@ include("inc/nav.php");
                                                                     <label class="input">
                                                                         <input id="numero" name="numero" maxlength="255" autocomplete="off" class="readonly" disabled type="text" value="">
                                                                     </label>
+                                                                </section>
+
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-2">
+                                                                    <label class="label" for="naturezaOperacao">Natureza Operação</label>
+                                                                    <label class="select">
+                                                                        <input id="naturezaOperacaoId" name="naturezaOperacaoId" type="hidden" value="">
+                                                                        <select id="naturezaOperacao" name="naturezaOperacao" class="required">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $sql =  "SELECT codigo, descricao FROM Estoque.naturezaOperacao where ativo = 1 AND tipo = 1 order by descricao";
+                                                                            $reposit = new reposit();
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = $row['codigo'];
+                                                                                $descricao = ($row['descricao']);
+                                                                                echo '<option value=' . $codigo . '>  ' . $descricao  . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
                                                                 </section>
                                                                 <section class="col col-2">
                                                                     <label class="label">Data Emissão</label>
@@ -212,6 +232,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label">Código Material</label>
                                                                     <label class="input">
+                                                                        <input id="fornecedorObrigatorio" name="fornecedorObrigatorio" type="hidden" value="">
                                                                         <input id="codigoItemId" name="codigoItemId" type="hidden" value="">
                                                                         <input id="codigoItem" name="codigoItemFiltro" autocomplete="off" class="form-control required" placeholder="Digite o codigo..." type="text" value="">
                                                                         <i class="icon-append fa fa-filter"></i>
@@ -480,6 +501,7 @@ include("inc/scripts.php");
     $(document).ready(function() {
 
         carregaPagina();
+        recuperaFornecedor();
 
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -890,6 +912,7 @@ include("inc/scripts.php");
                             dataEntrega = piece[6];
                             dataEmissaoNF = piece[7];
                             observacao = piece[8];
+                            naturezaOperacao = piece[9];
 
                             //Arrumando o valor de data 
                             dataEntregaMaterial = dataEntregaMaterial.split(" ");
@@ -919,6 +942,7 @@ include("inc/scripts.php");
                             $("#dataEntrega").val(dataEntrega);
                             $("#dataEmissao").val(dataEmissaoNF);
                             $("#observacao").val(observacao);
+                            $("#naturezaOperacao").val(naturezaOperacao);
 
                             $("#dataMovimento").addClass('readonly');
                             $("#dataMovimento").attr('disabled', true);
@@ -930,6 +954,8 @@ include("inc/scripts.php");
                             $("#numero").attr('disabled', true);
                             $("#dataEmissao").addClass('readonly');
                             $("#dataEmissao").attr('disabled', true);
+                            $("#naturezaOperacao").addClass('readonly');
+                            $("#naturezaOperacao").attr('disabled', true);
 
                             $("#btnAddItem").attr('disabled', true);
                             $("#btnRemoverItem").attr('disabled', true);
@@ -1014,8 +1040,29 @@ include("inc/scripts.php");
                     codigo = piece[0];
                     descricao = piece[1];
 
-                    $("#descricaoItem").val(descricao);
-                    $("#descricaoItemFiltro").val(codigo);
+                    $("#clienteFornecedorId").val(descricao);
+                    $("#clienteFornecedorId").val(codigo);
+
+                }
+            }
+        );
+    }
+
+    function recuperaFornecedor() {
+        recuperaFornecedorObrigatorio(
+            function(data) {
+                if (data.indexOf('failed') > -1) {} else {
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    var mensagem = piece[0];
+                    var fornecedorObrigatorio = piece[1];
+
+                    $("#fornecedorObrigatorio").val(fornecedorObrigatorio);
+
+                    if (fornecedorObrigatorio == 1) {
+                        $("#clienteFornecedor").addClass('required');
+                        $("#clienteFornecedor").attr('required', true);
+                    }
 
                 }
             }
@@ -1330,11 +1377,14 @@ include("inc/scripts.php");
     function validaCampos() {
 
         var clienteFornecedorId = $('#clienteFornecedorId').val();
+        var fornecedorObrigatorio = $('#fornecedorObrigatorio').val();
         var tipo = $('#tipo option:selected').val();
         var dataEmissao = $('#dataEmissao').val();
         var dataEntrega = $('#dataEntrega').val();
+        var naturezaOperacao = $('#naturezaOperacao').val();
 
-        if (clienteFornecedorId === '') {
+
+        if (fornecedorObrigatorio == 1 && clienteFornecedorId === '') {
             smartAlert("Erro", "Informe o Fornecedor!", "error");
             $('#clienteFornecedor').focus();
             return false;
@@ -1342,6 +1392,11 @@ include("inc/scripts.php");
         if (tipo === '') {
             smartAlert("Erro", "Informe o Tipo!", "error");
             $('#tipo').focus();
+            return false;
+        }
+        if (naturezaOperacao === '') {
+            smartAlert("Erro", "Informe a Natureza da Operação!", "error");
+            $('#naturezaOperacao').focus();
             return false;
         }
         if (dataEmissao === '') {

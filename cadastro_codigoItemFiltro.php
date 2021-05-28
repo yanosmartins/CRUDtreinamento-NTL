@@ -80,16 +80,20 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-3 col-auto">
-                                                                <label class="label" for="codigoItem">Código</label>
+                                                            <section class="col col-3">
+                                                                <label class="label">Código Item</label>
                                                                 <label class="input">
-                                                                    <input id="codigoItem" name="codigoItem" type="text" class="" maxlength="50" autocomplete="off">
+                                                                    <input id="codigoItemId" name="codigoItemId" type="hidden" value="">
+                                                                    <input id="codigoItem" name="codigoItemFiltro" autocomplete="off" class="form-control " placeholder="Digite o codigo..." type="text" value="">
+                                                                    <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-3 col-auto">
-                                                                <label class="label" for="codigoFabricante">Código Fabricante</label>
+                                                            <section class="col col-3">
+                                                                <label class="label">Código Fabricante</label>
                                                                 <label class="input">
-                                                                    <input id="codigoFabricante" name="codigoFabricante" type="text" class="" maxlength="50" autocomplete="off">
+                                                                    <input id="codigoFabricanteId" name="codigoFabricanteId" type="hidden" value="">
+                                                                    <input id="codigoFabricante" name="codigoFabricanteFiltro" autocomplete="off" class="form-control " placeholder="Digite o codigo..." type="text" value="">
+                                                                    <i class="icon-append fa fa-filter"></i>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3 col-auto">
@@ -110,7 +114,7 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <div class="row">
-                                                        <section class="col col-3">
+                                                            <section class="col col-3">
                                                                 <label class="label" for="localizacaoItem">Unidade</label>
                                                                 <label class="select">
                                                                     <select id="unidade" name="unidade" class="">
@@ -128,10 +132,10 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                        <section class="col col-3">
+                                                            <section class="col col-3">
                                                                 <label class="label" for="estoque">Estoque</label>
                                                                 <label class="select">
-                                                                    <select id="estoque" name="estoque" class="" >
+                                                                    <select id="estoque" name="estoque" class="">
                                                                         <option value=""></option>
                                                                         <?php
                                                                         $reposit = new reposit();
@@ -149,7 +153,7 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label" for="grupoItem">Grupo item</label>
                                                                 <label class="select">
-                                                                    <select id="grupoItem" name="grupoItem" class=""  >
+                                                                    <select id="grupoItem" name="grupoItem" class="">
                                                                         <option value=""></option>
                                                                         <?php
                                                                         $reposit = new reposit();
@@ -167,7 +171,7 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label" for="localizacaoItem">Localização do item</label>
                                                                 <label class="select">
-                                                                    <select id="localizacaoItem" name="localizacaoItem" class="" >
+                                                                    <select id="localizacaoItem" name="localizacaoItem" class="">
                                                                         <option value=""></option>
                                                                         <?php
                                                                         $reposit = new reposit();
@@ -249,11 +253,103 @@ include("inc/scripts.php");
         $('#btnNovo').on("click", function() {
             novo();
         });
+
+        $("#codigoItem").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'js/sqlscope_cadastroCodigoItem.php',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        maxRows: 12,
+                        funcao: "listaCodigoAtivoAutoComplete",
+                        descricaoIniciaCom: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                id: item.id,
+                                label: item.descricao,
+                                value: item.descricao,
+                                descricaoItem: item.descricaoItem,
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 3,
+
+            select: function(event, ui) {
+                $("#codigoItemId").val(ui.item.id);
+                $("#codigoItemFiltro").val(ui.item.nome);
+                var descricaoId = $("#codigoItemId").val();
+                $("#codigoItem").val(descricaoId)
+                $("#codigoItemFiltro").val('');
+
+            },
+            change: function(event, ui) {
+                if (ui.item === null) {
+                    $("#codigoItemId").val('');
+                    $("#codigoItemFiltro").val('');
+                }
+            }
+        }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#codigoFabricante").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'js/sqlscope_cadastroCodigoItem.php',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        maxRows: 12,
+                        funcao: "listaFabricanteAtivoAutoComplete",
+                        descricaoIniciaCom: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                id: item.id,
+                                label: item.descricao,
+                                value: item.descricao,
+                                descricaoItem: item.descricaoItem,
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 3,
+
+            select: function(event, ui) {
+                $("#codigoFabricanteId").val(ui.item.id);
+                $("#codigoFabricanteFiltro").val(ui.item.nome);
+                var descricaoId = $("#codigoFabricanteId").val();
+                $("#codigoFabricante").val(descricaoId)
+                $("#codigoFabricanteFiltro").val('');
+
+            },
+            change: function(event, ui) {
+                if (ui.item === null) {
+                    $("#codigoFabricanteId").val('');
+                    $("#codigoFabricanteFiltro").val('');
+                }
+            }
+        }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+        };
     });
 
     function listarFiltro() {
 
-        var codigoItem = $('#codigoItem').val();
+        var codigoItem = $('#codigoItemId').val();
         var codigoFabricante = $('#codigoFabricante').val();
         var descricaoItem = $('#descricaoItem').val();
         var estoque = $('#estoque').val();
@@ -262,8 +358,8 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
         var unidade = $('#unidade').val();
 
-        var parametrosUrl = '&codigoItem=' + codigoItem + '&codigoFabricante=' + codigoFabricante + '&descricaoItem=' + descricaoItem + '&estoque=' + estoque + 
-                            '&grupoItem=' + grupoItem + '&localizacaoItem=' + localizacaoItem + '&ativo=' + ativo + '&unidade=' + unidade;
+        var parametrosUrl = '&codigoItem=' + codigoItem + '&codigoFabricante=' + codigoFabricante + '&descricaoItem=' + descricaoItem + '&estoque=' + estoque +
+            '&grupoItem=' + grupoItem + '&localizacaoItem=' + localizacaoItem + '&ativo=' + ativo + '&unidade=' + unidade;
 
         $('#resultadoBusca').load('cadastro_codigoItemFiltroListagem.php?' + parametrosUrl);
     }

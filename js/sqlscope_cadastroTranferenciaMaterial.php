@@ -50,7 +50,7 @@ function grava()
         ";
 
     $reposit = new reposit();
-    //$result = $reposit->Execprocedure($sql);
+    $result = $reposit->Execprocedure($sql);
 
     $ret = 'success';
     if ($result < 1) {

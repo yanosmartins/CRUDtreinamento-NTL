@@ -246,7 +246,7 @@ include("inc/nav.php");
                                                                             ?>
                                                                         </select><i></i>
                                                                 </section>
-                                                                
+
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-12">
@@ -460,6 +460,8 @@ include("inc/scripts.php");
                 $("#unidade").val(ui.item.unidade);
                 popularComboEstoque();
                 $("#estoque").val(ui.item.estoque);
+                var estoqueId = $("#estoque").val();
+
                 $("#quantidadeEstoque").val(ui.item.quantidade);
                 $("#quantidadeReservada").val(ui.item.quantidadeReservada);
                 $("#quantidadeForaEstoque").val(ui.item.quantidadeFora);
@@ -467,6 +469,7 @@ include("inc/scripts.php");
                 $("#unidadeMedida").val(ui.item.unidadeItem);
                 $("#consumivel").val(ui.item.consumivel);
                 $("#autorizacao").val(ui.item.autorizacao);
+                recuperaQuantidade(descricaoId, estoqueId);
 
             },
             change: function(event, ui) {
@@ -533,6 +536,8 @@ include("inc/scripts.php");
                 $("#unidade").val(ui.item.unidade);
                 popularComboEstoque();
                 $("#estoque").val(ui.item.estoque);
+                var estoqueId = $("#estoqueDestino").val();
+
                 $("#quantidadeEstoque").val(ui.item.quantidade);
                 $("#quantidadeReservada").val(ui.item.quantidadeReservada);
                 $("#quantidadeForaEstoque").val(ui.item.quantidadeFora);
@@ -540,6 +545,8 @@ include("inc/scripts.php");
                 $("#unidadeMedida").val(ui.item.unidadeItem);
                 $("#consumivel").val(ui.item.consumivel);
                 $("#autorizacao").val(ui.item.autorizacao);
+                recuperaQuantidade(descricaoId, estoqueId);
+
             },
             change: function(event, ui) {
                 if (ui.item === null) {
@@ -597,68 +604,6 @@ include("inc/scripts.php");
             popularComboEstoque();
         });
 
-
-        $("#quantidade").on("change", function() {
-            var quantidade = $("#quantidade").val();
-            var unitario = $("#unitario").val();
-            var desconto = $("#desconto").val();
-
-            if (unitario == "") {
-                return;
-            }
-            if (desconto == "") {
-                var desconto = '0';
-                $("#desconto").val('0,00');
-            }
-            unitario = unitario.replace(/,/g, ".");
-            desconto = desconto.replace(/,/g, ".");
-
-            var total = (parseFloat(unitario) * parseFloat(quantidade)) - parseFloat(desconto);
-            $("#final").val(total);
-            $("#final").focusout();
-
-        });
-
-        $("#unitario").on("change", function() {
-            var quantidade = $("#quantidade").val();
-            var unitario = $("#unitario").val();
-            var desconto = $("#desconto").val();
-
-            if (quantidade == "") {
-                return;
-            }
-            if (desconto == "") {
-                var desconto = '0';
-                $("#desconto").val('0,00');
-            }
-            unitario = unitario.replace(/,/g, ".");
-            desconto = desconto.replace(/,/g, ".");
-
-            var total = (parseFloat(unitario) * parseFloat(quantidade)) - parseFloat(desconto);
-            $("#final").val(total);
-            $("#final").focusout();
-
-        });
-
-        $("#desconto").on("change", function() {
-            var quantidade = $("#quantidade").val();
-            var unitario = $("#unitario").val();
-            var desconto = $("#desconto").val();
-
-            if (unitario == "") {
-                return;
-            }
-            if (quantidade == "") {
-                return;
-            }
-            unitario = unitario.replace(/,/g, ".");
-            desconto = desconto.replace(/,/g, ".");
-
-            var total = (parseFloat(unitario) * parseFloat(quantidade)) - parseFloat(desconto);
-            $("#final").val(total);
-            $("#final").focusout();
-
-        });
 
         $("#btnNovo").on("click", function() {
             novo();
@@ -760,22 +705,11 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'estoque_entradaMaterialFiltro.php');
+        $(location).attr('href', 'estoque_transferenciaMaterialCadastro.php');
     }
 
     function novo() {
-        $(location).attr('href', 'estoque_entradaMaterialCadastro.php');
-    }
-
-    function excluir() {
-        var codigo = +$("#codigo").val();
-
-        if (codigo === 0) {
-            smartAlert("Atenção", "Selecione uma Entrada Material para excluir!", "error");
-            return;
-        }
-
-        excluirEntradaItem(codigo);
+        $(location).attr('href', 'estoque_transferenciaMaterialCadastro.php');
     }
 
     function popularComboEstoque() {

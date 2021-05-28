@@ -31,6 +31,9 @@ if ($funcao == 'listaClienteFornecedorAtivoAutoComplete') {
 if ($funcao == 'populaComboEstoque') {
     call_user_func($funcao);
 }
+if ($funcao == 'recuperaFornecedorObrigatorio') {
+    call_user_func($funcao);
+}
 
 return;
 
@@ -58,8 +61,9 @@ function grava()
     $dataEmissao = validaData($_POST['dataEmissao']);
     $dataEntrada = validaData($_POST['dataEntrega']);
     $observacao =  validaString($_POST['observacao']);
+    $naturezaOperacao = (int)$_POST['naturezaOperacao'];
 
-    if($numero ==""){
+    if ($numero == "") {
         $numero = $codigo;
     }
 
@@ -109,7 +113,8 @@ function grava()
         $numero,
         $dataEmissao,
         $dataEntrada,
-        $observacao, 
+        $observacao,
+        $naturezaOperacao, 
         $usuario, 
         $xmlItem
         ";
@@ -136,7 +141,7 @@ function recupera()
     }
 
     $sql = "SELECT EM.codigo, EM.fornecedor, F.apelido, EM.tipoDocumento , T.descricao AS descricaoTipoDocumento, 
-    EM.numeroNF, EM.dataEntradaMaterial,EM.dataEntrega, EM.dataEmissaoNF, EM.observacao
+    EM.numeroNF, EM.dataEntradaMaterial,EM.dataEntrega, EM.dataEmissaoNF, EM.observacao, EM.naturezaOperacao
     FROM Estoque.entradaMaterial EM
     LEFT JOIN Ntl.fornecedor F ON F.codigo = EM.fornecedor
     LEFT JOIN Estoque.tipoDocumento T ON T.codigo = EM.tipoDocumento
@@ -157,6 +162,7 @@ function recupera()
     $dataEntrada = $row['dataEntrega'];
     $dataEmissaoNF = $row['dataEmissaoNF'];
     $observacao = $row['observacao'];
+    $naturezaOperacao = $row['naturezaOperacao'];
 
     $valorEstimado = number_format($row['valorEstimado'], 2, ',', '.');
 
@@ -240,7 +246,8 @@ function recupera()
         $numeroNF . "^" .
         $dataEntrada . "^" .
         $dataEmissaoNF . "^" .
-        $observacao;
+        $observacao . "^" .
+        $naturezaOperacao;
 
     if ($out == "") {
         echo "failed#";
@@ -442,8 +449,8 @@ function listaCodigoAtivoAutoComplete()
         $codigoItem = $row["codigoItem"];
         $descricaoItem = $row["descricaoItem"] . " " . $row["indicador"];
 
-        $sql = "SELECT SUM(quantidade) as quantidade FROM Estoque.entradaMaterialItem WHERE material =". $id ."AND estoque =" . $estoque;
-        $result = $reposit->RunQuery($sql); 
+        $sql = "SELECT SUM(quantidade) as quantidade FROM Estoque.entradaMaterialItem WHERE material =" . $id . "AND estoque =" . $estoque;
+        $result = $reposit->RunQuery($sql);
         if ($row = $result[0]) {
             $quantidade = (int)$row['quantidade'];
         }
@@ -495,6 +502,36 @@ function populaComboEstoque()
         echo "failed#";
         return;
     }
+}
+
+function recuperaFornecedorObrigatorio()
+{
+    session_start();
+    $id = $_SESSION['funcionario'];
+
+    $sql = "SELECT BP.codigo, BP.projeto, P.fornecedorObrigatorio
+    FROM Ntl.beneficioProjeto BP
+	LEFT JOIN Ntl.projeto P ON P.codigo = BP.projeto 
+    WHERE (0=0) AND
+    BP.funcionario = " . $id;
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $out = "";
+    if ($row = $result[0]) {
+        $fornecedorObrigatorio = $row['fornecedorObrigatorio'];
+    }
+
+    $out =  $fornecedorObrigatorio;
+
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out;
+    return;
 }
 
 function validaString($value)
