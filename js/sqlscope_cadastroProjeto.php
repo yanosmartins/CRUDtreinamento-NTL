@@ -38,7 +38,7 @@ function gravaProjeto()
     }
 
     $reposit = new reposit();
-
+    $comum = new comum();
 
     //Variáveis
     session_start();
@@ -115,6 +115,10 @@ function gravaProjeto()
     $limiteEntrada = validaString($projeto['limiteEntrada']);
     $limiteSaida = validaString($projeto['limiteSaida']);
     $imprimeCargo = $projeto['imprimeCargo'];
+    $fornecedorVAVR = (int)$projeto['apelidoFornecedorId'];
+    if(!$fornecedorVAVR)
+        $fornecedorVAVR = $comum->formataNuloGravar($fornecedorVAVR);
+
     //------------------------PROJETO Telefone------------------
     $strArrayTelefone = $projeto['jsonTelefone'];
     $arrayTelefone = json_decode($strArrayTelefone, true);
@@ -332,7 +336,8 @@ function gravaProjeto()
         $limiteSaida,
         $imprimeCargo,
         $fornecedorObrigatorio,
-        $xmlJsonResponsavel";
+        $xmlJsonResponsavel,
+        $fornecedorVAVR";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -356,7 +361,18 @@ function recuperaProjeto()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT * FROM Ntl.projeto WHERE codigo = " . $id;
+    $sql = "SELECT P.codigo,P.ativo,P.cnpj,P.descricao,P.apelido,P.seguroVida,P.cep,P.numeroEndereco,P.complemento,P.bairro,P.cidade,P.estado,P.usuarioCadastro,
+                    P.dataCadastro,P.usuarioAlteracao,P.dataAlteracao,P.dataAssinatura,P.dataRenovacao,P.endereco,P.diaUtilJaneiroVT,P.diaUtilFevereiroVT,
+                    P.diaUtilMarcoVT,P.diaUtilAbrilVT,P.diaUtilMaioVT,P.diaUtilJunhoVT,P.diaUtilJulhoVT,P.diaUtilAgostoVT,P.diaUtilSetembroVT,P.diaUtilOutubroVT,
+                    P.diaUtilNovembroVT,P.diaUtilDezembroVT,P.descontoVT,P.descontoFeriasVT,P.valorDiarioVT,P.valorMensalVT,P.descontoFolhaVT,P.valorDescontoFolhaVT,
+                    P.numeroCentroCusto,P.descontoFolhaPlanoSaude,P.valorDescontoFolhaPlanoSaude,P.diaUtilJaneiroVAVR,P.diaUtilFevereiroVAVR,P.diaUtilMarcoVAVR,P.diaUtilAbrilVAVR,
+                    P.diaUtilMaioVAVR,P.diaUtilJunhoVAVR,P.diaUtilJulhoVAVR,P.diaUtilAgostoVAVR,P.diaUtilSetembroVAVR,P.diaUtilOutubroVAVR,P.diaUtilNovembroVAVR,
+                    P.diaUtilDezembroVAVR,P.descontoVAVR,P.descontoFeriasVAVR,P.valorDiarioVAVR,P.valorMensalVAVR,P.descontoFolhaVAVR,P.valorDescontoFolhaVAVR,
+                    P.municipioFerias,P.razaoSocial,P.contratoSYSGEF,P.limiteEntrada,P.limiteSaida,P.imprimeCargo,P.fornecedorObrigatorio,P.fornecedorVAVR,
+                    F.apelido AS apelidoFornecedor
+                    FROM Ntl.projeto AS P 
+                    LEFT JOIN Ntl.fornecedor AS F on F.codigo = P.fornecedorVAVR
+                    WHERE P.codigo = " . $id;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
@@ -452,6 +468,8 @@ function recuperaProjeto()
         $limiteEntrada = (string)$row['limiteEntrada'];
         $limiteSaida = (string)$row['limiteSaida'];
         $imprimeCargo = (int)$row['imprimeCargo'];
+        $apelidoFornecedorId = $row['fornecedorVAVR'];
+        $apelidoFornecedor = $row['apelidoFornecedor'];
 
         $out = $id . "^" .
             $cnpj . "^" .
@@ -486,7 +504,6 @@ function recuperaProjeto()
             $valorMensalVAVR . "^" .
             $descontoFolhaVAVR . "^" .
             $valorDescontoFolhaVAVR . "^" .
-
             $diaUtilJaneiroVT . "^" .
             $diaUtilFevereiroVT . "^" .
             $diaUtilMarcoVT . "^" .
@@ -513,7 +530,9 @@ function recuperaProjeto()
             $limiteEntrada . "^" .
             $limiteSaida . "^" .
             $imprimeCargo . "^" .
-            $fornecedorObrigatorio;
+            $fornecedorObrigatorio . "^" .
+            $apelidoFornecedorId . "^" . 
+            $apelidoFornecedor;
 
         //----------------------Montando o array do Telefone
         $sql = "SELECT * FROM Ntl.projeto SI 

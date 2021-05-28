@@ -110,14 +110,7 @@ include("inc/nav.php");
                                                                     <input id="descricao" maxlength="70" name="descricao" autocomplete="off" placeholder="Digite a descrição do projeto" type="text" class=" required">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label" for="fornecedorObrigatorio">Preencher Fornecedor na Ent. Material</label>
-                                                                <label class="select">
-                                                                    <select id="fornecedorObrigatorio" name="fornecedorObrigatorio" class="required">
-                                                                        <option value="0">Não</option>
-                                                                        <option value="1">Sim</option>
-                                                                    </select><i></i>
-                                                            </section>
+
                                                         </div>
 
                                                         <div class="row">
@@ -202,6 +195,14 @@ include("inc/nav.php");
                                                                         <option value='0'>Não</option>
                                                                     </select><i></i>
                                                                 </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="fornecedorObrigatorio">Preencher Fornecedor na Ent. Material</label>
+                                                                <label class="select">
+                                                                    <select id="fornecedorObrigatorio" name="fornecedorObrigatorio" class="required">
+                                                                        <option value="0">Não</option>
+                                                                        <option value="1">Sim</option>
+                                                                    </select><i></i>
                                                             </section>
                                                         </div>
                                                     </fieldset>
@@ -493,9 +494,22 @@ include("inc/nav.php");
                                             </div>
                                             <div id="collapseValeAlimentacao" class="panel-collapse collapse">
                                                 <div class="panel-body no-padding">
-
                                                     <fieldset>
-
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <legend>Dados do fornecedor para planilha</legend>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-3">
+                                                                <label class="label">Fornecedor</label>
+                                                                <label class="input">
+                                                                    <input id="apelidoFornecedorId" name="apelidoFornecedorId" type="hidden" value="">
+                                                                    <input id="apelidoFornecedor" name="apelidoFornecedor" autocomplete="off" class="form-control" placeholder="Digite o Apelido..." type="text" value="">
+                                                                    <i class="icon-append fa fa-filter"></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
                                                         <div class="row">
                                                             <section class="col col-12">
                                                                 <legend>Dias Úteis</legend>
@@ -1624,8 +1638,51 @@ include("inc/scripts.php");
         $("#btnRemoverResponsavel").on("click", function() {
             excluirResponsavel();
         });
-
         //responsavel
+
+        $("#apelidoFornecedor").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'js/sqlscope_beneficioProdutoBeneficio.php',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        maxRows: 12,
+                        funcao: "listaFornecedorAutoComplete",
+                        descricaoIniciaCom: request.term
+                    },
+                    success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                id: item.id,
+                                label: item.apelido,
+                                value: item.apelido
+                            };
+                        }));
+                    },
+                });
+            },
+            minLength: 3,
+
+            select: function(event, ui) {
+                $("#apelidoFornecedorId").val(ui.item.id);
+                $("#apelidoFornecedor").val(ui.item.apelido);
+            },
+
+            change: function(event, ui) {
+
+                if (ui.item === null) {
+                    $("#apelidoFornecedorId").val('');
+                    $("#apelidoFornecedor").val('');
+                }
+            }
+        }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+
+        };
 
         carregaPagina();
 
@@ -1718,6 +1775,8 @@ include("inc/scripts.php");
                             var limiteSaida = piece[57];
                             var imprimeCargo = piece[58];
                             var fornecedorObrigatorio = piece[59];
+                            var apelidoFornecedorId = piece[60];
+                            var apelidoFornecedor = piece[61];
 
                             $("#codigo").val(codigo);
                             $("#cnpj").val(cnpj);
@@ -1791,6 +1850,9 @@ include("inc/scripts.php");
                             $("#limiteSaida").val(limiteSaida);
                             $("#imprimeCargo").val(imprimeCargo);
                             $("#jsonResponsavel").val(strArrayResponsavel);
+
+                            $("#apelidoFornecedorId").val(apelidoFornecedorId);
+                            $("#apelidoFornecedor").val(apelidoFornecedor);
 
                             jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
                             jsonEmailArray = JSON.parse($("#jsonEmail").val());
