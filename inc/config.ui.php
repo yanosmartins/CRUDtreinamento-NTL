@@ -184,9 +184,9 @@ if ($condicaoBeneficioOk) {
         $page_nav['beneficio']['sub']['tabela'] = array("title" => "Tabelas");
         $page_nav['beneficio']['sub']['tabela']['sub'] = array();
 
-        if (in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['beneficio']['sub']['tabela']['sub'] += array("beneficioIndireto" => array("title" => "Benefício Indireto", "url" => APP_URL . "/tabelaBasica_beneficioIndiretoFiltro.php")); //SYSCB 
-        }
+        // if (in_array('BENEFICIOINDIRETO_ACESSAR', $arrayPermissao, true)) { // após a reunião no dia 24/05/2021 optamos por desabilitar a tela pois eram campos fixos no codigo nas outras telas.
+        //     $page_nav['beneficio']['sub']['tabela']['sub'] += array("beneficioIndireto" => array("title" => "Benefício Indireto", "url" => APP_URL . "/tabelaBasica_beneficioIndiretoFiltro.php")); //SYSCB 
+        // }
 
         if (in_array('DEPARTAMENTO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['tabela']['sub'] += array("departamento" => array("title" => "Departamento", "url" => APP_URL . "/tabelaBasica_departamentoFiltro.php")); //SYSGEF
