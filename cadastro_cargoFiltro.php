@@ -82,7 +82,7 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label" for="cbo">CBO</label>
                                                                 <label class="input">
-                                                                    <input id="cbo" maxlength="9" name="cbo" value="" autocomplete="off" onkeypress="return seNumero(event)">
+                                                                    <input id="cbo" maxlength="9" name="cbo" value="" autocomplete="off" >
                                                                 </label>
                                                             </section>
 
