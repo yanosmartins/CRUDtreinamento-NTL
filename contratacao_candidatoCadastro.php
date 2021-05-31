@@ -4170,6 +4170,14 @@ include("inc/scripts.php");
                 smartAlert("Atenção", "Digite sua Conta Bancaria.", "error");
                 return;
             }
+
+            let digitoContaBanco = $("#digitoContaBanco").val();
+            if (!digitoContaBanco) {
+                smartAlert("Atenção", "Digite o digito de sua Conta Bancaria.", "error");
+                return;
+            }
+
+            
         }
 
         gravaFuncionario(formData);
