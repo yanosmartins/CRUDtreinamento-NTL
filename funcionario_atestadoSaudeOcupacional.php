@@ -115,7 +115,6 @@ include("inc/nav.php");
                                                                             foreach ($result as $row) {
                                                                                 $codigoFuncionario = (int) $row['codigo'];
                                                                                 $nome = $row['nome'];
-
                                                                                 echo '<option value=' . $codigoFuncionario . '>' . $nome . '</option>';
                                                                             }
                                                                         }
@@ -286,7 +285,7 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
 
-                                                              
+
                                                                 <section class="col col-2">
                                                                     <label class="label" for="dataProximoAsoLista"></label>
                                                                     <label class="input">
@@ -604,7 +603,7 @@ include("inc/scripts.php");
                             const dataAgendamento = piece[12]
                             const cargoId = piece[13];
                             const projetoId = piece[14];
-                            
+
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
@@ -654,7 +653,7 @@ include("inc/scripts.php");
                                     sequencialDataAso: obj.sequencialDataAso,
                                     situacao: obj.situacao,
                                     tipoExame: obj.tipoExame,
-                                    descricaoTipoExame : obj.descricaoTipoExame,
+                                    descricaoTipoExame: obj.descricaoTipoExame,
                                     fileUploadAso: files[index]
                                 })
                             })
@@ -957,6 +956,15 @@ include("inc/scripts.php");
         const dataProximoAso = $('#dataProximoAso').val();
         const ativo = $('#ativo').val();
 
+        if (!matricula) {
+            smartAlert("Erro", "Operação não foi realizada!", "error");
+            return false;
+        }
+        if (!cargo) {
+            smartAlert("Erro", "Operação não foi realizada!", "error");
+            return false;
+        }
+
         const dataAso = {
             id,
             funcionario,
@@ -1023,7 +1031,6 @@ include("inc/scripts.php");
             function(data) {
                 var atributoId = '#' + 'estoqueDestino';
                 if (data.indexOf('failed') > -1) {
-
                     $("#funcionario").focus()
                     // $("#matricula").val("")
                     return;
@@ -1032,34 +1039,47 @@ include("inc/scripts.php");
                     $("#funcionario").removeClass("readonly")
                     data = data.replace(/failed/g, '');
                     var piece = data.split("#");
-                    var mensagem = piece[0];
-                    var registros = piece[1].split("^");
-                    var matricula = registros[2];
-                    var cargo = registros[3];
-                    var projeto = registros[4];
-                    var sexo = registros[5];
-                    var dataNascimento = registros[6];
-                    var dataAdmissao = registros[8];
-                    var idade = registros[7];
-                    var cargoId = registros[9];
-                    var projetoId = registros[10];
-
-                    $("#matricula").val(matricula);
-                    $("#cargo").val(cargo);
-                    $("#projeto").val(projeto);
-
-                    if (sexo == 'M') {
-                        sexo = 'Masculino'
+                    if (piece == "") {
+                        smartAlert("Erro", "Funcionario ja está cadastrado!", "error");
+                        $("#matricula").val('');
+                        $("#cargo").val('') ;
+                        $("#projeto").val('') ;
+                        $("#sexo").val('') ;
+                        $("#dataNascimento").val('') ;
+                        $("#dataAdmissao").val('') ;
+                        $("#idade").val('') ;
+                        $("#cargoId").val('') ;
+                        $("#projetoId").val('') ;
                     } else {
-                        sexo = 'Feminino'
-                    }
-                    $("#sexo").val(sexo);
-                    $("#dataNascimento").val(dataNascimento);
-                    $("#dataAdmissao").val(dataAdmissao);
-                    $("#idade").val(idade);
-                    $("#cargoId").val(cargoId);
-                    $("#projetoId").val(projetoId);
+                        var mensagem = piece[0];
+                        var registros = piece[1].split("^");
+                        var matricula = registros[2];
+                        var cargo = registros[3];
+                        var projeto = registros[4];
+                        var sexo = registros[5];
+                        var dataNascimento = registros[6];
+                        var dataAdmissao = registros[8];
+                        var idade = registros[7];
+                        var cargoId = registros[9];
+                        var projetoId = registros[10];
 
+                        $("#matricula").val(matricula);;
+                        $("#cargo").val(cargo);;
+                        $("#projeto").val(projeto);;
+
+                        if (sexo == 'M') {
+                            sexo = 'Masculino'
+                        } else {
+                            sexo = 'Feminino'
+                        }
+                        $("#sexo").val(sexo);;
+                        $("#dataNascimento").val(dataNascimento);;
+                        $("#dataAdmissao").val(dataAdmissao);;
+                        $("#idade").val(idade);;
+                        $("#cargoId").val(cargoId);;
+                        $("#projetoId").val(projetoId);;
+
+                    }
 
                 }
             }
@@ -1083,105 +1103,105 @@ include("inc/scripts.php");
                 } else {
                     $("#funcionario").prop("disabled", false)
                     $("#funcionario").removeClass("readonly")
-                            data = data.replace(/failed/g, '');
-                            let piece = data.split("#");
-                            const mensagem = piece[0];
-                            const out = piece[1];
-                            let JsonUpload = JSON.parse(piece[2]);
-                            piece = out.split("^");
+                    data = data.replace(/failed/g, '');
+                    let piece = data.split("#");
+                    const mensagem = piece[0];
+                    const out = piece[1];
+                    let JsonUpload = JSON.parse(piece[2]);
+                    piece = out.split("^");
 
-                            const codigo = +piece[0];
-                            const funcionario = piece[1];
-                            const matricula = piece[2];
-                            const cargo = piece[3];
-                            const projeto = piece[4];
-                            const sexo = piece[5];
-                            const dataNascimento = piece[6];
-                            const idade = piece[7]
-                            const dataAdmissao = piece[8]
-                            const ativo = piece[9]
-                            const dataUltimoAso = piece[10]
-                            const dataProximoAso = piece[11]
-                            const dataAgendamento = piece[12]
-                            const cargoId = piece[13];
-                            const projetoId = piece[14];
+                    const codigo = +piece[0];
+                    const funcionario = piece[1];
+                    const matricula = piece[2];
+                    const cargo = piece[3];
+                    const projeto = piece[4];
+                    const sexo = piece[5];
+                    const dataNascimento = piece[6];
+                    const idade = piece[7]
+                    const dataAdmissao = piece[8]
+                    const ativo = piece[9]
+                    const dataUltimoAso = piece[10]
+                    const dataProximoAso = piece[11]
+                    const dataAgendamento = piece[12]
+                    const cargoId = piece[13];
+                    const projetoId = piece[14];
 
-                            //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
-                            $("#codigo").val(codigo);
-                            $("#funcionario").val(funcionario);
-                            $("#matricula").val(matricula);
-                            $("#cargo").val(cargo);
-                            $("#projeto").val(projeto);
-                            $("#sexo").val(sexo);
-                            $("#dataNascimento").val(dataNascimento);
-                            $("#idade").val(idade);
-                            $("#ativo").val(ativo);
-                            $("#dataAdmissao").val(dataAdmissao);
-                            $("#dataUltimoAso").val(dataUltimoAso);
-                            $("#dataProximoAso").val(dataProximoAso);
-                            $("#dataAgendamento").val(dataAgendamento);
-                            $("#cargoId").val(cargoId);
-                            $("#projetoId").val(projetoId);
+                    //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
+                    $("#codigo").val(codigo);
+                    $("#funcionario").val(funcionario);
+                    $("#matricula").val(matricula);
+                    $("#cargo").val(cargo);
+                    $("#projeto").val(projeto);
+                    $("#sexo").val(sexo);
+                    $("#dataNascimento").val(dataNascimento);
+                    $("#idade").val(idade);
+                    $("#ativo").val(ativo);
+                    $("#dataAdmissao").val(dataAdmissao);
+                    $("#dataUltimoAso").val(dataUltimoAso);
+                    $("#dataProximoAso").val(dataProximoAso);
+                    $("#dataAgendamento").val(dataAgendamento);
+                    $("#cargoId").val(cargoId);
+                    $("#projetoId").val(projetoId);
 
-                            const files = []
-                            const jsonUploadAso = []
-                            //OK
-                            for (obj of JsonUpload) {
-                                let file = await fetch(obj.fileUploadAso)
-                                file = await file.blob()
-                                file = new File([file], obj.fileName, {
-                                    type: "application/pdf"
-                                })
-                                files.push(file)
-                            }
+                    const files = []
+                    const jsonUploadAso = []
+                    //OK
+                    for (obj of JsonUpload) {
+                        let file = await fetch(obj.fileUploadAso)
+                        file = await file.blob()
+                        file = new File([file], obj.fileName, {
+                            type: "application/pdf"
+                        })
+                        files.push(file)
+                    }
 
-                            JsonUpload.forEach((obj, index) => {
-                                let dataRealizacaoAso = obj.dataRealizacaoAso.split(" ")
-                                let aux = dataRealizacaoAso[0].split("-")
-                                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
-                                dataRealizacaoAso = aux
+                    JsonUpload.forEach((obj, index) => {
+                        let dataRealizacaoAso = obj.dataRealizacaoAso.split(" ")
+                        let aux = dataRealizacaoAso[0].split("-")
+                        aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                        dataRealizacaoAso = aux
 
-                                let dataProximoAsoLista = obj.dataProximoAsoLista.split(" ")
-                                aux = dataProximoAsoLista[0].split("-")
-                                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
-                                dataProximoAsoLista = aux
+                        let dataProximoAsoLista = obj.dataProximoAsoLista.split(" ")
+                        aux = dataProximoAsoLista[0].split("-")
+                        aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                        dataProximoAsoLista = aux
 
-                                let tipoExame = obj.tipoExame
+                        let tipoExame = obj.tipoExame
 
-                                jsonUploadAso.push({
-                                    dataRealizacaoAso: dataRealizacaoAso,
-                                    dataProximoAsoLista: dataProximoAsoLista,
-                                    sequencialDataAso: obj.sequencialDataAso,
-                                    situacao: obj.situacao,
-                                    tipoExame: obj.tipoExame,
-                                    descricaoTipoExame : obj.descricaoTipoExame,
-                                    fileUploadAso: files[index]
-                                })
-                            })
+                        jsonUploadAso.push({
+                            dataRealizacaoAso: dataRealizacaoAso,
+                            dataProximoAsoLista: dataProximoAsoLista,
+                            sequencialDataAso: obj.sequencialDataAso,
+                            situacao: obj.situacao,
+                            tipoExame: obj.tipoExame,
+                            descricaoTipoExame: obj.descricaoTipoExame,
+                            fileUploadAso: files[index]
+                        })
+                    })
 
-                            jsonDataAsoArray = jsonUploadAso
-                            fillTableDataAso();
+                    jsonDataAsoArray = jsonUploadAso
+                    fillTableDataAso();
 
-                            const dataTeste = new Date();
-                            let dataProximo = $("#dataProximoAso").val();
-                            let aux = dataProximo.split("/");
-                            dataProximo = new Date(aux[2], aux[1] - 1, aux[0])
-                            let diasAtrasoTeste = $("#diasAtraso").val();
+                    const dataTeste = new Date();
+                    let dataProximo = $("#dataProximoAso").val();
+                    let aux = dataProximo.split("/");
+                    dataProximo = new Date(aux[2], aux[1] - 1, aux[0])
+                    let diasAtrasoTeste = $("#diasAtraso").val();
 
-                            if (dataTeste > dataProximo) {
-                                const diff = dataTeste.getDate() - dataProximo.getDate()
-                                if (diff >= 1)
-                                    $("#diasAtraso").val(diff)
-                            } else {
-                                $("#diasAtraso").val('')
-                            }
+                    if (dataTeste > dataProximo) {
+                        const diff = dataTeste.getDate() - dataProximo.getDate()
+                        if (diff >= 1)
+                            $("#diasAtraso").val(diff)
+                    } else {
+                        $("#diasAtraso").val('')
+                    }
 
 
-                            if (dataUltimoAso != "") {
-                                <?php $funcionario = "readonly" ?>
-                            }
+                    if (dataUltimoAso != "") {
+                        <?php $funcionario = "readonly" ?>
+                    }
 
-                            return;
+                    return;
                 }
             }
         );
