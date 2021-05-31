@@ -33,18 +33,7 @@ function recuperaFolhaPontoMensal(funcionario = 0, mesAno, callback) {
   return
 }
 
-function excluirFolhaPontoMensal(id, callback) {
-  $.ajax({
-    url: 'js/sqlscope_beneficioFolhaPontoMensal.php', //caminho do arqivo a ser executado
-    dataType: 'html', //tipo do retorno
-    type: 'post', //metodo de envio
-    data: { funcao: 'excluir', id: id }, //valores enviados ao script
-
-    success: function (data) {
-      callback(data)
-    },
-  })
-}
+//==============================================
 
 function consultarLancamento(id, callback) {
   $.ajax({
@@ -72,6 +61,8 @@ function consultarPermissoes(callback) {
   })
 }
 
+//==============================================
+
 function enviarArquivo(jsonData , callback) {
   $.ajax({
     url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
@@ -97,17 +88,3 @@ function recuperaArquivo(callback) {
   })
 }
 
-function atualizar(form, callback) {
-  form.append('funcao', 'atualizarStatus')
-  $.ajax({
-    url: 'js/sqlscope_beneficioFolhaPontoMensal.php',
-    processData:false,
-    contentType: false,
-    cache:false,
-    data: form,
-    type: 'post',
-    success: function (data) {
-      callback(data)
-    }
-  })
-}
