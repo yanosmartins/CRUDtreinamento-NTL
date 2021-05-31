@@ -133,8 +133,14 @@ function recupera()
     session_start();
 
     $funcionario = (int)$_POST["funcionario"];
+
+    if($funcionario != $_SESSION["funcionario"]){
+        echo "failed#Não há permissão para acessar a folha de outro funcionário#";
+        return;
+    }
+
     $mesAno = $_POST["mesAno"];
-    $mesAno = preg_replace("/\d\d$/", "01", $mesAno);
+    $mesAno = preg_replace("/\d{2}$/", "01", $mesAno);
 
     $data = explode('-', $mesAno);
     $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
@@ -157,7 +163,7 @@ function recupera()
     $observacao = "";
     $toleranciaAtraso = "05:00";
     $toleranciaExtra = "05:00";
-    $status = null;
+    $status = 0;
 
     if ($folha) {
         $sql =
@@ -193,9 +199,7 @@ function recupera()
 
     $out =
         $folha . "^" .
-        $funcionario . "^" .
         $observacao . "^" .
-        $mesAno . "^" .
         $toleranciaAtraso . "^" .
         $toleranciaExtra . "^" .
         $status;
@@ -283,36 +287,6 @@ function recupera()
     return;
 }
 
-function excluir()
-{
-    $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("FOLHAPONTO_ACESSAR|FOLHAPONTO_EXCLUIR");
-
-    if ($possuiPermissao === 0) {
-        $mensagem = "O usuário não tem permissão para excluir!";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    }
-
-    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um Caução.";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    } else {
-        $id = (int) $_POST["id"];
-    }
-
-    $result = $reposit->update('Funcionario.folhaPontoMensal' . '|' . 'ativo = 0' . '|' . 'codigo = ' . $id);
-
-    if ($result < 1) {
-        echo ('failed#');
-        return;
-    }
-
-    echo 'sucess#' . $result;
-    return;
-}
-
 function consultarLancamento()
 {
     /*<-->Espaço destinada a variáveis ou funções utilitárias<-->*/
@@ -370,27 +344,6 @@ function consultarPermissoes()
     $arrayPermissoes = array();
     foreach ($permissoes as $permissao) {
         switch ($permissao) {
-            case 'PONTOELETRONICOMENSALMAXIMO':
-                $arrayPermissoes[$permissao] = [
-                    "funcionario" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                    "mesAno" => ["readonly" => false, "class" => ""],
-                    "status" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => "", "display" => "block"],
-                    "dia" => ["readonly" => false, "class" => ""],
-                    "entrada" => ["readonly" => false, "class" => ""],
-                    "inicioAlmoco" => ["readonly" => false, "class" => ""],
-                    "fimAlmoco" => ["readonly" => false, "class" => ""],
-                    "saida" => ["readonly" => false, "class" => ""],
-                    "extra" => ["readonly" => false, "class" => ""],
-                    "atraso" => ["readonly" => false, "class" => ""],
-                    "lancamento" => ["readonly" => false, "pointerEvents" => "auto", "touchAction" => "auto", "class" => ""],
-                    "adicionarPonto" => ["disabled" => false],
-                    "salvarAlteracoes" => ["disabled" => false],
-                    "fechar" => ["disabled" => false],
-                    "validarGestor" => ["display" => 'inline-block'],
-                    "validarRH" => ["display" => 'inline-block'],
-                    "reabrirPendencia" => ["display" => 'inline-block']
-                ];
-                break;
             case 'PONTOELETRONICOMENSALMODERADO':
                 $arrayPermissoes[$permissao] = [
                     "funcionario" => ["readonly" => true, "pointerEvents" => "none", "touchAction" => "none", "class" => "readonly"],
