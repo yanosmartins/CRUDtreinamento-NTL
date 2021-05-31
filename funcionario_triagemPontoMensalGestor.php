@@ -8,13 +8,12 @@ require_once("inc/config.ui.php");
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $funcionario = $_SESSION["funcionario"];
 
-$condicaoMaximaAcessarOK = (in_array('PONTOELETRONICOMENSALMAXIMO_ACESSAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('TRIAGEMPONTOELETRONICOMENSALGESTOR_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('TRIAGEMPONTOELETRONICOMENSALGESTOR_GRAVAR', $arrayPermissao, true));
 
-$condicaoModeradaAcessarOK = (in_array('PONTOELETRONICOMENSALMODERADO_ACESSAR', $arrayPermissao, true));
+$condicaoAcessarOK = true;
 
-$condicaoMinimaAcessarOK = (in_array('PONTOELETRONICOMENSALMINIMO_ACESSAR', $arrayPermissao, true));
-
-if (($condicaoMaximaAcessarOK == false) && ($condicaoModeradaAcessarOK == false) && ($condicaoMinimaAcessarOK == false)) {
+if (($condicaoAcessarOK == false)) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
@@ -24,7 +23,7 @@ if (($condicaoMaximaAcessarOK == false) && ($condicaoModeradaAcessarOK == false)
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Controle de Ponto";
+$page_title = "Triagem ponto mensal";
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header
@@ -60,7 +59,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Controle de Ponto
+                            <h2>Controle de folhas
                             </h2>
                         </header>
                         <div>
@@ -73,7 +72,7 @@ include("inc/nav.php");
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseFolhaPontoMensal" class="collapsed" id="accordionFolhaPontoMensal">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Ponto Mensal
+                                                        Dados do Mês <span id="showMesAno"><?= date("m/Y") ?></span>
                                                     </a>
                                                 </h4>
                                             </div>
@@ -84,285 +83,101 @@ include("inc/nav.php");
 
                                                         <div id="formFolhaPontoMensal" class="col-sm-12">
                                                             <input id="codigo" name="codigo" type="hidden" value="0">
-                                                            <input id="funcionario" name="funcionario" type="hidden" value="<?= $funcionario ?>">
-
-
 
                                                             <div class="row">
-                                                                <section class="col col-3">
-                                                                    <label class="label" for="mesAno">Mês/Ano</label>
+                                                                <section class="col col-4">
+                                                                    <label class="label" for="expediente">Funcionário</label>
+                                                                    <label class="select">
+                                                                        <select id="expediente" name="expediente">
+                                                                            <option></option>
+                                                                            <?php
+                                                                            $reposit = new reposit();
+                                                                            $sql = "SELECT codigo,nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            foreach ($result as $row) {
+                                                                                $codigo = (int) $row['codigo'];
+                                                                                $horaEntrada = $row['nome'];
+                                                                            }
+                                                                            ?>
+                                                                        </select><i></i>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2 col-auto">
+                                                                    <label for="mesAno" class="label">Mês/Ano</label>
                                                                     <label class="input">
-                                                                        <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="readonly" readonly style="pointer-events:none;touch-action:none">
-                                                                    </label>
-                                                                </section>
-                                                                <section id="sectionStatus" class="col col-2" style="display:none">
-                                                                    <label class="label" for="status">Status</label>
-                                                                    <label class="select">
-                                                                        <select id="status" name="status" class="readonly" readonly style="pointer-events: none; touch-action: none">
-                                                                            <?php
-                                                                            $reposit = new reposit();
-                                                                            $sql = "SELECT S.codigo,S.descricao FROM Ntl.status S  WHERE S.ativo = 1 ORDER BY S.codigo";
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            foreach ($result as $row) {
-                                                                                $codigo = (int) $row['codigo'];
-                                                                                $descricao = $row['descricao'];
-                                                                                $pattern = "/^aberto$/i";
-                                                                                if (preg_match($pattern, $descricao)) {
-                                                                                    echo '<option value="' . $codigo . '" selected>' . $descricao . '</option>';
-                                                                                } else {
-                                                                                    echo '<option value="' . $codigo . '">' . $descricao . '</option>';
-                                                                                }
-                                                                            }
-                                                                            ?>
-                                                                        </select><i></i>
+                                                                        <input id="mesAno" name="mesAno" type="text" data-dateformat="mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/9999" data-mask-placeholder="-" autocomplete="off">
                                                                     </label>
                                                                 </section>
 
-                                                                <section class="col col-md-2">
+                                                                <section class=" col col-md-2">
                                                                     <label class="label"> </label>
-                                                                    <button type="button" id="btnPdf" class="btn btn-danger" aria-hidden="true">
-                                                                        <i class="">Imprimir Folha</i>
+                                                                    <button type="button" id="btnPdf" class="btn btn-info" aria-hidden="true">
+                                                                        <i class="">Pesquisar</i>
                                                                     </button>
                                                                 </section>
                                                             </div>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="expediente">Expediente</label>
-                                                                    <label class="select">
-                                                                        <select id="expediente" name="expediente" class="readonly" readonly style="pointer-events: none; touch-action: none">
-                                                                            <option></option>
-                                                                            <?php
-                                                                            $reposit = new reposit();
-                                                                            $sql = "SELECT codigo, funcionario,horaEntrada,horaSaida FROM Ntl.beneficioProjeto WHERE ativo = 1 ORDER BY codigo";
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            foreach ($result as $row) {
-                                                                                $codigo = (int) $row['codigo'];
-                                                                                $horaEntrada = $row['horaEntrada'];
-                                                                                $horaSaida = $row['horaSaida'];
-                                                                                if ($row['funcionario'] == $funcionario) {
-                                                                                    echo '<option value="' . $codigo . '" selected>' . $horaEntrada . " - " . $horaSaida . '</option>';
-                                                                                } else {
-                                                                                    echo '<option value="' . $codigo . '">' . $horaEntrada . " - " . $horaSaida . '</option>';
-                                                                                }
-                                                                            }
-                                                                            ?>
-                                                                        </select>
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="almoco">Almoço</label>
-                                                                    <label class="select">
-                                                                        <select id="almoco" name="almoco" class="readonly" readonly style="pointer-events: none; touch-action: none">
-                                                                            <option></option>
-                                                                            <?php
-                                                                            $reposit = new reposit();
-                                                                            $sql = "SELECT codigo, funcionario,horaInicio,horaFim FROM Ntl.beneficioProjeto WHERE ativo = 1 ORDER BY codigo";
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            foreach ($result as $row) {
-                                                                                $codigo = (int) $row['codigo'];
-                                                                                $horaInicio = $row['horaInicio'];
-                                                                                $horaFim = $row['horaFim'];
-                                                                                if ($row['funcionario'] == $funcionario) {
-                                                                                    echo '<option value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                } else {
-                                                                                    echo '<option value="' . $codigo . '">' . $horaInicio . " - " . $horaFim . '</option>';
-                                                                                }
-                                                                            }
-                                                                            ?>
-                                                                        </select>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-                                                                <section class="col col-1">
-                                                                    <label class="label">Dia</label>
-                                                                    <div class="input-group" data-align="top" data-autoclose="true">
-                                                                        <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly" readonly data-autoclose="true" maxlength="2">
-                                                                    </div>
-                                                                </section>
-
-                                                                <section class="col col-2">
-                                                                    <label id="labelHora" class="label">Entrada</label>
-                                                                    <div class="input-group" data-align="top" data-autoclose="true">
-                                                                        <input id="inputHoraEntrada" name="inputHoraEntrada" type="text" class="text-center form-control readonly" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" readonly>
-                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                    </div>
-                                                                </section>
-
-                                                                <section class="col col-1">
-                                                                    <label class="label">Inicio/Almoço</label>
-                                                                    <div class="input-group" data-align="top" data-autoclose="true">
-                                                                        <input id="inputInicioAlmoco" name="inputInicioAlmoco" type="text" class="text-center form-control 
-                                                                            readonly" placeholder="00:00" data-autoclose="true" data-mask="99:99" readonly>
-                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                    </div>
-                                                                </section>
-
-                                                                <section class="col col-1">
-                                                                    <label class="label">Fim/Almoço</label>
-                                                                    <div class="input-group" data-align="top" data-autoclose="true">
-                                                                        <input id="inputFimAlmoco" name="inputFimAlmoco" type="text" class="text-center form-control 
-                                                                            readonly" placeholder="00:00" data-autoclose="true" data-mask="99:99" readonly>
-                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                    </div>
-                                                                </section>
-
-                                                                <section class="col col-2">
-                                                                    <label id="labelHora" class="label">Saída</label>
-                                                                    <div class="input-group" data-align="top" data-autoclose="true">
-                                                                        <input id="inputHoraSaida" name="inputHoraSaida" type="text" class="text-center form-control 
-                                                                            readonly" placeholder="  00:00:00" data-autoclose="true" data-mask="99:99:99" readonly>
-                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                    </div>
-                                                                </section>
-
-                                                                <section class="col col-1">
-                                                                    <label id="labelHora" class="label">H.Extra</label>
-                                                                    <div class="input-group" data-align="top" data-autoclose="true">
-                                                                        <input id="inputHoraExtra" name="inputHoraExtra" type="text" class="text-center form-control readonly" placeholder="00:00" readonly data-autoclose="true" data-mask="99:99">
-                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                    </div>
-                                                                </section>
-
-                                                                <section class="col col-1">
-                                                                    <label id="labelHora" class="label">Atraso</label>
-                                                                    <div class="input-group" data-align="top" data-autoclose="true">
-                                                                        <input id="inputAtraso" name="inputAtraso" type="text" class="text-center form-control readonly" placeholder="00:00" readonly data-autoclose="true" data-mask="99:99">
-                                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                                                    </div>
-                                                                </section>
-
-                                                                <section class="col col-2">
-                                                                    <label class="label" for="lancamento">Lançamento/Ocorrência</label>
-                                                                    <label class="select">
-                                                                        <select id="inputLancamento" name="inputLancamento" style="touch-action:none;pointer-events:none" readonly class="readonly">
-                                                                            <option selected value="0"></option>
-                                                                            <?php
-                                                                            $reposit = new reposit();
-                                                                            $projeto = $_SESSION['projeto'];
-                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L 
-                                                                            LEFT JOIN 
-                                                                            Ntl.lancamentoProjeto LP 
-                                                                            ON L.codigo = LP.lancamento
-                                                                            LEFT JOIN 
-                                                                            Ntl.projeto P 
-                                                                            ON P.codigo = LP.projeto
-                                                                            where L.ativo = 1 AND (P.codigo = " . $projeto . " OR P.codigo IS NULL) order by L.descricao";
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            foreach ($result as $row) {
-                                                                                $codigo = (int) $row['codigo'];
-                                                                                $descricao = $row['descricao'];
-                                                                                echo '<option value=' . $codigo . '>' . $descricao . '</option>';
-                                                                            }
-                                                                            ?>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <div class="row">
-
-                                                                <section class="col col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                                    <button id="btnAddPonto" type="button" class="btn btn-primary btn-xs-left btn-sm-right btn-md-right btn-lg-right " disabled>
-                                                                        <i class="">Adicionar Ponto</i>
-                                                                    </button>
-                                                                </section>
-
-                                                                <section class="col col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                                    <button id="btnGravar" type="button" class="btn btn-success btn-xs-left btn-sm-left btn-md-left btn-lg-left" disabled>
-                                                                        <i class="">Salvar alterações</i>
-                                                                    </button>
-                                                                </section>
-
-
-                                                            </div>
-
                                                             <hr><br>
 
-                                                            <div id="pointFieldGenerator"></div>
-
                                                             <div class="row">
-                                                                <section class="col col-12">
-                                                                    <label class="label">Observações</label>
-                                                                    <textarea maxlength="500" id="observacaoFolhaPontoMensal" name="observacaoFolhaPontoMensal" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
-                                                                </section>
-                                                            </div>
-                                                        </div>
-                                                    </fieldset>
-                                                </div>
+                                                                <input id="jsonUploadFolha" name="jsonUploadFolha" type="hidden" value="[]">
+                                                                <div id="formUploadFolha" class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                                            </div>
-                                        </div>
-                                        <!-- ############################################################# -->
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseUploadFolha" class="collapsed" id="accordionUploadFolha">
-                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Upload da folha assinada
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="collapseUploadFolha" class="panel-collapse collapse in">
-                                                <div class="panel-body no-padding">
-                                                    <fieldset>
-                                                        <input id="jsonUploadFolha" name="jsonUploadFolha" type="hidden" value="[]">
-                                                        <div id="formUploadFolha" class="col col-sm-12">
-                                                            <input id="uploadFolhaId" name="uploadFolhaId" type="hidden" value="">
-                                                            <input id="sequencialUploadFolha" name="sequencialUploadFolha" type="hidden" value="">
-                                                            <div class="form-group">
-                                                                <div class="row">
-                                                                    <section class="col col-md-4">
-                                                                        <label class="label">Arquivo</label>
-                                                                        <div class="form-control input">
-                                                                            <input type="file" name="fileUploadFolha" id="fileUploadFolha" accept="application/pdf">
-                                                                        </div>
-                                                                    </section>
-                                                                    <section class="col col-md-2">
-                                                                        <label class="label" for="dataReferenteUpload">Data referente</label>
-                                                                        <label class="input">
-                                                                            <i class="icon-append fa fa-calendar"></i>
-                                                                            <input id="dataReferenteUpload" name="dataReferenteUpload" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa">
-                                                                        </label>
-                                                                    </section>
-                                                                    <input type="text" name="dataUpload" id="dataUpload" hidden class="hidden">
-                                                                    <section class="col col-md-2">
-                                                                        <label class="label">&nbsp;</label>
-                                                                        <button id="btnAddUploadFolha" type="button" class="btn btn-primary">
-                                                                            <i class="fa fa-plus"></i>
-                                                                        </button>
-                                                                        <button id="btnRemoverUploadFolha" type="button" class="btn btn-danger">
-                                                                            <i class="fa fa-minus"></i>
-                                                                        </button>
-                                                                    </section>
+                                                                    <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                        <table id="tableUploadFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th>Dia</th>
+                                                                                    <th class="text-left" style="min-width: 100%;">Entrada</th>
+                                                                                    <th class="text-left">Almoço Início</th>
+                                                                                    <th class="text-left">Almoço - Saída</th>
+                                                                                    <th class="text-left">Saída</th>
+                                                                                    <th class="text-left">Extra</th>
+                                                                                    <th class="text-left">Atraso</th>
+                                                                                    <th class="text-left">Ocorrência</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                <table id="tableUploadFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                    <thead>
-                                                                        <tr role="row">
-                                                                            <th></th>
-                                                                            <th class="text-left" style="min-width: 100%;">Arquivo</th>
-                                                                            <th class="text-left">Mês referente</th>
-                                                                            <th class="text-left">Data de upload</th>
+                                                                <input id="jsonUploadFolha" name="jsonUploadFolha" type="hidden" value="[]">
+                                                                <div id="formUploadFolha" class="col col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                                    <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                        <table id="tableUploadFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th class="text-left" style="min-width: 100%;">Arquivo</th>
+                                                                                    <th class="text-left">Tipo</th>
+                                                                                    <th class="text-left">Mês referente</th>
 
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <div class="row">
-                                                                    <section class="col col-md-4">
-                                                                        <button id="enviarUploads" type="button" class="btn btn-danger">
-                                                                            <i class="fa fa-file-pdf-o" style="font-size:2rem"></i><i style="padding-left: 5px;">Enviar PDF</i>
-                                                                        </button>
-                                                                    </section>
+                                                                                    <th class="text-left">Data de upload</th>
+
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <input id="jsonUploadFolha" name="jsonUploadFolha" type="hidden" value="[]">
+                                                                <div id="formUploadFolha" class="col col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                                    <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                        <table id="tableUploadFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th class="text-left" style="min-width: 100%;">Arquivo</th>
+                                                                                    <th class="text-left" style="min-width: 100%;">Ação</th>
+
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </fieldset>
                                                 </div>
 
@@ -397,10 +212,13 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
 
-
-                                            <button type="button" id="btnFechar" class="btn btn-danger" aria-hidden="true" title="Fechar">
-                                                <i class="">Fechar folha</i>
+                                            <button type="button" id="btnFechar" class="btn btn-success" aria-hidden="true" title="Fechar">
+                                                <i class="">Validar</i>
                                             </button>
+                                            <button type="button" id="btnFechar" class="btn btn-warning" aria-hidden="true" title="Fechar">
+                                                <i class="">Reabrir com pendência</i>
+                                            </button>
+
                                         </footer>
                                 </form>
                             </div>
@@ -456,96 +274,8 @@ include("inc/scripts.php");
 <script src="js/plugin/clockpicker/clockpicker.min.js"></script>
 
 <script language="JavaScript" type="text/javascript">
-    /*---------------Variaveis e constantes globais-------------*/
-    var toleranciaExtra = '05:00';
-    var toleranciaAtraso = '05:00';
-
-    const defaultDate = new Date();
-    const formatedDate = defaultDate.toLocaleDateString('pt-BR');
-    const cutout = formatedDate.split('/');
-    const maxDay = cutout[0];
-    const maxMonth = cutout[1];
-
-    var minDay = '01';
-    var minMonth = Number(maxMonth - 1);
-    if (minMonth < 1) minMonth = 12;
-    if (minMonth < 10) minMonth = '0'.concat(minMonth);
-
-    const minDate = defaultDate.getFullYear() + '-' + minMonth + '-' + minDay;
-    const maxDate = defaultDate.getFullYear() + '-' + maxMonth + '-' + maxDay;
-
-    jsonUploadFolhaArray = JSON.parse($("#jsonUploadFolha").val());
-
-    Date.prototype.toDateInputValue = (function() {
-        const local = new Date(this);
-        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
-        return local.toJSON().slice(0, 10).replace(/\d{2}$/, '01');
-    });
-
-    /*---------------/Variaveis e constantes globais-------------*/
-
     $(document).ready(function() {
 
-        $("#mesAno").attr('min', minDate);
-        $("#mesAno").attr('max', maxDate);
-        $('#mesAno').val(new Date().toDateInputValue());
-
-        /* Evento para recarregar a folha de ponto() */
-        $("#mesAno").on("change", function() {
-            const mesAno = $("#mesAno").val().replace(/\d{2}$/,'01')
-            $("#mesAno").val(mesAno)
-
-            carregaFolhaPontoMensal();
-        });
-
-        /* Evento para validar a entrada do dia */
-        $('#inputDia').on('keydown', () => {
-            const pattern = /(\d|\t)/g
-
-            let value = $('#inputDia').val();
-
-            value = value.replace(/\D/gi, "");
-
-            return $('#inputDia').val(value);
-        });
-
-        /* Evento para trazer os dados dos respectivos dias */
-        $('#inputDia').on('change', function() {
-            let dia = $("#inputDia").val();
-            dia = dia.replace(/\D/gi, "");
-            if (!dia) dia = 1;
-
-            
-            let index = dia - 1;
-
-            let entrada = $("#pointFieldGenerator input[name=horaEntrada]");
-            entrada = entrada[index].value;
-
-            try {
-                let saida = $("#pointFieldGenerator [name=horaSaida]");
-                saida = saida[index].value;
-
-                let extra = $("#pointFieldGenerator [name=extra]");
-                extra = extra[index].value;
-
-                let atraso = $("#pointFieldGenerator [name=atraso]");
-                atraso = atraso[index].value;
-
-                let lancamento = $("#pointFieldGenerator [name=lancamento]");
-                lancamento = lancamento[index].value;
-
-                $("#inputHoraEntrada").val(entrada);
-                $("#inputHoraSaida").val(saida);
-
-                $("#inputHoraExtra").val(extra);
-                $("#inputAtraso").val(atraso);
-
-                $("#inputLancamento").val(lancamento);
-
-            } catch (e) {
-                return smartAlert('Atenção', 'Insira um dia válido!', 'error')
-            }
-        });
 
         /* Modal para a confirmação de finais de semana */
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
@@ -558,215 +288,63 @@ include("inc/scripts.php");
             }
         }));
 
-        $('#dlgSimplePoint').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
-            buttons: [{
-                html: "Confirmar",
-                "class": "btn btn-success",
-                click: function() {
-                    $(this).dialog("close");
-                    $('#dlgSimplePoint').css('display', 'none');
-                    addPoint();
-                }
-            }, {
-                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                "class": "btn btn-default",
-                click: function() {
-                    $(this).dialog("close");
-                    return;
-                }
-            }]
-        });
+        // $('#dlgSimplePoint').dialog({
+        //     autoOpen: false,
+        //     width: 400,
+        //     resizable: false,
+        //     modal: true,
+        //     title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+        //     buttons: [{
+        //         html: "Confirmar",
+        //         "class": "btn btn-success",
+        //         click: function() {
+        //             $(this).dialog("close");
+        //             $('#dlgSimplePoint').css('display', 'none');
+        //             addPoint();
+        //         }
+        //     }, {
+        //         html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+        //         "class": "btn btn-default",
+        //         click: function() {
+        //             $(this).dialog("close");
+        //             return;
+        //         }
+        //     }]
+        // });
 
-        $('#dlgSimpleClose').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
-            buttons: [{
-                html: "Confirmar",
-                "class": "btn btn-success",
-                click: function() {
-                    $(this).dialog("close");
-                    $('#dlgSimpleClose').css('display', 'none');
-                    fechar();
-                }
-            }, {
-                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                "class": "btn btn-default",
-                click: function() {
-                    $(this).dialog("close");
-                    return;
-                }
-            }]
-        });
+        // /* Evento para chamar a addPoint ou o Modal */
+        // $("#btnAddPonto").on("click", function() {
 
-        /* Evento para chamar a addPoint ou o Modal */
-        $("#btnAddPonto").on("click", function() {
+        //     let dia = $("#inputDia").val();
 
-            let dia = $("#inputDia").val();
+        //     if (!dia) {
+        //         smartAlert('Atenção', 'Insira um dia para a inserção das horas', 'error')
+        //         return;
+        //     }
 
-            if (!dia) {
-                smartAlert('Atenção', 'Insira um dia para a inserção das horas', 'error')
-                return;
-            }
+        //     let isWeekend = checkDay(dia);
 
-            let isWeekend = checkDay(dia);
+        //     if (isWeekend) {
+        //         $('#dlgSimplePoint').dialog('open');
+        //     } else {
 
-            if (isWeekend) {
-                $('#dlgSimplePoint').dialog('open');
-            } else {
-                addPoint();
-            }
-            return;
-        });
+        //     }
+        //     return;
+        // });
 
-        /* Evento para chamar a imprimir() */
-        $('#btnPdf').on("click", function() {
-            imprimir();
-        })
-
-        /* Evento para enviar folha assinada */
-        $('#enviarUploads').on("click", function() {
-            enviarPDF();
-        })
-
-        /* Eventos para chamar a gravar() */
-        $("#btnGravar").on("click", function() {
-            gravar();
-        });
-
-        $("#btnFechar").on("click", function() {
-            $('#dlgSimpleClose').dialog('open');
-        });
-
-        /* Evento para chamar a addUploadFolha */
-        $("#btnAddUploadFolha").on("click", function() {
-            if (validaUploadFolha())
-                addUploadFolha();
-        });
-
-        /*Evento para chamar a excluirUploadFolha() */
-        $("#btnRemoverUploadFolha").on("click", function() {
-            excluirUploadFolha();
-        });
-
-        $("#dataReferenteUpload").on("change", function() {
-            let dataReferente = $("#dataReferenteUpload").val();
-            dataReferente = dataReferente.replace(/^\d{2}/, '01')
-            $("#dataReferenteUpload").val(dataReferente);
-            return
-        });
+        // /* Eventos para chamar a gravar() */
+        // $("#btnGravar").on("click", function() {
+        //     gravar();
+        // });
 
         /*Função responsavel pelo carregamento dos dados pessoais e configurações da tela*/
-        carregaFolhaPontoMensal();
-        recuperaUpload();
+        // carregaFolhaPontoMensal();
+        // recuperaUpload();
 
     });
 
     /* Função reponsável por passar os dados para o back-end para a gravação ou reescrita da folha */
     function gravar() {
-
-        $("#btnGravar").prop('disabled', true);
-
-        var arrayFolha = $("#pointFieldGenerator input[name='dia']").serializeArray()
-
-        var arrayDia = arrayFolha.map(folha => {
-            return {
-                dia: Number(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='horaEntrada']").serializeArray()
-        var arrayHoraEntrada = arrayFolha.map(folha => {
-            return {
-                horaEntrada: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='inicioAlmoco']").serializeArray()
-        var arrayInicioAlmoco = arrayFolha.map(folha => {
-            return {
-                inicioAlmoco: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='fimAlmoco']").serializeArray()
-        var arrayFimAlmoco = arrayFolha.map(folha => {
-            return {
-                fimAlmoco: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='horaSaida']").serializeArray()
-        var arrayHoraSaida = arrayFolha.map(folha => {
-            return {
-                horaSaida: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='extra']").serializeArray()
-        var arrayHoraExtra = arrayFolha.map(folha => {
-            return {
-                horaExtra: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='atraso']").serializeArray()
-        var arrayAtraso = arrayFolha.map(folha => {
-            return {
-                atraso: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator select[name='lancamento']");
-        var arrayLancamento = new Array();
-        arrayFolha.each((index, el) => {
-            if ($(el).val() == null)
-                $(el).val(0);
-            let value = Number($(el).val());
-            arrayLancamento.push({
-                lancamento: Number(value)
-            })
-
-        })
-
-        var codigo = Number($("#codigo").val())
-        var ativo = Number($("#ativo").val())
-        var funcionario = Number($("#funcionario").val());
-        var status = Number($('#status').val());
-
-        var mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
-        var observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
-
-        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        var folhaPontoMensalTabela = arrayDia.map((array, index) => {
-            return {
-                dia: array.dia,
-                horaEntrada: arrayHoraEntrada[index].horaEntrada,
-                horaSaida: arrayHoraSaida[index].horaSaida,
-                inicioAlmoco: arrayInicioAlmoco[index].inicioAlmoco,
-                fimAlmoco: arrayFimAlmoco[index].fimAlmoco,
-                horaExtra: arrayHoraExtra[index].horaExtra,
-                atraso: arrayAtraso[index].atraso,
-                lancamento: arrayLancamento[index].lancamento
-            }
-
-        })
-
-        var folhaPontoInfo = {
-            codigo: Number(codigo),
-            ativo: Number(ativo),
-            funcionario: Number(funcionario),
-            mesAno: String(mesAno),
-            status: Number(status),
-            observacao: String(observacaoFolhaPontoMensal)
-        }
 
         gravaFolhaPontoMensal(folhaPontoInfo, folhaPontoMensalTabela,
             function(data) {
@@ -794,112 +372,6 @@ include("inc/scripts.php");
 
     function fechar() {
 
-        $("#btnGravar").prop('disabled', true);
-        $("#btnFechar").prop('disabled', true);
-
-        let arrayFolha = $("#pointFieldGenerator input[name='dia']").serializeArray()
-
-        let arrayDia = arrayFolha.map(folha => {
-            return {
-                dia: Number(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='horaEntrada']").serializeArray()
-        let arrayHoraEntrada = arrayFolha.map(folha => {
-            return {
-                horaEntrada: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='inicioAlmoco']").serializeArray()
-        let arrayInicioAlmoco = arrayFolha.map(folha => {
-            return {
-                inicioAlmoco: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='fimAlmoco']").serializeArray()
-        let arrayFimAlmoco = arrayFolha.map(folha => {
-            return {
-                fimAlmoco: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='horaSaida']").serializeArray()
-        let arrayHoraSaida = arrayFolha.map(folha => {
-            return {
-                horaSaida: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='extra']").serializeArray()
-        let arrayHoraExtra = arrayFolha.map(folha => {
-            return {
-                horaExtra: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator input[name='atraso']").serializeArray()
-        let arrayAtraso = arrayFolha.map(folha => {
-            return {
-                atraso: String(folha.value)
-            }
-        })
-
-        arrayFolha = $("#pointFieldGenerator select[name='lancamento']");
-        let arrayLancamento = new Array();
-        arrayFolha.each((index, el) => {
-            if ($(el).val() == null)
-                $(el).val(0);
-            let value = Number($(el).val());
-            arrayLancamento.push({
-                lancamento: Number(value)
-            })
-
-        })
-
-        let codigo = Number($("#codigo").val())
-        let ativo = Number($("#ativo").val())
-        let funcionario = Number($("#funcionario").val());
-        let options = $("#status option");
-        let status;
-
-        options.each((index, el) => {
-            const pattern = /^fechad(o|a)$/gi;
-            const texto = $(el).text();
-            if (pattern.test(texto)) {
-                status = $(el).val();
-                return;
-            }
-        });
-
-        let mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
-        let observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
-
-        // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
-        let folhaPontoMensalTabela = arrayDia.map((array, index) => {
-            return {
-                dia: array.dia,
-                horaEntrada: arrayHoraEntrada[index].horaEntrada,
-                horaSaida: arrayHoraSaida[index].horaSaida,
-                inicioAlmoco: arrayInicioAlmoco[index].inicioAlmoco,
-                fimAlmoco: arrayFimAlmoco[index].fimAlmoco,
-                horaExtra: arrayHoraExtra[index].horaExtra,
-                atraso: arrayAtraso[index].atraso,
-                lancamento: arrayLancamento[index].lancamento
-            }
-
-        })
-
-        let folhaPontoInfo = {
-            codigo: Number(codigo),
-            ativo: Number(ativo),
-            funcionario: Number(funcionario),
-            mesAno: String(mesAno),
-            status: Number(status),
-            observacao: String(observacaoFolhaPontoMensal)
-        }
 
         gravaFolhaPontoMensal(folhaPontoInfo, folhaPontoMensalTabela,
             function(data) {
@@ -975,318 +447,11 @@ include("inc/scripts.php");
                 textoAlmoco[0] = textoAlmoco[0].trim();
                 textoAlmoco[1] = textoAlmoco[1].trim();
 
-                $("#inputInicioAlmoco").val(textoAlmoco[0]);
-                $("#inputFimAlmoco").val(textoAlmoco[1]);
-
-                /*Não mexer até a linha 840 ($('#pointFieldGenerator [name=lancamento]').append(options);)*/
-                const row = $("#pointFieldGenerator .row")
-                if (row.length < 1) {
-                    const totalDiasMes = diasMes($("#mesAno").val());
-                    for (let i = 0; i < totalDiasMes; i++) {
-                        generateElements('div', '#pointFieldGenerator', '', {
-                            class: "row"
-                        });
-
-                        $("#pointFieldGenerator").append('<hr/>');
-                    };
-
-
-                    for (let i = 0; i < 8; i++) {
-                        const classList = ['col', 'col-2'];
-                        if (/(^0$|^2$|^3$|^5$|^6$)/.test(i)) {
-                            classList.pop();
-                            classList.push('col-1');
-                        }
-                        generateElements('section', '#pointFieldGenerator .row', '', {
-                            class: classList.join(" ")
-                        });
-                    }
-
-
-                    generateElements('div', '#pointFieldGenerator .row .col', '', {
-                        class: 'form-group'
-                    });
-                    generateElements('label', '#pointFieldGenerator .row .col .form-group', '--', {
-                        label: 'label'
-                    });
-                    generateElements('div', '#pointFieldGenerator .row .col .form-group', '', {
-                        class: 'input-group'
-                    });
-                    generateElements('input', '#pointFieldGenerator .row .col .form-group .input-group', '', {
-                        class: 'text-center form-control readonly',
-                        readonly: true
-                    })
-
-                    let lancamento = $("#pointFieldGenerator .row .col .form-group .input-group input")
-                    let length = lancamento.length
-
-                    for (let j = 7; j < length; j += 8) {
-
-                        const parent = lancamento[j].parentElement
-                        const select = $('<select/>', {
-                            class: 'text-center form-control readonly',
-                            readonly: true,
-                            style: 'pointer-events:none;touch-action:none;',
-                            name: 'lancamento'
-                        })
-                        const options = $('#inputLancamento').children('option').clone(true);
-                        select.append(options);
-
-                        $(parent).append(select)
-                        lancamento[j].remove()
-                    }
-
-                    let label = $("#pointFieldGenerator .row .col .form-group label")
-                    let input = $("#pointFieldGenerator .row .col .form-group .input-group input")
-
-                    length = label.length
-
-                    for (let j = 0; j < length; j += 8) {
-                        $(label[j]).text("Dia")
-                    }
-
-
-                    for (let j = 1; j < length; j += 8) {
-                        $(label[j]).text("Entrada")
-                    }
-
-                    for (let j = 2; j < length; j += 8) {
-                        $(label[j]).text("Inicio/Almoço")
-                    }
-
-                    for (let j = 3; j < length; j += 8) {
-                        $(label[j]).text("Fim/Almoço")
-                    }
-
-                    for (let j = 4; j < length; j += 8) {
-                        $(label[j]).text("Saída")
-                    }
-
-                    for (let j = 5; j < length; j += 8) {
-                        $(label[j]).text("Extra")
-                    }
-
-                    for (let j = 6; j < length; j += 8) {
-                        $(label[j]).text("Atraso")
-                    }
-
-                    for (let j = 7; j < length; j += 8) {
-                        $(label[j]).text("Lançamento/Ocorrência")
-                    }
-                    //====================================
-                    length = input.length
-
-                    for (let j = 0; j < length; j += 7) {
-                        $(input[j]).attr('name', 'dia')
-                    }
-                    for (let j = 1; j < length; j += 7) {
-                        $(input[j]).attr('name', 'horaEntrada')
-                    }
-                    for (let j = 2; j < length; j += 7) {
-                        $(input[j]).attr('name', 'inicioAlmoco')
-                    }
-                    for (let j = 3; j < length; j += 7) {
-                        $(input[j]).attr('name', 'fimAlmoco')
-                    }
-                    for (let j = 4; j < length; j += 7) {
-                        $(input[j]).attr('name', 'horaSaida')
-                    }
-                    for (let j = 5; j < length; j += 7) {
-                        $(input[j]).attr('name', 'extra')
-                    }
-                    for (let j = 6; j < length; j += 7) {
-                        $(input[j]).attr('name', 'atraso')
-                    }
-
-                }
-                preencherPonto(JsonFolha);
-
-                getPermissions();
-
                 return;
 
             }
         );
 
-    }
-
-    //funcionando
-    function preencherPonto(object) {
-        if (object)
-            
-        object = JSON.parse(object);
-
-        const mesAno = $('#mesAno').val();
-        const cutOut = mesAno.split('-');
-        const data = new Date(cutOut[0], cutOut[1], 0);
-
-        const totalDias = data.getDate();
-
-        const dia = [];
-        const entrada = [];
-        const saida = [];
-        const inicioAlmoco = [];
-        const fimAlmoco = [];
-        const extra = [];
-        const atraso = [];
-        const lancamento = [];
-
-        if (object && !object[0].dia) {
-            for (let i = 1; i <= totalDias; i++) {
-                dia.push(i);
-            }
-        }
-
-        if (object && !object[0].entrada) {
-            for (let i = 1; i <= totalDias; i++) {
-                entrada.push('00:00:00');
-            }
-        }
-
-        if (object && !object[0].inicioAlmoco) {
-            for (let i = 1; i <= totalDias; i++) {
-                inicioAlmoco.push('00:00');
-            }
-        }
-
-        if (object && !object[0].fimAlmoco) {
-            for (let i = 1; i <= totalDias; i++) {
-                fimAlmoco.push('00:00');
-            }
-        }
-
-        if (object && !object[0].saida) {
-            for (let i = 1; i <= totalDias; i++) {
-                saida.push('00:00:00');
-            }
-        }
-
-        if (object && !object[0].horaExtra) {
-            for (let i = 1; i <= totalDias; i++) {
-                extra.push('00:00');
-            }
-        }
-
-        if (object && !object[0].atraso) {
-            for (let i = 1; i <= totalDias; i++) {
-                atraso.push('00:00');
-            }
-        }
-
-        if (object)
-            for (obj of object) {
-                dia.push(obj.dia);
-                entrada.push(obj.entrada);
-                inicioAlmoco.push(obj.inicioAlmoco);
-                fimAlmoco.push(obj.fimAlmoco);
-                saida.push(obj.saida);
-                extra.push(obj.horaExtra);
-                atraso.push(obj.atraso);
-                lancamento.push(obj.lancamento);
-            }
-
-        $('#pointFieldGenerator [name=dia]').each((index, el) => {
-            if (!dia[index]) dia[index] = index + 1;
-            $(el).val(dia[index]);
-        });
-
-        $('#pointFieldGenerator [name=horaEntrada]').each((index, el) => {
-            if (!entrada[index]) entrada[index] = '00:00:00';
-            $(el).val(entrada[index]);
-        });
-
-        $('#pointFieldGenerator [name=inicioAlmoco]').each((index, el) => {
-            if (!inicioAlmoco[index]) inicioAlmoco[index] = '00:00';
-            $(el).val(inicioAlmoco[index]);
-        });
-
-        $('#pointFieldGenerator [name=fimAlmoco]').each((index, el) => {
-            if (!fimAlmoco[index]) fimAlmoco[index] = '00:00';
-            $(el).val(fimAlmoco[index]);
-        });
-
-        $('#pointFieldGenerator [name=horaSaida]').each((index, el) => {
-            if (!saida[index]) saida[index] = '00:00:00';
-            $(el).val(saida[index]);
-        });
-
-        $('#pointFieldGenerator [name=extra]').each((index, el) => {
-            if (!extra[index]) extra[index] = '00:00';
-            $(el).val(extra[index]);
-        });
-
-        $('#pointFieldGenerator [name=atraso]').each((index, el) => {
-            if (!atraso[index]) atraso[index] = '00:00';
-            $(el).val(atraso[index]);
-        });
-
-        $('#pointFieldGenerator [name=lancamento]').each((index, el) => {
-            if (!lancamento[index]) lancamento[index] = '0';
-            $(el).val(lancamento[index]);
-        });
-
-        return;
-    }
-
-    function aleatorizarTempo(hora, expediente) {
-        let separador = hora.split(':');
-        let h = Number(separador[0]);
-        let m = Number(separador[1]);
-        let s = Number(separador[2]);
-
-        separador = expediente.split(':');
-        const eh = Number(separador[0]);
-        const em = Number(separador[1]);
-        let es = Number(separador[2]);
-        if (isNaN(es)) es = Number('00');
-
-        if ((h == eh) && (m == em)) {
-            s = Math.floor(Math.random() * 50);
-        }
-
-        if (h.toString().length < 2) h = `0${h}`;
-        if (m.toString().length < 2) m = `0${m}`;
-        if (s.toString().length < 2) s = `0${s}`;
-
-        const result = `${h}:${m}:${s}`;
-        return result;
-    }
-
-    function parse(horario) {
-        // divide a string em duas partes, separado por dois-pontos, e transforma em número
-        let [hora, minuto] = horario.split(':').map(v => parseInt(v));
-        if (!minuto) { // para o caso de não ter os minutos
-            minuto = 00;
-        }
-        return minuto + (hora * 60);
-    }
-
-    function duracao(inicioExpediente, fimExpediente) {
-        return (parse(fimExpediente) - parse(inicioExpediente));
-    }
-
-    function imprimir() {
-        const id = $('#funcionario').val();
-        const folha = $('#codigo').val();
-        const mesAno = $('#mesAno').val();
-
-        $(location).attr('href', `funcionario_folhaDePontoPdfPontoEletronico.php?id=${id}&folha=${folha}&data=${mesAno}`);
-    }
-
-    function generateElements(tagName = "div", parent = "body", text = "", properties = {}) {
-
-        const element = $(`<${tagName}/>`, properties)
-
-        if (text) {
-            element.text(text)
-        }
-
-        return $(parent).append(element)
-    }
-
-    function deleteElements(element) {
-        $(element).remove();
-        return;
     }
 
     function diasMes(date = '') {
@@ -1305,35 +470,6 @@ include("inc/scripts.php");
         return data.getDate();
     }
 
-    function abonarAtraso() {
-        const lancamento = $("#inputLancamento").val();
-        let abonarAtraso = 0;
-
-        consultarLancamento(lancamento, function(data) {
-
-            data = data.replace(/failed/gi, '');
-            var piece = data.split("#");
-
-            var mensagem = piece[0];
-            var out = piece[1];
-            piece = out.split("^");
-
-            abonarAtraso = piece[0];
-
-            let arrayFolha = $("#pointFieldGenerator select[name='lancamento']");
-
-            if (abonarAtraso == 1) {
-                arrayFolha.each((index, el) => {
-
-                    if ($(el).val() == lancamento)
-                        $("input[name=atraso]")[index].value = "00:00";
-                })
-            }
-
-            return;
-        })
-
-    }
 
     function checkDay(day) {
         if (day.length < 2)
@@ -1351,445 +487,6 @@ include("inc/scripts.php");
 
         return isWeekend;
 
-    }
-
-    function addPoint() {
-
-        var dia = $("#inputDia").val();
-
-        if (!dia) {
-            smartAlert("Atenção", "Insira um dia válido", "error");
-            return;
-        }
-
-        var index = dia - 1;
-
-        var entrada = $("#pointFieldGenerator [name=horaEntrada]")[index]
-        var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
-
-        var inicioAlmoco = $("#pointFieldGenerator [name=inicioAlmoco]")[index]
-        var inputInicioAlmoco = $("#inputInicioAlmoco").val() || '00:00:00'
-
-        var fimAlmoco = $("#pointFieldGenerator [name=fimAlmoco]")[index]
-        var inputFimAlmoco = $("#inputFimAlmoco").val() || '00:00:00'
-
-        var saida = $("#pointFieldGenerator [name=horaSaida]")[index]
-        var inputSaida = $("#inputHoraSaida").val() || '00:00:00'
-
-        var extra = $("#pointFieldGenerator [name=extra]")[index]
-        var inputExtra = $("#inputHoraExtra").val()
-
-        var atraso = $("#pointFieldGenerator [name=atraso]")[index]
-        var inputAtraso = $("#inputAtraso").val()
-
-        var lancamento = $("#pointFieldGenerator select[name=lancamento]")[index]
-
-        var inputLancamento = $("#inputLancamento").val()
-
-
-        //Preparação dos valores para cálculo e aleatorização dos minutos e segundos
-        let separador = $("#expediente option:selected").text();
-        if (!separador) {
-            separador = '00:00 - 00:00';
-        }
-        separador = separador.split("-");
-        separador[0] = separador[0].trim();
-        separador[1] = separador[1].trim();
-
-        if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
-        if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
-
-        const inicioExpediente = separador[0];
-        const fimExpediente = separador[1];
-
-        const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
-        const horaSaida = aleatorizarTempo(inputSaida, fimExpediente)
-
-
-
-        //Começo Cálculo de Hora Extra
-        if (horaSaida != "00:00:00") {
-            const parseHoraEntrada = parse(horaEntrada)
-            const parseHoraSaida = parse(horaSaida)
-            const parseHoraInicio = parse(inicioExpediente)
-            const parseHoraFim = parse(fimExpediente)
-
-            let jornadaModerada = duracao(inicioExpediente, fimExpediente);
-
-            // quantidade de minutos efetivamente trabalhados
-            let jornada = duracao(horaEntrada, horaSaida);
-
-            // diferença entre as jornadas
-            let diff = Math.abs(jornada - jornadaModerada);
-
-            if (diff != 0) {
-                let horas = Math.floor(diff / 60);
-                let minutos = diff - (horas * 60);
-
-                if (horas.toString().length < 2) horas = `0${horas}`;
-                if (minutos.toString().length < 2) minutos = `0${minutos}`;
-
-                if (jornada > jornadaModerada) {
-                    inputExtra = (`${horas}:${minutos}`);
-                } else {
-                    inputAtraso = (`${horas}:${minutos}`);
-                }
-            }
-        }
-        //Fim Cálculo de Hora Extra
-        //Verificação de Atraso
-
-        separador = inputAtraso.split(':');
-        let h = Number(separador[0]);
-        let m = Number(separador[1]);
-
-        let separadorTolerancia = toleranciaAtraso.split(':');
-        let hTolerancia = Number(separadorTolerancia[0]);
-        let mTolerancia = Number(separadorTolerancia[1]);
-
-
-        //m <= tolerancia Atraso
-        if (m < mTolerancia && h == 0) {
-            inputAtraso = ""
-        }
-
-        //Fim da Verificação de Atraso
-
-        //Verificação de Extra
-        separador = inputExtra.split(':');
-        h = Number(separador[0]);
-        m = Number(separador[1]);
-
-        separadorTolerancia = toleranciaExtra.split(':');
-        hTolerancia = Number(separadorTolerancia[0]);
-        mTolerancia = Number(separadorTolerancia[1]);
-
-        //m <= tolerancia Extra
-        if (m <= mTolerancia && h == 0) {
-            inputExtra = ""
-        }
-
-        //Fim da Verificação de Extra
-
-        // Verificações antes de adicionar o ponto
-        if ((!inputEntrada || inputEntrada == "00:00:00") && !inputLancamento) {
-            smartAlert("Atenção", "A HORA DE ENTRADA deve ser preenchida", "error");
-            return
-        }
-
-        if (!inputExtra && horaSaida != "00:00:00") {
-            smartAlert("Aviso", "O funcionário não tem horas extras", "info");
-        }
-        if (!inputAtraso && horaSaida != "00:00:00") {
-            smartAlert("Aviso", "O funcionário não tem atrasos", "info");
-        }
-
-
-
-        entrada.value = horaEntrada || "00:00:00";
-        inicioAlmoco.value = inputInicioAlmoco || "00:00";
-        fimAlmoco.value = inputFimAlmoco || "00:00";
-        extra.value = inputExtra || '00:00';
-        atraso.value = inputAtraso || '00:00';
-        saida.value = horaSaida || "00:00:00";
-        lancamento.value = inputLancamento;
-
-        abonarAtraso();
-
-        return;
-    }
-
-    function getPermissions() {
-        consultarPermissoes(function(data) {
-            data = data.replace(/failed/gi, '');
-            var piece = data.split("#");
-
-            var mensagem = piece[0];
-            var out = piece[1];
-            if (!out) {
-                smartAlert("Atenção", "Não foi possível verificar a permissão do usuário", "error");
-                return;
-            }
-
-            try {
-
-                let permissoes = JSON.parse(out);
-                setPage(permissoes);
-
-            } catch (e) {
-                console.error(e)
-                smartAlert("Atenção", "Não foi possível verificar a permissão do usuário", "error")
-            } finally {
-                return;
-            }
-
-        });
-    }
-
-    function setPage(obj) {
-        for (permissao in obj) {
-
-            if (permissao == 'PONTOELETRONICOMENSALMODERADO') {
-                $("#mesAno").attr('readonly', obj[permissao].mesAno.readonly);
-                $("#mesAno").removeAttr('style');
-                if (!obj[permissao].mesAno.class)
-                    $("#mesAno").removeClass('readonly');
-
-                let status = $("#status option:selected").text();
-                const pattern = /^fechad(o|a)$/gi;
-                const pattern2 = /^validad(o|a) ?(pelo|por)? ?(o|a)?gestor$/gi;
-                const pattern3 = /^validad(o|a) ?(pelo|por)? ?(o|a)?(r|recursos?) ?(h|humanos?)$/gi;
-
-                const condition = pattern.test(status);
-                const condition2 = pattern2.test(status);
-                const condition3 = pattern3.test(status);
-
-                if (!condition && !condition2 && !condition3) {
-
-                    $("#inputDia").attr('readonly', obj[permissao].dia.readonly);
-                    if (!obj[permissao].dia.class)
-                        $("#inputDia").removeClass('readonly');
-
-                    $("#inputHoraEntrada").attr('readonly', obj[permissao].entrada.readonly);
-                    if (!obj[permissao].entrada.class)
-                        $("#inputHoraEntrada").removeClass('readonly');
-
-                    $("#inputInicioAlmoco").attr('readonly', obj[permissao].inicioAlmoco.readonly);
-                    if (!obj[permissao].inicioAlmoco.class)
-                        $("#inputInicioAlmoco").removeClass('readonly');
-
-                    $("#inputFimAlmoco").attr('readonly', obj[permissao].fimAlmoco.readonly);
-                    if (!obj[permissao].fimAlmoco.class)
-                        $("#inputFimAlmoco").removeClass('readonly');
-
-                    $("#inputHoraSaida").attr('readonly', obj[permissao].saida.readonly);
-                    if (!obj[permissao].saida.class)
-                        $("#inputHoraSaida").removeClass('readonly');
-
-                    $("#inputHoraExtra").attr('readonly', obj[permissao].extra.readonly);
-                    if (!obj[permissao].extra.class)
-                        $("#inputHoraExtra").removeClass('readonly');
-
-                    $("#inputAtraso").attr('readonly', obj[permissao].atraso.readonly);
-                    if (!obj[permissao].atraso.class)
-                        $("#inputAtraso").removeClass('readonly');
-
-                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
-                    $("#inputLancamento").removeAttr('style');
-                    if (!obj[permissao].lancamento.class)
-                        $("#inputLancamento").removeClass('readonly');
-                    $("#inputLancamento").css('pointer-events', obj[permissao].lancamento.pointerEvents);
-                    $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
-
-                    $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
-                    $("#btnFechar").attr('disabled', obj[permissao].fechar.disabled);
-                    $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
-                } else {
-
-                    $("#inputDia").attr('readonly', true);
-                    if (!$("#inputDia").hasClass('readonly')) {
-                        $("#inputDia").addClass('readonly');
-                    }
-
-                    $("#inputHoraEntrada").attr('readonly', true);
-                    if (!$("#inputHoraEntrada").hasClass('readonly')) {
-                        $("#inputHoraEntrada").addClass('readonly');
-                    }
-
-                    $("#inputInicioAlmoco").attr('readonly', true);
-                    if (!$("#inputInicioAlmoco").hasClass('readonly')) {
-                        $("#inputInicioAlmoco").addClass('readonly');
-                    }
-
-                    $("#inputFimAlmoco").attr('readonly', true);
-                    if (!$("#inputFimAlmoco").hasClass('readonly')) {
-                        $("#inputFimAlmoco").addClass('readonly');
-                    }
-
-                    $("#inputHoraSaida").attr('readonly', true);
-                    if (!$("#inputHoraSaida").hasClass('readonly')) {
-                        $("#inputHoraSaida").addClass('readonly');
-                    }
-
-                    $("#inputHoraExtra").attr('readonly', true);
-                    if (!$("#inputHoraExtra").hasClass('readonly')) {
-                        $("#inputHoraExtra").addClass('readonly');
-                    }
-
-                    $("#inputAtraso").attr('readonly', true);
-                    if (!$("#inputAtraso").hasClass('readonly')) {
-                        $("#inputAtraso").addClass('readonly');
-                    }
-
-                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
-                    $("#inputLancamento").removeAttr('style');
-                    if (!$("#inputLancamento").hasClass('readonly')) {
-                        $("#inputLancamento").addClass('readonly');
-                    }
-                    $("#inputLancamento").css('pointer-events', 'none');
-                    $("#inputLancamento").css('touch-action', 'none');
-
-                    $("#btnAddPonto").attr('disabled', true);
-                    $("#btnFechar").attr('disabled', true);
-                    $("#btnGravar").attr('disabled', true);
-                }
-
-                break;
-            } else if (permissao == 'PONTOELETRONICOMENSALMINIMO') {
-
-                $("#mesAno").attr('readonly', obj[permissao].mesAno.readonly);
-                $("#mesAno").removeAttr('style');
-                if (!obj[permissao].mesAno.class)
-                    $("#mesAno").removeClass('readonly');
-
-                let status = $("#status option:selected").text();
-                const pattern = /^fechad(o|a)$/gi
-                const pattern2 = /^validad(o|a) ?(pelo|por)? ?(o|a)?gestor$/gi;
-                const pattern3 = /^validad(o|a) ?(pelo|por)? ?(o|a)?(r|recursos?) ?(h|humanos?)$/gi;
-
-                const condition = pattern.test(status);
-                const condition2 = pattern2.test(status);
-                const condition3 = pattern3.test(status);
-
-                if (!condition && !condition2 && !condition3) {
-
-                    $("#inputDia").attr('readonly', obj[permissao].dia.readonly);
-                    if (!obj[permissao].dia.class)
-                        $("#inputDia").removeClass('readonly');
-
-                    $("#inputHoraEntrada").attr('readonly', obj[permissao].entrada.readonly);
-                    if (!obj[permissao].entrada.class)
-                        $("#inputHoraEntrada").removeClass('readonly');
-
-                    $("#inputInicioAlmoco").attr('readonly', obj[permissao].inicioAlmoco.readonly);
-                    if (!obj[permissao].inicioAlmoco.class)
-                        $("#inputInicioAlmoco").removeClass('readonly');
-
-                    $("#inputFimAlmoco").attr('readonly', obj[permissao].fimAlmoco.readonly);
-                    if (!obj[permissao].fimAlmoco.class)
-                        $("#inputFimAlmoco").removeClass('readonly');
-
-                    $("#inputHoraSaida").attr('readonly', obj[permissao].saida.readonly);
-                    if (!obj[permissao].saida.class)
-                        $("#inputHoraSaida").removeClass('readonly');
-
-                    $("#inputHoraExtra").attr('readonly', obj[permissao].extra.readonly);
-                    if (!obj[permissao].extra.class)
-                        $("#inputHoraExtra").removeClass('readonly');
-
-                    $("#inputAtraso").attr('readonly', obj[permissao].atraso.readonly);
-                    if (!obj[permissao].atraso.class)
-                        $("#inputAtraso").removeClass('readonly');
-
-                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
-                    $("#inputLancamento").removeAttr('style');
-                    if (!obj[permissao].lancamento.class)
-                        $("#inputLancamento").removeClass('readonly');
-                    $("#inputLancamento").css('pointer-events', obj[permissao].lancamento.pointerEvents);
-                    $("#inputLancamento").css('touch-action', obj[permissao].lancamento.touchAction);
-
-                    $("#btnAddPonto").attr('disabled', obj[permissao].adicionarPonto.disabled);
-                    $("#btnFechar").attr('disabled', obj[permissao].fechar.disabled);
-                    $("#btnGravar").attr('disabled', obj[permissao].salvarAlteracoes.disabled);
-                } else {
-
-                    $("#inputDia").attr('readonly', true);
-                    if (!$("#inputDia").hasClass('readonly')) {
-                        $("#inputDia").addClass('readonly');
-                    }
-
-                    $("#inputHoraEntrada").attr('readonly', true);
-                    if (!$("#inputHoraEntrada").hasClass('readonly')) {
-                        $("#inputHoraEntrada").addClass('readonly');
-                    }
-
-                    $("#inputInicioAlmoco").attr('readonly', true);
-                    if (!$("#inputInicioAlmoco").hasClass('readonly')) {
-                        $("#inputInicioAlmoco").addClass('readonly');
-                    }
-
-                    $("#inputFimAlmoco").attr('readonly', true);
-                    if (!$("#inputFimAlmoco").hasClass('readonly')) {
-                        $("#inputFimAlmoco").addClass('readonly');
-                    }
-
-                    $("#inputHoraSaida").attr('readonly', true);
-                    if (!$("#inputHoraSaida").hasClass('readonly')) {
-                        $("#inputHoraSaida").addClass('readonly');
-                    }
-
-                    $("#inputHoraExtra").attr('readonly', true);
-                    if (!$("#inputHoraExtra").hasClass('readonly')) {
-                        $("#inputHoraExtra").addClass('readonly');
-                    }
-
-                    $("#inputAtraso").attr('readonly', true);
-                    if (!$("#inputAtraso").hasClass('readonly')) {
-                        $("#inputAtraso").addClass('readonly');
-                    }
-
-                    $("#inputLancamento").attr('readonly', obj[permissao].lancamento.readonly);
-                    $("#inputLancamento").removeAttr('style');
-                    if (!$("#inputLancamento").hasClass('readonly')) {
-                        $("#inputLancamento").addClass('readonly');
-                    }
-                    $("#inputLancamento").css('pointer-events', 'none');
-                    $("#inputLancamento").css('touch-action', 'none');
-
-                    $("#btnAddPonto").attr('disabled', true);
-                    $("#btnFechar").attr('disabled', true);
-                    $("#btnGravar").attr('disabled', true);
-                }
-
-                break;
-            }
-        }
-
-    }
-
-    async function enviarPDF() {
-
-        const files = [];
-        const datas = [];
-        jsonUploadFolhaArray.forEach(obj => {
-            const ob = {};
-            for (let prop in obj) {
-                if (obj[prop] instanceof File) files.push(obj[prop])
-                else ob[prop] = obj[prop]
-            }
-            datas.push(ob)
-        })
-
-        const base64 = [];
-        for (let file of files) {
-            base64.push(await fileToBase64(file))
-        }
-
-        const jsonData = datas.map((obj, index) => {
-            obj.fileUploadFolha = base64[index]
-            return obj
-        })
-
-        enviarArquivo(jsonData, function(data) {
-            if (data.indexOf('sucess') < 0) {
-                var piece = data.split("#");
-                var mensagem = piece[1];
-                if (mensagem !== "") {
-                    smartAlert("Atenção", mensagem, "error");
-                    $("#btnEnviarArquivo").prop('disabled', false);
-                    return false;
-                } else {
-                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                    $("#btnEnviarArquivo").prop('disabled', false);
-                    return false;
-                }
-            } else {
-                var piece = data.split("#");
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                $("#btnEnviarArquivo").prop('disabled', false);
-                return true;
-            }
-        })
     }
 
     //====================================//

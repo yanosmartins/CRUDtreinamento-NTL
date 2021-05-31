@@ -166,7 +166,8 @@ include("inc/nav.php");
                                                                         <table id="tableUploadFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                             <thead>
                                                                                 <tr role="row">
-                                                                                    <th class="text-left" style="min-width: 100%;">--</th>
+                                                                                    <th class="text-left" style="min-width: 100%;">Arquivo</th>
+                                                                                    <th class="text-left" style="min-width: 100%;">Ação</th>
 
                                                                                 </tr>
                                                                             </thead>

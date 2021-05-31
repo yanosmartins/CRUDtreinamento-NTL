@@ -320,17 +320,21 @@ function consultarPermissoes()
     $usuario = $_SESSION["login"];
     $reposit = new reposit();
     $sql =
-        "SELECT F.nome FROM Ntl.funcionalidade F 
-        INNER JOIN Ntl.usuarioFuncionalidade UF 
+        "SELECT F.nome,UF.funcionalidade FROM Ntl.usuarioFuncionalidade UF
+        INNER JOIN Ntl.funcionalidade F
         ON F.codigo = UF.funcionalidade
         INNER JOIN Ntl.usuario U 
-        ON U.codigo = UF.usuario 
-        WHERE U.login = '" . $usuario . "' 
-    UNION 
-	SELECT F.nome FROM Ntl.funcionalidade F 
-        INNER JOIN Ntl.usuarioGrupoFuncionalidade GF 
-        ON F.codigo = GF.funcionalidade 
-        INNER JOIN Ntl.usuario U ON U.grupo = GF.grupo";
+        ON U.codigo = UF.usuario
+        WHERE U.login = '$usuario'
+        
+        UNION ALL 
+        
+        SELECT F.nome,GF.funcionalidade FROM Ntl.usuarioGrupoFuncionalidade GF
+        INNER JOIN Ntl.funcionalidade F
+        ON F.codigo = GF.funcionalidade
+        INNER JOIN Ntl.usuario U
+        ON U.grupo = GF.grupo
+        WHERE U.login = '$usuario'";
 
     $result = $reposit->RunQuery($sql);
     $permissoes = array();
