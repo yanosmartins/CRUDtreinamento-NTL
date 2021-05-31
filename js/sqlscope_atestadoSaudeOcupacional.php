@@ -58,18 +58,28 @@ function recuperarDadosFuncionario()
     if ($row = $result[0]) {
         $codigo = (int) $row['codigoFuncionario'];
         $nome = $row['nome'];
-        $matricula = $row['matricula'];
-        $cargo = $row['cargo'];
-        $projeto = $row['projeto'];
-        $sexo = $row['sexo'];
-        $dataNascimento = $row['dataNascimento'];
-        $dataNascimentoTeste = new DateTime($dataNascimento);
-        $dataAtual = new DateTime();
-        $difData = date_diff($dataAtual, $dataNascimentoTeste);
-        $idade = $difData->format('%y');
-        $dataAdmissao = $row['dataAdmissao'];
-        $cargoId = $row['codigoCargo'];
-        $projetoId = $row['codigoProjeto'];
+
+        $reposit = "";
+        $result = "";
+        $sql = "SELECT codigo FROM Funcionario.atestadoSaudeOcupacional WHERE funcionario = " . $funcionario;
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+        if ((empty($result)) || ($result < 1)) {
+            $matricula = $row['matricula'];
+            $cargo = $row['cargo'];
+            $projeto = $row['projeto'];
+            $sexo = $row['sexo'];
+            $dataNascimento = $row['dataNascimento'];
+            $dataNascimentoTeste = new DateTime($dataNascimento);
+            $dataAtual = new DateTime();
+            $difData = date_diff($dataAtual, $dataNascimentoTeste);
+            $idade = $difData->format('%y');
+            $dataAdmissao = $row['dataAdmissao'];
+            $cargoId = $row['codigoCargo'];
+            $projetoId = $row['codigoProjeto'];
+        } else {
+            return;
+        };
     }
 
     if ($dataNascimento != "") {
@@ -144,7 +154,6 @@ function recuperarDadosFuncionarioASO()
         $dataUltimoAso = $row['dataUltimoAso'];
         $dataValidadeAso = $row['dataValidadeAso'];
         $dataAgendamento = $row['dataAgendamento'];
-        
     }
 
     if ($dataNascimento != "") {
@@ -211,7 +220,7 @@ function recuperarDadosFuncionarioASO()
         } else {
             $sexo = "Feminino";
         }
-        
+
 
         array_push($pathArray, $path);
         array_push(
@@ -233,7 +242,7 @@ function recuperarDadosFuncionarioASO()
 
     $i = 0;
     foreach ($pathArray as $path) {
-        $path = dirname(__DIR__) . substr($path,1);
+        $path = dirname(__DIR__) . substr($path, 1);
         $content = file_get_contents($path . $uploadArray[$i]["fileName"]);
         $base64 = "data:application/pdf;base64," . base64_encode($content);
 
@@ -313,17 +322,16 @@ function grava()
     $dataAgendamento = formatarData($dataAso['dataAgendamento']);
     $ativo =  $dataAso['ativo'];
 
-
     $reposit = "";
     $result = "";
     $sql = "SELECT codigo FROM Funcionario.atestadoSaudeOcupacional WHERE funcionario = " . $funcionario;
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    if((empty($result))|| ($result < 1)) {
+    if ((empty($result)) || ($result < 1)) {
     } else {
         $row = $result[0];
         $codigoFolha = $row['codigo'];
-       $id = $codigoFolha;
+        $id = $codigoFolha;
     };
     // INICIO UPLOAD //
 
@@ -371,9 +379,9 @@ function grava()
                 $aux = explode("/", $value);
                 $value = $aux[2] . "-" . $aux[1] . "-" . $aux[0];
                 array_push($dataProximoAsoLista, $value);
-            }else if ($key == "tipoExame") {
+            } else if ($key == "tipoExame") {
                 array_push($tipoExame, $value);
-            }else if ($key == "situacao") {
+            } else if ($key == "situacao") {
                 array_push($situacao, $value);
             }
         }
@@ -397,8 +405,8 @@ function grava()
         array_push($pathArray, $path);
 
         $start = stripos($path, DIRECTORY_SEPARATOR . "uploads");
-        $recorte = explode($filename,substr($path, $start));
-        array_push($relativePathArray,"." . $recorte[0]);
+        $recorte = explode($filename, substr($path, $start));
+        array_push($relativePathArray, "." . $recorte[0]);
         array_push($fileNameArray, $filename);
 
         //Cria um arquivo de escrita e leitura
@@ -409,7 +417,7 @@ function grava()
             fwrite($pdf, $pdfContent);
         } catch (Exception $e) {
             $out = "Não foi possível realizar o upload.#";
-            echo "failed#".$out;
+            echo "failed#" . $out;
             return;
         } finally {
             if ($pdf)
@@ -428,72 +436,72 @@ function grava()
         $xmlDataAso = "";
         $nomeXml = "ArrayOfDataAso";
         $nomeTabela = "atestadoSaudeOcupacionalDetalhe";
-    if (sizeof($pathArray) > 0) {
-        $xmlDataAso = '<?xml version="1.0"?>';
-        $xmlDataAso = $xmlDataAso . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema%22%3E">';
-        $j = 0;
-        foreach ($relativePathArray as $path) {
-            $xmlDataAso = $xmlDataAso . "<" . $nomeTabela . ">";
-            $xmlDataAso = $xmlDataAso . "<path>" . $path . "</path>";
-            $xmlDataAso = $xmlDataAso . "<name>" . $fileNameArray[$j] . "</name>";
-            $xmlDataAso = $xmlDataAso . "<type>" . "application/pdf" . "</type>";
-            $xmlDataAso = $xmlDataAso . "<dataRealizacaoAso>" . $dataRealizacaoAso[$j] . "</dataRealizacaoAso>";
-            $xmlDataAso = $xmlDataAso . "<dataProximoAsoLista>" . $dataProximoAsoLista[$j] . "</dataProximoAsoLista>";
-            $xmlDataAso = $xmlDataAso . "<tipoExame>" . $tipoExame[$j] . "</tipoExame>";
-            $xmlDataAso = $xmlDataAso . "<situacao>" . $situacao[$j] . "</situacao>";
-            $xmlDataAso = $xmlDataAso . "</" . $nomeTabela . ">";
-            $j++;
+        if (sizeof($pathArray) > 0) {
+            $xmlDataAso = '<?xml version="1.0"?>';
+            $xmlDataAso = $xmlDataAso . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema%22%3E">';
+            $j = 0;
+            foreach ($relativePathArray as $path) {
+                $xmlDataAso = $xmlDataAso . "<" . $nomeTabela . ">";
+                $xmlDataAso = $xmlDataAso . "<path>" . $path . "</path>";
+                $xmlDataAso = $xmlDataAso . "<name>" . $fileNameArray[$j] . "</name>";
+                $xmlDataAso = $xmlDataAso . "<type>" . "application/pdf" . "</type>";
+                $xmlDataAso = $xmlDataAso . "<dataRealizacaoAso>" . $dataRealizacaoAso[$j] . "</dataRealizacaoAso>";
+                $xmlDataAso = $xmlDataAso . "<dataProximoAsoLista>" . $dataProximoAsoLista[$j] . "</dataProximoAsoLista>";
+                $xmlDataAso = $xmlDataAso . "<tipoExame>" . $tipoExame[$j] . "</tipoExame>";
+                $xmlDataAso = $xmlDataAso . "<situacao>" . $situacao[$j] . "</situacao>";
+                $xmlDataAso = $xmlDataAso . "</" . $nomeTabela . ">";
+                $j++;
+            }
+            $xmlDataAso = $xmlDataAso . "</" . $nomeXml . ">";
+        } else {
+            $xmlDataAso = '<?xml version="1.0"?>';
+            $xmlDataAso = $xmlDataAso . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema%22%3E';
+            $xmlDataAso = $xmlDataAso . "</" . $nomeXml . ">";
         }
-        $xmlDataAso = $xmlDataAso . "</" . $nomeXml . ">";
-    } else {
-        $xmlDataAso = '<?xml version="1.0"?>';
-        $xmlDataAso = $xmlDataAso . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema%22%3E';
-        $xmlDataAso = $xmlDataAso . "</" . $nomeXml . ">";
-    }
-    $xml = simplexml_load_string($xmlDataAso);
-    if ($xml === false) {
-        $mensagem = "Erro na criação do XML de Aso";
-        echo "failed#" . $mensagem . ' ';
+        $xml = simplexml_load_string($xmlDataAso);
+        if ($xml === false) {
+            $mensagem = "Erro na criação do XML de Aso";
+            echo "failed#" . $mensagem . ' ';
+            return;
+        }
+        $xmlDataAso = "'" . $xmlDataAso . "'";
+
+        // FIM XML//
+
+
+
+        if ($sexo == 'Masculino') {
+            $sexo = 'M';
+        } else {
+            $sexo = 'F';
+        }
+
+
+        $sql = "Funcionario.atestadoSaudeOcupacional_Atualiza "
+            . $id . ","
+            . $funcionario . ","
+            . $matricula . ","
+            . $cargo . ","
+            . $projeto . ","
+            . $sexo . ","
+            . $dataNascimento . ","
+            . $dataAdmissao . ","
+            . $dataUltimoAso . ","
+            . $dataProximoAso . ","
+            . $dataAgendamento  . ","
+            . $ativo  . ","
+            . $usuario . ","
+            . $xmlDataAso . "";
+
+        $result = $reposit->Execprocedure($sql);
+
+        $ret = 'sucess#';
+        if ($result < 1) {
+            $ret = 'failed#';
+        }
+        echo $ret;
         return;
     }
-    $xmlDataAso = "'" . $xmlDataAso . "'";
-
-    // FIM XML//
-
-
-
-    if ($sexo == 'Masculino') {
-        $sexo = 'M';
-    } else {
-        $sexo = 'F';
-    }
-
-
-    $sql = "Funcionario.atestadoSaudeOcupacional_Atualiza "
-        . $id . ","
-        . $funcionario . ","
-        . $matricula . ","
-        . $cargo . ","
-        . $projeto . ","
-        . $sexo . ","
-        . $dataNascimento . ","
-        . $dataAdmissao . ","
-        . $dataUltimoAso . ","
-        . $dataProximoAso . ","
-        . $dataAgendamento  . ","
-        . $ativo  . ","
-        . $usuario . ","
-        . $xmlDataAso . "";
-
-    $result = $reposit->Execprocedure($sql);
-
-    $ret = 'sucess#';
-    if ($result < 1) {
-        $ret = 'failed#';
-    }
-    echo $ret;
-    return;
-}
 }
 
 function recupera()
@@ -606,7 +614,7 @@ function recupera()
         if ($tipoExame == 4) {
             $descricaoTipoExame = "Retorno ao Trabalho";
         }
-        
+
 
         array_push($pathArray, $path);
         array_push(
@@ -628,7 +636,7 @@ function recupera()
 
     $i = 0;
     foreach ($pathArray as $path) {
-        $path = dirname(__DIR__) . substr($path,1);
+        $path = dirname(__DIR__) . substr($path, 1);
         $content = file_get_contents($path . $uploadArray[$i]["fileName"]);
         $base64 = "data:application/pdf;base64," . base64_encode($content);
 
@@ -771,7 +779,8 @@ function formatarData($value)
 }
 
 //Transforma uma data Y-M-D para D-M-Y. 
-function formataDataRecuperacao($campo){
+function formataDataRecuperacao($campo)
+{
     $campo = explode(" ", $campo);
     $diaCampo = explode("-", $campo[0]);
     $campo = $diaCampo[2] . "/" . $diaCampo[1] . "/" . $diaCampo[0];

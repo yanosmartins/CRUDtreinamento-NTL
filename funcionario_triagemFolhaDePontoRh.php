@@ -215,7 +215,7 @@ include("inc/scripts.php");
         }
         var status = $('#status').val();
         
-        $('#resultadoBusca').load('funcionario_triagemFolhaDePontoListagem.php?', {
+        $('#resultadoBusca').load('funcionario_triagemFolhaDePontoListagemRh.php?', {
             funcionario,
             mesAno,
             status
