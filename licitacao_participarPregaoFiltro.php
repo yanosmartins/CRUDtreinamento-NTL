@@ -57,7 +57,7 @@ include("inc/nav.php");
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
                             <h2>Participar de Pregões</h2>
