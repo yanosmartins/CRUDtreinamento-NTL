@@ -28,7 +28,7 @@ include "js/repositorio.php";
                 LEFT JOIN Contratacao.controleCandidato CF ON F.codigo = CF.candidato
                 LEFT JOIN Ntl.projeto P ON P.codigo = CF.projeto 
                 LEFT JOIN Ntl.sindicato S ON S.codigoSindicatoSCI = CF.sindicato
-                LEFT JOIN Ntl.cargo C ON C.codigoCargoSCI = CF.cargo 
+                LEFT JOIN Ntl.cargo C ON C.codigo = CF.cargo 
                 LEFT JOIN Contratacao.exportacao E ON E.situacao = F.codigo
                 WHERE  F.aprovado = 1";
                 $where = " AND (0 = 0) AND E.situacao IS NULL";
