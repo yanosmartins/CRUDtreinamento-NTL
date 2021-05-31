@@ -86,17 +86,18 @@ include("inc/nav.php");
 
                                                             <div class="row">
                                                                 <section class="col col-4">
-                                                                    <label class="label" for="expediente">Funcionário</label>
+                                                                    <label class="label" for="funcionario">Funcionário</label>
                                                                     <label class="select">
-                                                                        <select id="expediente" name="expediente">
+                                                                        <select id="funcionario" name="funcionario">
                                                                             <option></option>
                                                                             <?php
                                                                             $reposit = new reposit();
-                                                                            $sql = "SELECT codigo,nome FROM Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
+                                                                            $sql = "SELECT codigo,nome FROM Ntl.funcionario WHERE ativo = 1 AND nome !='ADMINISTRADOR'  ORDER BY nome";
                                                                             $result = $reposit->RunQuery($sql);
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
-                                                                                $horaEntrada = $row['nome'];
+                                                                                $nome = $row['nome'];
+                                                                                echo "<option value=\"$codigo\">$nome</option>";
                                                                             }
                                                                             ?>
                                                                         </select><i></i>
@@ -111,24 +112,58 @@ include("inc/nav.php");
 
                                                                 <section class=" col col-md-2">
                                                                     <label class="label"> </label>
-                                                                    <button type="button" id="btnPdf" class="btn btn-info" aria-hidden="true">
+                                                                    <button type="button" id="btnSearch" class="btn btn-info" aria-hidden="true">
                                                                         <i class="">Pesquisar</i>
                                                                     </button>
                                                                 </section>
                                                             </div>
                                                             <hr><br>
-
                                                             <div class="row">
                                                                 <input id="jsonUploadFolha" name="jsonUploadFolha" type="hidden" value="[]">
-                                                                <div id="formUploadFolha" class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
+                                                                <div id="formUploadFolha" class="col col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                                     <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
                                                                         <table id="tableUploadFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                             <thead>
                                                                                 <tr role="row">
+                                                                                    <th class="text-left" style="min-width: 100%;">Arquivo</th>
+                                                                                    <th class="text-left">Tipo</th>
+                                                                                    <th class="text-left">Mês referente</th>
+                                                                                    <th class="text-left">Data de upload</th>
+
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <input id="jsonVisualizarFolha" name="jsonVisualizarFolha" type="hidden" value="[]">
+                                                                <div id="formVisualizarFolha" class="col col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                                    <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                        <table id="tableVisualizarFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th class="text-left" style="min-width: 100%;">Arquivo</th>
+                                                                                    <th class="text-left" style="min-width: 100%;">Ação</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <input id="jsonPontoMensal" name="jsonPontoMensal" type="hidden" value="[]">
+                                                                <div id="formPontoMensal" class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                                                    <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                        <table id="tablePontoMensal" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                            <thead>
+                                                                                <tr role="row">
                                                                                     <th>Dia</th>
                                                                                     <th class="text-left" style="min-width: 100%;">Entrada</th>
-                                                                                    <th class="text-left">Almoço Início</th>
+                                                                                    <th class="text-left">Almoço - Início</th>
                                                                                     <th class="text-left">Almoço - Saída</th>
                                                                                     <th class="text-left">Saída</th>
                                                                                     <th class="text-left">Extra</th>
@@ -141,41 +176,7 @@ include("inc/nav.php");
                                                                         </table>
                                                                     </div>
                                                                 </div>
-                                                                <input id="jsonUploadFolha" name="jsonUploadFolha" type="hidden" value="[]">
-                                                                <div id="formUploadFolha" class="col col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                                    <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                        <table id="tableUploadFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                            <thead>
-                                                                                <tr role="row">
-                                                                                    <th class="text-left" style="min-width: 100%;">Arquivo</th>
-                                                                                    <th class="text-left">Tipo</th>
-                                                                                    <th class="text-left">Mês referente</th>
 
-                                                                                    <th class="text-left">Data de upload</th>
-
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                                <input id="jsonUploadFolha" name="jsonUploadFolha" type="hidden" value="[]">
-                                                                <div id="formUploadFolha" class="col col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                                    <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                        <table id="tableUploadFolha" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                            <thead>
-                                                                                <tr role="row">
-                                                                                    <th class="text-left" style="min-width: 100%;">Arquivo</th>
-                                                                                    <th class="text-left" style="min-width: 100%;">Ação</th>
-
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                     </fieldset>
@@ -184,13 +185,13 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                         <footer>
-                                            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimplePoint" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                                            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleReabrir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                                                     <span id="ui-id-1" class="ui-dialog-title">
                                                     </span>
                                                 </div>
                                                 <div id="dlgSimplePoint" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                    <p>O dia selecionado é um final de semana.</p>
+                                                    <p>Insira as pendências.</p>
                                                 </div>
                                                 <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
                                                     <div class="ui-dialog-buttonset">
@@ -198,24 +199,10 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                             <!-- --------------------------------------------- -->
-                                            <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleClose" aria-labelledby="ui-id-2" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
-                                                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                                                    <span id="ui-id-2" class="ui-dialog-title">
-                                                    </span>
-                                                </div>
-                                                <div id="dlgSimpleClose" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                    <p>Após o fechamento da folha não será possível realizar alterações. Deseja confirmar o fechamento da folha?</p>
-                                                </div>
-                                                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                                    <div class="ui-dialog-buttonset">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <button type="button" id="btnFechar" class="btn btn-success" aria-hidden="true" title="Fechar">
+                                            <button type="button" id="btnValidar" class="btn btn-success" aria-hidden="true" title="Validar">
                                                 <i class="">Validar</i>
                                             </button>
-                                            <button type="button" id="btnFechar" class="btn btn-warning" aria-hidden="true" title="Fechar">
+                                            <button type="button" id="btnReabrir" class="btn btn-warning" aria-hidden="true" title="Reabrir com pendência">
                                                 <i class="">Reabrir com pendência</i>
                                             </button>
 
@@ -246,7 +233,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_beneficioFolhaPontoMensal.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_funcionarioTriagemPontoMensalGestor.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -288,204 +275,140 @@ include("inc/scripts.php");
             }
         }));
 
-        // $('#dlgSimplePoint').dialog({
-        //     autoOpen: false,
-        //     width: 400,
-        //     resizable: false,
-        //     modal: true,
-        //     title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
-        //     buttons: [{
-        //         html: "Confirmar",
-        //         "class": "btn btn-success",
-        //         click: function() {
-        //             $(this).dialog("close");
-        //             $('#dlgSimplePoint').css('display', 'none');
-        //             addPoint();
-        //         }
-        //     }, {
-        //         html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-        //         "class": "btn btn-default",
-        //         click: function() {
-        //             $(this).dialog("close");
-        //             return;
-        //         }
-        //     }]
-        // });
+        $('#dlgSimpleReabrir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Confirmar",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    $('#dlgSimplePoint').css('display', 'none');
+                    return;
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                    return;
+                }
+            }]
+        });
 
-        // /* Evento para chamar a addPoint ou o Modal */
-        // $("#btnAddPonto").on("click", function() {
+        //Eventos
 
-        //     let dia = $("#inputDia").val();
+        $("#btnSearch").on('click', () => {
+            carregaPagina();
+        });
 
-        //     if (!dia) {
-        //         smartAlert('Atenção', 'Insira um dia para a inserção das horas', 'error')
-        //         return;
-        //     }
+        $("#btnReabrir").on('click', () => {
+            $('#dlgSimplePoint').dialog('open');
+        });
 
-        //     let isWeekend = checkDay(dia);
+        $("#btnValidar").on('click', () => {
+            validar();
+        });
 
-        //     if (isWeekend) {
-        //         $('#dlgSimplePoint').dialog('open');
-        //     } else {
+        carregaPagina()
+    })
 
-        //     }
-        //     return;
-        // });
-
-        // /* Eventos para chamar a gravar() */
-        // $("#btnGravar").on("click", function() {
-        //     gravar();
-        // });
-
-        /*Função responsavel pelo carregamento dos dados pessoais e configurações da tela*/
-        // carregaFolhaPontoMensal();
-        // recuperaUpload();
-
-    });
 
     /* Função reponsável por passar os dados para o back-end para a gravação ou reescrita da folha */
-    function gravar() {
+    function validar() {
 
-        gravaFolhaPontoMensal(folhaPontoInfo, folhaPontoMensalTabela,
-            function(data) {
+        validarGestor(function(data) {
 
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        $("#btnGravar").prop('disabled', false);
-                        return false;
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                        $("#btnGravar").prop('disabled', false);
-                        return false;
-                    }
-                } else {
-                    var piece = data.split("#");
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+            if (data.indexOf('sucess') < 0) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
+                if (mensagem !== "") {
+                    smartAlert("Atenção", mensagem, "error");
                     $("#btnGravar").prop('disabled', false);
-                }
-            }
-        );
-    }
-
-    function fechar() {
-
-
-        gravaFolhaPontoMensal(folhaPontoInfo, folhaPontoMensalTabela,
-            function(data) {
-
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        $("#btnFechar").prop('disabled', false);
-                        return false;
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                        $("#btnFechar").prop('disabled', false);
-                        return false;
-                    }
+                    return false;
                 } else {
-                    var piece = data.split("#");
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    const funcionario = $("#funcionario").val();
-                    const mesAno = $("#mesAno").val();
-                    $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php?funcionario=' + funcionario + '&mesAno=' + mesAno);
+                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                    $("#btnGravar").prop('disabled', false);
+                    return false;
                 }
+            } else {
+                var piece = data.split("#");
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                const funcionario = $("#funcionariio").val();
+                let mesAno = $("#mesAno").val();
+                mesAno = mesAno.split("/").reverse().join("-")
+                $(location).attr('href', `funcionario_triagemPontoMensalGestor?funcionario=${funcionario}&mesAno=${mesAno}.php`);
             }
-        );
+        });
     }
 
     /*Função reponsável por trazer os dados pessoais e configurações da folha*/
-    function carregaFolhaPontoMensal() {
+    function carregaPagina() {
 
-        /*Pega a query da URL e separa seus devidos valores*/
+        recuperaTriagem(function(data) {
+
+            data = data.replace(/failed/gi, '');
+            let piece = data.split("#");
+
+
+            let mensagem = piece[0];
+            let out = piece[1];
+            let JsonPontoMensal = piece[2];
+            let JsonUploadFile = piece[3];
+            let JsonVisualiza
+
+            piece = out.split("^");
+
+            //funcionando
+            let codigo = piece[0] || 0;
+            const funcionario = piece[1] || 0
+            let mesAno = piece[2] || new Date().toDateString();
+
+            $("#codigo").val(codigo);
+            $("#funcionario").val(funcionario);
+            $("#mesAno").val(mesAno);
+
+            return;
+
+        });
+
+    }
+
+    function atualizaPagina() {
         const funcionario = $("#funcionario").val()
 
-        const mesAno = $("#mesAno").val()
+        let mesAno = $("#mesAno").val()
+        mesAno = mesAno.split("/").reverse().join("-")
 
-        recuperaFolhaPontoMensal(funcionario, mesAno,
-            function(data) {
+        atualizaTriagem(funcionario, mesAno, function(data) {
 
-                data = data.replace(/failed/gi, '');
-                let piece = data.split("#");
-
-
-                let mensagem = piece[0];
-                let out = piece[1];
-                let JsonFolha = piece[2];
-                piece = out.split("^");
-
-                let statusText;
-                let status = $("#status option");
-                status.each((index, el) => {
-                    let texto = $(el).text();
-                    let pattern = /abert(o|a)/gi;
-                    if (pattern.test(texto)) {
-                        statusText = $(el).val();
-                    }
-                });
-
-                //funcionando
-                let codigo = piece[0] || 0;
-                let observacao = piece[2] || "";
-                toleranciaAtraso = piece[4] || '05:00';
-                toleranciaExtra = piece[5] || '05:00';
-                status = piece[6] || statusText;
-
-                $("#codigo").val(codigo);
-                $("#observacaoFolhaPontoMensal").val(observacao);
-                $("#status").val(status);
-
-                //funcionando
-                const almoco = $("#almoco")
-                let textoAlmoco = almoco.text().trim();
-                textoAlmoco = textoAlmoco.split("-");
-                textoAlmoco[0] = textoAlmoco[0].trim();
-                textoAlmoco[1] = textoAlmoco[1].trim();
-
-                return;
-
-            }
-        );
-
-    }
-
-    function diasMes(date = '') {
-        let ano, mes, cutout;
-        if (/\//g.test(date)) {
-            cutout = date.split(/\//g);
-            ano = cutout[2];
-            mes = cutout[1];
-        }
-        if (/\-/g.test(date)) {
-            cutout = date.split(/\-/g);
-            ano = cutout[0];
-            mes = cutout[1];
-        }
-        const data = new Date(ano, mes, 0);
-        return data.getDate();
-    }
+            data = data.replace(/failed/gi, '');
+            let piece = data.split("#");
 
 
-    function checkDay(day) {
-        if (day.length < 2)
-            day = '0'.concat(day);
+            let mensagem = piece[0];
+            let out = piece[1];
+            let JsonPontoMensal = piece[2];
+            let JsonUploadFile = piece[3];
+            let JsonVisualiza
 
-        let mesAno = $("#mesAno").val();
-        mesAno = mesAno.replace(/\d\d$/g, day);
-        const aux = mesAno.split('-');
-        const date = new Date(aux[0], (aux[1] - 1), aux[2]);
-        let isWeekend = false;
-        let checkDay = date.getDay();
-        const weekend = [0, 6];
+            piece = out.split("^");
 
-        isWeekend = weekend.includes(checkDay);
+            //funcionando
+            let codigo = piece[0] || 0;
+            const funcionario = piece[1] || 0
+            let mesAno = piece[2] || new Date().toDateString();
 
-        return isWeekend;
+            $("#codigo").val(codigo);
+            $("#funcionario").val(funcionario);
+            $("#mesAno").val(mesAno);
+
+            return;
+
+        });
 
     }
 
