@@ -628,6 +628,7 @@ include("inc/scripts.php");
                             for (obj of JsonUpload) {
                                 let file = await fetch(obj.fileUploadAso)
                                 file = await file.blob()
+                                file = new File([file], obj.path)
                                 file = new File([file], obj.fileName, {
                                     type: "application/pdf"
                                 })
@@ -654,6 +655,7 @@ include("inc/scripts.php");
                                     situacao: obj.situacao,
                                     tipoExame: obj.tipoExame,
                                     descricaoTipoExame: obj.descricaoTipoExame,
+                                    path: obj.path,
                                     fileUploadAso: files[index]
                                 })
                             })
@@ -795,7 +797,14 @@ include("inc/scripts.php");
 
             var fileUploadAso = jsonDataAsoArray[i].fileUploadAso;
 
-            row.append($('<td class="text-center" >' + jsonDataAsoArray[i].fileUploadAso.name + '</td>'));
+            let codigo = $("#codigo").val()
+            if (codigo ="" || !codigo ) {
+                row.append($('<td class="text-center" >' + jsonDataAsoArray[i].fileUploadAso.name + '</td>'));
+            } else {
+                row.append($('<td class="text-center"><a href="' + jsonDataAsoArray[i].path + jsonDataAsoArray[i].fileUploadAso.name + '"> ' + jsonDataAsoArray[i].fileUploadAso.name + ' </a> </td>'));
+                let a = $("#codigo").val()
+            }
+
 
         }
     }
@@ -1042,14 +1051,14 @@ include("inc/scripts.php");
                     if (piece == "") {
                         smartAlert("Erro", "Funcionario ja está cadastrado!", "error");
                         $("#matricula").val('');
-                        $("#cargo").val('') ;
-                        $("#projeto").val('') ;
-                        $("#sexo").val('') ;
-                        $("#dataNascimento").val('') ;
-                        $("#dataAdmissao").val('') ;
-                        $("#idade").val('') ;
-                        $("#cargoId").val('') ;
-                        $("#projetoId").val('') ;
+                        $("#cargo").val('');
+                        $("#projeto").val('');
+                        $("#sexo").val('');
+                        $("#dataNascimento").val('');
+                        $("#dataAdmissao").val('');
+                        $("#idade").val('');
+                        $("#cargoId").val('');
+                        $("#projetoId").val('');
                     } else {
                         var mensagem = piece[0];
                         var registros = piece[1].split("^");
