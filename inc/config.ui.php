@@ -114,7 +114,7 @@ if ($condicaoTabelaBasicaOk) {
     if (in_array('LOCALIZACAO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("localizacao" => array("title" => "Localização", "url" => APP_URL . "/tabelaBasica_localizacaoFiltro.php"));
     }
-    
+
     if (in_array('PRODUTOSERVICO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['tabelaBasica']['sub'] += array("produtoServico" => array("title" => "Produto Serviço", "url" => APP_URL . "/tabelaBasica_produtoServicoFiltro.php")); //SYSGC //Faturamento
     }
@@ -514,17 +514,14 @@ if ($condicaoFuncionarioOk) {
     if (in_array('PONTOELETRONICODIARIO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("controlePontoDiario" => array("title" => "Ponto Eletrônico Diario", "url" => APP_URL . "/prototipo_pontoEletronicoDiario.php"));
     }
-    if (array_intersect(array( 'PONTOELETRONICOMENSALMODERADO_ACESSAR', 'PONTOELETRONICOMENSALMINIMO_ACESSAR'), $arrayPermissao)) {
+    if (array_intersect(array('PONTOELETRONICOMENSALMODERADO_ACESSAR', 'PONTOELETRONICOMENSALMINIMO_ACESSAR'), $arrayPermissao)) {
         $page_nav['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php"));
     }
-    if (in_array('TRIAGEMPONTOELETRONICO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['funcionario']['sub'] += array("triagemPontoEletronico" => array("title" => "Triagem Ponto Eletrônico Filtro", "url" => APP_URL . "/funcionario_triagemFolhaDePonto.php"));
-    }
     if (in_array('TRIAGEMPONTOELETRONICOMENSALGESTOR_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['funcionario']['sub'] += array("triagemPontoEletronicoGestor" => array("title" => "Triagem Ponto Eletrônico Gestor", "url" => APP_URL . "/funcionario_triagemPontoMensalGestor.php"));
+        $page_nav['funcionario']['sub'] += array("triagemPontoEletronicoGestorFiltro" => array("title" => "Triagem Ponto Eletrônico Filtro", "url" => APP_URL . "/funcionario_triagemPontoMensalGestorFiltro.php"));
     }
     if (in_array('TRIAGEMPONTOELETRONICOMENSALRH_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['funcionario']['sub'] += array("triagemPontoEletronicoRH" => array("title" => "Triagem Ponto Eletrônico RH", "url" => APP_URL . "/funcionario_triagemPontoMensalRecursosHumanos.php"));
+        $page_nav['funcionario']['sub'] += array("triagemPontoEletronicoRecursosHumanosFiltro" => array("title" => "Triagem Ponto Eletrônico Filtro", "url" => APP_URL . "/funcionario_triagemPontoMensalRecursosHumanosFiltro.php"));
     }
     if (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("geradorFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));
