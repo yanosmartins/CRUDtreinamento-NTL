@@ -1,6 +1,6 @@
-function validarRH(codigo,callback) {
+function validarGestor(codigo,callback) {
   $.ajax({
-    url: 'js/sqlscope_funcionarioTriagemPontoMensalRecursosHumanos.php',
+    url: 'js/sqlscope_funcionarioTriagemPontoMensalGestor.php',
     dataType: 'html', //tipo do retorno
     type: 'post', //metodo de envio
     data: {
@@ -12,9 +12,9 @@ function validarRH(codigo,callback) {
   })
 }
 
-function reabrirRH(codigo,callback) {
+function reabrirGestor(codigo,callback) {
   $.ajax({
-    url: 'js/sqlscope_funcionarioTriagemPontoMensalRecursosHumanos.php',
+    url: 'js/sqlscope_funcionarioTriagemPontoMensalGestor.php',
     dataType: 'html', //tipo do retorno
     type: 'post', //metodo de envio
     data: {
@@ -28,7 +28,7 @@ function reabrirRH(codigo,callback) {
 
 function recuperaTriagem(funcionario, mesAno, callback) {
   $.ajax({
-    url: 'js/sqlscope_funcionarioTriagemPontoMensalRecursosHumanos.php', //caminho do arquivo a ser executado
+    url: 'js/sqlscope_funcionarioTriagemPontoMensalGestor.php', //caminho do arquivo a ser executado
     dataType: 'html', //tipo do retorno
     type: 'get', //metodo de envio
     data: { funcao: 'recupera',funcionario,mesAno }, //valores enviados ao script
