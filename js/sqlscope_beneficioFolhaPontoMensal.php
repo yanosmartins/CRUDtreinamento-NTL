@@ -134,7 +134,7 @@ function recupera()
 
     $funcionario = (int)$_POST["funcionario"];
 
-    if($funcionario != $_SESSION["funcionario"]){
+    if ($funcionario != $_SESSION["funcionario"]) {
         echo "failed#Não há permissão para acessar a folha de outro funcionário#";
         return;
     }
@@ -163,7 +163,7 @@ function recupera()
     $observacao = "";
     $toleranciaAtraso = "05:00";
     $toleranciaExtra = "05:00";
-    $status = 0;
+    $status = "";
 
     if ($folha) {
         $sql =
@@ -432,6 +432,8 @@ function enviarFolha()
     $datasUploads = array();
 
     $filesContent = array();
+    $uploadTypeArray = array();
+
     foreach ($jsonData as $array) {
         foreach ($array as $key => $value) {
             if ($key == "fileUploadFolha") {
@@ -439,6 +441,9 @@ function enviarFolha()
                     @list($encode, $value) = explode(',', $value);
                 }
                 array_push($filesContent, base64_decode($value, true));
+            }
+            if ($key == "uploadType") {
+                array_push($uploadTypeArray, str_replace(" ","_",$value));
             } else if ($key == "dataReferenteUpload") {
                 $aux = explode("/", $value);
                 $value = $aux[2] . "-" . $aux[1] . "-" . $aux[0];
@@ -463,14 +468,14 @@ function enviarFolha()
         $pdfContent = $file;
 
         $extension = ".pdf";
-        $filename = $funcionario . "_" . str_replace("-", "", $datasReferentes[$i]) . $extension;
+        $filename = $funcionario . "_". $uploadTypeArray[$i] . "_" . str_replace("-", "", $datasReferentes[$i]) . $extension;
         $path = $funcionarioPath . DIRECTORY_SEPARATOR . $filename;
 
         array_push($pathArray, $path);
 
         $start = stripos($path, DIRECTORY_SEPARATOR . "uploads");
-        $recorte = explode($filename,substr($path, $start));
-        array_push($relativePathArray,"." . $recorte[0]);
+        $recorte = explode($filename, substr($path, $start));
+        array_push($relativePathArray, "." . $recorte[0]);
         array_push($fileNameArray, $filename);
 
         //Cria um arquivo de escrita e leitura
@@ -481,7 +486,7 @@ function enviarFolha()
             fwrite($pdf, $pdfContent);
         } catch (Exception $e) {
             $out = "Não foi possível realizar o upload.#";
-            echo "failed#".$out;
+            echo "failed#" . $out;
             return;
         } finally {
             if ($pdf)
@@ -505,6 +510,7 @@ function enviarFolha()
             $xmlUploadFolha = $xmlUploadFolha . "<path>" . $path . "</path>";
             $xmlUploadFolha = $xmlUploadFolha . "<name>" . $fileNameArray[$j] . "</name>";
             $xmlUploadFolha = $xmlUploadFolha . "<type>" . "application/pdf" . "</type>";
+            $xmlUploadFolha = $xmlUploadFolha . "<uploadType>" . $uploadTypeArray[$j] . "</uploadType>";
             $xmlUploadFolha = $xmlUploadFolha . "<dataReferente>" . $datasReferentes[$j] . "</dataReferente>";
             $xmlUploadFolha = $xmlUploadFolha . "<dataUpload>" . $datasUploads[$j] . "</dataUpload>";
             $xmlUploadFolha = $xmlUploadFolha . "<usuarioCadastro>" . $usuario . "</usuarioCadastro>";
@@ -556,7 +562,7 @@ function recuperaPDF()
     $funcionario = $_SESSION['funcionario'];
 
     $reposit = new reposit();
-    $sql = "SELECT filePath AS 'path',fileName AS 'name', fileType AS 'type', dataReferente AS 'dataReferenteUpload', dataCadastro AS 'dataUpload' FROM Funcionario.logUploadFolhaPonto";
+    $sql = "SELECT filePath AS 'path',fileName AS 'name', fileType AS 'type',uploadType, dataReferente AS 'dataReferenteUpload', dataCadastro AS 'dataUpload' FROM Funcionario.logUploadFolhaPonto";
     $where = " WHERE (0=0) AND ";
     $where .= "funcionario = " . $funcionario;
 
@@ -578,6 +584,7 @@ function recuperaPDF()
         $path = $row["path"];
         $name = $row["name"];
         $type = $row["type"];
+        $uploadType = $row["uploadType"];
         $dataReferenteUpload = $row['dataReferenteUpload'];
         $sequencialUploadFolha = $i + 1;
         $dataUpload = $row['dataUpload'];
@@ -588,6 +595,7 @@ function recuperaPDF()
             [
                 "fileName" => $name,
                 "fileType" => $type,
+                "uploadType" => str_replace("_"," ",$uploadType),
                 "dataReferenteUpload" => $dataReferenteUpload,
                 "dataUpload" => $dataUpload,
                 "sequencialUploadFolha" => $sequencialUploadFolha
@@ -599,7 +607,7 @@ function recuperaPDF()
 
     $i = 0;
     foreach ($pathArray as $path) {
-        $path = dirname(__DIR__) . substr($path,1);
+        $path = dirname(__DIR__) . substr($path, 1);
         $content = file_get_contents($path . $uploadArray[$i]["fileName"]);
         $base64 = "data:application/pdf;base64," . base64_encode($content);
 

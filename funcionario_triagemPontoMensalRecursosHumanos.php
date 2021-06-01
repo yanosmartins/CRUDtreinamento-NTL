@@ -7,6 +7,8 @@ require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $funcionario = $_SESSION["funcionario"];
+@list($ano,$mes,$dia) = explode("-",$_GET["mesAno"]);
+$mesAno = $mes . "/" . $ano;
 
 $condicaoAcessarOK = (in_array('TRIAGEMPONTOELETRONICOMENSALRH_ACESSAR', $arrayPermissao, true));
 $condicaoGravarOK = (in_array('TRIAGEMPONTOELETRONICOMENSALRH_GRAVAR', $arrayPermissao, true));
@@ -72,7 +74,7 @@ include("inc/nav.php");
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseFolhaPontoMensal" class="collapsed" id="accordionFolhaPontoMensal">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Dados do Mês <span id="showMesAno"><?= date("m/Y") ?></span>
+                                                        Dados do Mês <span id="showMesAno"><?= $mesAno ?></span>
                                                     </a>
                                                 </h4>
                                             </div>
@@ -97,6 +99,10 @@ include("inc/nav.php");
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $nome = $row['nome'];
+                                                                                if($codigo == $_GET["funcionario"]){
+                                                                                    echo "<option value=\"$codigo\" selected>$nome</option>";
+                                                                                    continue;
+                                                                                }
                                                                                 echo "<option value=\"$codigo\">$nome</option>";
                                                                             }
                                                                             ?>
@@ -106,7 +112,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2 col-auto">
                                                                     <label for="mesAno" class="label">Mês/Ano</label>
                                                                     <label class="input">
-                                                                        <input id="mesAno" name="mesAno" type="text" data-dateformat="mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/9999" data-mask-placeholder="-" autocomplete="off">
+                                                                        <input id="mesAno" name="mesAno" type="text" data-dateformat="mm/yy" class="datepicker" style="text-align: center" value="<?= $mesAno?>" data-mask="99/9999" data-mask-placeholder="-" autocomplete="off">
                                                                     </label>
                                                                 </section>
 
@@ -261,6 +267,11 @@ include("inc/scripts.php");
 <script src="js/plugin/clockpicker/clockpicker.min.js"></script>
 
 <script language="JavaScript" type="text/javascript">
+
+    jsonUploadFolhaArray = JSON.parse($("#jsonUploadFolha").val());
+    jsonVisualizarFolhaArray = JSON.parse($("#jsonVisualizarFolha").val());
+    jsonPontoMensalArray = JSON.parse($("#jsonPontoMensal").val());
+
     $(document).ready(function() {
 
 
@@ -348,42 +359,9 @@ include("inc/scripts.php");
     /*Função reponsável por trazer os dados pessoais e configurações da folha*/
     function carregaPagina() {
 
-        recuperaTriagem(function(data) {
-
-            data = data.replace(/failed/gi, '');
-            let piece = data.split("#");
-
-
-            let mensagem = piece[0];
-            let out = piece[1];
-            let JsonPontoMensal = piece[2];
-            let JsonUploadFile = piece[3];
-            let JsonVisualiza
-
-            piece = out.split("^");
-
-            //funcionando
-            let codigo = piece[0] || 0;
-            const funcionario = piece[1] || 0
-            let mesAno = piece[2] || new Date().toDateString();
-
-            $("#codigo").val(codigo);
-            $("#funcionario").val(funcionario);
-            $("#mesAno").val(mesAno);
-
-            return;
-
-        });
-
-    }
-
-    function atualizaPagina() {
-        const funcionario = $("#funcionario").val()
-
-        let mesAno = $("#mesAno").val()
-        mesAno = mesAno.split("/").reverse().join("-")
-
-        atualizaTriagem(funcionario, mesAno, function(data) {
+        const funcionario = $("#funcionario").val();
+        const mesAno = $("#mesAno").val();
+        recuperaTriagem(funcionario, mesAno, function(data) {
 
             data = data.replace(/failed/gi, '');
             let piece = data.split("#");
@@ -420,6 +398,43 @@ include("inc/scripts.php");
 
             var row = $('<tr />');
             $("#tableUploadFolha tbody").append(row);
+
+            var fileName = jsonUploadFolhaArray[i].fileName;
+            row.append($('<td class="text-nowrap">' + fileName + '</td>'));
+
+            var tipo = jsonUploadFolhaArray[i].tipo;
+            row.append($('<td class="text-nowrap">' + tipo + '</td>'));
+
+            var dataReferente = jsonUploadFolhaArray[i].dataReferente;
+            row.append($('<td class="text-nowrap">' + dataReferente + '</td>'));
+
+            var dataUpload = jsonUploadFolhaArray[i].dataUpload;
+            row.append($('<td class="text-nowrap">' + dataUpload + '</td>'));
+        }
+    }
+
+    function fillTableVisualizar() {
+        $("#tableUploadFolha tbody").empty();
+        for (var i = 0; i < jsonUploadFolhaArray.length; i++) {
+
+            var row = $('<tr />');
+            $("#tableUploadFolha tbody").append(row);
+
+            var fileName = jsonUploadFolhaArray[i].fileName;
+            row.append($('<td class="text-nowrap">' + fileName + '</td>'));
+
+
+            var base64 = jsonUploadFolhaArray[i].base64;
+            row.append($('<td class="text-nowrap" onclick="carregaUploadFolha(' + jsonUploadFolhaArray[i].sequencialUploadFolha + ');">' + fileUploadFolha.name + '</td>'));
+        }
+    }
+
+    function fillTableUploadFolha() {
+        $("#tableUploadFolha tbody").empty();
+        for (var i = 0; i < jsonUploadFolhaArray.length; i++) {
+
+            var row = $('<tr />');
+            $("#tableUploadFolha tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonUploadFolhaArray[i].sequencialUploadFolha + '"><i></i></label></td>'));
 
             var fileUploadFolha = jsonUploadFolhaArray[i].fileUploadFolha;
@@ -432,210 +447,5 @@ include("inc/scripts.php");
             var dataUpload = jsonUploadFolhaArray[i].dataUpload;
             row.append($('<td class="text-nowrap">' + dataUpload + '</td>'));
         }
-    }
-
-    function validaUploadFolha() {
-
-        const fileUploadFolha = $('#fileUploadFolha').prop('files')[0];
-
-        if (!fileUploadFolha) {
-            smartAlert("Erro", "Informe o arquivo!", "error");
-            return false;
-        }
-
-        const dataReferenteUpload = $('#dataReferenteUpload').val();
-
-        if (!dataReferenteUpload) {
-            smartAlert("Erro", "Informe a data à qual o arquivo pertence!", "error");
-            return false;
-        }
-
-        if (dataReferenteUpload) {
-            for (obj of jsonUploadFolhaArray) {
-                if (dataReferenteUpload == obj.dataReferenteUpload) {
-                    smartAlert("Erro", "Não é possível inserir dois documentos da mesma data no sistema!", "error");
-                    return false;
-                }
-            }
-        }
-
-
-        return true;
-    }
-
-    function addUploadFolha() {
-
-        var item = $("#formUploadFolha").toObject({
-            mode: 'combine',
-            skipEmpty: false,
-            nodeCallback: processDataUploadFolha
-        });
-
-        if (item["sequencialUploadFolha"] === '') {
-            if (jsonUploadFolhaArray.length === 0) {
-                item["sequencialUploadFolha"] = 1;
-            } else {
-                item["sequencialUploadFolha"] = Math.max.apply(Math, jsonUploadFolhaArray.map(function(o) {
-                    return o.sequencialUploadFolha;
-                })) + 1;
-            }
-            item["uploadFolhaId"] = 0;
-        } else {
-            item["sequencialUploadFolha"] = +item["sequencialUploadFolha"];
-        }
-
-        var index = -1;
-        $.each(jsonUploadFolhaArray, function(i, obj) {
-            if (+$('#sequencialUploadFolha').val() === obj.sequencialUploadFolha) {
-                index = i;
-                return false;
-            }
-        });
-
-        if (index >= 0)
-            jsonUploadFolhaArray.splice(index, 1, item);
-        else
-            jsonUploadFolhaArray.push(item);
-
-        $("#jsonUploadFolha").val(JSON.stringify(jsonUploadFolhaArray));
-        fillTableUploadFolha();
-        clearFormUploadFolha();
-    }
-
-    function processDataUploadFolha(node) {
-
-        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
-        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
-
-
-        if (fieldName !== '' && (fieldId === "fileUploadFolha")) {
-
-            return {
-                name: fieldName,
-                value: $("#fileUploadFolha").prop('files')[0]
-            };
-        }
-
-
-        if (fieldName !== '' && (fieldId === "dataReferenteUpload")) {
-
-            var dataReferenteUpload = $('#dataReferenteUpload').val();
-
-            return {
-                name: fieldName,
-                value: dataReferenteUpload
-            };
-        }
-
-        if (fieldName !== '' && (fieldId === "dataUpload")) {
-
-            var dataUpload = new Date().toLocaleDateString('pt-BR')
-
-            return {
-                name: fieldName,
-                value: dataUpload
-            };
-        }
-
-        return false;
-    }
-
-    function clearFormUploadFolha() {
-        $("#fileUploadFolha").val('');
-        $("#dataReferenteUpload").val('');
-        $("#uploadFolhaId").val('');
-        $("#dataUpload").val('');
-        $("#sequencialUploadFolha").val('');
-    }
-
-    function carregaUploadFolha(sequencialUploadFolha) {
-        var arr = jQuery.grep(jsonUploadFolhaArray, function(item, i) {
-            return (item.sequencialUploadFolha === sequencialUploadFolha);
-        });
-
-        clearFormUploadFolha();
-
-        if (arr.length > 0) {
-            var item = arr[0];
-            let list = new DataTransfer();
-            list.items.add(item.fileUploadFolha)
-            $("#fileUploadFolha").prop('files', list.files)[0];
-            $("#dataReferenteUpload").val(item.dataReferenteUpload);
-            $("#uploadFolhaId").val(item.uploadFolhaId);
-            $("#dataUpload").val(item.dataUpload);
-            $("#sequencialUploadFolha").val(item.sequencialUploadFolha);
-        }
-    }
-
-    function excluirUploadFolha() {
-        var arrSequencial = [];
-        $('#tableUploadFolha input[type=checkbox]:checked').each(function() {
-            arrSequencial.push(parseInt($(this).val()));
-        });
-        if (arrSequencial.length > 0) {
-            for (i = jsonUploadFolhaArray.length - 1; i >= 0; i--) {
-                var obj = jsonUploadFolhaArray[i];
-                if (jQuery.inArray(obj.sequencialUploadFolha, arrSequencial) > -1) {
-                    jsonUploadFolhaArray.splice(i, 1);
-                }
-            }
-            $("#jsonUploadFolha").val(JSON.stringify(jsonUploadFolhaArray));
-            fillTableUploadFolha();
-        } else
-            smartAlert("Erro", "Selecione pelo menos um arquivo para excluir.", "error");
-    }
-
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    };
-
-    function recuperaUpload() {
-        recuperaArquivo(async function(data) {
-            data = data.replace(/failed/g, '');
-            let piece = data.split("#");
-
-            let mensagem = piece[0];
-            let out = piece[1];
-            let JsonUpload = JSON.parse(piece[2]);
-
-            const files = []
-            const jsonUploadFolha = []
-            //OK
-            for (obj of JsonUpload) {
-                let file = await fetch(obj.fileUploadFolha)
-                file = await file.blob()
-                file = new File([file], obj.fileName, {
-                    type: "application/pdf"
-                })
-                files.push(file)
-            }
-
-            JsonUpload.forEach((obj, index) => {
-                let dataReferente = obj.dataReferenteUpload.split(" ")
-                let aux = dataReferente[0].split("-")
-                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
-                dataReferente = aux
-
-                let dataUpload = obj.dataUpload.split(" ")
-                aux = dataUpload[0].split("-")
-                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
-                dataUpload = aux
-
-                jsonUploadFolha.push({
-                    dataReferenteUpload: dataReferente,
-                    dataUpload: dataUpload,
-                    sequencialUploadFolha: obj.sequencialUploadFolha,
-                    fileUploadFolha: files[index]
-                })
-            })
-
-            jsonUploadFolhaArray = jsonUploadFolha
-            fillTableUploadFolha()
-        })
     }
 </script>
