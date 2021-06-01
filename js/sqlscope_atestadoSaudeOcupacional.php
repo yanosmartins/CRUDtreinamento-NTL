@@ -620,6 +620,7 @@ function recupera()
         array_push(
             $uploadArray,
             [
+                "path" => $path,
                 "fileName" => $name,
                 "fileType" => $type,
                 "dataRealizacaoAso" => $dataRealizacaoAso,
