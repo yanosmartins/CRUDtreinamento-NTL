@@ -20,7 +20,7 @@ return;
 function valida()
 {
   $reposit = new reposit();
-  $possuiPermissao = $reposit->PossuiPermissao("TRIAGEMPONTOELETRONICOMENSALRH_GRAVAR");
+  $possuiPermissao = $reposit->PossuiPermissao("TRIAGEMPONTOELETRONICOMENSALGESTOR_GRAVAR");
 
   if ($possuiPermissao === 0) {
     $mensagem = "O usuário não tem permissão para gravar!";
@@ -32,7 +32,7 @@ function valida()
   $usuario = "'" .  $_SESSION['login'] . "'";
   $codigo = $_POST["codigo"];
 
-  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = (select codigo from Ntl.status where descricao LIKE 'Validado pelo RH') , usuarioAlteracao = $usuario|codigo = $codigo");
+  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = (select codigo from Ntl.status where descricao LIKE 'Validado pelo gestor') , usuarioAlteracao = $usuario|codigo = $codigo");
 
   $ret = 'sucess#Validado com sucesso!';
   if ($result < 1) {
@@ -45,7 +45,7 @@ function valida()
 function reabrir()
 {
   $reposit = new reposit();
-  $possuiPermissao = $reposit->PossuiPermissao("TRIAGEMPONTOELETRONICOMENSALRH_GRAVAR");
+  $possuiPermissao = $reposit->PossuiPermissao("TRIAGEMPONTOELETRONICOMENSALGESTOR_GRAVAR");
 
   if ($possuiPermissao === 0) {
     $mensagem = "O usuário não tem permissão para gravar!";
