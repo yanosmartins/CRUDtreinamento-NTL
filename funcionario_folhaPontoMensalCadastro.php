@@ -293,7 +293,6 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                         <!-- ############################################################# -->
-                                        <!--
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
@@ -382,7 +381,6 @@ include("inc/nav.php");
 
                                             </div>
                                         </div>
-            -->                            
                                         <footer>
                                             <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimplePoint" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
@@ -489,7 +487,7 @@ include("inc/scripts.php");
     const minDate = defaultDate.getFullYear() + '-' + minMonth + '-' + minDay;
     const maxDate = defaultDate.getFullYear() + '-' + maxMonth + '-' + maxDay;
 
-    //var jsonUploadFolhaArray = JSON.parse($("#jsonUploadFolha").val());
+    var jsonUploadFolhaArray = JSON.parse($("#jsonUploadFolha").val());
 
     Date.prototype.toDateInputValue = (function() {
         const local = new Date(this);
@@ -661,26 +659,26 @@ include("inc/scripts.php");
         });
 
         /* Evento para chamar a addUploadFolha */
-        // $("#btnAddUploadFolha").on("click", function() {
-        //     if (validaUploadFolha())
-        //         addUploadFolha();
-        // });
+        $("#btnAddUploadFolha").on("click", function() {
+            if (validaUploadFolha())
+                addUploadFolha();
+        });
 
-        // /*Evento para chamar a excluirUploadFolha() */
-        // $("#btnRemoverUploadFolha").on("click", function() {
-        //     excluirUploadFolha();
-        // });
+        /*Evento para chamar a excluirUploadFolha() */
+        $("#btnRemoverUploadFolha").on("click", function() {
+            excluirUploadFolha();
+        });
 
-        // $("#dataReferenteUpload").on("change", function() {
-        //     let dataReferente = $("#dataReferenteUpload").val();
-        //     dataReferente = dataReferente.replace(/^\d{2}/, '01')
-        //     $("#dataReferenteUpload").val(dataReferente);
-        //     return
-        // });
+        $("#dataReferenteUpload").on("change", function() {
+            let dataReferente = $("#dataReferenteUpload").val();
+            dataReferente = dataReferente.replace(/^\d{2}/, '01')
+            $("#dataReferenteUpload").val(dataReferente);
+            return
+        });
 
         /*Função responsavel pelo carregamento dos dados pessoais e configurações da tela*/
         carregaFolhaPontoMensal();
-        //recuperaUpload();
+        recuperaUpload();
 
     });
 
@@ -998,6 +996,12 @@ include("inc/scripts.php");
                 if (row.length > 0) {
                     deleteElements("#pointFieldGenerator .row")
                 }
+
+                const hr = $("#pointFieldGenerator hr")
+                if (hr.length > 0) {
+                    deleteElements("#pointFieldGenerator hr")
+                }
+
                 const totalDiasMes = diasMes($("#mesAno").val());
                 for (let i = 0; i < totalDiasMes; i++) {
                     generateElements('div', '#pointFieldGenerator', '', {
@@ -1270,15 +1274,16 @@ include("inc/scripts.php");
 
     function parse(horario) {
         // divide a string em duas partes, separado por dois-pontos, e transforma em número
-        let [hora, minuto] = horario.split(':').map(v => parseInt(v));
-        if (!minuto) { // para o caso de não ter os minutos
-            minuto = 00;
-        }
-        return minuto + (hora * 60);
-    }
 
-    function duracao(inicioExpediente, fimExpediente) {
-        return (parse(fimExpediente) - parse(inicioExpediente));
+        let [hora, minuto, segundos] = horario.split(':').map(v => parseInt(v));
+        if (!minuto) { // para o caso de não ter os minutos
+            minuto = 0;
+        }
+
+        if (!segundos) { // para o caso de não ter os segundos
+            segundos = 0;
+        }
+        return segundos + (minuto * 60) + (hora * Math.pow(60, 2));
     }
 
     function imprimir() {
@@ -1371,39 +1376,46 @@ include("inc/scripts.php");
 
     function addPoint() {
 
-        var dia = $("#inputDia").val();
+        const dia = $("#inputDia").val();
 
-        if (!dia) {
+        if (!dia || dia < 1) {
             smartAlert("Atenção", "Insira um dia válido", "error");
             return;
         }
 
-        var index = dia - 1;
+        const index = dia - 1;
 
-        var entrada = $("#pointFieldGenerator [name=horaEntrada]")[index]
-        var inputEntrada = $("#inputHoraEntrada").val() || '00:00:00'
+        const entrada = $("#pointFieldGenerator [name=horaEntrada]")[index]
+        const inputEntrada = $("#inputHoraEntrada").val().trim() || '00:00:00'
 
-        var inicioAlmoco = $("#pointFieldGenerator [name=inicioAlmoco]")[index]
-        var inputInicioAlmoco = $("#inputInicioAlmoco").val() || '00:00:00'
+        const inicioAlmoco = $("#pointFieldGenerator [name=inicioAlmoco]")[index]
+        const inputInicioAlmoco = $("#inputInicioAlmoco").val().trim() || '00:00'
+        if (inputInicioAlmoco == "00:00") {
+            smartAlert("Aviso", "O horário de inicio de almoço encontra-se como: "+inputInicioAlmoco, "warning");
+        }
 
-        var fimAlmoco = $("#pointFieldGenerator [name=fimAlmoco]")[index]
-        var inputFimAlmoco = $("#inputFimAlmoco").val() || '00:00:00'
+        const fimAlmoco = $("#pointFieldGenerator [name=fimAlmoco]")[index]
+        const inputFimAlmoco = $("#inputFimAlmoco").val().trim() || '00:00'
+        if (inputFimAlmoco == "00:00") {
+            smartAlert("Aviso", "O horário de encerramento de almoço encontra-se como: "+inputFimAlmoco, "warning");
+        }
 
-        var saida = $("#pointFieldGenerator [name=horaSaida]")[index]
-        var inputSaida = $("#inputHoraSaida").val() || '00:00:00'
+        const saida = $("#pointFieldGenerator [name=horaSaida]")[index]
+        const inputSaida = $("#inputHoraSaida").val().trim() || '00:00:00'
 
-        var extra = $("#pointFieldGenerator [name=extra]")[index]
-        var inputExtra = $("#inputHoraExtra").val()
+        const extra = $("#pointFieldGenerator [name=extra]")[index]
+        let inputExtra = $("#inputHoraExtra").val().trim()
 
-        var atraso = $("#pointFieldGenerator [name=atraso]")[index]
-        var inputAtraso = $("#inputAtraso").val()
+        const atraso = $("#pointFieldGenerator [name=atraso]")[index]
+        let inputAtraso = $("#inputAtraso").val().trim()
 
-        var lancamento = $("#pointFieldGenerator select[name=lancamento]")[index]
+        const lancamento = $("#pointFieldGenerator select[name=lancamento]")[index]
 
-        var inputLancamento = $("#inputLancamento").val()
+        const inputLancamento = $("#inputLancamento").val()
 
 
         //Preparação dos valores para cálculo e aleatorização dos minutos e segundos
+
         let separador = $("#expediente option:selected").text();
         if (!separador) {
             separador = '00:00 - 00:00';
@@ -1415,39 +1427,45 @@ include("inc/scripts.php");
         if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
         if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
 
-        const inicioExpediente = separador[0];
-        const fimExpediente = separador[1];
+        let inicioExpediente = separador[0];
+        let fimExpediente = separador[1];
 
         const horaEntrada = aleatorizarTempo(inputEntrada, inicioExpediente);
         const horaSaida = aleatorizarTempo(inputSaida, fimExpediente)
 
-
-
         //Começo Cálculo de Hora Extra
+        const parseToleranciaExtra = parse("00:" + toleranciaExtra)
+        parseToleranciaAtraso = parse("00:" + toleranciaAtraso)
+
         if (horaSaida != "00:00:00") {
+            //valor em segundos
             const parseHoraEntrada = parse(horaEntrada)
             const parseHoraSaida = parse(horaSaida)
             const parseHoraInicio = parse(inicioExpediente)
             const parseHoraFim = parse(fimExpediente)
 
-            let jornadaModerada = duracao(inicioExpediente, fimExpediente);
+            //calculo
 
+            let jornadaModerada = parseHoraFim - parseHoraInicio
+            const jornadaModeradaToleranteExtra = jornadaModerada + parseToleranciaExtra
+            const jornadaModeradaToleranteAtraso = jornadaModerada - parseToleranciaExtra
             // quantidade de minutos efetivamente trabalhados
-            let jornada = duracao(horaEntrada, horaSaida);
+            let jornada = parseHoraSaida - parseHoraEntrada;
 
             // diferença entre as jornadas
             let diff = Math.abs(jornada - jornadaModerada);
 
             if (diff != 0) {
-                let horas = Math.floor(diff / 60);
-                let minutos = diff - (horas * 60);
+                let horas = Math.floor(diff / Math.pow(60, 2));
+                let minutos = Math.floor(diff / 60);
+                let segundos = diff;
 
                 if (horas.toString().length < 2) horas = `0${horas}`;
                 if (minutos.toString().length < 2) minutos = `0${minutos}`;
 
-                if (jornada > jornadaModerada) {
+                if (jornada > jornadaModeradaToleranteExtra) {
                     inputExtra = (`${horas}:${minutos}`);
-                } else {
+                } else if (jornada < jornadaModeradaToleranteAtraso) {
                     inputAtraso = (`${horas}:${minutos}`);
                 }
             }
@@ -1499,7 +1517,6 @@ include("inc/scripts.php");
         if (!inputAtraso && horaSaida != "00:00:00") {
             smartAlert("Aviso", "O funcionário não tem atrasos", "info");
         }
-
 
 
         entrada.value = horaEntrada || "00:00:00";
@@ -1763,272 +1780,272 @@ include("inc/scripts.php");
 
     }
 
-    // async function enviarPDF() {
+    async function enviarPDF() {
 
-    //     const files = [];
-    //     const datas = [];
-    //     jsonUploadFolhaArray.forEach(obj => {
-    //         const ob = {};
-    //         for (let prop in obj) {
-    //             if (obj[prop] instanceof File) files.push(obj[prop])
-    //             else ob[prop] = obj[prop]
-    //         }
-    //         datas.push(ob)
-    //     })
+        const files = [];
+        const datas = [];
+        jsonUploadFolhaArray.forEach(obj => {
+            const ob = {};
+            for (let prop in obj) {
+                if (obj[prop] instanceof File) files.push(obj[prop])
+                else ob[prop] = obj[prop]
+            }
+            datas.push(ob)
+        })
 
-    //     const base64 = [];
-    //     for (let file of files) {
-    //         base64.push(await fileToBase64(file))
-    //     }
+        const base64 = [];
+        for (let file of files) {
+            base64.push(await fileToBase64(file))
+        }
 
-    //     const jsonData = datas.map((obj, index) => {
-    //         obj.fileUploadFolha = base64[index]
-    //         return obj
-    //     })
+        const jsonData = datas.map((obj, index) => {
+            obj.fileUploadFolha = base64[index]
+            return obj
+        })
 
-    //     enviarArquivo(jsonData, function(data) {
-    //         if (data.indexOf('sucess') < 0) {
-    //             var piece = data.split("#");
-    //             var mensagem = piece[1];
-    //             if (mensagem !== "") {
-    //                 smartAlert("Atenção", mensagem, "error");
-    //                 $("#btnEnviarArquivo").prop('disabled', false);
-    //                 return false;
-    //             } else {
-    //                 smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-    //                 $("#btnEnviarArquivo").prop('disabled', false);
-    //                 return false;
-    //             }
-    //         } else {
-    //             var piece = data.split("#");
-    //             smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-    //             $("#btnEnviarArquivo").prop('disabled', false);
-    //             return true;
-    //         }
-    //     })
-    // }
+        enviarArquivo(jsonData, function(data) {
+            if (data.indexOf('sucess') < 0) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
+                if (mensagem !== "") {
+                    smartAlert("Atenção", mensagem, "error");
+                    $("#btnEnviarArquivo").prop('disabled', false);
+                    return false;
+                } else {
+                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
+                    $("#btnEnviarArquivo").prop('disabled', false);
+                    return false;
+                }
+            } else {
+                var piece = data.split("#");
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                $("#btnEnviarArquivo").prop('disabled', false);
+                return true;
+            }
+        })
+    }
 
     //====================================//
     //====================================//
-    // function fillTableUploadFolha() {
-    //     $("#tableUploadFolha tbody").empty();
-    //     for (var i = 0; i < jsonUploadFolhaArray.length; i++) {
+    function fillTableUploadFolha() {
+        $("#tableUploadFolha tbody").empty();
+        for (var i = 0; i < jsonUploadFolhaArray.length; i++) {
 
-    //         var row = $('<tr />');
-    //         $("#tableUploadFolha tbody").append(row);
-    //         row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonUploadFolhaArray[i].sequencialUploadFolha + '"><i></i></label></td>'));
+            var row = $('<tr />');
+            $("#tableUploadFolha tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonUploadFolhaArray[i].sequencialUploadFolha + '"><i></i></label></td>'));
 
-    //         var fileUploadFolha = jsonUploadFolhaArray[i].fileUploadFolha;
+            var fileUploadFolha = jsonUploadFolhaArray[i].fileUploadFolha;
 
-    //         row.append($('<td class="text-nowrap" onclick="carregaUploadFolha(' + jsonUploadFolhaArray[i].sequencialUploadFolha + ');">' + fileUploadFolha.name + '</td>'));
+            row.append($('<td class="text-nowrap" onclick="carregaUploadFolha(' + jsonUploadFolhaArray[i].sequencialUploadFolha + ');">' + fileUploadFolha.name + '</td>'));
 
-    //         var uploadType = jsonUploadFolhaArray[i].uploadType;
+            var uploadType = jsonUploadFolhaArray[i].uploadType;
 
-    //         row.append($('<td class="text-nowrap">' + uploadType + '</td>'));
+            row.append($('<td class="text-nowrap">' + uploadType + '</td>'));
 
-    //         var dataReferenteUpload = jsonUploadFolhaArray[i].dataReferenteUpload;
-    //         row.append($('<td class="text-nowrap">' + dataReferenteUpload + '</td>'));
+            var dataReferenteUpload = jsonUploadFolhaArray[i].dataReferenteUpload;
+            row.append($('<td class="text-nowrap">' + dataReferenteUpload + '</td>'));
 
-    //         var dataUpload = jsonUploadFolhaArray[i].dataUpload;
-    //         row.append($('<td class="text-nowrap">' + dataUpload + '</td>'));
-    //     }
-    // }
+            var dataUpload = jsonUploadFolhaArray[i].dataUpload;
+            row.append($('<td class="text-nowrap">' + dataUpload + '</td>'));
+        }
+    }
 
-    // function validaUploadFolha() {
+    function validaUploadFolha() {
 
-    //     const fileUploadFolha = $('#fileUploadFolha').prop('files')[0];
+        const fileUploadFolha = $('#fileUploadFolha').prop('files')[0];
 
-    //     if (!fileUploadFolha) {
-    //         smartAlert("Erro", "Informe o arquivo!", "error");
-    //         return false;
-    //     }
+        if (!fileUploadFolha) {
+            smartAlert("Erro", "Informe o arquivo!", "error");
+            return false;
+        }
 
-    //     const dataReferenteUpload = $('#dataReferenteUpload').val();
+        const dataReferenteUpload = $('#dataReferenteUpload').val();
 
-    //     if (!dataReferenteUpload) {
-    //         smartAlert("Erro", "Informe a data à qual o arquivo pertence!", "error");
-    //         return false;
-    //     }
+        if (!dataReferenteUpload) {
+            smartAlert("Erro", "Informe a data à qual o arquivo pertence!", "error");
+            return false;
+        }
 
-    //     return true;
-    // }
+        return true;
+    }
 
-    // function addUploadFolha() {
+    function addUploadFolha() {
 
-    //     var item = $("#formUploadFolha").toObject({
-    //         mode: 'combine',
-    //         skipEmpty: false,
-    //         nodeCallback: processDataUploadFolha
-    //     });
+        var item = $("#formUploadFolha").toObject({
+            mode: 'combine',
+            skipEmpty: false,
+            nodeCallback: processDataUploadFolha
+        });
 
-    //     if (item["sequencialUploadFolha"] === '') {
-    //         if (jsonUploadFolhaArray.length === 0) {
-    //             item["sequencialUploadFolha"] = 1;
-    //         } else {
-    //             item["sequencialUploadFolha"] = Math.max.apply(Math, jsonUploadFolhaArray.map(function(o) {
-    //                 return o.sequencialUploadFolha;
-    //             })) + 1;
-    //         }
-    //         item["uploadFolhaId"] = 0;
-    //     } else {
-    //         item["sequencialUploadFolha"] = +item["sequencialUploadFolha"];
-    //     }
+        if (item["sequencialUploadFolha"] === '') {
+            if (jsonUploadFolhaArray.length === 0) {
+                item["sequencialUploadFolha"] = 1;
+            } else {
+                item["sequencialUploadFolha"] = Math.max.apply(Math, jsonUploadFolhaArray.map(function(o) {
+                    return o.sequencialUploadFolha;
+                })) + 1;
+            }
+            item["uploadFolhaId"] = 0;
+        } else {
+            item["sequencialUploadFolha"] = +item["sequencialUploadFolha"];
+        }
 
-    //     var index = -1;
-    //     $.each(jsonUploadFolhaArray, function(i, obj) {
-    //         if (+$('#sequencialUploadFolha').val() === obj.sequencialUploadFolha) {
-    //             index = i;
-    //             return false;
-    //         }
-    //     });
+        var index = -1;
+        $.each(jsonUploadFolhaArray, function(i, obj) {
+            if (+$('#sequencialUploadFolha').val() === obj.sequencialUploadFolha) {
+                index = i;
+                return false;
+            }
+        });
 
-    //     if (index >= 0)
-    //         jsonUploadFolhaArray.splice(index, 1, item);
-    //     else
-    //         jsonUploadFolhaArray.push(item);
+        if (index >= 0)
+            jsonUploadFolhaArray.splice(index, 1, item);
+        else
+            jsonUploadFolhaArray.push(item);
 
-    //     $("#jsonUploadFolha").val(JSON.stringify(jsonUploadFolhaArray));
-    //     fillTableUploadFolha();
-    //     clearFormUploadFolha();
-    // }
+        $("#jsonUploadFolha").val(JSON.stringify(jsonUploadFolhaArray));
+        fillTableUploadFolha();
+        clearFormUploadFolha();
+    }
 
-    // function processDataUploadFolha(node) {
+    function processDataUploadFolha(node) {
 
-    //     var fieldId = node.getAttribute ? node.getAttribute('id') : '';
-    //     var fieldName = node.getAttribute ? node.getAttribute('name') : '';
-
-
-    //     if (fieldName !== '' && (fieldId === "fileUploadFolha")) {
-
-    //         return {
-    //             name: fieldName,
-    //             value: $("#fileUploadFolha").prop('files')[0]
-    //         };
-    //     }
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
 
 
-    //     if (fieldName !== '' && (fieldId === "dataReferenteUpload")) {
+        if (fieldName !== '' && (fieldId === "fileUploadFolha")) {
 
-    //         var dataReferenteUpload = $('#dataReferenteUpload').val();
+            return {
+                name: fieldName,
+                value: $("#fileUploadFolha").prop('files')[0]
+            };
+        }
 
-    //         return {
-    //             name: fieldName,
-    //             value: dataReferenteUpload
-    //         };
-    //     }
 
-    //     if (fieldName !== '' && (fieldId === "dataUpload")) {
+        if (fieldName !== '' && (fieldId === "dataReferenteUpload")) {
 
-    //         var dataUpload = new Date().toLocaleDateString('pt-BR')
+            var dataReferenteUpload = $('#dataReferenteUpload').val();
 
-    //         return {
-    //             name: fieldName,
-    //             value: dataUpload
-    //         };
-    //     }
+            return {
+                name: fieldName,
+                value: dataReferenteUpload
+            };
+        }
 
-    //     return false;
-    // }
+        if (fieldName !== '' && (fieldId === "dataUpload")) {
 
-    // function clearFormUploadFolha() {
-    //     $("#fileUploadFolha").val('');
-    //     $("#uploadType").val('');
-    //     $("#dataReferenteUpload").val('');
-    //     $("#uploadFolhaId").val('');
-    //     $("#dataUpload").val('');
-    //     $("#sequencialUploadFolha").val('');
-    // }
+            var dataUpload = new Date().toLocaleDateString('pt-BR')
 
-    // function carregaUploadFolha(sequencialUploadFolha) {
-    //     var arr = jQuery.grep(jsonUploadFolhaArray, function(item, i) {
-    //         return (item.sequencialUploadFolha === sequencialUploadFolha);
-    //     });
+            return {
+                name: fieldName,
+                value: dataUpload
+            };
+        }
 
-    //     clearFormUploadFolha();
+        return false;
+    }
 
-    //     if (arr.length > 0) {
-    //         var item = arr[0];
-    //         let list = new DataTransfer();
-    //         list.items.add(item.fileUploadFolha)
-    //         $("#fileUploadFolha").prop('files', list.files)[0];
-    //         $("#uploadType").val(item.uploadType);
-    //         $("#dataReferenteUpload").val(item.dataReferenteUpload);
-    //         $("#uploadFolhaId").val(item.uploadFolhaId);
-    //         $("#dataUpload").val(item.dataUpload);
-    //         $("#sequencialUploadFolha").val(item.sequencialUploadFolha);
-    //     }
-    // }
+    function clearFormUploadFolha() {
+        $("#fileUploadFolha").val('');
+        $("#uploadType").val('');
+        $("#dataReferenteUpload").val('');
+        $("#uploadFolhaId").val('');
+        $("#dataUpload").val('');
+        $("#sequencialUploadFolha").val('');
+    }
 
-    // function excluirUploadFolha() {
-    //     var arrSequencial = [];
-    //     $('#tableUploadFolha input[type=checkbox]:checked').each(function() {
-    //         arrSequencial.push(parseInt($(this).val()));
-    //     });
-    //     if (arrSequencial.length > 0) {
-    //         for (i = jsonUploadFolhaArray.length - 1; i >= 0; i--) {
-    //             var obj = jsonUploadFolhaArray[i];
-    //             if (jQuery.inArray(obj.sequencialUploadFolha, arrSequencial) > -1) {
-    //                 jsonUploadFolhaArray.splice(i, 1);
-    //             }
-    //         }
-    //         $("#jsonUploadFolha").val(JSON.stringify(jsonUploadFolhaArray));
-    //         fillTableUploadFolha();
-    //     } else
-    //         smartAlert("Erro", "Selecione pelo menos um arquivo para excluir.", "error");
-    // }
+    function carregaUploadFolha(sequencialUploadFolha) {
+        var arr = jQuery.grep(jsonUploadFolhaArray, function(item, i) {
+            return (item.sequencialUploadFolha === sequencialUploadFolha);
+        });
 
-    // function fileToBase64(file) {
-    //     return new Promise((resolve, reject) => {
-    //         const reader = new FileReader();
-    //         reader.readAsDataURL(file);
-    //         reader.onload = () => resolve(reader.result);
-    //         reader.onerror = error => reject(error);
-    //     });
-    // };
+        clearFormUploadFolha();
 
-    // function recuperaUpload() {
-    //     recuperaArquivo(async function(data) {
-    //         data = data.replace(/failed/g, '');
-    //         let piece = data.split("#");
+        if (arr.length > 0) {
+            var item = arr[0];
+            let list = new DataTransfer();
+            list.items.add(item.fileUploadFolha)
+            $("#fileUploadFolha").prop('files', list.files)[0];
+            $("#uploadType").val(item.uploadType);
+            $("#dataReferenteUpload").val(item.dataReferenteUpload);
+            $("#uploadFolhaId").val(item.uploadFolhaId);
+            $("#dataUpload").val(item.dataUpload);
+            $("#sequencialUploadFolha").val(item.sequencialUploadFolha);
+        }
+    }
 
-    //         let mensagem = piece[0];
-    //         let out = piece[1];
-    //         let JsonUpload = JSON.parse(piece[2]);
+    function excluirUploadFolha() {
+        var arrSequencial = [];
+        $('#tableUploadFolha input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonUploadFolhaArray.length - 1; i >= 0; i--) {
+                var obj = jsonUploadFolhaArray[i];
+                if (jQuery.inArray(obj.sequencialUploadFolha, arrSequencial) > -1) {
+                    jsonUploadFolhaArray.splice(i, 1);
+                }
+            }
+            $("#jsonUploadFolha").val(JSON.stringify(jsonUploadFolhaArray));
+            fillTableUploadFolha();
+        } else
+            smartAlert("Erro", "Selecione pelo menos um arquivo para excluir.", "error");
+    }
 
-    //         const files = []
-    //         const jsonUploadFolha = []
-    //         //OK
-    //         for (obj of JsonUpload) {
-    //             let file = await fetch(obj.fileUploadFolha)
-    //             file = await file.blob()
-    //             file = new File([file], obj.fileName, {
-    //                 type: "application/pdf"
-    //             })
-    //             files.push(file)
-    //         }
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    };
 
-    //         JsonUpload.forEach((obj, index) => {
-    //             let dataReferente = obj.dataReferenteUpload.split(" ")
-    //             let aux = dataReferente[0].split("-")
-    //             aux = `${aux[2]}/${aux[1]}/${aux[0]}`
-    //             dataReferente = aux
+    function recuperaUpload() {
+        recuperaArquivo(async function(data) {
+            data = data.replace(/failed/g, '');
+            let piece = data.split("#");
 
-    //             let dataUpload = obj.dataUpload.split(" ")
-    //             aux = dataUpload[0].split("-")
-    //             aux = `${aux[2]}/${aux[1]}/${aux[0]}`
-    //             dataUpload = aux
+            let mensagem = piece[0];
+            let out = piece[1];
+            let JsonUpload = JSON.parse(piece[2]);
 
-    //             jsonUploadFolha.push({
-    //                 dataReferenteUpload: dataReferente,
-    //                 dataUpload: dataUpload,
-    //                 uploadType: obj.uploadType,
-    //                 sequencialUploadFolha: obj.sequencialUploadFolha,
-    //                 fileUploadFolha: files[index]
-    //             })
-    //         })
+            const files = []
+            const jsonUploadFolha = []
+            //OK
+            for (obj of JsonUpload) {
+                let file = await fetch(obj.fileUploadFolha)
+                file = await file.blob()
+                file = new File([file], obj.fileName, {
+                    type: "application/pdf"
+                })
+                files.push(file)
+            }
 
-    //         jsonUploadFolhaArray = jsonUploadFolha
-    //         fillTableUploadFolha()
-    //     })
-    // }
+            JsonUpload.forEach((obj, index) => {
+                let dataReferente = obj.dataReferenteUpload.split(" ")
+                let aux = dataReferente[0].split("-")
+                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                dataReferente = aux
+
+                let dataUpload = obj.dataUpload.split(" ")
+                aux = dataUpload[0].split("-")
+                aux = `${aux[2]}/${aux[1]}/${aux[0]}`
+                dataUpload = aux
+
+                jsonUploadFolha.push({
+                    dataReferenteUpload: dataReferente,
+                    dataUpload: dataUpload,
+                    uploadType: obj.uploadType,
+                    sequencialUploadFolha: obj.sequencialUploadFolha,
+                    fileUploadFolha: files[index]
+                })
+            })
+
+            jsonUploadFolhaArray = jsonUploadFolha
+            fillTableUploadFolha()
+        })
+    }
 </script>
