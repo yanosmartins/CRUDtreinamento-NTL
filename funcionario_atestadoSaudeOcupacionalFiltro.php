@@ -6,17 +6,11 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('SINDICATO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('SINDICATO_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('TRIAGEMASO_ACESSAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
-}
-
-$esconderBtnGravar = "";
-if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
 }
 
 /* ---------------- PHP Custom Scripts ---------
@@ -36,7 +30,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["beneficio"]["sub"]["triagem"]["sub"]["relatorioValidade"]["active"] = true;
+$page_nav["seguranca"]["sub"]["aso"]["sub"]["relatorioValidade"]["active"] = true;
 
 include("inc/nav.php");
 ?>

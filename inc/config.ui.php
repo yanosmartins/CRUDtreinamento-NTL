@@ -245,19 +245,6 @@ if ($condicaoBeneficioOk) {
             $page_nav['beneficio']['sub']['operacao']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
         }
     }
-
-    if (in_array('BENEFICIO_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['beneficio']['sub']['triagem'] = array("title" => "Triagem");
-        $page_nav['beneficio']['sub']['triagem']['sub'] = array();
-
-
-        if (in_array('ASO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['beneficio']['sub']['triagem']['sub'] += array("filtroTriagem" => array("title" => "Triagem ASO", "url" => APP_URL . "/funcionario_atestadoSaudeOcupacionalFiltroTriagem.php"));
-        }
-        if (in_array('ASO_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['beneficio']['sub']['triagem']['sub'] += array("relatorioValidade" => array("title" => "Relatório de Validade", "url" => APP_URL . "/funcionario_atestadoSaudeOcupacionalFiltro.php"));
-        }
-    }
 }
 //CONTRATACAO
 $condicaoRHOk = (in_array('CONTRATACAO_ACESSAR', $arrayPermissao, true));
@@ -300,6 +287,30 @@ if ($condicaoRHOk) {
     $page_nav['candidato']['sub'] = array();
     $page_nav['candidato']['sub'] += array("candidato" => array("title" => "Candidato", "url" => APP_URL . "/contratacao_candidatoCadastro.php?=" . $candidato));
 }
+
+
+// MEDICINA E SEGURANÇA DO TRABALHO
+
+
+// MENSAGERIA // a pedido do guinancio 24/02/21 colocar servico externo no nome
+$condicaoSegurancaOk = (in_array('SEGURANCA_ACESSAR', $arrayPermissao, true));
+if ($condicaoSegurancaOk) {
+    $page_nav['seguranca'] = array("title" => "Segurança do Trabalho", "icon" => "fa-medkit ");
+    $page_nav['seguranca']['sub'] = array();
+    if (in_array('TRIAGEMASO_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['seguranca']['sub']['aso'] = array("title" => "ASO");
+        $page_nav['seguranca']['sub']['aso']['sub'] = array();
+
+        if (in_array('TRIAGEMASO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['seguranca']['sub']['aso']['sub'] += array("filtroTriagem" => array("title" => "Triagem", "url" => APP_URL . "/funcionario_atestadoSaudeOcupacionalFiltroTriagem.php")); //SYSCC   
+        }
+        if (in_array('TRIAGEMASO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['seguranca']['sub']['aso']['sub'] += array("relatorioValidade" => array("title" => "Relatório de Validade", "url" => APP_URL . "/funcionario_atestadoSaudeOcupacionalFiltro.php")); //SYSCC   
+        }
+    }
+}
+
+// FIM MEDICINA E SEGURANÇA DO TRABALHO
 
 //FATURAMENTO
 $condicaoFaturamentoOk = (in_array('FATURAMENTO_ACESSAR', $arrayPermissao, true));
