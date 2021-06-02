@@ -112,7 +112,7 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT S.codigo,S.descricao from Ntl.status S  where S.ativo = 1 order by S.codigo";
+                                                                        $sql = "SELECT S.codigo,S.descricao from Ntl.status S  where S.ativo = 1 AND S.descricao != 'validado pelo rh' order by S.codigo";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigo = (int) $row['codigo'];

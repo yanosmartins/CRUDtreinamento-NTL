@@ -347,7 +347,7 @@ include("inc/scripts.php");
             } else {
                 var piece = data.split("#");
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                const funcionario = $("#funcionariio").val();
+                const funcionario = $("#funcionario").val();
                 let mesAno = $("#mesAno").val();
                 mesAno = mesAno.split("/").reverse().join("-").concat("-01")
                 $(location).attr('href', `funcionario_triagemPontoMensalGestor.php?funcionario=${funcionario}&mesAno=${mesAno}`);
@@ -374,7 +374,7 @@ include("inc/scripts.php");
             } else {
                 var piece = data.split("#");
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                const funcionario = $("#funcionariio").val();
+                const funcionario = $("#funcionario").val();
                 let mesAno = $("#mesAno").val();
                 mesAno = mesAno.split("/").reverse().join("-").concat("-01")
                 $(location).attr('href', `funcionario_triagemPontoMensalGestor.php?funcionario=${funcionario}&mesAno=${mesAno}`);

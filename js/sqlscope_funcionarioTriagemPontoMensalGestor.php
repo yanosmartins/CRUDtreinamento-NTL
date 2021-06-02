@@ -5,7 +5,7 @@ use PhpOffice\PhpSpreadsheet\Shared\OLE\PPS\File;
 include "repositorio.php";
 include "girComum.php";
 
-$funcao = $_GET["funcao"];
+$funcao = $_REQUEST["funcao"];
 
 $pattern = "/(valida|recupera|reabrir)/i";
 
@@ -32,7 +32,19 @@ function valida()
   $usuario = "'" .  $_SESSION['login'] . "'";
   $codigo = $_POST["codigo"];
 
-  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = (select codigo from Ntl.status where descricao LIKE 'Validado pelo gestor') , usuarioAlteracao = $usuario|codigo = $codigo");
+  $sql = "select codigo as 'status' from Ntl.status where descricao LIKE 'Validado pelo gestor'";
+
+  $result = $reposit->RunQuery($sql);
+
+  if ($row = $result[0]) {
+    $status = $row["status"];
+  } else {
+    $ret = 'failed#Falha ao validar!';
+    echo $ret;
+    return;
+  }
+
+  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = $status , usuarioAlteracao = $usuario|codigo = $codigo");
 
   $ret = 'sucess#Validado com sucesso!';
   if ($result < 1) {
