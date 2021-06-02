@@ -52,9 +52,15 @@ include "js/repositorio.php";
                     $mesAno = $aux[0];
                     $aux = explode("-",$mesAno);
                     $mostrarMesAno = "$aux[2]/$aux[1]/$aux[0]";
+                    $pattern = "/[c-e]{3}had(o|a)/i";
+                    $pattern2 = "/[a-z]{8} (pelo|por) gestor(a)?/i";
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="funcionario_triagemPontoMensalRecursosHumanos.php?' . 'funcionario=' . $funcionario . '&' . 'mesAno=' . $mesAno . '">' . $nomeFuncionario . '</a></td>';
+                    if(preg_match($pattern,$status) || preg_match($pattern2,$status)){
+                        echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="funcionario_triagemPontoMensalRecursosHumanos.php?' . 'funcionario=' . $funcionario . '&' . 'mesAno=' . $mesAno . '">' . $nomeFuncionario . '</a></td>';
+                    }else{
+                        echo '<td class="text-left">' . $nomeFuncionario . '</td>';
+                    }
                     echo '<td class="text-left">' . $mostrarMesAno . '</td>';
                     echo '<td class="text-left">' . $status . '</td>';
                 }
