@@ -104,6 +104,37 @@ function grava()
     }
     $xmlItem = "'" . $xmlItem . "'";
 
+    $datahojeNome = new DateTime();
+    $datahoje = $datahojeNome->format('Y-m-d');
+    $datahoje = "'" . $datahoje . "'";
+    $dataNome = $datahojeNome->format('Y_m_d_H_i_s');
+
+    $uploadsPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . "uploads";
+    $entradaItemPath = $uploadsPath . DIRECTORY_SEPARATOR . "entradaMaterial";
+
+    if (!is_dir($uploadsPath)) {
+        mkdir($uploadsPath);
+    }
+
+    if (!is_dir($entradaItemPath)) {
+        mkdir($entradaItemPath);
+    }
+
+    $fileContent = $_FILES['xmlNota'];
+    $nomeTemporario = $fileContent['tmp_name'][0];
+    $nomeXmlNota = str_replace("-", "_", $fileContent['name'][0]);
+    $nomeXmlNota = tiraAcento($nomeXmlNota);
+    $fileName = $dataNome . "-" . $nomeXmlNota;
+    $path = $entradaItemPath . DIRECTORY_SEPARATOR . $fileName;
+
+    $filePath = "." . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR. "entradaMaterial" . DIRECTORY_SEPARATOR;
+    $fileType = $fileContent['type'][0];
+
+    $filePath = "'" .$filePath. "'" ;
+    $fileType = "'" .$fileType. "'" ;
+    $fileName = "'" .$fileName. "'" ;
+
+    move_uploaded_file($nomeTemporario, $path);
 
     $sql = "Estoque.entradaMaterial_Atualiza
         $codigo,
@@ -116,7 +147,10 @@ function grava()
         $observacao,
         $naturezaOperacao, 
         $usuario, 
-        $xmlItem
+        $xmlItem,
+        $filePath,
+        $fileName,
+        $fileType
         ";
 
     $reposit = new reposit();
@@ -125,6 +159,7 @@ function grava()
     $ret = 'success';
     if ($result < 1) {
         $ret = 'failed';
+        unlink($entradaItemPath . DIRECTORY_SEPARATOR . $fileName);
     }
     echo $ret;
     return;
@@ -141,7 +176,8 @@ function recupera()
     }
 
     $sql = "SELECT EM.codigo, EM.fornecedor, F.apelido, EM.tipoDocumento , T.descricao AS descricaoTipoDocumento, 
-    EM.numeroNF, EM.dataEntradaMaterial,EM.dataEntrega, EM.dataEmissaoNF, EM.observacao, EM.naturezaOperacao
+    EM.numeroNF, EM.dataEntradaMaterial,EM.dataEntrega, EM.dataEmissaoNF, EM.observacao, EM.naturezaOperacao,
+     EM.filePath, EM.fileName, EM.fileType
     FROM Estoque.entradaMaterial EM
     LEFT JOIN Ntl.fornecedor F ON F.codigo = EM.fornecedor
     LEFT JOIN Estoque.tipoDocumento T ON T.codigo = EM.tipoDocumento
@@ -163,6 +199,9 @@ function recupera()
     $dataEmissaoNF = $row['dataEmissaoNF'];
     $observacao = $row['observacao'];
     $naturezaOperacao = $row['naturezaOperacao'];
+    $filePath = $row['filePath'];
+    $fileName = $row['fileName'];
+    $fileType = $row['fileType'];
 
     $valorEstimado = number_format($row['valorEstimado'], 2, ',', '.');
 
@@ -247,7 +286,10 @@ function recupera()
         $dataEntrada . "^" .
         $dataEmissaoNF . "^" .
         $observacao . "^" .
-        $naturezaOperacao;
+        $naturezaOperacao . "^" .
+        $filePath . "^" .
+        $fileName . "^" .
+        $fileType;
 
     if ($out == "") {
         echo "failed#";
@@ -579,4 +621,20 @@ function validaVerifica($value)
         $value = NULL;
     }
     return $value;
+}
+
+function verificaDiretorio($enderecoPasta)
+{
+
+    /*Verifica se o diretório com o endereço especificado existe,
+    se não, ele cria e atribui permissões de leitura e gravação. */
+
+    if (!file_exists($enderecoPasta)) {
+        mkdir($enderecoPasta, 0777, true);
+        chmod($enderecoPasta, 0777);
+    }
+}
+function tiraAcento($string)
+{
+    return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/"), explode(" ", "a A e E i I o O u U n N"), $string);
 }

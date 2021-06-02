@@ -174,6 +174,22 @@ include("inc/nav.php");
                                                                         <i class="icon-append fa fa-calendar"></i>
                                                                     </label>
                                                                 </section>
+                                                                <!-- XML DA NOTA -->
+
+                                                                <section class="col col-4">
+                                                                    <label class="label">XML da nota</label>
+                                                                    <label class="input input-file">
+                                                                        <span class="button"><input type="file" id="xmlNota" name="xmlNota[]">Selecione
+                                                                            o arquivo</span><input id="xmlNotaText" type="text">
+                                                                    </label>
+                                                                </section>
+                                                                <section id="xmlNotaLink" class="col col-2">
+                                                                    <label class="label">&nbsp;</label>
+                                                                    <label class="input">
+                                                                        <a href="" id="xmlNotaLink"></a>
+                                                                    </label>
+                                                                </section>
+
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-12">
@@ -865,6 +881,27 @@ include("inc/scripts.php");
 
         });
 
+        $("input[name='xmlNota[]']").change(function() {
+            let files = document.getElementById("xmlNota").files;
+            let array = [];
+            let tamanhoTotal = 0;
+            let tamanhoMaximoPorCampo = 1048576; //1MB = 1048576 | 2MB = 2097152
+            for (let i = 0; i < files.length; i++) {
+                array.push(files[i].name);
+                tamanhoTotal += files[i].size;
+            }
+            let arrayString = array.toString();
+            $("#xmlNotaText").val(arrayString);
+
+            if (tamanhoTotal > tamanhoMaximoPorCampo) {
+                smartAlert("Atenção", "Estes arquivos ultrapassaram o valor máximo permitido! O total de arquivos não pode ser maior do que 1MB", "error");
+                $("#xmlNotaText").val("");
+                $("#xmlNota").val("");
+
+            }
+
+        });
+
         $("#btnNovo").on("click", function() {
             novo();
         });
@@ -913,6 +950,9 @@ include("inc/scripts.php");
                             dataEmissaoNF = piece[7];
                             observacao = piece[8];
                             naturezaOperacao = piece[9];
+                            filePath = piece[10];
+                            fileName = piece[11];
+                            fileType = piece[12];
 
                             //Arrumando o valor de data 
                             dataEntregaMaterial = dataEntregaMaterial.split(" ");
@@ -956,6 +996,15 @@ include("inc/scripts.php");
                             $("#dataEmissao").attr('disabled', true);
                             $("#naturezaOperacao").addClass('readonly');
                             $("#naturezaOperacao").attr('disabled', true);
+
+                            $("#xmlNota").addClass('readonly');
+                            $("#xmlNotaText").addClass('readonly');
+                            $("#xmlBtn").addClass('readonly');
+                            $("#xmlNota").attr('disabled', true);
+                            $("#xmlNotaText").attr('disabled', true);
+                            $("#xmlBtn").attr('disabled', true);
+
+                            $("#xmlNotaLink").append("<a href ='" + filePath + fileName + "' target='_blank'>" + fileName + "</a><br>");
 
                             $("#btnAddItem").attr('disabled', true);
                             $("#btnRemoverItem").attr('disabled', true);
