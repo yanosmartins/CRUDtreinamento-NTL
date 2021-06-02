@@ -326,6 +326,8 @@ include("inc/nav.php");
                                                                             <datalist id="type">
                                                                                 <option value="Folha de ponto">
                                                                                 <option value="Atestado médico">
+                                                                                <option value="Comprovante TRE">
+                                                                                <option value="Audiência na justiça">
                                                                             </datalist>
                                                                         </label>
                                                                     </section>
@@ -380,7 +382,7 @@ include("inc/nav.php");
 
                                             </div>
                                         </div>
-                                        -->
+            -->                            
                                         <footer>
                                             <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimplePoint" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
