@@ -536,7 +536,7 @@ include("inc/scripts.php");
                 $("#unidade").val(ui.item.unidade);
                 popularComboEstoque();
                 $("#estoque").val(ui.item.estoque);
-                var estoqueId = $("#estoqueDestino").val();
+                var estoqueId = $("#estoque").val();
 
                 $("#quantidadeEstoque").val(ui.item.quantidade);
                 $("#quantidadeReservada").val(ui.item.quantidadeReservada);
