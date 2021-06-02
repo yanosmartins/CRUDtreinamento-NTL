@@ -19,7 +19,7 @@ include "js/repositorio.php";
                 INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
                 LEFT JOIN Ntl.status S ON S.codigo = F.status ";
 
-                $where = " WHERE (0 = 0) ";
+                $where = " WHERE (0 = 0) S.descricao != 'validado pelo RH' ";
 
                 if ($_POST["funcionario"] != "") {
                     $funcionario = (int)$_POST["funcionario"];

@@ -44,7 +44,7 @@ function valida()
     return;
   }
 
-  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = $status , usuarioAlteracao = $usuario|codigo = $codigo");
+  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = $status , usuarioAlteracao = $usuario,dataAlteracao = '". date("Y/m/d") ."'|codigo = $codigo");
 
   $ret = 'sucess#Validado com sucesso!';
   if ($result < 1) {
@@ -69,11 +69,23 @@ function reabrir()
   $usuario = "'" .  $_SESSION['login'] . "'";
   $codigo = $_POST["codigo"];
 
-  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = (select codigo from Ntl.status where descricao LIKE 'pendente') , usuarioAlteracao = $usuario|codigo = $codigo");
+  $sql = "select codigo as 'status' from Ntl.status where descricao LIKE 'pendente'";
+
+  $result = $reposit->RunQuery($sql);
+
+  if ($row = $result[0]) {
+    $status = $row["status"];
+  } else {
+    $ret = 'failed#Falha ao validar!';
+    echo $ret;
+    return;
+  }
+
+  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = $status , usuarioAlteracao = $usuario,dataAlteracao = '". date("Y/m/d") ."'|codigo = $codigo");
 
   $ret = 'sucess#Validado com sucesso!';
   if ($result < 1) {
-    $ret = 'failed#Falha ao reabrir!';
+    $ret = 'failed#Falha ao validar!';
   }
   echo $ret;
   return;
