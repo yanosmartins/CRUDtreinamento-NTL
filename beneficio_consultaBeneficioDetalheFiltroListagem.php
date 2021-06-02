@@ -148,6 +148,9 @@ include "js/repositorio.php";
     <button id="btnExcelSodexoBeneficioIndireto" name="btnExcelSodexoBeneficioIndireto" type="button" class="btn btn-success" title="grava">
         Sodexo Benefício Indireto
     </button>
+    <!-- <button id="btnExcelTicket" name="btnExcelSodexoBeneficioIndireto" type="button" class="btn btn-danger" title="grava">
+        Ticket
+    </button> -->
 </div>
 
 <!-- PAGE RELATED PLUGIN(S) -->
@@ -185,6 +188,12 @@ include "js/repositorio.php";
             $("#btnExcelSodexoBeneficioIndireto").prop('disabled', true);
             var codigoConsultaBeneficio = <?php echo $codigoConsultaBeneficio ?>;
             $(location).attr('href', `beneficio_excelBeneficioIndireto.php?id=${codigoConsultaBeneficio}`);
+        });
+
+        $("#btnExcelTicket").on("click", function() {
+            $("#btnExcelTicket").prop('disabled', true);
+            var codigoConsultaBeneficio = <?php echo $codigoConsultaBeneficio ?>;
+            $(location).attr('href', `beneficio_excelBeneficioTicket.php?id=${codigoConsultaBeneficio}`);
         });
 
         /* TABLETOOLS */
