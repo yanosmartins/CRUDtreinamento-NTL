@@ -303,7 +303,7 @@ include("inc/scripts.php");
             const id = $('#funcionario').val();
             const folha = $('#codigoFolha').val();
             const mesAno = $('#mesAno').val();
-            $(location).attr('href', `funcionario_folhaPontoMensalCadastro.php?funcionario=${id}&mesAno=${mesAno}`);
+            $(location).attr('href', `funcionario_folhaPontoMensalCadastro.php`);
         });
 
         $("#btnFolhaMensal").on("click", function() {

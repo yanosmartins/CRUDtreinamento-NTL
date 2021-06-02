@@ -6,18 +6,34 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-// $condicaoAcessarOK = (in_array('CONTROLEFERIAS_ACESSAR', $arrayPermissao, true));
-// $condicaoGravarOK = (in_array('CONTROLEFERIAS_GRAVAR', $arrayPermissao, true));
+$condicaoGestorOK = (in_array('CONTROLEFERIAS_MENUGESTOR', $arrayPermissao, true));
+$condicaoFuncionarioOK = (in_array('CONTROLEFERIAS_MENUFUNCIONARIO', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('CONTROLEFERIAS_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('CONTROLEFERIAS_EXCLUIR', $arrayPermissao, true));
 
-// if ($condicaoAcessarOK == false) {
-//     unset($_SESSION['login']);
-//     header("Location:login.php");
-// }
+if ($condicaoGestorOK == false && $condicaoFuncionarioOK == false) {
+    unset($_SESSION['login']);
+    header("Location:login.php");
+}
 
-// $condicaoAcessarOK = "";
-// if ($condicaoAcessarOK === false) {
-//     $condicaoAcessarOK = "none";
-// }
+$esconderBtnExcluir = "";
+if ($condicaoExcluirOK === false) {
+    $esconderBtnExcluir = "none";
+}
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
+
+$id = $_SESSION['funcionario'];
+$funcionario = "";
+$gestor =  "order by nome";
+$optionGestor = "<option></option>";
+if ($condicaoGestorOK === false) {
+    $gestor = "AND codigo = $id";
+    $optionGestor = "";
+}
+
 
 /* ---------------- PHP Custom Scripts ---------
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
@@ -108,26 +124,15 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label " for="funcionario">Funcionário</label>
                                                                 <label class="select">
-                                                                    <select id="funcionario" name="funcionario" <?php echo $funcionario ?> class="required <?php echo $funcionario ?>">
-
+                                                                    <select id="funcionario" name="funcionario" class="required ">
+                                                                    <?php echo $optionGestor?>
                                                                         <?php
 
                                                                         session_start();
                                                                         $id = $_SESSION['funcionario'];
-                                                                        if (!$id) {
-                                                                            echo '<option></option>';
-                                                                            $reposit = new reposit();
-                                                                            $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL order by nome";
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            foreach ($result as $row) {
-                                                                                $codigoFuncionario = (int) $row['codigo'];
-                                                                                $nome = $row['nome'];
 
-                                                                                echo '<option value=' . $codigoFuncionario . '>' . $nome . '</option>';
-                                                                            }
-                                                                        }
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL AND codigo =" . $id;
+                                                                        $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL " . $gestor;
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigoFuncionario = (int) $row['codigo'];
@@ -158,8 +163,8 @@ include("inc/nav.php");
                                                             <section class="col col-1">
                                                                 <label class="label" for="feriasVencidas">Férias Vencidas</label>
                                                                 <label class="select">
-                                                                        <select name="feriasVencidas" id="feriasVencidas">
-                                                                            <option value="1">Sim</option>
+                                                                    <select name="feriasVencidas" id="feriasVencidas">
+                                                                        <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                                 </label>
@@ -259,17 +264,17 @@ include("inc/scripts.php");
         var funcionario = $('#funcionario').val();
         var periodoFeriasInicio = $('#periodoFeriasInicio').val();
         var periodoFeriasFim = $('#periodoFeriasFim').val();
-        var periodoFeriasFim = $('#feriasVencidas').val();
-        var feriasAgendadasInicio = $('#feriasAgendadasInicio').val();
-        var feriasAgendadasFim = $('#feriasAgendadasFim').val();
+        var feriasVencidas = $('#feriasVencidas').val();
+        // var feriasAgendadasInicio = $('#feriasAgendadasInicio').val();
+        // var feriasAgendadasFim = $('#feriasAgendadasFim').val();
 
         var parametrosUrl = '&projeto=' + projeto;
-        parametrosUrl = '&funcionario=' + funcionario;
-        parametrosUrl = '&periodoFeriasInicio=' + periodoFeriasInicio;
-        parametrosUrl = '&periodoFeriasFim=' + periodoFeriasFim;
-        parametrosUrl = '&feriasVencidas=' + feriasVencidas;
-        parametrosUrl = '&feriasAgendadasInicio=' + feriasAgendadasInicio;
-        parametrosUrl = '&feriasAgendadasFim=' + feriasAgendadasFim;
+        parametrosUrl += '&funcionario=' + funcionario;
+        parametrosUrl += '&periodoFeriasInicio=' + periodoFeriasInicio;
+        parametrosUrl += '&periodoFeriasFim=' + periodoFeriasFim;
+        parametrosUrl += '&feriasVencidas=' + feriasVencidas;
+        // parametrosUrl = '&feriasAgendadasInicio=' + feriasAgendadasInicio;
+        // parametrosUrl = '&feriasAgendadasFim=' + feriasAgendadasFim;
 
         $('#resultadoBusca').load('funcionario_controleFeriasFiltroListagem.php?' + parametrosUrl);
     }

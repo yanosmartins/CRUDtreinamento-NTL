@@ -37,23 +37,29 @@ function grava()
 {
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";
+    $ativo = (int)$_POST['ativo'];
+
     $id = (int)$_POST['id'];
     $funcionario = (int)$_POST['funcionario'];
-    $matricula = (int)$_POST['matricula'];
-    $cargo = (int)$_POST['cargo'];
     $projeto = (int)$_POST['projeto'];
 
-    $dataAdmissao = $_POST['dataAdmissao'];
-    if ($dataAdmissao != "") {
-        $aux = explode('/', $dataAdmissao);
-        $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
-        $data = "'" . trim($data) . "'";
-        $dataAdmissao = $data;
-    } else {
-        $dataAdmissao = 'NULL';
+    if ($projeto == $funcionario) {
+        $reposit = new reposit();
+        $sql = "SELECT BP.codigo, BP.funcionario,F.cargo, BP.projeto,F.matricula, F.dataAdmissaoFuncionario
+                from Ntl.beneficioProjeto BP
+                inner join Ntl.funcionario F ON F.codigo = BP.funcionario
+                where BP.ativo = 1  AND BP.funcionario = " . $funcionario;
+        $result = $reposit->RunQuery($sql);
+        foreach ($result as $row) {
+            $funcionario = (int) $row['funcionario'];
+            $cargo = (int) $row['cargo'];
+            $projeto =(int) $row['projeto'];
+            $matricula = (int)$row['matricula'];
+            $dataAdmissao = "'".$row['dataAdmissaoFuncionario']."'";
+        }
     }
 
-    $ativo = (int)$_POST['ativo'];
+   
 
 
     //Inicio do Json ControleFerias
@@ -70,14 +76,17 @@ function grava()
             foreach ($arrayControleFerias as $chave) {
                 $xmlControleFerias = $xmlControleFerias . "<" . $nomeTabela . ">";
                 foreach ($chave as $campo => $valor) {
-                    if ($campo == "dataInicioFerias" || $campo == "dataFimFerias" || $campo == "periodoAquisitivoInicio" || $campo == "periodoAquisitivoFim" || $campo == "gozoFeriasInicio" || $campo == "gozoFeriasFim") {
+                    if (($campo === "sequencialControleFerias")) {
+                        continue;
+                    }
+                    if ($campo == "solicitacaoInicioFerias" || $campo == "solicitacaoFimFerias" || $campo == "periodoAquisitivoInicio" || $campo == "periodoAquisitivoFim" || $campo == "periodoFeriasInicio" || $campo == "periodoFeriasFim") {
                         if ($valor != "") {
                             $aux = explode('/', $valor);
                             $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
                             $data = trim($data);
                             $valor = $data;
                         } else {
-                            $valor = 'NULL';
+                            $valor = '';
                         }
                     }
 
@@ -152,31 +161,18 @@ function recupera()
     $out = "";
     if ($row = $result[0]) {
         $codigo = (int) $row['codigo'];
-        $matricula = $row['matricula'];
         $funcionario = $row['funcionario'];
-        $cargo = $row['cargo'];
-        $projeto = $row['projeto'];
-        $dataAdmissao = $row['dataAdmissao'];
+        $matricula = $funcionario;
+        $cargo = $funcionario;
+        $projeto = $funcionario;
+        $dataAdmissao = $funcionario;
         $ativo = $row['ativo'];
-
-        if ($row['dataAdmissao'] != "") {
-            $aux = explode(' ', $row['dataAdmissao']);
-            $data = $aux[1] . ' ' . $aux[0];
-            $data = $aux[0];
-            $data =  trim($data);
-            $aux = explode('-', $data);
-            $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
-            $data =  trim($data);
-            $dataAdmissao = $data;
-        } else {
-            $dataAdmissao = '';
-        };
 
 
         // XML CONTROLE FERIAS
         $reposit = "";
         $result = "";
-        $sql = "SELECT FS.periodoAquisitivoInicio, FS.periodoAquisitivoFim, FS.gozoFeriasInicio, FS.gozoFeriasFim, FS.diasSolicitacao, FS.adiantamentoDecimo, FS.abono, FS.status
+        $sql = "SELECT FS.periodoAquisitivoInicio, FS.periodoAquisitivoFim, FS.periodoFeriasInicio, FS.periodoFeriasFim, FS.diasSolicitacao, FS.adiantamentoDecimo, FS.abono, FS.status, FS.solicitacaoInicioFerias, FS.solicitacaoFimFerias
      FROM Funcionario.controleFeriasSolicitacao FS
     INNER JOIN  Funcionario.controleFerias CF ON FS.controleFeriasSolicitacao = CF.codigo
     WHERE CF.codigo = $id";
@@ -199,7 +195,7 @@ function recupera()
             } else {
                 $periodoAquisitivoInicio = '';
             };
-    
+
             $periodoAquisitivoFim = $row['periodoAquisitivoFim'];
             if ($row['periodoAquisitivoFim'] != "") {
                 $aux = explode(' ', $row['periodoAquisitivoFim']);
@@ -213,35 +209,63 @@ function recupera()
             } else {
                 $periodoAquisitivoFim = '';
             };
-    
-            $gozoFeriasInicio = $row['situacao'];
-            if ($row['gozoFeriasInicio'] != "") {
-                $aux = explode(' ', $row['gozoFeriasInicio']);
+
+            $periodoFeriasInicio = $row['periodoFeriasInicio'];
+            if ($periodoFeriasInicio) {
+                $aux = explode(' ', $periodoFeriasInicio);
                 $data = $aux[1] . ' ' . $aux[0];
                 $data = $aux[0];
                 $data =  trim($data);
                 $aux = explode('-', $data);
                 $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
                 $data =  trim($data);
-                $gozoFeriasInicio = $data;
+                $periodoFeriasInicio = $data;
             } else {
-                $gozoFeriasInicio = '';
+                $periodoFeriasInicio = '';
             };
-    
-            $gozoFeriasFim = $row['gozoFeriasFim'];
-            if ($row['gozoFeriasFim'] != "") {
-                $aux = explode(' ', $row['gozoFeriasFim']);
+
+            $periodoFeriasFim = $row['periodoFeriasFim'];
+            if ($periodoFeriasFim) {
+                $aux = explode(' ', $periodoFeriasFim);
                 $data = $aux[1] . ' ' . $aux[0];
                 $data = $aux[0];
                 $data =  trim($data);
                 $aux = explode('-', $data);
                 $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
                 $data =  trim($data);
-                $gozoFeriasFim = $data;
+                $periodoFeriasFim = $data;
             } else {
-                $gozoFeriasFim = '';
+                $periodoFeriasFim = '';
             };
-    
+
+            $solicitacaoInicioFerias = $row['solicitacaoInicioFerias'];
+            if ($row['solicitacaoInicioFerias'] != "") {
+                $aux = explode(' ', $row['solicitacaoInicioFerias']);
+                $data = $aux[1] . ' ' . $aux[0];
+                $data = $aux[0];
+                $data =  trim($data);
+                $aux = explode('-', $data);
+                $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
+                $data =  trim($data);
+                $solicitacaoInicioFerias = $data;
+            } else {
+                $solicitacaoInicioFerias = '';
+            };
+
+            $solicitacaoFimFerias = $row['solicitacaoFimFerias'];
+            if ($row['solicitacaoFimFerias'] != "") {
+                $aux = explode(' ', $row['solicitacaoFimFerias']);
+                $data = $aux[1] . ' ' . $aux[0];
+                $data = $aux[0];
+                $data =  trim($data);
+                $aux = explode('-', $data);
+                $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
+                $data =  trim($data);
+                $solicitacaoFimFerias = $data;
+            } else {
+                $solicitacaoFimFerias = '';
+            };
+
             $diasSolicitacao = $row['diasSolicitacao'];
             $adiantamentoDecimo = $row['adiantamentoDecimo'];
             $abono = (int)$row['abono'];
@@ -251,14 +275,17 @@ function recupera()
 
             $contadorControleFerias = $contadorControleFerias + 1;
             $arrayControleFerias[] = array(
+                "sequencialControleFerias" => $contadorControleFerias,
                 "periodoAquisitivoInicio" => $periodoAquisitivoInicio,
                 "periodoAquisitivoFim" => $periodoAquisitivoFim,
-                "gozoFeriasInicio" => $gozoFeriasInicio,
-                "gozoFeriasFim" => $gozoFeriasFim,
+                "periodoFeriasInicio" => $periodoFeriasInicio,
+                "periodoFeriasFim" => $periodoFeriasFim,
                 "diasSolicitacao" => $diasSolicitacao,
                 "adiantamentoDecimo" => $adiantamentoDecimo,
                 "abono" => $abono,
-                "status" => $status
+                "status" => $status,
+                "solicitacaoInicioFerias" => $solicitacaoInicioFerias,
+                "solicitacaoFimFerias" => $solicitacaoFimFerias
             );
         }
 

@@ -25,7 +25,7 @@ function gravaControleFerias(id, funcionario, matricula, cargo, projeto,  dataAd
     return;
   }
   
-  function excluirControleFerias(id, callback) {
+  function excluirControle(id, callback) {
     $.ajax({
         url: 'js/sqlscope_funcionarioControleFerias.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
