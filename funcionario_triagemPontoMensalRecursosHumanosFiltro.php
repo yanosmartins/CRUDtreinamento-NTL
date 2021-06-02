@@ -88,7 +88,7 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, nome FROM 
-                                                                        Ntl.funcionario WHERE ativo = 1 ORDER BY nome";
+                                                                        Ntl.funcionario WHERE ativo = 1  AND nome != 'ADMINISTRADOR' ORDER BY nome";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigo = (int)$row['codigo'];
@@ -188,8 +188,6 @@ include("inc/scripts.php");
 <script>
     $(document).ready(function() {
 
-        listarFiltro();
-
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
@@ -215,7 +213,7 @@ include("inc/scripts.php");
         }
         var status = $('#status').val();
         
-        $('#resultadoBusca').load('funcionario_triagemFolhaDePontoListagemRh.php?', {
+        $('#resultadoBusca').load('funcionario_triagemPontoMensalRecursosHumanosFiltroListagem.php?', {
             funcionario,
             mesAno,
             status

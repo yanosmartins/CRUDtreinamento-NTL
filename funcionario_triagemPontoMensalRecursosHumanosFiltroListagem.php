@@ -54,7 +54,7 @@ include "js/repositorio.php";
                     $mostrarMesAno = "$aux[2]/$aux[1]/$aux[0]";
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="funcionario_folhaPontoMensalCadastro.php?' . 'funcionario=' . $funcionario . '&' . 'mesAno=' . $mesAno . '">' . $nomeFuncionario . '</a></td>';
+                    echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="funcionario_triagemPontoMensalRecursosHumanos.php?' . 'funcionario=' . $funcionario . '&' . 'mesAno=' . $mesAno . '">' . $nomeFuncionario . '</a></td>';
                     echo '<td class="text-left">' . $mostrarMesAno . '</td>';
                     echo '<td class="text-left">' . $status . '</td>';
                 }
