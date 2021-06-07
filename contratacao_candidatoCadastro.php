@@ -286,7 +286,16 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
+                                                            <section class="col col-2">
+                                                                <label class="label">pcd</label>
+                                                                <label class="select">
+                                                                    <select name="pcd" id="pcd" autocomplete="off" class="form-control required" autocomplete="new-password">
+                                                                        <option></option>
+                                                                        <option value="0">Não</option>
+                                                                        <option value="1">Sim</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-3">
@@ -723,7 +732,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label" for="dataNascimentoConjuge">Data Nascimento</label>
                                                                 <label class="input">
-                                                                    <input id="dataNascimentoConjuge" name="dataNascimentoConjuge" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" >
+                                                                    <input id="dataNascimentoConjuge" name="dataNascimentoConjuge" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -879,7 +888,7 @@ include("inc/nav.php");
                                                                     <label class="label" for="dataNascimentoFilho">Nascimento</label>
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="dataNascimentoFilho" name="dataNascimentoFilho" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" >
+                                                                        <input id="dataNascimentoFilho" name="dataNascimentoFilho" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa">
                                                                     </label>
                                                                 </section>
                                                             </div>
@@ -948,7 +957,7 @@ include("inc/nav.php");
                                                                     <label class="label" for="dataNascimentoDependente">Nascimento</label>
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" >
+                                                                        <input id="dataNascimentoDependente" name="dataNascimentoDependente" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
@@ -1493,9 +1502,9 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-6">
-                                                                <label class="label"  for="fotoCandidato">Foto</label>
+                                                                <label class="label">Foto</label>
                                                                 <label class="input input-file">
-                                                                    <span class="button"><input type="file" id="fotoCandidato" name="fotoCandidato" multiple>Selecionar
+                                                                    <span class="button"><input type="file" id="fotoCandidato" name="fotoCandidato[]" multiple>Selecionar
                                                                         documentos</span><input id="fotoCandidatoText" type="text">
                                                                 </label>
                                                             </section>
@@ -2227,27 +2236,27 @@ include("inc/scripts.php");
 
         $("input[name='fotoCandidato[]']").change(function() {
 
-            let files = document.getElementById("fotoCandidato").files;
-            let array = [];
-            let tamanhoTotal = 0;
-            let tamanhoMaximoPorCampo = 1048576; //1MB = 1048576 | 2MB = 2097152
-            for (let i = 0; i < files.length; i++) {
-                array.push(files[i].name);
-                tamanhoTotal += files[i].size;
+let files = document.getElementById("fotoCandidato").files;
+let array = [];
+let tamanhoTotal = 0;
+let tamanhoMaximoPorCampo = 1048576; //1MB = 1048576 | 2MB = 2097152
+for (let i = 0; i < files.length; i++) {
+    array.push(files[i].name);
+    tamanhoTotal += files[i].size;
 
-            }
+}
 
-            let arrayString = array.toString();
-            $("#fotoCandidatoText").val(arrayString);
+let arrayString = array.toString();
+$("#fotoCandidatoText").val(arrayString);
 
-            if (tamanhoTotal > tamanhoMaximoPorCampo) {
-                smartAlert("Atenção", "Estes arquivos ultrapassaram o valor máximo permitido! O total de arquivos não pode ser maior do que 1MB", "error");
-                $("#fotoCandidatoText").val("");
-                $("#fotoCandidato").val("");
+if (tamanhoTotal > tamanhoMaximoPorCampo) {
+    smartAlert("Atenção", "Estes arquivos ultrapassaram o valor máximo permitido! O total de arquivos não pode ser maior do que 1MB", "error");
+    $("#fotoCandidatoText").val("");
+    $("#fotoCandidato").val("");
 
-            }
+}
 
-        });
+});
 
 
 
@@ -3037,6 +3046,7 @@ include("inc/scripts.php");
                             logradouro = piece[103]
                             justificativaVt = piece[104];
                             var tipoCartaoVt = piece[105];
+                            pcd = piece[106];
                             var banco = codigoBanco;
                             banco = banco.split("-");
                             banco = banco[0].trim();
@@ -3161,6 +3171,7 @@ include("inc/scripts.php");
                             // funcionario pais/estado/municipio
                             $("#numeroPais").val(numeroPais);
                             $("#paisNascimento").val(paisNascimento);
+                            $("#pcd").val(pcd);
 
                             //funcionario EX.
                             let valor = $("#paisNascimento").val();
@@ -4177,7 +4188,15 @@ include("inc/scripts.php");
                 return;
             }
 
-            
+            let pcd = $("#pcd").val();
+            if (!pcd) {
+                smartAlert("Atenção", "Selecione o Estado Civil", "error");
+                return;
+            }
+
+
+
+
         }
 
         gravaFuncionario(formData);
