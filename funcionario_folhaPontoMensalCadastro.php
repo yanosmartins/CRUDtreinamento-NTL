@@ -89,7 +89,7 @@ include("inc/nav.php");
 
 
                                                             <div class="row">
-                                                                <section class="col col-3">
+                                                                <section class="col col-xs-3 col-sm-3 col-md-3 col-lg-2">
                                                                     <label class="label" for="mesAno">Mês/Ano</label>
                                                                     <label class="input">
                                                                         <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="readonly" readonly style="pointer-events:none;touch-action:none">

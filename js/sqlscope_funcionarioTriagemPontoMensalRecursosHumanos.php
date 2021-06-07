@@ -67,7 +67,12 @@ function reabrir()
 
   session_start();
   $usuario = "'" .  $_SESSION['login'] . "'";
-  $codigo = $_POST["codigo"];
+  $data = $_POST["data"];
+
+  $codigo = $data["codigo"];
+
+  //===XML===//
+  
 
   $sql = "select codigo as 'status' from Ntl.status where descricao LIKE 'pendente'";
 
