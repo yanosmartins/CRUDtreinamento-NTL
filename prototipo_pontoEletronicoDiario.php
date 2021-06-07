@@ -87,17 +87,29 @@ include("inc/nav.php");
                                                             <div class=" row text-center" style="margin-bottom: 10px;">
                                                                 <h2 style="font-weight:bold;">Ponto Eletrônico</h2>
                                                                 <h5>
-                                                                    <?php
-                                                                    setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese.utf-8');
-                                                                    date_default_timezone_set('America/Sao_Paulo');
-                                                                    echo ucwords(strftime('%A, '));
-                                                                    $data = strftime('%d de %B de %Y.', strtotime('today'));
+                                                                    <div id="diaAtual" name="diaAtual" style="font-size: 17px;">
+                                                                    </div>
+                                                                    <script>
+                                                                        dataAtual()
 
-                                                                    $dia = date("d");
-                                                                    echo $data . " <input id=\"dia\" name=\"dia\" type=\"text\" class=\"text-center form-control readonly hidden\" readonly data-autoclose=\"true\" value=\"" . $dia . "\">";
+                                                                        function dataAtual() {
+                                                                            meses = new Array("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro");
+                                                                            semana = new Array("Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado");
+
+                                                                            var dataAtual = new Date(),
+                                                                                diaext;
+                                                                            var dia = dataAtual.getDate();
+                                                                            var dias = dataAtual.getDay();
+                                                                            var mes = dataAtual.getMonth();
+                                                                            var ano = dataAtual.getFullYear();
+
+                                                                            diaext = semana[dias] + ", " + dia + " de " + meses[mes] + " de " + ano;
+                                                                            document.getElementById("diaAtual").innerHTML = diaext;
 
 
-                                                                    ?>
+                                                                        }
+                                                                    </script>
+
                                                                 </h5>
                                                                 <script>
                                                                     var myVar = setInterval(myTimer, 1000);
