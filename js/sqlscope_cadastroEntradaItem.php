@@ -127,12 +127,17 @@ function grava()
     $fileName = $dataNome . "-" . $nomeXmlNota;
     $path = $entradaItemPath . DIRECTORY_SEPARATOR . $fileName;
 
-    $filePath = "." . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR. "entradaMaterial" . DIRECTORY_SEPARATOR;
+    $filePath = "." . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . "entradaMaterial" . DIRECTORY_SEPARATOR;
     $fileType = $fileContent['type'][0];
 
-    $filePath = "'" .$filePath. "'" ;
-    $fileType = "'" .$fileType. "'" ;
-    $fileName = "'" .$fileName. "'" ;
+    $filePath = "'" . $filePath . "'";
+    $fileType = "'" . $fileType . "'";
+    $fileName = "'" . $fileName . "'";
+
+    $xml = simplexml_load_file($nomeTemporario);
+    $jsonXml = json_encode($xml);
+    $jsonXml = "'" . $jsonXml . "'";
+    //$array = json_decode($json, TRUE);
 
     move_uploaded_file($nomeTemporario, $path);
 
@@ -150,7 +155,8 @@ function grava()
         $xmlItem,
         $filePath,
         $fileName,
-        $fileType
+        $fileType,
+        $jsonXml
         ";
 
     $reposit = new reposit();
