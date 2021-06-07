@@ -289,6 +289,17 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
 
+                                                            <section class="col col-2">
+                                                                <label class="label">pcd</label>
+                                                                <label class="select">
+                                                                    <select name="pcd" id="pcd" autocomplete="off" class="form-control required" autocomplete="new-password">
+                                                                        <option></option>
+                                                                        <option value="0">Não</option>
+                                                                        <option value="1">Sim</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+
                                                         </div>
                                                         <div class="row">
                                                             <section class="col col-3">
@@ -3180,6 +3191,7 @@ include("inc/scripts.php");
                             var logradouro = piece[103];
                             var justificativaVt = piece[104];
                             var tipoCartaoVt = piece[105];
+                            pcd = piece[106];
 
                             let conta = tipoConta //tipoConta:  1 - Corrente  2-Poupança
 
@@ -3303,6 +3315,7 @@ include("inc/scripts.php");
                             $("#numeroPais").val(numeroPais);
                             $("#paisNascimento").val(paisNascimento);
                             $("#logradouro").val(logradouro);
+                            $("#pcd").val(pcd);
                             verificaBanco();
 
 
@@ -4023,6 +4036,7 @@ include("inc/scripts.php");
         let valeRefeicaoValeAlimentacao = $("#valeRefeicaoValeAlimentacao").val();
         let possuiContaBancaria = $("#possuiContaBancaria").val();
         let email = $("#email").val();
+        let pcd = $("#pcd").val();
 
         if (!nomeCompleto) {
             smartAlert("Atenção", "Digite o Nome Completo", "error");
@@ -4070,6 +4084,11 @@ include("inc/scripts.php");
 
         if (!estadoCivil) {
             smartAlert("Atenção", "Selecione o Estado Civil", "error");
+            return;
+        }
+
+        if (!pcd) {
+            smartAlert("Atenção", "Selecione o campo pcd", "error");
             return;
         }
 

@@ -149,6 +149,8 @@ function gravaFuncionario()
     $ativo = 1;
     $justificativaVt = validaString($_POST['justificativaVt']);
     $tipoCartaoVt = validaNumero($_POST['tipoCartaoVt']);
+    $pcd = validaNumero($_POST['pcd']);
+    
 
 
 
@@ -1441,7 +1443,7 @@ function gravaFuncionario()
         $naturalidade,						
         $nacionalidade,						
         $racaCor,							
-        $estadoCivil,						
+        $estadoCivil,				
         $nomePai,    								
         $nomeMae,								
         $ctps,								
@@ -1562,7 +1564,8 @@ function gravaFuncionario()
         $usuarioCadastro, 
         $ativo,
         $justificativaVt, 
-        $tipoCartaoVt
+        $tipoCartaoVt,
+        $pcd
         ";
 
     $reposit = new reposit();
@@ -1739,6 +1742,7 @@ function recuperaFuncionario()
     $logradouro = $row['logradouro'];
     $justificativaVt = $row['justificativaVt'];
     $tipoCartaoVt = $row['tipoCartaoVt'];
+    $pcd = $row['pcd'];
 
     /*------- Lista de Filhos -------*/
     $sql = "SELECT CF.codigo, CF.candidato, CF.nomeCompleto, CF.cpf, CF.dataNascimento FROM Contratacao.candidatoFilho CF 
@@ -1933,7 +1937,8 @@ function recuperaFuncionario()
         $projeto . "^" .
         $logradouro . "^" .
         $justificativaVt . "^" .
-        $tipoCartaoVt;
+        $tipoCartaoVt ."^" .
+        $pcd;
 
     if ($out == "") {
         echo "failed#";
