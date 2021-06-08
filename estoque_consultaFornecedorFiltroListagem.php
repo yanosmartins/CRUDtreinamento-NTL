@@ -23,19 +23,21 @@ include "js/repositorio.php";
                
                 $where = "where (0 = 0)";
                 
-                $sql = "SELECT F.codigo, F.apelido, F.ativo, 
+                $sql = "SELECT DISTINCT  F.codigo, F.apelido, F.ativo, 
                  F.notaFiscal,UF.sigla,FT.fornecedor, FT.telefone AS tel ,
                  FT.telefonePrincipal, F.uf, F.bairro, FTI.tipoItem,
                  TI.descricao AS tipoItem, TI.codigo FROM ntl.fornecedor F
-                INNER JOIN ntl.fornecedorTipoItem FTI ON FTI.fornecedor = F.codigo AND F.ativo = 1
-                INNER JOIN Estoque.tipoItem TI ON TI.codigo = FTI.tipoItem 
-                INNER JOIN ntl.unidadeFederacao UF ON F.uf = UF.sigla 
-                INNER JOIN ntl.fornecedorTelefone FT ON FT.fornecedor = F.codigo AND FT.telefonePrincipal = 1 ";
+                LEFT JOIN ntl.fornecedorTipoItem FTI ON FTI.fornecedor = F.codigo AND F.ativo = 1
+                LEFT JOIN Estoque.tipoItem TI ON TI.codigo = FTI.tipoItem 
+                LEFT JOIN ntl.unidadeFederacao UF ON F.uf = UF.sigla 
+                LEFT JOIN ntl.fornecedorTelefone FT ON FT.fornecedor = F.codigo AND FT.telefonePrincipal = 1 ";
 
         
                 if ($_GET["tipoItem"] != "") {
                     $tipoItem = $_GET["tipoItem"];
                     $where = $where . " AND [tipoItem] = " . $tipoItem;
+                }else{
+                    $where = $where . " AND [tipoItem] IS NOT NULL ";
                 }
 
                 if ($_GET["tel"] != "") {
