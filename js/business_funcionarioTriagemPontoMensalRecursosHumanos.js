@@ -12,13 +12,13 @@ function validarRH(codigo,callback) {
   })
 }
 
-function reabrirRH(codigo,callback) {
+function reabrirRH(data,callback) {
   $.ajax({
     url: 'js/sqlscope_funcionarioTriagemPontoMensalRecursosHumanos.php',
     dataType: 'html', //tipo do retorno
     type: 'post', //metodo de envio
     data: {
-      funcao: 'reabrir',codigo
+      funcao: 'reabrir',data
     }, //valores enviados ao script
     success: function (data) {
       callback(data)

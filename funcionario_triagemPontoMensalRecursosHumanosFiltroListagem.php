@@ -52,7 +52,7 @@ include "js/repositorio.php";
                     $mesAno = $aux[0];
                     $aux = explode("-",$mesAno);
                     $mostrarMesAno = "$aux[2]/$aux[1]/$aux[0]";
-                    $pattern = "/[c-e]{3}had(o|a)/i";
+                    $pattern = "/[c-f]{3}had(o|a)/i";
                     $pattern2 = "/[a-z]{8} (pelo|por) gestor(a)?/i";
 
                     echo '<tr >';

@@ -15,11 +15,11 @@ include "js/repositorio.php";
             <tbody>
                 <?php
 
-                $sql = "SELECT F.codigo as 'folha',FU.codigo as 'funcionario', FU.nome as 'nomeFuncionario', F.mesAno, S.descricao as 'status'FROM Funcionario.folhaPontoMensal F 
+                $sql = "SELECT F.codigo as 'folha',FU.codigo as 'funcionario', FU.nome as 'nomeFuncionario', F.mesAno, S.descricao as 'status' FROM Funcionario.folhaPontoMensal F 
                 INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
                 LEFT JOIN Ntl.status S ON S.codigo = F.status ";
 
-                $where = " WHERE (0 = 0) S.descricao != 'validado pelo RH' ";
+                $where = " WHERE (0 = 0) AND S.descricao != 'validado pelo RH' ";
 
                 if ($_POST["funcionario"] != "") {
                     $funcionario = (int)$_POST["funcionario"];
@@ -52,11 +52,11 @@ include "js/repositorio.php";
                     $mesAno = $aux[0];
                     $aux = explode("-",$mesAno);
                     $mostrarMesAno = "$aux[2]/$aux[1]/$aux[0]";
-                    $pattern = "/[c-e]{3}had(o|a)/i";
+                    $pattern = "/[c-f]{3}had(o|a)/i";
 
                     echo '<tr >';
                     if(preg_match($pattern,$status)){
-                        echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="funcionario_triagemPontoMensalRecursosHumanos.php?' . 'funcionario=' . $funcionario . '&' . 'mesAno=' . $mesAno . '">' . $nomeFuncionario . '</a></td>';
+                        echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="funcionario_triagemPontoMensalGestor.php?' . 'funcionario=' . $funcionario . '&' . 'mesAno=' . $mesAno . '">' . $nomeFuncionario . '</a></td>';
                     }else{
                         echo '<td class="text-left">' . $nomeFuncionario . '</td>';
                     }

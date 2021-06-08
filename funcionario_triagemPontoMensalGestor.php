@@ -85,7 +85,6 @@ include("inc/nav.php");
 
                                                         <div id="formFolhaPontoMensal" class="col-sm-12">
                                                             <input id="codigo" name="codigo" type="hidden" value="0">
-
                                                             <div class="row">
                                                                 <section class="col col-4">
                                                                     <label class="label" for="funcionario">Funcionário</label>
