@@ -194,8 +194,25 @@ include("inc/nav.php");
                                                     <span id="ui-id-1" class="ui-dialog-title">
                                                     </span>
                                                 </div>
-                                                <div id="dlgSimplePoint" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
-                                                    <p>Insira as pendências.</p>
+                                                <div id="dlgSimpleReabrir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                                    <h3 style="font-weight: 500">Insira as pendências:</h3>
+                                                    <div class="form-group" id="pendingForm">
+                                                        <section class="row">
+                                                            <div class="col col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                                <div style="margin-bottom:10px">
+                                                                    <input type="text" class="form-control" name="pendencia" placeholder="Pendência">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                                <button name="btnAddPendencia" type="button" class="btn btn-primary" onclick="addPendency(event)">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </button>
+                                                                <button name="btnRemoverPendencia" type="button" class="btn btn-danger" onclick="removePendency(event)">
+                                                                    <i class="fa fa-minus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </section>
+                                                    </div>
                                                 </div>
                                                 <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
                                                     <div class="ui-dialog-buttonset">
@@ -294,7 +311,7 @@ include("inc/scripts.php");
                 "class": "btn btn-success",
                 click: function() {
                     $(this).dialog("close");
-                    $('#dlgSimplePoint').css('display', 'none');
+                    $('dlgSimpleReabrir').css('display', 'none');
                     reabrir()
                     return;
                 }
@@ -315,7 +332,7 @@ include("inc/scripts.php");
         });
 
         $("#btnReabrir").on('click', () => {
-            $('#dlgSimplePoint').dialog('open');
+            $('#dlgSimpleReabrir').dialog('open');
         });
 
         $("#btnValidar").on('click', () => {
@@ -356,18 +373,32 @@ include("inc/scripts.php");
 
     function reabrir() {
         const codigo = $("#codigo").val();
-        reabrirGestor(codigo, function(data) {
+        const pendencia = new Array()
+        $("[name=pendencia]").each((index, el) => {
+            pendencia.push(el.value)
+        })
+
+        if (pendencia.length == 0) {
+            smartAlert("Atenção", "Não há pendências para a reabertura", "error")
+            return false
+        }
+
+        data = {
+            codigo,
+            pendencia
+        }
+        reabrirGestor(data, function(data) {
 
             if (data.indexOf('sucess') < 0) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
                 if (mensagem !== "") {
                     smartAlert("Atenção", mensagem, "error");
-                    $("#btnValidar").prop('disabled', false);
+                    $("#btnReabrir").prop('disabled', false);
                     return false;
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                    $("#btnValidar").prop('disabled', false);
+                    $("#btnReabrir").prop('disabled', false);
                     return false;
                 }
             } else {
@@ -458,7 +489,7 @@ include("inc/scripts.php");
             row.append($('<td class="text-nowrap">' + fileName + '</td>'));
 
 
-            const path = jsonVisualizarFolhaArray[i].filePath.replaceAll("\\","\/");
+            const path = jsonVisualizarFolhaArray[i].filePath.replaceAll("\\", "\/");
             row.append($('<td class="text-nowrap"><a href="' + path.concat(fileName) + '" target="_blank" rel="noopener noreferrer">Abrir <i class="fa fa-external-link" aria-hidden="true"></i></a></td>'));
         }
     }
@@ -494,5 +525,29 @@ include("inc/scripts.php");
             const lancamento = jsonPontoMensalArray[i].lancamento;
             row.append($('<td class="text-nowrap">' + lancamento + '</td>'));
         }
+    }
+
+    //===================================//
+    //===================================//
+    function addPendency(event) {
+        event.stopPropagation()
+        const row = $("#pendingForm .row")[0].cloneNode(true)
+        const parent = event.currentTarget.parentElement.parentElement
+        $(row).insertAfter(parent)
+        return true
+    }
+
+    function removePendency(event) {
+        event.stopPropagation()
+        const firstBtnRemove = document.getElementsByName("btnRemoverPendencia").item(0)
+        const condition = event.currentTarget.isEqualNode(firstBtnRemove)
+        const length = document.getElementsByName("btnRemoverPendencia").length
+        if (condition && length == 1) {
+            smartAlert("Atenção", "É obrigatório pelo menos uma pendência para que a folha seja reaberta.", "warning")
+            return false
+        }
+        const parent = event.currentTarget.parentElement.parentElement
+        $(parent).remove()
+        return true
     }
 </script>

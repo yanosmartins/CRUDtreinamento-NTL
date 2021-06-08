@@ -311,7 +311,7 @@ include("inc/scripts.php");
                 "class": "btn btn-success",
                 click: function() {
                     $(this).dialog("close");
-                    $('#dlgSimplePoint').css('display', 'none');
+                    $('#dlgSimpleReabrir').css('display', 'none');
                     reabrir()
                     return;
                 }
@@ -396,11 +396,11 @@ include("inc/scripts.php");
                 var mensagem = piece[1];
                 if (mensagem !== "") {
                     smartAlert("Atenção", mensagem, "error");
-                    $("#btnValidar").prop('disabled', false);
+                    $("#btnReabrir").prop('disabled', false);
                     return false;
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR !", "error");
-                    $("#btnValidar").prop('disabled', false);
+                    $("#btnReabrir").prop('disabled', false);
                     return false;
                 }
             } else {
