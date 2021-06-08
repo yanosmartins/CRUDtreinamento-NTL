@@ -174,32 +174,32 @@ include("inc/nav.php");
                                                         <div class="col col-md-10">
 
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnBaterPonto" name="btnBaterPonto" id="btnBaterPonto">
+                                                                <button type="button" class="btn  btnBaterPonto" name="btnBaterPonto" id="btnBaterPonto">
                                                                     <span class="fa fa-clock-o fa-2x"></span><br>Bater Ponto
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnPontoMensal" id="btnPontoMensal">
+                                                                <button type="button" class="btn  btnPontoMensal" id="btnPontoMensal">
                                                                     <span class="fa fa-calendar fa-2x"></span><br> Ponto Mensal
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnFolhaMensal" id="btnFolhaMensal">
+                                                                <button type="button" class="btn  btnFolhaMensal" id="btnFolhaMensal">
                                                                     <span class="fa fa-file fa-2x"></span><br> Folha Mensal
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnFolhaPreenchida" disabled="disabled" id="btnFolhaPreenchida">
+                                                                <button type="button" class="btn  btnFolhaPreenchida" disabled="disabled" id="btnFolhaPreenchida">
                                                                     <span class="fa fa-file-text fa-2x"></span><br>Folha Mensal <br> Preenchida
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnContracheque" id="btnContracheque">
+                                                                <button type="button" class="btn  btnContracheque" id="btnContracheque">
                                                                     <span class="fa fa-money fa-2x"></span><br>Contracheque
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-md-2">
-                                                                <button type="button" class="btn  btn-block btnAso" id="btnAso">
+                                                                <button type="button" class="btn  btnAso" id="btnAso">
                                                                     <span class="fa fa fa-stethoscope fa-2x"></span><br>Consulta ASO
                                                                 </button><br>
                                                             </div>

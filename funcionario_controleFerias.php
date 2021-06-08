@@ -419,7 +419,7 @@ include("inc/nav.php");
                                                                 </button>
                                                             </section>
                                                         </div>
-                                                        <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                        <div class="table-responsive" style="min-height: 115px; width:100%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
                                                             <table id="tableControleFerias" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                 <thead>
                                                                     <tr role="row">

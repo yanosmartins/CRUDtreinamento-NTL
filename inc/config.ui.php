@@ -295,7 +295,7 @@ if ($condicaoRHOk) {
 // MENSAGERIA // a pedido do guinancio 24/02/21 colocar servico externo no nome
 $condicaoSegurancaOk = (in_array('SEGURANCA_ACESSAR', $arrayPermissao, true));
 if ($condicaoSegurancaOk) {
-    $page_nav['seguranca'] = array("title" => "Segurança do Trabalho", "icon" => "fa-medkit ");
+    $page_nav['seguranca'] = array("title" => "Saúde/Seg Do Trabalho", "icon" => "fa-medkit ");
     $page_nav['seguranca']['sub'] = array();
     if (in_array('TRIAGEMASO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['seguranca']['sub']['aso'] = array("title" => "ASO");
@@ -539,6 +539,9 @@ if ($condicaoFuncionarioOk) {
     }
     if (in_array('FOLHAPONTOPROJETO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("emitirFolhaPorProjeto" => array("title" => "Gerador Folha de Ponto por Projeto", "url" => APP_URL . "/funcionario_folhaDePontoPorProjeto.php"));
+    }
+    if (in_array('CONTROLEFERIAS_MENUFUNCIONARIO', $arrayPermissao, true)) {
+        $page_nav['funcionario']['sub'] += array("controleFerias" => array("title" => "Controle de Férias", "url" => APP_URL . "/funcionario_controleFeriasFiltro.php"));
     }
 
     $sql = "SELECT dataUltimoAso FROM Funcionario.atestadoSaudeOcupacional WHERE funcionario = " . $funcionario . "";

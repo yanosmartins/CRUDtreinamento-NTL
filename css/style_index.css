@@ -1,4 +1,4 @@
-h {
+h1 {
     font-weight: bold;
 }
 
@@ -13,7 +13,6 @@ h {
 }
 
 .btnBaterPonto, .btnPontoMensal, .btnFolhaMensal, .btnFolhaPreenchida, .btnContracheque, .btnAso,.xxs :active {
-    border: none;
     height: 80px;
     color: #305d8c;
     font-size: 16px;
