@@ -19,6 +19,12 @@ if ($funcao == 'excluirProjeto') {
 if ($funcao == 'listaProjetoAtivoAutoComplete') {
     call_user_func($funcao);
 }
+
+
+if ($funcao == 'recuperaNomeLogin') {
+    call_user_func($funcao);
+}
+
 //if ($funcao == 'popularComboMunicipio') {
 //    call_user_func($funcao);
 //}
@@ -116,7 +122,7 @@ function gravaProjeto()
     $limiteSaida = validaString($projeto['limiteSaida']);
     $imprimeCargo = $projeto['imprimeCargo'];
     $fornecedorVAVR = (int)$projeto['apelidoFornecedorId'];
-    if(!$fornecedorVAVR)
+    if (!$fornecedorVAVR)
         $fornecedorVAVR = $comum->formataNuloGravar($fornecedorVAVR);
 
     //------------------------PROJETO Telefone------------------
@@ -351,6 +357,45 @@ function gravaProjeto()
 }
 
 
+function recuperaNomeLogin()
+{
+    if ((empty($_POST["responsavelLogin"])) || (!isset($_POST["responsavelLogin"])) || (is_null($_POST["responsavelLogin"]))) {
+        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    } else {
+        $responsavelLogin = (int) $_POST["responsavelLogin"];
+    }
+
+    $sql = "SELECT U.codigo AS 'codigoFuncionario', U.login ,F.nome AS 'nome' FROM Ntl.usuario U 
+    INNER JOIN Ntl.funcionario F ON U.funcionario = F.codigo WHERE U.ativo = 1 AND F.ativo = 1 AND U.codigo = " . $responsavelLogin;
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $out = "";
+    if ($row = $result[0]) {
+       
+            $codigo = (int) $row['codigoFuncionario'];
+            $nomeLogin2 = $row['nome'];
+        
+      
+        
+        $out =
+            $codigo . "^" .
+            $nomeLogin2;
+
+        if ($out == "") {
+            echo "failed#";
+            return;
+        }
+
+        echo "sucess#" . $out;
+        return;
+    }
+}
+
+
 function recuperaProjeto()
 {
     if ((empty($_POST["id"])) || (!isset($_POST["id"])) || (is_null($_POST["id"]))) {
@@ -531,7 +576,7 @@ function recuperaProjeto()
             $limiteSaida . "^" .
             $imprimeCargo . "^" .
             $fornecedorObrigatorio . "^" .
-            $apelidoFornecedorId . "^" . 
+            $apelidoFornecedorId . "^" .
             $apelidoFornecedor;
 
         //----------------------Montando o array do Telefone
@@ -662,10 +707,11 @@ function recuperaProjeto()
         $strArrayFolga = json_encode($arrayFolga);
 
         //----------------------Montando o array do Responsavel
-        $sql = "SELECT  R.codigo,R.projeto,R.responsavelLogin,U.login
+        $sql = "SELECT  R.codigo,R.projeto,R.responsavelLogin,U.login,F.nome AS 'nome'
                  FROM Ntl.projeto P 
                 INNER JOIN Ntl.projetoResponsavel R ON P.codigo = R.projeto 
                 LEFT JOIN Ntl.usuario U ON U.codigo = R.responsavelLogin
+                INNER JOIN Ntl.Funcionario F ON U.funcionario = F.codigo
                 WHERE P.codigo = " . $id;
         $reposit = new reposit();
         $result = $reposit->RunQuery($sql);
@@ -676,13 +722,15 @@ function recuperaProjeto()
             $responsavelId = $row['codigo'];
             $responsavelLogin = $row['responsavelLogin'];
             $login = $row['login'];
+            $nomeLogin = $row['nome'];
 
             $contadorResponsavel = $contadorResponsavel + 1;
             $arrayResponsavel[] = array(
                 "sequencialResponsavel" => $contadorResponsavel,
                 "responsavelId" => $responsavelId,
                 "responsavelLogin" => $responsavelLogin,
-                "responsavelLoginDescricao" => $login
+                "responsavelLoginDescricao" => $login,
+                "nomeLogin" => $nomeLogin
             );
         }
         $strArrayResponsavel = json_encode($arrayResponsavel);
