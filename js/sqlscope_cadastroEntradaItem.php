@@ -130,6 +130,7 @@ function grava()
     $filePath = "." . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . "entradaMaterial" . DIRECTORY_SEPARATOR;
     $fileType = $fileContent['type'][0];
 
+
     $filePath = "'" . $filePath . "'";
     $fileType = "'" . $fileType . "'";
     $fileName = "'" . $fileName . "'";
@@ -165,7 +166,7 @@ function grava()
     $ret = 'success';
     if ($result < 1) {
         $ret = 'failed';
-        unlink($entradaItemPath . DIRECTORY_SEPARATOR . $fileName);
+        unlink($path);
     }
     echo $ret;
     return;
@@ -320,12 +321,32 @@ function excluir()
     }
 
     $codigo = $_POST["codigo"];
+    $path = $_POST["xmlNotaPath"];
 
     if ((empty($_POST['codigo']) || (!isset($_POST['codigo'])) || (is_null($_POST['codigo'])))) {
         $mensagem = "Selecione uma entrada Material.";
         echo "failed#" . $mensagem . ' ';
         return;
     }
+
+    $sql = "SELECT codigo
+    FROM Estoque.estoqueMovimento WHERE entradaMaterial = " . $codigo . "
+    AND( estoqueMovimentoSaida IS NOT NULL 
+    OR motivoMovimento IS NOT NULL 
+    OR estoqueMovimentoEntrada IS NOT NULL 
+    OR estoqueMovimentoSaidaTransferencia IS NOT NULL
+    OR situacaoItem != 1)";
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    if ($result) {
+        $mensagem = "Esta entrada material já possui movimentos nos seus itens.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
+    $sql = "";
+    $result = "";
 
     $sql = "Estoque.entradaMaterial_Deleta $codigo";
 
@@ -335,6 +356,8 @@ function excluir()
     $ret = 'success';
     if ($result < 1) {
         $ret = 'failed';
+    } else {
+        unlink($path);
     }
     echo $ret;
     return;
