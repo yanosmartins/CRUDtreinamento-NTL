@@ -1262,7 +1262,7 @@ include("inc/nav.php");
                                                             <input id="responsavelId" name="responsavelId" type="hidden" value="">
 
                                                             <div class="row">
-                                                                <section class="col col-8">
+                                                                <section class="col col-7">
                                                                     <label class="label">Login</label>
                                                                     <label class="select">
                                                                         <select id="responsavelLogin" name="responsavelLogin">
@@ -1281,6 +1281,13 @@ include("inc/nav.php");
                                                                         </select><i></i>
                                                                     </label>
                                                                 </section>
+                                                                <section class="col col-5 col-auto">
+                                                                <label class="label" for="nomeLogin">Nome</label>
+                                                                <label class="input">
+                                                                    <input id="nomeLogin" name="nomeLogin" class="readonly" readonly value="">
+                                                                    </select>
+                                                                </label>
+                                                            </section>
                                                                 <section class="col col-md-2">
                                                                     <label class="label">&nbsp;</label>
                                                                     <button id="btnAddResponsavel" type="button" class="btn btn-primary">
@@ -1297,6 +1304,7 @@ include("inc/nav.php");
                                                                         <tr role="row">
                                                                             <th style="width: 2px"></th>
                                                                             <th class="text-center">Login</th>
+                                                                            <th class="text-center">Nome</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -1637,6 +1645,10 @@ include("inc/scripts.php");
 
         $("#btnRemoverResponsavel").on("click", function() {
             excluirResponsavel();
+        });
+
+        $("#responsavelLogin").on("change", function() {
+           recuperaNomeLogin();
         });
         //responsavel
 
@@ -1984,6 +1996,35 @@ include("inc/scripts.php");
         );
 
     }
+
+    function recuperaNomeLogin() {
+        var responsavelLogin = $("#responsavelLogin").val()
+        recuperarNomeLogin(responsavelLogin,
+            function(data) {
+                var atributoId = '#' + 'estoqueDestino';
+                if (data.indexOf('failed') > -1) {
+                    $("#responsavelLogin").focus()
+                    // $("#matricula").val("")
+                    return;
+                } else {
+                    $("#responsavelLogin").prop("disabled", false)
+                    $("#responsavelLogin").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                        var piece = data.split("#");
+                       
+
+                        var mensagem = piece[0];
+                        var registros = piece[1].split("^");
+                        var nomeLogin = registros[1];
+                
+                        $("#nomeLogin").val(nomeLogin);;
+
+                }
+            }
+        );
+    }
+
+
 
     //############################################################################## LISTA TELEFONE INICIO ####################################################################################################################
 
@@ -2668,6 +2709,7 @@ include("inc/scripts.php");
         } else {
             item["sequencialResponsavel"] = +item["sequencialResponsavel"];
         }
+        item.nomeLoginResponsavel = $("#nomeLogin").val()
 
         var index = -1;
         $.each(jsonResponsavelArray, function(i, obj) {
@@ -2709,9 +2751,11 @@ include("inc/scripts.php");
         $("#tableResponsavel tbody").empty();
         for (var i = 0; i < jsonResponsavelArray.length; i++) {
             var row = $('<tr />');
+            
             $("#tableResponsavel tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonResponsavelArray[i].sequencialResponsavel + '"><i></i></label></td>'));
             row.append($('<td class="text-left" onclick="carregaResponsavel(' + jsonResponsavelArray[i].sequencialResponsavel + ');">' + jsonResponsavelArray[i].responsavelLoginDescricao + '</td>'));
+            row.append($('<td class="text-center">' + jsonResponsavelArray[i].nomeLogin + '</td>'));
         }
     }
 
@@ -2737,6 +2781,13 @@ include("inc/scripts.php");
             };
         }
 
+        if (fieldName !== '' && (fieldId === "nomeLogin")) {
+            var nomeLoginResponsavel = $("#nomeLogin").val();
+            if (nomeLoginResponsavel !== '') {
+                fieldName = "nomeLogin";
+            }
+        }
+
         return false;
     }
 
@@ -2752,6 +2803,7 @@ include("inc/scripts.php");
             $("#responsavelId").val(item.responsavelId);
             $("#responsavelLogin").val(item.responsavelLogin);
             $("#sequencialResponsavel").val(item.sequencialResponsavel);
+            $("#nomeLogin").val(item.nomeLoginResponsavel);
         }
     }
 
@@ -2761,6 +2813,7 @@ include("inc/scripts.php");
         var achouResponsavel = false;
         var responsavelLogin = $('#responsavelLogin').val();
         var sequencial = +$('#sequencialResponsavel').val();
+        var nomeLogin = $('#nomeLogin').val();
         if (!responsavelLogin) {
             smartAlert("Erro", "Informe o responsavel", "error");
             return false;
@@ -2773,7 +2826,6 @@ include("inc/scripts.php");
                 }
             }
         }
-
         if (achouResponsavel === true) {
             smartAlert("Erro", "Já existe o Responsável na lista.", "error");
             return false;

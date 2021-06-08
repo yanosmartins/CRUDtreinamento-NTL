@@ -37,5 +37,21 @@ function excluirProjeto(id, callback) {
     });
 }
 
+function recuperarNomeLogin(responsavelLogin, callback) {
+    $.ajax({
+        url: 'js/sqlscope_cadastroProjeto.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: 'recuperaNomeLogin', responsavelLogin: responsavelLogin }, //valores enviados ao script     
+        async: false,
+        success: function (data) {
+            callback(data);
+        }
+
+    });
+
+    return;
+}
+
 
 
