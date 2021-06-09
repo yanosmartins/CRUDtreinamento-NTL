@@ -12,13 +12,13 @@ function validarGestor(codigo,callback) {
   })
 }
 
-function reabrirGestor(codigo,callback) {
+function reabrirGestor(data,callback) {
   $.ajax({
     url: 'js/sqlscope_funcionarioTriagemPontoMensalGestor.php',
     dataType: 'html', //tipo do retorno
     type: 'post', //metodo de envio
     data: {
-      funcao: 'reabrir',codigo
+      funcao: 'reabrir',data
     }, //valores enviados ao script
     success: function (data) {
       callback(data)

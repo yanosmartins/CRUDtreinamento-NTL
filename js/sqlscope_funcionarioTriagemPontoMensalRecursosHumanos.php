@@ -83,7 +83,7 @@ function reabrir()
     $xmlPendencia = $xmlPendencia . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
     foreach ($pendenciaArray as $pendencia) {
       $xmlPendencia = $xmlPendencia . "<" . $nomeTabela . ">";
-      $xmlPendencia = $xmlPendencia . "<pendenciaCampo>" . $pendencia . "</pendenciaCampo>";
+      $xmlPendencia = $xmlPendencia . "<descricao>" . $pendencia . "</descricao>";
       $xmlPendencia = $xmlPendencia . "</" . $nomeTabela . ">";
     }
     $xmlPendencia = $xmlPendencia . "</" . $nomeXml . ">";
