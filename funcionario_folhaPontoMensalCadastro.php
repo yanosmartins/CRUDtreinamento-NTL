@@ -161,7 +161,13 @@ include("inc/nav.php");
                                                                             foreach ($result as $row) {
                                                                                 $codigo = (int) $row['codigo'];
                                                                                 $horaInicio = $row['horaInicio'];
+                                                                                if (is_null($horaInicio)) {
+                                                                                    $horaFim = "00:00";
+                                                                                }
                                                                                 $horaFim = $row['horaFim'];
+                                                                                if (is_null($horaFim)) {
+                                                                                    $horaFim = "00:00";
+                                                                                }
                                                                                 if ($row['funcionario'] == $funcionario) {
                                                                                     echo '<option value="' . $codigo . '" selected>' . $horaInicio . " - " . $horaFim . '</option>';
                                                                                 } else {
@@ -554,6 +560,23 @@ include("inc/scripts.php");
                 $("#inputAtraso").val(atraso);
 
                 $("#inputLancamento").val(lancamento);
+
+                let isWeekend = checkDay(dia);
+
+                if (isWeekend) {
+                    $("#inputInicioAlmoco").val("00:00");
+                    $("#inputFimAlmoco").val("00:00");
+                } else {
+                    const almoco = $("#almoco option:selected")
+                    debugger
+                    let textoAlmoco = almoco.text().trim();
+                    textoAlmoco = textoAlmoco.split("-");
+                    textoAlmoco[0] = textoAlmoco[0].trim();
+                    textoAlmoco[1] = textoAlmoco[1].trim();
+
+                    $("#inputInicioAlmoco").val(textoAlmoco[0]);
+                    $("#inputFimAlmoco").val(textoAlmoco[1]);
+                }
 
             } catch (e) {
                 return smartAlert('Atenção', 'Insira um dia válido!', 'error')
@@ -982,7 +1005,8 @@ include("inc/scripts.php");
                 $("#status").val(status);
 
                 //funcionando
-                const almoco = $("#almoco")
+                const almoco = $("#almoco option:selected")
+                debugger
                 let textoAlmoco = almoco.text().trim();
                 textoAlmoco = textoAlmoco.split("-");
                 textoAlmoco[0] = textoAlmoco[0].trim();
@@ -1391,13 +1415,13 @@ include("inc/scripts.php");
         const inicioAlmoco = $("#pointFieldGenerator [name=inicioAlmoco]")[index]
         const inputInicioAlmoco = $("#inputInicioAlmoco").val().trim() || '00:00'
         if (inputInicioAlmoco == "00:00") {
-            smartAlert("Aviso", "O horário de inicio de almoço encontra-se como: "+inputInicioAlmoco, "warning");
+            smartAlert("Aviso", "O horário de inicio de almoço encontra-se como: " + inputInicioAlmoco, "warning");
         }
 
         const fimAlmoco = $("#pointFieldGenerator [name=fimAlmoco]")[index]
         const inputFimAlmoco = $("#inputFimAlmoco").val().trim() || '00:00'
         if (inputFimAlmoco == "00:00") {
-            smartAlert("Aviso", "O horário de encerramento de almoço encontra-se como: "+inputFimAlmoco, "warning");
+            smartAlert("Aviso", "O horário de encerramento de almoço encontra-se como: " + inputFimAlmoco, "warning");
         }
 
         const saida = $("#pointFieldGenerator [name=horaSaida]")[index]
