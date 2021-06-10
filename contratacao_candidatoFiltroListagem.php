@@ -2,12 +2,15 @@
 include "js/repositorio.php";
 ?>
 <div class="table-container">
+    <a class="btn btn-primary" href="javascript:executarExportacaoFuncionario();" style="float:right; margin-bottom: 10px">Exportar</a>
+
     <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
 
                     <!-- <th class="text-left" style="min-width:30px;" scope="col">Código</th> -->
+                    <th class="text-left" style="min-width:20px;"></th>
 
                     <th class="text-left" style="min-width:70px;" scope="col">Nome Completo</th>
                     <th class="text-left" style="min-width:30px;" scope="col">CPF</th>
@@ -28,6 +31,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;" scope="col">Cargo</th>
                     <th class="text-left" style="min-width:30px;" scope="col">Uniforme</th>
                     <th class="text-left" style="min-width:30px;" scope="col">Anexo Documento</th>
+                    <th class="hidden"></th>
                 </tr>
             </thead>
             <tbody>
@@ -158,6 +162,7 @@ include "js/repositorio.php";
                     //$login = mb_convert_encoding($row['cpf'], 'UTF-8', 'HTML-ENTITIES');
                     echo '<tr >';
                     // echo "<td class='text-left'>$codigo</td>";
+                    echo '<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' . $id . '"><i></i></label></td>';
                     echo '<td class="text-left"><a href="contratacao_candidatoCadastroDividida.php?codigo=' . $id . '">' . $nomeCompleto . '</a></td>';
                     // echo "<td class='text-left'>$nomeCompleto</td>";
                     echo "<td class='text-center'>$cpf</td>";
@@ -177,6 +182,7 @@ include "js/repositorio.php";
                     echo "<td class='text-left'>$verificaCargo</td>";
                     echo "<td class='text-left'>$verificaUniforme</td>";
                     echo "<td class='text-left'>$verificaAnexoDocumento</td>";
+                    echo "<td class='hidden'>$id</td>";
                     echo '</tr >';
                 }
 
@@ -194,13 +200,16 @@ include "js/repositorio.php";
             </tbody>
         </table>
     </div>
+
 </div>
+
 <!-- PAGE RELATED PLUGIN(S) -->
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
 <!--script src="js/plugin/datatables/dataTables.tableTools.min.js"></script-->
 <script src="js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+
 
 <link rel="stylesheet" type="text/css" href="js/plugin/Buttons-1.5.2/css/buttons.dataTables.min.css" />
 
@@ -283,5 +292,19 @@ include "js/repositorio.php";
         });
 
         /* END TABLETOOLS */
+
     });
+    function executarExportacaoFuncionario() {
+        var arrayFuncionario = [];
+        var arrSelecionados = $('#tableSearchResult').DataTable().rows((i, data, tr) => $(tr).find('input').prop('checked')).data().toArray();
+        debugger;
+
+        for (var i = 0; i < arrSelecionados.length; i++) {
+            arrayFuncionario.push({
+                'codigo': arrSelecionados[i][19],
+            });
+        };
+
+        exportarCandidatos(arrayFuncionario);
+    }
 </script>
