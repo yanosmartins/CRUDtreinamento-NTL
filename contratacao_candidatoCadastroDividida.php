@@ -8,13 +8,10 @@ include("populaTabela/popula.php");
 require_once("inc/config.ui.php");
 
 // colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true)) || $tipoUsuario == 'T';
-$condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true) || in_array('TRIAGEM_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('TRIAGEM_GRAVAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('TRIAGEM_GRAVAR', $arrayPermissao, true));
 $condicaoTriagemAcessarOK = (in_array('TRIAGEM_ACESSAR', $arrayPermissao, true));
 
-//REMOVER DEPOIS
-$condicaoAcessarOK = true;
-$condicaoTriagemAcessarOK = true;
 
 if ($condicaoAcessarOK == false && $condicaoTriagemAcessarOK == false) {
     unset($_SESSION['login']);
@@ -115,6 +112,7 @@ include("inc/nav.php");
                                                                       da emissão de recibo e o trabalhador da apresentação da CTPS em meio físico;<br>
                                                                     • Os registros eletrônicos gerados pelo empregador nos sistemas informatizados da Carteira de Trabalho em meio digital equivalem às anotações a que se refere o Decreto-Lei nº 5.452/1943;<br>
                                                                     • O trabalhador deverá ter acesso às informações de seu contrato de trabalho na Carteira de Trabalho Digital após o processamento das respectivas anotações pelo sistema do E-social.<br>
+                                                                    • Como obter a sua carteira digital: <a target="_blank" rel="noopener noreferrer" href="https://www.gov.br/pt-br/servicos/obter-a-carteira-de-trabalho">https://www.gov.br/pt-br/servicos/obter-a-carteira-de-trabalho</a><br>
                                                                     <p style="color:red"> • Após o cadastro,você poderá retornar para adicionar dados pendentes, o login deverá ser feito com seu email usado no primeiro cadastro como usuario e o CPF com a pontuação completa como senha. <br>
                                                                            Exemplo LOGIN: seuEmail@gmail.com SENHA: 999.999.999-99</p>
                                                                 </strong> <br>
@@ -453,7 +451,7 @@ include("inc/nav.php");
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseEndereco" class="collapsed" id="accordionEndereco">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Endereço
+                                                        Endereço / Comprovante PCD
                                                     </a>
                                                 </h4>
                                             </div>
@@ -543,7 +541,7 @@ include("inc/nav.php");
                                                         <!-- COMPROVANTE DE RESIDÊNCIA -->
                                                         <div class="row">
                                                             <section class="col col-6">
-                                                                <label class="label">Comprovante de Residência</label>
+                                                                <label class="label">Comprovante de Residência/ Comprovante PCD</label>
                                                                 <label class="input input-file">
                                                                     <span class="button"><input type="file" id="comprovanteResidenciaArquivo" name="comprovanteResidenciaArquivo[]" multiple>Selecionar
                                                                         documentos</span><input id="comprovanteResidenciaText" type="text">
@@ -567,7 +565,7 @@ include("inc/nav.php");
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseDocumento" class="collapsed" id="accordionDocumento">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Documentos
+                                                        Documentos/ Upload Exame Admissional
                                                     </a>
                                                 </h4>
                                             </div>
@@ -839,13 +837,24 @@ include("inc/nav.php");
                                                         <!-- CERTIFICADO DE RESERVISTA -->
                                                         <div class="row">
                                                             <section class="col col-6">
-                                                                <label class="label">Certificado de Reservista</label>
+                                                                <label class="label">Certificado de Reservista / Exame Admissional</label>
                                                                 <label class="input input-file">
                                                                     <span class="button"><input type="file" id="certificadoReservistaArquivo" name="certificadoReservistaArquivo[]" multiple>Selecionar
                                                                         documentos</span><input id="certificadoReservistaText" type="text">
                                                                 </label>
                                                             </section>
                                                             <section id="certificadoReservistaArquivoLink" class="col col-4">
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <strong style="color:red">* Ao realizar o exame admissional fazer o upload e preencher a data da realização *</strong>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">DATA DE REALIZAÇÃO DO ASO </label>
+                                                                <label class="input">
+                                                                    <input id="dataRealizacaoAso" name="dataRealizacaoAso" type="text" data-dateformat="dd/mm/yy" class="datepicker" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="new-password" onchange="validaCampoData('#dataNascimento')">
+                                                                </label>
                                                             </section>
                                                         </div>
                                                     </fieldset>
@@ -3192,6 +3201,7 @@ include("inc/scripts.php");
                             var justificativaVt = piece[104];
                             var tipoCartaoVt = piece[105];
                             pcd = piece[106];
+                            dataRealizacaoAso = piece[107];
 
                             let conta = tipoConta //tipoConta:  1 - Corrente  2-Poupança
 
@@ -3316,6 +3326,7 @@ include("inc/scripts.php");
                             $("#paisNascimento").val(paisNascimento);
                             $("#logradouro").val(logradouro);
                             $("#pcd").val(pcd);
+                            $("#dataRealizacaoAso").val(dataRealizacaoAso);
                             verificaBanco();
 
 
