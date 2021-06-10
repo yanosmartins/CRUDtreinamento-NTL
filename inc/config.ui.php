@@ -284,6 +284,10 @@ if ($condicaoRHOk) {
         if (in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
         }
+
+        if (in_array('IMPORTARCANDIDATO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("importacao" => array("title" => "Importação", "url" => APP_URL . "/contratacao_importacaoCandidatFiltro.php"));
+        }
     }
 } else if ($tipoUsuario == 'T') {
     $page_nav['candidato'] = array("title" => "Contratação", "icon" => "fa fa-folder-open");
