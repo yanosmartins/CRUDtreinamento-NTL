@@ -89,11 +89,12 @@ include("inc/nav.php");
 
 
                                                             <div class="row">
-                                                                <section class="col col-xs-3 col-sm-3 col-md-3 col-lg-2">
-                                                                    <label class="label" for="mesAno">Mês/Ano</label>
+                                                                <section class="col col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                                                    <label class="label">Mês/Ano</label>
                                                                     <label class="input">
-                                                                        <input id="mesAno" name="mesAno" style="text-align: center;" autocomplete="off" type="date" class="readonly" readonly style="pointer-events:none;touch-action:none">
-                                                                    </label>
+                                                                        <i class="icon-append fa fa-calendar"></i>
+                                                                        <input id="mesAno" name="mesAno" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker text-center" value="<?= date("m/Y") ?>">
+
                                                                 </section>
                                                                 <section id="sectionStatus" class="col col-2" style="display:none">
                                                                     <label class="label" for="status">Status</label>
@@ -476,44 +477,45 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     /*---------------Variaveis e constantes globais-------------*/
+
     var toleranciaExtra = '05:00';
     var toleranciaAtraso = '05:00';
 
-    const defaultDate = new Date();
-    const formatedDate = defaultDate.toLocaleDateString('pt-BR');
-    const cutout = formatedDate.split('/');
-    const maxDay = cutout[0];
-    const maxMonth = cutout[1];
-
-    var minDay = '01';
-    var minMonth = Number(maxMonth - 1);
-    if (minMonth < 1) minMonth = 12;
-    if (minMonth < 10) minMonth = '0'.concat(minMonth);
-
-    const minDate = defaultDate.getFullYear() + '-' + minMonth + '-' + minDay;
-    const maxDate = defaultDate.getFullYear() + '-' + maxMonth + '-' + maxDay;
-
     //var jsonUploadFolhaArray = JSON.parse($("#jsonUploadFolha").val());
 
-    Date.prototype.toDateInputValue = (function() {
-        const local = new Date(this);
-        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
-        return local.toJSON().slice(0, 10).replace(/\d{2}$/, '01');
-    });
-
+    var initialDate = $('#mesAno').val().split("/").reverse().join("-").concat("-01")
+    const maxMonth = new Date().getMonth() + 1
+    var minMonth = maxMonth - 1
+    minMonth == 0 ? 12 : minMonth
     /*---------------/Variaveis e constantes globais-------------*/
 
     $(document).ready(function() {
 
-        $("#mesAno").attr('min', minDate);
-        $("#mesAno").attr('max', maxDate);
-        $('#mesAno').val(new Date().toDateInputValue());
+        $('#mesAno').datepicker();
+        $('#mesAno').on('focus', function(e) {
+            e.preventDefault();
+            $(this).datepicker('show');
+            $(this).datepicker('widget').css('z-index', 1051);
+        });
 
         /* Evento para recarregar a folha de ponto() */
         $("#mesAno").on("change", function() {
-            const mesAno = $("#mesAno").val().replace(/\d{2}$/, '01')
-            $("#mesAno").val(mesAno)
+            let mesAno = $('#mesAno').val()
 
+
+            const month = parseInt(mesAno.split("/")[0])
+
+            if (month < minMonth) {
+                if (minMonth.toString.length < 2) $('#mesAno').val(mesAno.replace(/^\d{2}/, "0" + minMonth))
+                else $('#mesAno').val(mesAno.replace(/^\d{2}/, minMonth))
+            }
+            if (month > maxMonth) {
+                if (maxMonth.toString.length < 2) $('#mesAno').val(mesAno.replace(/^\d{2}/, "0" + maxMonth))
+                else $('#mesAno').val(mesAno.replace(/^\d{2}/, maxMonth))
+            }
+
+            const newValue = $('#mesAno').val().split("/").reverse().join("-").concat("-01")
+            initialDate = newValue
             carregaFolhaPontoMensal();
         });
 
@@ -568,7 +570,7 @@ include("inc/scripts.php");
                     $("#inputFimAlmoco").val("00:00");
                 } else {
                     const almoco = $("#almoco option:selected")
-                    debugger
+
                     let textoAlmoco = almoco.text().trim();
                     textoAlmoco = textoAlmoco.split("-");
                     textoAlmoco[0] = textoAlmoco[0].trim();
@@ -777,7 +779,7 @@ include("inc/scripts.php");
         var funcionario = Number($("#funcionario").val());
         var status = Number($('#status').val());
 
-        var mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
+        var mesAno = initialDate
         var observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
@@ -910,7 +912,7 @@ include("inc/scripts.php");
             }
         });
 
-        let mesAno = String($("#mesAno").val()).replace(/\d\d$/g, 01);
+        let mesAno = initialDate;
         let observacaoFolhaPontoMensal = String($("#observacaoFolhaPontoMensal").val());
 
         // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
@@ -956,7 +958,7 @@ include("inc/scripts.php");
                     var piece = data.split("#");
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                     const funcionario = $("#funcionario").val();
-                    const mesAno = $("#mesAno").val();
+                    const mesAno = initialDate;
                     $(location).attr('href', 'funcionario_folhaPontoMensalCadastro.php?funcionario=' + funcionario + '&mesAno=' + mesAno);
                 }
             }
@@ -969,7 +971,7 @@ include("inc/scripts.php");
         /*Pega a query da URL e separa seus devidos valores*/
         const funcionario = $("#funcionario").val()
 
-        const mesAno = $("#mesAno").val()
+        const mesAno = initialDate
 
         recuperaFolhaPontoMensal(funcionario, mesAno,
             function(data) {
@@ -1006,7 +1008,7 @@ include("inc/scripts.php");
 
                 //funcionando
                 const almoco = $("#almoco option:selected")
-                debugger
+
                 let textoAlmoco = almoco.text().trim();
                 textoAlmoco = textoAlmoco.split("-");
                 textoAlmoco[0] = textoAlmoco[0].trim();
@@ -1026,7 +1028,7 @@ include("inc/scripts.php");
                     deleteElements("#pointFieldGenerator hr")
                 }
 
-                const totalDiasMes = diasMes($("#mesAno").val());
+                const totalDiasMes = diasMes(initialDate);
                 for (let i = 0; i < totalDiasMes; i++) {
                     generateElements('div', '#pointFieldGenerator', '', {
                         class: "row"
@@ -1160,7 +1162,7 @@ include("inc/scripts.php");
 
             object = JSON.parse(object);
 
-        const mesAno = $('#mesAno').val();
+        const mesAno = initialDate
         const cutOut = mesAno.split('-');
         const data = new Date(cutOut[0], cutOut[1], 0);
 
@@ -1313,7 +1315,7 @@ include("inc/scripts.php");
     function imprimir() {
         const id = $('#funcionario').val();
         const folha = $('#codigo').val();
-        const mesAno = $('#mesAno').val();
+        const mesAno = initialDate
 
         $(location).attr('href', `funcionario_folhaDePontoPdfPontoEletronico.php?id=${id}&folha=${folha}&data=${mesAno}`);
     }
@@ -1384,7 +1386,7 @@ include("inc/scripts.php");
         if (day.length < 2)
             day = '0'.concat(day);
 
-        let mesAno = $("#mesAno").val();
+        let mesAno = initialDate
         mesAno = mesAno.replace(/\d\d$/g, day);
         const aux = mesAno.split('-');
         const date = new Date(aux[0], (aux[1] - 1), aux[2]);
