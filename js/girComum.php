@@ -237,5 +237,13 @@ function formataNuloGravar($value){
     $value = 'NULL'; //funcao criada caso mude a forma de passar o null no grava, 
     return $value;// retorna NULL com aspas.
 }
-
+function formatarString($value)
+    {
+        $aux = $value;
+        if (!$aux) {
+            return 'NULL';
+        }
+        $aux = "'".trim($aux)."'";
+        return $aux;
+    }
 }
