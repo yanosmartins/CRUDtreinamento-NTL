@@ -31,6 +31,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;" scope="col">Cargo</th>
                     <th class="text-left" style="min-width:30px;" scope="col">Uniforme</th>
                     <th class="text-left" style="min-width:30px;" scope="col">Anexo Documento</th>
+                    <th class="text-left" style="min-width:30px;" scope="col">Data Exame Admissional</th>
                     <th class="hidden"></th>
                 </tr>
             </thead>
@@ -60,7 +61,7 @@ include "js/repositorio.php";
 
                 $sql = " SELECT C.codigo, C.nomeCompleto, C.cargo ,C.rg, C.cpf,C.verificaDadoPessoal,C.verificaDadoContato,C.verificaEndereco,
                 C.verificaDocumento,C.verificaEscolaridade,C.verificaDadoConjuge,C.verificaFilho,C.verificaDependente,
-				C.verificaBeneficio,C.verificaVT,C.verificaDadoBancario,C.verificaCargo,C.verificaUniforme,C.verificaAnexoDocumento
+				C.verificaBeneficio,C.verificaVT,C.verificaDadoBancario,C.verificaCargo,C.verificaUniforme,C.verificaAnexoDocumento,C.dataRealizacaoAso
                 FROM Contratacao.candidato C
 				LEFT JOIN Contratacao.exportacao E ON C.codigo = E.candidato ";
                 $where = "WHERE (0 = 0) AND (C.ativo = 1 OR C.ativo IS NULL) AND (E.situacao IS NULL OR E.situacao = 0)";
@@ -80,6 +81,13 @@ include "js/repositorio.php";
                 if ($_POST["cargo"] != "") {
                     $cargo = $_POST["cargo"];
                     $where = $where . " AND (C.cargo like '%' + " . "replace('" . $cargo . "',' ','%') + " . "'%')";
+                }
+
+                $dataAso = $_POST["dataAso"];
+                if ($dataAso == "R") {
+                    $where = $where . " AND dataRealizacaoAso IS NOT NULL";
+                } else if ($dataAso == "N") {
+                    $where = $where . " AND dataRealizacaoAso IS NULL";
                 }
 
                 if ($_POST["verifica"] != "") {
@@ -159,6 +167,11 @@ include "js/repositorio.php";
                     $verificaUniforme = descricaoVerifica($row['verificaUniforme']);
                     $verificaAnexoDocumento = descricaoVerifica($row['verificaAnexoDocumento']);
 
+                    $dataRealizacaoAso = $row['dataRealizacaoAso'];
+                    if ($dataRealizacaoAso) {
+                        $dataRealizacaoAso = date('d/m/Y', strtotime($dataRealizacaoAso));
+                    }
+
                     //$login = mb_convert_encoding($row['cpf'], 'UTF-8', 'HTML-ENTITIES');
                     echo '<tr >';
                     // echo "<td class='text-left'>$codigo</td>";
@@ -182,6 +195,7 @@ include "js/repositorio.php";
                     echo "<td class='text-left'>$verificaCargo</td>";
                     echo "<td class='text-left'>$verificaUniforme</td>";
                     echo "<td class='text-left'>$verificaAnexoDocumento</td>";
+                    echo "<td class='text-left'>$dataRealizacaoAso</td>";
                     echo "<td class='hidden'>$id</td>";
                     echo '</tr >';
                 }
@@ -192,8 +206,10 @@ include "js/repositorio.php";
                         return $numero = "<b><font color='#228B22'> Verificado </font></b>";
                     } else if ($numero == 1) {
                         return $numero = "<b><font color='#dbc616'> Pendente </font></b>";
-                    } else if ($numero == 0) {
+                    } else if ($numero === 0) {
                         return $numero = "<b><font color='#FF0000'> Não Verificado </font></b>";
+                    } else{
+                        return $numero = "<b><font color='#D2691E'> Aguardando Candidato Acessar </font></b>";
                     }
                 }
                 ?>
@@ -294,6 +310,7 @@ include "js/repositorio.php";
         /* END TABLETOOLS */
 
     });
+
     function executarExportacaoFuncionario() {
         var arrayFuncionario = [];
         var arrSelecionados = $('#tableSearchResult').DataTable().rows((i, data, tr) => $(tr).find('input').prop('checked')).data().toArray();

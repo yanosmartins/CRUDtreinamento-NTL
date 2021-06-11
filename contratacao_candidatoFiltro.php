@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('CANDIDATO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('TRIAGEM_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('TRIAGEM_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('TRIAGEM_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -117,6 +117,16 @@ include("inc/nav.php");
                                                                         <option value="0">Não Verificado</option>
                                                                         <option value="1">Pendente</option>
                                                                         <option value="2">Verificado</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Exame Admissional</label>
+                                                                <label class="select">
+                                                                    <select id="dataAso" name="dataAso" class="">
+                                                                        <option></option>
+                                                                        <option value="R">Realizado</option>
+                                                                        <option value="N">Não realizado</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
@@ -235,6 +245,7 @@ include("inc/scripts.php");
         var cargo = $('#cargo').val();
         // var tipoPendencia = $('#tipoPendencia').val();
         var verifica = $('#verifica').val();
+        var dataAso = $('#dataAso').val();
         // var pendencia = $('#pendencia').val();
         // var pendencia = $('#pendencia').val();
 
@@ -247,7 +258,8 @@ include("inc/scripts.php");
             rg: rg,
             cargo: cargo,
             // tipoPendencia: tipoPendencia,
-            verifica: verifica
+            verifica: verifica,
+            dataAso: dataAso
         });
     }
 
