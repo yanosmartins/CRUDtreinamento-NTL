@@ -1671,6 +1671,7 @@ function recuperaFuncionario()
     $horarioEstudo = $row['horarioEstudo'];
     $nomeEnderecoColegioUniversidade = $row['nomeEnderecoColegioUniversidade'];
     $atividadesExtracurriculares = $row['atividadesExtracurriculares'];
+    // $atividadesExtracurriculares = urlencode($atividadesExtracurriculares);
     $nomeConjuge = (string)$row['nomeConjuge'];
     $naturalidadeConjuge = $row['naturalidadeConjuge'];
     $nacionalidadeConjuge = $row['nacionalidadeConjuge'];
@@ -1948,7 +1949,7 @@ function recuperaFuncionario()
         return;
     }
 
-    echo "sucess#" . $out . "#" . $strArrayFilho . "#" . $strArrayDependente . "#" . $strArrayTransporte;
+    echo "sucess¦" . $out . "¦" . $strArrayFilho . "¦" . $strArrayDependente . "¦" . $strArrayTransporte; // substituido o # pois pode haver algum candidato com C# como cursos e etc e o sistema dar erro no slpit.
     return;
 }
 

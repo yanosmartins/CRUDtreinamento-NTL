@@ -3082,7 +3082,7 @@ include("inc/scripts.php");
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
-                            var piece = data.split("#");
+                            var piece = data.split("¦");
                             var mensagem = piece[0];
                             var out = piece[1];
                             var strArrayFilho = piece[2];

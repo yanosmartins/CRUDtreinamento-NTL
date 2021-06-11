@@ -2939,7 +2939,7 @@ include("inc/scripts.php");
                     function(data) {
                         if (data.indexOf('failed') > -1) {} else {
                             data = data.replace(/failed/g, '');
-                            var piece = data.split("#");
+                            var piece = data.split("¦");
                             var mensagem = piece[0];
                             var out = piece[1];
                             var strArrayFilho = piece[2];
@@ -2984,6 +2984,9 @@ include("inc/scripts.php");
                             horarioEstudo = piece[34];
                             nomeEnderecoColegioUniversidade = piece[35];
                             atividadesExtracurriculares = piece[36];
+                            // if(atividadesExtracurriculares){
+                            //     atividadesExtracurriculares = decodeURIComponent(atividadesExtracurriculares);
+                            // }
                             nomeConjuge = piece[37];
                             naturalidadeConjuge = piece[38];
                             nacionalidadeConjuge = piece[39];
