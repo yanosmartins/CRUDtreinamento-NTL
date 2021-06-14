@@ -244,6 +244,9 @@ if ($condicaoBeneficioOk) {
         if (in_array('PROCESSABENEFICIO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['beneficio']['sub']['operacao']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
         }
+        if (in_array('TRIAGEMPONTOELETRONICOMENSALRH_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['beneficio']['sub']['operacao']['sub']+= array("triagemPontoEletronicoRecursosHumanosFiltro" => array("title" => "Triagem Ponto Eletrônico Filtro", "url" => APP_URL . "/funcionario_triagemPontoMensalRecursosHumanosFiltro.php"));
+        }
     }
 }
 //CONTRATACAO
@@ -281,6 +284,10 @@ if ($condicaoRHOk) {
         if (in_array('EXPORTACAO_ACESSAR', $arrayPermissao, true)) {
             $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("exportacao" => array("title" => "Exportação", "url" => APP_URL . "/contratacao_exportacaoFiltro.php"));
         }
+
+        if (in_array('IMPORTARCANDIDATO_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['recursoshumanos']['sub']['contratacao']['sub'] += array("importacao" => array("title" => "Importação", "url" => APP_URL . "/contratacao_importacaoCandidatFiltro.php"));
+        }
     }
 } else if ($tipoUsuario == 'T') {
     $page_nav['candidato'] = array("title" => "Contratação", "icon" => "fa fa-folder-open");
@@ -295,7 +302,7 @@ if ($condicaoRHOk) {
 // MENSAGERIA // a pedido do guinancio 24/02/21 colocar servico externo no nome
 $condicaoSegurancaOk = (in_array('SEGURANCA_ACESSAR', $arrayPermissao, true));
 if ($condicaoSegurancaOk) {
-    $page_nav['seguranca'] = array("title" => "Saúde/Seg Do Trabalho", "icon" => "fa-medkit ");
+    $page_nav['seguranca'] = array("title" => "Saúde/Seg do Trabalho", "icon" => "fa-medkit ");
     $page_nav['seguranca']['sub'] = array();
     if (in_array('TRIAGEMASO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['seguranca']['sub']['aso'] = array("title" => "ASO");
@@ -531,9 +538,7 @@ if ($condicaoFuncionarioOk) {
     if (in_array('TRIAGEMPONTOELETRONICOMENSALGESTOR_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("triagemPontoEletronicoGestorFiltro" => array("title" => "Triagem Ponto Eletrônico Filtro", "url" => APP_URL . "/funcionario_triagemPontoMensalGestorFiltro.php"));
     }
-    if (in_array('TRIAGEMPONTOELETRONICOMENSALRH_ACESSAR', $arrayPermissao, true)) {
-        $page_nav['funcionario']['sub'] += array("triagemPontoEletronicoRecursosHumanosFiltro" => array("title" => "Triagem Ponto Eletrônico Filtro", "url" => APP_URL . "/funcionario_triagemPontoMensalRecursosHumanosFiltro.php"));
-    }
+    
     if (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("geradorFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));
     }

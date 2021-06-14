@@ -44,7 +44,7 @@ function valida()
     return;
   }
 
-  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = $status , usuarioAlteracao = $usuario,dataAlteracao = '". date("Y/m/d") ."'|codigo = $codigo");
+  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = $status , usuarioAlteracao = $usuario,dataAlteracao = '" . date("Y/m/d") . "'|codigo = $codigo");
 
   $ret = 'sucess#Validado com sucesso!';
   if ($result < 1) {
@@ -67,21 +67,42 @@ function reabrir()
 
   session_start();
   $usuario = "'" .  $_SESSION['login'] . "'";
-  $codigo = $_POST["codigo"];
+  $data = $_POST["data"];
 
-  $sql = "select codigo as 'status' from Ntl.status where descricao LIKE 'pendente'";
+  $codigo = $data["codigo"];
+  $pendenciaArray = $data["pendencia"];
 
-  $result = $reposit->RunQuery($sql);
+  //===XML===//
+  $xmlPendencia = "";
+  $nomeXml = "ArrayOfPendencia";
+  $nomeTabela = "pendencia";
+  $j = 0;
 
-  if ($row = $result[0]) {
-    $status = $row["status"];
+  if (sizeof($pendenciaArray) > 0) {
+    $xmlPendencia = '<?xml version="1.0"?>';
+    $xmlPendencia = $xmlPendencia . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+    foreach ($pendenciaArray as $pendencia) {
+      $xmlPendencia = $xmlPendencia . "<" . $nomeTabela . ">";
+      $xmlPendencia = $xmlPendencia . "<descricao>" . $pendencia . "</descricao>";
+      $xmlPendencia = $xmlPendencia . "</" . $nomeTabela . ">";
+    }
+    $xmlPendencia = $xmlPendencia . "</" . $nomeXml . ">";
   } else {
-    $ret = 'failed#Falha ao reabrir!';
-    echo $ret;
-    return;
+    $xmlPendencia = '<?xml version="1.0"?>';
+    $xmlPendencia = $xmlPendencia . '<' . $nomeXml . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+    $xmlPendencia = $xmlPendencia . "</" . $nomeXml . ">";
   }
 
-  $result = $reposit->Update("Funcionario.folhaPontoMensal|status = $status , usuarioAlteracao = $usuario,dataAlteracao = '". date("Y/m/d") ."'|codigo = $codigo");
+  $xml = simplexml_load_string($xmlPendencia);
+  if ($xml === false) {
+    $mensagem = "Erro na criação do XML de pendência";
+    echo "failed#" . $mensagem . ' ';
+    return;
+  }
+  $xmlPendencia = "'" . $xmlPendencia . "'";
+
+  //===SQL===//
+  $result = $reposit->Execprocedure("funcionario.pendencia_Atualiza $codigo,$xmlPendencia,$usuario");
 
   $ret = 'sucess#Validado com sucesso!';
   if ($result < 1) {

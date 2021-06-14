@@ -150,6 +150,7 @@ function gravaFuncionario()
     $justificativaVt = validaString($_POST['justificativaVt']);
     $tipoCartaoVt = validaNumero($_POST['tipoCartaoVt']);
     $pcd = validaNumero($_POST['pcd']);
+    $dataRealizacaoAso = validaData($_POST['dataRealizacaoAso']);
     
 
 
@@ -1434,7 +1435,6 @@ function gravaFuncionario()
     moverArquivosParaPasta($idCarteiraVacinacaoFilho, $uniqidCarteiraVacinacaoFilho, $tipoArquivoPermitido, $diretorioFilhoCarteiraVacinacaoFilho);
 
 
-
     $sql = "Contratacao.candidatoDocumento_Atualiza
         $codigo,							
         $nomeCompleto,						
@@ -1565,7 +1565,8 @@ function gravaFuncionario()
         $ativo,
         $justificativaVt, 
         $tipoCartaoVt,
-        $pcd
+        $pcd,
+        $dataRealizacaoAso
         ";
 
     $reposit = new reposit();
@@ -1670,6 +1671,7 @@ function recuperaFuncionario()
     $horarioEstudo = $row['horarioEstudo'];
     $nomeEnderecoColegioUniversidade = $row['nomeEnderecoColegioUniversidade'];
     $atividadesExtracurriculares = $row['atividadesExtracurriculares'];
+    // $atividadesExtracurriculares = urlencode($atividadesExtracurriculares);
     $nomeConjuge = (string)$row['nomeConjuge'];
     $naturalidadeConjuge = $row['naturalidadeConjuge'];
     $nacionalidadeConjuge = $row['nacionalidadeConjuge'];
@@ -1743,6 +1745,7 @@ function recuperaFuncionario()
     $justificativaVt = $row['justificativaVt'];
     $tipoCartaoVt = $row['tipoCartaoVt'];
     $pcd = $row['pcd'];
+    $dataRealizacaoAso = validaDataRecupera($row['dataRealizacaoAso']);
 
     /*------- Lista de Filhos -------*/
     $sql = "SELECT CF.codigo, CF.candidato, CF.nomeCompleto, CF.cpf, CF.dataNascimento FROM Contratacao.candidatoFilho CF 
@@ -1938,14 +1941,15 @@ function recuperaFuncionario()
         $logradouro . "^" .
         $justificativaVt . "^" .
         $tipoCartaoVt ."^" .
-        $pcd;
+        $pcd ."^" .
+        $dataRealizacaoAso;
 
     if ($out == "") {
         echo "failed#";
         return;
     }
 
-    echo "sucess#" . $out . "#" . $strArrayFilho . "#" . $strArrayDependente . "#" . $strArrayTransporte;
+    echo "sucess¦" . $out . "¦" . $strArrayFilho . "¦" . $strArrayDependente . "¦" . $strArrayTransporte; // substituido o # pois pode haver algum candidato com C# como cursos e etc e o sistema dar erro no slpit.
     return;
 }
 
@@ -2072,7 +2076,7 @@ function recuperaCpf()
 function excluir()
 {
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("CANDIDATO_ACESSAR|CANDIDATO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("TRIAGEM_GRAVAR|TRIAGEM_GRAVAR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";

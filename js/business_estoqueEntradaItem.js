@@ -72,19 +72,26 @@ function recuperaFornecedorObrigatorio(callback) {
     });
 }
 
-function excluirEntradaItem(codigo, callback) {
+function excluirEntradaItem(codigo, xmlNotaPath, callback) {
     $.ajax({
         url: 'js/sqlscope_cadastroEntradaItem.php', 
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: 'excluir', codigo: codigo}, //valores enviados ao script   
+        data: {funcao: 'excluir', codigo: codigo, xmlNotaPath:xmlNotaPath}, //valores enviados ao script   
         success: function (data, textStatus) {
-            debugger; 
-            if (textStatus === 'success') {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success"); 
-               voltar();
+            if (data.indexOf('sucess') < 0) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
+                if (mensagem !== "") {
+                    smartAlert("Atenção", mensagem, "error");
+                } else {
+                    smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                }
+
+                return '';
             } else {
-                smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                novo();
             }
         }, error: function (xhr, er) {
             console.log(xhr, er);

@@ -186,6 +186,7 @@ include("inc/nav.php");
                                                                 <section id="xmlNotaLink" class="col col-2">
                                                                     <label class="label">&nbsp;</label>
                                                                     <label class="input">
+                                                                        <input id="xmlNotaPath" name="xmlNotaPath" type="hidden" value="">
                                                                         <a href="" id="xmlNotaLink"></a>
                                                                     </label>
                                                                 </section>
@@ -983,6 +984,7 @@ include("inc/scripts.php");
                             $("#dataEmissao").val(dataEmissaoNF);
                             $("#observacao").val(observacao);
                             $("#naturezaOperacao").val(naturezaOperacao);
+                            $("#xmlNotaPath").val(filePath + fileName);
 
                             $("#dataMovimento").addClass('readonly');
                             $("#dataMovimento").attr('disabled', true);
@@ -1031,13 +1033,14 @@ include("inc/scripts.php");
 
     function excluir() {
         var codigo = +$("#codigo").val();
+        var xmlNotaPath = $("#xmlNotaPath").val();
 
         if (codigo === 0) {
             smartAlert("Atenção", "Selecione uma Entrada Material para excluir!", "error");
             return;
         }
 
-        excluirEntradaItem(codigo);
+        excluirEntradaItem(codigo, xmlNotaPath);
     }
 
     function popularComboEstoque() {

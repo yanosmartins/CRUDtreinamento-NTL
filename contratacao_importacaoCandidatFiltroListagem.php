@@ -2,67 +2,60 @@
 include "js/repositorio.php";
 ?>
 <div class="table-container">
+<h1> CANDIDATOS COM ERRO NA IMPORTAÇÃO </h1>
     <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:110px;">Funcionário</th>
-                    <th class="text-left" style="min-width:55px;">Mês/Ano</th>
-                    <th class="text-left" style="min-width:55px;">Status</th>
+                    <!-- <th class="text-left" style="min-width:30px;" scope="col">Código</th> -->
 
+                    <th class="text-left" style="min-width:30px;" scope="col">Nome</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">Telefone</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">Email</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">Cargo</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">data Nascimento</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">cpf</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">pcd</th>
+                    <th class="text-left" style="min-width:70px;" scope="col">pis</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
 
-                $sql = "SELECT F.codigo as 'folha',FU.codigo as 'funcionario', FU.nome as 'nomeFuncionario', F.mesAno, S.descricao as 'status'FROM Funcionario.folhaPontoMensal F 
-                INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
-                LEFT JOIN Ntl.status S ON S.codigo = F.status ";
 
-                $where = " WHERE (0 = 0) ";
+                $jsonArrayErros = $_POST["jsonArrayErros"];
+                $tamanhoArray = count($jsonArrayErros);
 
-                if ($_POST["funcionario"] != "") {
-                    $funcionario = (int)$_POST["funcionario"];
-                    $where = $where . " AND ( FU.codigo = $funcionario)";
-                }
 
-                if ($_POST["mesAno"] != "") {
-                    $mesAno = $_POST["mesAno"];
-                    $where = $where . " AND F.mesAno = '" . $mesAno . "'";
-                }
+                foreach ($jsonArrayErros as $item) {
+                    $nome = trim($item[0],"'");
+                    $telefoneFormatado = trim($item[1],"'");
+                    $email = trim($item[2],"'");
+                    $cargoAnterior = trim($item[3],"'");
+                    $dataNascimento = trim($item[4],"'");
+                    $dataNascimento = date('d/m/Y', strtotime($dataNascimento));
 
-                if ($_POST["status"] != "") {
-                    $status = (int)$_POST["status"];
-                    $where = $where . " AND S.codigo = " . $status;
-                }
 
-                $orderBy = " ORDER BY FU.nome ASC";
-
-                $sql .= $where . $orderBy;
-                $reposit = new reposit();
-                $result = $reposit->RunQuery($sql);
-
-                foreach ($result as $row) {
-                    $folha = $row['folha'];
-                    $funcionario = $row['funcionario'];
-                    $nomeFuncionario = $row['nomeFuncionario'];
-                    $mesAno = $row['mesAno'];
-                    $status = $row['status'];
-                    $aux = explode(" ", $mesAno);
-                    $mesAno = $aux[0];
-                    $aux = explode("-",$mesAno);
-                    $mostrarMesAno = "$aux[2]/$aux[1]/$aux[0]";
-                    $pattern = "/[c-f]{3}had(o|a)/i";
-                    $pattern2 = "/[a-z]{8} (pelo|por) gestor(a)?/i";
+                    $cpf = trim($item[5],"'");
+                    $pis = trim($item[6],"'");
+                    $pcd = trim($item[7],"'");
+                    if($pcd == 1){
+                        $pcdDescricao = "S";
+                    }else{
+                        $pcdDescricao = "N";
+                    }
 
                     echo '<tr >';
-                    if(preg_match($pattern,$status) || preg_match($pattern2,$status)){
-                        echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="funcionario_triagemPontoMensalRecursosHumanos.php?' . 'funcionario=' . $funcionario . '&' . 'mesAno=' . $mesAno . '">' . $nomeFuncionario . '</a></td>';
-                    }else{
-                        echo '<td class="text-left">' . $nomeFuncionario . '</td>';
-                    }
-                    echo '<td class="text-left">' . $mostrarMesAno . '</td>';
-                    echo '<td class="text-left">' . $status . '</td>';
+                    echo '<td class="text-left">' . $nome . '</td>';
+                    echo '<td class="text-left">' . $telefoneFormatado . '</td>';
+                    echo '<td class="text-left">' . $email . '</td>';
+                    echo '<td class="text-left">' . $cargoAnterior . '</td>';
+                    echo '<td class="text-left">' . $dataNascimento . '</td>';
+                    echo '<td class="text-left">' . $cpf . '</td>';
+                    echo '<td class="text-left">' . $pcdDescricao . '</td>';
+                    echo '<td class="text-left">' . $pis . '</td>';
+                    echo '</tr >';
+                    // $tamanhoArray--;
                 }
                 ?>
             </tbody>
@@ -127,7 +120,6 @@ include "js/repositorio.php";
                     "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
-            "aaSorting": [],
             "buttons": [
                 //{extend: 'copy', className: 'btn btn-default'},
                 //{extend: 'csv', className: 'btn btn-default'},

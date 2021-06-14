@@ -6,9 +6,9 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('CANDIDATO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('CANDIDATO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('CANDIDATO_EXCLUIR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('TRIAGEM_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('TRIAGEM_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('TRIAGEM_EXCLUIR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -120,6 +120,16 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Exame Admissional</label>
+                                                                <label class="select">
+                                                                    <select id="dataAso" name="dataAso" class="">
+                                                                        <option></option>
+                                                                        <option value="R">Realizado</option>
+                                                                        <option value="N">Não realizado</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -177,6 +187,7 @@ include("inc/scripts.php");
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/fullcalendar.js"></script>
 <!--<script src="<?php echo ASSETS_URL; ?>/js/plugin/fullcalendar/locale-all.js"></script>-->
 
+<script src="<?php echo ASSETS_URL; ?>/js/business_exportacaoCandidato.js" type="text/javascript"></script>
 
 <!-- Form to json -->
 <script src="<?php echo ASSETS_URL; ?>/js/plugin/form-to-json/form2js.js"></script>
@@ -234,6 +245,7 @@ include("inc/scripts.php");
         var cargo = $('#cargo').val();
         // var tipoPendencia = $('#tipoPendencia').val();
         var verifica = $('#verifica').val();
+        var dataAso = $('#dataAso').val();
         // var pendencia = $('#pendencia').val();
         // var pendencia = $('#pendencia').val();
 
@@ -246,7 +258,8 @@ include("inc/scripts.php");
             rg: rg,
             cargo: cargo,
             // tipoPendencia: tipoPendencia,
-            verifica: verifica
+            verifica: verifica,
+            dataAso: dataAso
         });
     }
 

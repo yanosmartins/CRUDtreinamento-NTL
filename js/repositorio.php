@@ -1,5 +1,5 @@
 <?php
-
+require_once explode('\js', getcwd())[0]. '\vendor\autoload.php';
 include "config.php";
 
 class reposit
