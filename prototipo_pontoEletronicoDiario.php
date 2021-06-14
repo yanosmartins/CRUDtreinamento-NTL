@@ -103,6 +103,8 @@ include("inc/nav.php");
                                                                             var mes = dataAtual.getMonth();
                                                                             var ano = dataAtual.getFullYear();
 
+                                                                            $("#dia").val(dia);
+
                                                                             diaext = semana[dias] + ", " + dia + " de " + meses[mes] + " de " + ano;
                                                                             document.getElementById("diaAtual").innerHTML = diaext;
 
@@ -228,9 +230,9 @@ include("inc/nav.php");
                                                                     <select id="lancamento" name="lancamento" style="height: 40px; border-radius: 0px !important;">
                                                                         <option selected value="0"></option>
                                                                         <?php
-                                                                            $reposit = new reposit();
-                                                                            $projeto = $_SESSION['projeto'];
-                                                                            $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L 
+                                                                        $reposit = new reposit();
+                                                                        $projeto = $_SESSION['projeto'];
+                                                                        $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L 
                                                                             LEFT JOIN 
                                                                             Ntl.lancamentoProjeto LP 
                                                                             ON L.codigo = LP.lancamento
@@ -238,13 +240,13 @@ include("inc/nav.php");
                                                                             Ntl.projeto P 
                                                                             ON P.codigo = LP.projeto
                                                                             where L.ativo = 1 AND (P.codigo = " . $projeto . " OR P.codigo IS NULL) order by L.descricao";
-                                                                            $result = $reposit->RunQuery($sql);
-                                                                            foreach ($result as $row) {
-                                                                                $codigo = (int) $row['codigo'];
-                                                                                $descricao = $row['descricao'];
-                                                                                echo '<option value=' . $codigo . '>' . $descricao . '</option>';
-                                                                            }
-                                                                            ?>
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
                                                                     </select><i></i>
                                                                 </label>
                                                             </div>
@@ -379,10 +381,10 @@ include("inc/scripts.php");
 
         $("#btnLancamento").on("click", function() {
             var lancamento = $("#lancamento").val()
-           if(lancamento == 0){
-            smartAlert("Atenção", "Selecione um lançamento!", "error");
-            return;
-           }
+            if (lancamento == 0) {
+                smartAlert("Atenção", "Selecione um lançamento!", "error");
+                return;
+            }
             gravar()
         });
 
@@ -401,7 +403,8 @@ include("inc/scripts.php");
         var funcionario = $("#funcionario").val();
         var mesAno = $("#mesAno").val();
         var idFolha = $("#idFolha").val();
-        var dia = $("#dia").val();
+        var dataAtual = new Date();
+        var dia = dataAtual.getDate();
         var horaEntrada = $("#horaEntrada").val();
         var horaSaida = $("#horaSaida").val();
         var inicioAlmoco = $("#inicioAlmoco").val();
@@ -570,7 +573,8 @@ include("inc/scripts.php");
     function carregaPonto() {
         const mesAno = new Date().toJSON().slice(0, 10).replace(/[0-9]$/g, 01);
         const funcionario = $("#funcionario").val();
-        const dia = $("#dia").val();
+        const dataAtual = new Date();
+        const dia = dataAtual.getDate();
 
         $('#mesAno').val(mesAno);
         recuperaPonto(funcionario, mesAno, dia,

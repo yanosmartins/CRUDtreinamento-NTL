@@ -39,7 +39,7 @@ if ($condicaoGestorOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Controle de Férias Filtro";
+$page_title = "Agendamento/Consulta de Férias Filtro";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -145,18 +145,18 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label" for="feriasSolicitadasInicio">Férias Solicitadas Início</label>
+                                                                <label class="label" for="feriasAgendadasInicio">Férias Agendadas Início</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="feriasSolicitadasInicio" name="feriasSolicitadasInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="feriasAgendadasInicio" name="feriasAgendadasInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Férias Solicitadas Fim</label>
+                                                                <label class="label">Férias Agendadas Fim</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="feriasSolicitadasFim" name="feriasSolicitadasFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="feriasAgendadasFim" name="feriasAgendadasFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
 
@@ -169,13 +169,31 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label" for="feriasSolicitadasInicio"> Férias Solicitadas - Início</label>
+                                                                <label class="input">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                    <input id="feriasSolicitadasInicio" name="feriasSolicitadasInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                </label>
+                                                            </section>
 
+                                                            <section class="col col-2">
+                                                                <label class="label"> Férias Solicitadas - Fim</label>
+                                                                <label class="input">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                    <input id="feriasSolicitadasFim" name="feriasSolicitadasFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                </label>
+                                                            </section>
 
                                                         </div>
                                                     </fieldset>
                                                 </div>
+
                                             </div>
                                         </div>
+
                                     </div>
                                     <footer>
                                         <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
@@ -243,18 +261,22 @@ include("inc/scripts.php");
     });
 
     function listarFiltro() {
-        var projeto = $('#projeto').val();
-        var funcionario = $('#funcionario').val();
+        var projeto = +$('#projeto').val();
+        var funcionario = +$('#funcionario').val();
+        var feriasAgendadasInicio = $('#feriasAgendadasInicio').val();
+        var feriasAgendadasFim = $('#feriasAgendadasFim').val();
+        var feriasVencidas = $('#feriasVencidas').val();
         var feriasSolicitadasInicio = $('#feriasSolicitadasInicio').val();
         var feriasSolicitadasFim = $('#feriasSolicitadasFim').val();
-        var feriasVencidas = $('#feriasVencidas').val();
 
         var parametrosUrl = '&projeto=' + projeto;
         parametrosUrl += '&funcionario=' + funcionario;
+        parametrosUrl += '&feriasAgendadasInicio=' + feriasAgendadasInicio;
+        parametrosUrl += '&feriasAgendadasFim=' + feriasAgendadasFim;
+        parametrosUrl += '&feriasVencidas=' + feriasVencidas;
         parametrosUrl += '&feriasSolicitadasInicio=' + feriasSolicitadasInicio;
         parametrosUrl += '&feriasSolicitadasFim=' + feriasSolicitadasFim;
-        parametrosUrl += '&feriasVencidas=' + feriasVencidas;
 
-        $('#resultadoBusca').load('funcionario_controleFeriasFiltroListagem.php?' + parametrosUrl);
+        $('#resultadoBusca').load('funcionario_controleFeriasAgendamentoFiltroListagem.php?' + parametrosUrl);
     }
 </script>

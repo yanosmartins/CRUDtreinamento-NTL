@@ -6,14 +6,16 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-center" style="min-width:30px;">Funcionário</th>
-                    <th class="text-center" style="min-width:30px;">Projeto</th>
-                    <th class="text-center" style="min-width:30px;">Período Aquisitivo - Início</th>
-                    <th class="text-center" style="min-width:30px;">Período Aquisitivo - Fim</th>
-                    <th class="text-center" style="min-width:30px;">Situação Férias</th>
-                    <th class="text-center" style="min-width:30px;">Dias Vencidos</th>
-                    <th class="text-center" style="min-width:30px;">Décimo Terceiro</th>
-                    <th class="text-center" style="min-width:30px;">Abono</th>
+                    <th class="text-left" style="min-width:30px;">Funcionário</th>
+                    <th class="text-left" style="min-width:30px;">Projeto</th>
+                    <th class="text-left" style="min-width:30px;">Férias Agendadas - Início</th>
+                    <th class="text-left" style="min-width:30px;">Férias Agendadas - Fim</th>
+                    <th class="text-left" style="min-width:30px;">Férias Solicitadas - Início</th>
+                    <th class="text-left" style="min-width:30px;">Férias Solicitadas - Fim</th>
+                    <th class="text-left" style="min-width:30px;">Situação</th>
+                    <th class="text-left" style="min-width:30px;">Dias Vencidos</th>
+                    <th class="text-left" style="min-width:30px;">Décimo Terceiro</th>
+                    <th class="text-left" style="min-width:30px;">Abono</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,37 +24,36 @@ include "js/repositorio.php";
 
                 $where = " WHERE (0=0) ";
                 $projeto = (int) $_GET["projeto"];
-                $funcionario = $_GET["funcionario"];
+                $funcionario = (int) $_GET["funcionario"];
+                $feriasAgendadasInicio = $_GET["feriasAgendadasInicio"];
 
-                $feriasSolicitadasInicio = $_GET["feriasSolicitadasInicio"];
-
-                if ($feriasSolicitadasInicio != "") {
-                    $aux = explode(' ', $feriasSolicitadasInicio);
+                if ($feriasAgendadasInicio != "") {
+                    $aux = explode(' ', $feriasAgendadasInicio);
                     $data = $aux[1] . ' ' . $aux[0];
                     $data = $aux[0];
                     $data =  trim($data);
                     $aux = explode('/', $data);
                     $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
                     $data =  trim($data);
-                    $feriasSolicitadasInicio = $data;
+                    $feriasAgendadasInicio = $data;
                 } else {
-                    $feriasSolicitadasInicio = '';
+                    $feriasAgendadasInicio = '';
                 };
-                $feriasSolicitadasFim = $_GET["feriasSolicitadasFim"];
-                if ($feriasSolicitadasFim != "") {
-                    $aux = explode(' ', $feriasSolicitadasFim);
+                $feriasAgendadasFim = $_GET["feriasAgendadasFim"];
+                if ($feriasAgendadasFim != "") {
+                    $aux = explode(' ', $feriasAgendadasFim);
                     $data = $aux[1] . ' ' . $aux[0];
                     $data = $aux[0];
                     $data =  trim($data);
                     $aux = explode('/', $data);
                     $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
                     $data =  trim($data);
-                    $feriasSolicitadasFim = $data;
+                    $feriasAgendadasFim = $data;
                 } else {
-                    $feriasSolicitadasFim = '';
+                    $feriasAgendadasFim = '';
                 };
+                $feriasVencidas = $_GET["feriasVencidas"];
 
-                $feriasVencidas = (int)$_GET["feriasVencidas"];
 
 
                 if ($projeto != 0) {
@@ -60,23 +61,23 @@ include "js/repositorio.php";
                     $where = $where . " AND CF.projeto = " . $projeto;
                 }
 
-                if ($funcionario != "") {
+                if ($funcionario != 0) {
 
                     $where = $where . " AND CF.funcionario = " . $funcionario;
                 }
-                if ($feriasSolicitadasInicio != '') {
+                if ($feriasAgendadasInicio != '') {
 
-                    $where = $where . " AND CS.feriasSolicitadasInicio = " . "'" . $feriasSolicitadasInicio . "'";
+                    $where = $where . " AND CS.feriasAgendadasInicio = " . "'" . $feriasAgendadasInicio . "'";
                 }
-                if ($feriasSolicitadasFim != '') {
+                if ($feriasAgendadasFim != '') {
 
-                    $where = $where . " AND CS.feriasSolicitadasFim = " . "'" . $feriasSolicitadasFim . "'";
+                    $where = $where . " AND CS.feriasAgendadasFim = " . "'" . $feriasAgendadasFim . "'";
                 }
 
 
 
                 $reposit = new reposit();
-                $sql = "SELECT CF.codigo, CF.funcionario, F.nome, CF.projeto, P.descricao, CS.situacaoFerias,CS.periodoAquisitivoInicio, CS.adiantamentoDecimo, CS.abono
+                $sql = "SELECT CF.codigo, CF.funcionario, F.nome, CF.projeto, P.descricao, CS.feriasAgendadasInicio, CS.feriasAgendadasFim,CS.situacaoAgendamento,CS.periodoAquisitivoInicio, CS.feriasSolicitadasInicio, CS.feriasSolicitadasFim,CS.adiantamentoDecimo, CS.abono
                 FROM funcionario.controleFerias CF
                    INNER JOIN funcionario.controleFeriasSolicitacao CS ON controleFeriasSolicitacao = CF.codigo
                    INNER JOIN ntl.funcionario F ON F.codigo = CF.funcionario
@@ -85,6 +86,9 @@ include "js/repositorio.php";
 
                 $result = $reposit->RunQuery($sql);
                 foreach ($result as $row) {
+
+
+
 
                     $codigo = (int) $row['codigo'];
                     $projeto = $row['descricao'];
@@ -118,102 +122,105 @@ include "js/repositorio.php";
                         $feriasAgendadasFim = '';
                     };
 
+                    $feriasSolicitadasInicio = $row['feriasSolicitadasInicio'];
+                    if ($feriasSolicitadasInicio != "" && $feriasSolicitadasInicio != "1900-01-01 00:00:00.000") {
+                        $aux = explode(' ', $feriasSolicitadasInicio);
+                        $data = $aux[1] . ' ' . $aux[0];
+                        $data = $aux[0];
+                        $data =  trim($data);
+                        $aux = explode('-', $data);
+                        $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
+                        $data =  trim($data);
+                        $feriasSolicitadasInicio = $data;
+                    } else {
+                        $feriasSolicitadasInicio = '';
+                    };
 
-                    $situacaoFerias = (int)$row['situacaoFerias'];
+                    $feriasSolicitadasFim = $row['feriasSolicitadasFim'];
+                    if ($feriasSolicitadasFim != "" && $feriasSolicitadasFim != "1900-01-01 00:00:00.000") {
+                        $aux = explode(' ',  $feriasSolicitadasFim);
+                        $data = $aux[1] . ' ' . $aux[0];
+                        $data = $aux[0];
+                        $data =  trim($data);
+                        $aux = explode('-', $data);
+                        $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
+                        $data =  trim($data);
+                        $feriasSolicitadasFim = $data;
+                    } else {
+                        $feriasSolicitadasFim = '';
+                    };
+
                     $adiantamentoDecimo = (int)$row['adiantamentoDecimo'];
+                    $situacaoAgendamento = (int)$row['situacaoAgendamento'];
                     $abono = (int)$row['abono'];
 
-
                     $periodoAquisitivoInicio = $row['periodoAquisitivoInicio'];
-                    $periodoAquisitivoFim = $row['periodoAquisitivoFim'];
-
-                    //Início da conta de validade
                     $aux = explode(' ',  $periodoAquisitivoInicio);
                     $data = $aux[1] . ' ' . $aux[0];
-                    $periodoAquisitivo = $aux[0];
+                    $periodoAquisitivoInicio = $aux[0];
 
                     $dataAtual = date('Y-m-d');
-                    $diferenca = strtotime($dataAtual) - strtotime($periodoAquisitivo);
+                    $diferenca = strtotime($dataAtual) - strtotime($periodoAquisitivoInicio);
                     $validade = floor($diferenca / (1000 * 60 * 60 * 24));
-
-
-                    //Fim da conta de validade
-
-                    if ($periodoAquisitivoInicio != "" && $periodoAquisitivoInicio != "1900-01-01 00:00:00.000") {
-                        $aux = explode(' ', $periodoAquisitivoInicio);
-                        $data = $aux[1] . ' ' . $aux[0];
-                        $data = $aux[0];
-                        $data =  trim($data);
-                        $aux = explode('-', $data);
-                        $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
-                        $data =  trim($data);
-                        $periodoAquisitivoInicio = $data;
-                    } else {
-                        $periodoAquisitivoInicio = '';
-                    };
-
-                    if ($dataAtual != "" && $dataAtual != "1900-01-01 00:00:00.000") {
-                        $aux = explode(' ', $dataAtual);
-                        $data = $aux[1] . ' ' . $aux[0];
-                        $data = $aux[0];
-                        $data =  trim($data);
-                        $aux = explode('-', $data);
-                        $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
-                        $data =  trim($data);
-                        $dataAtual = $data;
-                    } else {
-                        $dataAtual = '';
-                    };
-
 
                     if ($feriasVencidas == 1 && $validade > 0) {
                         echo '<tr >';
-                        echo '<td class="text-center"><a href="funcionario_controleFerias.php?codigo=' . $codigo . '">' . $funcionario . '</a></td>';
-                        echo '<td class="text-center">' .  $projeto . '</td>';
-                        echo '<td class="text-center">' .  $periodoAquisitivoInicio . '</td>';
-                        echo '<td class="text-center">' .  $dataAtual . '</td>';
-                        if ($situacaoFerias == 1) {
-                            echo '<td class="text-center" style="color:red; font-weight: bold;">' . '' . '</td>';
-                        } else {
-                            echo '<td class="text-center"  style="color:red; font-weight: bold;">' . 'Vencida' . '</td>';
+                        echo '<td class="text-left"><a href="funcionario_controleFerias.php?codigo=' . $codigo . '">' . $funcionario . '</a></td>';
+                        echo '<td class="text-left">' . $projeto  . '</td>';
+                        echo '<td class="text-left">' .  $feriasAgendadasInicio . '</td>';
+                        echo '<td class="text-left">' .  $feriasAgendadasFim . '</td>';
+                        echo '<td class="text-left">' .  $feriasSolicitadasInicio . '</td>';
+                        echo '<td class="text-left">' .  $feriasSolicitadasFim . '</td>';
+                        if ($situacaoAgendamento == 1) {
+                            echo '<td class="text-left" style="color:green; font-weight: bold;">' . 'Aprovado' . '</td>';
                         }
-                        echo '<td class="text-center">' .  $validade . '</td>';
-
+                        if ($situacaoAgendamento == 0) {
+                            echo '<td class="text-left" style="color:red; font-weight: bold;">' . 'Reprovado' . '</td>';
+                        }
+                        if ($situacaoAgendamento == 2) {
+                            echo '<td class="text-left" style="color:blue; font-weight: bold;">' . 'Aguardando Aprovação' . '</td>';
+                        }
+                        echo '<td class="text-left">' .  $validade . '</td>';
                         if ($adiantamentoDecimo == 1) {
-                            echo '<td class="text-center">' . 'Sim' . '</td>';
+                            echo '<td class="text-left">' . 'Sim' . '</td>';
                         } else {
-                            echo '<td class="text-center">' . 'Não' . '</td>';
+                            echo '<td class="text-left">' . 'Não' . '</td>';
                         }
                         if ($abono == 1) {
-                            echo '<td class="text-center">' . 'Sim' . '</td>';
+                            echo '<td class="text-left">' . 'Sim' . '</td>';
                         } else {
-                            echo '<td class="text-center">' . 'Não' . '</td>';
+                            echo '<td class="text-left">' . 'Não' . '</td>';
                         }
 
                         echo '</tr >';
                     }
                     if ($feriasVencidas == 0 && $validade <= 0) {
                         echo '<tr >';
-                        echo '<td class="text-center"><a href="funcionario_controleFerias.php?codigo=' . $codigo . '">' . $funcionario . '</a></td>';
-                        echo '<td class="text-center">' .  $projeto . '</td>';
-                        echo '<td class="text-center">' .  $periodoAquisitivoInicio . '</td>';
-                        echo '<td class="text-center">' .  $dataAtual . '</td>';
-                        if ($situacaoFerias == 1) {
-                            echo '<td class="text-center" style="color:red; font-weight: bold;">' . '' . '</td>';
-                        } else {
-                            echo '<td class="text-center"  style="color:red; font-weight: bold;">' . 'Vencida' . '</td>';
+                        echo '<td class="text-left"><a href="funcionario_controleFerias.php?codigo=' . $codigo . '">' . $funcionario . '</a></td>';
+                        echo '<td class="text-left">' . $projeto  . '</td>';
+                        echo '<td class="text-left">' .  $feriasAgendadasInicio . '</td>';
+                        echo '<td class="text-left">' .  $feriasAgendadasFim . '</td>';
+                        echo '<td class="text-left">' .  $feriasSolicitadasInicio . '</td>';
+                        echo '<td class="text-left">' .  $feriasSolicitadasFim . '</td>';
+                        if ($situacaoAgendamento == 1) {
+                            echo '<td class="text-left" style="color:green; font-weight: bold;">' . 'Aprovado' . '</td>';
                         }
-                        echo '<td class="text-center">' .  $validade . '</td>';
-
+                        if ($situacaoAgendamento == 0) {
+                            echo '<td class="text-left" style="color:red; font-weight: bold;">' . 'Reprovado' . '</td>';
+                        }
+                        if ($situacaoAgendamento == 2) {
+                            echo '<td class="text-left" style="color:blue; font-weight: bold;">' . 'Aguardando Aprovação' . '</td>';
+                        }
+                        echo '<td class="text-left">' .  $validade . '</td>';
                         if ($adiantamentoDecimo == 1) {
-                            echo '<td class="text-center">' . 'Sim' . '</td>';
+                            echo '<td class="text-left">' . 'Sim' . '</td>';
                         } else {
-                            echo '<td class="text-center">' . 'Não' . '</td>';
+                            echo '<td class="text-left">' . 'Não' . '</td>';
                         }
                         if ($abono == 1) {
-                            echo '<td class="text-center">' . 'Sim' . '</td>';
+                            echo '<td class="text-left">' . 'Sim' . '</td>';
                         } else {
-                            echo '<td class="text-center">' . 'Não' . '</td>';
+                            echo '<td class="text-left">' . 'Não' . '</td>';
                         }
 
                         echo '</tr >';

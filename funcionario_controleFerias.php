@@ -26,12 +26,15 @@ if ($condicaoGravarOK === false) {
 
 $gestor =  "order by nome";
 $funcionario = "";
+$option = "<option></option>";
 if ($condicaoGestorOK === false) {
     $id = $_SESSION['funcionario'];
     $funcionario = "hidden";
+    $readonly = 'style="touch-action:none;pointer-events:none"';
+    $option = "";
     $gestor = "AND codigo =  $id";
     $gestorProjeto =  "where BP.ativo = 1  AND BP.funcionario =  $id";
-    $gestorCargo ="AND F.codigo =  $id"; ;
+    $gestorCargo = "AND F.codigo =  $id";
 }
 
 
@@ -102,8 +105,8 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label " for="funcionario">Funcionário</label>
                                                                 <label class="select">
-                                                                    <select id="funcionario" name="funcionario" class="required ">
-                                                                        <option></option>
+                                                                    <select id="funcionario" name="funcionario" readonly class="readonly" <?php echo $readonly ?>>
+                                                                        <?php echo $option ?>
                                                                         <?php
 
                                                                         session_start();
@@ -118,7 +121,7 @@ include("inc/nav.php");
                                                                             echo '<option value=' . $codigoFuncionario . '>' . $nome . '</option>';
                                                                         }
                                                                         ?>
-                                                                    </select><i></i>
+                                                                    </select>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1 col-auto">
@@ -131,7 +134,7 @@ include("inc/nav.php");
 
                                                                         session_start();
                                                                         $id = $_SESSION['funcionario'];
-                                                                        
+
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, matricula  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL " . $gestor;
                                                                         $result = $reposit->RunQuery($sql);
@@ -153,7 +156,7 @@ include("inc/nav.php");
 
                                                                         session_start();
                                                                         $id = $_SESSION['funcionario'];
-                                                                        
+
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT F.codigo, F.cargo, C.descricao as cargoDescricao  from Ntl.funcionario F
                                                                         inner join Ntl.cargo C ON C.codigo = F.cargo
@@ -179,10 +182,10 @@ include("inc/nav.php");
 
                                                                         session_start();
                                                                         $id = $_SESSION['funcionario'];
-                                                                       
+
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT BP.codigo, BP.funcionario, BP.projeto, P.descricao as projetoDescricao from Ntl.beneficioProjeto BP
-                                                                        inner join Ntl.projeto P ON P.codigo = BP.projeto ".$gestorProjeto;
+                                                                        inner join Ntl.projeto P ON P.codigo = BP.projeto " . $gestorProjeto;
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigoFuncionario = (int) $row['funcionario'];
@@ -208,9 +211,9 @@ include("inc/nav.php");
 
                                                                         session_start();
                                                                         $id = $_SESSION['funcionario'];
-                                                                        
+
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, dataAdmissaoFuncionario  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL ". $gestor;
+                                                                        $sql = "SELECT codigo, dataAdmissaoFuncionario  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL " . $gestor;
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigoFuncionario = (int) $row['codigo'];
@@ -236,7 +239,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="periodoAquisitivoInicioLista">Período Aquisitivo - Início</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="periodoAquisitivoInicioLista" name="periodoAquisitivoInicioLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="periodoAquisitivoInicioLista" name="periodoAquisitivoInicioLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="readonly" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
 
@@ -244,7 +247,7 @@ include("inc/nav.php");
                                                                 <label class="label">Período Aquisitivo - Fim</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="periodoAquisitivoFimLista" name="periodoAquisitivoFimLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="periodoAquisitivoFimLista" name="periodoAquisitivoFimLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="readonly" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
 
@@ -260,17 +263,17 @@ include("inc/nav.php");
 
 
                                                             <section class="col col-2">
-                                                                <label class="label <?php echo $funcionario ?>" for="periodoFeriasInicioLista">Período de Férias - Início</label>
+                                                                <label class="label <?php echo $funcionario ?>" for="feriasAgendadasInicioLista">Férias Agendadas - Início</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar <?php echo $funcionario ?>"></i>
-                                                                    <input id="periodoFeriasInicioLista" name="periodoFeriasInicioLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker <?php echo $funcionario ?>" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="feriasAgendadasInicioLista" name="feriasAgendadasInicioLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="readonly <?php echo $funcionario ?>" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label <?php echo $funcionario ?>">Período de Férias - Fim</label>
+                                                                <label class="label <?php echo $funcionario ?>">Férias Agendadas - Fim</label>
                                                                 <label class="input">
                                                                     <i class="icon-append fa fa-calendar <?php echo $funcionario ?>"></i>
-                                                                    <input id="periodoFeriasFimLista" name="periodoFeriasFimLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker <?php echo $funcionario ?>" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                    <input id="feriasAgendadasFimLista" name="feriasAgendadasFimLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="readonly <?php echo $funcionario ?>" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1">
@@ -294,7 +297,7 @@ include("inc/nav.php");
                                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseFerias" class="" id="accordionFerias">
                                                         <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                         <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Solicitação
+                                                        Solicitação de Férias
                                                     </a>
                                                 </h4>
                                             </div>
@@ -309,10 +312,10 @@ include("inc/nav.php");
 
                                                                 <div class="col col-10">
                                                                     <section class="col col-2">
-                                                                        <label class="label" for="solicitacaoInicioFerias">Data de Início</label>
+                                                                        <label class="label" for="feriasSolicitadasInicio">Data de Início</label>
                                                                         <label class="input">
                                                                             <i class="icon-append fa fa-calendar"></i>
-                                                                            <input id="solicitacaoInicioFerias" name="solicitacaoInicioFerias" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker required" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                            <input id="feriasSolicitadasInicio" name="feriasSolicitadasInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker required" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                         </label>
                                                                     </section>
 
@@ -324,25 +327,13 @@ include("inc/nav.php");
                                                                     </section>
 
                                                                     <section class="col col-2">
-                                                                        <label class="label" for="solicitacaoFimFerias">Data Fim</label>
+                                                                        <label class="label" for="feriasSolicitadasFim">Data Fim</label>
                                                                         <label class="input">
                                                                             <i class="icon-append fa fa-calendar"></i>
-                                                                            <input id="solicitacaoFimFerias" name="solicitacaoFimFerias" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class=" readonly" readonly value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                            <input id="feriasSolicitadasFim" name="feriasSolicitadasFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class=" readonly" readonly value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                         </label>
                                                                     </section>
 
-
-                                                                    <section class="col col-1">
-                                                                        <label class="label" for="adiantamentoDecimo">Adiantamento 13º</label>
-                                                                        <label class="select">
-                                                                            <select name="adiantamentoDecimo" id="adiantamentoDecimo" class="required">
-                                                                                <option value="1">Sim</option>
-                                                                                <option value="0">Não</option>
-                                                                            </select><i></i>
-                                                                        </label>
-                                                                    </section>
-                                                                </div>
-                                                                <div class="col col-10">
                                                                     <section class="col col-1">
                                                                         <label class="label" for="abono">Tem Abono</label>
                                                                         <label class="select">
@@ -353,28 +344,39 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
 
-
-
                                                                     <section class="col col-1">
-                                                                        <label class="label <?php echo $funcionario ?>" for="status">Status</label>
+                                                                        <label class="label" for="adiantamentoDecimo">Adiantamento 13º</label>
                                                                         <label class="select">
-                                                                            <select id="status" name="status" class="required <?php echo $funcionario ?>">
-                                                                                <?php
-                                                                                $reposit = new reposit();
-                                                                                $sql = "SELECT S.codigo,S.descricao FROM Ntl.status S  WHERE S.ativo = 1 ORDER BY S.codigo";
-                                                                                $result = $reposit->RunQuery($sql);
-                                                                                foreach ($result as $row) {
-                                                                                    $codigo = (int) $row['codigo'];
-                                                                                    $descricao = $row['descricao'];
-                                                                                    $pattern = "/^aberto$/i";
-                                                                                    if (preg_match($pattern, $descricao)) {
-                                                                                        echo '<option value="' . $codigo . '" selected>' . $descricao . '</option>';
-                                                                                    } else {
-                                                                                        echo '<option value="' . $codigo . '">' . $descricao . '</option>';
-                                                                                    }
-                                                                                }
-                                                                                ?>
+                                                                            <select name="adiantamentoDecimo" id="adiantamentoDecimo" class="required">
+                                                                                <option value="1">Sim</option>
+                                                                                <option value="0">Não</option>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
+
+
+                                                                </div>
+                                                                <div class="col col-10">
+                                                                    <section class="col col-2">
+                                                                        <label class="label <?php echo $funcionario ?>" for="situacaoAgendamento">Situacão Agendamento</label>
+                                                                        <label class="select">
+                                                                            <select id="situacaoAgendamento" name="situacaoAgendamento" class="required <?php echo $funcionario ?>">
+                                                                                <option value="2">Aguardando Aprovação</option>
+                                                                                <option value="1">Aprovado</option>
+                                                                                <option value="0">Reprovado</option>
                                                                             </select><i class="<?php echo $funcionario ?>"></i>
+                                                                        </label>
+                                                                    </section>
+
+
+                                                                    <section class="col col-2">
+                                                                        <label class="label <?php echo $funcionario ?>" for="situacaoFerias">Situacão Férias</label>
+                                                                        <label class="select">
+                                                                            <select id="situacaoFerias" name="situacaoFerias" class="readonly required <?php echo $funcionario ?>" style="touch-action:none;pointer-events:none">
+                                                                                <option></option>
+                                                                                <option value="1">Pendente</option>
+                                                                                <option value="0">Vencida</option>
+                                                                            </select>
                                                                         </label>
                                                                     </section>
 
@@ -391,15 +393,15 @@ include("inc/nav.php");
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
-                                                                        <label class="label" for="periodoFeriasInicio"></label>
+                                                                        <label class="label" for="feriasAgendadasInicio"></label>
                                                                         <label class="input">
-                                                                            <input id="periodoFeriasInicio" name="periodoFeriasInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker required hidden" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                            <input id="feriasAgendadasInicio" name="feriasAgendadasInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker required hidden" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
-                                                                        <label class="label" for="periodoFeriasFim"></label>
+                                                                        <label class="label" for="feriasAgendadasFim"></label>
                                                                         <label class="input">
-                                                                            <input id="periodoFeriasFim" name="periodoFeriasFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker required hidden" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                            <input id="feriasAgendadasFim" name="feriasAgendadasFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker required hidden" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                         </label>
                                                                     </section>
                                                                 </div>
@@ -426,9 +428,10 @@ include("inc/nav.php");
                                                                         <th style="width: 2px"></th>
                                                                         <th class="text-center">Periodo Aquisitivo - Início</th>
                                                                         <th class="text-center">Período Aquisitivo - Fim</th>
-                                                                        <th class="text-center">Periodo de Férias - Inicio</th>
-                                                                        <th class="text-center">Periodo de Férias - Fim</th>
+                                                                        <th class="text-center">Férias Solicitadas - Inicio</th>
+                                                                        <th class="text-center">Férias Solicitadas - Fim</th>
                                                                         <th class="text-center">Qtde de Dias</th>
+                                                                        <th class="text-center">Situação Agendamento</th>
                                                                         <th class="text-center">Adiantamento 13º Salário</th>
                                                                         <th class="text-center">Abono</th>
 
@@ -441,6 +444,12 @@ include("inc/nav.php");
                                                                 </tbody>
                                                             </table>
 
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-12">
+                                                                <label class="label">Observações</label>
+                                                                <textarea maxlength="500" id="observacao" name="observacao" class="form-control" rows="3" value="" style="resize:vertical"></textarea>
+                                                            </section>
                                                         </div>
                                                         <div class="row">
 
@@ -574,24 +583,24 @@ include("inc/scripts.php");
 
         $('#btnAddControleFerias').on("click", function() {
 
-            var solicitacaoInicioFerias = $("#solicitacaoInicioFerias").val()
+            var feriasSolicitadasInicio = $("#feriasSolicitadasInicio").val()
             var diasSolicitacao = $("#diasSolicitacao").val()
-            var periodoFeriasInicioLista = $("#periodoFeriasInicioLista").val()
-            var periodoFeriasFimLista = $("#periodoFeriasFimLista").val()
+            var feriasAgendadasInicioLista = $("#feriasAgendadasInicioLista").val()
+            var feriasAgendadasFimLista = $("#feriasAgendadasFimLista").val()
 
-            if (!solicitacaoInicioFerias) {
+            if (!feriasSolicitadasInicio) {
                 smartAlert("Atenção", "Informe uma Data de Inicio", "error");
                 return;
             }
-             if (!diasSolicitacao) {
+            if (!diasSolicitacao) {
                 smartAlert("Atenção", "Informe a quantidade de Dias", "error");
                 return;
             }
-            if (!periodoFeriasInicioLista) {
-                $("#periodoFeriasInicioLista").val("")
+            if (!feriasAgendadasInicioLista) {
+                $("#feriasAgendadasInicioLista").val("")
             }
-            if (!periodoFeriasFimLista) {
-                $("#periodoFeriasFimLista").val("")
+            if (!feriasAgendadasFimLista) {
+                $("#feriasAgendadasFimLista").val("")
             }
             if (validaControleFerias()) {
                 addControleFerias();
@@ -604,21 +613,33 @@ include("inc/scripts.php");
 
         });
 
-        $("#periodoAquisitivoFimLista").on("change", function() {
-            verificaValidade();
-        });
-
         $("#funcionario").on("change", function() {
             var id = $("#funcionario").val()
             $("#matricula").val(id);
             $("#projeto").val(id);
             $("#cargo").val(id);
             $("#dataAdmissao").val(id);
+
+
         });
 
 
         $("#diasSolicitacao").on("change", function() {
             verificaDias();
+        });
+
+        $("#situacaoAgendamento").on("change", function() {
+            var situacao = $("#situacaoAgendamento").val()
+            var feriasSolicitadasInicio = $("#feriasSolicitadasInicio").val()
+            var feriasSolicitadasFim = $("#feriasSolicitadasFim").val()
+
+            if (situacao == 1) {
+                $("#feriasAgendadasInicioLista").val(feriasSolicitadasInicio);
+                $("#feriasAgendadasFimLista").val(feriasSolicitadasFim);
+            }
+            if (situacao == 0) {
+                smartAlert("info", "Informe os dias Disponíneis!", "error");
+            }
         });
 
         $("#btnNovo").on("click", function() {
@@ -632,6 +653,19 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
+
+
+        dataAdmissao = $('#dataAdmissao option:selected').text().trim();
+        $("#periodoAquisitivoInicioLista").val(dataAdmissao);
+
+        var data = new Date();
+        var dia = String(data.getDate()).padStart(2, '0');
+        var mes = String(data.getMonth() + 1).padStart(2, '0');
+        var ano = data.getFullYear();
+        dataAtual = dia + '/' + mes + '/' + ano;
+        $("#periodoAquisitivoFimLista").val(dataAtual);
+
+        verificaValidade();
         carregaPagina();
     });
 
@@ -678,12 +712,29 @@ include("inc/scripts.php");
                             jsonControleFeriasArray = JSON.parse($("#jsonControleFerias").val());
                             fillTableControleFerias();
 
+                            dataAdmissao = $('#dataAdmissao option:selected').text().trim();
+                            $("#periodoAquisitivoInicioLista").val(dataAdmissao);
+
+                            var data = new Date();
+                            var dia = String(data.getDate()).padStart(2, '0');
+                            var mes = String(data.getMonth() + 1).padStart(2, '0');
+                            var ano = data.getFullYear();
+                            dataAtual = dia + '/' + mes + '/' + ano;
+                            $("#periodoAquisitivoFimLista").val(dataAtual);
+
+                            verificaValidade();
+
+
+
+
                             return;
                         }
                     }
                 );
             }
         }
+
+
     }
 
     function novo() {
@@ -691,7 +742,7 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'funcionario_controleFeriasFiltro.php');
+        $(location).attr('href', 'funcionario_controleFeriasAgendamentoFiltro.php');
     }
 
     function verificaValidade() {
@@ -728,10 +779,16 @@ include("inc/scripts.php");
         }
 
         $("#diasVencidos").val(validade)
+
+        if (validade < 0) {
+            $("#situacaoFerias").val(0)
+        } else {
+            $("#situacaoFerias").val(1)
+        }
     }
 
     function verificaDias() {
-        let dataInicio = $("#solicitacaoInicioFerias").val()
+        let dataInicio = $("#feriasSolicitadasInicio").val()
         let dias = +$("#diasSolicitacao").val()
 
 
@@ -757,7 +814,7 @@ include("inc/scripts.php");
 
         dataFim = (d + "/" + m + "/" + y)
 
-        $("#solicitacaoFimFerias").val(dataFim)
+        $("#feriasSolicitadasFim").val(dataFim)
     }
 
     function excluir() {
@@ -796,14 +853,15 @@ include("inc/scripts.php");
         $("#sequencialControleFerias").val('');
         $("#periodoAquisitivoInicio").val('');
         $("#periodoAquisitivoFim").val('');
-        $("#periodoFeriasInicio").val('');
-        $("#periodoFeriasFim").val('');
+        $("#feriasAgendadasInicio").val('');
+        $("#feriasAgendadasFim").val('');
         $("#diasSolicitacao").val('');
         $("#adiantamentoDecimo").val('');
         $("#abono").val('');
-        $("#status").val('');
-        $("#solicitacaoInicioFerias").val('');
-        $("#solicitacaoFimFerias").val('');
+        $("#situacaoFerias").val('');
+        $("#situacaoAgendamento").val('');
+        $("#feriasSolicitadasInicio").val('');
+        $("#feriasSolicitadasFim").val('');
     }
 
     function addControleFerias() {
@@ -828,8 +886,8 @@ include("inc/scripts.php");
 
         item.periodoAquisitivoInicio = $("#periodoAquisitivoInicioLista").val()
         item.periodoAquisitivoFim = $("#periodoAquisitivoFimLista").val()
-        item.periodoFeriasInicio = $("#periodoFeriasInicioLista").val()
-        item.periodoFeriasFim = $("#periodoFeriasFimLista").val()
+        item.feriasAgendadasInicio = $("#feriasAgendadasInicioLista").val()
+        item.feriasAgendadasFim = $("#feriasAgendadasFimLista").val()
 
         var index = -1;
         $.each(jsonControleFeriasArray, function(i, obj) {
@@ -861,9 +919,20 @@ include("inc/scripts.php");
                 row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox " value="' + jsonControleFeriasArray[i].sequencialControleFerias + '"><i></i></label></td>'));
                 row.append($('<td class="text-center" onclick="carregaControleFerias(' + jsonControleFeriasArray[i].sequencialControleFerias + ');">' + jsonControleFeriasArray[i].periodoAquisitivoInicio + '</td>'));
                 row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].periodoAquisitivoFim + '</td>'));
-                row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].periodoFeriasInicio + '</td>'));
-                row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].periodoFeriasFim + '</td>'));
+                row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].feriasSolicitadasInicio + '</td>'));
+                row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].feriasSolicitadasFim + '</td>'));
                 row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].diasSolicitacao + '</td>'));
+
+                if ((situacaoAgendamento == '2') || (jsonControleFeriasArray[i].situacaoAgendamento == '2')) {
+                    row.append($('<td class="text-center" style="color:blue; font-weight: bold;" >' + 'Aguardando Aprovação' + '</td>'));
+                }
+                if ((situacaoAgendamento == '1') || (jsonControleFeriasArray[i].situacaoAgendamento == '1')) {
+                    row.append($('<td class="text-center" style="color:green; font-weight: bold;" >' + 'Aprovado' + '</td>'));
+                }
+                if ((situacaoAgendamento == '0') || (jsonControleFeriasArray[i].situacaoAgendamento == '0')) {
+                    row.append($('<td class="text-center" style="color:red; font-weight: bold;" >' + 'Reprovado' + '</td>'));
+                }
+
                 if ((adiantamentoDecimo == '1') || (jsonControleFeriasArray[i].adiantamentoDecimo == '1')) {
                     row.append($('<td class="text-center" >' + 'Sim' + '</td>'));
                 } else {
@@ -906,25 +975,25 @@ include("inc/scripts.php");
             };
         }
 
-        if (fieldName !== '' && (fieldId === "periodoFeriasInicio")) {
-            var periodoFeriasInicio = $("#periodoFeriasInicio").val();
-            if (periodoFeriasInicio !== '') {
-                fieldName = "periodoFeriasInicio";
+        if (fieldName !== '' && (fieldId === "feriasAgendadasInicio")) {
+            var feriasAgendadasInicio = $("#feriasAgendadasInicio").val();
+            if (feriasAgendadasInicio !== '') {
+                fieldName = "feriasAgendadasInicio";
             }
             return {
                 name: fieldName,
-                value: $("#periodoFeriasInicio").val()
+                value: $("#feriasAgendadasInicio").val()
             };
         }
 
-        if (fieldName !== '' && (fieldId === "periodoFeriasFim")) {
-            var periodoFeriasFim = $("#periodoFeriasFim").val();
-            if (periodoFeriasFim !== '') {
-                fieldName = "periodoFeriasFim";
+        if (fieldName !== '' && (fieldId === "feriasAgendadasFim")) {
+            var feriasAgendadasFim = $("#feriasAgendadasFim").val();
+            if (feriasAgendadasFim !== '') {
+                fieldName = "feriasAgendadasFim";
             }
             return {
                 name: fieldName,
-                value: $("#periodoFeriasFim").val()
+                value: $("#feriasAgendadasFim").val()
             };
         }
 
@@ -959,34 +1028,44 @@ include("inc/scripts.php");
                 value: $("#abono").val()
             };
         }
-        if (fieldName !== '' && (fieldId === "status")) {
-            var status = $("#status").val();
-            if (status !== '') {
-                fieldName = "status";
+        if (fieldName !== '' && (fieldId === "situacaoFerias")) {
+            var situacaoFerias = $("#situacaoFerias").val();
+            if (situacaoFerias !== '') {
+                fieldName = "situacaoFerias";
             }
             return {
                 name: fieldName,
-                value: $("#status").val()
+                value: $("#situacaoFerias").val()
             };
         }
-        if (fieldName !== '' && (fieldId === "solicitacaoInicioFerias")) {
-            var solicitacaoInicioFerias = $("#solicitacaoInicioFerias").val();
-            if (solicitacaoInicioFerias !== '') {
-                fieldName = "solicitacaoInicioFerias";
+        if (fieldName !== '' && (fieldId === "situacaoAgendamento")) {
+            var situacaoAgendamento = $("#situacaoAgendamento").val();
+            if (situacaoAgendamento !== '') {
+                fieldName = "situacaoAgendamento";
             }
             return {
                 name: fieldName,
-                value: $("#solicitacaoInicioFerias").val()
+                value: $("#situacaoAgendamento").val()
             };
         }
-        if (fieldName !== '' && (fieldId === "solicitacaoFimFerias")) {
-            var solicitacaoFimFerias = $("#solicitacaoFimFerias").val();
-            if (solicitacaoFimFerias !== '') {
-                fieldName = "solicitacaoFimFerias";
+        if (fieldName !== '' && (fieldId === "feriasSolicitadasInicio")) {
+            var feriasSolicitadasInicio = $("#feriasSolicitadasInicio").val();
+            if (feriasSolicitadasInicio !== '') {
+                fieldName = "feriasSolicitadasInicio";
             }
             return {
                 name: fieldName,
-                value: $("#solicitacaoFimFerias").val()
+                value: $("#feriasSolicitadasInicio").val()
+            };
+        }
+        if (fieldName !== '' && (fieldId === "feriasSolicitadasFim")) {
+            var feriasSolicitadasFim = $("#feriasSolicitadasFim").val();
+            if (feriasSolicitadasFim !== '') {
+                fieldName = "feriasSolicitadasFim";
+            }
+            return {
+                name: fieldName,
+                value: $("#feriasSolicitadasFim").val()
             };
         }
         return false;
@@ -1005,15 +1084,17 @@ include("inc/scripts.php");
             $("#sequencialControleFerias").val(item.sequencialControleFerias);
             $("#periodoAquisitivoInicioLista").val(item.periodoAquisitivoInicio);
             $("#periodoAquisitivoFimLista").val(item.periodoAquisitivoFim);
-            $("#periodoFeriasInicioLista").val(item.periodoFeriasInicio);
-            $("#periodoFeriasFimLista").val(item.periodoFeriasFim);
+            $("#feriasAgendadasInicioLista").val(item.feriasAgendadasInicio);
+            $("#feriasAgendadasFimLista").val(item.feriasAgendadasFim);
             $("#diasSolicitacao").val(item.diasSolicitacao);
             $("#adiantamentoDecimo").val(item.adiantamentoDecimo);
             $("#abono").val(item.abono);
-            $("#status").val(item.status);
-            $("#solicitacaoInicioFerias").val(item.solicitacaoInicioFerias);
-            $("#solicitacaoFimFerias").val(item.solicitacaoFimFerias);
+            $("#situacaoFerias").val(item.situacaoFerias);
+            $("#situacaoAgendamento").val(item.situacaoAgendamento);
+            $("#feriasSolicitadasInicio").val(item.feriasSolicitadasInicio);
+            $("#feriasSolicitadasFim").val(item.feriasSolicitadasFim);
         }
+        verificaValidade();
     }
 
     function excluirControleFerias() {
@@ -1064,6 +1145,7 @@ include("inc/scripts.php");
         var cargo = $('#cargo').val();
         var projeto = $('#projeto').val();
         var dataAdmissao = $('#dataAdmissao').val();
+        var observacao = $('#observacao').val();
         var ativo = $('#ativo').val();
         var jsonControleFeriasArray = JSON.parse($("#jsonControleFerias").val());
         var periodoAquisitivo = $('#periodoAquisitivoInicioLista').val()
@@ -1083,7 +1165,7 @@ include("inc/scripts.php");
 
 
         //Chama a função de gravar do business de convênio de saúde.
-        gravaControleFerias(id, funcionario, matricula, cargo, projeto, dataAdmissao, ativo, jsonControleFeriasArray,
+        gravaControleFerias(id, funcionario, matricula, cargo, projeto, dataAdmissao, observacao, ativo, jsonControleFeriasArray,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");

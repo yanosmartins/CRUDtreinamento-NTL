@@ -1,9 +1,9 @@
-function gravaControleFerias(id, funcionario, matricula, cargo, projeto,  dataAdmissao, ativo, jsonControleFeriasArray, callback) {
+function gravaControleFerias(id, funcionario, matricula, cargo, projeto,  dataAdmissao,observacao, ativo, jsonControleFeriasArray, callback) {
     $.ajax({
         url: 'js/sqlscope_funcionarioControleFerias.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", id:id, funcionario:funcionario, matricula:matricula, cargo:cargo, projeto:projeto, dataAdmissao:dataAdmissao,
+        data: {funcao: "grava", id:id, funcionario:funcionario, matricula:matricula, cargo:cargo, projeto:projeto, dataAdmissao:dataAdmissao,observacao:observacao,
          ativo:ativo, jsonControleFeriasArray:jsonControleFeriasArray},   
         success: function (data) {
         callback(data);

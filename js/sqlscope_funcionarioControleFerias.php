@@ -17,17 +17,11 @@ if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'pesquisaData') {
+if ($funcao == 'verificaFuncionario') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'recuperarDadosFuncionario') {
-    call_user_func($funcao);
-}
 
-if ($funcao == 'recuperarDadosFuncionarioASO') {
-    call_user_func($funcao);
-}
 
 
 return;
@@ -53,13 +47,14 @@ function grava()
         foreach ($result as $row) {
             $funcionario = (int) $row['funcionario'];
             $cargo = (int) $row['cargo'];
-            $projeto =(int) $row['projeto'];
+            $projeto = (int) $row['projeto'];
             $matricula = (int)$row['matricula'];
-            $dataAdmissao = "'".$row['dataAdmissaoFuncionario']."'";
+            $dataAdmissao = "'" . $row['dataAdmissaoFuncionario'] . "'";
+            $observacao = "'" . $row['observacao'] . "'";
         }
     }
 
-   
+
 
 
     //Inicio do Json ControleFerias
@@ -79,7 +74,7 @@ function grava()
                     if (($campo === "sequencialControleFerias")) {
                         continue;
                     }
-                    if ($campo == "solicitacaoInicioFerias" || $campo == "solicitacaoFimFerias" || $campo == "periodoAquisitivoInicio" || $campo == "periodoAquisitivoFim" || $campo == "periodoFeriasInicio" || $campo == "periodoFeriasFim") {
+                    if ($campo == "feriasSolicitadasInicio" || $campo == "feriasSolicitadasFim" || $campo == "periodoAquisitivoInicio" || $campo == "periodoAquisitivoFim" || $campo == "feriasAgendadasInicio" || $campo == "feriasAgendadasFim") {
                         if ($valor != "") {
                             $aux = explode('/', $valor);
                             $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
@@ -122,7 +117,8 @@ function grava()
                 $matricula,
                 $cargo,
                 $projeto,
-                $dataAdmissao,			
+                $dataAdmissao,	
+                $observacao,		
                 $ativo,
                 $usuario,
                 $xmlControleFerias          
@@ -148,7 +144,7 @@ function recupera()
         $id = (int)$_POST["id"];
     }
 
-    $sql = "SELECT CF.codigo, CF.funcionario, F.nome as funcionarioNome, CF.matricula, CF.cargo, C.descricao as cargoNome, CF.projeto, P.descricao as projetoNome, CF.dataAdmissao, CF.ativo
+    $sql = "SELECT CF.codigo, CF.funcionario,CF.observacao, F.nome as funcionarioNome, CF.matricula, CF.cargo, C.descricao as cargoNome, CF.projeto, P.descricao as projetoNome, CF.dataAdmissao, CF.ativo
     FROM funcionario.controleFerias CF
        INNER JOIN ntl.funcionario F ON F.codigo = CF.funcionario
        INNER JOIN ntl.cargo C ON C.codigo = CF.cargo
@@ -167,12 +163,14 @@ function recupera()
         $projeto = $funcionario;
         $dataAdmissao = $funcionario;
         $ativo = $row['ativo'];
+        $observacao = $row['observacao'];
 
 
         // XML CONTROLE FERIAS
         $reposit = "";
         $result = "";
-        $sql = "SELECT FS.periodoAquisitivoInicio, FS.periodoAquisitivoFim, FS.periodoFeriasInicio, FS.periodoFeriasFim, FS.diasSolicitacao, FS.adiantamentoDecimo, FS.abono, FS.status, FS.solicitacaoInicioFerias, FS.solicitacaoFimFerias
+        $sql = "SELECT FS.periodoAquisitivoInicio, FS.periodoAquisitivoFim, FS.feriasAgendadasInicio, FS.feriasAgendadasFim, FS.diasSolicitacao,
+         FS.adiantamentoDecimo, FS.abono, FS.feriasSolicitadasInicio, FS.feriasSolicitadasFim, FS.situacaoFerias, FS.situacaoAgendamento
      FROM Funcionario.controleFeriasSolicitacao FS
     INNER JOIN  Funcionario.controleFerias CF ON FS.controleFeriasSolicitacao = CF.codigo
     WHERE CF.codigo = $id";
@@ -210,66 +208,68 @@ function recupera()
                 $periodoAquisitivoFim = '';
             };
 
-            $periodoFeriasInicio = $row['periodoFeriasInicio'];
-            if ($periodoFeriasInicio) {
-                $aux = explode(' ', $periodoFeriasInicio);
+            $feriasAgendadasInicio = $row['feriasAgendadasInicio'];
+            if ($feriasAgendadasInicio != "" && $feriasAgendadasInicio != "1900-01-01 00:00:00.000") {
+                $aux = explode(' ', $feriasAgendadasInicio);
                 $data = $aux[1] . ' ' . $aux[0];
                 $data = $aux[0];
                 $data =  trim($data);
                 $aux = explode('-', $data);
                 $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
                 $data =  trim($data);
-                $periodoFeriasInicio = $data;
+                $feriasAgendadasInicio = $data;
             } else {
-                $periodoFeriasInicio = '';
+                $feriasAgendadasInicio = '';
             };
 
-            $periodoFeriasFim = $row['periodoFeriasFim'];
-            if ($periodoFeriasFim) {
-                $aux = explode(' ', $periodoFeriasFim);
+            $feriasAgendadasFim = $row['feriasAgendadasFim'];
+            if ($feriasAgendadasFim != "" && $feriasAgendadasFim != "1900-01-01 00:00:00.000") {
+                $aux = explode(' ', $feriasAgendadasFim);
                 $data = $aux[1] . ' ' . $aux[0];
                 $data = $aux[0];
                 $data =  trim($data);
                 $aux = explode('-', $data);
                 $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
                 $data =  trim($data);
-                $periodoFeriasFim = $data;
+                $feriasAgendadasFim = $data;
             } else {
-                $periodoFeriasFim = '';
+                $feriasAgendadasFim = '';
             };
 
-            $solicitacaoInicioFerias = $row['solicitacaoInicioFerias'];
-            if ($row['solicitacaoInicioFerias'] != "") {
-                $aux = explode(' ', $row['solicitacaoInicioFerias']);
+            $feriasSolicitadasInicio = $row['feriasSolicitadasInicio'];
+            if ($feriasSolicitadasInicio != "" && $feriasSolicitadasInicio != "1900-01-01 00:00:00.000") {
+                $aux = explode(' ', $feriasSolicitadasInicio);
                 $data = $aux[1] . ' ' . $aux[0];
                 $data = $aux[0];
                 $data =  trim($data);
                 $aux = explode('-', $data);
                 $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
                 $data =  trim($data);
-                $solicitacaoInicioFerias = $data;
+                $feriasSolicitadasInicio = $data;
             } else {
-                $solicitacaoInicioFerias = '';
+                $feriasSolicitadasInicio = '';
             };
 
-            $solicitacaoFimFerias = $row['solicitacaoFimFerias'];
-            if ($row['solicitacaoFimFerias'] != "") {
-                $aux = explode(' ', $row['solicitacaoFimFerias']);
+            $feriasSolicitadasFim = $row['feriasSolicitadasFim'];
+            if ($feriasSolicitadasFim != "" && $feriasSolicitadasFim != "1900-01-01 00:00:00.000") {
+                $aux = explode(' ',  $feriasSolicitadasFim);
                 $data = $aux[1] . ' ' . $aux[0];
                 $data = $aux[0];
                 $data =  trim($data);
                 $aux = explode('-', $data);
                 $data = $aux[2] . '/' . $aux[1] . '/' . $aux[0];
                 $data =  trim($data);
-                $solicitacaoFimFerias = $data;
+                $feriasSolicitadasFim = $data;
             } else {
-                $solicitacaoFimFerias = '';
+                $feriasSolicitadasFim = '';
             };
 
             $diasSolicitacao = $row['diasSolicitacao'];
             $adiantamentoDecimo = $row['adiantamentoDecimo'];
             $abono = (int)$row['abono'];
-            $status = (int)$row['status'];
+            $situacaoFerias = (int)$row['situacaoFerias'];
+            $situacaoAgendamento = (int)$row['situacaoAgendamento'];
+
 
 
 
@@ -278,14 +278,15 @@ function recupera()
                 "sequencialControleFerias" => $contadorControleFerias,
                 "periodoAquisitivoInicio" => $periodoAquisitivoInicio,
                 "periodoAquisitivoFim" => $periodoAquisitivoFim,
-                "periodoFeriasInicio" => $periodoFeriasInicio,
-                "periodoFeriasFim" => $periodoFeriasFim,
+                "feriasAgendadasInicio" => $feriasAgendadasInicio,
+                "feriasAgendadasFim" => $feriasAgendadasFim,
                 "diasSolicitacao" => $diasSolicitacao,
                 "adiantamentoDecimo" => $adiantamentoDecimo,
                 "abono" => $abono,
-                "status" => $status,
-                "solicitacaoInicioFerias" => $solicitacaoInicioFerias,
-                "solicitacaoFimFerias" => $solicitacaoFimFerias
+                "situacaoFerias" => $situacaoFerias,
+                "situacaoAgendamento" => $situacaoAgendamento,
+                "feriasSolicitadasInicio" => $feriasSolicitadasInicio,
+                "feriasSolicitadasFim" => $feriasSolicitadasFim
             );
         }
 
@@ -301,6 +302,7 @@ function recupera()
             $cargo . "^" .
             $projeto . "^" .
             $dataAdmissao . "^" .
+            $observacao . "^" .
             $ativo;
 
         if ($out == "") {
