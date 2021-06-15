@@ -8,13 +8,12 @@ require_once("inc/config.ui.php");
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $funcionario = $_SESSION["funcionario"];
 
-$condicaoMaximaAcessarOK = (in_array('PONTOELETRONICOMENSALMAXIMO_ACESSAR', $arrayPermissao, true));
 
 $condicaoModeradaAcessarOK = (in_array('PONTOELETRONICOMENSALMODERADO_ACESSAR', $arrayPermissao, true));
 
 $condicaoMinimaAcessarOK = (in_array('PONTOELETRONICOMENSALMINIMO_ACESSAR', $arrayPermissao, true));
 
-if (($condicaoMaximaAcessarOK == false) && ($condicaoModeradaAcessarOK == false) && ($condicaoMinimaAcessarOK == false)) {
+if (($condicaoModeradaAcessarOK == false) && ($condicaoMinimaAcessarOK == false)) {
     unset($_SESSION['login']);
     header("Location:login.php");
 }
@@ -93,8 +92,10 @@ include("inc/nav.php");
                                                                     <label class="label">Mês/Ano</label>
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="mesAno" name="mesAno" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker text-center" value="<?= date("m/Y") ?>">
-
+                                                                        <input id="mesAno" name="mesAno" autocomplete="off" data-mask="99/9999" class="text-center">
+                                                                        <!--Removido de acordo com a reunião do dia 14.06.2021 as 14h-->
+                                                                        <!-- data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker text-center" value="<?= date("m/Y") ?>">
+ -->
                                                                 </section>
                                                                 <section id="sectionStatus" class="col col-2" style="display:none">
                                                                     <label class="label" for="status">Status</label>
@@ -184,7 +185,7 @@ include("inc/nav.php");
                                                                 <section class="col col-1">
                                                                     <label class="label">Dia</label>
                                                                     <div class="input-group" data-align="top" data-autoclose="true">
-                                                                        <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly" readonly data-autoclose="true" maxlength="2">
+                                                                        <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly datepicker" readonly data-autoclose="true" maxlength="2" data-dateformat="d">
                                                                     </div>
                                                                 </section>
 
@@ -491,12 +492,47 @@ include("inc/scripts.php");
 
     $(document).ready(function() {
 
-        $('#mesAno').datepicker();
-        $('#mesAno').on('focus', function(e) {
+        // Removido de acordo com a reunião do dia 14 as 14h devido ao datepicker não mostrar APENAS mes/Ano
+        // $('#mesAno').datepicker();
+        // $('#mesAno').on('focus', function(e) {
+        //     e.preventDefault();
+        //     $(this).datepicker('show');
+        //     $(this).datepicker('widget').css('z-index', 1051);
+        // });
+
+        // $('#mesAno').datepicker({
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     showButtonPanel: true,
+        //     dateFormat: 'mm/yyyy',
+        //     onClose: function(dateText, inst) {
+        //         var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        //         var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        //         $(this).datepicker('setDate', new Date(year, month, 1));
+        //     }
+        // });
+        // Removido de acordo com a reunião do dia 14 as 14h devido ao datepicker não mostrar APENAS mes/Ano
+
+        $('#inputDia').datepicker();
+        $('#inputDia').on('focus', function(e) {
             e.preventDefault();
             $(this).datepicker('show');
             $(this).datepicker('widget').css('z-index', 1051);
         });
+
+        $('#inputDia').datepicker({
+            changeMonth: false,
+            changeYear: false,
+            showButtonPanel: false,
+            dateFormat: 'dd',
+            onClose: function(dateText, inst) {
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                $(this).datepicker('setDate', new Date(year, month, 1));
+            }
+        });
+
+        //========================================================
 
         /* Evento para recarregar a folha de ponto() */
         $("#mesAno").on("change", function() {
@@ -1532,15 +1568,15 @@ include("inc/scripts.php");
 
         // Verificações antes de adicionar o ponto
         if ((!inputEntrada || inputEntrada == "00:00:00") && !inputLancamento) {
-            smartAlert("Atenção", "A HORA DE ENTRADA deve ser preenchida", "error");
+            smartAlert("Atenção", "A Hora de Entrada deve ser preenchida", "error");
             return
         }
 
-        if (!inputExtra && horaSaida != "00:00:00") {
-            smartAlert("Aviso", "O funcionário não tem horas extras", "info");
+        if (inputExtra && (horaSaida != "00:00:00")) {
+            smartAlert("Aviso", "O funcionário possui horas extras", "info");
         }
-        if (!inputAtraso && horaSaida != "00:00:00") {
-            smartAlert("Aviso", "O funcionário não tem atrasos", "info");
+        if (inputAtraso && (horaSaida != "00:00:00")) {
+            smartAlert("Aviso", "O funcionário possuiatrasos", "info");
         }
 
 
