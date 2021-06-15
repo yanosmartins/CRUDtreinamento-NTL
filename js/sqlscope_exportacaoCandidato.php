@@ -41,7 +41,7 @@ function exportarCandidatos()
                                         $usuario";
 
     $reposit = new reposit();
-    //$result = $reposit->Execprocedure($sql);
+    $result = $reposit->Execprocedure($sql);
 
     if ($result < 1) {
         echo ('failed#');
