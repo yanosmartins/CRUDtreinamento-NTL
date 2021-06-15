@@ -15,6 +15,8 @@ function exportarCandidatos()
 {
     $reposit = new reposit();
     $girComum = new comum();
+    session_start();
+    $usuario = "'" . $_SESSION['login'] . "'";
 
     $possuiPermissao = $reposit->PossuiPermissao("CANDIDATO_ACESSAR|CANDIDATO_EXCLUIR");
 
@@ -31,10 +33,15 @@ function exportarCandidatos()
     $xmlFuncionario = new \FluidXml\FluidXml('ArrayOfFuncionario', ['encoding' => '']);
     foreach ($arrayFuncionario as $item) {
         $xmlFuncionario->addChild('funcionario', true)
-            ->add('codigo', (int) $item['id']);
+            ->add('codigo', (int) $item['codigo']);
     }
     $xmlFuncionario = $girComum->formatarString($xmlFuncionario);
 
+    $sql = "Ntl.exportaCandidato_Atualiza $xmlFuncionario,
+                                        $usuario";
+
+    $reposit = new reposit();
+    $result = $reposit->Execprocedure($sql);
 
     if ($result < 1) {
         echo ('failed#');
