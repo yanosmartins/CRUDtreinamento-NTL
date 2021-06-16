@@ -6,11 +6,12 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Apelido</th>
-                    <th class="text-left" style="min-width:30px;">Razão Social</th>
-                    <th class="text-left" style="min-width:30px;">CNPJ</th>
-                    <th class="text-left" style="min-width:30px;">UF</th>
-                    <th class="text-left" style="min-width:30px;">Ativo</th>
+                    <th class="text-center" style="min-width:30px;">Apelido</th>
+                    <th class="text-center" style="min-width:30px;">Razão Social</th>
+                    <th class="text-center" style="min-width:30px;">CNPJ</th>
+                    <th class="text-center" style="min-width:30px;">Bairro</th>
+                    <th class="text-center" style="min-width:30px;">UF</th>
+                    <th class="text-center" style="min-width:30px;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,6 +20,7 @@ include "js/repositorio.php";
                 $apelido = $_GET["apelido"];
                 $razaoSocial = $_GET["razaoSocial"];
                 $cnpj = $_GET["cnpj"];
+                $bairro = $_GET["bairro"];
                 $sigla = $_GET["sigla"];
                 $ativo = $_GET["ativo"];
 
@@ -28,8 +30,12 @@ include "js/repositorio.php";
                 if ($razaoSocial != "") {
                     $where = $where . " AND F.razaoSocial = '$razaoSocial'";
                 }
+
+                if ($bairro != "") {
+                    $where = $where . " and (F.bairro like '%' + " . "replace('" . $bairro . "',' ','%') + " . "'%')";
+                }
                 if ($cnpj != "") {
-                    $where = $where . " and (CI.cnpj like '%' + " . "replace('" . $cnpj . "',' ','%') + " . "'%')";
+                    $where = $where . " and (F.cnpj like '%' + " . "replace('" . $cnpj . "',' ','%') + " . "'%')";
                 }
 
                 if ($sigla != "") {
@@ -41,7 +47,7 @@ include "js/repositorio.php";
                 }
 
                 $reposit = new reposit();
-                $sql = "SELECT C.codigo AS 'codigo',C.fornecedor AS 'codigoFornecedor',
+                $sql = "SELECT C.codigo AS 'codigo',C.fornecedor AS 'codigoFornecedor',F.bairro AS 'bairro',
                 F.razaoSocial AS 'nome',F.apelido AS 'apelido',C.ativo AS 'ativo',F.uf AS 'uf', F.cnpj AS 'cnpj'
                 from ntl.clinica C INNER JOIN ntl.fornecedor F ON F.codigo = C.fornecedor";
 
@@ -52,24 +58,25 @@ include "js/repositorio.php";
                     $codigo = $row['codigo'];
                     $codigoFornecedor = $row['codigoFornecedor'];
                     $nome = $row['nome'];
+                    $bairro =$row['bairro'];
                     $cnpj = $row['cnpj'];
                     $apelido = $row['apelido'];
                     $ativo = $row['ativo'];
                     $uf = $row['uf'];
 
-                    echo '<tr>';
-                    echo '<td class="text-left"><a href="cadastro_clinicaCadastro.php?codigo=' . $codigo . '">'  . $apelido . '</a></td>';
-                    echo '<td class="text-left">' . $nome . '</td>';
-                    echo '<td class="text-left">' . $cnpj . '</td>';
-                    echo '<td class="text-left">' . $ativo . '</td>';
-                    echo '<td class="text-left">' . $uf . '</td>';
-                   
                     if ($ativo == 1) {
-                        echo '<td class="text-left">' . 'Sim' . '</td>';
+                        $ativo = 'Sim';
                     } else {
-                        echo '<td class="text-left">' . 'Não' . '</td>';
+                        $ativo = 'Não';
                     }
-                    echo '</tr>';
+
+                    echo '<tr>';
+                    echo '<td class="text-center"><a href="cadastro_clinicaCadastro.php?codigo=' . $codigo . '">'  . $apelido . '</a></td>';
+                    echo '<td class="text-center">' . $nome . '</td>';
+                    echo '<td class="text-center">' . $cnpj . '</td>';
+                    echo '<td class="text-center">' . $bairro . '</td>';
+                    echo '<td class="text-center">' . $uf . '</td>';
+                    echo '<td class="text-center">' .  $ativo . '</td>';
                 }
                 ?>
             </tbody>

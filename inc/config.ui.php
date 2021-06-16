@@ -298,8 +298,6 @@ if ($condicaoRHOk) {
 
 // MEDICINA E SEGURANÇA DO TRABALHO
 
-
-// MENSAGERIA // a pedido do guinancio 24/02/21 colocar servico externo no nome
 $condicaoSegurancaOk = (in_array('SEGURANCA_ACESSAR', $arrayPermissao, true));
 if ($condicaoSegurancaOk) {
     $page_nav['seguranca'] = array("title" => "Saúde/Seg do Trabalho", "icon" => "fa-medkit ");
@@ -315,6 +313,16 @@ if ($condicaoSegurancaOk) {
             $page_nav['seguranca']['sub']['aso']['sub'] += array("relatorioValidade" => array("title" => "Relatório de Validade", "url" => APP_URL . "/funcionario_atestadoSaudeOcupacionalFiltro.php")); //SYSCC   
         }
     }
+    
+    if (in_array('CLINICA_ACESSAR', $arrayPermissao, true)) {
+        $page_nav['seguranca']['sub']['cadastroAso'] = array("title" => "Cadastro");
+        $page_nav['seguranca']['sub']['cadastroAso']['sub'] = array();
+
+        if (in_array('CLINICA_ACESSAR', $arrayPermissao, true)) {
+            $page_nav['seguranca']['sub']['cadastroAso']['sub'] += array("cadastroClinica" => array("title" => "Clínica", "url" => APP_URL . "/cadastro_clinicaCadastroFiltro.php"));
+        }
+    }
+    
 }
 
 // FIM MEDICINA E SEGURANÇA DO TRABALHO
