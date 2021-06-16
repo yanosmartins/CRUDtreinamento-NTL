@@ -6,8 +6,8 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK = (in_array('CODIGOITEM_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('CODIGOITEM_GRAVAR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('CLINICA_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('CLINICA_GRAVAR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -23,7 +23,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Código Item";
+$page_title = "Clínica";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -35,7 +35,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav['estoque']['sub']['cadastro']['sub']['codigoItem']['active'] = true;
+$page_nav["seguranca"]["sub"]["cadastroAso"]["sub"]["cadastroClinica"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -96,6 +96,12 @@ include("inc/nav.php");
                                                                 <label class="label" for="cnpj">CNPJ</label>
                                                                 <label class="input">
                                                                     <input id="cnpj" name="cnpj" type="text" autocomplete="off">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3 col-auto">
+                                                                <label class="label" for="bairro">Bairro</label>
+                                                                <label class="input">
+                                                                    <input id="bairro" name="bairro" type="text" autocomplete="off">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-1 col-auto" id='sectionUFFeriado'>
@@ -200,10 +206,29 @@ include("inc/scripts.php");
         var apelido = $('#apelido').val();
         var razaoSocial = $('#razaoSocial').val();
         var cnpj = $('#cnpj').val();
+        var bairro =$('#bairro').val();
         var sigla = $('#sigla').val();
         var ativo = $('#ativo').val();
 
-        var parametrosUrl = '&apelido=' + apelido + '&razaoSocial=' + razaoSocial + '&cnpj=' + cnpj + '&sigla=' + sigla +
+        if (apelido !== "") {
+            apelido = apelido.replace(/^\s+|\s+$/g, "");
+            apelido = encodeURIComponent(apelido);
+        }
+        if (razaoSocial !== "") {
+            razaoSocial = razaoSocial.replace(/^\s+|\s+$/g, "");
+            razaoSocial = encodeURIComponent(razaoSocial);
+        }
+        if (bairro !== "") {
+            bairro = bairro.replace(/^\s+|\s+$/g, "");
+            bairro = encodeURIComponent(bairro);
+        }
+        if (cnpj !== "") {
+            cnpj = cnpj.replace(/^\s+|\s+$/g, "");
+            cnpj = encodeURIComponent(cnpj);
+        }
+      
+
+        var parametrosUrl = '&apelido=' + apelido + '&razaoSocial=' + razaoSocial + '&bairro=' + bairro + '&cnpj=' + cnpj + '&sigla=' + sigla +
             '&ativo=' + ativo;
 
         $('#resultadoBusca').load('cadastro_clinicaCadastroFiltroListagem.php?' + parametrosUrl);

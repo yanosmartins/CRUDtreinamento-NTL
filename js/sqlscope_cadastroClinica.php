@@ -50,18 +50,28 @@ function recuperarDadosCnpj()
     if ($row = $result[0]) {
         $codigo = (int) $row['codigo'];
         $codigoFornecedor = (int)$row['codigoFornecedor'];
-        $razaoSocial = (string) $row['razaoSocial'];
-        $apelido = (string) $row['apelido'];
-        $cep = (string) $row['cep'];
-        $logradouro = (string) $row['logradouro'];
-        $endereco = (string) $row['endereco'];
-        $numero = (int) $row['numero'];
-        $complemento = (string) $row['complemento'];
-        $bairro = (string) $row['bairro'];
-        $cidade = (string) $row['cidade'];
-        $uf = (string) $row['uf'];
+        $reposit = "";
+        $result = "";
+        $sql = "SELECT c.codigo,c.fornecedor FROM ntl.clinica c
+        INNER JOIN ntl.fornecedor f ON f.codigo = c.fornecedor  WHERE f.cnpj = " . "'" . $cnpj . "'";
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+        if ((empty($result)) || ($result < 1)) {
+            $razaoSocial = (string) $row['razaoSocial'];
+            $apelido = (string) $row['apelido'];
+            $cep = (string) $row['cep'];
+            $logradouro = (string) $row['logradouro'];
+            $endereco = (string) $row['endereco'];
+            $numero = (int) $row['numero'];
+            $complemento = (string) $row['complemento'];
+            $bairro = (string) $row['bairro'];
+            $cidade = (string) $row['cidade'];
+            $uf = (string) $row['uf'];
+        } else {
+            return;
+        };
     }
-
+       
     $out = $codigo . "^" .
         $codigoFornecedor . "^" .
         $razaoSocial . "^" .
@@ -187,19 +197,20 @@ function grava()
     session_start();
     $usuario = $_SESSION['login'];  //Pegando o nome do usuário mantido pela sessão.
     $clinica = $_POST['clinica'];
+    $codigoClinica = (int)$clinica['id'];
     $codigoFornecedor = (int)$clinica['codigoFornecedor'];
     $observacao =  "'" . (string)$clinica['observacao']  . "'";
     $agendamentoData = $clinica['agendamentoData'];
     $agendamentoHorario =  $clinica['agendamentoHorario'];
     $quantidadeDia =  $clinica['quantidadeDia'];
-    $quantidade = (string) $clinica['quantidade'];
+    $quantidade = "'" . (string) $clinica['quantidade']  . "'";
     $agendamentoEmail =  $clinica['agendamentoEmail'];
     $emailDeAgendamento = "'" . (string) $clinica['emailDeAgendamento'] . "'";
     $ativo =  $clinica['ativo'];
 
     
     $sql = "Ntl.clinica_Atualiza
-    $id, 
+    $codigoClinica, 
     $codigoFornecedor,
     $observacao,
     $agendamentoData,
@@ -231,163 +242,138 @@ function recupera()
         $id = (int)$_POST["id"];
     }
 
-    $sql = "SELECT ASO.codigo, ASO.funcionario,C.codigo AS 'cargoId',P.codigo AS 'projetoId', F.matricula,F.nome,P.descricao AS 'projetoNome',C.descricao AS 'cargoNome',F.sexo,
-    ASO.dataAdmissao, ASO.dataNascimento, ASO.dataAgendamento, ASO.dataProximoAso, ASO.dataUltimoAso,ASO.ativo FROM funcionario.atestadoSaudeOcupacional ASO
-        INNER JOIN ntl.funcionario F ON F.codigo = ASO.funcionario
-        INNER JOIN ntl.cargo C ON C.codigo = ASO.cargo
-        INNER JOIN ntl.projeto P ON P.codigo = ASO.projeto
-    WHERE ASO.codigo = " . $id;
+    $sql = "SELECT C.codigo AS 'codigoClinica',F.codigo AS 'codigoFornecedor', F.razaoSocial AS 'nome',F.apelido AS 'apelido',C.ativo AS 'ativo',F.uf AS 'uf', F.cnpj AS 'cnpj',F.cep,F.logradouro,F.endereco,F.numero,F.complemento,F.bairro,
+    F.cidade,F.uf,C.observacao,C.agendamentoData,C.agendamentoHorario,C.quantidade,C.quantidadeDia,C.agendamentoEmail,C.emailDeAgendamento
+    
+    from ntl.clinica C INNER JOIN ntl.fornecedor F ON F.codigo = C.fornecedor WHERE (0=0)  AND C.codigo =  " . $id;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
     if ($row = $result[0]) {
-        $codigo = (int) $row['codigo'];
-        $matricula = $row['matricula'];
-        $funcionario = $row['funcionario'];
-        $cargo = $row['cargoNome'];
-        $projeto = $row['projetoNome'];
-        $sexo = $row['sexo'];
-        $dataNascimento = $row['dataNascimento'];
-        $dataNascimentoTeste = new DateTime($dataNascimento);
-        $dataAtual = new DateTime();
-        $difData = date_diff($dataAtual, $dataNascimentoTeste);
-        $idade = $difData->format('%y');
-        $dataAdmissao = $row['dataAdmissao'];
+        $codigoClinica = (int) $row['codigoClinica'];
+        $codigoFornecedor = (int) $row ['codigoFornecedor'];
+        $cnpj = $row['cnpj'];
+        $nome = $row['nome'];
+        $apelido = $row['apelido'];
+        $cep = $row['cep'];
+        $logradouro = $row['logradouro'];
+        $endereco = $row['endereco'];
+        $numero = $row['numero'];
+        $complemento = $row['complemento'];
+        $bairro = $row['bairro'];
+        $cidade = $row['cidade'];
+        $uf = $row['uf'];
+        $observacao = $row['observacao'];
+        $agendamentoData = $row['agendamentoData'];
+        $agendamentoHorario = $row['agendamentoHorario'];
+        $quantidadeDia = $row['quantidadeDia'];
+        $quantidade = $row['quantidade'];
+        $agendamentoEmail = $row['agendamentoEmail'];
+        $emailDeAgendamento = $row['emailDeAgendamento'];
         $ativo = $row['ativo'];
-        $dataProximoAso = $row['dataProximoAso'];
-        $dataUltimoAso = $row['dataUltimoAso'];
-        $dataAgendamento = $row['dataAgendamento'];
-        $cargoId = $row['cargoId'];
-        $projetoId = $row['projetoId'];
     }
+    $out = $codigoClinica . "^" .
+        $codigoFornecedor . "^" .
+        $cnpj . "^" .
+        $nome . "^" .
+        $apelido . "^" .
+        $cep . "^" .
+        $logradouro . "^" .
+        $endereco . "^" .
+        $numero . "^" .
+        $complemento  . "^" .
+        $bairro . "^" .
+        $cidade . "^" .
+        $uf . "^" .
+        $observacao . "^" .
+        $agendamentoData . "^" .
+        $agendamentoHorario . "^" .
+        $quantidadeDia . "^" .
+        $quantidade . "^" .
+        $agendamentoEmail . "^" .
+        $emailDeAgendamento . "^" .
+        $ativo;
 
-    if ($dataNascimento != "") {
-        $dataNascimentoFormatada = formataDataRecuperacao($dataNascimento);
-    };
-    if ($dataAdmissao != "") {
-        $dataAdmissaoFormatada = formataDataRecuperacao($dataAdmissao);
-    };
 
-    if ($dataProximoAso != "") {
-        $dataProximoAsoFormatada = formataDataRecuperacao($dataProximoAso);
-    };
+    //----------------------Montando o array do Telefone
 
-    if ($dataUltimoAso != "") {
-        $dataUltimoAsoFormatada = formataDataRecuperacao($dataUltimoAso);
-    };
-
-
-    if ($dataAgendamento != "") {
-        $dataAgendamentoFormatada = formataDataRecuperacao($dataAgendamento);
-    };
-
-    if ($sexo == "M") {
-        $sexo = "Masculino";
-    } else {
-        $sexo = "Feminino";
-    }
-    // XML UPLOAD
-
+    $sql = "SELECT telefone,telefonePrincipal,telefoneWpp FROM Ntl.fornecedorTelefone FT
+    INNER JOIN Ntl.fornecedor F ON F.codigo = FT.fornecedor 
+    WHERE F.cnpj =" . "'" . $cnpj . "'";
     $reposit = new reposit();
-    $sql = "SELECT filePath AS 'path',fileName AS 'name', fileType AS 'type', dataRealizacaoAso AS 'dataRealizacaoAso', dataProximoAsoLista AS 'dataProximoAsoLista',situacao AS 'situacao', tipoExame AS 'tipoExame' FROM Funcionario.atestadoSaudeOcupacionalDetalhe";
-    $where = " WHERE (0=0) AND ";
-    $where .= "atestadoSaudeOcupacional = " . $id;
-
-    $sql .= $where;
-
     $result = $reposit->RunQuery($sql);
-    $out = "";
-
-    if ($result < 1) {
-        echo "failed#" . "$out#";
-        return;
-    }
-
-    $uploadArray = array();
-    $pathArray = array();
-    $i = 0;
-
+    $contadorTelefone = 0;
+    $arrayTelefone = array();
     foreach ($result as $row) {
-        $path = $row["path"];
-        $name = $row["name"];
-        $type = $row["type"];
-        $dataRealizacaoAso = $row['dataRealizacaoAso'];
-        $sequencialDataAso = $i + 1;
-        $dataProximoAsoLista = $row['dataProximoAsoLista'];
-        $situacao = $row['situacao'];
-        $tipoExame = $row['tipoExame'];
 
-        if ($tipoExame == 1) {
-            $descricaoTipoExame = "Exame Admissional";
+        $telefoneId = $row['codigo'];
+        $telefone = $row['telefone'];
+        $principal = +$row['telefonePrincipal'];
+        $whatsapp = +$row['telefoneWpp'];
+
+        if ($principal === 1) {
+            $descricaoPrincipal = "Sim";
+        } else {
+            $descricaoPrincipal = "Não";
         }
-        if ($tipoExame == 2) {
-            $descricaoTipoExame = "Exame Periódico";
-        }
-        if ($tipoExame == 3) {
-            $descricaoTipoExame = "Mudança de Risco Ocupacional";
-        }
-        if ($tipoExame == 4) {
-            $descricaoTipoExame = "Retorno ao Trabalho";
+        if ($whatsapp === 1) {
+            $descricaoWhatsapp = "Sim";
+        } else {
+            $descricaoWhatsapp = "Não";
         }
 
-
-        array_push($pathArray, $path);
-        array_push(
-            $uploadArray,
-            [
-                "path" => $path,
-                "fileName" => $name,
-                "fileType" => $type,
-                "dataRealizacaoAso" => $dataRealizacaoAso,
-                "dataProximoAsoLista" => $dataProximoAsoLista,
-                "situacao" => $situacao,
-                "tipoExame" => $tipoExame,
-                "descricaoTipoExame" => $descricaoTipoExame,
-                "sequencialDataAso" => $sequencialDataAso
-
-            ]
+        $contadorTelefone = $contadorTelefone + 1;
+        $arrayTelefone[] = array(
+            "sequencialTelefone" => $contadorTelefone,
+            "telefoneId" => $telefoneId,
+            "telefone" => $telefone,
+            "whatsapp" => $whatsapp,
+            "descricaoTelefoneWhatsApp" => $descricaoWhatsapp,
+            "principal" => $principal,
+            "descricaoTelefonePrincipal" => $descricaoPrincipal
         );
-        $i++;
     }
+    $strArrayTelefone = json_encode($arrayTelefone);
 
-    $i = 0;
-    foreach ($pathArray as $path) {
-        $path = dirname(__DIR__) . substr($path, 1);
-        $content = file_get_contents($path . $uploadArray[$i]["fileName"]);
-        $base64 = "data:application/pdf;base64," . base64_encode($content);
+    //----------------------Montando o array do Email
+    $sql = "SELECT email,emailPrincipal FROM Ntl.fornecedorEmail FE
+    INNER JOIN Ntl.fornecedor F ON F.codigo = FE.fornecedor 
+    WHERE F.cnpj =" . "'" . $cnpj . "'";
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    $contadorEmail = 0;
+    $arrayEmail = array();
+    foreach ($result as $row) {
 
-        $uploadArray[$i]["fileUploadAso"] = $base64;
-        $i++;
+        $emailId = $row['codigo'];
+        $email = $row['email'];
+        $principal = +$row['emailPrincipal'];
+
+        if ($principal === 1) {
+            $descricaoEmailPrincipal = "Sim";
+        } else {
+            $descricaoEmailPrincipal = "Não";
+        }
+
+        $contadorEmail = $contadorEmail + 1;
+        $arrayEmail[] = array(
+            "sequencialEmail" => $contadorEmail,
+            "emailId" => $emailId,
+            "email" => $email,
+            "principal" => $principal,
+            "descricaoEmailPrincipal" => $descricaoEmailPrincipal
+        );
     }
-
-    $jsonUpload = json_encode($uploadArray);
-
-    // FIM XML UPLOAD
-
-    $out = $codigo . "^" .
-        $funcionario . "^" .
-        $matricula . "^" .
-        $cargo . "^" .
-        $projeto . "^" .
-        $sexo . "^" .
-        $dataNascimentoFormatada . "^" .
-        $idade . "^" .
-        $dataAdmissaoFormatada . "^" .
-        $ativo  . "^" .
-        $dataUltimoAsoFormatada . "^" .
-        $dataProximoAsoFormatada . "^" .
-        $dataAgendamentoFormatada . "^" .
-        $cargoId . "^" .
-        $projetoId;
+    $strArrayEmail = json_encode($arrayEmail);
 
     if ($out == "") {
         echo "failed#";
         return;
     }
 
-    echo "success#" . "$out#" . $jsonUpload;
+    echo "sucess#" . $out . "#" . $strArrayTelefone . "#" .  $strArrayEmail;
     return;
 }
 
@@ -395,7 +381,7 @@ function excluir()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("FERIADO_ACESSAR|FERIADO_EXCLUIR");
+    $possuiPermissao = $reposit->PossuiPermissao("CLINICA_ACESSAR|CLINICA_EXCLUIR");
 
     if ($possuiPermissao === 0) {
         $mensagem = "O usuário não tem permissão para excluir!";
@@ -411,7 +397,7 @@ function excluir()
         return;
     }
 
-    $result = $reposit->update('funcionario.atestadoSaudeOcupacional' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+    $result = $reposit->update('ntl.clinica' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
     if ($result < 1) {
         echo ('failed#');

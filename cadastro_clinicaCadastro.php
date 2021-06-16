@@ -5,10 +5,10 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-$condicaoAcessarOK = (in_array('ASO_ACESSAR', $arrayPermissao, true));
-$condicaoGravarOK = (in_array('ASO_GRAVAR', $arrayPermissao, true));
-$condicaoExcluirOK = (in_array('ASO_EXCLUIR', $arrayPermissao, true));
-$condicaoGestorOK = (in_array('ASO_GESTOR', $arrayPermissao, true));
+$condicaoAcessarOK = (in_array('CLINICA_ACESSAR', $arrayPermissao, true));
+$condicaoGravarOK = (in_array('CLINICA_GRAVAR', $arrayPermissao, true));
+$condicaoExcluirOK = (in_array('CLINICA_EXCLUIR', $arrayPermissao, true));
+// $condicaoGestorOK = (in_array('ASO_GESTOR', $arrayPermissao, true));
 
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
@@ -51,7 +51,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["funcionario"]["sub"]["atestadoSaudeOcupacional"]["active"] = true;
+$page_nav["seguranca"]["sub"]["cadastroAso"]["sub"]["cadastroClinica"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -96,7 +96,7 @@ include("inc/nav.php");
                                                         <div class="row">
                                                             <input id="codigo" name="codigo" type="text" class="hidden" value="">
                                                             <input id="codigoFornecedor" name="codigoFornecedor" type="text" class="hidden" value="">
-                                                
+
 
                                                             <section class="col col-3">
                                                                 <label class="label">CNPJ</label>
@@ -347,7 +347,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2 col-auto">
                                                                     <label class="label" for="agendamentoPorEmail">Agendamento por email</label>
                                                                     <label class="select">
-                                                                        <select id="agendamentoPorEmail" name="agendamentoPorEmail">
+                                                                        <select id="agendamentoPorEmail" name="agendamentoPorEmail" class='required'>
                                                                             <option></option>
                                                                             <option value='1' selected>Sim</option>
                                                                             <option value='0'>Não</option>
@@ -517,6 +517,24 @@ include("inc/scripts.php");
         $("#cnpj").on("change", function() {
             recuperarDadosCnpj();
         });
+        $("#quantidadeMaxima").on("change", function() {
+            var quantidadeMaxima = $("#quantidadeMaxima").val();
+            if (quantidadeMaxima == 1) {
+            } else {
+                $("#quantidade").prop('readonly', true);
+                $("#quantidade").val('');
+            }
+        });
+        $("#agendamentoPorEmail").on("change", function() {
+            var agendamentoPorEmail = $("#agendamentoPorEmail").val();
+            if (agendamentoPorEmail == 1) {
+
+            } else {
+                $("#emailAgendamento").prop('readonly', true);
+                $("#emailAgendamento").val('');
+            }
+        });
+
 
         carregaPagina();
     });
@@ -537,42 +555,63 @@ include("inc/scripts.php");
                             data = data.replace(/failed/g, '');
                             let piece = data.split("#");
                             const mensagem = piece[0];
-                            const out = piece[1];
-                            piece = out.split("^");
+                            const registros = piece[1].split("^");
+                            const $strArrayTelefone = piece[2];
+                            const $strArrayEmail = piece[3];
+                            const codigo = +registros[0];
+                            const codigoFornecedor = +registros[1];
+                            const cnpj = registros[2];
+                            const nome = registros[3];
+                            const apelido = registros[4];
+                            const cep = registros[5];
+                            const logradouro = registros[6];
+                            const endereco = registros[7];
+                            const numero = registros[8]
+                            const complemento = registros[9]
+                            const bairro = registros[10];
+                            const cidade = registros[11];
+                            const uf = registros[12];
+                            const observacao = registros[13];
+                            const agendamentoData = registros[14];
+                            const agendamentoHorario = registros[15];
+                            const quantidadeDia = registros[16];
+                            const quantidade = registros[17];
+                            const agendamentoEmail = registros[18];
+                            const emailDeAgendamento = registros[19];
 
-                            const codigo = +piece[0];
-                            const funcionario = piece[1];
-                            const matricula = piece[2];
-                            const cargo = piece[3];
-                            const projeto = piece[4];
-                            const sexo = piece[5];
-                            const dataNascimento = piece[6];
-                            const idade = piece[7]
-                            const dataAdmissao = piece[8]
-                            const ativo = piece[9];
-                            const dataUltimoAso = piece[10]
-                            const dataProximoAso = piece[11]
-                            const dataAgendamento = piece[12]
-                            const cargoId = piece[13];
-                            const projetoId = piece[14];
 
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
-                            $("#matricula").val(matricula);
-                            $("#funcionario").val(funcionario);
-                            $("#cargo").val(cargo);
-                            $("#projeto").val(projeto);
-                            $("#sexo").val(sexo);
-                            $("#dataNascimento").val(dataNascimento);
-                            $("#idade").val(idade);
-                            $("#dataAdmissao").val(dataAdmissao);
-                            $("#ativo").val(ativo);
-                            $("#dataUltimoAso").val(dataUltimoAso);
-                            $("#dataProximoAso").val(dataProximoAso);
-                            $("#dataAgendamento").val(dataAgendamento);
-                            $("#cargoId").val(cargoId);
-                            $("#projetoId").val(projetoId);
+                            $("#codigoFornecedor").val(codigoFornecedor);
+                            $("#cnpj").val(cnpj);
+                            $("#razaoSocial").val(nome);
+                            $("#apelido").val(apelido);
+                            $("#cep").val(cep);
+                            $("#logradouro").val(logradouro);
+                            $("#endereco").val(endereco);
+                            $("#numero").val(numero);
+                            $("#complemento").val(complemento);
+                            $("#bairro").val(bairro);
+                            $("#cidade").val(cidade);
+                            $("#uf").val(uf);
+                            $("#observacao").val(observacao);
+                            $("#agendamentoData").val(agendamentoData);
+                            $("#agendamentoHorario").val(agendamentoHorario);
+                            $("#quantidadeMaxima").val(quantidadeDia);
+                            $("#quantidade").val(quantidade);
+                            $("#agendamentoPorEmail").val(agendamentoEmail);
+                            $("#emailAgendamento").val(emailDeAgendamento);
+                            $("#jsonTelefone").val($strArrayTelefone);
+                            $("#jsonEmail").val($strArrayEmail);
+
+
+
+                            jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+                            jsonEmailArray = JSON.parse($("#jsonEmail").val());
+
+                            fillTableTelefone();
+                            fillTableEmail();
                         }
                     }
                 );
@@ -624,7 +663,7 @@ include("inc/scripts.php");
                         var bairro = registros[9];
                         var cidade = registros[10];
                         var uf = registros[11];
-                        
+
                         $("#codigoFornecedor").val(fornecedor);
                         $("#razaoSocial").val(razaoSocial);;
                         $("#apelido").val(apelido);;
@@ -638,7 +677,7 @@ include("inc/scripts.php");
                         $("#uf").val(uf);;
                         $("#jsonTelefone").val($strArrayTelefone);
                         $("#jsonEmail").val($strArrayEmail);
-                        
+
 
 
                         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
@@ -655,11 +694,11 @@ include("inc/scripts.php");
 
 
     function novo() {
-        $(location).attr('href', 'funcionario_atestadoSaudeOcupacional.php');
+        $(location).attr('href', 'cadastro_clinicaCadastro.php');
     }
 
     function voltar() {
-        $(location).attr('href', 'funcionario_atestadoSaudeOcupacionalFiltro.php');
+        $(location).attr('href', 'cadastro_clinicaCadastroFiltro.php');
     }
 
     function excluir() {
@@ -1132,18 +1171,57 @@ include("inc/scripts.php");
         const emailDeAgendamento = $('#emailAgendamento').val();
         const ativo = $('#ativo').val();
 
-      
+        if (!codigoFornecedor) {
+            smartAlert("Atenção", "Esta clínica não é um fornecedor", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+        if (!agendamentoData) {
+            smartAlert("Atenção", "Preencha o campo Agendamento Data", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!agendamentoHorario) {
+            smartAlert("Atenção", "Preencha o campo Agendamento Horário", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!quantidadeDia) {
+            smartAlert("Atenção", "Preencha o campo Quantidade por Dia", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+        if ((quantidadeDia == 1) && (quantidade == '')) {
+            smartAlert("Atenção", "Preencha o campo Quantidade", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if (!agendamentoEmail) {
+            smartAlert("Atenção", "Preencha o campo Agendamento por Email", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+        if ((agendamentoEmail == 1) && (emailDeAgendamento == '')) {
+            smartAlert("Atenção", "Preencha o campo Email de Agendamento", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+
         const clinica = {
-           id,
-           codigoFornecedor,
-           observacao,
-           agendamentoData,
-           agendamentoHorario,
-           quantidadeDia,
-           quantidade,
-           agendamentoEmail,
-           emailDeAgendamento,
-           ativo
+            id,
+            codigoFornecedor,
+            observacao,
+            agendamentoData,
+            agendamentoHorario,
+            quantidadeDia,
+            quantidade,
+            agendamentoEmail,
+            emailDeAgendamento,
+            ativo
         }
 
         //Chama a função de gravar do business de convênio de saúde.
@@ -1168,5 +1246,4 @@ include("inc/scripts.php");
             }
         );
     }
-
 </script>
