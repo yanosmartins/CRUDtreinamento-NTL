@@ -220,6 +220,10 @@ include("inc/scripts.php");
     function listarFiltro() {
 
         var descricao = $('#descricao').val();
+        if (descricao !== "") {
+            descricao = descricao.replace(/^\s+|\s+$/g, "");
+            descricao = encodeURIComponent(descricao);
+        }
         var projeto = $('#projeto').val();
         var ativo = $('#ativo').val();
 
