@@ -8,10 +8,16 @@ require_once("inc/config.ui.php");
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 $funcionario = $_SESSION["funcionario"];
 
-$condicaoAcessarOK = (in_array('PONTOELETRONICOMENSALMODERADO_ACESSAR', $arrayPermissao, true));
-$condicaoAcessarOK = true;
+$condicaoFuncionarioAcessarOK = (in_array('FUNCIONARIOSOLICITACAOFOLHA_ACESSAR', $arrayPermissao, true));
+$condicaoGestorAcessarOK = (in_array('GESTORSOLICITACAOFOLHA_ACESSAR', $arrayPermissao, true));
 
-if (($condicaoAcessarOK == false)) {
+$condicaoFuncionarioGravarOK = (in_array('FUNCIONARIOSOLICITACAOFOLHA_GRAVAR', $arrayPermissao, true));
+$condicaoGestorGravarOK = (in_array('GESTORSOLICITACAOFOLHA_GRAVAR', $arrayPermissao, true));
+
+$condicaoFuncionarioAcessarOK = true;
+$condicaoGestorAcessarOK = true;
+
+if ( !$condicaoFuncionarioAcessarOK && !$condicaoGestorAcessarOK) {
   unset($_SESSION['login']);
   header("Location:login.php");
 }
@@ -64,7 +70,9 @@ include("inc/nav.php");
               <div class="widget-body no-padding">
                 <form class="smart-form client-form" id="formSolicitacao" method="post">
                   <div class="panel-group smart-accordion-default" id="accordion">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" style="<?php 
+                      if(!$condicaoFuncionarioGravarOK) echo "display:none";
+                    ?>">
                       <div class="panel-heading">
                         <h4 class="panel-title">
                           <a data-toggle="collapse" data-parent="#accordion" href="#collapseSolicitante" class="collapsed" id="accordionSolicitante">
@@ -166,7 +174,9 @@ include("inc/nav.php");
 
                       </div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" style="<?php 
+                      if(!$condicaoGestorGravarOK) echo "display:none";
+                    ?>">
                       <div class="panel-heading">
                         <h4 class="panel-title">
                           <a data-toggle="collapse" data-parent="#accordion" href="#collapseSolicitado" class="collapsed" id="accordionSolicitado">
@@ -248,7 +258,7 @@ include("inc/footer.php");
 //include required scripts
 include("inc/scripts.php");
 ?>
-<script src="<?php echo ASSETS_URL; ?>/js/business_beneficioFolhaPontoMensal.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/business_funcionarioSolicitacaoFolha.js" type="text/javascript"></script>
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
 <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
@@ -291,8 +301,16 @@ include("inc/scripts.php");
       }
     }));
 
-    $("#btnAddSolicitacao").on("click", addSolicitante);
+    $("#btnAddSolicitacao").on("click", () => {
+      if (validaSolicitante()) {
+        addSolicitante()
+        return true
+      } else
+        return false
+    });
     $("#btnRemoverSolicitacao").on("click", excluirSolicitante);
+
+    $("#enviarSolicitacao").on("click", gravarSolicitante);
 
     $("#campo").on("change", () => {
       const val = $("#campo").val();
@@ -305,16 +323,151 @@ include("inc/scripts.php");
       }
     })
 
+    recuperarSolicitante()
   });
 
+  //============ Funções da página ===================
+  function gravarSolicitante() {
+
+    const json = jsonSolicitanteArray
+
+    json.forEach(obj => {
+      obj.dataReferente = obj.dataReferente.split("/").reverse().join("-").concat("-01")
+    })
+
+    grava(json, function(data) {
+      var piece = data.split("#");
+      var mensagem = piece[0];
+
+      if (data.indexOf('failed') > -1) {
+        data = data.replace(/failed/g, '');
+        smartAlert("Atenção", mensagem, "error")
+      } else {
+        data = data.replace(/failed/g, '');
+        var out = piece[1];
+
+      }
+    })
+  }
+
+  function recuperarSolicitante() {
+    recupera(function(data) {
+      if (data.indexOf('failed') > -1) {
+        data = data.replace(/failed/g, '')
+        smartAlert("Atenção", data.split("#")[0], "error")
+      }
+    })
+  }
+
+  function aceitarSolicitado() {
+
+    const rowData = [];
+    $('#tableSolicitado tbody input[type=checkbox]:checked').each(function(index, el) {
+      let td = el.parentElement.parentElement
+      const values = new Set()
+
+      while (td) {
+        td = td.nextElementSibling
+        values.add(td.textContent)
+      }
+
+      //==== INCOMPLETO
+      //jsonSolicitadoArray
+      const row = td.parentElement
+      $(row).remove()
+
+      rowData.push(values)
+    })
+
+    debugger
+
+    fillTableSolicitado();
+  }
+
+  function recusarSolicitado() {
+    const rowData = [];
+    $('#tableSolicitado tbody input[type=checkbox]:checked').each(function(index, el) {
+      let td = el.parentElement.parentElement
+      const values = new Set()
+
+      while (td) {
+        td = td.nextElementSibling
+        values.add(td.textContent)
+      }
+
+      //==== INCOMPLETO
+      //jsonSolicitadoArray
+      const row = td.parentElement
+      $(row).remove()
+
+      rowData.push(values)
+    })
+
+    debugger
+
+    fillTableSolicitado();
+  }
+
+  function recuperarSolicitado() {
+    recuperaGestao(function(data) {
+      if (data.indexOf('failed') > -1) {
+        data = data.replace(/failed/g, '')
+        smartAlert("Atenção", data.split("#")[0], "error")
+      }
+    })
+  }
   //============ TABLE SOLICITANTE ===================
 
-  function clearFormSolicitante() {
-    $("#dia").val('');
-    $("#campo").val('');
-    $("#horas").val('');
-    $("#dataReferente").val('');
-    $("#justificativa").val('');
+  function fillTableSolicitante() {
+    $("#tableSolicitante tbody").empty();
+    if (typeof(jsonSolicitanteArray) != 'undefined') {
+      for (var i = 0; i < jsonSolicitanteArray.length; i++) {
+        var row = $('<tr />');
+        $("#tableSolicitante tbody").append(row);
+        row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox " value="' + jsonSolicitanteArray[i].sequencialSolicitante + '"><i></i></label></td>'));
+        row.append($('<td class="text-center" onclick="carregaSolicitante(' + jsonSolicitanteArray[i].sequencialSolicitante + ');">' + jsonSolicitanteArray[i].dia + '</td>'));
+        row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].campo + '</td>'));
+        row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].horas + '</td>'));
+        row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].dataReferente + '</td>'));
+        row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].justificativa + '</td>'));
+      }
+      clearFormSolicitante()
+    }
+  }
+
+  function validaSolicitante() {
+    const dia = $("#dia").val();
+    const campo = $("#campo").val();
+    const horas = $("#horas").val();
+    const dataReferente = $("#dataReferente").val();
+    const justificativa = $("#justificativa").val();
+
+    if (!dia) {
+      smartAlert("Atenção", "Selecione um dia", "error")
+      return false
+    }
+
+    if (!campo) {
+      smartAlert("Atenção", "Selecione um campo", "error")
+      return false
+    }
+
+    if (!horas) {
+      smartAlert("Atenção", "Insira um horário", "error")
+      return false
+    }
+
+    if (!dataReferente) {
+      smartAlert("Atenção", "Insira uma Data referente", "error")
+      return false
+    }
+
+    if (!justificativa) {
+      smartAlert("Atenção", "Insira uma justificativa", "error")
+      return false
+    }
+
+    return true
   }
 
   function addSolicitante() {
@@ -360,23 +513,6 @@ include("inc/scripts.php");
     fillTableSolicitante();
     clearFormSolicitante();
 
-  }
-
-  function fillTableSolicitante() {
-    $("#tableSolicitante tbody").empty();
-    if (typeof(jsonSolicitanteArray) != 'undefined') {
-      for (var i = 0; i < jsonSolicitanteArray.length; i++) {
-        var row = $('<tr />');
-        $("#tableSolicitante tbody").append(row);
-        row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox " value="' + jsonSolicitanteArray[i].sequencialSolicitante + '"><i></i></label></td>'));
-        row.append($('<td class="text-center" onclick="carregaSolicitante(' + jsonSolicitanteArray[i].sequencialSolicitante + ');">' + jsonSolicitanteArray[i].dia + '</td>'));
-        row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].campo + '</td>'));
-        row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].horas + '</td>'));
-        row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].dataReferente + '</td>'));
-        row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].justificativa + '</td>'));
-      }
-      clearFormSolicitante()
-    }
   }
 
   function processSolicitante(node) {
@@ -441,6 +577,16 @@ include("inc/scripts.php");
     return false;
   }
 
+  function clearFormSolicitante() {
+    $("#dia").val('');
+    $("#campo").val('');
+    $("#horas").val('');
+    $("#dataReferente").val('');
+    $("#justificativa").val('');
+    $("#solicitanteId").val('');
+    $("#sequencialSolicitante").val('');
+  }
+
   function carregaSolicitante(sequencialSolicitante) {
     var arr = jQuery.grep(jsonSolicitanteArray, function(item, i) {
       return (item.sequencialSolicitante === sequencialSolicitante);
@@ -455,6 +601,8 @@ include("inc/scripts.php");
       $("#horas").val(item.horas);
       $("#dataReferente").val(item.dataReferente);
       $("#justificativa").val(item.justificativa);
+      $("#sequencialSolicitante").val(item.sequencialSolicitante);
+      $("#solicitanteId").val(item.solicitanteId);
     }
   }
 
@@ -463,6 +611,7 @@ include("inc/scripts.php");
     $('#tableSolicitante input[type=checkbox]:checked').each(function() {
       arrSequencial.push(parseInt($(this).val()));
     });
+
     if (arrSequencial.length > 0) {
       for (i = jsonSolicitanteArray.length - 1; i >= 0; i--) {
         var obj = jsonSolicitanteArray[i];
@@ -492,7 +641,6 @@ include("inc/scripts.php");
         row.append($('<td class="text-center" >' + jsonSolicitadoArray[i].dataReferente + '</td>'));
         row.append($('<td class="text-center" >' + jsonSolicitadoArray[i].justificativa + '</td>'));
       }
-      clearFormSolicitante()
     }
   }
 
