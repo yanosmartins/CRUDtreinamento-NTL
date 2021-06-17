@@ -88,27 +88,30 @@ function recuperaSolicitante()
     $result = "";
     $funcionario = $_SESSION["funcionario"];
 
-    $sql = "SELECT codigo,dia,campo,horas,mesAno as 'dataReferente',justificativa 
+    $sql = "SELECT S.codigo,S.dia,S.campo,S.horas,S.mesAno as 'dataReferente',justificativa 
     FROM Funcionario.solicitacaoFolha S
     INNER JOIN Ntl.funcionario F ON F.codigo = S.funcionario
-    WHERE (0=0) AND F.codigo =" . $funcionario;
+    WHERE (0=0) AND F.codigo = " . $funcionario;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $arraySolicitacao = [];
+    $sequencial = 0;
     foreach ($result as $row) {
 
+        $sequencial++;
         $codigo = $row["codigo"];
         $dia = $row["dia"];
         $campo = $row["campo"];
         $horas = $row["horas"];
-        $dataReferente = $row["dataReferente"];
+        @list($dataReferente, $descartar) = explode(" ", $row["dataReferente"]);
         $justificativa = $row["justificativa"];
 
         $array =
             [
-                "codigo" => $codigo,
+                "sequencialSolicitante" => $sequencial,
+                "solicitanteId" => $codigo,
                 "dia" => $dia,
                 "campo" => $campo,
                 "horas" => $horas,
@@ -122,11 +125,11 @@ function recuperaSolicitante()
     $strArraySolicitacao = json_encode($arraySolicitacao);
 
     if ($strArraySolicitacao == "") {
-        echo "failed#";
+        echo "failed#Erro ao recuperar as solicitações##";
         return;
     }
 
-    echo "sucess#" . $strArraySolicitacao;
+    echo "sucess#Solicitações recuperadas com sucesso##" . $strArraySolicitacao;
     return;
 }
 
@@ -137,9 +140,10 @@ function recuperaSolicitado()
     $result = "";
     $projeto = $_SESSION["projeto"];
 
-    $sql = "SELECT S.codigo,S.funcionario,dia,campo,horas,mesAno as 'dataReferente',justificativa 
+    $sql = "SELECT S.codigo,F.nome as 'funcionario',dia,campo,horas,mesAno as 'dataReferente',justificativa 
     FROM Funcionario.solicitacaoFolha S
     INNER JOIN Ntl.beneficioProjeto BP ON S.funcionario = BP.funcionario
+    INNER JOIN Ntl.funcionario F ON S.funcionario = F.codigo
     WHERE (0=0) AND BP.projeto = $projeto";
 
     $reposit = new reposit();
@@ -154,13 +158,13 @@ function recuperaSolicitado()
         $dia = $row["dia"];
         $campo = $row["campo"];
         $horas = $row["horas"];
-        $dataReferente = $row["dataReferente"];
+        @list($dataReferente, $descartar) = explode(" ", $row["dataReferente"]);
         $justificativa = $row["justificativa"];
 
         $array =
             [
-                "sequencial" => $sequencial,
-                "codigo" => $codigo,
+                "sequencialSolicitado" => $sequencial,
+                "solicitadoId" => $codigo,
                 "funcionario" => $funcionario,
                 "dia" => $dia,
                 "campo" => $campo,
@@ -175,10 +179,10 @@ function recuperaSolicitado()
     $strArraySolicitacao = json_encode($arraySolicitacao);
 
     if ($strArraySolicitacao == "") {
-        echo "failed#";
+        echo "failed#Erro ao recuperar as solicitações##";
         return;
     }
 
-    echo "sucess#" . $strArraySolicitacao;
+    echo "sucess#Solicitações recuperadas com sucesso##" . $strArraySolicitacao;
     return;
 }
