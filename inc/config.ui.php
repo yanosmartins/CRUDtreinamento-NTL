@@ -245,7 +245,7 @@ if ($condicaoBeneficioOk) {
             $page_nav['beneficio']['sub']['operacao']['sub'] += array("processaBeneficio" => array("title" => "Processa Benefício", "url" => APP_URL . "/beneficio_processaBeneficioFiltro.php"));
         }
         if (in_array('TRIAGEMPONTOELETRONICOMENSALRH_ACESSAR', $arrayPermissao, true)) {
-            $page_nav['beneficio']['sub']['operacao']['sub']+= array("triagemPontoEletronicoRecursosHumanosFiltro" => array("title" => "Triagem Ponto Eletrônico Filtro", "url" => APP_URL . "/funcionario_triagemPontoMensalRecursosHumanosFiltro.php"));
+            $page_nav['beneficio']['sub']['operacao']['sub'] += array("triagemPontoEletronicoRecursosHumanosFiltro" => array("title" => "Triagem Ponto Eletrônico Filtro", "url" => APP_URL . "/funcionario_triagemPontoMensalRecursosHumanosFiltro.php"));
         }
     }
 }
@@ -313,7 +313,7 @@ if ($condicaoSegurancaOk) {
             $page_nav['seguranca']['sub']['aso']['sub'] += array("relatorioValidade" => array("title" => "Relatório de Validade", "url" => APP_URL . "/funcionario_atestadoSaudeOcupacionalFiltro.php")); //SYSCC   
         }
     }
-    
+
     if (in_array('CLINICA_ACESSAR', $arrayPermissao, true)) {
         $page_nav['seguranca']['sub']['cadastroAso'] = array("title" => "Cadastro");
         $page_nav['seguranca']['sub']['cadastroAso']['sub'] = array();
@@ -322,7 +322,6 @@ if ($condicaoSegurancaOk) {
             $page_nav['seguranca']['sub']['cadastroAso']['sub'] += array("cadastroClinica" => array("title" => "Clínica", "url" => APP_URL . "/cadastro_clinicaCadastroFiltro.php"));
         }
     }
-    
 }
 
 // FIM MEDICINA E SEGURANÇA DO TRABALHO
@@ -543,10 +542,15 @@ if ($condicaoFuncionarioOk) {
     if (array_intersect(array('PONTOELETRONICOMENSALMODERADO_ACESSAR', 'PONTOELETRONICOMENSALMINIMO_ACESSAR'), $arrayPermissao)) {
         $page_nav['funcionario']['sub'] += array("controlePonto" => array("title" => "Ponto Eletrônico Mensal", "url" => APP_URL . "/funcionario_folhaPontoMensalCadastro.php"));
     }
+
+    if (array_intersect(array('FUNCIONARIOSOLICITACAOFOLHA_ACESSAR', 'GESTORSOLICITACAOFOLHA_ACESSAR'), $arrayPermissao)) {
+        $page_nav['funcionario']['sub'] += array("solicitacaoFolha" => array("title" => "Solicitação de alteração", "url" => APP_URL . "/funcionario_solicitacaoFolha.php"));
+    }
+    
     if (in_array('TRIAGEMPONTOELETRONICOMENSALGESTOR_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("triagemPontoEletronicoGestorFiltro" => array("title" => "Triagem Ponto Eletrônico Filtro", "url" => APP_URL . "/funcionario_triagemPontoMensalGestorFiltro.php"));
     }
-    
+
     if (in_array('GERADORFOLHAPONTO_ACESSAR', $arrayPermissao, true)) {
         $page_nav['funcionario']['sub'] += array("geradorFolha" => array("title" => "Gerador Folha de Ponto", "url" => APP_URL . "/funcionario_gerandoFolhaDePonto.php"));
     }
