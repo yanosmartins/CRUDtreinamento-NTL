@@ -98,7 +98,13 @@ include("inc/nav.php");
                                   <input id="nome" name="nome" style="text-align: left;" type="text" class="required" autocomplete="off" required>
                                 </label>
                               </section>
-                              <section class="col col-4">
+                              <section class="col col-2">
+                                <label class="label">CNPJ</label>
+                                <label class="input">
+                                  <input id="cnpj" name="cnpj" autocomplete="off" placeholder="XX.XXX.XXX/XXXX-XX" type="text" class=" required">
+                                </label>
+                              </section>
+                              <!-- <section class="col col-4"> // desabilitado temporariamente pois o márcio pediu para colocar no cadastro de fornecedor
                                 <label class="label">Codigo Departamento</label>
                                 <label class="input">
                                   <input id="codigoDepartamento" name="codigoDepartamento" style="text-align: left;" type="text" class="required" autocomplete="off" required>
@@ -117,7 +123,7 @@ include("inc/nav.php");
                                 <label class="input">
                                   <input id="responsavelRecebimento" name="responsavelRecebimento" style="text-align: left;" type="text" class="required" autocomplete="off" required>
                                 </label>
-                              </section>
+                              </section> -->
                               <section class="col col-2">
                                 <label class="label " for="grauRisco">Grau Risco</label>
                                 <label class="select ">
@@ -311,6 +317,17 @@ include("inc/scripts.php");
     $("#btnVoltar").on("click", function() {
       voltar();
     });
+    $("#cnpj").mask("99.999.999/9999-99", {
+      placeholder: "X"
+    });
+    $("#cnpj").on("change", function() {
+      var cnpj = $("#cnpj").val();
+      if (!validacao_cnpj(cnpj)) {
+        smartAlert("Atenção", "CNPJ inválido!", "error");
+        $("#cnpj").val('');
+      }
+    });
+
     carregaEncargo();
   });
 
@@ -325,9 +342,9 @@ include("inc/scripts.php");
     var codigo = +$("#codigo").val();
     var ativo = $("#ativo").val();
     var nome = $("#nome").val();
-    var codigoDepartamento = $("#codigoDepartamento").val();
-    var nomeDepartamento = $("#nomeDepartamento").val();
-    var responsavelRecebimento = $("#responsavelRecebimento").val();
+    // var codigoDepartamento = $("#codigoDepartamento").val();
+    // var nomeDepartamento = $("#nomeDepartamento").val();
+    // var responsavelRecebimento = $("#responsavelRecebimento").val();
     var cep = $("#cep").val();
     var tipoLogradouro = $("#tipoLogradouro").val();
     var logradouro = $("#logradouro").val();
@@ -337,6 +354,7 @@ include("inc/scripts.php");
     var cidade = $("#cidade").val();
     var bairro = $("#bairro").val();
     var grauRisco = $("#grauRisco").val();
+    var cnpj = $("#cnpj").val();
 
     // Mensagens de aviso caso o usuário deixe de digitar algum campo obrigatório:
     if (!nome) {
@@ -344,20 +362,25 @@ include("inc/scripts.php");
       return;
     }
 
-    if (!codigoDepartamento) {
-      smartAlert("Erro", "Informe o codigo Departamento.", "error");
+    if (!cnpj) {
+      smartAlert("Erro", "Informe o cnpj.", "error");
       return;
     }
 
-    if (!nomeDepartamento) {
-      smartAlert("Erro", "Informe o nome Departamento.", "error");
-      return;
-    }
+    // if (!codigoDepartamento) {
+    //   smartAlert("Erro", "Informe o codigo Departamento.", "error");
+    //   return;
+    // }
 
-    if (!responsavelRecebimento) {
-      smartAlert("Erro", "Informe o Responsavel Recebimento.", "error");
-      return;
-    }
+    // if (!nomeDepartamento) {
+    //   smartAlert("Erro", "Informe o nome Departamento.", "error");
+    //   return;
+    // }
+
+    // if (!responsavelRecebimento) {
+    //   smartAlert("Erro", "Informe o Responsavel Recebimento.", "error");
+    //   return;
+    // }
 
     if (!cep) {
       smartAlert("Erro", "Informe o cep.", "error");
@@ -395,8 +418,7 @@ include("inc/scripts.php");
     }
 
 
-    gravaEmpresa(codigo, ativo, nome, codigoDepartamento, nomeDepartamento, responsavelRecebimento,
-      cep, tipoLogradouro, logradouro, numero, complemento, uf, cidade, bairro, grauRisco,
+    gravaEmpresa(codigo, ativo, nome, cep, tipoLogradouro, logradouro, numero, complemento, uf, cidade, bairro, grauRisco,cnpj,
       function(data) {
 
         if (data.indexOf('sucess') < 0) {
@@ -437,30 +459,23 @@ include("inc/scripts.php");
 
             piece = out.split("^");
             console.table(piece);
-
             var codigo = +piece[0];
             var ativo = piece[1];
             var nome = piece[2];
-            var codigoDepartamento = piece[3];
-            var nomeDepartamento = piece[4];
-            var responsavelRecebimento = piece[5];
-            var cep = piece[6];
-            var tipoLogradouro = piece[7];
-            var logradouro = piece[8];
-            var numero = piece[9];
-            var complemento = piece[10];
-            var bairro = piece[11];
-            var cidade = piece[12];
-            var uf = piece[13];
-            var grauRisco = piece[14];
-
+            var cep = piece[3];
+            var tipoLogradouro = piece[4];
+            var logradouro = piece[5];
+            var numero = piece[6];
+            var complemento = piece[7];
+            var bairro = piece[8];
+            var cidade = piece[9];
+            var uf = piece[10];
+            var grauRisco = piece[11];
+            var cnpj = piece[12];
 
             $("#codigo").val(codigo);
             $("#ativo").val(ativo);
             $("#nome").val(nome);
-            $("#codigoDepartamento").val(codigoDepartamento);
-            $("#nomeDepartamento").val(nomeDepartamento);
-            $("#responsavelRecebimento").val(responsavelRecebimento);
             $("#cep").val(cep);
             $("#tipoLogradouro").val(tipoLogradouro);
             $("#logradouro").val(logradouro);
@@ -470,6 +485,7 @@ include("inc/scripts.php");
             $("#cidade").val(cidade);
             $("#ufLogradouro").val(uf);
             $("#grauRisco").val(grauRisco);
+            $("#cnpj").val(cnpj);
           }
         );
       }

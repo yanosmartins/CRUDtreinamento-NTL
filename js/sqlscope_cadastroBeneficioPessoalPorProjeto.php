@@ -107,7 +107,7 @@ function gravaBeneficio()
 
     session_start();
     $usuario = "'" . $_SESSION['login'] . "'";  //Pegando o nome do usuário mantido pela sessão.
-
+ 
     $beneficio = $_POST['beneficio'];
     $codigo =  validaNumero($beneficio['codigo']);
     $projeto = validaNumero($beneficio['projeto']);
@@ -199,9 +199,8 @@ function gravaBeneficio()
 
     $municipioFerias =        validaNumero($beneficio['municipioFerias']);
     $tipoBeneficio = "'" . $beneficio['tipoBeneficio'] . "'";
-
-    $escalaFerias = +$beneficio['escalaFerias'];
-    $escalaFeriasVAVR = +$beneficio['escalaFeriasVAVR'];
+    $escalaFerias = (int)$beneficio['escalaFerias'];
+    $escalaFeriasVAVR = (int)$beneficio['escalaFeriasVAVR'];
 
     $localizacao = (int)$beneficio['localizacao'];
     $posto = (int)$beneficio['descricaoPosto'];
@@ -213,23 +212,23 @@ function gravaBeneficio()
     }
 
     $departamento = (int)$beneficio['departamento'];
-    if($departamento == 0){
+    if ($departamento == 0) {
         $departamento = 'NULL';
     }
- 
 
-    $horaEntrada = "'" .$beneficio['horaEntrada']. "'" ;
-    $horaInicio = "'" .$beneficio['horaInicio']. "'" ;
-    $horaFim = "'" .$beneficio['horaFim']. "'" ;
-    $horaSaida = "'" .$beneficio['horaSaida']. "'" ;
+
+    $horaEntrada = "'" . $beneficio['horaEntrada'] . "'";
+    $horaInicio = "'" . $beneficio['horaInicio'] . "'";
+    $horaFim = "'" . $beneficio['horaFim'] . "'";
+    $horaSaida = "'" . $beneficio['horaSaida'] . "'";
 
     $produtoVAVR = (int)$beneficio['produtoVAVR'];
-    if($produtoVAVR == 0){
+    if ($produtoVAVR == 0) {
         $produtoVAVR = 'NULL';
     }
 
     $produtoBeneficioIndireto = (int)$beneficio['produtoBeneficioIndireto'];
-    if($produtoBeneficioIndireto == 0){
+    if ($produtoBeneficioIndireto == 0) {
         $produtoBeneficioIndireto = 'NULL';
     }
 

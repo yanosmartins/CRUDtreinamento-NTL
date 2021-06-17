@@ -38,9 +38,6 @@ function grava()
     $codigo = (int) $_POST['codigo'];
     $ativo = 1;
     $nome = "'" . $_POST['nome'] . "'";
-    $codigoDepartamento = "'" . $_POST['codigoDepartamento'] . "'";
-    $nomeDepartamento = "'" . $_POST['nomeDepartamento'] . "'";
-    $responsavelRecebimento = "'" . $_POST['responsavelRecebimento'] . "'";
     $cep = "'" . $_POST['cep'] . "'";
     $tipoLogradouro = "'" . $_POST['tipoLogradouro'] . "'";
     $cep = "'" . $_POST['cep'] . "'";
@@ -52,14 +49,12 @@ function grava()
     $cidade = "'" . $_POST['cidade'] . "'";
     $bairro = "'" . $_POST['bairro'] . "'";
     $grauRisco = (int)$_POST['grauRisco'];
+    $cnpj = "'" . $_POST['cnpj'] . "'";
 
     $sql = "Ntl.empresa_Atualiza
         $codigo,
         $ativo,
         $nome,
-        $codigoDepartamento,
-        $nomeDepartamento,
-        $responsavelRecebimento,
         $cep,
         $tipoLogradouro,
         $logradouro,
@@ -69,7 +64,8 @@ function grava()
         $cidade,
         $bairro,
         $usuario,
-        $grauRisco";
+        $grauRisco,
+        $cnpj";
 
     $reposit = new reposit();
 
@@ -92,8 +88,8 @@ function recupera()
         $id = (int) $_POST["id"];
     }
 
-    $sql = "SELECT codigo, ativo, nome,codigoDepartamento,nomeDepartamento, responsavelRecebimento,
-            cep,tipoLogradouro,logradouro,numero,complemento,bairro,cidade,uf,grauRisco
+    $sql = "SELECT codigo, ativo, nome,cep,tipoLogradouro,logradouro,numero,
+                    complemento,bairro,cidade,uf,grauRisco,cnpj
             FROM Ntl.empresa WHERE (0=0) AND codigo = " . $id;
 
     $reposit = new reposit();
@@ -105,9 +101,6 @@ function recupera()
     $id = $row['codigo'];
     $ativo = $row['ativo'];
     $nome = $row['nome'];
-    $codigoDepartamento = $row['codigoDepartamento'];
-    $nomeDepartamento = $row['nomeDepartamento'];
-    $responsavelRecebimento = $row['responsavelRecebimento'];
     $cep = $row['cep'];
     $tipoLogradouro = $row['tipoLogradouro'];
     $logradouro = $row['logradouro'];
@@ -117,14 +110,12 @@ function recupera()
     $cidade = $row['cidade'];
     $uf = $row['uf'];
     $grauRisco = $row['grauRisco'];
+    $cnpj = $row['cnpj'];
 
 
     $out =  $id . "^" .
         $ativo . "^" .
         $nome . "^" .
-        $codigoDepartamento . "^" .
-        $nomeDepartamento . "^" .
-        $responsavelRecebimento . "^" .
         $cep . "^" .
         $tipoLogradouro . "^" .
         $logradouro . "^" .
@@ -133,7 +124,8 @@ function recupera()
         $bairro . "^" .
         $cidade . "^" .
         $uf . "^" .
-        $grauRisco; 
+        $grauRisco . "^" .
+        $cnpj; 
 
 
     if ($out == "") {
