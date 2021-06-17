@@ -2874,7 +2874,7 @@ include("inc/scripts.php");
             $("#agenciaBanco").removeAttr('disabled');
 
             $("#digitoAgenciaBanco").removeClass('readonly');
-            $("#digitoAgenciaBanco").addClass('required');
+            // $("#digitoAgenciaBanco").addClass('required');
             $("#digitoAgenciaBanco").removeAttr('disabled');
 
             $("#contaCorrente").removeClass('readonly');
