@@ -7,6 +7,7 @@ include "js/repositorio.php";
             <thead>
                 <tr role="row">
                     <th class="text-left" style="min-width:110px;">Funcionário</th>
+                    <th class="text-left" style="min-width:110px;">Projeto</th>
                     <th class="text-left" style="min-width:55px;">Mês/Ano</th>
                     <th class="text-left" style="min-width:55px;">Status</th>
 
@@ -15,9 +16,11 @@ include "js/repositorio.php";
             <tbody>
                 <?php
 
-                $sql = "SELECT F.codigo as 'folha',FU.codigo as 'funcionario', FU.nome as 'nomeFuncionario', F.mesAno, S.descricao as 'status'FROM Funcionario.folhaPontoMensal F 
+                $sql = "SELECT F.codigo as 'folha',FU.codigo as 'funcionario', FU.nome as 'nomeFuncionario', F.mesAno, S.descricao as 'status',  P.descricao as 'descricaoProjeto'  FROM Funcionario.folhaPontoMensal F 
                 INNER JOIN Ntl.funcionario FU ON FU.codigo = F.funcionario
-                LEFT JOIN Ntl.status S ON S.codigo = F.status ";
+                LEFT JOIN Ntl.status S ON S.codigo = F.status
+                INNER JOIN Ntl.beneficioProjeto BP ON BP.funcionario = FU.codigo
+                INNER JOIN Ntl.projeto P ON P.codigo = BP.projeto";
 
                 $where = " WHERE (0 = 0) ";
 
@@ -26,14 +29,19 @@ include "js/repositorio.php";
                     $where = $where . " AND ( FU.codigo = $funcionario)";
                 }
 
+                if ($_POST["projeto"] != "") {
+                    $projeto = (int)$_POST["projeto"];
+                    $where = $where . " AND ( P.codigo = $projeto) ";
+                }
+
                 if ($_POST["mesAno"] != "") {
                     $mesAno = $_POST["mesAno"];
-                    $where = $where . " AND F.mesAno = '" . $mesAno . "'";
+                    $where = $where . " AND (F.mesAno = '" . $mesAno . "')";
                 }
 
                 if ($_POST["status"] != "") {
                     $status = (int)$_POST["status"];
-                    $where = $where . " AND S.codigo = " . $status;
+                    $where = $where . " AND (S.codigo = " . $status . ") ";
                 }
 
                 $orderBy = " ORDER BY FU.nome ASC";
@@ -46,21 +54,23 @@ include "js/repositorio.php";
                     $folha = $row['folha'];
                     $funcionario = $row['funcionario'];
                     $nomeFuncionario = $row['nomeFuncionario'];
+                    $descricaoProjeto = $row['descricaoProjeto'];
                     $mesAno = $row['mesAno'];
                     $status = $row['status'];
                     $aux = explode(" ", $mesAno);
                     $mesAno = $aux[0];
-                    $aux = explode("-",$mesAno);
+                    $aux = explode("-", $mesAno);
                     $mostrarMesAno = "$aux[2]/$aux[1]/$aux[0]";
                     $pattern = "/[c-f]{3}had(o|a)/i";
                     $pattern2 = "/[a-z]{8} (pelo|por) gestor(a)?/i";
 
                     echo '<tr >';
-                    if(preg_match($pattern,$status) || preg_match($pattern2,$status)){
+                    if (preg_match($pattern, $status) || preg_match($pattern2, $status)) {
                         echo '<td class="text-left"><a target="_blank" rel="noopener noreferrer" href="funcionario_triagemPontoMensalRecursosHumanos.php?' . 'funcionario=' . $funcionario . '&' . 'mesAno=' . $mesAno . '">' . $nomeFuncionario . '</a></td>';
-                    }else{
+                    } else {
                         echo '<td class="text-left">' . $nomeFuncionario . '</td>';
                     }
+                    echo '<td class="text-left">' . $descricaoProjeto . '</td>';
                     echo '<td class="text-left">' . $mostrarMesAno . '</td>';
                     echo '<td class="text-left">' . $status . '</td>';
                 }

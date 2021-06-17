@@ -99,6 +99,29 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-4 col-auto">
+                                                                <label class="label" for="projeto">Projeto</label>
+                                                                <label class="select">
+                                                                    <select id="projeto" name="projeto">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao FROM 
+                                                                        Ntl.projeto WHERE ativo = 1 ORDER BY descricao";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int)$row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            if ($codigo == $_SESSION["projeto"]) {
+                                                                                echo '<option value="' . $codigo . '" selected>' . $descricao . '</option>';
+                                                                                continue;
+                                                                            }
+                                                                            echo '<option value="' . $codigo . '">' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                             <section class="col col-2 col-auto">
                                                                 <label for="mesAno" class="label">Mês/Ano</label>
                                                                 <label class="input">
@@ -196,27 +219,34 @@ include("inc/scripts.php");
 
         $("#mesAno").on("change", function() {
             let data = $("#mesAno").val();
-            if(!data){
+            if (!data) {
                 return
             }
-            data = data.replace(/^\d{2}/g,"01")
-           return $("#mesAno").val(data);
+            data = data.replace(/^\d{2}/g, "01")
+            return $("#mesAno").val(data);
         });
 
     });
 
     function listarFiltro() {
-        var funcionario = $('#funcionario').val();
-        debugger;
-        var mesAno = $('#mesAno').val();
-        if(mesAno){
-        const aux = mesAno.split('/');
-        mesAno = aux[2]+"-"+aux[1]+"-"+aux[0];
-        }
-        var status = $('#status').val();
+        const funcionario = $('#funcionario').val();
         
+        const projeto = $('#projeto').val();
+        const mesAno = $('#mesAno').val();
+        if (mesAno) {
+            if (mesAno) {
+                const aux = mesAno.split('/').reverse().join("-");
+            } else {
+                const aux = "";
+            }
+
+            mesAno = aux;
+        }
+        const status = $('#status').val();
+
         $('#resultadoBusca').load('funcionario_triagemPontoMensalGestorFiltroListagem.php?', {
             funcionario,
+            projeto,
             mesAno,
             status
         });
