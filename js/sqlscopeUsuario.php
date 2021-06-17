@@ -405,22 +405,25 @@ function gravarNovaSenha()
     }
 
     session_start();
-    $login= "'" .  $_SESSION['login'] . "'";
+    $login = "'" .  $_SESSION['login'] . "'";
     $usuario =  $login;
 
     $id = $_SESSION['codigo'];
     $funcionario = $_SESSION['funcionario'];
+    if (!$funcionario) {
+        $funcionario = 'NULL';
+    }
     $ativo = 1;
     $tipoUsuario = 'C';
     $restaurarSenha = 0;
 
-        $sql = "Ntl.usuario_Atualiza " . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . "," . $funcionario . "," . $restaurarSenha . " ";
+    $sql = "Ntl.usuario_Atualiza " . $id . "," . $ativo . "," . $login . "," . $senha . "," . $tipoUsuario . "," . $usuario . "," . $funcionario . "," . $restaurarSenha . " ";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
     $ret = 'sucess#';
-    
+
     if ($result < 1) {
         $ret = 'failed#';
     }

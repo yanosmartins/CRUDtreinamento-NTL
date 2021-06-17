@@ -148,9 +148,9 @@ include "js/repositorio.php";
     <button id="btnExcelSodexoBeneficioIndireto" name="btnExcelSodexoBeneficioIndireto" type="button" class="btn btn-success" title="grava">
         Sodexo Benefício Indireto
     </button>
-    <!-- <button id="btnExcelTicket" name="btnExcelSodexoBeneficioIndireto" type="button" class="btn btn-danger" title="grava">
+    <button id="btnExcelTicket" name="btnExcelSodexoBeneficioIndireto" type="button" class="btn btn-danger" title="grava">
         Ticket
-    </button> -->
+    </button>
 </div>
 
 <!-- PAGE RELATED PLUGIN(S) -->
