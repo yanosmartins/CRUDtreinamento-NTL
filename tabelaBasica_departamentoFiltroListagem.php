@@ -13,7 +13,6 @@ include "js/repositorio.php";
             </thead>
             <tbody>
                 <?php
-
                 $reposit = new reposit();
                 $sql = "SELECT C.codigo as departamentoCodigo, C.descricao, C.projeto, C.ativo,P.codigo as projetoCodigo, P.descricao as descricaoProjeto, P.apelido
                 FROM Ntl.departamento C
@@ -23,18 +22,17 @@ include "js/repositorio.php";
                 // $descricao = $_GET["descricao"];
                 // $percentual = $_GET["percentual"];
                 // $ativo = $_GET["ativo"];
-
                 if ($_POST["descricao"] != "") {
                     $descricao = $_POST["descricao"];
-                    $where = $where . " AND ( descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
+                    $where = $where . " AND ( C.descricao like '%' + " . "replace('" . $descricao . "',' ','%') + " . "'%')";
                 }
                 if ($_POST["projeto"] != "") {
                     $projeto = (int)$_POST["projeto"];
-                    $where = $where . " AND ( projeto = $ativo)";
+                    $where = $where . " AND ( C.projeto = $projeto)";
                 }
                 if ($_POST["ativo"] != "") {
                     $ativo = (int)$_POST["ativo"];
-                    $where = $where . " AND ( ativo = $ativo)";
+                    $where = $where . " AND ( C.ativo = $ativo)";
                 }
 
                 $sql = $sql . $where;
