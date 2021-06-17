@@ -17,7 +17,7 @@ $condicaoGestorGravarOK = (in_array('GESTORSOLICITACAOFOLHA_GRAVAR', $arrayPermi
 $condicaoFuncionarioAcessarOK = true;
 $condicaoGestorAcessarOK = true;
 
-if ( !$condicaoFuncionarioAcessarOK && !$condicaoGestorAcessarOK) {
+if (!$condicaoFuncionarioAcessarOK && !$condicaoGestorAcessarOK) {
   unset($_SESSION['login']);
   header("Location:login.php");
 }
@@ -70,9 +70,9 @@ include("inc/nav.php");
               <div class="widget-body no-padding">
                 <form class="smart-form client-form" id="formSolicitacao" method="post">
                   <div class="panel-group smart-accordion-default" id="accordion">
-                    <div class="panel panel-default" style="<?php 
-                      if(!$condicaoFuncionarioGravarOK) echo "display:none";
-                    ?>">
+                    <div class="panel panel-default" style="<?php
+                                                            if (!$condicaoFuncionarioGravarOK) echo "display:none";
+                                                            ?>">
                       <div class="panel-heading">
                         <h4 class="panel-title">
                           <a data-toggle="collapse" data-parent="#accordion" href="#collapseSolicitante" class="collapsed" id="accordionSolicitante">
@@ -174,9 +174,9 @@ include("inc/nav.php");
 
                       </div>
                     </div>
-                    <div class="panel panel-default" style="<?php 
-                      if(!$condicaoGestorGravarOK) echo "display:none";
-                    ?>">
+                    <div class="panel panel-default" style="<?php
+                                                            if (!$condicaoGestorGravarOK) echo "display:none";
+                                                            ?>">
                       <div class="panel-heading">
                         <h4 class="panel-title">
                           <a data-toggle="collapse" data-parent="#accordion" href="#collapseSolicitado" class="collapsed" id="accordionSolicitado">
@@ -197,7 +197,9 @@ include("inc/nav.php");
                                 <table id="tableSolicitado" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                   <thead>
                                     <tr role="row">
-                                      <th><input type="checkbox" name="checkbox "></th>
+                                      <th>
+                                        <label class="checkbox" style="top:-13px"><input type="checkbox" name="checkbox " value="' + jsonSolicitadoArray[i].sequencialSolicitado + '" onclick="selectAll(event)"><i></i></label>
+                                      </th>
                                       <th>Funcionário</th>
                                       <th>Dia</th>
                                       <th>Campo</th>
@@ -213,11 +215,11 @@ include("inc/nav.php");
                               <div class="form-group">
                                 <div class="row">
                                   <section class="col">
-                                    <button id="enviarUploads" type="button" class="btn btn-primary">Aceitar solicitações selecionadas
+                                    <button id="aceitarSolicitacao" type="button" class="btn btn-primary">Aceitar solicitações selecionadas
                                     </button>
                                   </section>
                                   <section class="col">
-                                    <button id="enviarUploads" type="button" class="btn btn-danger">Recusar solicitações selecionadas
+                                    <button id="recusarSolicitacao" type="button" class="btn btn-danger">Recusar solicitações selecionadas
                                     </button>
                                   </section>
                                 </div>
@@ -323,7 +325,12 @@ include("inc/scripts.php");
       }
     })
 
+    $("#aceitarSolicitacao").on("click", aceitarSolicitado())
+
+    $("#recusarSolicitacao").on("click", recusarSolicitado())
+
     recuperarSolicitante()
+    recuperarSolicitado()
   });
 
   //============ Funções da página ===================
@@ -337,51 +344,70 @@ include("inc/scripts.php");
 
     grava(json, function(data) {
       var piece = data.split("#");
-      var mensagem = piece[0];
+      var mensagem = piece[1];
+      var out = piece[2];
 
       if (data.indexOf('failed') > -1) {
-        data = data.replace(/failed/g, '');
         smartAlert("Atenção", mensagem, "error")
       } else {
         data = data.replace(/failed/g, '');
-        var out = piece[1];
-
+        smartAlert("Sucesso", mensagem, "success")
       }
     })
   }
 
   function recuperarSolicitante() {
     recupera(function(data) {
+      const piece = data.split("#");
+      const mensagem = piece[1];
+      const out = piece[2];
+      let jsonResponse = piece[3];
+
       if (data.indexOf('failed') > -1) {
-        data = data.replace(/failed/g, '')
-        smartAlert("Atenção", data.split("#")[0], "error")
+        smartAlert("Atenção", mensagem, "error")
+      } else {
+        jsonResponse = JSON.parse(jsonResponse);
+        jsonResponse.forEach((obj) => {
+          obj.dataReferente = obj.dataReferente.split("-").reverse().join("/")
+          obj.dataReferente = obj.dataReferente.substr(3)
+        })
+
+        jsonSolicitanteArray = jsonResponse
+        fillTableSolicitante()
       }
+      return
     })
   }
 
   function aceitarSolicitado() {
 
-    const rowData = [];
+    const sequencialSelected = [];
+
+
     $('#tableSolicitado tbody input[type=checkbox]:checked').each(function(index, el) {
-      let td = el.parentElement.parentElement
-      const values = new Set()
 
-      while (td) {
-        td = td.nextElementSibling
-        values.add(td.textContent)
-      }
-
-      //==== INCOMPLETO
-      //jsonSolicitadoArray
-      const row = td.parentElement
-      $(row).remove()
-
-      rowData.push(values)
+      sequencialSelected.push(el.value)
     })
+
+    const jsonSelected = jsonSolicitadoArray.filter(obj => {
+      const seq = obj.sequencialSolicitado
+      for (let value of sequencialSelected) {
+        return seq == value
+      }
+    })
+    debugger
+    //------- O código acima pega o sequencial de cada linha e cria um novoobjeto com os quais os sequencial estão inclusos no "sequencialSelected" e então enviar para o backend e dar continuidade a função do botão
+/*
+    OBS: Os dados na tabela "solicitaçãoFolha" devem ser apagados de acordo com os que foram aceitos ou recusados
+
+    aceitos: substitui os dados da  tabela "detalheDiario" e apaga os dados da tabela "solicitacaoFolha"
+    recusados: apenas apaga os dados da tabela "solicitacaoFolha"
+*/
 
     debugger
 
     fillTableSolicitado();
+    //Essa parte é necessária para o recarregamento visual da tabela para o usuário enquanto a tela não recarrega 
   }
 
   function recusarSolicitado() {
@@ -410,11 +436,47 @@ include("inc/scripts.php");
 
   function recuperarSolicitado() {
     recuperaGestao(function(data) {
+      const piece = data.split("#");
+      const mensagem = piece[1];
+      const out = piece[2];
+      let jsonResponse = piece[3];
+
       if (data.indexOf('failed') > -1) {
-        data = data.replace(/failed/g, '')
-        smartAlert("Atenção", data.split("#")[0], "error")
+        smartAlert("Atenção", mensagem, "error")
+      } else {
+        jsonResponse = JSON.parse(jsonResponse);
+        jsonResponse.forEach((obj) => {
+          obj.dataReferente = obj.dataReferente.split("-").reverse().join("/")
+          obj.dataReferente = obj.dataReferente.substr(3)
+        })
+
+        jsonSolicitadoArray = jsonResponse
+        fillTableSolicitado()
       }
+      return
     })
+  }
+
+  function selectAll(evt) {
+    const checkbox = $("#tableSolicitado tbody input[type=\"checkbox\"]")
+
+    const mainCheckBox = evt.currentTarget
+
+    const verify = mainCheckBox.checked
+    if (verify) {
+      checkbox.each((index, input) => {
+
+        input.checked = true
+
+      })
+    } else {
+      checkbox.each((index, input) => {
+
+        input.checked = false
+
+      })
+    }
+
   }
   //============ TABLE SOLICITANTE ===================
 
@@ -424,7 +486,7 @@ include("inc/scripts.php");
       for (var i = 0; i < jsonSolicitanteArray.length; i++) {
         var row = $('<tr />');
         $("#tableSolicitante tbody").append(row);
-        row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox " value="' + jsonSolicitanteArray[i].sequencialSolicitante + '"><i></i></label></td>'));
+        row.append($('<td><label class="checkbox" style="top:-3px"><input type="checkbox" name="checkbox " value="' + jsonSolicitanteArray[i].sequencialSolicitante + '"><i></i></label></td>'));
         row.append($('<td class="text-center" onclick="carregaSolicitante(' + jsonSolicitanteArray[i].sequencialSolicitante + ');">' + jsonSolicitanteArray[i].dia + '</td>'));
         row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].campo + '</td>'));
         row.append($('<td class="text-center" >' + jsonSolicitanteArray[i].horas + '</td>'));
@@ -634,7 +696,8 @@ include("inc/scripts.php");
       for (var i = 0; i < jsonSolicitadoArray.length; i++) {
         var row = $('<tr />');
         $("#tableSolicitado tbody").append(row);
-        row.append($('<td><input type="checkbox" name="checkbox " value="' + jsonSolicitadoArray[i].sequencialSolicitado + '"></td>'));
+        row.append($('<td><label class="checkbox" style="top:-3px"><input type="checkbox" name="checkbox " value="' + jsonSolicitadoArray[i].sequencialSolicitado + '"><i></i></label></td>'));
+        row.append($('<td class="text-center">' + jsonSolicitadoArray[i].funcionario + '</td>'));
         row.append($('<td class="text-center">' + jsonSolicitadoArray[i].dia + '</td>'));
         row.append($('<td class="text-center" >' + jsonSolicitadoArray[i].campo + '</td>'));
         row.append($('<td class="text-center" >' + jsonSolicitadoArray[i].horas + '</td>'));
