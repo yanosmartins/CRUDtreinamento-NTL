@@ -200,6 +200,10 @@ include("inc/scripts.php");
 
     function listarFiltro() {
         var descricaoFiltro = $('#transporteUnitario').val();
+        if (descricaoFiltro !== "") {
+            descricaoFiltro = descricaoFiltro.replace(/^\s+|\s+$/g, "");
+            descricaoFiltro = encodeURIComponent(descricaoFiltro);
+        }
         var valorMinimo = $('#valorMinimo').val();
 
         if (valorMinimo != "") {
