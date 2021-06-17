@@ -180,7 +180,17 @@ include("inc/scripts.php");
     function listarFiltro() {
 
         var sigla = $('#sigla').val();
+        if (sigla !== "") {
+            sigla = sigla.replace(/^\s+|\s+$/g, "");
+            sigla = encodeURIComponent(sigla);
+        }
+
         var descricao = $('#descricao').val();
+        if (descricao !== "") {
+            descricao = descricao.replace(/^\s+|\s+$/g, "");
+            descricao = encodeURIComponent(descricao);
+        }
+
         var ativo = $('#ativo').val();
 
         var parametrosUrl = '&descricao=' + descricao;
