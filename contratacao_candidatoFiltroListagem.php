@@ -2,7 +2,6 @@
 include "js/repositorio.php";
 ?>
 <div class="table-container">
-    <a class="btn btn-primary" href="javascript:executarExportacaoFuncionario();" style="float:right; margin-bottom: 10px">Exportar</a>
 
     <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
@@ -10,7 +9,6 @@ include "js/repositorio.php";
                 <tr role="row">
 
                     <!-- <th class="text-left" style="min-width:30px;" scope="col">Código</th> -->
-                    <th class="text-left" style="min-width:20px;"></th>
 
                     <th class="text-left" style="min-width:70px;" scope="col">Nome Completo</th>
                     <th class="text-left" style="min-width:30px;" scope="col">CPF</th>
@@ -145,7 +143,7 @@ include "js/repositorio.php";
                 $sql .= $where;
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
-
+                
                 foreach ($result as $row) {
                     $id = $row['codigo'];
                     $nomeCompleto = (string)$row['nomeCompleto'];
@@ -175,9 +173,7 @@ include "js/repositorio.php";
                     //$login = mb_convert_encoding($row['cpf'], 'UTF-8', 'HTML-ENTITIES');
                     echo '<tr >';
                     // echo "<td class='text-left'>$codigo</td>";
-                    echo '<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' . $id . '"><i></i></label></td>';
-                    echo '<td class="text-left"><a href="contratacao_candidatoCadastroDividida.php?codigo=' . $id . '">' . $nomeCompleto . '</a></td>';
-                    // echo "<td class='text-left'>$nomeCompleto</td>";
+                    echo "<td class='text-left'>$nomeCompleto</td>";
                     echo "<td class='text-center'>$cpf</td>";
                     echo "<td class='text-center'>$rg</td>";
                     echo "<td class='text-left'>$cargo</td>";
@@ -311,17 +307,5 @@ include "js/repositorio.php";
 
     });
 
-    function executarExportacaoFuncionario() {
-        var arrayFuncionario = [];
-        var arrSelecionados = $('#tableSearchResult').DataTable().rows((i, data, tr) => $(tr).find('input').prop('checked')).data().toArray();
-        debugger;
-
-        for (var i = 0; i < arrSelecionados.length; i++) {
-            arrayFuncionario.push({
-                'codigo': arrSelecionados[i][19],
-            });
-        };
-
-        exportarCandidatos(arrayFuncionario);
-    }
+ 
 </script>

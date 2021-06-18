@@ -14,7 +14,8 @@ include "js/repositorio.php";
                     <th class="text-left" scope="col">CPF</th>
                     <th class="text-left" scope="col">Projeto</th>
                     <th class="text-left" scope="col">Cargo</th>
-                    <th class="text-left" scope="col">Situação da Exportação</th>
+                    <th class="text-left" scope="col">Situação da Exportação SCI</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -56,19 +57,24 @@ include "js/repositorio.php";
                     $situacao = $_POST["situacao"];
                     $where = $where . "AND (ISNULL(E.situacao, 0) =" . $situacao . ")";
                 }
+                if ($_POST["situacaoExportacaoFuncionario"] != "") {
+                    $situacaoExportacaoFuncionario = $_POST["situacaoExportacaoFuncionario"];
+                    $where = $where . "AND (ISNULL(E.situacaoExportacaoFuncionario, 0) =" . $situacaoExportacaoFuncionario . ")";
+                }
 
                 $sql .= $where;
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
-                $row = array();
-                for ($i = 0; $i < count($result); $i++) {
-                    $codigo = mb_convert_encoding($result[$i]['codigo'], 'UTF-8', 'HTML-ENTITIES');
-                    $nome = mb_convert_encoding($result[$i]['nome'], 'UTF-8', 'HTML-ENTITIES');
-                    $cpf = mb_convert_encoding($result[$i]['cpf'], 'UTF-8', 'HTML-ENTITIES');
-                    $projeto = mb_convert_encoding($result[$i]['projeto'], 'UTF-8', 'HTML-ENTITIES');;
-                    $cargo = mb_convert_encoding($result[$i]['cargo'], 'UTF-8', 'HTML-ENTITIES');
-                    $situacao = mb_convert_encoding($result[$i]['situacao'], 'UTF-8', 'HTML-ENTITIES');
+                foreach ($result as $row) {
+                    $codigo = $row['codigo'];
+                    $nome = $row['nome'];
+                    $cpf = $row['cpf'];
+                    $projeto = $row['projeto'];
+                    $cargo = $row['cargo'];
+                    $situacao = $row['situacao'];
+
+
                     switch ($situacao) {
                         default:
                             $situacao = "<b><font color='#dbc616'>Pendente</font></b>";

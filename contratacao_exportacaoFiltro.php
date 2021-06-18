@@ -107,16 +107,17 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Situação</label>
+                                                                <label class="label">Situação Exportação SCI</label>
                                                                 <label class="select">
                                                                     <select id="situacao" name="situacao">
                                                                         <option></option>
-                                                                        <option value="0" selected>Pendente</option>
+                                                                        <option value="0">Pendente</option>
                                                                         <option value="1">Exportado</option>
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
                                                         </div>
+
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -236,14 +237,12 @@ include("inc/scripts.php");
         });
 
 
-
-
         $("#btnExportar").on("click", function() {
 
             let checkboxComIdDosFuncionarios = [];
             // Pega o valor do ID do Funcionário e joga para um array chamado 'checkboxSelecionado'.
             $("input[type='checkbox']").each(function() {
-                
+
                 if ($(this).prop("checked")) { //Se o checkbox tiver sido selecionado. 
                     checkboxComIdDosFuncionarios.push(($(this).attr('value'))); //Ele puxa o valor do código do funcionário pra um array.
                 }
@@ -258,6 +257,7 @@ include("inc/scripts.php");
             $('#dlgSimpleExportacao').dialog('open'); //Abre uma janela de aviso pra conferir os funcionários pra exportação.
 
         });
+
     });
 
     function listarFiltro() {
@@ -267,13 +267,15 @@ include("inc/scripts.php");
         let projeto = $('#projeto').val();
         let cargo = $('#cargo').val();
         let situacao = $('#situacao').val();
+        let situacaoExportacaoFuncionario = $('#situacaoExportacaoFuncionario').val();
 
         $('#resultadoBusca').load('contratacao_exportacaoFiltroListagem.php?', {
             nome: nome,
             cpf: cpf,
             projeto: projeto,
             cargo: cargo,
-            situacao: situacao
+            situacao: situacao,
+            situacaoExportacaoFuncionario: situacaoExportacaoFuncionario
         });
     }
 
@@ -296,16 +298,20 @@ include("inc/scripts.php");
                 checkboxComIdDosCandidatos: checkboxComIdDosFuncionarios
             },
             success: function(data) {
-                let valor = data.split("^");
-
-                if (valor[0] === 'success') {
+                let valor = data.split("#");
+                var mensagem = valor[1];
+                if (valor[0] == 'success') {
                     smartAlert("Sucesso", "O arquivo foi gerado com sucesso!", "success");
-
-                    
                     let enderecoCaminho = valor[1];
                     $("#caminho").val(enderecoCaminho);
                 } else {
-                    smartAlert("Atenção", "Erro ao gerar o arquivo!", "error");
+                    if (mensagem !== "") {
+                        smartAlert("Sucesso", "O arquivo foi gerado com sucesso!", "success");
+                        smartAlert("Atenção", mensagem, "error");
+                    } else {
+                        smartAlert("Atenção", "Erro ao gerar o arquivo !", "error");
+                    }
+
                 }
             },
             error: function(xhr, er) {
@@ -313,4 +319,19 @@ include("inc/scripts.php");
             }
         });
     }
+
+
+    //    function executarExportacaoFuncionario() {
+    //     var arrayFuncionario = [];
+    //     var arrSelecionados = $('#tableSearchResult').DataTable().rows((i, data, tr) => $(tr).find('input').prop('checked')).data().toArray();
+    //     debugger;
+
+    //     for (var i = 0; i < arrSelecionados.length; i++) {
+    //         arrayFuncionario.push({
+    //             'codigo': arrSelecionados[i][19],
+    //         });
+    //     };
+
+    //     exportarCandidatos(arrayFuncionario);
+    // }
 </script>

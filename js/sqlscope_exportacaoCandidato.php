@@ -5,13 +5,13 @@ include "girComum.php";
 
 $funcao = $_POST["funcao"];
 
-if ($funcao == 'exportarCandidatos') {
+if ($funcao == 'exportarCandidato') {
     call_user_func($funcao);
 }
 
 return;
 
-function exportarCandidatos()
+function exportarCandidato()
 {
     $reposit = new reposit();
     $girComum = new comum();
@@ -29,6 +29,12 @@ function exportarCandidatos()
 
     //XML TITULO PAGAR
     $arrayFuncionario = $_POST["arrayFuncionario"];
+    if (!verificaFuncionario()) {
+        $mensagem = "Um dos candidatos já é um Funcionário";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    };
+
     // $arrayFuncionario = json_decode($arrayFuncionario, true);
     $xmlFuncionario = new \FluidXml\FluidXml('ArrayOfFuncionario', ['encoding' => '']);
     foreach ($arrayFuncionario as $item) {
@@ -41,12 +47,31 @@ function exportarCandidatos()
                                         $usuario";
 
     $reposit = new reposit();
-    $result = $reposit->Execprocedure($sql);
+   // $result = $reposit->Execprocedure($sql);
 
     if ($result < 1) {
         echo ('failed#');
         return;
     }
-    echo 'sucess#' . $result;
+    echo 'success#' . $result;
     return;
+}
+
+
+function verificaFuncionario()
+{
+    $codigo =  "";
+    $arrayFuncionario = $_POST["arrayFuncionario"];
+    foreach ($arrayFuncionario as $funcionario) {
+        $codigo .=  $funcionario["codigo"];
+    }
+
+    $sql = "SELECT codigo  FROM Ntl.funcionario WHERE cpf IN (SELECT cpf FROM Contratacao.candidato WHERE codigo IN ( " . $codigo . "))";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    if ($result) {
+        return false;
+    }
+    return true;
 }
