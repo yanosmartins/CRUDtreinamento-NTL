@@ -39,7 +39,11 @@ function exportar()
 
     foreach ($arrayCodigoCandidatos as $candidato) {
 
-        gravarLogExportacao($candidato, $nomeArquivo);
+        // gravarLogExportacao($candidato, $nomeArquivo);
+        if (!gravarLogExportacao($candidato, $nomeArquivo)) {
+            echo "failed#";
+            return;
+        };
 
         $sql = "SELECT  C.nomeCompleto,
 		CC.matriculaSCI,
@@ -520,31 +524,99 @@ function exportar()
 
         fwrite($handler, $mensagem);
 
-        $sql = "Contratacao.exportacao_Atualiza 0,";
-        foreach ($arrayCandidatosExportacao as $candidato) {
-            foreach ($candidato as $chave => $valor) {
-                if (preg_match("/(^codigo$|^cargo$)/", $chave)) {
-                    $sql .= $valor . ",";
-                } else {
-                    $sql .= "'" . $valor . "',";
-                }
-            }
-            $sql = substr($sql, 0, strrpos($sql, ","));
-            $result = $reposit->Execprocedure($sql);
-            $ret = 'success';
-            if ($result < 1) {
-                $ret = 'failed#';
-                return
-                    $ret . "^" . $nomeArquivo;
-            }
-        }
+        // $sql = "Contratacao.exportacao_Atualiza 0,";
+        // foreach ($arrayCandidatosExportacao as $candidato) {
+        //     foreach ($candidato as $chave => $valor) {
+        //         if (preg_match("/(^codigo$|^cargo$)/", $chave)) {
+        //             $sql .= $valor . ",";
+        //         } else {
+        //             $sql .= "'" . $valor . "',";
+        //         }
+        //     }
+        //     $sql = substr($sql, 0, strrpos($sql, ","));
+        //     $result = $reposit->Execprocedure($sql);
+        //     $ret = 'success';
+        //     if ($result < 1) {
+        //         $ret = 'failed#';
+        //         return
+        //             $ret . "^" . $nomeArquivo;
+        //     }
+        // }
     }
     fclose($handler);
 
-    echo $ret . "^" . $nomeArquivo;
+    $arrayFuncionarioTemp = $_POST['checkboxComIdDosCandidatos'];
+    if (!exportarCandidato($arrayFuncionarioTemp)) {
+        return;
+    };
+    echo 'success#' . $nomeArquivo;
     return;
 }
 
+function exportarCandidato($arrayFuncionarioTemp)
+{
+    $reposit = new reposit();
+    $girComum = new comum();
+    session_start();
+    $usuario = "'" . $_SESSION['login'] . "'";
+
+    $possuiPermissao = $reposit->PossuiPermissao("CANDIDATO_ACESSAR|CANDIDATO_EXCLUIR");
+
+    if ($possuiPermissao === 0) {
+        $mensagem = "O usuário não tem permissão para excluir!";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
+
+    //XML TITULO PAGAR
+    $arrayFuncionarioTemp = $arrayFuncionarioTemp;
+    foreach ($arrayFuncionarioTemp as $funcionario) {
+        $arrayFuncionario[]["codigo"] = $funcionario;
+    }
+    if (!verificaFuncionario($arrayFuncionario)) {
+        $mensagem = "Um dos candidatos já é um Funcionário";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    };
+
+    // $arrayFuncionario = json_decode($arrayFuncionario, true);
+    $xmlFuncionario = new \FluidXml\FluidXml('ArrayOfFuncionario', ['encoding' => '']);
+    foreach ($arrayFuncionario as $item) {
+        $xmlFuncionario->addChild('funcionario', true)
+            ->add('codigo', (int) $item['codigo']);
+    }
+    $xmlFuncionario = $girComum->formatarString($xmlFuncionario);
+
+    $sql = "Ntl.exportaCandidato_Atualiza $xmlFuncionario,
+                                        $usuario";
+
+    $reposit = new reposit();
+    $result = $reposit->Execprocedure($sql);
+
+    if ($result < 1) {
+        return false;
+    }
+    return true;
+}
+
+function verificaFuncionario($arrayFuncionario)
+{
+    $codigo =  "";
+    $arrayFuncionario = $arrayFuncionario;
+    foreach ($arrayFuncionario as $funcionario) {
+        $codigo .=  $funcionario["codigo"];
+    }
+
+    $sql = "SELECT codigo  FROM Ntl.funcionario WHERE cpf IN (SELECT cpf FROM Contratacao.candidato WHERE codigo IN ( " . $codigo . "))";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    if ($result) {
+        return false;
+    }
+    return true;
+}
 
 
 //ATENÇÃO, AS FUNÇÕES ABAIXO SÃO BASEADAS NO LAYOUT DO SCI.  FAVOR CONSULTAR O DOCUMENTO ORIGINAL ANTES DE ALTERAR.
@@ -1314,12 +1386,10 @@ function gravarLogExportacao($candidato, $nomeTxtGerado)
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
 
-    $ret = 'sucess#';
     if ($result < 1) {
-        $ret = 'failed#';
+        return false;
     }
-    echo $ret;
-    return;
+    return true;
 }
 
 function consultaLogExportacao($candidato)
