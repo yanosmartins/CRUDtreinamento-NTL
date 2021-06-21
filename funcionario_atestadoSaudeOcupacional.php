@@ -97,6 +97,7 @@ include("inc/nav.php");
                                                             <input id="codigo" name="codigo" type="text" class="hidden" value="">
                                                             <input id="cargoId" name="cargoId" type="text" class="hidden" value="">
                                                             <input id="projetoId" name="projetoId" type="text" class="hidden" value="">
+                                                            <input id="clinicaId" name="clinicaId" type="text" class="hidden" value="">
 
                                                             <section class="col col-4">
                                                                 <label class="label " for="funcionario">Funcionário</label>
@@ -218,6 +219,25 @@ include("inc/nav.php");
                                                                     <i class="icon-append fa fa-calendar"></i>
                                                                     <input id="dataAgendamento" name="dataAgendamento" <?php echo $funcionario ?> type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="<?php echo $esconderData ?>" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off" style="touch-action: none;">
 
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label " for="clinicaSugestao">Sugestão de Clínica</label>
+                                                                <label class="select">
+                                                                    <select id="clinicaSugestao" name="clinicaSugestao" class="">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT c.codigo,f.apelido from ntl.fornecedor f INNER JOIN ntl.clinica c ON f.codigo = c.fornecedor";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $id = (int) $row['codigo'];
+                                                                            $apelido = $row['apelido'];
+                                                                            echo '<option value=' . $id . '>' . $apelido . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                    </select><i></i>
                                                                 </label>
                                                             </section>
 
@@ -798,7 +818,7 @@ include("inc/scripts.php");
             var fileUploadAso = jsonDataAsoArray[i].fileUploadAso;
 
             let codigo = $("#codigo").val()
-            if (codigo ="" || !codigo ) {
+            if (codigo = "" || !codigo) {
                 row.append($('<td class="text-center" >' + jsonDataAsoArray[i].fileUploadAso.name + '</td>'));
             } else {
                 row.append($('<td class="text-center"><a href="' + jsonDataAsoArray[i].path + jsonDataAsoArray[i].fileUploadAso.name + '"> ' + jsonDataAsoArray[i].fileUploadAso.name + ' </a> </td>'));
@@ -1059,6 +1079,7 @@ include("inc/scripts.php");
                         $("#idade").val('');
                         $("#cargoId").val('');
                         $("#projetoId").val('');
+                        $("#clinica").val('');
                     } else {
                         var mensagem = piece[0];
                         var registros = piece[1].split("^");
@@ -1071,22 +1092,27 @@ include("inc/scripts.php");
                         var idade = registros[7];
                         var cargoId = registros[9];
                         var projetoId = registros[10];
+                        var clinica = registros[11];
+                        var clinicaId = registros[12];
 
-                        $("#matricula").val(matricula);;
-                        $("#cargo").val(cargo);;
-                        $("#projeto").val(projeto);;
+                        $("#matricula").val(matricula);
+                        $("#cargo").val(cargo);
+                        $("#projeto").val(projeto);
 
                         if (sexo == 'M') {
                             sexo = 'Masculino'
                         } else {
                             sexo = 'Feminino'
                         }
-                        $("#sexo").val(sexo);;
-                        $("#dataNascimento").val(dataNascimento);;
-                        $("#dataAdmissao").val(dataAdmissao);;
-                        $("#idade").val(idade);;
-                        $("#cargoId").val(cargoId);;
-                        $("#projetoId").val(projetoId);;
+                        $("#sexo").val(sexo);
+                        $("#dataNascimento").val(dataNascimento);
+                        $("#dataAdmissao").val(dataAdmissao);
+                        $("#idade").val(idade);
+                        $("#cargoId").val(cargoId);
+                        $("#projetoId").val(projetoId);
+                        $("#clinicaSugestao").val(clinicaId);
+                        $("#clinicaId").val(clinicaId);
+                        
 
                     }
 

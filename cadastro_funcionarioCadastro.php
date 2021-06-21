@@ -154,6 +154,26 @@ include("inc/nav.php");
                                                                     <input id="matricula" name="matricula" autocomplete="off" autocomplete="14" class="required">
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="clinica">Sugestão de Clínica</label>
+                                                                <label class="select">
+                                                                    <select id="clinica" name="clinica" class="">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT C.codigo, F.apelido  from Ntl.clinica C INNER JOIN
+                                                                        ntl.fornecedor F ON F.codigo = C.fornecedor where C.ativo=1 order by apelido";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = (int) $row['codigo'];
+                                                                            $apelido = $row['apelido'];
+
+                                                                            echo '<option value=' . $codigo . '>' . $apelido . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
 
                                                         </div>
 
@@ -1189,33 +1209,34 @@ include("inc/scripts.php");
                         var nome = piece[4];
                         var cpf = piece[5];
                         var matricula = piece[6];
-                        var sexo = piece[7];
-                        var dataNascimento = piece[8];
-                        var dataAdmissaoFuncionario = piece[9];
-                        var dataDemissaoFuncionario = piece[10];
-                        var dataCancelamentoPlanoSaude = piece[11];
-                        var pisPasep = piece[12];
-                        var numeroCarteiraTrabalho = piece[13];
-                        var serieCarteiraTrabalho = piece[14];
-                        var ufCarteiraTrabalho = piece[15];
-                        var dataExpedicaoCarteiraTrabalho = piece[16];
-                        var rg = piece[17];
-                        var dataEmissaoRG = piece[18];
-                        var orgaoEmissorRG = piece[19];
-                        var cnh = piece[20];
-                        var categoriaCNH = piece[21];
-                        var ufCNH = piece[22];
-                        var dataEmissaoCNH = piece[23];
-                        var dataVencimentoCNH = piece[24];
-                        var primeiraHabilitacaoCNH = piece[25];
-                        var cep = piece[26];
-                        var logradouro = piece[27];
-                        var numeroLogradouro = piece[28];
-                        var complemento = piece[29];
-                        var ufLogradouro = piece[30];
-                        var cidade = piece[31];
-                        var bairro = piece[32];
-                        var ufIdentidade = piece[33];
+                        var clinica = piece[7]
+                        var sexo = piece[8];
+                        var dataNascimento = piece[9];
+                        var dataAdmissaoFuncionario = piece[10];
+                        var dataDemissaoFuncionario = piece[11];
+                        var dataCancelamentoPlanoSaude = piece[12];
+                        var pisPasep = piece[13];
+                        var numeroCarteiraTrabalho = piece[14];
+                        var serieCarteiraTrabalho = piece[15];
+                        var ufCarteiraTrabalho = piece[16];
+                        var dataExpedicaoCarteiraTrabalho = piece[17];
+                        var rg = piece[18];
+                        var dataEmissaoRG = piece[19];
+                        var orgaoEmissorRG = piece[20];
+                        var cnh = piece[21];
+                        var categoriaCNH = piece[22];
+                        var ufCNH = piece[23];
+                        var dataEmissaoCNH = piece[24];
+                        var dataVencimentoCNH = piece[25];
+                        var primeiraHabilitacaoCNH = piece[26];
+                        var cep = piece[27];
+                        var logradouro = piece[28];
+                        var numeroLogradouro = piece[29];
+                        var complemento = piece[30];
+                        var ufLogradouro = piece[31];
+                        var cidade = piece[32];
+                        var bairro = piece[33];
+                        var ufIdentidade = piece[34];
 
                         $("#codigo").val(codigo);
                         $("#ativo").val(ativo);
@@ -1224,6 +1245,7 @@ include("inc/scripts.php");
                         $("#nome").val(nome);
                         $("#cpf").val(cpf);
                         $("#matricula").val(matricula);
+                        $("#clinica").val(clinica);
                         $("#sexo").val(sexo);
                         $("#dataNascimento").val(dataNascimento);
                         $("#dataAdmissao").val(dataAdmissaoFuncionario);
@@ -1417,6 +1439,7 @@ include("inc/scripts.php");
         var cargo = $("#cargo").val();
         var cpf = $("#cpf").val();
         var matricula = $("#matricula").val();
+        var clinica = $("#clinica").val();
         var sexo = $("#sexo").val();
         var dataNascimento = $("#dataNascimento").val();
         var dataAdmissaoFuncionario = $("#dataAdmissao").val();
@@ -1592,7 +1615,7 @@ include("inc/scripts.php");
             $("#btnGravar").prop('disabled', false);
             return;
         }
-        gravaFuncionario(id, nome, sindicato, cargo, cpf, matricula, sexo, dataNascimento, dataAdmissaoFuncionario,
+        gravaFuncionario(id, nome, sindicato, cargo, cpf, matricula,clinica, sexo, dataNascimento, dataAdmissaoFuncionario,
             dataDemissaoFuncionario, dataCancelamentoPlanoSaude, pisPasep, numeroCarteiraTrabalho, serieCarteiraTrabalho, ufCarteiraTrabalho, dataExpedicaoCarteiraTrabalho,
             rg, dataEmissaoRG, orgaoEmissorRG, cnh, categoriaCNH, ufCNH, dataEmissaoCNH, dataVencimentoCNH, primeiraHabilitacaoCNH,
             cep, logradouro, numeroLogradouro, complemento, ufLogradouro, cidade, bairro, jsonTelefoneArray, jsonEmailArray,

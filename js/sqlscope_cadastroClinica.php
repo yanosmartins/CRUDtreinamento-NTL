@@ -71,7 +71,7 @@ function recuperarDadosCnpj()
             return;
         };
     }
-       
+
     $out = $codigo . "^" .
         $codigoFornecedor . "^" .
         $razaoSocial . "^" .
@@ -206,9 +206,11 @@ function grava()
     $quantidade = "'" . (string) $clinica['quantidade']  . "'";
     $agendamentoEmail =  $clinica['agendamentoEmail'];
     $emailDeAgendamento = "'" . (string) $clinica['emailDeAgendamento'] . "'";
+    $modeloProprio = (int) $clinica['modeloProprio'];
+    $solicitante = (int)$clinica['solicitante'];
     $ativo =  $clinica['ativo'];
 
-    
+
     $sql = "Ntl.clinica_Atualiza
     $codigoClinica, 
     $codigoFornecedor,
@@ -220,16 +222,18 @@ function grava()
     $agendamentoEmail,
     $emailDeAgendamento,
     $ativo,
-    $usuario";
+    $usuario,
+    $modeloProprio,
+    $solicitante";
 
-$result = $reposit->Execprocedure($sql);
+    $result = $reposit->Execprocedure($sql);
 
-$ret = 'sucess#';
-if ($result < 1) {
-$ret = 'failed#';
-}
-echo $ret;
-return;
+    $ret = 'sucess#';
+    if ($result < 1) {
+        $ret = 'failed#';
+    }
+    echo $ret;
+    return;
 }
 
 function recupera()
@@ -243,9 +247,10 @@ function recupera()
     }
 
     $sql = "SELECT C.codigo AS 'codigoClinica',F.codigo AS 'codigoFornecedor', F.razaoSocial AS 'nome',F.apelido AS 'apelido',C.ativo AS 'ativo',F.uf AS 'uf', F.cnpj AS 'cnpj',F.cep,F.logradouro,F.endereco,F.numero,F.complemento,F.bairro,
-    F.cidade,F.uf,C.observacao,C.agendamentoData,C.agendamentoHorario,C.quantidade,C.quantidadeDia,C.agendamentoEmail,C.emailDeAgendamento
-    
-    from ntl.clinica C INNER JOIN ntl.fornecedor F ON F.codigo = C.fornecedor WHERE (0=0)  AND C.codigo =  " . $id;
+    F.cidade,F.uf,C.observacao,C.agendamentoData,C.agendamentoHorario,C.quantidade,C.quantidadeDia,C.agendamentoEmail,C.emailDeAgendamento,C.modeloProprio,C.solicitante
+    from ntl.clinica C INNER JOIN ntl.fornecedor F ON F.codigo = C.fornecedor 
+	LEFT JOIN ntl.funcionario FC ON C.solicitante = FC.codigo
+	WHERE (0=0)  AND C.codigo = " . $id;
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -253,7 +258,7 @@ function recupera()
     $out = "";
     if ($row = $result[0]) {
         $codigoClinica = (int) $row['codigoClinica'];
-        $codigoFornecedor = (int) $row ['codigoFornecedor'];
+        $codigoFornecedor = (int) $row['codigoFornecedor'];
         $cnpj = $row['cnpj'];
         $nome = $row['nome'];
         $apelido = $row['apelido'];
@@ -272,6 +277,8 @@ function recupera()
         $quantidade = $row['quantidade'];
         $agendamentoEmail = $row['agendamentoEmail'];
         $emailDeAgendamento = $row['emailDeAgendamento'];
+        $modeloProprio = $row['modeloProprio'];
+        $solicitante = $row['solicitante'];
         $ativo = $row['ativo'];
     }
     $out = $codigoClinica . "^" .
@@ -294,6 +301,8 @@ function recupera()
         $quantidade . "^" .
         $agendamentoEmail . "^" .
         $emailDeAgendamento . "^" .
+        $modeloProprio . "^" .
+        $solicitante . "^" .
         $ativo;
 
 
