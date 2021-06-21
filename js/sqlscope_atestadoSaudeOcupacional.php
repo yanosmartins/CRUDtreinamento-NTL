@@ -44,11 +44,13 @@ function recuperarDadosFuncionario()
     }
 
     $sql = "SELECT F.codigo AS 'codigoFuncionario',C.codigo AS 'codigoCargo',P.codigo AS 'codigoProjeto', F.matricula AS 'matricula',F.nome AS 'nome',F.sexo AS 'sexo',
-    f.dataNascimento AS 'dataNascimento', C.descricao AS 'cargo', P.descricao AS 'projeto', F.dataAdmissaoFuncionario AS 'dataAdmissao'
+    f.dataNascimento AS 'dataNascimento', C.descricao AS 'cargo', P.descricao AS 'projeto', F.dataAdmissaoFuncionario AS 'dataAdmissao', FO.apelido AS 'nomeClinica', F.clinica AS 'clinica'
     from ntl.beneficioProjeto BP
     INNER JOIN ntl.funcionario F ON F.codigo = BP.funcionario
     INNER JOIN ntl.projeto P ON P.codigo = BP.projeto
     INNER JOIN ntl.cargo C ON F.cargo = C.codigo
+	LEFT JOIN ntl.clinica CLI ON CLI.codigo = F.clinica
+    LEFT JOIN ntl.fornecedor FO ON FO.codigo = F.clinica
     where C.ativo=1 AND F.codigo = $funcionario AND F.ativo = 1 AND P.ativo = 1";
 
     $reposit = new reposit();
@@ -77,6 +79,8 @@ function recuperarDadosFuncionario()
             $dataAdmissao = $row['dataAdmissao'];
             $cargoId = $row['codigoCargo'];
             $projetoId = $row['codigoProjeto'];
+            $nomeClinica = $row['nomeClinica'];
+            $clinica = $row['clinica'];
         } else {
             return;
         };
@@ -99,7 +103,9 @@ function recuperarDadosFuncionario()
         $idade . "^" .
         $dataAdmissaoFormatada . "^" .
         $cargoId . "^" .
-        $projetoId;
+        $projetoId ."^".
+        $nomeClinica ."^".
+        $clinica;
 
     if ($out == "") {
         echo "failed#";

@@ -1,4 +1,4 @@
- function gravaFuncionario(id, nome, sindicato, cargo, cpf, matricula, sexo, dataNascimento, dataAdmissaoFuncionario, 
+ function gravaFuncionario(id, nome, sindicato, cargo, cpf, matricula,clinica, sexo, dataNascimento, dataAdmissaoFuncionario, 
                 dataDemissaoFuncionario, dataCancelamentoPlanoSaude, pisPasep, numeroCarteiraTrabalho, serieCarteiraTrabalho, ufCarteiraTrabalho,  
                 dataExpedicaoCarteiraTrabalho, rg, dataEmissaoRG, orgaoEmissorRG, cnh, categoriaCNH, ufCNH, dataEmissaoCNH, 
                 dataVencimentoCNH, primeiraHabilitacaoCNH, cep, logradouro, numeroLogradouro, complemento, 
@@ -7,7 +7,7 @@
         url: 'js/sqlscope_cadastroFuncionario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {funcao: "grava", id:id, nome:nome, sindicato:sindicato, cargo:cargo, cpf:cpf, matricula:matricula,
+        data: {funcao: "grava", id:id, nome:nome, sindicato:sindicato, cargo:cargo, cpf:cpf, matricula:matricula,clinica:clinica,
             sexo:sexo, dataNascimento:dataNascimento, dataAdmissaoFuncionario: dataAdmissaoFuncionario,
             dataDemissaoFuncionario: dataDemissaoFuncionario, dataCancelamentoPlanoSaude: dataCancelamentoPlanoSaude, pisPasep:pisPasep, numeroCarteiraTrabalho:numeroCarteiraTrabalho,
             serieCarteiraTrabalho:serieCarteiraTrabalho, ufCarteiraTrabalho:ufCarteiraTrabalho, dataExpedicaoCarteiraTrabalho: dataExpedicaoCarteiraTrabalho, 

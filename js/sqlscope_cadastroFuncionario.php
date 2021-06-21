@@ -49,6 +49,7 @@ function grava()
     $cargo = formatarNumero($_POST['cargo']);
     $cpf = formatarString($_POST['cpf']);
     $matricula = formatarString($_POST['matricula']);
+    $clinica = formatarNumero($_POST['clinica']);
     $sexo = formatarString($_POST['sexo']);
 
     $dataNascimento = formatarDATA($_POST['dataNascimento']);
@@ -86,6 +87,7 @@ function grava()
     $ufLogradouro = formatarString($_POST['ufLogradouro']);
     $cidade = formatarString($_POST['cidade']);
     $bairro = formatarString($_POST['bairro']);
+
 
     //------------------------Funcionário Telefone------------------
     $strArrayTelefone = $_POST['jsonTelefoneArray'];
@@ -278,7 +280,8 @@ function grava()
                         $xmlEmail,
                         $xmlDependente,
                         $xmlEspecializacao,
-                        $usuario";
+                        $usuario,
+                        $clinica";
 
     // $sql = 'Ntl.funcionario_Atualiza ';
     // $sql .= "$id,";
@@ -359,6 +362,7 @@ function recupera()
         $nome = $row['nome'];
         $cpf = $row['cpf'];
         $matricula = $row['matricula'];
+        $clinica = $row['clinica'];
         $sexo = $row['sexo'];
         $dataNascimento =  $row['dataNascimento'];
         $dataAdmissaoFuncionario =  $row['dataAdmissaoFuncionario'];
@@ -595,6 +599,7 @@ function recupera()
             $nome . "^" .
             $cpf . "^" .
             $matricula . "^" .
+            $clinica ."^" .
             $sexo . "^" .
             $dataNascimentoFormatada . "^" .
             $dataAdmissaoFuncionarioFormatada . "^" .

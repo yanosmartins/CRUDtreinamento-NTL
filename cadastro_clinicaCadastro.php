@@ -362,6 +362,40 @@ include("inc/nav.php");
 
                                                                     </label>
                                                                 </section>
+                                                                </div>
+                                                                <div class="row">
+                                                                <section class="col col-2 col-auto">
+                                                                    <label class="label" for="modeloProprio">Modelo Proprio</label>
+                                                                    <label class="select">
+                                                                        <select id="modeloProprio" name="modeloProprio" class='required'>
+                                                                            <option></option>
+                                                                            <option value='1' selected>AMBIMED</option>
+                                                                            <option value='2'>SEMTRAB</option>
+                                                                        </select><i></i>
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-3">
+                                                                <label class="label " for="solicitante">Solicitante</label>
+                                                                <label class="select">
+                                                                    <select id="solicitante" name="solicitante" class="required">
+                                                                        <option></option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT F.codigo, F.nome from ntl.funcionario F 
+                                                                        INNER JOIN ntl.beneficioProjeto BP ON F.codigo = BP.funcionario
+                                                                        INNER JOIN ntl.departamento DP ON BP.departamento = DP.codigo
+                                                                        WHERE DP.codigo = 9";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $id = (int) $row['codigo'];
+                                                                            $nome = $row['nome'];
+                                                                            echo '<option value=' . $id . '>' . $nome . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
                                                                 <section class="col col-2 col-auto">
                                                                     <label class="label" for="ativo"></label>
                                                                     <label class="select">
@@ -372,6 +406,7 @@ include("inc/nav.php");
                                                                         </select>
                                                                     </label>
                                                                 </section>
+                                                            
                                                             </div>
 
 
@@ -578,6 +613,8 @@ include("inc/scripts.php");
                             const quantidade = registros[17];
                             const agendamentoEmail = registros[18];
                             const emailDeAgendamento = registros[19];
+                            const modeloProprio = registros[20];
+                            const solicitante = registros[21];
 
 
 
@@ -602,6 +639,8 @@ include("inc/scripts.php");
                             $("#quantidade").val(quantidade);
                             $("#agendamentoPorEmail").val(agendamentoEmail);
                             $("#emailAgendamento").val(emailDeAgendamento);
+                            $("#modeloProprio").val(modeloProprio);
+                            $("#solicitante").val(solicitante);
                             $("#jsonTelefone").val($strArrayTelefone);
                             $("#jsonEmail").val($strArrayEmail);
 
@@ -1169,6 +1208,8 @@ include("inc/scripts.php");
         const quantidade = $('#quantidade').val();
         const agendamentoEmail = $('#agendamentoPorEmail').val();
         const emailDeAgendamento = $('#emailAgendamento').val();
+        const modeloProprio = $('#modeloProprio').val();
+        const solicitante = $('#solicitante').val();
         const ativo = $('#ativo').val();
 
         if (!codigoFornecedor) {
@@ -1209,7 +1250,17 @@ include("inc/scripts.php");
             $("#btnGravar").prop('disabled', false);
             return;
         }
-
+        if (!modeloProprio) {
+            smartAlert("Atenção", "Preencha o campo Modelo Próprio", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+        
+        if (!solicitante) {
+            smartAlert("Atenção", "Preencha o campo solicitante", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
 
         const clinica = {
             id,
@@ -1221,7 +1272,9 @@ include("inc/scripts.php");
             quantidade,
             agendamentoEmail,
             emailDeAgendamento,
-            ativo
+            ativo,
+            modeloProprio,
+            solicitante
         }
 
         //Chama a função de gravar do business de convênio de saúde.
