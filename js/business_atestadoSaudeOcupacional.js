@@ -72,3 +72,20 @@ function recuperaDadosFuncionarioASO(funcionario, callback) {
 
     return;
 }
+
+
+function recuperaModeloProprio(clinicaSugestao, callback) {
+    $.ajax({
+        url: 'js/sqlscope_atestadoSaudeOcupacional.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: 'recuperarModeloProprio', clinicaSugestao: clinicaSugestao }, //valores enviados ao script     
+        async: false,
+        success: function (data) {
+            callback(data);
+        }
+
+    });
+
+    return;
+}

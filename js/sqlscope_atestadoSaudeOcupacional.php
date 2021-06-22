@@ -29,6 +29,9 @@ if ($funcao == 'recuperarDadosFuncionarioASO') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'recuperarModeloProprio') {
+    call_user_func($funcao);
+}
 
 return;
 
@@ -116,6 +119,51 @@ function recuperarDadosFuncionario()
     return;
 }
 
+function recuperarModeloProprio()
+{
+    if ((empty($_POST["clinicaSugestao"])) || (!isset($_POST["clinicaSugestao"])) || (is_null($_POST["clinicaSugestao"]))) {
+        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    } else {
+        $clinicaSugestao = (int)$_POST["clinicaSugestao"];
+    }
+
+    $sql = "SELECT C.codigo,C.modeloProprio FROM ntl.clinica C WHERE C.codigo =" . $clinicaSugestao;
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    $out = "";
+    if ($row = $result[0]) {
+        $codigo = (int) $row['codigo'];
+        $modeloProprio = $row['modeloProprio'];
+    }
+
+    if ($modeloProprio == 1) {
+        $modeloProprio = 'Ambimed';
+    }
+    if ($modeloProprio == 2) {
+        $modeloProprio = 'SEMTRAB';
+    }
+    if ($modeloProprio == 3) {
+        $modeloProprio = 'Italab';
+    }
+    
+
+    $out = $codigo . "^" .
+        $modeloProprio;
+
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out;
+    return;
+}
+
+
 
 function recuperarDadosFuncionarioASO()
 {
@@ -130,7 +178,7 @@ function recuperarDadosFuncionarioASO()
     $sql = "SELECT F.codigo AS 'codigoFuncionario',C.codigo AS 'codigoCargo',P.codigo AS 'codigoProjeto', ASO.codigo,F.nome AS 'nome',ASO.matricula AS 'matricula',C.descricao AS 'cargo',P.descricao AS 'projeto',ASO.sexo AS 'sexo',
     ASO.dataNascimento AS 'dataNascimento',ASO.dataAdmissao AS 'dataAdmissao',ASO.dataUltimoAso AS 'dataUltimoAso',ASO.dataProximoAso AS 'dataValidadeAso',
     ASO.dataAgendamento AS 'dataAgendamento',ASOD.dataProximoAsoLista AS 'dataProximoAsoLista',ASOD.dataRealizacaoAso AS 'dataRealizacaoAso',
-    ASOD.situacao AS 'situacao',ASOD.tipoExame AS 'tipoExame', ASO.ativo AS 'ativo' from funcionario.atestadoSaudeOcupacional ASO
+    ASOD.situacao AS 'situacao',ASOD.tipoExame AS 'tipoExame', ASO.ativo AS 'ativo', F.clinica AS 'clinicaFuncionario',ASO.tipoExameCadastro AS 'tipoExameCadastro' from funcionario.atestadoSaudeOcupacional ASO
     INNER JOIN funcionario.atestadoSaudeOcupacionalDetalhe ASOD ON ASO.codigo = ASOD.atestadoSaudeOcupacional
     INNER JOIN ntl.funcionario F ON ASO.funcionario = F.codigo
     INNER JOIN ntl.cargo C ON ASO.cargo = C.codigo
@@ -160,6 +208,8 @@ function recuperarDadosFuncionarioASO()
         $dataUltimoAso = $row['dataUltimoAso'];
         $dataValidadeAso = $row['dataValidadeAso'];
         $dataAgendamento = $row['dataAgendamento'];
+        $tipoExameCadastro = $row['tipoExameCadastro'];
+        $clinica = $row['clinicaFuncionario'];
     }
 
     if ($dataNascimento != "") {
@@ -273,7 +323,9 @@ function recuperarDadosFuncionarioASO()
         $dataValidadeAsoFormatada . "^" .
         $dataAgendamentoFormatada  . "^" .
         $cargoId . "^" .
-        $projetoId;
+        $projetoId . "^" .
+        $tipoExameCadastro . "^".
+        $clinica;
 
     if ($out == "") {
         echo "failed#";
@@ -327,6 +379,7 @@ function grava()
     $dataProximoAso = formatarData($dataAso['dataProximoAso']);
     $dataAgendamento = formatarData($dataAso['dataAgendamento']);
     $ativo =  $dataAso['ativo'];
+    $tipoExameCadastro = (int)$dataAso ['tipoExameCadastro'];
 
     $reposit = "";
     $result = "";
@@ -496,6 +549,7 @@ function grava()
             . $dataProximoAso . ","
             . $dataAgendamento  . ","
             . $ativo  . ","
+            . $tipoExameCadastro . ","
             . $usuario . ","
             . $xmlDataAso . "";
 
@@ -521,10 +575,12 @@ function recupera()
     }
 
     $sql = "SELECT ASO.codigo, ASO.funcionario,C.codigo AS 'cargoId',P.codigo AS 'projetoId', F.matricula,F.nome,P.descricao AS 'projetoNome',C.descricao AS 'cargoNome',F.sexo,
-    ASO.dataAdmissao, ASO.dataNascimento, ASO.dataAgendamento, ASO.dataProximoAso, ASO.dataUltimoAso,ASO.ativo FROM funcionario.atestadoSaudeOcupacional ASO
+    ASO.dataAdmissao, ASO.dataNascimento, ASO.dataAgendamento, ASO.dataProximoAso, ASO.dataUltimoAso,ASO.ativo,ASO.tipoExameCadastro, F.clinica AS 'clinicaFuncionario', CLI.modeloProprio,FO.apelido FROM funcionario.atestadoSaudeOcupacional ASO
         INNER JOIN ntl.funcionario F ON F.codigo = ASO.funcionario
         INNER JOIN ntl.cargo C ON C.codigo = ASO.cargo
         INNER JOIN ntl.projeto P ON P.codigo = ASO.projeto
+        LEFT JOIN ntl.clinica CLI ON CLI.ativo = 1
+        LEFT JOIN ntl.fornecedor FO ON CLI.fornecedor = FO.codigo
     WHERE ASO.codigo = " . $id;
 
     $reposit = new reposit();
@@ -550,6 +606,10 @@ function recupera()
         $dataAgendamento = $row['dataAgendamento'];
         $cargoId = $row['cargoId'];
         $projetoId = $row['projetoId'];
+        $tipoExameCadastro = $row['tipoExameCadastro'];
+        $clinica = $row['clinicaFuncionario'];
+        $modeloProprio = $row ['modeloProprio'];
+        $razaoSocial = $row ['razaoSocial'];
     }
 
     if ($dataNascimento != "") {
@@ -669,7 +729,11 @@ function recupera()
         $dataProximoAsoFormatada . "^" .
         $dataAgendamentoFormatada . "^" .
         $cargoId . "^" .
-        $projetoId;
+        $projetoId . "^" .
+        $tipoExameCadastro . "^" .
+        $clinica . "^" . 
+        $modeloProprio . "^" . 
+        $razaoSocial;
 
     if ($out == "") {
         echo "failed#";
