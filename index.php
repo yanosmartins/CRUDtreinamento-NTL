@@ -152,7 +152,7 @@ include("inc/nav.php");
                                                                                                     echo "<input id=\"mesAno\" name=\"mesAno\" value =\"" . $mesAtual  . "\"  class=\"hidden\">" .
                                                                                                         "<input id=\"codigoFolha\" name=\"codigoFolha\" value =\"" . $codigoFolha  . "\"  class=\"hidden\">";
                                                                                                 }
-                                                                                                echo "<option id=\"funcionario\" name=\"funcionario\" value= \"" . $codigo . "\" selected>" . $nome . "</option>";
+                                                                                                echo '<option id="funcionario" name="funcionario" value= ' . $codigo . ' selected>' . $nome . '</option>';
 
                                                                                                 ?>
                                                                         </span></h4>
