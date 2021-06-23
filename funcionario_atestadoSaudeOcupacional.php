@@ -10,6 +10,11 @@ $condicaoGravarOK = (in_array('ASO_GRAVAR', $arrayPermissao, true));
 $condicaoExcluirOK = (in_array('ASO_EXCLUIR', $arrayPermissao, true));
 $condicaoGestorOK = (in_array('ASO_GESTOR', $arrayPermissao, true));
 
+$funcionarioId = (int)$_GET["id"];
+$asoId = (int)$_GET["aso"];
+$ultimoAsoConsulta = $_GET["ultimoAso"];
+
+
 if ($condicaoAcessarOK == false) {
     unset($_SESSION['login']);
     header("Location:login.php");
@@ -98,6 +103,8 @@ include("inc/nav.php");
                                                             <input id="cargoId" name="cargoId" type="text" class="hidden" value="">
                                                             <input id="projetoId" name="projetoId" type="text" class="hidden" value="">
                                                             <input id="clinicaId" name="clinicaId" type="text" class="hidden" value="">
+                                                            <input id="modeloProprio" name="modeloProprio" type="text" class="hidden" value="">
+                                                            <input id="razaoSocial" name="razaoSocial" type="text" class="hidden" value="">
 
                                                             <section class="col col-4">
                                                                 <label class="label " for="funcionario">Funcionário</label>
@@ -105,10 +112,10 @@ include("inc/nav.php");
                                                                     <select id="funcionario" name="funcionario" <?php echo $funcionario ?> class="required <?php echo $funcionario ?>">
 
                                                                         <?php
-
+                                                                        if (!$funcionarioId) {
                                                                         session_start();
                                                                         $id = $_SESSION['funcionario'];
-                                                                        if (!$id) {
+                                                                        if ($condicaoGestorOK == true) {
                                                                             echo '<option></option>';
                                                                             $reposit = new reposit();
                                                                             $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL order by nome";
@@ -116,17 +123,21 @@ include("inc/nav.php");
                                                                             foreach ($result as $row) {
                                                                                 $codigoFuncionario = (int) $row['codigo'];
                                                                                 $nome = $row['nome'];
-                                                                                echo '<option value=' . $codigoFuncionario . '>' . $nome . '</option>';
+                                                                                echo '<option  value=' . $codigoFuncionario . '>' . $nome . '</option>';
                                                                             }
                                                                         }
+                                                                    } else {
+                                                                        echo '<option></option>';
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND dataDemissaoFuncionario IS NULL AND codigo =" . $id;
+                                                                        $sql = "SELECT codigo, nome  from Ntl.funcionario where ativo = 1 AND codigo = " . $funcionarioId;
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigoFuncionario = (int) $row['codigo'];
                                                                             $nome = $row['nome'];
-                                                                            echo '<option value=' . $codigoFuncionario . '>' . $nome . '</option>';
-                                                                        }
+                                                                            echo '<option selected value=' . $codigoFuncionario . '>' . $nome . '</option>';
+
+                                                                    }
+                                                                }
                                                                         ?>
                                                                     </select><i></i>
                                                                 </label>
@@ -240,6 +251,18 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label" for="tipoExameCadastro">Tipo do exame</label>
+                                                                <label class="select">
+                                                                    <select id="tipoExameCadastro" name="tipoExameCadastro" class="">
+                                                                        <option></option>
+                                                                        <option value='1'>Exame Admissional</option>
+                                                                        <option value='2'>Exame Periódico</option>
+                                                                        <option value='3'>Mudança de Risco Ocupacional</option>
+                                                                        <option value='4'>Retorno ao Trabalho</option>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
 
                                                         </div>
                                                     </fieldset>
@@ -275,18 +298,7 @@ include("inc/nav.php");
                                                                         <input id="dataRealizacaoAso" name="dataRealizacaoAso" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker required" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
                                                                     </label>
                                                                 </section>
-                                                                <section class="col col-2 col-auto">
-                                                                    <label class="label" for="tipoExame">Tipo do exame</label>
-                                                                    <label class="select">
-                                                                        <select id="tipoExame" name="tipoExame" class="required">
-                                                                            <option></option>
-                                                                            <option value='1'>Exame Admissional</option>
-                                                                            <option value='2'>Exame Periódico</option>
-                                                                            <option value='3'>Mudança de Risco Ocupacional</option>
-                                                                            <option value='4'>Retorno ao Trabalho</option>
-                                                                        </select><i></i>
-                                                                    </label>
-                                                                </section>
+
                                                                 <section class="col col-md-4">
                                                                     <label class="label">Comprovante Aso</label>
                                                                     <div class="form-control input">
@@ -305,7 +317,18 @@ include("inc/nav.php");
                                                                     </label>
                                                                 </section>
 
-
+                                                                <section class="col col-2 col-auto">
+                                                                    <label class="label" for="tipoExame"></label>
+                                                                    <label class="select">
+                                                                        <select id="tipoExame" name="tipoExame" class="required hidden">
+                                                                            <option></option>
+                                                                            <option value='1'>Exame Admissional</option>
+                                                                            <option value='2'>Exame Periódico</option>
+                                                                            <option value='3'>Mudança de Risco Ocupacional</option>
+                                                                            <option value='4'>Retorno ao Trabalho</option>
+                                                                        </select>
+                                                                    </label>
+                                                                </section>
                                                                 <section class="col col-2">
                                                                     <label class="label" for="dataProximoAsoLista"></label>
                                                                     <label class="input">
@@ -349,6 +372,7 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
+
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
@@ -374,6 +398,12 @@ include("inc/nav.php");
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
                                             <span class="fa fa-backward "></span>
                                         </button>
+
+                                        <button type="button" id="btnGeraPdf" class="btn btn-info" aria-hidden="true" title="Gerar Pdf" style="float:left;">
+                                            Encaminhamento
+                                        </button>
+
+
                                     </footer>
                                 </form>
                             </div>
@@ -457,9 +487,26 @@ include("inc/scripts.php");
             recuperarDadosFuncionario();
         });
 
+        $("#clinicaSugestao").on("change", function() {
+            recuperarModeloProprio();
+        });
+
         $("#dataProximoAso").on("change", function() {
             recuperarValidadeAso();
         })
+
+        $("#dataAgendamento").on("change", function() {
+            var dataAgendamento = $("#dataAgendamento").val();
+            if (dataAgendamento != '') {
+                $("#tipoExameCadastro").addClass("required")
+            } else {
+                $("#tipoExameCadastro").removeClass("required")
+            }
+        });
+        $("#tipoExameCadastro").on("change", function() {
+            var tipoExameCadastro = $("#tipoExameCadastro").val();
+            $("#tipoExame").val(tipoExameCadastro);
+        });
 
         $("#btnExcluir").on("click", function() {
             var id = $("#codigo").val();
@@ -583,16 +630,62 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
+        $('#btnGeraPdf').on("click", function() {
+            var funcionario = $('#funcionario').val();
+            var clinicaSugestao = $('#clinicaSugestao').val();
+            var cargo = $('#cargo').val();
+            var tipoExame = $('#tipoExameCadastro').val();
+            var dataAgendamento = $('#dataAgendamento').val();
+
+            if (!clinicaSugestao) {
+                smartAlert("Atenção", "Informe a clinica", "error");
+                return;
+            }
+            if (!funcionario) {
+                smartAlert("Atenção", "Informe o Funcionario", "error");
+                return;
+            }
+            if (!tipoExame) {
+                smartAlert("Atenção", "Informe o tipo do Exame", "error");
+                return;
+            }
+            geraPdf();
+        });
         carregaPagina();
-        recuperarDadosFuncionarioASO();
         recuperarValidadeAso();
     });
+
+
+
+
+    function geraPdf() {
+
+        var modeloProprio = $('#modeloProprio').val();
+        var funcionario = $('#funcionario').val();
+        var tipoExame = $('#tipoExameCadastro').val();
+        var dataAgendamento = $('#dataAgendamento').val();
+        var parametrosUrl = '&id=' + funcionario + '&tipoExame=' + tipoExame + '&dataAgendamento=' + dataAgendamento;
+
+
+        if ((modeloProprio == '1') || (modeloProprio == 'Ambimed')) {
+            window.open("cadastro_encaminhamentoPdf.php?'" + parametrosUrl);
+        }
+        if ((modeloProprio == '2') || modeloProprio == 'Italab') {
+            window.open("cadastro_encaminhamentoPdfSeropedica.php?'" + parametrosUrl);
+        }
+        if ((modeloProprio == '3') || modeloProprio == 'SEMTRAB') {
+            // window.open("cadastro_encaminhamentoPdf.php?'" + parametrosUrl);
+        }
+
+    }
 
     function carregaPagina() {
         const urlx = window.document.URL.toString();
         const params = urlx.split("?");
         if (params.length === 2) {
-            const id = params[1];
+            const temp = params[1];
+            const recebe = temp.split("&");
+            const id = recebe[0];
             const idx = id.split("=");
             const idd = idx[1];
             if (idd !== "") {
@@ -623,12 +716,18 @@ include("inc/scripts.php");
                             const dataAgendamento = piece[12]
                             const cargoId = piece[13];
                             const projetoId = piece[14];
+                            const tipoExameCadastro = piece[15];
+                            const clinica = piece[16];
+                            const modeloProprio = piece[17];
+                            const razaoSocial = piece[18];
 
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(codigo);
                             $("#matricula").val(matricula);
                             $("#funcionario").val(funcionario);
+                            $("#funcionario").addClass('readonly');
+                            $("#funcionario").prop('disabled', true);
                             $("#cargo").val(cargo);
                             $("#projeto").val(projeto);
                             $("#sexo").val(sexo);
@@ -641,6 +740,11 @@ include("inc/scripts.php");
                             $("#dataAgendamento").val(dataAgendamento);
                             $("#cargoId").val(cargoId);
                             $("#projetoId").val(projetoId);
+                            $("#tipoExameCadastro").val(tipoExameCadastro);
+                            $("#clinicaSugestao").val(clinica);
+                            $("#modeloProprio").val(modeloProprio);
+                            $("#razaoSocial").val(razaoSocial);
+
 
                             const files = []
                             const jsonUploadAso = []
@@ -701,6 +805,11 @@ include("inc/scripts.php");
                             if (dataUltimoAso != "") {
                                 <?php $funcionario = "readonly" ?>
                             }
+
+                            if (tipoExameCadastro != '') {
+                                $("#tipoExame").val(tipoExameCadastro);
+                            }
+
 
                             return;
                         }
@@ -984,6 +1093,7 @@ include("inc/scripts.php");
         const dataUltimoAso = $('#dataUltimoAso').val();
         const dataProximoAso = $('#dataProximoAso').val();
         const ativo = $('#ativo').val();
+        const tipoExameCadastro = $("#tipoExameCadastro").val();
 
         if (!matricula) {
             smartAlert("Erro", "Operação não foi realizada!", "error");
@@ -1006,7 +1116,8 @@ include("inc/scripts.php");
             dataAgendamento,
             dataUltimoAso,
             dataProximoAso,
-            ativo
+            ativo,
+            tipoExameCadastro
         }
 
         const files = [];
@@ -1112,7 +1223,41 @@ include("inc/scripts.php");
                         $("#projetoId").val(projetoId);
                         $("#clinicaSugestao").val(clinicaId);
                         $("#clinicaId").val(clinicaId);
-                        
+
+
+                    }
+
+                }
+            }
+        );
+    }
+
+    function recuperarModeloProprio() {
+        var clinicaSugestao = $("#clinicaSugestao").val()
+        recuperaModeloProprio(clinicaSugestao,
+            function(data) {
+                var atributoId = '#' + 'estoqueDestino';
+                if (data.indexOf('failed') > -1) {
+                    $("#clinicaSugestao").focus()
+                    // $("#matricula").val("")
+                    return;
+                } else {
+                    $("#clinicaSugestao").prop("disabled", false)
+                    $("#clinicaSugestao").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    if (piece == "") {
+                        smartAlert("Erro", "Erro!", "error");
+                        $("#clinicaSugestao").val('');
+                    } else {
+                        var mensagem = piece[0];
+                        var registros = piece[1].split("^");
+                        var clinicaId = registros[0];
+                        var modeloProprio = registros[1];
+
+                        $("#clinicaId").val(clinicaId);
+                        $("#modeloProprio").val(modeloProprio);
+
 
                     }
 
@@ -1160,6 +1305,8 @@ include("inc/scripts.php");
                     const dataAgendamento = piece[12]
                     const cargoId = piece[13];
                     const projetoId = piece[14];
+                    const tipoExameCadastro = piece[15];
+                    const clinica = piece[16];
 
                     //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                     $("#codigo").val(codigo);
@@ -1177,6 +1324,8 @@ include("inc/scripts.php");
                     $("#dataAgendamento").val(dataAgendamento);
                     $("#cargoId").val(cargoId);
                     $("#projetoId").val(projetoId);
+                    $("#tipoExameCadastro").val(tipoExameCadastro);
+                    $("#clinicaSugestao").val(clinica);
 
                     const files = []
                     const jsonUploadAso = []
@@ -1235,6 +1384,11 @@ include("inc/scripts.php");
                     if (dataUltimoAso != "") {
                         <?php $funcionario = "readonly" ?>
                     }
+
+                    if (tipoExameCadastro != '') {
+                        $("#tipoExame").val(tipoExameCadastro);
+                    }
+
 
                     return;
                 }

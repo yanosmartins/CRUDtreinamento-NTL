@@ -122,11 +122,15 @@ include("inc/nav.php");
 
                                                                                                 $mesAtual = strftime('%Y-%m-01', strtotime('today'));
 
-                                                                                                $sql = "SELECT dataUltimoAso FROM Funcionario.atestadoSaudeOcupacional WHERE funcionario = " . $_SESSION['funcionario'] . "";
+                                                                                                $sql = "SELECT dataUltimoAso,codigo,funcionario FROM Funcionario.atestadoSaudeOcupacional WHERE funcionario = " . $_SESSION['funcionario'] . "";
                                                                                                 $result = $reposit->RunQuery($sql);
-                                                                                                if ($row = $result[0]) {
+                                                                                                if ($row = $result[0]) {;
+                                                                                                    $codigoAso = $row['codigo'];
                                                                                                     $ultimoAso = $row['dataUltimoAso'];
+                                                                                                    $funcionarioAso = $row['funcionario'];
                                                                                                     echo "<input id=\"ultimoAso\" name=\"ultimoAso\" value =\"" . $ultimoAso  . "\"  class=\"hidden\">";
+                                                                                                    echo "<input id=\"codigoAso\" name=\"codigoAso\" value =\"" . $codigoAso  . "\"  class=\"hidden\">";
+                                                                                                    echo "<input id=\"funcionarioAso\" name=\"funcionarioAso\" value =\"" . $funcionarioAso  . "\"  class=\"hidden\">";
                                                                                                 }
 
 
@@ -320,6 +324,17 @@ include("inc/scripts.php");
             const mesAno = $('#mesAno').val();
             $(location).attr('href', `funcionario_folhaPontoMensalCadastro.php`);
         });
+        $("#btnAso").on("click", function() {
+            const id = $('#funcionarioAso').val();
+            const asoId = $('#codigoAso').val();
+            const ultimoAso = $('#ultimoAso').val();
+            if (!ultimoAso) {
+                smartAlert("Atenção", "O Funcionário não tem data de último ASO", "error");
+                return
+            }
+            $(location).attr('href', `funcionario_atestadoSaudeOcupacional.php?aso=${asoId}&id=${id}&ultimoAso=${ultimoAso}`);
+        });
+        
 
         $("#btnFolhaMensal").on("click", function() {
             $(location).attr('href', 'funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>');
@@ -340,14 +355,7 @@ include("inc/scripts.php");
         $("#btnContracheque").on("click", function() {
             $(location).attr('href', 'http://www.contrachequeweb.com.br/ntl/');
         });
-        $("#btnAso").on("click", function() {
-            const ultimoAso = $('#ultimoAso').val();
-            if (!ultimoAso) {
-                smartAlert("Atenção", "O Funcionário não tem data de último ASO", "error");
-                return
-            }
-            $(location).attr('href', 'funcionario_atestadoSaudeOcupacional.php');
-        });
+
         $('#parametroLinkModalPanel').on('hide.bs.modal', (e) => {
             e.preventDefault();
             e.stopPropagation();

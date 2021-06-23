@@ -369,8 +369,9 @@ include("inc/nav.php");
                                                                     <label class="select">
                                                                         <select id="modeloProprio" name="modeloProprio" class='required'>
                                                                             <option></option>
-                                                                            <option value='1' selected>AMBIMED</option>
+                                                                            <option value='1' selected>Ambimed</option>
                                                                             <option value='2'>SEMTRAB</option>
+                                                                            <option value='3'>Italab</option>
                                                                         </select><i></i>
                                                                     </label>
                                                                 </section>
@@ -416,6 +417,7 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
+                                    
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
