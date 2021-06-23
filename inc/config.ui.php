@@ -558,7 +558,7 @@ if ($condicaoFuncionarioOk) {
         $page_nav['funcionario']['sub'] += array("emitirFolhaPorProjeto" => array("title" => "Gerador Folha de Ponto por Projeto", "url" => APP_URL . "/funcionario_folhaDePontoPorProjeto.php"));
     }
     if (in_array('CONTROLEFERIAS_MENUFUNCIONARIO', $arrayPermissao, true)) {
-        $page_nav['funcionario']['sub'] += array("controleFerias" => array("title" => "Controle de Férias", "url" => APP_URL . "/funcionario_controleFeriasFiltro.php"));
+        $page_nav['funcionario']['sub'] += array("controleFerias" => array("title" => "Controle de Férias", "url" => APP_URL . "/funcionario_controleFeriasAgendamentoFiltro.php"));
     }
 
     $sql = "SELECT dataUltimoAso FROM Funcionario.atestadoSaudeOcupacional WHERE funcionario = " . $funcionario . "";

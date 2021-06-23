@@ -25,33 +25,48 @@ include "js/repositorio.php";
                 $where = " WHERE (0=0) ";
                 $projeto = (int) $_GET["projeto"];
                 $funcionario = (int) $_GET["funcionario"];
-                $feriasAgendadasInicio = $_GET["feriasAgendadasInicio"];
+                $situacaoData = (int) $_GET["situacaoData"];
+                $dataInicio = $_GET["dataInicio"];
+                $dataFim = $_GET["dataFim"];
 
-                if ($feriasAgendadasInicio != "") {
-                    $aux = explode(' ', $feriasAgendadasInicio);
+                if ($dataInicio != "") {
+                    $aux = explode(' ', $dataInicio);
                     $data = $aux[1] . ' ' . $aux[0];
                     $data = $aux[0];
                     $data =  trim($data);
                     $aux = explode('/', $data);
                     $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
                     $data =  trim($data);
-                    $feriasAgendadasInicio = $data;
+                    $dataInicio = $data;
                 } else {
-                    $feriasAgendadasInicio = '';
+                    $dataInicio = '';
                 };
-                $feriasAgendadasFim = $_GET["feriasAgendadasFim"];
-                if ($feriasAgendadasFim != "") {
-                    $aux = explode(' ', $feriasAgendadasFim);
+
+                if ($dataFim != "") {
+                    $aux = explode(' ', $dataFim);
                     $data = $aux[1] . ' ' . $aux[0];
                     $data = $aux[0];
                     $data =  trim($data);
                     $aux = explode('/', $data);
                     $data = $aux[2] . '-' . $aux[1] . '-' . $aux[0];
                     $data =  trim($data);
-                    $feriasAgendadasFim = $data;
+                    $dataFim = $data;
                 } else {
-                    $feriasAgendadasFim = '';
+                    $dataFim = '';
                 };
+
+                if ($situacaoData == 2) {
+                    $dataName = 'CS.feriasSolicitadas';
+                    $nomeData = 'Férias Solicitadas';
+                }
+                if ($situacaoData == 1) {
+                    $dataName = 'CS.feriasAgendadas';
+                    $nomeData = 'Férias Agendadas';
+                }
+                // if ($situacaoData == 0) {
+                //     $dataName = 'CS.feriasConfirmadas';
+                // }
+
                 $feriasVencidas = $_GET["feriasVencidas"];
 
 
@@ -65,13 +80,13 @@ include "js/repositorio.php";
 
                     $where = $where . " AND CF.funcionario = " . $funcionario;
                 }
-                if ($feriasAgendadasInicio != '') {
+                if ($dataInicio != '' && $situacaoData != 0) {
 
-                    $where = $where . " AND CS.feriasAgendadasInicio = " . "'" . $feriasAgendadasInicio . "'";
+                    $where = $where . " AND  $dataName"."Inicio = " . "'" . $dataInicio . "'";
                 }
-                if ($feriasAgendadasFim != '') {
+                if ($dataFim != '' && $situacaoData != 0) {
 
-                    $where = $where . " AND CS.feriasAgendadasFim = " . "'" . $feriasAgendadasFim . "'";
+                    $where = $where . " AND $dataName"."Fim = " . "'" . $dataFim . "'";
                 }
 
 

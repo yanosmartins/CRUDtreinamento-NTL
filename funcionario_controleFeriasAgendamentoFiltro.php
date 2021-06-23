@@ -144,21 +144,57 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
 
-                                                            <section class="col col-2">
-                                                                <label class="label" for="feriasAgendadasInicio">Férias Agendadas Início</label>
-                                                                <label class="input">
-                                                                    <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="feriasAgendadasInicio" name="feriasAgendadasInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                            <section class="col col-3 col-auto">
+                                                                <label class="label" for="cargo">Cargo</label>
+                                                                <label class="select">
+                                                                    <select id="cargo" name="cargo" class="">
+                                                                        <?php
+
+                                                                        session_start();
+                                                                        $id = $_SESSION['funcionario'];
+
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo,descricao FROM Ntl.cargo order by codigo";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+
+                                                                            $codigo = $row['cargo'];
+                                                                            $cargo = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $cargo . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
                                                                 </label>
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">Férias Agendadas Fim</label>
-                                                                <label class="input">
-                                                                    <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="feriasAgendadasFim" name="feriasAgendadasFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                <label class="label" for="situacaoData">Situação da Data</label>
+                                                                <label class="select">
+                                                                    <select name="situacaoData" id="situacaoData" class="">
+                                                                        <option value="2">Férias Solicitadas</option>
+                                                                        <option value="1" selected>Férias Agendadas</option>
+                                                                        <option value="0">Férias Confirmadas</option>
+                                                                    </select><i></i>
                                                                 </label>
                                                             </section>
+
+                                                            <section class="col col-2">
+                                                                <label class="label" for="dataInicio">Data Início</label>
+                                                                <label class="input">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                    <input id="dataInicio" name="dataInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col col-2">
+                                                                <label class="label">Data Fim</label>
+                                                                <label class="input">
+                                                                    <i class="icon-append fa fa-calendar"></i>
+                                                                    <input id="dataFim" name="dataFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                </label>
+                                                            </section>
+
+
 
                                                             <section class="col col-1">
                                                                 <label class="label" for="feriasVencidas">Férias Vencidas</label>
@@ -170,24 +206,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                        <div class="row">
-                                                            <section class="col col-2">
-                                                                <label class="label" for="feriasSolicitadasInicio"> Férias Solicitadas - Início</label>
-                                                                <label class="input">
-                                                                    <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="feriasSolicitadasInicio" name="feriasSolicitadasInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
-                                                                </label>
-                                                            </section>
 
-                                                            <section class="col col-2">
-                                                                <label class="label"> Férias Solicitadas - Fim</label>
-                                                                <label class="input">
-                                                                    <i class="icon-append fa fa-calendar"></i>
-                                                                    <input id="feriasSolicitadasFim" name="feriasSolicitadasFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
-                                                                </label>
-                                                            </section>
-
-                                                        </div>
                                                     </fieldset>
                                                 </div>
 
@@ -263,19 +282,17 @@ include("inc/scripts.php");
     function listarFiltro() {
         var projeto = +$('#projeto').val();
         var funcionario = +$('#funcionario').val();
-        var feriasAgendadasInicio = $('#feriasAgendadasInicio').val();
-        var feriasAgendadasFim = $('#feriasAgendadasFim').val();
+        var dataInicio = $('#dataInicio').val();
+        var dataFim = $('#dataFim').val();
         var feriasVencidas = $('#feriasVencidas').val();
-        var feriasSolicitadasInicio = $('#feriasSolicitadasInicio').val();
-        var feriasSolicitadasFim = $('#feriasSolicitadasFim').val();
+        var situacaoData = $('#situacaoData').val();
 
         var parametrosUrl = '&projeto=' + projeto;
         parametrosUrl += '&funcionario=' + funcionario;
-        parametrosUrl += '&feriasAgendadasInicio=' + feriasAgendadasInicio;
-        parametrosUrl += '&feriasAgendadasFim=' + feriasAgendadasFim;
+        parametrosUrl += '&dataInicio=' + dataInicio;
+        parametrosUrl += '&dataFim=' + dataFim;
         parametrosUrl += '&feriasVencidas=' + feriasVencidas;
-        parametrosUrl += '&feriasSolicitadasInicio=' + feriasSolicitadasInicio;
-        parametrosUrl += '&feriasSolicitadasFim=' + feriasSolicitadasFim;
+        parametrosUrl += '&situacaoData=' + situacaoData;
 
         $('#resultadoBusca').load('funcionario_controleFeriasAgendamentoFiltroListagem.php?' + parametrosUrl);
     }
