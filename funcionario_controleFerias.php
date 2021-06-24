@@ -261,6 +261,21 @@ include("inc/nav.php");
                                                             </section>
 
 
+
+                                                            <section class="col col-2">
+                                                                <label class="label <?php echo $funcionario ?>" for="feriasAgendadasInicioLista">Férias Agendadas - Início</label>
+                                                                <label class="input">
+                                                                    <i class="icon-append fa fa-calendar <?php echo $funcionario ?>"></i>
+                                                                    <input id="feriasAgendadasInicioLista" name="feriasAgendadasInicioLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="readonly <?php echo $funcionario ?>" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label <?php echo $funcionario ?>">Férias Agendadas - Fim</label>
+                                                                <label class="input">
+                                                                    <i class="icon-append fa fa-calendar <?php echo $funcionario ?>"></i>
+                                                                    <input id="feriasAgendadasFimLista" name="feriasAgendadasFimLista" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" readonly class="readonly <?php echo $funcionario ?>" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                </label>
+                                                            </section>
                                                             <section class="col col-1">
                                                                 <label class="select">
                                                                     <select name="ativo" id="ativo" class="hidden">
@@ -289,14 +304,6 @@ include("inc/nav.php");
                                             <div id="collapseFerias" class="panel-collapse collapse">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">
-                                                            <section class="col col-12">
-                                                                <strong style="color: red;">ATENÇÃO: </strong> <br><br>
-                                                                <strong style="color: red;">
-                                                                    • Preencha os campos solicitados e adicione 3 sugestões de férias.
-                                                                </strong><br>
-                                                            </section>
-                                                        </div>
                                                         <div class="row">
                                                             <input id="jsonControleFerias" name="jsonControleFerias" type="hidden" value="[]">
                                                             <div id="formControleFerias" class="col-sm-12">
@@ -351,18 +358,27 @@ include("inc/nav.php");
                                                                 </div>
                                                                 <div class="col col-10">
                                                                     <section class="col col-2">
-                                                                        <label class="label hidden" for="situacaoAgendamento">Situacão Agendamento</label>
+                                                                        <label class="label <?php echo $funcionario ?>" for="situacaoAgendamento">Situacão Agendamento</label>
                                                                         <label class="select">
-                                                                            <select id="situacaoAgendamento" name="situacaoAgendamento" class="hidden">
+                                                                            <select id="situacaoAgendamento" name="situacaoAgendamento" class="required <?php echo $funcionario ?>">
                                                                                 <option value="2">Aguardando Aprovação</option>
                                                                                 <option value="1">Aprovado</option>
                                                                                 <option value="0">Reprovado</option>
-                                                                            </select>
+                                                                            </select><i class="<?php echo $funcionario ?>"></i>
                                                                         </label>
                                                                     </section>
 
 
-
+                                                                    <section class="col col-2">
+                                                                        <label class="label <?php echo $funcionario ?>" for="situacaoFerias">Situacão Férias</label>
+                                                                        <label class="select">
+                                                                            <select id="situacaoFerias" name="situacaoFerias" class="readonly required <?php echo $funcionario ?>" style="touch-action:none;pointer-events:none">
+                                                                                <option></option>
+                                                                                <option value="1">Pendente</option>
+                                                                                <option value="0">Vencida</option>
+                                                                            </select>
+                                                                        </label>
+                                                                    </section>
 
                                                                     <section class="col col-2">
                                                                         <label class="label" for="periodoAquisitivoInicio"></label>
@@ -415,8 +431,6 @@ include("inc/nav.php");
                                                                         <th class="text-center">Férias Solicitadas - Inicio</th>
                                                                         <th class="text-center">Férias Solicitadas - Fim</th>
                                                                         <th class="text-center">Qtde de Dias</th>
-                                                                        <th class="text-center">Semana Início</th>
-                                                                        <th class="text-center">Semana Fim</th>
                                                                         <th class="text-center">Situação Agendamento</th>
                                                                         <th class="text-center">Adiantamento 13º Salário</th>
                                                                         <th class="text-center">Abono</th>
@@ -446,7 +460,7 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                     <footer>
-                                        <!-- <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnExcluir ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
@@ -461,14 +475,16 @@ include("inc/nav.php");
                                                 <div class="ui-dialog-buttonset">
                                                 </div>
                                             </div>
-                                        </div> -->
+                                        </div>
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file-o"></span>
                                         </button>
-                                        
+                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                            <span class="fa fa-backward "></span>
+                                        </button>
                                     </footer>
                                 </form>
                             </div>
@@ -840,10 +856,10 @@ include("inc/scripts.php");
         $("#feriasAgendadasInicio").val('');
         $("#feriasAgendadasFim").val('');
         $("#diasSolicitacao").val('');
-        $("#adiantamentoDecimo").val('1');
-        $("#abono").val('1');
+        $("#adiantamentoDecimo").val('');
+        $("#abono").val('');
         $("#situacaoFerias").val('');
-        $("#situacaoAgendamento").val('2');
+        $("#situacaoAgendamento").val('');
         $("#feriasSolicitadasInicio").val('');
         $("#feriasSolicitadasFim").val('');
     }
@@ -901,13 +917,11 @@ include("inc/scripts.php");
                 var row = $('<tr />');
                 $("#tableControleFerias tbody").append(row);
                 row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox " value="' + jsonControleFeriasArray[i].sequencialControleFerias + '"><i></i></label></td>'));
-                row.append($('<td class="text-center" style=" font-weight: bold;" onclick="carregaControleFerias(' + jsonControleFeriasArray[i].sequencialControleFerias + ');">' + jsonControleFeriasArray[i].periodoAquisitivoInicio + '</td>'));
+                row.append($('<td class="text-center" onclick="carregaControleFerias(' + jsonControleFeriasArray[i].sequencialControleFerias + ');">' + jsonControleFeriasArray[i].periodoAquisitivoInicio + '</td>'));
                 row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].periodoAquisitivoFim + '</td>'));
                 row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].feriasSolicitadasInicio + '</td>'));
                 row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].feriasSolicitadasFim + '</td>'));
                 row.append($('<td class="text-center" >' + jsonControleFeriasArray[i].diasSolicitacao + '</td>'));
-                row.append($('<td class="text-center" >' + 'Segunda-feira' + '</td>'));
-                row.append($('<td class="text-center" >' + 'Sexta-feira' + '</td>'));
 
                 if ((situacaoAgendamento == '2') || (jsonControleFeriasArray[i].situacaoAgendamento == '2')) {
                     row.append($('<td class="text-center" style="color:blue; font-weight: bold;" >' + 'Aguardando Aprovação' + '</td>'));
@@ -1136,17 +1150,12 @@ include("inc/scripts.php");
         var jsonControleFeriasArray = JSON.parse($("#jsonControleFerias").val());
         var periodoAquisitivo = $('#periodoAquisitivoInicioLista').val()
 
-        if (jsonControleFeriasArray.length != 3) {
-            smartAlert("Atenção", "Você deve informar 3 sugestões de férias", "error");
-            $("#btnGravar").prop('disabled', false);
-            return;
-        }
         if (!funcionario) {
             smartAlert("Atenção", "Informe um Funcionário", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }
-        
+
         if (!periodoAquisitivo) {
             smartAlert("Atenção", "Preencha uma solicitação para Gravar", "error");
             $("#btnGravar").prop('disabled', false);
