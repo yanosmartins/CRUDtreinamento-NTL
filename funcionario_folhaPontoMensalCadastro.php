@@ -37,10 +37,6 @@ include("inc/header.php");
 //follow the tree in inc/config.ui.php
 $page_nav['funcionario']['sub']["controlePonto"]["active"] = true;
 include("inc/nav.php");
-
-$txt = "ABC" . "EEF";
-$txt
-
 ?>
 
 <!-- ==========================CONTENT STARTS HERE ========================== -->
@@ -96,7 +92,7 @@ $txt
                                                                     <label class="label">Mês/Ano</label>
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="mesAno" name="mesAno" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker text-center" value="<?= date("m/Y") ?>">
+                                                                        <input id="mesAno" name="mesAno" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker text-center">
                                                                         <!--Removido de acordo com a reunião do dia 14.06.2021 as 14h-->
 
                                                                 </section>
