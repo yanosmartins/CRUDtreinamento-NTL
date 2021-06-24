@@ -665,7 +665,12 @@ include("inc/scripts.php");
         var tipoExame = $('#tipoExameCadastro').val();
         var dataAgendamento = $('#dataAgendamento').val();
         var parametrosUrl = '&id=' + funcionario + '&tipoExame=' + tipoExame + '&dataAgendamento=' + dataAgendamento;
+        
 
+        var clinicaId = $('#clinicaSugestao').val();
+        var parametrosUrlSemTrab = '&id=' + funcionario + '&tipoExame=' + tipoExame + '&dataAgendamento=' + dataAgendamento + '&clinicaId=' + clinicaId;
+        
+        
 
         if ((modeloProprio == '1') || (modeloProprio == 'Ambimed')) {
             window.open("cadastro_encaminhamentoPdf.php?'" + parametrosUrl);
@@ -674,7 +679,7 @@ include("inc/scripts.php");
             window.open("cadastro_encaminhamentoPdfSeropedica.php?'" + parametrosUrl);
         }
         if ((modeloProprio == '3') || modeloProprio == 'SEMTRAB') {
-            // window.open("cadastro_encaminhamentoPdf.php?'" + parametrosUrl);
+            window.open("cadastro_encaminhamentoPdfSemTrab.php?'" + parametrosUrlSemTrab);
         }
 
     }
@@ -862,6 +867,8 @@ include("inc/scripts.php");
         $("#fileUploadAso").val('');
         $("#situacao").val('');
         $("#tipoExame").val('');
+        $("#dataAgendamento").val('');
+        $("#tipoExameCadastro").val('');
     }
 
     function addDataAso() {
