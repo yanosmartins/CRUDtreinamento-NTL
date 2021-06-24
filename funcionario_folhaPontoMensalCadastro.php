@@ -37,6 +37,10 @@ include("inc/header.php");
 //follow the tree in inc/config.ui.php
 $page_nav['funcionario']['sub']["controlePonto"]["active"] = true;
 include("inc/nav.php");
+
+$txt = "ABC" . "EEF";
+$txt
+
 ?>
 
 <!-- ==========================CONTENT STARTS HERE ========================== -->
@@ -92,10 +96,9 @@ include("inc/nav.php");
                                                                     <label class="label">Mês/Ano</label>
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        <input id="mesAno" name="mesAno" autocomplete="off" data-mask="99/9999" class="text-center">
+                                                                        <input id="mesAno" name="mesAno" autocomplete="off" data-mask="99/9999" data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker text-center" value="<?= date("m/Y") ?>">
                                                                         <!--Removido de acordo com a reunião do dia 14.06.2021 as 14h-->
-                                                                        <!-- data-mask-placeholder="MM/AAAA" data-dateformat="mm/yy" placeholder="MM/AAAA" type="text" class="datepicker text-center" value="<?= date("m/Y") ?>">
- -->
+
                                                                 </section>
                                                                 <section id="sectionStatus" class="col col-2" style="display:none">
                                                                     <label class="label" for="status">Status</label>
@@ -185,7 +188,14 @@ include("inc/nav.php");
                                                                 <section class="col col-1">
                                                                     <label class="label">Dia</label>
                                                                     <div class="input-group" data-align="top" data-autoclose="true">
-                                                                        <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly datepicker" readonly data-autoclose="true" maxlength="2" data-dateformat="d">
+                                                                        <input id="inputDia" name="inputDia" type="text" class="text-center form-control readonly" readonly data-autoclose="true" maxlength="2">
+                                                                    </div>
+                                                                </section>
+
+                                                                <section class="col col-1">
+                                                                    <div class="input-group" data-align="top" data-autoclose="true">
+                                                                        <label class="label"> </label>
+                                                                        <input id="diaSemana" name="diaSemana" type="text" class="text-center form-control readonly" readonly data-autoclose="true" maxlength="2" style="pointer-events: none; touch-action: none">
                                                                     </div>
                                                                 </section>
 
@@ -493,44 +503,44 @@ include("inc/scripts.php");
     $(document).ready(function() {
 
         // Removido de acordo com a reunião do dia 14 as 14h devido ao datepicker não mostrar APENAS mes/Ano
-        // $('#mesAno').datepicker();
-        // $('#mesAno').on('focus', function(e) {
-        //     e.preventDefault();
-        //     $(this).datepicker('show');
-        //     $(this).datepicker('widget').css('z-index', 1051);
-        // });
-
-        // $('#mesAno').datepicker({
-        //     changeMonth: true,
-        //     changeYear: true,
-        //     showButtonPanel: true,
-        //     dateFormat: 'mm/yyyy',
-        //     onClose: function(dateText, inst) {
-        //         var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-        //         var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-        //         $(this).datepicker('setDate', new Date(year, month, 1));
-        //     }
-        // });
-        // Removido de acordo com a reunião do dia 14 as 14h devido ao datepicker não mostrar APENAS mes/Ano
-
-        $('#inputDia').datepicker();
-        $('#inputDia').on('focus', function(e) {
+        $('#mesAno').datepicker();
+        $('#mesAno').on('focus', function(e) {
             e.preventDefault();
             $(this).datepicker('show');
             $(this).datepicker('widget').css('z-index', 1051);
         });
 
-        $('#inputDia').datepicker({
-            changeMonth: false,
-            changeYear: false,
-            showButtonPanel: false,
-            dateFormat: 'dd',
+        $('#mesAno').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'mm/yyyy',
             onClose: function(dateText, inst) {
                 var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
                 var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
                 $(this).datepicker('setDate', new Date(year, month, 1));
             }
         });
+        // Removido de acordo com a reunião do dia 14 as 14h devido ao datepicker não mostrar APENAS mes/Ano
+
+        // $('#inputDia').datepicker();
+        // $('#inputDia').on('focus', function(e) {
+        //     e.preventDefault();
+        //     $(this).datepicker('show');
+        //     $(this).datepicker('widget').css('z-index', 1051);
+        // });
+
+        // $('#inputDia').datepicker({
+        //     changeMonth: false,
+        //     changeYear: false,
+        //     showButtonPanel: false,
+        //     dateFormat: 'dd',
+        //     onClose: function(dateText, inst) {
+        //         var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        //         var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        //         $(this).datepicker('setDate', new Date(year, month, 1));
+        //     }
+        // });
 
         //========================================================
 
@@ -570,6 +580,9 @@ include("inc/scripts.php");
         $('#inputDia').on('change', function() {
             let dia = $("#inputDia").val();
             dia = dia.replace(/\D/gi, "");
+
+            let mesAno = $("#mesAno").val();
+
             if (!dia) dia = 1;
 
 
@@ -614,6 +627,45 @@ include("inc/scripts.php");
 
                     $("#inputInicioAlmoco").val(textoAlmoco[0]);
                     $("#inputFimAlmoco").val(textoAlmoco[1]);
+                }
+
+                let separador = mesAno.split('/');
+
+                let m = Number(separador[0]);
+                let y = Number(separador[1]);
+                dia++
+                if (dia.toString().length < 2) dia = `0${dia}`;
+                if (m.toString().length < 2) m = `0${m}`;
+                if (y.toString().length < 2) y = `0${y}`;
+
+                date = new Date(y + "-" + m + "-" + dia)
+
+                newDate = new Date(date);
+                var weekday = newDate.getDay();
+
+
+                switch (weekday) {
+                    case 0:
+                        $("#diaSemana").val('Domingo');
+                        break
+
+                    case 1:
+                        $("#diaSemana").val('Segunda-feira');
+                        break
+                    case 2:
+                        $("#diaSemana").val('Terça-feira');
+                        break
+                    case 3:
+                        $("#diaSemana").val('Quarta-feira');
+                        break
+                    case 4:
+                        $("#diaSemana").val('Quinta-feira');
+                        break
+                    case 5:
+                        $("#diaSemana").val('Sexta-feira');
+                        break
+                    default:
+                        $("#diaSemana").val('Sábado');
                 }
 
             } catch (e) {
@@ -1572,11 +1624,11 @@ include("inc/scripts.php");
             return
         }
 
-        if (inputExtra && (horaSaida != "00:00:00")) {
+        if (inputExtra != "00:00" && inputExtra != "" && horaSaida != "00:00:00") {
             smartAlert("Aviso", "O funcionário possui horas extras", "info");
         }
-        if (inputAtraso && (horaSaida != "00:00:00")) {
-            smartAlert("Aviso", "O funcionário possuiatrasos", "info");
+        if (inputAtraso != "00:00" && inputAtraso != "" && horaSaida != "00:00:00") {
+            smartAlert("Aviso", "O funcionário possui atrasos", "info");
         }
 
 
