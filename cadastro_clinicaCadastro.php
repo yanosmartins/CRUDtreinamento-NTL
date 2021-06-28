@@ -15,6 +15,9 @@ if ($condicaoAcessarOK == false) {
     header("Location:login.php");
 }
 
+SESSION_START();
+$id = $_SESSION['codigo'];
+
 $esconderBtnExcluir = "";
 if ($condicaoExcluirOK === false) {
     $esconderBtnExcluir = "none";
@@ -96,7 +99,7 @@ include("inc/nav.php");
                                                         <div class="row">
                                                             <input id="codigo" name="codigo" type="text" class="hidden" value="">
                                                             <input id="codigoFornecedor" name="codigoFornecedor" type="text" class="hidden" value="">
-
+                                                            <input id="solicitanteId" name="solicitanteId" type="text" class="hidden" value="">
 
                                                             <section class="col col-3">
                                                                 <label class="label">CNPJ</label>
@@ -382,11 +385,10 @@ include("inc/nav.php");
                                                                         <option></option>
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT F.codigo, F.nome from ntl.funcionario F 
-                                                                        INNER JOIN ntl.beneficioProjeto BP ON F.codigo = BP.funcionario
-                                                                        INNER JOIN ntl.departamento DP ON BP.departamento = DP.codigo
-                                                                        WHERE DP.codigo = 9";
+                                                                        $sql = "SELECT F.codigo, F.nome from ntl.funcionario F
+                                                                        WHERE F.ativo = 1 ORDER BY nome";
                                                                         $result = $reposit->RunQuery($sql);
+                                                                        if ($result != 0)
                                                                         foreach ($result as $row) {
                                                                             $id = (int) $row['codigo'];
                                                                             $nome = $row['nome'];
@@ -574,6 +576,7 @@ include("inc/scripts.php");
 
 
         carregaPagina();
+        recuperarSolicitante();
     });
 
     function carregaPagina() {
@@ -704,8 +707,7 @@ include("inc/scripts.php");
                         var bairro = registros[9];
                         var cidade = registros[10];
                         var uf = registros[11];
-
-                        $("#codigoFornecedor").val(fornecedor);
+                        
                         $("#razaoSocial").val(razaoSocial);;
                         $("#apelido").val(apelido);;
                         $("#cep").val(cep);;
@@ -719,13 +721,49 @@ include("inc/scripts.php");
                         $("#jsonTelefone").val($strArrayTelefone);
                         $("#jsonEmail").val($strArrayEmail);
 
+                        if (($strArrayEmail == "[]") && ($strArrayTelefone == "[]")) {
+                            return false;
+                        } 
+                        $("#codigoFornecedor").val(fornecedor);
 
 
                         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
                         jsonEmailArray = JSON.parse($("#jsonEmail").val());
-
+                        
                         fillTableTelefone();
                         fillTableEmail();
+                    }
+
+                }
+            }
+        );
+    }
+
+    function recuperarSolicitante() {
+        var solicitante = $("#solicitante").val()
+        recuperaSolicitante(solicitante,
+            function(data) {
+                var atributoId = '#' + 'estoqueDestino';
+                if (data.indexOf('failed') > -1) {
+                    $("#solicitante").focus()
+                    // $("#matricula").val("")
+                    return;
+                } else {
+                    $("#solicitante").prop("disabled", false)
+                    $("#solicitante").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+                    if (piece == "") {
+                        smartAlert("Erro", "Erro!", "error");
+                        $("#solicitante").val('');
+                    } else {
+                        var mensagem = piece[0];
+                        var registros = piece[1].split("^");
+                        var solicitanteId = registros[0];
+                        var solicitanteNome = registros[1];
+                        
+                        $("#solicitanteId").val(solicitanteId);
+                        $("#solicitante").val(solicitanteId);
                     }
 
                 }
@@ -1213,9 +1251,23 @@ include("inc/scripts.php");
         const modeloProprio = $('#modeloProprio').val();
         const solicitante = $('#solicitante').val();
         const ativo = $('#ativo').val();
+        const apelido = $('#apelido').val();
 
-        if (!codigoFornecedor) {
+
+        if ((codigoFornecedor) && (!apelido)) {
             smartAlert("Atenção", "Esta clínica não é um fornecedor", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if ((!codigoFornecedor) && (!apelido)) {
+            smartAlert("Atenção", "Esta clínica não é um fornecedor", "error");
+            $("#btnGravar").prop('disabled', false);
+            return;
+        }
+
+        if ((!codigoFornecedor) && (apelido != '')) {
+            smartAlert("Atenção", "Este fornecedor não possui dados para contato", "error");
             $("#btnGravar").prop('disabled', false);
             return;
         }

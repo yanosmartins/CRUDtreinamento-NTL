@@ -25,6 +25,10 @@ if ($funcao == 'recuperarDadosCnpj') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'recuperarSolicitante') {
+    call_user_func($funcao);
+}
+
 return;
 
 
@@ -39,8 +43,8 @@ function recuperarDadosCnpj()
     }
 
     $sql = "SELECT F.codigo AS 'codigoFornecedor',cnpj,razaoSocial,apelido,cep,logradouro,endereco,numero,complemento,bairro,cidade,uf,telefone,email from ntl.fornecedor F 
-    INNER JOIN ntl.fornecedorEmail FE ON FE.fornecedor = F.codigo 
-    INNER JOIN ntl.fornecedorTelefone FT ON FT.fornecedor = F.codigo WHERE cnpj =" . "'" . $cnpj . "'";
+    LEFT JOIN ntl.fornecedorEmail FE ON FE.fornecedor = F.codigo 
+    LEFT JOIN ntl.fornecedorTelefone FT ON FT.fornecedor = F.codigo WHERE cnpj =" . "'" . $cnpj . "'";
 
 
     $reposit = new reposit();
@@ -162,6 +166,54 @@ function recuperarDadosCnpj()
     }
 
     echo "sucess#" . $out . "#" . $strArrayTelefone . "#" .  $strArrayEmail;
+    return;
+}
+
+function recuperarSolicitante()
+{
+
+    $solicitante = (int)$_POST["solicitante"];
+    SESSION_START();
+    $logado = $_SESSION['funcionario'];
+
+    if ($solicitante == 0) {
+
+        $sql = "SELECT F.codigo, F.nome from ntl.funcionario F
+        WHERE F.ativo = 1  AND F.codigo=" . $logado;
+    
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+    
+        $out = "";
+        if ($row = $result[0]) {
+            $codigo = (int) $row['codigo'];
+            $solicitanteNome = $row['nome'];
+        }
+    } else {
+        
+        $sql = "SELECT F.codigo, F.nome from ntl.funcionario F
+        WHERE F.ativo = 1 AND F.codigo" . $solicitante;
+    
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+    
+        $out = "";
+        if ($row = $result[0]) {
+            $codigo = (int) $row['codigo'];
+            $solicitanteNome = $row['nome'];
+        }
+    }
+
+
+    $out = $codigo . "^" .
+        $solicitanteNome;
+
+    if ($out == "") {
+        echo "failed#";
+        return;
+    }
+
+    echo "sucess#" . $out;
     return;
 }
 
