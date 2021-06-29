@@ -55,4 +55,18 @@ function recuperaDadosCnpj(cnpj, callback) {
     return;
 }
 
+function recuperaSolicitante(solicitante, callback) {
+    $.ajax({
+        url: 'js/sqlscope_cadastroClinica.php', //caminho do arquivo a ser executado
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: 'recuperarSolicitante', solicitante: solicitante }, //valores enviados ao script     
+        async: false,
+        success: function (data) {
+            callback(data);
+        }
+    });
+    return;
+}
+
 

@@ -101,6 +101,11 @@ $pdf->SetMargins(0, 0, 0); #Seta a Margin Esquerda com 20 milímetro, superrior 
 $pdf->SetDisplayMode('default', 'continuous'); #Digo que o PDF abrirá em tamanho PADRÃO e as páginas na exibição serão contínuas
 $pdf->AddPage();
 
+
+
+
+$pdf->Image('img\logoNTL.jpg',167,3,-75);
+
 $pdf->Line(19, 22 , 192, 22  ); //primeira linha
 
 // RJ DATA DE HOJE
