@@ -243,31 +243,31 @@ include("inc/nav.php");
                                                             </div>
                                                             <div class="row" id="linha3">
                                                                 <section class="col col-2">
-                                                                    <label class="label">Quantiidade em estoque</label>
+                                                                    <label class="label">Quantidade em estoque</label>
                                                                     <label class="input">
                                                                         <input id="quantidadeEstoque" name="quantidadeEstoque" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
-                                                                    <label class="label">Quantiidade</label>
+                                                                    <label class="label">Quantidade</label>
                                                                     <label class="input">
                                                                         <input id="quantidade" name="quantidade" maxlength="255" min="0" autocomplete="off" class="required" type="number" value="">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
-                                                                    <label class="label">Quantiidade reservada</label>
+                                                                    <label class="label">Quantidade reservada</label>
                                                                     <label class="input">
                                                                         <input id="quantidadeReservada" name="quantidadeReservada" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
-                                                                    <label class="label">Quantiidade fora de estoque</label>
+                                                                    <label class="label">Quantidade fora de estoque</label>
                                                                     <label class="input">
                                                                         <input id="quantidadeForaEstoque" name="quantidadeForaEstoque" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
-                                                                    <label class="label">Quantiidade não disponivel</label>
+                                                                    <label class="label">Quantidade não disponivel</label>
                                                                     <label class="input">
                                                                         <input id="quantidadeNaoDisponivel" name="quantidadeNaoDisponivel" maxlength="255" min="0" autocomplete="off" class="readonly" disabled type="number" value="">
                                                                     </label>
