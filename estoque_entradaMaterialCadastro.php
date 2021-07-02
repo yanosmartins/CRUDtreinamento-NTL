@@ -271,7 +271,7 @@ include("inc/nav.php");
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-2">
-                                                                    <label class="label">Quantiidade</label>
+                                                                    <label class="label">Quantidade</label>
                                                                     <label class="input">
                                                                         <input id="quantidade" name="quantidade" maxlength="255" min="0" autocomplete="off" class="required" type="number" value="">
                                                                     </label>

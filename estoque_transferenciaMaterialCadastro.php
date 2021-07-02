@@ -604,6 +604,9 @@ include("inc/scripts.php");
             popularComboEstoque();
         });
 
+        $("#unidadeDestino").on("change", function() {
+            popularComboEstoqueDestino();
+        });
 
         $("#btnNovo").on("click", function() {
             novo();
@@ -717,6 +720,41 @@ include("inc/scripts.php");
         populaComboEstoque(unidadeDestino,
             function(data) {
                 var atributoId = '#' + 'estoque';
+                if (data.indexOf('failed') > -1) {
+                    smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
+                    $("#unidade").focus()
+                    $("#estoque").val("")
+                    $("#estoque").prop("disabled", true)
+                    $("#estoque").addClass("readonly")
+                    return;
+                } else {
+                    $("#estoque").prop("disabled", false)
+                    $("#estoque").removeClass("readonly")
+                    data = data.replace(/failed/g, '');
+                    var piece = data.split("#");
+
+                    var mensagem = piece[0];
+                    var qtdRegs = piece[1];
+                    var arrayRegistros = piece[2].split("|");
+                    var registro = "";
+
+                    $(atributoId).html('');
+                    $(atributoId).append('<option></option>');
+
+                    for (var i = 0; i < qtdRegs; i++) {
+                        registro = arrayRegistros[i].split("^");
+                        $(atributoId).append('<option value=' + registro[0] + '>' + registro[1] + '</option>');
+                    }
+                }
+            }
+        );
+    }
+
+    function popularComboEstoqueDestino() {
+        var unidadeDestino = $("#unidadeDestino").val()
+        populaComboEstoque(unidadeDestino,
+            function(data) {
+                var atributoId = '#' + 'estoqueDestino';
                 if (data.indexOf('failed') > -1) {
                     smartAlert("Aviso", "A unidade informada não possui estoques!", "info");
                     $("#unidade").focus()
