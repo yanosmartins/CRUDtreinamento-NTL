@@ -173,7 +173,7 @@ include "js/repositorio.php";
                     //$login = mb_convert_encoding($row['cpf'], 'UTF-8', 'HTML-ENTITIES');
                     echo '<tr >';
                     // echo "<td class='text-left'>$codigo</td>";
-                    echo "<td class='text-left'>$nomeCompleto</td>";
+                    echo '<td class="text-left"><a href="contratacao_candidatoCadastroDividida.php?codigo=' . $id . '">' . $nomeCompleto . '</a></td>';
                     echo "<td class='text-center'>$cpf</td>";
                     echo "<td class='text-center'>$rg</td>";
                     echo "<td class='text-left'>$cargo</td>";
