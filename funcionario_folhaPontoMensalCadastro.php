@@ -341,6 +341,11 @@ include("inc/nav.php");
                                                                                 <option value="Atestado médico">
                                                                                 <option value="Comprovante TRE">
                                                                                 <option value="Audiência na justiça">
+                                                                                <option value="Atestado de Óbito">
+                                                                                <option value="Licença Casamento">
+                                                                                <option value="Licença Paternidade">
+                                                                                <option value="Licença Maternidade">
+
                                                                             </datalist>
                                                                         </label>
                                                                     </section>
@@ -351,6 +356,24 @@ include("inc/nav.php");
                                                                             <input id="dataReferenteUpload" name="dataReferenteUpload" autocomplete="new-password" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker " value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa">
                                                                         </label>
                                                                     </section>
+                                                                    <section class="col col-2">
+                                                                        <label class="label" for="dataInicio">Data Inicio</label>
+                                                                        <label class="input">
+                                                                            <i class="icon-append fa fa-calendar"></i>
+                                                                            <input id="dataInicio" name="dataInicio" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                        </label>
+                                                                    </section>
+
+                                                                    <section class="col col-2">
+                                                                        <label class="label" for="dataFim">Data Fim</label>
+                                                                        <label class="input">
+                                                                            <i class="icon-append fa fa-calendar"></i>
+                                                                            <input id="dataFim" name="dataFim" type="text" placeholder="dd/mm/aaaa" data-dateformat="dd/mm/yy" class="datepicker" value="" data-mask="99/99/9999" data-mask-placeholder="dd/mm/aaaa" autocomplete="off">
+                                                                        </label>
+                                                                    </section>
+
+                                                                </div>
+                                                                <div class="row">
                                                                     <input type="text" name="dataUpload" id="dataUpload" hidden class="hidden">
                                                                     <section class="col col-md-2">
                                                                         <label class="label">&nbsp;</label>
@@ -372,6 +395,8 @@ include("inc/nav.php");
                                                                             <th class="text-left">Tipo de arquivo</th>
                                                                             <th class="text-left">Mês referente</th>
                                                                             <th class="text-left">Data de upload</th>
+                                                                            <th class="text-left">Data Inicio</th>
+                                                                            <th class="text-left">Data Fim</th>
 
                                                                         </tr>
                                                                     </thead>
@@ -560,6 +585,23 @@ include("inc/scripts.php");
             initialDate = newValue
             carregaFolhaPontoMensal();
         });
+
+        $("#uploadType").on("change", function() {
+            let uploadType = $('#uploadType').val()
+
+            if ((uploadType != "Atestado médico") && (uploadType != "Comprovante TRE") && (uploadType != "Audiência na justiça")) {
+                $("#dataInicio").addClass('readonly');
+                $("#dataInicio").prop('disabled', true);
+                $("#dataFim").addClass('readonly');
+                $("#dataFim").prop('disabled', true);
+            } else {
+                $("#dataInicio").removeAttr('disabled');
+                $("#dataInicio").removeClass('readonly');
+                $("#dataFim").removeAttr('disabled');
+                $("#dataFim").removeClass('readonly');
+            }
+        });
+
 
         /* Evento para validar a entrada do dia */
         $('#inputDia').on('keydown', () => {
