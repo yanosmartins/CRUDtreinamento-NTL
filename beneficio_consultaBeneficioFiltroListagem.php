@@ -10,13 +10,14 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Projeto</th>
                     <th class="text-left" style="min-width:30px;">Usuario Fechamento</th>
                     <th class="text-left" style="min-width:30px;">Data Fechamento</th>
+                    <th class="text-left" style="min-width:30px;">Situação</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
 
                 $reposit = new reposit();
-                $sql = "SELECT PB.codigo, PB.mesAno, PB.projeto,P.descricao,P.apelido, PB.usuarioFechamento,PB.dataFechamento
+                $sql = "SELECT PB.codigo, PB.mesAno, PB.projeto,P.descricao,P.apelido, PB.usuarioFechamento,PB.dataFechamento,PB.situacao
                         FROM Beneficio.processaBeneficio AS PB
                         LEFT JOIN ntl.projeto AS P ON PB.projeto = P.codigo";
                 $where = " WHERE (0=0) ";
@@ -49,12 +50,21 @@ include "js/repositorio.php";
                         // $dataFechamentoHoras = explode(".", $dataFechamentoHoras);
                         $dataFechamento = $dataFechamentoDia[0] . "/" . $dataFechamento[1] . "/" . $dataFechamento[0];
                     }
+                    $situacao = (string)$row['situacao'];
 
                     echo '<tr>';
                     echo '<td class="text-left"><a target="_blank" href="beneficio_consultaBeneficioDetalheFiltro.php?codigo=' . $codigo . '">' . $mesAno . '</a></td>';
                     echo '<td class="text-center">' . $projetoDescricao . '</td>';
                     echo '<td class="text-center">' . $usuarioFechamento . '</td>';
                     echo '<td class="text-center">' . $dataFechamento . '</td>';
+                    echo '<td class="text-center"> <a> <button id="btnExcluir" value="'. $codigo .'" type="button" class="btn btn-danger">
+                        <i class="fa fa-trash"></i>
+                    </button></td>';
+                    // if ($situacao == 'A') {
+                        
+                    // } else {
+                    //     echo '<td class="text-center"></td>';
+                    // }
                     echo '</tr>';
                 }
                 ?>
@@ -62,7 +72,20 @@ include "js/repositorio.php";
         </table>
     </div>
 </div>
-<div class="modal fade" id="parametroLinkModalPanel" data-backdrop="static" tabindex="-1" role="dialog">
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+        <span id="ui-id-2" class="ui-dialog-title">
+        </span>
+    </div>
+    <div id="dlgSimpleExcluir" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+        <p>CONFIRMA A EXCLUSÃO ? </p>
+    </div>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+        <div class="ui-dialog-buttonset">
+        </div>
+    </div>
+</div>
+<!-- <div class="modal fade" id="parametroLinkModalPanel" data-backdrop="static" tabindex="-1" role="dialog">
     <div class="modal-dialog" style="width:75%;">
         <div class="modal-content">
             <div class="modal-header">
@@ -76,7 +99,7 @@ include "js/repositorio.php";
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- PAGE RELATED PLUGIN(S) -->
 
 <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
@@ -104,9 +127,41 @@ include "js/repositorio.php";
             phone: 480
         };
 
-        function abreModal() {
-            $('#parametroLinkModalPanel').modal();
-        }
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: " Atenção",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+        $("#btnExcluir").on("click", function() {
+            // var id = <?php echo $codigo ?>;
+            var id = +$("#btnExcluir").val();
+            console.log(id);
+            // if (id === 0) {
+            //     smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+            //     $("#nome").focus();
+            //     return;
+            // }
+
+            // if (id !== 0) {
+            //     $('#dlgSimpleExcluir').dialog('open');
+            // }
+        });
 
         /* TABLETOOLS */
         $('#tableSearchResult').dataTable({
