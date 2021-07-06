@@ -73,14 +73,15 @@ function grava()
     }
     $xmlJsonProcessaBeneficio = "'" . $xmlJsonProcessaBeneficio . "'";
     //Fim do Json ProcessaBeneficio
-
+    $situacao = 'A';
     $sql = "Beneficio.processaBeneficio_Atualiza
         $codigo,
         $ativo,
         $mesAno,
         $projeto,
         $usuario,
-        $xmlJsonProcessaBeneficio";
+        $xmlJsonProcessaBeneficio,
+        $situacao";
 
     $reposit = new reposit();
 
