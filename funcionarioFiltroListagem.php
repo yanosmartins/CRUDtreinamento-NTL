@@ -11,6 +11,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">RG</th>
                     <th class="text-left" style="min-width:30px;">Data de Nascimento</th>
                     <th class="text-left" style="min-width:30px;">Estado Civil</th>
+                    <th class="text-left" style="min-width:30px;">Genero</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
@@ -59,6 +60,13 @@ include "js/repositorio.php";
                     $dataNascimentoFimFiltro = $_POST["dataNascimentoFimFiltro"];
                     $where = $where . " AND (funcionario.[dataNascimento] <='$dataNascimentoFimFiltro')";
                 } 
+                $generoFiltro = "";
+                $generoFiltro = $_POST["generoFiltro"];
+                if ($_POST["generoFiltro"] != "") {
+                    $generoFiltro = $_POST["generoFiltro"];
+                    $where = $where . " AND funcionario.[genero] =" . $generoFiltro;
+                }
+
                 $ativoFiltro = "";
                 $ativoFiltro = $_POST["ativoFiltro"];
                 if ($_POST["ativoFiltro"] != "") {
@@ -68,7 +76,7 @@ include "js/repositorio.php";
 
 
 
-                $sql = " SELECT codigo, ativo, cpf, rg, dataNascimento, estadoCivil, nome from dbo.funcionario
+                $sql = " SELECT codigo, ativo, cpf, rg, dataNascimento, estadoCivil, nome, genero from dbo.funcionario
                  ";
 
                 $sql = $sql . $where;
@@ -80,6 +88,7 @@ include "js/repositorio.php";
                     $nomeFiltro = $row['nome'];
                     $cpfFiltro = $row['cpf'];;
                     $rgFiltro = $row['rg'];
+                    $genero=  $row['genero'];
 
                     $dataNascimentoFiltro = $row['dataNascimento'];
                     if ($dataNascimentoFiltro) {
@@ -105,6 +114,9 @@ include "js/repositorio.php";
                         $estadoCivilFiltro = "Viúvo";
                     }
 
+
+
+
                     $ativoFiltro = (int) $row['ativo'];
                     if ($ativoFiltro == 1) {
                         $ativoFiltro = "Sim";
@@ -118,6 +130,7 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $rgFiltro . '</td>';
                     echo '<td class="text-left">' . $dataNascimentoFiltro . '</td>';
                     echo '<td class="text-left">' . $estadoCivilFiltro . '</td>';
+                    echo '<td class="text-left">' . $genero . '</td>';
                     echo '<td class="text-left">' . $ativoFiltro . '</td>';
                     echo '</tr >';
                 }

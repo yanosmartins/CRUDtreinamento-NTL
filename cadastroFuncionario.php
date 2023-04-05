@@ -147,6 +147,7 @@ include("inc/nav.php");
                                                                 <label class="select">
                                                                     <select id="genero" name="genero">
                                                                         <option value="1">Homem</option>
+                                                                        <option value="2">Mulher</option>
                                                                     </select><i></i>
                                                             </section>
                                                         </div>

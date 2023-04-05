@@ -225,6 +225,7 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
         var dataNascimentoInicio = $('#dataNascimentoInicio').val();
         var dataNascimentoFim = $('#dataNascimentoFim').val();
+        var genero = $('#genero').val();
 
 
 
@@ -236,6 +237,7 @@ include("inc/scripts.php");
             dataNascimentoFimFiltro: dataNascimentoFim,
             rgFiltro: rg,
             estadoCivilFiltro: estadoCivil,
+            generoFiltro: genero,
             ativoFiltro: ativo
         });
     }
