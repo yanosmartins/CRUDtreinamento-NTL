@@ -6,11 +6,6 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Nome</th>
-                    <th class="text-left" style="min-width:30px;">CPF</th>
-                    <th class="text-left" style="min-width:30px;">RG</th>
-                    <th class="text-left" style="min-width:30px;">Data de Nascimento</th>
-                    <th class="text-left" style="min-width:30px;">Estado Civil</th>
                     <th class="text-left" style="min-width:30px;">Genero</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
@@ -125,11 +120,6 @@ include "js/repositorio.php";
                     }
 
                     echo '<tr >';
-                    echo '<td class="text-left"><a href="cadastroFuncionario.php?id=' . $id . '">' . $nomeFiltro . '</a></td>';
-                    echo '<td class="text-left">' . $cpfFiltro . '</td>';
-                    echo '<td class="text-left">' . $rgFiltro . '</td>';
-                    echo '<td class="text-left">' . $dataNascimentoFiltro . '</td>';
-                    echo '<td class="text-left">' . $estadoCivilFiltro . '</td>';
                     echo '<td class="text-left">' . $genero . '</td>';
                     echo '<td class="text-left">' . $ativoFiltro . '</td>';
                     echo '</tr >';

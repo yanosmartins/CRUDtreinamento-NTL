@@ -168,7 +168,7 @@ include("inc/scripts.php");
         });
 
         $('#btnNovo').on("click", function() {
-            // novo();
+            novo();
         });
     })
 
@@ -185,6 +185,6 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'funcionarioCadastro.php');
+        $(location).attr('href', 'TBCadastroGenero.php');
     }
 </script>

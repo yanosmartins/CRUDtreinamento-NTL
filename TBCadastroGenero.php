@@ -100,56 +100,22 @@ include("inc/nav.php");
                                                         <div class="row">
                                                         </div>
                                                         <div class="row">
-                                                            <section class="col col-2">
-                                                                <label class="label">Nome do funcionário:</label>
-                                                                <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" class="required" value="">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">CPF:</label>
-                                                                <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                    <input id="cpf"  name="cpf" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">RG:</label>
-                                                                <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                    <input id="rg" name="rg" class="required rg-mask" type="text" value="" placeholder="XX.XXX.XXX-X">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Data de Nascimento:</label>
-                                                                <label class="input">
-                                                                    <input id="dataNascimento" name="dataNascimento" type="text" class="datepicker required" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
-                                                                </label>
-                                                            </section>
-                                                            
-                                                            <section class="col col-1">
-                                                                <label class="label">Idade:</label>
-                                                                <label class="input">
-                                                                    <input id="idade" name="idade" type="text" class="readonly">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label" for="Sexo">Estado Civil</label>
-                                                                <label class="select">
-                                                                    <select id="estadoCivil" name="ativo">
-                                                                        <option value="1" selected>Solteiro</option>
-                                                                        <option value="2">Casado</option>
-                                                                        <option value="3">Separado</option>
-                                                                        <option value="4">Divorciado</option>
-                                                                        <option value="5">Viúvo</option>
-                                                                    </select><i></i>
-                                                            </section>
-                                                            <section class="col col-2">
+                                                        <section class="col col-2">
                                                                 <label class="label" for="genero">Sexo:</label>
                                                                 <label class="select">
                                                                     <select id="genero" name="genero">
                                                                         <option value="1">Homem</option>
                                                                         <option value="2">Mulher</option>
                                                                     </select><i></i>
+                                                            </section>    
+                                                        <section class="col col-2">
+                                                                <label class="label">Nome do funcionário:</label>
+                                                                <label class="input">
+                                                                    <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                </label>
                                                             </section>
+                                                            
+                                                            
                                                         </div>
                                                     </fieldset>
                                                 </div>
