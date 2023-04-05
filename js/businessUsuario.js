@@ -18,6 +18,7 @@ function gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario, funci
                     smartAlert("Atenção", mensagem, "error");
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
+                    novo();
                 }
 
                 return '';
@@ -53,22 +54,20 @@ function recuperaUsuario(id) {
             } else {
                 data = data.replace(/failed/g, '');
                 var piece = data.split("#");
-
                 var mensagem = piece[0];
                 var out = piece[1];
                 piece = out.split("^");
                 var codigo = +piece[0];
-                var login = piece[1];
+                var nome = piece[1];
                 var ativo = +piece[2];
-                var tipoUsuario = piece[3];
-                var funcionario = +piece[4];
-                var restaurarSenha = +piece[5];
+                var cpf = piece[3];
+                var dataNascimento = +piece[4];
                
                 $("#codigo").val(codigo);
-                $("#login").val(login);
+                $("#nome").val(nome);
                 $("#ativo").val(ativo);
-                $("#funcionario").val(funcionario);
-                $("#restaurarSenha").val(restaurarSenha);
+                $("#cpf").val(cpf);
+                $("#dataNascimento").val(dataNascimento);
                 if (ativo === 1) {
                     $('#ativo').prop('checked', true);
                 } else {
@@ -107,10 +106,10 @@ function excluirUsuario(id) {
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                 }
-                novo();
+                location.reload();
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                novo();
+                location.reload();
             }
         },
         error: function (xhr, er) {

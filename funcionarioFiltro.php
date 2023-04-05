@@ -6,25 +6,25 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-$condicaoAcessarOK =true;
-$condicaoGravarOK =true;
+// $condicaoAcessarOK = (in_array('USUARIO_ACESSAR', $arrayPermissao, true));
+// $condicaoGravarOK = (in_array('USUARIO_GRAVAR', $arrayPermissao, true));
 
 // if ($condicaoAcessarOK == false) {
 //     unset($_SESSION['login']);
 //     header("Location:login.php");
 // }
 
-// $esconderBtnGravar = "";
-// if ($condicaoGravarOK === false) {
-//     $esconderBtnGravar = "none";
-// }
+$esconderBtnGravar = "";
+if ($condicaoGravarOK === false) {
+    $esconderBtnGravar = "none";
+}
 
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Usuário";
+$page_title = "Funcionário";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -57,7 +57,7 @@ include("inc/nav.php");
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
-                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false" style="">
+                    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
                             <h2>Usuário</h2>
@@ -80,41 +80,72 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-6">
-                                                                <label class="label">Nome</label>
-                                                                <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                    <input id="nome" maxlength="50" name="nome" type="text" value="">
+                                                            <section class="col col-2">
+                                                                <label class="label">Nome do funcionário</label>
+                                                                <label class="input">
+                                                                    <input id="nome" maxlength="255" name="nome" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                            <label class="label">CPF</label>
+                                                                <label class="label">RG:</label>
                                                                 <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                    <input id="cpf" maxlength="50" name="cpf" type="text" value="">
+                                                                    <input id="rg" name="rg" class="rg-mask" type="text" value="" placeholder="XX.XXX.XXX-X">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                            <label class="label">Data Nascimento</label>
-                                                                <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                <input id="dataNascimento" name="dataNascimento" autocomplete="off" type="text" data-dateformat="dd/mm/yy" class="datepicker required" style="text-align: center" value="" data-mask="99/99/9999" data-mask-placeholder="-" autocomplete="off">
+                                                                <label class="label">Data de Nascimento</label>
+                                                                <label class="input">
+                                                                    <input id="dataNascimento" name="dataNascimento" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label">Ativo</label>
+                                                            <section class="col col-2">
+                                                                <label class="label">CPF</label>
+                                                                <label class="input"><i class="icon-prepend fa fa-user"></i>
+                                                                    <input id="cpf" maxlength="20" name="cpf" cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="estadoCivil">Estado Civil</label>
                                                                 <label class="select">
-                                                                    <select id="ativo" name="ativo" class="required">
-
-                                                                        <option value="1">Sim</option>
+                                                                    <select id="estadoCivil" name="estadoCivil">
+                                                                        <option value="" selected>Todos</option>
+                                                                        <option value="1">Solteiro</option>
+                                                                        <option value="2">Casado</option>
+                                                                        <option value="3">Separado</option>
+                                                                        <option value="4">Divorciado</option>
+                                                                        <option value="5">Viúvo</option>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="ativo">Ativo</label>
+                                                                <label class="select">
+                                                                    <select id="ativo" name="ativo">
+                                                                        <option value="" selected>Todos</option>
+                                                                        <option value="1" >Sim</option>
                                                                         <option value="0">Não</option>
-                                                                    </select>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Nascimento - Início</label>
+                                                                <label class="input">
+                                                                    <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Nascimento - Fim</label>
+                                                                <label class="input">
+                                                                    <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
                                                 <footer>
-                                                    <button id="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                                    <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                                         <span class="fa fa-search"></span>
                                                     </button>
                                                     <?php if ($condicaoGravarOK) { ?>
-                                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
+                                                        <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
                                                             <span class="fa fa-file"></span>
                                                         </button>
                                                     <?php } ?>
@@ -169,29 +200,47 @@ include("inc/scripts.php");
 
 
 <script>
+    $("#cpf").mask('999.999.999-99');
+    $("#rg").mask('99.999.999-9');
+    $("#dataNascimento").mask('99/99/9999');
+    $("#dataNascimentoInicio").mask('99/99/9999');
+    $("#dataNascimentoFim").mask('99/99/9999');
     $(document).ready(function() {
+
         $('#btnSearch').on("click", function() {
             listarFiltro();
         });
 
         $('#btnNovo').on("click", function() {
-            novo();
+            // novo();
         });
-
-        $("#cpf").mask("999.999.999-99");
-    });
+    })
 
     function listarFiltro() {
+        var nome = $('#nome').val();
+        var cpf = $('#cpf').val();
+        var dataNascimento = $('#dataNascimento').val();
+        var rg = $('#rg').val();
+        var estadoCivil = $('#estadoCivil').val();
+        var ativo = $('#ativo').val();
+        var dataNascimentoInicio = $('#dataNascimentoInicio').val();
+        var dataNascimentoFim = $('#dataNascimentoFim').val();
 
-    var nome = $('#nome').val();
-    var cpf = $('#cpf').val();
-    var dataNascimento = $('#dataNascimento').val();
-    var parametrosUrl = '&nome=' + nome + '&cpf=' + cpf + '&dataNascimento=' + dataNascimento;
-    $('#resultadoBusca').load('cadastroFiltroListagem.php?' + parametrosUrl);
+
+
+        $('#resultadoBusca').load('funcionarioFiltroListagem.php?', {
+            nomeFiltro: nome,
+            cpfFiltro: cpf,
+            dataNascimentoFiltro: dataNascimento,
+            dataNascimentoInicioFiltro: dataNascimentoInicio,
+            dataNascimentoFimFiltro: dataNascimentoFim,
+            rgFiltro: rg,
+            estadoCivilFiltro: estadoCivil,
+            ativoFiltro: ativo
+        });
     }
 
     function novo() {
-        $(location).attr('href', 'cadastroFuncionario.php');
+        $(location).attr('href', 'funcionarioCadastro.php');
     }
-
 </script>

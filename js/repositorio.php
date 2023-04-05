@@ -12,7 +12,7 @@ class reposit
     private $porta = PORTA;
     //private $socket = SOCKET;
     private $sqlconnect;
-    const SCHEMA = 'Ntl';
+    const SCHEMA = 'dbo';
 
 
     function AbreConexao($banco)
