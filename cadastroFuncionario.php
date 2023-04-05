@@ -143,10 +143,10 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="ativo">Sexo:</label>
+                                                                <label class="label" for="genero">Sexo:</label>
                                                                 <label class="select">
                                                                     <select id="genero" name="genero">
-                                                                        <option value="1" selected>Homem</option>
+                                                                        <option value="1">Homem</option>
                                                                     </select><i></i>
                                                             </section>
                                                         </div>
@@ -386,6 +386,7 @@ include("inc/scripts.php");
                             var rg = piece[4];
                             var dataNascimento = piece[5];
                             var estadoCivil = piece[6];
+                            var genero = piece[7];
 
                             // var dataNascimento = piece[5];
 
@@ -406,6 +407,7 @@ include("inc/scripts.php");
                             var idade = (anoAtual - dataNascimento);
                             $("#idade").val(idade);
                             $("#estadoCivil").val(estadoCivil);
+                            $("#genero").val(genero);
                             return;
                         }
 
@@ -464,6 +466,7 @@ include("inc/scripts.php");
         var dataNascimento = $("#dataNascimento").val();
         var rg = $("#rg").val();
         var estadoCivil = $("#estadoCivil").val();
+        var genero = $("#genero").val();
 
         if (cpf === "") {
             smartAlert("Atenção", "Informe o cpf !", "error");
@@ -494,7 +497,7 @@ include("inc/scripts.php");
 
 
 
-        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil);
+        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero);
     }
 
 

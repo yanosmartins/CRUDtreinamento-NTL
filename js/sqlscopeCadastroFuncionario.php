@@ -50,6 +50,7 @@ function gravar()
     $dataNascimento = $_POST['dataNascimento'];
     $dataNascimento = implode("-", array_reverse(explode("/", $dataNascimento)));
     $rg = $_POST['rg'];
+    $genero = $_POST['genero'];
     $estadoCivil= (int)$_POST['estadoCivil'];
 
 
@@ -60,6 +61,7 @@ function gravar()
             '$cpf',
             '$dataNascimento'
             ,'$rg'
+            ,'$genero'            
             ,'$estadoCivil'
             ";
 
@@ -241,6 +243,7 @@ function recupera()
         $nomeCompleto = (string)$row['nome'];
         $cpf = (string)$row['cpf'];
         $rg = (string)$row['rg'];
+        $genero = (int)$row['genero'];
         $dataNascimento = (string)$row['dataNascimento'];
         $dataNascimento = explode("-", $dataNascimento);
         $dataNascimento = $dataNascimento[2] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
@@ -251,7 +254,8 @@ function recupera()
             $nomeCompleto . "^" .
             $cpf . "^" .
             $dataNascimento . "^" .
-            $rg;
+            $rg.
+            $genero;
 
   if ($out == "") {
             echo "failed#";
