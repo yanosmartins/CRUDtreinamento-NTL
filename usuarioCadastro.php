@@ -503,6 +503,4 @@ include("inc/scripts.php");
         }
         gravaUsuario(id, ativo, login, senha, senhaConfirma, tipoUsuario,funcionario,restaurarSenha);
     }
-</script>
-
-xerr
+</script>   
