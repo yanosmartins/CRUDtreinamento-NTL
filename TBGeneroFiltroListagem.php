@@ -6,7 +6,7 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Genero</th>
+                    <th class="text-left" style="min-width:30px;">Gênero</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
@@ -71,8 +71,8 @@ include "js/repositorio.php";
 
 
 
-                $sql = " SELECT codigo, ativo, cpf, rg, dataNascimento, estadoCivil, nome, genero from dbo.funcionario
-                 ";
+                $sql = "SELECT GF.codigo, GF.descricao, F.ativo  from dbo.generoFuncionario AS GF
+                LEFT JOIN dbo.funcionario as F on F.genero = GF.codigo";
 
                 $sql = $sql . $where;
                 $reposit = new reposit();
@@ -81,9 +81,13 @@ include "js/repositorio.php";
                 foreach ($result as $row) {
                     $id = (int) $row['codigo'];
                     $nomeFiltro = $row['nome'];
-                    $cpfFiltro = $row['cpf'];;
+                    $cpfFiltro = $row['cpf'];
                     $rgFiltro = $row['rg'];
                     $genero=  $row['genero'];
+
+
+
+
 
                     $dataNascimentoFiltro = $row['dataNascimento'];
                     if ($dataNascimentoFiltro) {
@@ -120,7 +124,7 @@ include "js/repositorio.php";
                     }
 
                     echo '<tr >';
-                    echo '<td class="text-left">' . $genero . '</td>';
+                    echo '<td class="text-left"><a href="TBCadastroGenero.php?descricao=' . $descricao . '"></a></td>';
                     echo '<td class="text-left">' . $ativoFiltro . '</td>';
                     echo '</tr >';
                 }

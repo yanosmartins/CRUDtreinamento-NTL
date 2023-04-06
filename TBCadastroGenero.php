@@ -83,10 +83,14 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-1">
-                                                                <label class="label">Código</label>
+                                                        </div>
+                                                        <div class="row">
+                                                        </div>
+                                                        <div class="row">
+                                                        <section class="col col-2">
+                                                                <label class="label">Descrição de Gênero:</label>
                                                                 <label class="input">
-                                                                    <input id="codigo" name="codigo" type="text" class="readonly" readonly>
+                                                                    <input id="descricao" maxlength="255" name="nome" class="required">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -95,27 +99,7 @@ include("inc/nav.php");
                                                                     <input checked="checked" id="ativo" name="ativo" type="checkbox" value="true"><i></i>
                                                                     Ativo
                                                                 </label>
-                                                            </section>
-                                                        </div>
-                                                        <div class="row">
-                                                        </div>
-                                                        <div class="row">
-                                                        <section class="col col-2">
-                                                                <label class="label" for="genero">Sexo:</label>
-                                                                <label class="select">
-                                                                    <select id="genero" name="genero">
-                                                                        <option value="1">Homem</option>
-                                                                        <option value="2">Mulher</option>
-                                                                    </select><i></i>
-                                                            </section>    
-                                                        <section class="col col-2">
-                                                                <label class="label">Nome do funcionário:</label>
-                                                                <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" class="required" value="">
-                                                                </label>
-                                                            </section>
-                                                            
-                                                            
+                                                            </section>                                                                                                                     
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -139,16 +123,9 @@ include("inc/nav.php");
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
-                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                            <span class="fa fa-file-o"></span>
-                                        </button>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir">
                                             <span class="fa fa-trash"></span>
                                         </button>
-                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward "></span>
-                                        </button>
-
                                     </footer>
                                 </form>
                             </div>
@@ -178,7 +155,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/businessCadastroFuncionario.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/TBbusinessCadastroGenero.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -205,40 +182,10 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
+    
+    //     //EVENTO CONSTANTE
     $(document).ready(function() {
-        //EVENTO CONSTANTE
-        // $("#cpf").mask('999.999.999-99', {
-        //     reverse: true
-        // });
-        $("#cpf").mask('999.999.999-99');
-        $("#rg").mask('99.999.999-9');
-        $("#dataNascimento").mask('99/99/9999');
-        $("#dataNascimento").on("change", function() {
-            let data = $("#dataNascimento").val()
-            if (validaData(data) == false) {
-                smartAlert("Atenção", "Data inválida ", "error");
-                $("#idade").val("");
-                document.getElementById('dataNascimento').value = '';
-                $("#dataNascimento").focus();
-                // disableButton();
-            }
-        });
 
-
-
-
-        $("#cpf").on("change", function() {
-            let data = $("#cpf").val()
-            VerificaCPF()
-            ValidaCPF()
-            
-        });
-        
-        $("#rg").on("change", function() {
-            VerificaRG()
-        });
-
-        
 
         carregaPagina();
 
@@ -278,20 +225,17 @@ include("inc/scripts.php");
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
 
-            if (id === 0) {
-                smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-                $("#nome").focus();
-                return;
-            }
+            // if (id === 0) {
+            //     smartAlert("Atenção", "Selecione um registro para excluir !", "error");
+            //     $("#nome").focus();
+            //     return;
+            // }
 
             if (id !== 0) {
                 $('#dlgSimpleExcluir').dialog('open');
             }
         });
 
-        // $("#btnNovo").on("click", function() {
-        //     novo();
-        // });
         $("#btnGravar").on("click", function() {
             gravar();
 
@@ -303,27 +247,7 @@ include("inc/scripts.php");
     });
 
 
-
-    function VerificaCPF() {
-        var cpf = $("#cpf").val();
-        cpfverificado(cpf);
-        return;
-    }
-
-    function ValidaCPF() {
-        var cpf = $("#cpf").val();
-        cpfvalidado(cpf);
-        return;
-    }
-
-    function VerificaRG() {
-        var rg = $("#rg").val();
-        RGverificado(rg);
-        return;
-    }
-
-
-    function carregaPagina() {
+ function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
         if (params.length === 2) {
@@ -331,7 +255,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaUsuario(idd,
+                recuperaGenero(idd,
                     function(data) {
                         if (data.indexOf('failed') > -1) {
                             return;
@@ -346,164 +270,57 @@ include("inc/scripts.php");
                             piece = out.split("^");
 
                             // Atributos de vale transporte unitário que serão recuperados: 
-                            var id = piece[0];
-                            var ativo = piece[1];
-                            var nome = piece[2];
-                            var cpf = piece[3];
-                            var rg = piece[4];
-                            var dataNascimento = piece[5];
-                            var estadoCivil = piece[6];
-                            var genero = piece[7];
-
-                            // var dataNascimento = piece[5];
-
+                            var ativo = piece[0];
+                            var descricao = piece[1];
+                            $("#ativo").val(ativo);
+                            $("#descricao").val(descricao);
 
 
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
-                            $("#codigo").val(id);
-                            $("#ativo").val(ativo);
-                            $("#nome").val(nome);
-                            $("#cpf").val(cpf);
-                            $("#rg").val(rg);
-                            $("#dataNascimento").val(dataNascimento);
-                            ///////////////////////////////////////////////////////////////////////////////
-                            var dataagora = new Date()
-                            var anoAtual = dataagora.getFullYear();
-                            var dataNascimento = $("#dataNascimento").val();
-                            var dataNascimento = dataNascimento.split("/")[2];
-                            var idade = (anoAtual - dataNascimento);
-                            $("#idade").val(idade);
-                            $("#estadoCivil").val(estadoCivil);
-                            $("#genero").val(genero);
+                            var ativo = $("#ativo").val();
+                            var descricao = $("#descricao").val();
+
+                
+                            
                             return;
                         }
-
-
                     }
                 );
-
             }
         }
-        $("#nome").focus();
-
     }
 
 
-    $("#nome").focus();
-
-
-
-    function novo() {
-        $(location).attr('href', 'cadastroFuncionario.php');
-    }
-
-    function excluir() {
-        var id = +$("#codigo").val();
-
-        if (id === 0) {
-            smartAlert("Atenção", "Selecione um registro para excluir!", "error");
-            return;
-        }
-
-        excluirUsuario(id);
-    }
-
-    function voltar() {
-        $(location).attr('href', 'funcionarioFiltro.php');
-    }
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    function VerificaCPF() {
-        var cpf = $("#cpf").val();  
-        cpfverificado(cpf);        
-        return;
-    }
-
+    // $("#nome").focus();
 
 
     function gravar() {
-        var id = +($("#codigo").val());
+        var descricao = $("#descricao").val();
+        var descricao = $("#descricao").val();
         var ativo = 0;
+
         if ($("#ativo").is(':checked')) {
             ativo = 1;
         }
-        var nome = $("#nome").val();
-        var cpf = $("#cpf").val();
-        var dataNascimento = $("#dataNascimento").val();
-        var rg = $("#rg").val();
-        var estadoCivil = $("#estadoCivil").val();
-        var genero = $("#genero").val();
 
-        if (cpf === "") {
-            smartAlert("Atenção", "Informe o cpf !", "error");
-            $("#cpf").focus();
-            return;
-        }
         // || (nome=="") || (dataNascimento=="")
-        if (nome == "") {
-            smartAlert("Atenção", "Informe o nome!", "error");
+        if (descricao == "") {
+            smartAlert("Atenção", "Campo de descrição não pode ser vazio!", "error");
             $("#nome").focus();
             return;
         }
-        if (dataNascimento == "") {
-            smartAlert("Atenção", "Informe a data de nascimento!", "error");
-            $("#dataNascimento").focus();
-            return;
-        }
-        if (rg == "") {
-            smartAlert("Atenção", "Informe o seu RG!", "error");
-            $("#rg").focus();
-            return;
-        }
-        // if (estadoCivil == "") {
-        //     smartAlert("Atenção", "Informe o seu Estado Civil!", "error");
-        //     $("#estadoCivil").focus();
-        //     return;
-        // }
 
-
-
-        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero);
+        gravaGenero(ativo, descricao);
     }
 
+    function novo() {
+        $(location).attr('href', 'TBcadastroGenero.php');
+    }
 
-    /////////////////////////////////
+    
+    function excluir() {
+        // var ativo = $("#ativo").val();
 
-    function validaData(data) {
-        var data = document.getElementById("dataNascimento").value; // pega o valor do input
-        data = data.replace(/\//g, "-"); // substitui eventuais barras (ex. IE) "/" por hífen "-"
-        var data_array = data.split("-"); // quebra a data em array
-
-        // para o IE onde será inserido no formato dd/MM/yyyy
-        if (data_array[0].length != 4) {
-            data = data_array[2] + "-" + data_array[1] + "-" + data_array[0];
-        }
-
-        // compara as datas e calcula a idade
-        var hoje = new Date();
-        var nasc = new Date(data);
-        var idade = hoje.getFullYear() - nasc.getFullYear();
-        var m = hoje.getMonth() - nasc.getMonth();
-        if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
-
-        if (idade < 14) {
-            // alert("Pessoas menores de 14 não podem se cadastrar.");
-            $("#idade").val(idade)
-            $("#btnGravar").prop('disabled', false);
-            return false;
-
-        }
-
-        if (idade >= 18 && idade <= 95) {
-            // alert("Maior de 18, pode se cadastrar.");
-            $("#idade").val(idade)
-            $("#btnGravar").prop('disabled', false);
-            return;
-        }
-        if (hoje)
-            // se for maior que 60 não vai acontecer nada!
-            return false;
-
+        excluiGenero(ativo);
     }
 </script>
