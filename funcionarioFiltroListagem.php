@@ -65,7 +65,7 @@ include "js/repositorio.php";
                 $generoFiltro = $_POST["generoFiltro"];
                 if ($_POST["generoFiltro"] != "") {
                     $generoFiltro = $_POST["generoFiltro"];
-                    $where = $where . " AND generoFuncionario.[genero] =" . $generoFiltro;
+                    $where = $where . " AND GF.codigo =" . $generoFiltro;
                 }
 
                 $ativoFiltro = "";
@@ -77,7 +77,8 @@ include "js/repositorio.php";
 
 
 
-                $sql = " SELECT codigo, ativo, cpf, rg, dataNascimento, estadoCivil, nome, genero from dbo.funcionario
+                $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, GF.descricao as genero from dbo.funcionario FU
+                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero
                  ";
                 //   $sql = "SELECT GF.codigo, GF.descricao, F.ativo  from dbo.generoFuncionario AS GF
                 //   // LEFT JOIN dbo.funcionario as F on F.genero = GF.codigo";                

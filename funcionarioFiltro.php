@@ -128,7 +128,7 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
-                                                                    <select id="descricao" name="genero">
+                                                                    <select id="genero" name="genero">
                                                                     <option value="" selected>Todos</option>
                                                                         <?php
                                                                         $reposit = new reposit();
