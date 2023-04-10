@@ -80,7 +80,27 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                        <section class="col col-2">
+                                                        
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label">Gênero</label>
+                                                                <label class="select">
+                                                                    <select id="descricao" name="genero">
+                                                                    <option value="" selected>Todos</option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao
+                                                                        FROM dbo.generoFuncionario ORDER BY codigo";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
@@ -88,14 +108,7 @@ include("inc/nav.php");
                                                                         <option value="1" >Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
-                                                            </section>
-                                                        <section class="col col-2">
-                                                                <label class="label" for="ativo">Gênero</label>
-                                                                <label class="select">
-                                                                    <select id="ativo" name="ativo">
-                                                                        <option value="" selected>Todos</option>
-                                                                    </select><i></i>
-                                                            
+                                                            </section>                                                            
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -174,12 +187,10 @@ include("inc/scripts.php");
 
     function listarFiltro() {
         var ativo = $('#ativo').val();
-        var genero = $('#genero').val();
-
-
+        var codigo = $('#descricao').val();
 
         $('#resultadoBusca').load('TBGeneroFiltroListagem.php?', {
-            generoFiltro: genero,
+           codigoFiltro: codigo,
             ativoFiltro: ativo
         });
     }

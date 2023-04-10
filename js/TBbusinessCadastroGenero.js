@@ -1,9 +1,9 @@
-function gravaGenero(codigo, ativo, descricao) {
+function gravaGenero(codigo, descricao, ativo) {
     $.ajax({
         url: 'js/TBsqlscopeCadastroGenero.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "gravar", codigo:codigo, ativo: ativo, descricao: descricao}, //valores enviados ao script     
+        data: { funcao: "gravar", codigo:codigo, descricao: descricao, ativo: ativo}, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },

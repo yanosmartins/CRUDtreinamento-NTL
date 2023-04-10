@@ -296,8 +296,8 @@ include("inc/scripts.php");
 
     function gravar() {
         var descricao = $("#descricao").val();
-        var descricao = $("#descricao").val();
         var ativo = 0;
+        var codigo = 0;
 
         if ($("#ativo").is(':checked')) {
             ativo = 1;
@@ -306,13 +306,17 @@ include("inc/scripts.php");
         // || (nome=="") || (dataNascimento=="")
         if (descricao == "") {
             smartAlert("Atenção", "Campo de descrição não pode ser vazio!", "error");
-            $("#nome").focus();
+            $("#descricao").focus();
             return;
         }
 
-        gravaGenero(ativo, descricao);
+        gravaGenero(codigo, descricao, ativo);
     }
 
+    
+    
+    
+    
     function novo() {
         $(location).attr('href', 'TBcadastroGenero.php');
     }

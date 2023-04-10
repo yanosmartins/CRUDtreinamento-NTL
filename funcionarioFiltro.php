@@ -125,7 +125,27 @@ include("inc/nav.php");
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                             </section>
-                                                            <section class="col col-2">
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label">Gênero</label>
+                                                                <label class="select">
+                                                                    <select id="descricao" name="genero">
+                                                                    <option value="" selected>Todos</option>
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao
+                                                                        FROM dbo.generoFuncionario ORDER BY codigo";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <section class="col col-2">
                                                                 <label class="label">Data de Nascimento - Início</label>
                                                                 <label class="input">
                                                                     <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
@@ -137,7 +157,6 @@ include("inc/nav.php");
                                                                     <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
                                                             </section>
-                                                        </div>
                                                     </fieldset>
                                                 </div>
                                                 <footer>

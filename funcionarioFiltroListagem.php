@@ -11,7 +11,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">RG</th>
                     <th class="text-left" style="min-width:30px;">Data de Nascimento</th>
                     <th class="text-left" style="min-width:30px;">Estado Civil</th>
-                    <th class="text-left" style="min-width:30px;">Genero</th>
+                    <th class="text-left" style="min-width:30px;">Gênero</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
@@ -23,6 +23,7 @@ include "js/repositorio.php";
                 $dataNascimentoFiltro = "";
                 $dataNascimentoInicio = "";
                 $dataNascimentoFim = "";
+
                 $where = " WHERE (0 = 0)";
 
                 if ($_POST["nomeFiltro"] != "") {
@@ -64,7 +65,7 @@ include "js/repositorio.php";
                 $generoFiltro = $_POST["generoFiltro"];
                 if ($_POST["generoFiltro"] != "") {
                     $generoFiltro = $_POST["generoFiltro"];
-                    $where = $where . " AND funcionario.[genero] =" . $generoFiltro;
+                    $where = $where . " AND generoFuncionario.[genero] =" . $generoFiltro;
                 }
 
                 $ativoFiltro = "";
@@ -78,6 +79,10 @@ include "js/repositorio.php";
 
                 $sql = " SELECT codigo, ativo, cpf, rg, dataNascimento, estadoCivil, nome, genero from dbo.funcionario
                  ";
+                //   $sql = "SELECT GF.codigo, GF.descricao, F.ativo  from dbo.generoFuncionario AS GF
+                //   // LEFT JOIN dbo.funcionario as F on F.genero = GF.codigo";                
+                //  $sql = " SELECT codigo, descricao from dbo.generoFuncionario
+                //  ";
 
                 $sql = $sql . $where;
                 $reposit = new reposit();
@@ -88,14 +93,14 @@ include "js/repositorio.php";
                     $nomeFiltro = $row['nome'];
                     $cpfFiltro = $row['cpf'];;
                     $rgFiltro = $row['rg'];
-                    $genero=  $row['genero'];
+                    $generoFiltro = $row['genero'];
 
                     $dataNascimentoFiltro = $row['dataNascimento'];
                     if ($dataNascimentoFiltro) {
                         $dataNascimentoFiltro = explode(" ", $dataNascimentoFiltro);
                         $data = explode("-", $dataNascimentoFiltro[0]);
                         $dataNascimentoFiltro = ($data[2] . "/" . $data[1] . "/" . $data[0]);
-                    };
+                    }
 
                     $estadoCivilFiltro = (int)$row['estadoCivil'];
                     if ($estadoCivilFiltro == 1) {
@@ -105,7 +110,7 @@ include "js/repositorio.php";
                         $estadoCivilFiltro = "Casado";
                     }
                     if ($estadoCivilFiltro == 3) {
-                        $estadoCivilFiltro = "Separadp";
+                        $estadoCivilFiltro = "Separado";
                     }
                     if ($estadoCivilFiltro == 4) {
                         $estadoCivilFiltro = "Divorciado";
@@ -113,9 +118,6 @@ include "js/repositorio.php";
                     if ($estadoCivilFiltro == 5) {
                         $estadoCivilFiltro = "Viúvo";
                     }
-
-
-
 
                     $ativoFiltro = (int) $row['ativo'];
                     if ($ativoFiltro == 1) {
@@ -130,7 +132,7 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $rgFiltro . '</td>';
                     echo '<td class="text-left">' . $dataNascimentoFiltro . '</td>';
                     echo '<td class="text-left">' . $estadoCivilFiltro . '</td>';
-                    echo '<td class="text-left">' . $genero . '</td>';
+                    echo '<td class="text-left">' . $generoFiltro . '</td>';
                     echo '<td class="text-left">' . $ativoFiltro . '</td>';
                     echo '</tr >';
                 }

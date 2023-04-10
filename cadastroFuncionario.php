@@ -89,13 +89,6 @@ include("inc/nav.php");
                                                                     <input id="codigo" name="codigo" type="text" class="readonly" readonly>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">&nbsp;</label>
-                                                                <label id="labelAtivo" class="checkbox ">
-                                                                    <input checked="checked" id="ativo" name="ativo" type="checkbox" value="true"><i></i>
-                                                                    Ativo
-                                                                </label>
-                                                            </section>
                                                         </div>
                                                         <div class="row">
                                                         </div>
@@ -134,7 +127,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label" for="Sexo">Estado Civil</label>
                                                                 <label class="select">
-                                                                    <select id="estadoCivil" name="ativo">
+                                                                    <select id="estadoCivil" class = "required" name="ativo">
                                                                         <option value="1" selected>Solteiro</option>
                                                                         <option value="2">Casado</option>
                                                                         <option value="3">Separado</option>
@@ -142,13 +135,30 @@ include("inc/nav.php");
                                                                         <option value="5">Viúvo</option>
                                                                     </select><i></i>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label" for="genero">Sexo:</label>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label">Gênero</label>
                                                                 <label class="select">
-                                                                    <select id="genero" name="genero">
-                                                                        <option value="1">Homem</option>
-                                                                        <option value="2">Mulher</option>
+                                                                    <select id="genero" class = "required" name="genero">
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao
+                                                                        FROM dbo.generoFuncionario ORDER BY codigo";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
                                                                     </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2 ">
+                                                                <label class="label">&nbsp;</label>
+                                                                <label id="labelAtivo" class="checkbox ">
+                                                                    <input checked="checked" id="ativo" name="ativo" type="checkbox" value="true"><i></i>
+                                                                    Ativo
+                                                                </label>
                                                             </section>
                                                         </div>
                                                     </fieldset>
@@ -490,11 +500,11 @@ include("inc/scripts.php");
             $("#rg").focus();
             return;
         }
-        // if (estadoCivil == "") {
-        //     smartAlert("Atenção", "Informe o seu Estado Civil!", "error");
-        //     $("#estadoCivil").focus();
-        //     return;
-        // }
+        if (estadoCivil == "") {
+            smartAlert("Atenção", "Informe o seu Estado Civil!", "error");
+            $("#estadoCivil").focus();
+            return;
+        }
 
 
 

@@ -12,122 +12,45 @@ include "js/repositorio.php";
             </thead>
             <tbody>
                 <?php
-                $nomeFiltro = "";
-                $cpfFiltro = "";
-                $rgFiltro = "";
-                $dataNascimentoFiltro = "";
-                $dataNascimentoInicio = "";
-                $dataNascimentoFim = "";
                 $where = " WHERE (0 = 0)";
 
-                if ($_POST["nomeFiltro"] != "") {
-                    $nomeFiltro = $_POST["nomeFiltro"];
-                    $where = $where . " AND (funcionario.[nome] like '%' + " . "replace('" . $nomeFiltro . "',' ','%') + " . "'%')";
-                }
-                if ($_POST["cpfFiltro"] != "") {
-                    $cpfFiltro = $_POST["cpfFiltro"];
-                    $where = $where . " AND (funcionario.[cpf] like '%' + " . "replace('" . $cpfFiltro . "',' ','%') + " . "'%')";
-                }
-                if ($_POST["rgFiltro"] != "") {
-                    $rgFiltro = $_POST["rgFiltro"];
-                    $where = $where . " AND (funcionario.[rg] like '%' + " . "replace('" . $rgFiltro . "',' ','%') + " . "'%')";
-                }
-                if ($_POST["dataNascimentoFiltro"] != "") {
-                    $dataNascimentoFiltro = $_POST["dataNascimentoFiltro"];
-                    $where = $where . " AND (funcionario.[dataNascimento] = '$dataNascimentoFiltro')";
-                }
-                $estadoCivilFiltro = "";
-                $estadoCivilFiltro = $_POST["estadoCivilFiltro"];
-                if ($_POST["estadoCivilFiltro"] != "") {
-                    $estadoCivilFiltro = $_POST["estadoCivilFiltro"];
-                    $where = $where . " AND (funcionario.[estadoCivil] ='$estadoCivilFiltro')";
-                } 
-
-                $dataNascimentoInicioFiltro = "";
-                $dataNascimentoInicioFiltro = $_POST["dataNascimentoInicioFiltro"];
-                if ($_POST["dataNascimentoInicioFiltro"] != "") {
-                    $dataNascimentoInicioFiltro = $_POST["dataNascimentoInicioFiltro"];
-                    $where = $where . " AND (funcionario.[dataNascimento] >='$dataNascimentoInicioFiltro')";
-                } 
-                $dataNascimentoFimFiltro = "";
-                $dataNascimentoFimFiltro = $_POST["dataNascimentoFimFiltro"];
-                if ($_POST["dataNascimentoFimFiltro"] != "") {
-                    $dataNascimentoFimFiltro = $_POST["dataNascimentoFimFiltro"];
-                    $where = $where . " AND (funcionario.[dataNascimento] <='$dataNascimentoFimFiltro')";
-                } 
-                $generoFiltro = "";
-                $generoFiltro = $_POST["generoFiltro"];
-                if ($_POST["generoFiltro"] != "") {
-                    $generoFiltro = $_POST["generoFiltro"];
-                    $where = $where . " AND funcionario.[genero] =" . $generoFiltro;
+                $codigoFiltro = "";
+                $codigoFiltro = $_POST["codigoFiltro"];
+                if ($_POST["codigoFiltro"] != "") {
+                    $codigoFiltro = $_POST["codigoFiltro"];
+                    $where = $where . " AND generoFuncionario.[codigo] = " . $codigoFiltro;
                 }
 
                 $ativoFiltro = "";
                 $ativoFiltro = $_POST["ativoFiltro"];
                 if ($_POST["ativoFiltro"] != "") {
                     $ativoFiltro = $_POST["ativoFiltro"];
-                    $where = $where . " AND funcionario.[ativo] =" . $ativoFiltro;
+                    $where = $where . " AND generoFuncionario.[generoAtivo] =" . $ativoFiltro;
                 }
 
-
-
-                $sql = "SELECT GF.codigo, GF.descricao, F.ativo  from dbo.generoFuncionario AS GF
-                LEFT JOIN dbo.funcionario as F on F.genero = GF.codigo";
+                $sql = "SELECT codigo, descricao, generoAtivo from dbo.generoFuncionario";
 
                 $sql = $sql . $where;
                 $reposit = new reposit();
                 $result = $reposit->RunQuery($sql);
 
                 foreach ($result as $row) {
-                    $id = (int) $row['codigo'];
-                    $nomeFiltro = $row['nome'];
-                    $cpfFiltro = $row['cpf'];
-                    $rgFiltro = $row['rg'];
-                    $genero=  $row['genero'];
+                    $codigoFiltro = $row['descricao'];
+                    $ativoFiltro = (int) $row['generoAtivo'];
 
+                    // if ($ativoFiltro == 1) {
+                    //     $ativo = "Sim";
+                    // } else {
+                    //     $ativo = "Não";
+                    // }
+                    // A linha abaixo é um operador ternário. Um if/else em uma única linha. Neste exemplo, foram rudizadas 5 linhas em 1.
+                    $ativoFiltro == 1 ? $ativo = "Sim": $ativo = "Não";
 
-
-
-
-                    $dataNascimentoFiltro = $row['dataNascimento'];
-                    if ($dataNascimentoFiltro) {
-                        $dataNascimentoFiltro = explode(" ", $dataNascimentoFiltro);
-                        $data = explode("-", $dataNascimentoFiltro[0]);
-                        $dataNascimentoFiltro = ($data[2] . "/" . $data[1] . "/" . $data[0]);
-                    };
-
-                    $estadoCivilFiltro = (int)$row['estadoCivil'];
-                    if ($estadoCivilFiltro == 1) {
-                        $estadoCivilFiltro = "Solteiro";
+                        echo '<tr >';
+                        echo '<td class="text-left">' . $codigoFiltro . '</td>';
+                        echo '<td class="text-left">' . $ativo . '</td>';
+                        echo '</tr >';
                     }
-                    if ($estadoCivilFiltro == 2) {
-                        $estadoCivilFiltro = "Casado";
-                    }
-                    if ($estadoCivilFiltro == 3) {
-                        $estadoCivilFiltro = "Separadp";
-                    }
-                    if ($estadoCivilFiltro == 4) {
-                        $estadoCivilFiltro = "Divorciado";
-                    }
-                    if ($estadoCivilFiltro == 5) {
-                        $estadoCivilFiltro = "Viúvo";
-                    }
-
-
-
-
-                    $ativoFiltro = (int) $row['ativo'];
-                    if ($ativoFiltro == 1) {
-                        $ativoFiltro = "Sim";
-                    } else {
-                        $ativoFiltro = "Não";
-                    }
-
-                    echo '<tr >';
-                    echo '<td class="text-left"><a href="TBCadastroGenero.php?descricao=' . $descricao . '"></a></td>';
-                    echo '<td class="text-left">' . $ativoFiltro . '</td>';
-                    echo '</tr >';
-                }
                 ?>
             </tbody>
         </table>
@@ -212,19 +135,3 @@ include "js/repositorio.php";
 
     });
 </script>
-
-<!-- SELECT nome_aluno, data_conclusao FROM alunos WHERE data_conclusao BETWEEN '2020-01-01' AND '2020-12-31' 
-
-
-
- if ($_POST["dataNascimentoFim"] != "") {
-                    $dataNascimentoFim = $_POST["dataNascimentoFim"];
-
-                    $where = $where . " BETWEEN dataNascimento = '$dataNascimentoInicio' 'AND'  $dataNascimentoFim)";
-
-
-
-
-
-
--->

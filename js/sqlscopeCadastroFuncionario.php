@@ -59,10 +59,10 @@ function gravar()
             $ativo,
             '$nome', 
             '$cpf',
-            '$dataNascimento'
-            ,'$rg'
-            ,'$genero'            
-            ,'$estadoCivil'
+            '$dataNascimento',
+            '$rg',
+            '$genero',           
+            '$estadoCivil'
             ";
 
     $reposit = new reposit();

@@ -30,14 +30,13 @@ function gravar()
 
     $reposit = new reposit();
 
-
-    $ativo = (int)$_POST['ativo'];
     $descricao = $_POST['descricao'];
-    
-
+    $codigo = 0;
+     $ativo = (int)$_POST['ativo'];
 
     $sql = "dbo.Genero_Atualiza 
     
+    '$codigo'
     ,'$descricao'
     ,'$ativo'
     ";
