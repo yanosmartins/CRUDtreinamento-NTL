@@ -35,6 +35,7 @@ include "js/repositorio.php";
                 $result = $reposit->RunQuery($sql);
 
                 foreach ($result as $row) {
+                    $codigo = $row['codigo'];
                     $codigoFiltro = $row['descricao'];
                     $ativoFiltro = (int) $row['generoAtivo'];
 
@@ -47,7 +48,7 @@ include "js/repositorio.php";
                     $ativoFiltro == 1 ? $ativo = "Sim": $ativo = "Não";
 
                         echo '<tr >';
-                        echo '<td class="text-left">' . $codigoFiltro . '</td>';
+                        echo '<td class="text-left"><a href="TBCadastroGenero.php?codigo=' . $codigo . '">' . $codigoFiltro . '<a></td>';
                         echo '<td class="text-left">' . $ativo . '</td>';
                         echo '</tr >';
                     }

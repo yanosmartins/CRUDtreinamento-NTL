@@ -67,7 +67,7 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formUsuario" method="post">
+                                <form class="smart-form client-form" id="formUsuario">
                                     <div class="panel-group smart-accordion-default" id="accordion">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -82,10 +82,7 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">
-                                                        </div>
-                                                        <div class="row">
-                                                        </div>
+                                                        <input id="codigo" type="text" value="<?= $_GET['codigo']?>" hidden>
                                                         <div class="row">
                                                         <section class="col col-2">
                                                                 <label class="label">Descrição de Gênero:</label>
@@ -268,20 +265,14 @@ include("inc/scripts.php");
                             var strArrayEmail = piece[3];
                             var strArrayDependente = piece[4];
                             piece = out.split("^");
-
                             // Atributos de vale transporte unitário que serão recuperados: 
                             var ativo = piece[0];
                             var descricao = piece[1];
                             $("#ativo").val(ativo);
                             $("#descricao").val(descricao);
-
-
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             var ativo = $("#ativo").val();
                             var descricao = $("#descricao").val();
-
-                
-                            
                             return;
                         }
                     }
@@ -290,20 +281,15 @@ include("inc/scripts.php");
         }
     }
 
-
-    // $("#nome").focus();
-
-
     function gravar() {
         var descricao = $("#descricao").val();
+        var codigo = $("#codigo").val();
         var ativo = 0;
-        var codigo = 0;
-
+        
         if ($("#ativo").is(':checked')) {
             ativo = 1;
         }
 
-        // || (nome=="") || (dataNascimento=="")
         if (descricao == "") {
             smartAlert("Atenção", "Campo de descrição não pode ser vazio!", "error");
             $("#descricao").focus();
@@ -311,20 +297,15 @@ include("inc/scripts.php");
         }
 
         gravaGenero(codigo, descricao, ativo);
-    }
-
-    
-    
-    
+    }  
     
     function novo() {
         $(location).attr('href', 'TBcadastroGenero.php');
     }
-
     
     function excluir() {
-        // var ativo = $("#ativo").val();
-
+        var ativo = $("#ativo").val();
+        var codigo = $("#codigo").val();
         excluiGenero(ativo);
     }
 </script>

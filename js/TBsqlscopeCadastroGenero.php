@@ -31,14 +31,13 @@ function gravar()
     $reposit = new reposit();
 
     $descricao = $_POST['descricao'];
-    $codigo = 0;
-     $ativo = (int)$_POST['ativo'];
+    $ativo = (int)$_POST['ativo'];
+    $codigo = (int)$_POST['codigo'];
 
     $sql = "dbo.Genero_Atualiza 
-    
-    '$codigo'
+    $codigo
     ,'$descricao'
-    ,'$ativo'
+    ,$ativo
     ";
 
     $reposit = new reposit();
@@ -58,7 +57,8 @@ function gravar()
 
 function recupera()
 {
-    $sql = "SELECT ativo, descricao FROM dbo.generoFuncionario WHERE (0 = 0)";
+    $codigo = $_POST["codigo"];
+    $sql = "SELECT generoAtivo, descricao FROM dbo.generoFuncionario WHERE codigo = $codigo";
 
 
 
@@ -68,13 +68,13 @@ function recupera()
     $out = "";
 
     if ($row = $result[0]) {
-        $ativo = (int)$row['ativo'];
+        $ativo = (int)$row['generoAtivo'];
         $descricao = $row['descricao'];
 
         $out =  $ativo . "^" .
             $descricao;
 
-  if ($out == "") {
+        if ($out == "") {
             echo "failed#";
         }
         if ($out != '') {
@@ -84,38 +84,36 @@ function recupera()
     }
 }
 
-// function excluir()
-// {
+function excluir()
+{
 
-//     $reposit = new reposit();
-//     $possuiPermissao = $reposit->PossuiPermissao("USUARIO_ACESSAR|USUARIO_EXCLUIR");
-
-
-//     $id = $_POST["id"];
-
-//     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-//         $mensagem = "Selecione um usuário.";
-//         echo "failed#" . $mensagem . ' ';
-//         return;
-//     }
-
-//     session_start();
-//     $usuario = $_SESSION['login'];
-//     $usuario = "'" . $usuario . "'";
-
-//     $result = $reposit->update('dbo.funcionario' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
+    $reposit = new reposit();
 
 
-//     $reposit = new reposit();
+    $id = $_POST["id"];
 
-//     if ($result < 1) {
-//         echo ('failed#');
-//         return;
-//     }
+    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
+        $mensagem = "Selecione um usuário.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
 
-//     echo 'sucess#' . $result;
-//     return;
-// }
+    session_start();
+    $usuario = $_SESSION['login'];
+    $usuario = "'" . $usuario . "'";
+
+    $result = $reposit->update('dbo.funcionario' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
 
 
-//
+    $reposit = new reposit();
+
+    if ($result < 1) {
+        echo ('failed#');
+        return;
+    }
+
+    echo 'sucess#' . $result;
+    return;
+}
+
+

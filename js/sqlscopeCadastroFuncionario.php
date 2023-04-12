@@ -199,37 +199,37 @@ function excluir()
 
 function recupera()
 {
-    $condicaoId = !((empty($_POST["codigo"])) || (!isset($_POST["codigo"])) || (is_null($_POST["codigo"])));
-    $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
+    // $condicaoId = !((empty($_POST["codigo"])) || (!isset($_POST["codigo"])) || (is_null($_POST["codigo"])));
+    // $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
 
 
-    if (($condicaoId === false) && ($condicaoLogin === false)) {
-        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    }
+    // if (($condicaoId === false) && ($condicaoLogin === false)) {
+    //     $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
+    //     echo "failed#" . $mensagem . ' ';
+    //     return;
+    // }
 
-    if (($condicaoId === true) && ($condicaoLogin === true)) {
-        $mensagem = "Somente 1 parâmetro de pesquisa deve ser informado.";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    }
+    // if (($condicaoId === true) && ($condicaoLogin === true)) {
+    //     $mensagem = "Somente 1 parâmetro de pesquisa deve ser informado.";
+    //     echo "failed#" . $mensagem . ' ';
+    //     return;
+    // }
 
-    if ($condicaoId) {
-        $id = $_POST["codigo"];
-    }
+    $id = $_POST["codigo"];
+    
 
-    if ($condicaoLogin) {
-        $loginPesquisa = $_POST["loginPesquisa"];
-    }
-
-
-    $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento FROM dbo.funcionario WHERE (0 = 0)";
+    // if ($condicaoLogin) {
+    //     $loginPesquisa = $_POST["loginPesquisa"];
+    // }
 
 
-    if ($condicaoId) {
-        $sql = $sql . " AND codigo = " . $id . " ";
-    }
+    $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento, genero, estadoCivil FROM dbo.funcionario WHERE codigo = $id";
+    // $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, GF.descricao as genero from dbo.funcionario FU
+    // LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
+
+    // if ($condicaoId) {
+    //     $sql = $sql . " AND codigo = " . $id . " ";
+    // }
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -243,20 +243,23 @@ function recupera()
         $nomeCompleto = (string)$row['nome'];
         $cpf = (string)$row['cpf'];
         $rg = (string)$row['rg'];
+        $estadoCivil = (int)$row['estadoCivil'];
         $genero = (int)$row['genero'];
         $dataNascimento = (string)$row['dataNascimento'];
         $dataNascimento = explode("-", $dataNascimento);
         $dataNascimento = $dataNascimento[2] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
+
      
 
         $out =  $id . "^" .
             $ativo . "^" .
             $nomeCompleto . "^" .
             $cpf . "^" .
-            $dataNascimento . "^" .
-            $rg.
+            $rg. "^" .
+            $dataNascimento. "^" .
+            $estadoCivil. "^" .
             $genero;
-
+            
   if ($out == "") {
             echo "failed#";
         }

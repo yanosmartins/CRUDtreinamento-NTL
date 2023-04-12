@@ -7,11 +7,11 @@ function gravaGenero(codigo, descricao, ativo) {
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
-        complete: function () {ss
+        complete: function () {
             //função executada depois de terminar o ajax
         },
         ///////////////////////////////////////////////////
-        success: function (data, textStatus) {
+        success: function (data) {
             if (data.indexOf('sucess') < 0) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
@@ -77,11 +77,14 @@ function recuperaGenero(id, callback) {
         type: 'post', //metodo de envio
         data: {
             funcao: 'recupera',
-            codigo: id
+            codigo: id,
+            
+
         }, //valores enviados ao script      
         success: function (data) {
             callback(data);
         }
+        
     });
 
     return;

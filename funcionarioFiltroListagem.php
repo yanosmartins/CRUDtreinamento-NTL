@@ -28,39 +28,39 @@ include "js/repositorio.php";
 
                 if ($_POST["nomeFiltro"] != "") {
                     $nomeFiltro = $_POST["nomeFiltro"];
-                    $where = $where . " AND (funcionario.[nome] like '%' + " . "replace('" . $nomeFiltro . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (FU.nome like '%' + " . "replace('" . $nomeFiltro . "',' ','%') + " . "'%')";
                 }
                 if ($_POST["cpfFiltro"] != "") {
                     $cpfFiltro = $_POST["cpfFiltro"];
-                    $where = $where . " AND (funcionario.[cpf] like '%' + " . "replace('" . $cpfFiltro . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (FU.cpf like '%' + " . "replace('" . $cpfFiltro . "',' ','%') + " . "'%')";
                 }
                 if ($_POST["rgFiltro"] != "") {
                     $rgFiltro = $_POST["rgFiltro"];
-                    $where = $where . " AND (funcionario.[rg] like '%' + " . "replace('" . $rgFiltro . "',' ','%') + " . "'%')";
+                    $where = $where . " AND (FU.rg like '%' + " . "replace('" . $rgFiltro . "',' ','%') + " . "'%')";
                 }
                 if ($_POST["dataNascimentoFiltro"] != "") {
                     $dataNascimentoFiltro = $_POST["dataNascimentoFiltro"];
-                    $where = $where . " AND (funcionario.[dataNascimento] = '$dataNascimentoFiltro')";
+                    $where = $where . " AND (FU.dataNascimento = '$dataNascimentoFiltro')";
                 }
                 $estadoCivilFiltro = "";
                 $estadoCivilFiltro = $_POST["estadoCivilFiltro"];
                 if ($_POST["estadoCivilFiltro"] != "") {
                     $estadoCivilFiltro = $_POST["estadoCivilFiltro"];
-                    $where = $where . " AND (funcionario.[estadoCivil] ='$estadoCivilFiltro')";
-                } 
+                    $where = $where . " AND (FU.estadoCivil ='$estadoCivilFiltro')";
+                }
 
                 $dataNascimentoInicioFiltro = "";
                 $dataNascimentoInicioFiltro = $_POST["dataNascimentoInicioFiltro"];
                 if ($_POST["dataNascimentoInicioFiltro"] != "") {
                     $dataNascimentoInicioFiltro = $_POST["dataNascimentoInicioFiltro"];
-                    $where = $where . " AND (funcionario.[dataNascimento] >='$dataNascimentoInicioFiltro')";
-                } 
+                    $where = $where . " AND (FU.dataNascimento >='$dataNascimentoInicioFiltro')";
+                }
                 $dataNascimentoFimFiltro = "";
                 $dataNascimentoFimFiltro = $_POST["dataNascimentoFimFiltro"];
                 if ($_POST["dataNascimentoFimFiltro"] != "") {
                     $dataNascimentoFimFiltro = $_POST["dataNascimentoFimFiltro"];
-                    $where = $where . " AND (funcionario.[dataNascimento] <='$dataNascimentoFimFiltro')";
-                } 
+                    $where = $where . " AND (FU.dataNascimento <='$dataNascimentoFimFiltro')";
+                }
                 $generoFiltro = "";
                 $generoFiltro = $_POST["generoFiltro"];
                 if ($_POST["generoFiltro"] != "") {
@@ -72,14 +72,12 @@ include "js/repositorio.php";
                 $ativoFiltro = $_POST["ativoFiltro"];
                 if ($_POST["ativoFiltro"] != "") {
                     $ativoFiltro = $_POST["ativoFiltro"];
-                    $where = $where . " AND funcionario.[ativo] =" . $ativoFiltro;
+                    $where = $where . " AND FU.ativo =" . $ativoFiltro;
                 }
 
-
-
-                $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, GF.descricao as genero from dbo.funcionario FU
-                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero
-                 ";
+                $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, GF.descricao as genero 
+                from dbo.funcionario FU
+                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
                 //   $sql = "SELECT GF.codigo, GF.descricao, F.ativo  from dbo.generoFuncionario AS GF
                 //   // LEFT JOIN dbo.funcionario as F on F.genero = GF.codigo";                
                 //  $sql = " SELECT codigo, descricao from dbo.generoFuncionario
@@ -103,22 +101,36 @@ include "js/repositorio.php";
                         $dataNascimentoFiltro = ($data[2] . "/" . $data[1] . "/" . $data[0]);
                     }
 
+                    // $estadoCivilFiltro = (int)$row['estadoCivil'];
+                    // if ($estadoCivilFiltro == 1) {
+                    //     $estadoCivilFiltro = "Solteiro";
+                    // }
+                    // if ($estadoCivilFiltro == 2) {
+                    //     $estadoCivilFiltro = "Casado";
+                    // }
+                    // if ($estadoCivilFiltro == 3) {
+                    //     $estadoCivilFiltro = "Separado";
+                    // }
+                    // if ($estadoCivilFiltro == 4) {
+                    //     $estadoCivilFiltro = "Divorciado";
+                    // }
+                    // if ($estadoCivilFiltro == 5) {
+                    //     $estadoCivilFiltro = "Viúvo";
+                    // }
+
+                    // USANDO O PHP MATCH, EU CONSIGO REDUZIR A QUANTIDADE DE BLOCOS CONDICIONAIS
                     $estadoCivilFiltro = (int)$row['estadoCivil'];
-                    if ($estadoCivilFiltro == 1) {
-                        $estadoCivilFiltro = "Solteiro";
-                    }
-                    if ($estadoCivilFiltro == 2) {
-                        $estadoCivilFiltro = "Casado";
-                    }
-                    if ($estadoCivilFiltro == 3) {
-                        $estadoCivilFiltro = "Separado";
-                    }
-                    if ($estadoCivilFiltro == 4) {
-                        $estadoCivilFiltro = "Divorciado";
-                    }
-                    if ($estadoCivilFiltro == 5) {
-                        $estadoCivilFiltro = "Viúvo";
-                    }
+
+                    $valor_de_retorno = match ($estadoCivilFiltro) {
+                        1 => 'Solteiro',
+                        2 => 'Casado',
+                        3 => 'Separado',
+                        4=> 'Divorciado',
+                        5=> 'Viúvo'
+                    };
+                    $estadoCivilFiltro = $valor_de_retorno;
+
+
 
                     $ativoFiltro = (int) $row['ativo'];
                     if ($ativoFiltro == 1) {
@@ -221,19 +233,3 @@ include "js/repositorio.php";
 
     });
 </script>
-
-<!-- SELECT nome_aluno, data_conclusao FROM alunos WHERE data_conclusao BETWEEN '2020-01-01' AND '2020-12-31' 
-
-
-
- if ($_POST["dataNascimentoFim"] != "") {
-                    $dataNascimentoFim = $_POST["dataNascimentoFim"];
-
-                    $where = $where . " BETWEEN dataNascimento = '$dataNascimentoInicio' 'AND'  $dataNascimentoFim)";
-
-
-
-
-
-
--->

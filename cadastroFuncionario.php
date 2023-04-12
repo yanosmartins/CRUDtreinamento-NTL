@@ -83,7 +83,7 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section class="col col-1">
+                                                            <section id ="condicaoCheck" class="col col-1 hidden">
                                                                 <label class="label">Código</label>
                                                                 <label class="input">
                                                                     <input id="codigo" name="codigo" type="text" class="readonly" readonly>
@@ -153,13 +153,13 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2 ">
+                                                            <!-- <section class="col col-2 ">
                                                                 <label class="label">&nbsp;</label>
                                                                 <label id="labelAtivo" class="checkbox ">
                                                                     <input checked="checked" id="ativo" name="ativo" type="checkbox" value="true"><i></i>
                                                                     Ativo
                                                                 </label>
-                                                            </section>
+                                                            </section> -->
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -388,7 +388,6 @@ include("inc/scripts.php");
                             var strArrayEmail = piece[3];
                             var strArrayDependente = piece[4];
                             piece = out.split("^");
-
                             // Atributos de vale transporte unitário que serão recuperados: 
                             var id = piece[0];
                             var ativo = piece[1];
@@ -398,18 +397,16 @@ include("inc/scripts.php");
                             var dataNascimento = piece[5];
                             var estadoCivil = piece[6];
                             var genero = piece[7];
-
                             // var dataNascimento = piece[5];
-
-
-
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(id);
                             $("#ativo").val(ativo);
                             $("#nome").val(nome);
                             $("#cpf").val(cpf);
                             $("#rg").val(rg);
+                            $("#estadoCivil").val(estadoCivil);
                             $("#dataNascimento").val(dataNascimento);
+                            $("#genero").val(genero);
                             ///////////////////////////////////////////////////////////////////////////////
                             var dataagora = new Date()
                             var anoAtual = dataagora.getFullYear();
@@ -417,25 +414,17 @@ include("inc/scripts.php");
                             var dataNascimento = dataNascimento.split("/")[2];
                             var idade = (anoAtual - dataNascimento);
                             $("#idade").val(idade);
-                            $("#estadoCivil").val(estadoCivil);
-                            $("#genero").val(genero);
+                            
                             return;
                         }
-
-
                     }
                 );
-
             }
         }
         $("#nome").focus();
 
     }
-
-
     $("#nome").focus();
-
-
 
     function novo() {
         $(location).attr('href', 'cadastroFuncionario.php');
@@ -448,15 +437,12 @@ include("inc/scripts.php");
             smartAlert("Atenção", "Selecione um registro para excluir!", "error");
             return;
         }
-
         excluirUsuario(id);
     }
 
     function voltar() {
         $(location).attr('href', 'funcionarioFiltro.php');
     }
-
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function VerificaCPF() {
         var cpf = $("#cpf").val();  
@@ -464,14 +450,12 @@ include("inc/scripts.php");
         return;
     }
 
-
-
     function gravar() {
         var id = +($("#codigo").val());
-        var ativo = 0;
-        if ($("#ativo").is(':checked')) {
-            ativo = 1;
-        }
+        var ativo = 1;
+        // if ($("#ativo").is(':checked')) {
+        //     ativo = 1;
+        // }
         var nome = $("#nome").val();
         var cpf = $("#cpf").val();
         var dataNascimento = $("#dataNascimento").val();
