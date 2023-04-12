@@ -100,3 +100,32 @@ function excluir()
 }
 
 
+// function excluir()
+// {
+
+//     $reposit = new reposit();
+
+
+//     $id = (int) $_POST["id"]; 
+
+//     if ((empty($_POST['id'])  (!isset($_POST['id']))  (is_null($_POST['id'])))) {
+//         $mensagem = "Selecione um usuário.";
+//         echo "failed#" . $mensagem . ' ';
+//         return;
+//     }
+
+//     session_start();
+
+//     $result = $reposit->update('dbo.generoFuncionario' .'|'.'ativo = 0'.'|'.'generoId ='.$id);
+//     $reposit = new reposit();
+
+//     if ($result < 1) {
+//         echo ('failed#');
+//         return;
+//     }
+
+//     echo 'sucess#' . $result;
+//     return;
+// }
+
+

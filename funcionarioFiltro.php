@@ -121,7 +121,7 @@ include("inc/nav.php");
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
                                                                         <option value="" selected>Todos</option>
-                                                                        <option value="1" >Sim</option>
+                                                                        <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
                                                             </section>
@@ -129,7 +129,7 @@ include("inc/nav.php");
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
                                                                     <select id="genero" name="genero">
-                                                                    <option value="" selected>Todos</option>
+                                                                        <option value="" selected>Todos</option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao
@@ -146,20 +146,23 @@ include("inc/nav.php");
                                                             </section>
                                                         </div>
                                                         <section class="col col-2">
-                                                                <label class="label">Data de Nascimento - Início</label>
-                                                                <label class="input">
-                                                                    <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Data de Nascimento - Fim</label>
-                                                                <label class="input">
-                                                                    <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
-                                                                </label>
-                                                            </section>
+                                                            <label class="label">Data de Nascimento - Início</label>
+                                                            <label class="input">
+                                                                <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                            </label>
+                                                        </section>
+                                                        <section class="col col-2">
+                                                            <label class="label">Data de Nascimento - Fim</label>
+                                                            <label class="input">
+                                                                <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                            </label>
+                                                        </section>
                                                     </fieldset>
                                                 </div>
                                                 <footer>
+                                                    <button id="btnNovo" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                                        <span class="fa fa-novo"></span>
+                                                    </button>
                                                     <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                                         <span class="fa fa-search"></span>
                                                     </button>

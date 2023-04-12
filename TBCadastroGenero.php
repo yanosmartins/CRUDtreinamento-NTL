@@ -90,13 +90,13 @@ include("inc/nav.php");
                                                                     <input id="descricao" maxlength="255" name="nome" class="required">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
+                                                            <!-- <section class="col col-2" hidden>
                                                                 <label class="label">&nbsp;</label>
                                                                 <label id="labelAtivo" class="checkbox ">
                                                                     <input checked="checked" id="ativo" name="ativo" type="checkbox" value="true"><i></i>
                                                                     Ativo
                                                                 </label>
-                                                            </section>                                                                                                                     
+                                                            </section>                                                                                                                      -->
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -117,6 +117,9 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
+                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                            <span class="fa fa-backward " ></span>
+                                        </button>
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
