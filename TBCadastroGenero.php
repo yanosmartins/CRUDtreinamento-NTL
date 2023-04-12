@@ -222,15 +222,10 @@ include("inc/scripts.php");
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
 
-            // if (id === 0) {
-            //     smartAlert("Atenção", "Selecione um registro para excluir !", "error");
-            //     $("#nome").focus();
-            //     return;
-            // }
-
             if (id !== 0) {
                 $('#dlgSimpleExcluir').dialog('open');
             }
+            excluir();
         });
 
         $("#btnGravar").on("click", function() {
@@ -306,6 +301,8 @@ include("inc/scripts.php");
     function excluir() {
         var ativo = $("#ativo").val();
         var codigo = $("#codigo").val();
-        excluiGenero(ativo);
+
+        
+        excluiGenero(codigo, ativo);
     }
 </script>

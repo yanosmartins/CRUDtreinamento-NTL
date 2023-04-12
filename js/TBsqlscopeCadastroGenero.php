@@ -83,7 +83,7 @@ function excluir()
 {
     $reposit = new reposit();
 
-    $codigo = $_POST["codigo"];
+    $codigo = $_GET["codigo"];
 
     session_start();
 

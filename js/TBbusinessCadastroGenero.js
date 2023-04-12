@@ -39,7 +39,7 @@ function excluiGenero(codigo) {
     $.ajax({
         url: 'js/TBsqlscopeCadastroGenero.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
-        type: 'post', //metodo de envio
+        type: 'get', //metodo de envio
         data: { funcao: 'excluir', codigo:codigo }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
