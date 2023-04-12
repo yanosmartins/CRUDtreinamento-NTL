@@ -22,11 +22,6 @@ return;
 
 function gravar()
 {
-    // if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
-    //     $ativo = 0;
-    // } else {
-    //     $ativo = (int) $_POST["ativo"];
-    // }
 
     $reposit = new reposit();
 
@@ -86,24 +81,13 @@ function recupera()
 
 function excluir()
 {
-
     $reposit = new reposit();
 
-
-    $id = $_POST["id"];
-
-    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um usuário.";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    }
+    $codigo = $_POST["codigo"];
 
     session_start();
-    $usuario = $_SESSION['login'];
-    $usuario = "'" . $usuario . "'";
 
-    $result = $reposit->update('dbo.funcionario' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
-
+    $result = $reposit->update('dbo.generoFuncionario' .'|'.'generoAtivo = 0'.'|'.'codigo ='.$codigo);
 
     $reposit = new reposit();
 
@@ -111,7 +95,6 @@ function excluir()
         echo ('failed#');
         return;
     }
-
     echo 'sucess#' . $result;
     return;
 }
