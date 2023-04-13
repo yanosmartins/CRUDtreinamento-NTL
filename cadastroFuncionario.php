@@ -445,7 +445,9 @@ include("inc/scripts.php");
     });
 
 
-
+    // $("#btnRemoverTelefone").on("click", function() {
+    //   excluiTelefoneTabela();
+    // });
 
 
 
