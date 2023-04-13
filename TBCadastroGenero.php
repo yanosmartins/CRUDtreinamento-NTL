@@ -282,7 +282,7 @@ include("inc/scripts.php");
     function gravar() {
         var descricao = $("#descricao").val();
         var codigo = $("#codigo").val();
-        var ativo = 0;
+        var ativo = 1;
         
         if ($("#ativo").is(':checked')) {
             ativo = 1;
