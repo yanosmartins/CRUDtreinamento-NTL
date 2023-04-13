@@ -83,7 +83,7 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section id ="condicaoCheck" class="col col-1 hidden">
+                                                            <section id="condicaoCheck" class="col col-1 hidden">
                                                                 <label class="label">Código</label>
                                                                 <label class="input">
                                                                     <input id="codigo" name="codigo" type="text" class="readonly" readonly>
@@ -102,7 +102,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">CPF:</label>
                                                                 <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                    <input id="cpf"  name="cpf" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
+                                                                    <input id="cpf" name="cpf" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -117,7 +117,7 @@ include("inc/nav.php");
                                                                     <input id="dataNascimento" name="dataNascimento" type="text" class="datepicker required" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
                                                             </section>
-                                                            
+
                                                             <section class="col col-1">
                                                                 <label class="label">Idade:</label>
                                                                 <label class="input">
@@ -127,7 +127,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label" for="Sexo">Estado Civil</label>
                                                                 <label class="select">
-                                                                    <select id="estadoCivil" class = "required" name="ativo">
+                                                                    <select id="estadoCivil" class="required" name="ativo">
                                                                         <option value="1" selected>Solteiro</option>
                                                                         <option value="2">Casado</option>
                                                                         <option value="3">Separado</option>
@@ -138,7 +138,7 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
-                                                                    <select id="genero" class = "required" name="genero">
+                                                                    <select id="genero" class="required" name="genero">
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao
@@ -166,6 +166,109 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                     </div>
+
+
+
+                                    <div class="panel-group smart-accordion-default" id="accordion">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseContato" class="" id="accordionContato">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Contato
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseContato" class="panel-collapse collapse in">
+                                                <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <div class="row">
+                                                            <section id="condicaoCheck" class="col col-1 hidden">
+                                                                <label class="label">Código</label>
+                                                                <label class="input">
+                                                                    <input id="codigo" name="codigo" type="text" class="readonly" readonly>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
+                                                        </div>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">Nome do funcionário:</label>
+                                                                <label class="input">
+                                                                    <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">CPF:</label>
+                                                                <label class="input"><i class="icon-prepend fa fa-user"></i>
+                                                                    <input id="cpf" name="cpf" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">RG:</label>
+                                                                <label class="input"><i class="icon-prepend fa fa-user"></i>
+                                                                    <input id="rg" name="rg" class="required rg-mask" type="text" value="" placeholder="XX.XXX.XXX-X">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Nascimento:</label>
+                                                                <label class="input">
+                                                                    <input id="dataNascimento" name="dataNascimento" type="text" class="datepicker required" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col col-1">
+                                                                <label class="label">Idade:</label>
+                                                                <label class="input">
+                                                                    <input id="idade" name="idade" type="text" class="readonly">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label" for="Sexo">Estado Civil</label>
+                                                                <label class="select">
+                                                                    <select id="estadoCivil" class="required" name="ativo">
+                                                                        <option value="1" selected>Solteiro</option>
+                                                                        <option value="2">Casado</option>
+                                                                        <option value="3">Separado</option>
+                                                                        <option value="4">Divorciado</option>
+                                                                        <option value="5">Viúvo</option>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-2 col-auto">
+                                                                <label class="label">Gênero</label>
+                                                                <label class="select">
+                                                                    <select id="genero" class="required" name="genero">
+                                                                        <?php
+                                                                        $reposit = new reposit();
+                                                                        $sql = "SELECT codigo, descricao
+                                                                        FROM dbo.generoFuncionario ORDER BY codigo";
+                                                                        $result = $reposit->RunQuery($sql);
+                                                                        foreach ($result as $row) {
+                                                                            $codigo = $row['codigo'];
+                                                                            $descricao = $row['descricao'];
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select><i></i>
+                                                                </label>
+                                                            </section>
+                                                            <!-- <section class="col col-2 ">
+                                                                <label class="label">&nbsp;</label>
+                                                                <label id="labelAtivo" class="checkbox ">
+                                                                    <input checked="checked" id="ativo" name="ativo" type="checkbox" value="true"><i></i>
+                                                                    Ativo
+                                                                </label>
+                                                            </section> -->
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                     <footer>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
@@ -275,14 +378,14 @@ include("inc/scripts.php");
             let data = $("#cpf").val()
             VerificaCPF()
             ValidaCPF()
-            
+
         });
-        
+
         $("#rg").on("change", function() {
             VerificaRG()
         });
 
-        
+
 
         carregaPagina();
 
@@ -414,7 +517,7 @@ include("inc/scripts.php");
                             var dataNascimento = dataNascimento.split("/")[2];
                             var idade = (anoAtual - dataNascimento);
                             $("#idade").val(idade);
-                            
+
                             return;
                         }
                     }
@@ -445,8 +548,8 @@ include("inc/scripts.php");
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function VerificaCPF() {
-        var cpf = $("#cpf").val();  
-        cpfverificado(cpf);        
+        var cpf = $("#cpf").val();
+        cpfverificado(cpf);
         return;
     }
 

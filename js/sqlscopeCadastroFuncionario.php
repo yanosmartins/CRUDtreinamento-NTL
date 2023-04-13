@@ -199,37 +199,17 @@ function excluir()
 
 function recupera()
 {
-    // $condicaoId = !((empty($_POST["codigo"])) || (!isset($_POST["codigo"])) || (is_null($_POST["codigo"])));
-    // $condicaoLogin = !((empty($_POST["loginPesquisa"])) || (!isset($_POST["loginPesquisa"])) || (is_null($_POST["loginPesquisa"])));
-
-
-    // if (($condicaoId === false) && ($condicaoLogin === false)) {
-    //     $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
-    //     echo "failed#" . $mensagem . ' ';
-    //     return;
-    // }
-
-    // if (($condicaoId === true) && ($condicaoLogin === true)) {
-    //     $mensagem = "Somente 1 parâmetro de pesquisa deve ser informado.";
-    //     echo "failed#" . $mensagem . ' ';
-    //     return;
-    // }
+    
 
     $id = $_POST["codigo"];
     
 
-    // if ($condicaoLogin) {
-    //     $loginPesquisa = $_POST["loginPesquisa"];
-    // }
 
 
     $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento, genero, estadoCivil FROM dbo.funcionario WHERE codigo = $id";
     // $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, GF.descricao as genero from dbo.funcionario FU
     // LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
 
-    // if ($condicaoId) {
-    //     $sql = $sql . " AND codigo = " . $id . " ";
-    // }
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
