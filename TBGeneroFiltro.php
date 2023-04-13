@@ -120,7 +120,7 @@ include("inc/nav.php");
                                                     </button>
                                                     <?php if ($condicaoGravarOK) { ?>
                                                         <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
-                                                            <span class="fa fa-file"></span>
+                                                            <span class="fa fa-backward"></span>
                                                         </button>
                                                     <?php } ?>
                                                 </footer>

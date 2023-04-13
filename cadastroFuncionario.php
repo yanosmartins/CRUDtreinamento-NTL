@@ -83,7 +83,8 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section id="condicaoCheck" class="col col-1 hidden">
+                                                            <section id="condicaoCheck" class="col col-1 ">
+                                                            <!-- hidden -->
                                                                 <label class="label">Código</label>
                                                                 <label class="input">
                                                                     <input id="codigo" name="codigo" type="text" class="readonly" readonly>
@@ -184,53 +185,98 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
 
                                                     <div class="listaTelefone">
+
                                                         <fieldset>
                                                             <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label">Telefone:</label>
-                                                                    <label class="input">
-                                                                        <input id="telefone" maxlength="255" name="nome" class="required" value="">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label id="labelAtivo" class="checkbox ">
-                                                                        <input checked="checked" id="principalAtivo" type="checkbox"><i></i>
-                                                                        Principal
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label id="labelAtivo" class="checkbox ">
-                                                                        <input checked="checked" id="wppAtivo" type="checkbox"><i></i>
-                                                                        WhatsApp
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label id="labelAtivo" class="checkbox ">
-                                                                        <input checked="checked" id="corporativoAtivo" type="checkbox"><i></i>
-                                                                        Corporativo
-                                                                    </label>
-                                                                </section>
+                                                                <div class="col col-6">
+                                                                    <section class="col col-2">
+                                                                        <label class="label">Telefone:</label>
+                                                                        <label class="input"><i class="icon-prepend fa fa-phone"></i>
+                                                                            <input id="telefone" maxlength="255" name="nome" class="required" value="">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label id="labelAtivo" class="checkbox ">
+                                                                            <input checked="checked" id="principalAtivo" type="checkbox"><i></i>
+                                                                            Principal
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label id="labelAtivo" class="checkbox ">
+                                                                            <input checked="checked" id="wppAtivo" type="checkbox"><i></i>
+                                                                            WhatsApp
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label id="labelAtivo" class="checkbox ">
+                                                                            <input checked="checked" id="corporativoAtivo" type="checkbox"><i></i>
+                                                                            Corporativo
+                                                                        </label>
+                                                                    </section>
+                                                                    
+
+                                                                    <div class="table-responsive" style="min-height: 115px; width:45%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                        <table id="tableLancamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th style="width: 8px"></th>
+                                                                                    <th class="text-left">Telefone</th>
+                                                                                    <th class="text-left">Principal</th>
+                                                                                    <th class="text-left">WhatsApp</th>
+                                                                                    <th class="text-left">Corporativo</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="col col-6">
+                                                                    <section class="col col-2">
+                                                                        <label class="label">Email:</label>
+                                                                        <label class="input">
+                                                                            <input id="telefone" maxlength="255" name="nome" class="required" value="">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label id="labelAtivo" class="checkbox ">
+                                                                            <input checked="checked" id="principalAtivo" type="checkbox"><i></i>
+                                                                            Principal
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label id="labelAtivo" class="checkbox ">
+                                                                            <input checked="checked" id="corporativoAtivo" type="checkbox"><i></i>
+                                                                            Corporativo
+                                                                        </label>
+                                                                    </section>
+                                                                    
+
+                                                                    
+
+                                                                </div>
+                                                                <div class="table-responsive" style="min-height: 115px; width:45%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                        <table id="tableLancamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th style="width: 8px"></th>
+                                                                                    <th class="text-left">Email</th>
+                                                                                    <th class="text-left">Principal</th>
+                                                                                    <th class="text-left">Corporativo</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
                                                             </div>
+
                                                         </fieldset>
                                                     </div>
 
-                                                    <center><!--tabela telefone-->
-                                                        <div class="table-responsive" style="min-height: 115px; width:45%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                            <table id="tableLancamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                <thead>
-                                                                    <tr role="row">
-                                                                        <th style="width: 8px"></th>
-                                                                        <th class="text-left">Telefone</th>
-                                                                        <th class="text-left">Principal</th>
-                                                                        <th class="text-left">WhatsApp</th>
-                                                                        <th class="text-left">Corporativo</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </center>
+
                                                 </div>
                                             </div>
                                         </div>

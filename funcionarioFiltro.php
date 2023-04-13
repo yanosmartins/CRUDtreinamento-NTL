@@ -167,7 +167,7 @@ include("inc/nav.php");
                                                 </div>
                                                 <footer>
                                                     <button id="btnNovo" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
-                                                        <span class="fa fa-novo"></span>
+                                                        <span class="fa fa-file"></span>
                                                     </button>
                                                     <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                                         <span class="fa fa-search"></span>
