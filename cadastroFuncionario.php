@@ -248,50 +248,50 @@ include("inc/nav.php");
                                                                     </table>
                                                                 </div>
                                                             </div>
-                                                            <div id="formEmail" class="col-sm-6">
-                                                                <input id="emailId" name="emailId" type="hidden" value="">
-                                                                <input id="descricaoEmailPrincipal" name="descricaoEmailPrincipal" type="hidden" value="">
-                                                                <input id="descricaoEmailCorporativo" name="descricaoEmailCorporativo" type="hidden" value="">
-                                                                <input id="sequencialEmail" name="sequencialEmail" type="hidden" value="">
+                                                            <div id="formTelefone" class="col-sm-6">
+                                                                <input id="TelefoneId" name="TelefoneId" type="hidden" value="">
+                                                                <input id="descricaoTelefonePrincipal" name="descricaoTelefonePrincipal" type="hidden" value="">
+                                                                <input id="descricaoTelefoneCorporativo" name="descricaoTelefoneCorporativo" type="hidden" value="">
+                                                                <input id="sequencialTelefone" name="sequencialTelefone" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
                                                                         <section class="col col-md-6">
-                                                                            <label class="label">Email</label>
+                                                                            <label class="label">Telefone</label>
                                                                             <label class="input"><i class="icon-prepend fa fa-at"></i>
-                                                                                <input id="email" maxlength="50" name="email" type="text" value="">
+                                                                                <input id="Telefone" maxlength="50" name="Telefone" type="text" value="">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
                                                                             <label class="checkbox ">
-                                                                                <input id="emailPrincipal" name="emailPrincipal" type="checkbox" value="true" checked><i></i>
+                                                                                <input id="TelefonePrincipal" name="TelefonePrincipal" type="checkbox" value="true" checked><i></i>
                                                                                 Principal
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
                                                                             <label class="checkbox ">
-                                                                                <input id="emailCorporativo" name="emailCorporativo" type="checkbox" value="false"><i></i>
+                                                                                <input id="TelefoneCorporativo" name="TelefoneCorporativo" type="checkbox" value="false"><i></i>
                                                                                 Corporativo
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-auto">
                                                                             <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddEmail" type="button" class="btn btn-primary">
+                                                                            <button id="btnAddTelefone" type="button" class="btn btn-primary">
                                                                                 <i class="fa fa-plus"></i>
                                                                             </button>
-                                                                            <button id="btnRemoverEmail" type="button" class="btn btn-danger">
+                                                                            <button id="btnRemoverTelefone" type="button" class="btn btn-danger">
                                                                                 <i class="fa fa-minus"></i>
                                                                             </button>
                                                                         </section>
                                                                     </div>
                                                                 </div>
                                                                 <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableEmail" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <table id="tableTelefone" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                         <thead>
                                                                             <tr role="row">
                                                                                 <th></th>
-                                                                                <th class="text-left" style="min-width: 100px;">Email</th>
+                                                                                <th class="text-left" style="min-width: 100px;">Telefone</th>
                                                                                 <th class="text-left">Principal</th>
                                                                                 <th class="text-left">Corporativo</th>
                                                                             </tr>
@@ -399,6 +399,18 @@ include("inc/scripts.php");
         // $("#cpf").mask('999.999.999-99', {
         //     reverse: true
         // });
+
+        jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+  $("#btnAddTelefone").on("click", function() {
+      if (validaTelefone())
+        addTelefone();
+    });
+
+    $("#btnRemoverTelefone").on("click", function() {
+      excluiTelefoneTabela();
+    });
+
+
         $("#cpf").mask('999.999.999-99');
         $("#rg").mask('99.999.999-9');
         $("#dataNascimento").mask('99/99/9999');
@@ -571,6 +583,9 @@ include("inc/scripts.php");
     }
     $("#nome").focus();
 
+    
+
+
     function novo() {
         $(location).attr('href', 'cadastroFuncionario.php');
     }
@@ -679,4 +694,42 @@ include("inc/scripts.php");
             return false;
 
     }
+
+
+
+
+
+    function processDataTeste(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        if (fieldName !== '' && (fieldId === "TestePrincipal")) {
+            var princial = 0;
+            if ($("#TestePrincipal").is(':checked') === true) {
+                princial = 1;
+            }
+            return {
+                name: fieldName,
+                value: princial
+            };
+        }
+
+        if (fieldName !== '' && (fieldId === "descricaoTestePrincipal")) {
+            var princial = "Não";
+            if ($("#TestePrincipal").is(':checked') === true) {
+                princial = "Sim";
+            }
+            return {
+                name: fieldName,
+                value: princial
+            };
+        }
+
+
+        return false;
+    }
+
+  
+
+
 </script>

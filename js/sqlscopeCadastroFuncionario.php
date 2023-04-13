@@ -249,3 +249,144 @@ function recupera()
         return;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+function validaTorre() {
+    var achouTorre = false;
+    var limiteFuncionario = false;
+    var departamentoId = +$('#departamentoProjetoId').val();
+    var sequencial = +$('#sequencialTorre').val();
+    var funcionariosTorre = +$("#funcionarioSimultaneosTorre").val();
+    var funcionarios = +$("#funcionarioSimultaneos").val();
+
+    if (!funcionarios) {
+      smartAlert("Atenção", "Preencha o campo de Fun. Simultaneos por Departamento", "error");
+      return;
+    }
+
+    for (i = jsonTorreArray.length - 1; i >= 0; i--) {
+      if (departamentoId !== "") {
+        if ((jsonTorreArray[i].departamentoProjetoId === departamentoId) && (jsonTorreArray[i].sequencialTorre !== sequencial)) {
+          achouTorre = true;
+          break;
+        }
+      }
+    }
+
+    if (achouTorre === true) {
+      smartAlert("Erro", "Já existe um Departamento na lista.", "error");
+      $('#departamentoProjeto').val("");
+      return false;
+    }
+
+    //-------------------------------- Validação de funcionarios da torre -----------------------------------
+    //OBS:O numero de funcionarios por projeto não pode passar o numero de funcionarios simultaneos da torre
+
+    for (i = jsonTorreArray.length; i >= 0; i--) {
+      if (funcionariosTorre < funcionarios) {
+        limiteFuncionario = true;
+        $("#funcionarioSimultaneos").val('');
+        break;
+      }
+    }
+
+    if (limiteFuncionario === true) {
+      smartAlert("Atenção", `A torre tem o limite de ${funcionariosTorre} funcionarios simultaneos`, "warning");
+      return false;
+    }
+    //------------------------------------------------------------------------------------------
+
+    return true;
+  }
+----------------------------------------------------------------------------------------------------------------------------------------
+  function addTorre() {
+    var item = $("#formTorre").toObject({
+      mode: 'combine',
+      skipEmpty: false
+    });
+
+    if (item["sequencialTorre"] === '') {
+      if (jsonTorreArray.length === 0) {
+        item["sequencialTorre"] = 1;
+      } else {
+        item["sequencialTorre"] = Math.max.apply(Math, jsonTorreArray.map(function(o) {
+          return o.sequencialTorre;
+        })) + 1;
+      }
+      item["torreId"] = 0;
+    } else {
+      item["sequencialTorre"] = +item["sequencialTorre"];
+    }
+
+    var index = -1;
+    $.each(jsonTorreArray, function(i, obj) {
+      if (+$('#sequencialTorre').val() === obj.sequencialTorre) {
+        index = i;
+        return false;
+      }
+    });
+
+    if (index >= 0)
+      jsonTorreArray.splice(index, 1, item);
+    else
+      jsonTorreArray.push(item);
+
+    $("#jsonTorre").val(JSON.stringify(jsonTorreArray));
+
+    fillTableTorre();
+    clearFormTorre();
+  }
+
+  function fillTableTorre() {
+    $("#tableTorre tbody").empty();
+    for (var i = 0; i < jsonTorreArray.length; i++) {
+      var row = $('<tr />');
+
+      $("#tableTorre tbody").append(row);
+      row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTorreArray[i].sequencialTorre + '"><i></i></label></td>'));
+
+      if (jsonTorreArray[i].departamentoProjeto != undefined) {
+        row.append($('<td class="text-left" >' + jsonTorreArray[i].departamentoProjeto + '</td>'));
+      } else {
+        row.append($('<td class="text-left" >' + jsonTorreArray[i].descricaoProjeto + " - " + jsonTorreArray[i].descricaoDepartamento + '</td>'));
+      }
+
+      row.append($('<td class="text-left" >' + jsonTorreArray[i].funcionarioSimultaneos + '</td>'));
+    }
+  }
+
+  function clearFormTorre() {
+    $("#torreId").val('');
+    $("#sequencialTorre").val('');
+    $("#departamentoProjeto").val('');
+    $("#funcionarioSimultaneos").val('');
+  }
+
+  function excluiTorreTabela() {
+    var arrSequencial = [];
+    $('#tableTorre input[type=checkbox]:checked').each(function() {
+      arrSequencial.push(parseInt($(this).val()));
+    });
+    if (arrSequencial.length > 0) {
+      for (i = jsonTorreArray.length - 1; i >= 0; i--) {
+        var obj = jsonTorreArray[i];
+        if (jQuery.inArray(obj.sequencialTorre, arrSequencial) > -1) {
+          jsonTorreArray.splice(i, 1);
+        }
+      }
+      $("#jsonTorre").val(JSON.stringify(jsonTorreArray));
+      fillTableTorre();
+    } else
+      smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
+  }
