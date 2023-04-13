@@ -185,8 +185,8 @@ include("inc/nav.php");
 
                                                         <fieldset>
                                                             <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
-                                                            <input id="jsonEmail" name="jsonEmail" type="hidden" value="[]">
-                                                            <div id="formTelefone" class="col-sm-6">
+                                                            <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
+                                                            <div id="formTelefone" class="col-sm-6 required">
                                                                 <input id="telefoneId" name="telefoneId" type="hidden" value="">
                                                                 <input id="descricaoTelefonePrincipal" name="descricaoTelefonePrincipal" type="hidden" value="">
                                                                 <input id="descricaoTelefoneWhatsApp" name="descricaoTelefoneWhatsApp" type="hidden" value="">
@@ -197,7 +197,7 @@ include("inc/nav.php");
                                                                         <section class="col col-md-3">
                                                                             <label class="label">Telefone</label>
                                                                             <label class="input"><i class="icon-prepend fa fa-phone"></i>
-                                                                                <input id="telefone" name="telefone" type="text" class="form-control" value="">
+                                                                                <input id="telefone" name="telefone" type="text" class="form-control required" value="">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
@@ -400,20 +400,14 @@ include("inc/scripts.php");
         //     reverse: true
         // });
 
-        jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
-  $("#btnAddTelefone").on("click", function() {
-      if (validaTelefone())
-        addTelefone();
-    });
 
-    $("#btnRemoverTelefone").on("click", function() {
-      excluiTelefoneTabela();
-    });
 
 
         $("#cpf").mask('999.999.999-99');
         $("#rg").mask('99.999.999-9');
         $("#dataNascimento").mask('99/99/9999');
+        $("#telefone").mask('(99) 99999-9999');
+
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
             if (validaData(data) == false) {
@@ -425,9 +419,6 @@ include("inc/scripts.php");
             }
         });
 
-
-
-
         $("#cpf").on("change", function() {
             let data = $("#cpf").val()
             VerificaCPF()
@@ -438,6 +429,27 @@ include("inc/scripts.php");
         $("#rg").on("change", function() {
             VerificaRG()
         });
+
+
+
+
+
+        jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+  $("#btnAddTelefone").on("click", function() {
+      if (validaTelefone())
+        addTelefone();
+    });
+
+    $("#btnRemoverTelefone").on("click", function() {
+      excluiTelefoneTabela();
+    });
+
+
+
+
+
+
+
 
 
 
