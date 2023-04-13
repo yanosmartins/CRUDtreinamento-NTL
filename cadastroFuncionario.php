@@ -182,91 +182,76 @@ include("inc/nav.php");
                                             </div>
                                             <div id="collapseContato" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
-                                                    <fieldset>
-                                                        <div class="row">
-                                                            <section id="condicaoCheck" class="col col-1 hidden">
-                                                                <label class="label">Código</label>
-                                                                <label class="input">
-                                                                    <input id="codigo" name="codigo" type="text" class="readonly" readonly>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-                                                        <div class="row">
-                                                        </div>
-                                                        <div class="row">
-                                                            <section class="col col-2">
-                                                                <label class="label">Nome do funcionário:</label>
-                                                                <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" class="required" value="">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">CPF:</label>
-                                                                <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                    <input id="cpf" name="cpf" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">RG:</label>
-                                                                <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                    <input id="rg" name="rg" class="required rg-mask" type="text" value="" placeholder="XX.XXX.XXX-X">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Data de Nascimento:</label>
-                                                                <label class="input">
-                                                                    <input id="dataNascimento" name="dataNascimento" type="text" class="datepicker required" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
-                                                                </label>
-                                                            </section>
 
-                                                            <section class="col col-1">
-                                                                <label class="label">Idade:</label>
-                                                                <label class="input">
-                                                                    <input id="idade" name="idade" type="text" class="readonly">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label" for="Sexo">Estado Civil</label>
-                                                                <label class="select">
-                                                                    <select id="estadoCivil" class="required" name="ativo">
-                                                                        <option value="1" selected>Solteiro</option>
-                                                                        <option value="2">Casado</option>
-                                                                        <option value="3">Separado</option>
-                                                                        <option value="4">Divorciado</option>
-                                                                        <option value="5">Viúvo</option>
-                                                                    </select><i></i>
-                                                            </section>
-                                                            <section class="col col-2 col-auto">
-                                                                <label class="label">Gênero</label>
-                                                                <label class="select">
-                                                                    <select id="genero" class="required" name="genero">
-                                                                        <?php
-                                                                        $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, descricao
-                                                                        FROM dbo.generoFuncionario ORDER BY codigo";
-                                                                        $result = $reposit->RunQuery($sql);
-                                                                        foreach ($result as $row) {
-                                                                            $codigo = $row['codigo'];
-                                                                            $descricao = $row['descricao'];
-                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
-                                                                        }
-                                                                        ?>
-                                                                    </select><i></i>
-                                                                </label>
-                                                            </section>
-                                                            <!-- <section class="col col-2 ">
-                                                                <label class="label">&nbsp;</label>
-                                                                <label id="labelAtivo" class="checkbox ">
-                                                                    <input checked="checked" id="ativo" name="ativo" type="checkbox" value="true"><i></i>
-                                                                    Ativo
-                                                                </label>
-                                                            </section> -->
+                                                    <div class="listaTelefone">
+                                                        <fieldset>
+                                                            <div class="row">
+                                                                <section class="col col-2">
+                                                                    <label class="label">Telefone:</label>
+                                                                    <label class="input">
+                                                                        <input id="telefone" maxlength="255" name="nome" class="required" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label id="labelAtivo" class="checkbox ">
+                                                                        <input checked="checked" id="principalAtivo" type="checkbox"><i></i>
+                                                                        Principal
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label id="labelAtivo" class="checkbox ">
+                                                                        <input checked="checked" id="wppAtivo" type="checkbox"><i></i>
+                                                                        WhatsApp
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label id="labelAtivo" class="checkbox ">
+                                                                        <input checked="checked" id="corporativoAtivo" type="checkbox"><i></i>
+                                                                        Corporativo
+                                                                    </label>
+                                                                </section>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <center><!--tabela telefone-->
+                                                        <div class="table-responsive" style="min-height: 115px; width:45%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                            <table id="tableLancamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                <thead>
+                                                                    <tr role="row">
+                                                                        <th style="width: 8px"></th>
+                                                                        <th class="text-left">Telefone</th>
+                                                                        <th class="text-left">Principal</th>
+                                                                        <th class="text-left">WhatsApp</th>
+                                                                        <th class="text-left">Corporativo</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </table>
                                                         </div>
-                                                    </fieldset>
+                                                    </center>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                                     <footer>

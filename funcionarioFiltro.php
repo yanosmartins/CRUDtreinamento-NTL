@@ -145,12 +145,16 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
+                                                        
+                                                        
                                                         <section class="col col-2">
                                                             <label class="label">Data de Nascimento - Início</label>
                                                             <label class="input">
                                                                 <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                             </label>
                                                         </section>
+                                                        
+                                                        
                                                         <section class="col col-2">
                                                             <label class="label">Data de Nascimento - Fim</label>
                                                             <label class="input">
@@ -158,6 +162,8 @@ include("inc/nav.php");
                                                             </label>
                                                         </section>
                                                     </fieldset>
+                                                    
+
                                                 </div>
                                                 <footer>
                                                     <button id="btnNovo" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
