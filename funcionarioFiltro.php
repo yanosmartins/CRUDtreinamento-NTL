@@ -128,12 +128,11 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
-                                                                    <select id="genero" name="genero">
-                                                                        <option value="" selected>Todos</option>
+                                                                    <select id="genero" class="required" name="genero">
                                                                         <?php
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, descricao
-                                                                        FROM dbo.generoFuncionario ORDER BY codigo";
+                                                                        $sql = "SELECT codigo, descricao 
+                                                                        FROM dbo.generoFuncionario where generoAtivo = 1 ORDER BY codigo";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];

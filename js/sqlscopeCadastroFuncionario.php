@@ -167,7 +167,7 @@ function excluir()
 {
 
     $reposit = new reposit();
-    $possuiPermissao = $reposit->PossuiPermissao("USUARIO_ACESSAR|USUARIO_EXCLUIR");
+   
 
 
     $id = $_POST["id"];
