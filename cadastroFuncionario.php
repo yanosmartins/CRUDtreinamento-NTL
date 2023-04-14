@@ -188,30 +188,29 @@ include("inc/nav.php");
                                                             <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
                                                             <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
                                                             <div id="formTelefone" class="col-sm-6 required">
-                                                                <input id="telefoneId" name="telefoneId" type="hidden" value="">
-                                                                <input id="descricaoTelefonePrincipal" name="descricaoTelefonePrincipal" type="hidden" value="">
-                                                                <input id="descricaoTelefoneWhatsApp" name="descricaoTelefoneWhatsApp" type="hidden" value="">
-                                                                <input id="descricaoTelefoneCorporativo" name="descricaoTelefoneCorporativo" type="hidden" value="">
-                                                                <input id="sequencialTel" name="sequencialTel" type="hidden" value="">
+                                                                <input id="sequencialTelefone" type="hidden" value="">
+                                                                <!-- <input id="telefoneId" type="hidden" value=""> -->
+                                                                <input id="descricaoTelefonePrincipal" type="hidden" value="">
+                                                                <input id="descricaoTelefoneWhatsApp" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
                                                                         <section class="col col-md-3">
                                                                             <label class="label">Telefone</label>
                                                                             <label class="input"><i class="icon-prepend fa fa-phone"></i>
-                                                                                <input id="telefone" name="telefone" type="text" class="form-control required" value="">
+                                                                                <input id="telefone" name="telefone" type="text" class="form-control required" placeholder="(XX) XXXXX-XXXX" value="">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
-                                                                            <label class="checkbox ">
-                                                                                <input id="telefonePrincipal" name="telefonePrincipal" type="checkbox" value="true" checked="checked"><i></i>
+                                                                            <label class="checkbox">
+                                                                                <input id="telefonePrincipal" type="checkbox" value="true"><i></i>
                                                                                 Principal
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
                                                                             <label class="checkbox ">
-                                                                                <input id="telefoneWhatsApp" name="telefoneWhatsApp" type="checkbox" value="true" checked="checked"><i></i>
+                                                                                <input id="telefoneWhatsApp" name="telefoneWhatsApp" type="checkbox" value="true"><i></i>
                                                                                 WhatsApp
                                                                             </label>
                                                                         </section>
@@ -242,39 +241,40 @@ include("inc/nav.php");
                                                                     </table>
                                                                 </div>
                                                             </div>
-                                                            <div id="formTelefone" class="col-sm-6">
-                                                                <input id="TelefoneId" name="TelefoneId" type="hidden" value="">
-                                                                <input id="descricaoTelefonePrincipal" name="descricaoTelefonePrincipal" type="hidden" value="">
-                                                                <input id="descricaoTelefoneCorporativo" name="descricaoTelefoneCorporativo" type="hidden" value="">
-                                                                <input id="sequencialTelefone" name="sequencialTelefone" type="hidden" value="">
+
+                                                            <div id="formEmail" class="col-sm-6">
+                                                                <input id="EmailId" name="EmailId" type="hidden" value="">
+                                                                <input id="descricaoEmailPrincipal" name="descricaoEmailPrincipal" type="hidden" value="">
+                                                                <input id="descricaoEmailCorporativo" name="descricaoEmailCorporativo" type="hidden" value="">
+                                                                <input id="sequencialEmail" name="sequencialEmail" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
                                                                         <section class="col col-md-6">
-                                                                            <label class="label">Telefone</label>
+                                                                            <label class="label">Email</label>
                                                                             <label class="input"><i class="icon-prepend fa fa-at"></i>
-                                                                                <input id="Telefone" maxlength="50" name="Telefone" type="text" value="">
+                                                                                <input id="Email" maxlength="50" name="Email" type="text" value="">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
                                                                             <label class="checkbox ">
-                                                                                <input id="TelefonePrincipal" name="TelefonePrincipal" type="checkbox" value="true" checked><i></i>
+                                                                                <input id="EmailPrincipal" name="EmailPrincipal" type="checkbox" value="true" checked><i></i>
                                                                                 Principal
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
                                                                             <label class="checkbox ">
-                                                                                <input id="TelefoneCorporativo" name="TelefoneCorporativo" type="checkbox" value="false"><i></i>
+                                                                                <input id="EmailCorporativo" name="EmailCorporativo" type="checkbox" value="false"><i></i>
                                                                                 Corporativo
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-auto">
                                                                             <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddTelefone" type="button" class="btn btn-primary">
+                                                                            <button id="btnAddEmail" type="button" class="btn btn-primary">
                                                                                 <i class="fa fa-plus"></i>
                                                                             </button>
-                                                                            <button id="btnRemoverTelefone" type="button" class="btn btn-danger">
+                                                                            <button id="btnRemoverEmail" type="button" class="btn btn-danger">
                                                                                 <i class="fa fa-minus"></i>
                                                                             </button>
                                                                         </section>
@@ -285,7 +285,7 @@ include("inc/nav.php");
                                                                         <thead>
                                                                             <tr role="row">
                                                                                 <th></th>
-                                                                                <th class="text-left" style="min-width: 100px;">Telefone</th>
+                                                                                <th class="text-left" style="min-width: 100px;">Email</th>
                                                                                 <th class="text-left">Principal</th>
                                                                                 <th class="text-left">Corporativo</th>
                                                                             </tr>
@@ -394,7 +394,7 @@ include("inc/scripts.php");
         // });
 
 
-
+        jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
 
         $("#cpf").mask('999.999.999-99');
         $("#rg").mask('99.999.999-9');
@@ -424,29 +424,15 @@ include("inc/scripts.php");
         });
 
 
-
-
-
-        jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         $("#btnAddTelefone").on("click", function() {
             //   if (validaTelefone())
             addTelefone();
         });
-
         $("#btnRemoverTelefone").on("click", function() {
             excluiTelefoneTabela();
         });
-
-
         // $("#btnRemoverTelefone").on("click", function() {
-
         // });
-
-
-
-
-
-
 
         carregaPagina();
 
@@ -459,8 +445,6 @@ include("inc/scripts.php");
                 }
             }
         }));
-
-
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -482,7 +466,6 @@ include("inc/scripts.php");
                 }
             }]
         });
-
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
 
@@ -496,7 +479,6 @@ include("inc/scripts.php");
                 $('#dlgSimpleExcluir').dialog('open');
             }
         });
-
         $("#btnNovo").on("click", function() {
             novo();
         });
@@ -504,7 +486,6 @@ include("inc/scripts.php");
             gravar();
 
         });
-
         $("#btnVoltar").on("click", function() {
             voltar();
         });
@@ -702,84 +683,120 @@ include("inc/scripts.php");
 
     }
 
+    // function addTelefone() {
+    //     // var telefone = $("#telefone").val();
+    //     // if (telefone === "") {
+    //     //     smartAlert("Atenção", "Informe o Telefone !", "error");
+    //     //     $("#telefone").focus();
+    //     //     return;
+    //     // }
+       
+
+
+
+        
 
 
 
 
-    // function processDataTeste(node) {
-    //     var fieldId = node.getAttribute ? node.getAttribute('id') : '';
-    //     var fieldName = node.getAttribute ? node.getAttribute('name') : '';
 
-    //     if (fieldName !== '' && (fieldId === "TestePrincipal")) {
-    //         var princial = 0;
-    //         if ($("#TestePrincipal").is(':checked') === true) {
-    //             princial = 1;
+
+
+
+
+
+    //     var item = $("#formTelefone").toObject({
+    //         mode: 'combine',
+    //         skipEmpty: false
+    //     });
+
+    //     if (item["sequencialTelefone"] === '') {
+    //         if (jsonTelefoneArray.length === 0) {
+    //             item["sequencialTelefone"] = 1;
+    //         } else {
+    //             item["sequencialTelefone"] = Math.max.apply(Math, jsonTelefoneArray.map(function(o) {
+    //                 return o.sequencialTelefone;
+    //             })) + 1;
     //         }
-    //         return {
-    //             name: fieldName,
-    //             value: princial
-    //         };
+    //         item["telefoneId"] = 0;
+    //     } else {
+    //         item["sequencialTelefone"] = +item["sequencialTelefone"];
     //     }
 
-    //     if (fieldName !== '' && (fieldId === "descricaoTestePrincipal")) {
-    //         var princial = "Não";
-    //         if ($("#TestePrincipal").is(':checked') === true) {
-    //             princial = "Sim";
+    //     var index = -1;
+    //     $.each(jsonTelefoneArray, function(i, obj) {
+    //         if (+$('#sequencialTelefone').val() === obj.sequencialTelefone) {
+    //             index = i;
+    //             return false;
     //         }
-    //         return {
-    //             name: fieldName,
-    //             value: princial
-    //         };
-    //     }
+    //     });
 
+    //     if (index >= 0)
+    //         jsonTelefoneArray.splice(index, 1, item);
+    //     else
+    //         jsonTelefoneArray.push(item);
 
-    //     return false;
+    //     $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
+
+    //     fillTableTelefone();
+    //     clearFormTelefone();
     // }
+   
+   
+    // function addTelefone() {
+    //     var item = $("#formTelefone").toObject({
+    //         mode: 'combine',
+    //         skipEmpty: false
+    //     });
+    //     // if ($("#item").val() == "" || $("#quantidade").val() == "") {
+    //     //     smartAlert("Atenção", "Informe o item e a quantidade", "error");
+
+    //     //     clearFormTelefone()
+    //     //     return;
+    //     // }
+    //     if (item["sequencialTelefone"] === '') {
+    //         if (jsonTelefoneArray.length === 0) {
+    //             item["sequencialTelefone"] = 1;
+    //         } else {
+    //             item["sequencialTelefone"] = Math.max.apply(Math, jsonTelefoneArray.map(function(o) {
+    //                 return o.sequencialTelefone;
+    //             })) + 1;
+    //         }
+    //         item["itemId"] = 0;
+    //     } else {
+    //         item["sequencialTelefone"] = +item["sequencialTelefone"];
+    //     }
+
+    //     var principal = $('#telefonePrincipal').val();
+
+    //     // if (item["TelefonePrincipal"]){
+    //     //     if(item["principal"]).is(':checked'){
+    //     //         item["principal"] = true;                
+    //     //     }
+    //     // }
 
 
 
+    //     var index = -1;
+    //     $.each(jsonTelefoneArray, function(i, obj) {
+    //         if (+$('#sequencialTelefone').val() === obj.sequencialTelefone) {
+    //             index = i;
+    //             return false;
+    //         }
+    //     });
+
+    //     if (index >= 0)
+    //         jsonTelefoneArray.splice(index, 1, item);
+    //     else
+    //         jsonTelefoneArray.push(item);
+
+    //     $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
 
 
 
-
-    function addTelefone() {
-        var item = $("#formTelefone").toObject({
-            mode: 'combine',
-            skipEmpty: false
-        });
-
-        if (item["sequencialTelefone"] === '') {
-            if (jsonTelefoneArray.length === 0) {
-                item["sequencialTelefone"] = 1;
-            } else {
-                item["sequencialTelefone"] = Math.max.apply(Math, jsonTelefoneArray.map(function(o) {
-                    return o.sequencialTelefone;
-                })) + 1;
-            }
-            item["telefoneId"] = 0;
-        } else {
-            item["sequencialTelefone"] = +item["sequencialTelefone"];
-        }
-
-        var index = -1;
-        $.each(jsonTelefoneArray, function(i, obj) {
-            if (+$('#sequencialTelefone').val() === obj.sequencialTelefone) {
-                index = i;
-                return false;
-            }
-        });
-
-        if (index >= 0)
-            jsonTelefoneArray.splice(index, 1, item);
-        else
-            jsonTelefoneArray.push(item);
-
-        $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
-
-        fillTableTelefone();
-        clearFormTelefone();
-    }
-
+    
+    // }
+    
     function fillTableTelefone() {
         $("#tableTelefone tbody").empty();
         for (var i = 0; i < jsonTelefoneArray.length; i++) {
@@ -788,21 +805,23 @@ include("inc/scripts.php");
             $("#tableTelefone tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTelefone + '"><i></i></label></td>'));
 
-            if (jsonTelefoneArray[i].departamentoProjeto != undefined) {
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].departamentoProjeto + '</td>'));
+
+
+            if (jsonTelefoneArray[i].telefone != undefined) {
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefone + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].principal + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefoneWhatsApp + '</td>'));
             } else {
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].descricaoProjeto + " - " + jsonTelefoneArray[i].descricaoDepartamento + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefoneWhatsApp + '</td>'));
             }
 
-            row.append($('<td class="text-left" >' + jsonTelefoneArray[i].funcionarioSimultaneos + '</td>'));
+
         }
     }
 
     function clearFormTelefone() {
         $("#TelefoneId").val('');
         $("#sequencialTelefone").val('');
-        $("#departamentoProjeto").val('');
-        $("#funcionarioSimultaneos").val('');
     }
 
     function excluiTelefoneTabela() {
