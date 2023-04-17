@@ -683,13 +683,13 @@ include("inc/scripts.php");
 
     }
 
-    // function addTelefone() {
-    //     // var telefone = $("#telefone").val();
-    //     // if (telefone === "") {
-    //     //     smartAlert("Atenção", "Informe o Telefone !", "error");
-    //     //     $("#telefone").focus();
-    //     //     return;
-    //     // }
+    function addTelefone() {
+        // var telefone = $("#telefone").val();
+        // if (telefone === "") {
+        //     smartAlert("Atenção", "Informe o Telefone !", "error");
+        //     $("#telefone").focus();
+        //     return;
+        // }
        
 
 
@@ -705,42 +705,42 @@ include("inc/scripts.php");
 
 
 
-    //     var item = $("#formTelefone").toObject({
-    //         mode: 'combine',
-    //         skipEmpty: false
-    //     });
+        var item = $("#formTelefone").toObject({
+            mode: 'combine',
+            skipEmpty: false
+        });
 
-    //     if (item["sequencialTelefone"] === '') {
-    //         if (jsonTelefoneArray.length === 0) {
-    //             item["sequencialTelefone"] = 1;
-    //         } else {
-    //             item["sequencialTelefone"] = Math.max.apply(Math, jsonTelefoneArray.map(function(o) {
-    //                 return o.sequencialTelefone;
-    //             })) + 1;
-    //         }
-    //         item["telefoneId"] = 0;
-    //     } else {
-    //         item["sequencialTelefone"] = +item["sequencialTelefone"];
-    //     }
+        if (item["sequencialTelefone"] === '') {
+            if (jsonTelefoneArray.length === 0) {
+                item["sequencialTelefone"] = 1;
+            } else {
+                item["sequencialTelefone"] = Math.max.apply(Math, jsonTelefoneArray.map(function(o) {
+                    return o.sequencialTelefone;
+                })) + 1;
+            }
+            item["telefoneId"] = 0;
+        } else {
+            item["sequencialTelefone"] = +item["sequencialTelefone"];
+        }
 
-    //     var index = -1;
-    //     $.each(jsonTelefoneArray, function(i, obj) {
-    //         if (+$('#sequencialTelefone').val() === obj.sequencialTelefone) {
-    //             index = i;
-    //             return false;
-    //         }
-    //     });
+        var index = -1;
+        $.each(jsonTelefoneArray, function(i, obj) {
+            if (+$('#sequencialTelefone').val() === obj.sequencialTelefone) {
+                index = i;
+                return false;
+            }
+        });
 
-    //     if (index >= 0)
-    //         jsonTelefoneArray.splice(index, 1, item);
-    //     else
-    //         jsonTelefoneArray.push(item);
+        if (index >= 0)
+            jsonTelefoneArray.splice(index, 1, item);
+        else
+            jsonTelefoneArray.push(item);
 
-    //     $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
+        $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
 
-    //     fillTableTelefone();
-    //     clearFormTelefone();
-    // }
+        fillTableTelefone();
+        clearFormTelefone();
+    }
    
    
     // function addTelefone() {
