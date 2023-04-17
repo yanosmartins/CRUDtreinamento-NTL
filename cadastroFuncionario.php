@@ -203,7 +203,7 @@ include("inc/nav.php");
                                                                         <section class="col col-md-2">
                                                                             <label class="label">&nbsp;</label>
                                                                             <label class="checkbox">
-                                                                                <input id="telefonePrincipal" type="checkbox" value="true"><i></i>
+                                                                                <input id="telefonePrincipal" name="telefonePrincipal" type="checkbox" value="true"><i></i>
                                                                                 Principal
                                                                             </label>
                                                                         </section>
@@ -684,26 +684,12 @@ include("inc/scripts.php");
     }
 
     function addTelefone() {
-        // var telefone = $("#telefone").val();
-        // if (telefone === "") {
-        //     smartAlert("Atenção", "Informe o Telefone !", "error");
-        //     $("#telefone").focus();
-        //     return;
-        // }
-       
-
-
-
-        
-
-
-
-
-
-
-
-
-
+        var telefone = $("#telefone").val();
+        if (telefone === "") {
+            smartAlert("Atenção", "Informe o Telefone !", "error");
+            $("#telefone").focus();
+            return;
+        }
 
         var item = $("#formTelefone").toObject({
             mode: 'combine',
@@ -742,8 +728,50 @@ include("inc/scripts.php");
         clearFormTelefone();
     }
    
-   
-    // function addTelefone() {
+    function fillTableTelefone() {
+        $("#tableTelefone tbody").empty();
+        for (var i = 0; i < jsonTelefoneArray.length; i++) {
+            var row = $('<tr />');
+
+            $("#tableTelefone tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTelefone + '"><i></i></label></td>'));
+
+            if (jsonTelefoneArray[i].telefone != undefined) {
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefone + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefonePrincipal + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefoneWhatsApp + '</td>'));
+            } else {
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefoneWhatsApp + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefonePrincipal + '</td>'));
+            }
+        }
+    }
+
+    function clearFormTelefone() {
+        $("#TelefoneId").val('');
+        $("#sequencialTelefone").val('');
+    }
+    function excluiTelefoneTabela() {
+        var arrSequencial = [];
+        $('#tableTelefone input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonTelefoneArray.length - 1; i >= 0; i--) {
+                var obj = jsonTelefoneArray[i];
+                if (jQuery.inArray(obj.sequencialTelefone, arrSequencial) > -1) {
+                    jsonTelefoneArray.splice(i, 1);
+                }
+            }
+            $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
+            fillTableTelefone();
+        } else
+            smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
+    }
+</script>
+
+
+<!-- // function addTelefone() {
     //     var item = $("#formTelefone").toObject({
     //         mode: 'combine',
     //         skipEmpty: false
@@ -795,50 +823,5 @@ include("inc/scripts.php");
 
 
     
-    // }
+    // } -->
     
-    function fillTableTelefone() {
-        $("#tableTelefone tbody").empty();
-        for (var i = 0; i < jsonTelefoneArray.length; i++) {
-            var row = $('<tr />');
-
-            $("#tableTelefone tbody").append(row);
-            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTelefone + '"><i></i></label></td>'));
-
-
-
-            if (jsonTelefoneArray[i].telefone != undefined) {
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefone + '</td>'));
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].principal + '</td>'));
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefoneWhatsApp + '</td>'));
-            } else {
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefoneWhatsApp + '</td>'));
-            }
-
-
-        }
-    }
-
-    function clearFormTelefone() {
-        $("#TelefoneId").val('');
-        $("#sequencialTelefone").val('');
-    }
-
-    function excluiTelefoneTabela() {
-        var arrSequencial = [];
-        $('#tableTelefone input[type=checkbox]:checked').each(function() {
-            arrSequencial.push(parseInt($(this).val()));
-        });
-        if (arrSequencial.length > 0) {
-            for (i = jsonTelefoneArray.length - 1; i >= 0; i--) {
-                var obj = jsonTelefoneArray[i];
-                if (jQuery.inArray(obj.sequencialTelefone, arrSequencial) > -1) {
-                    jsonTelefoneArray.splice(i, 1);
-                }
-            }
-            $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
-            fillTableTelefone();
-        } else
-            smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
-    }
-</script>
