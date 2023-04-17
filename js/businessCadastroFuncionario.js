@@ -3,11 +3,12 @@ function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil,
         url: 'js/sqlscopeCadastroFuncionario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "gravar", id: id, ativo: ativo, cpf: cpf, nome: nome, dataNascimento: dataNascimento, rg: rg, estadoCivil:estadoCivil, genero:genero }, //valores enviados ao script     
+        data: { funcao: "gravar", id: id, ativo: ativo, cpf: cpf, nome: nome, dataNascimento: dataNascimento, rg: rg, estadoCivil: estadoCivil, genero: genero }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
-        complete: function () {ss
+        complete: function () {
+            ss
             //função executada depois de terminar o ajax
         },
         ///////////////////////////////////////////////////
@@ -56,7 +57,7 @@ function cpfverificado(cpf) {
                     return;
                 }
                 else {
-                    mensagem ="Opa! CPF já registrado.";
+                    mensagem = "Opa! CPF já registrado.";
                     document.getElementById('cpf').value = "";
                     $("#cpf").focus();
                     smartAlert("Atenção", mensagem, "error");
@@ -75,22 +76,22 @@ function cpfverificado(cpf) {
 }
 
 function cpfvalidado(cpf) {
-    $.ajax({ 
+    $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php',
         type: 'post',
-        dataType:"html",
-        data: {funcao: "ValidaCPF", cpf:cpf},
+        dataType: "html",
+        data: { funcao: "ValidaCPF", cpf: cpf },
 
-        success: function (data, textStatus) {
+        success: function (data) {
             if (data.trim() === 'success') {
-                smartAlert("Sucesso", "CPF válido!", "success"); 
+                smartAlert("Sucesso", "CPF válido!", "success");
             } else {
                 smartAlert("Atenção", "CPF Inválido!", "error");
                 document.getElementById('cpf').value = "";
                 $("#cpf").focus();
             }
         }, error: function (xhr, er) {
-            console.log(xhr, er);   
+            console.log(xhr, er);
         }
     });
 }
@@ -117,7 +118,7 @@ function RGverificado(rg) {
                     return;
                 }
                 else {
-                    mensagem ="RG já registrado.";
+                    mensagem = "RG já registrado.";
                     smartAlert("Atenção", mensagem, "error");
                     document.getElementById('rg').value = "";
                     $("#rg").focus();

@@ -186,12 +186,10 @@ include("inc/nav.php");
 
                                                         <fieldset>
                                                             <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
-                                                            <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
                                                             <div id="formTelefone" class="col-sm-6 required">
-                                                                <input id="sequencialTelefone" type="hidden" value="">
-                                                                <!-- <input id="telefoneId" type="hidden" value=""> -->
                                                                 <input id="descricaoTelefonePrincipal" type="hidden" value="">
                                                                 <input id="descricaoTelefoneWhatsApp" type="hidden" value="">
+                                                                <input id="sequencialTelefone" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
                                                                         <section class="col col-md-3">
@@ -425,8 +423,8 @@ include("inc/scripts.php");
 
 
         $("#btnAddTelefone").on("click", function() {
-            //   if (validaTelefone())
-            addTelefone();
+            if (validaTelefone())
+                addTelefone();
         });
         $("#btnRemoverTelefone").on("click", function() {
             excluiTelefoneTabela();
@@ -435,6 +433,8 @@ include("inc/scripts.php");
 
 
         carregaPagina();
+        carregaTelefone();
+
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
@@ -490,6 +490,7 @@ include("inc/scripts.php");
             voltar();
         });
     });
+    /////////////////////fim dos eventos
 
 
 
@@ -510,6 +511,29 @@ include("inc/scripts.php");
         RGverificado(rg);
         return;
     }
+
+
+    function carregaTelefone(sequencialTelefone) {
+        var arr = jQuery.grep(jsonTelefoneArray, function(item, i) {
+            return (item.sequencialTelefone === sequencialTelefone);
+        });
+        if (arr.length > 0) {
+            var item = arr[0];
+
+            $("#telefone").val(item.telefone);
+            $("#sequencialTelefone").val(item.sequencialTelefone);
+
+            if ($("#telefonePrincipal").is(':checked')) {
+                item["telefonePrincipal"] = true;
+            } else {
+                item["telefonePrincipal"] = false;
+            }
+            $("#telefonePrincipal").val(item.telefonePrincipal);
+            $("#telefoneWhatsApp").val(item.telefoneWhatsApp);
+        }
+        clearFormTelefone();
+    }
+
 
 
     function carregaPagina() {
@@ -563,6 +587,7 @@ include("inc/scripts.php");
                             return;
                         }
                     }
+
                 );
             }
         }
@@ -570,6 +595,8 @@ include("inc/scripts.php");
 
     }
     $("#nome").focus();
+
+
 
 
 
@@ -696,6 +723,8 @@ include("inc/scripts.php");
             skipEmpty: false
         });
 
+        item["sequencialTelefone"] = $("#sequencialTelefone").val();
+
         if (item["sequencialTelefone"] === '') {
             if (jsonTelefoneArray.length === 0) {
                 item["sequencialTelefone"] = 1;
@@ -724,6 +753,29 @@ include("inc/scripts.php");
 
         $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
 
+
+        var principal = $('#telefonePrincipal').val();
+        if (item["telefonePrincipal"]) {
+            if ($("#telefonePrincipal").is(':checked')) {
+                item["telefonePrincipal"] = true;
+            } else {
+                item["telefonePrincipal"] = false;
+            }
+            item["telefonePrincipal"] = "Sim";
+        } else {
+            item["telefonePrincipal"] = "Não";
+        }
+        var WhatsApp = $('#telefoneWhatsApp').val();
+        if (item["telefoneWhatsApp"]) {
+            if ($("#telefoneWhatsApp").is(':checked')) {
+                item["telefoneWhatsApp"] = true;
+            } else {
+                item["telefoneWhatsApp"] = false;
+            }
+            item["telefoneWhatsApp"] = "Sim";
+        } else {
+            item["telefoneWhatsApp"] = "Não";
+        }
         fillTableTelefone();
         clearFormTelefone();
     }
@@ -735,9 +787,11 @@ include("inc/scripts.php");
 
             $("#tableTelefone tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTelefone + '"><i></i></label></td>'));
-
+ 
             if (jsonTelefoneArray[i].telefone != undefined) {
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefone + '</td>'));
+                clearFormTelefone();
+                // <a href="cadastroFuncionario.php">' </a>
+                row.append($('<td class="text-left" onclick="carregaTelefone(' + jsonTelefoneArray[i].sequencialTelefone + ');">' + jsonTelefoneArray[i].telefone + '</td>'));
                 row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefonePrincipal + '</td>'));
                 row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefoneWhatsApp + '</td>'));
             } else {
@@ -745,11 +799,16 @@ include("inc/scripts.php");
                 row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefonePrincipal + '</td>'));
             }
         }
+
     }
 
     function clearFormTelefone() {
-        $("#TelefoneId").val('');
+        $("#telefone").focus();
+        $("#telefone").val('');
         $("#sequencialTelefone").val('');
+        $("#telefonePrincipal").prop('checked', false);
+        $("#telefoneWhatsApp").prop('checked', false);
+
     }
 
     function excluiTelefoneTabela() {
@@ -761,7 +820,7 @@ include("inc/scripts.php");
         if (arrSequencial.length > 0) {
             for (i = jsonTelefoneArray.length - 1; i >= 0; i--) {
                 var obj = jsonTelefoneArray[i];
-                if (jQuery.inArray(obj.sequencialTelefone, arrSequencial) > -1) {            
+                if (jQuery.inArray(obj.sequencialTelefone, arrSequencial) > -1) {
                     jsonTelefoneArray.splice(i, 1);
                 }
             }
@@ -769,5 +828,48 @@ include("inc/scripts.php");
             fillTableTelefone();
         } else
             smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
+        clearFormTelefone();
+    }
+
+    function validaTelefone() {
+        var achouTelefone = false;
+        var achouTelefonePrincipal = false;
+        var telefonePrincipal = '';
+
+        if ($('#telefonePrincipal').is(':checked')) {
+            telefonePrincipal = true;
+        } else {
+            telefonePrincipal = false;
+        }
+
+        var sequencial = +$('#sequencialTelefone').val();
+        var telefone = $('#telefone').val();
+
+        for (i = jsonTelefoneArray.length - 1; i >= 0; i--) {
+            if (telefonePrincipal == true) {
+                if ((jsonTelefoneArray[i].telefonePrincipal == telefonePrincipal) && (jsonTelefoneArray[i].sequencialTelefone !== sequencial)) {
+                    achouTelefonePrincipal = true;
+                    break;
+                }
+            }
+            if (telefone !== "") {
+                if ((jsonTelefoneArray[i].telefone === telefone) && (jsonTelefoneArray[i].sequencialTelefone !== sequencial)) {
+                    achouTelefone = true;
+                    break;
+                }
+            }
+
+        }
+        if (achouTelefone === true) {
+            smartAlert("Erro", "Este número já está na lista.", "error");
+            clearFormTelefone();
+            return false;
+        }
+        if (achouTelefonePrincipal === true) {
+            smartAlert("Erro", "Já existe um Telefone Principal na lista.", "error");
+            clearFormTelefone();
+            return false;
+        }
+        return true;
     }
 </script>
