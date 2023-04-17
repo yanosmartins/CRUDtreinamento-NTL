@@ -836,12 +836,12 @@ include("inc/scripts.php");
         var achouTelefonePrincipal = false;
         var telefonePrincipal = '';
 
-        if ($('#telefonePrincipal').is(':checked')) {
-            telefonePrincipal = true;
-        } else {
-            telefonePrincipal = false;
-        }
-
+        // if ($('#telefonePrincipal').is(':checked')) {
+        //     telefonePrincipal = true;
+        // } else {
+        //     telefonePrincipal = false;
+        // }
+       
         var sequencial = +$('#sequencialTelefone').val();
         var telefone = $('#telefone').val();
 
