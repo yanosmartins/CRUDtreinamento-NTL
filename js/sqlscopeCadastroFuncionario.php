@@ -85,13 +85,10 @@ function VerificaCPF(){
     
     $sql = "SELECT cpf, codigo FROM dbo.funcionario WHERE cpf='$cpf'";
     //achou 
-    // $sql = "SELECT cpf FROM dbo.funcionario WHERE (0 = 0) AND" . "' cpf ='".$cpf;
+    
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);    
-    // $result = $reposit->RunQuery($sql);
-    // if ($id > 0) {
-    //     $sql = "SELECT codigo FROM dbo.funcionario WHERE cpf='$cpf' and codigo =$id";
-    // }
+    
     ////! ANTES É NEGAÇÃO
     if (!$result){
         echo  'success#';

@@ -430,11 +430,8 @@ include("inc/scripts.php");
             excluiTelefoneTabela();
         });
 
-
-
         carregaPagina();
         carregaTelefone();
-
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
@@ -512,29 +509,22 @@ include("inc/scripts.php");
         return;
     }
 
-
     function carregaTelefone(sequencialTelefone) {
         var arr = jQuery.grep(jsonTelefoneArray, function(item, i) {
             return (item.sequencialTelefone === sequencialTelefone);
         });
         if (arr.length > 0) {
             var item = arr[0];
-
             $("#telefone").val(item.telefone);
             $("#sequencialTelefone").val(item.sequencialTelefone);
-
-            if ($("#telefonePrincipal").is(':checked')) {
-                item["telefonePrincipal"] = true;
-            } else {
-                item["telefonePrincipal"] = false;
+            if (item.telefonePrincipal == true) {
+                $("#telefonePrincipal").prop("checked", true);
             }
-            $("#telefonePrincipal").val(item.telefonePrincipal);
-            $("#telefoneWhatsApp").val(item.telefoneWhatsApp);
+            if (item.telefoneWhatsApp == true) {
+                $("#telefoneWhatsApp").prop("checked", true);
+            }
         }
-        clearFormTelefone();
     }
-
-
 
     function carregaPagina() {
         var urlx = window.document.URL.toString();
@@ -583,7 +573,6 @@ include("inc/scripts.php");
                             var dataNascimento = dataNascimento.split("/")[2];
                             var idade = (anoAtual - dataNascimento);
                             $("#idade").val(idade);
-
                             return;
                         }
                     }
@@ -595,11 +584,6 @@ include("inc/scripts.php");
 
     }
     $("#nome").focus();
-
-
-
-
-
 
     function novo() {
         $(location).attr('href', 'cadastroFuncionario.php');
@@ -754,28 +738,27 @@ include("inc/scripts.php");
         $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
 
 
-        var principal = $('#telefonePrincipal').val();
         if (item["telefonePrincipal"]) {
-            if ($("#telefonePrincipal").is(':checked')) {
-                item["telefonePrincipal"] = true;
-            } else {
-                item["telefonePrincipal"] = false;
-            }
-            item["telefonePrincipal"] = "Sim";
+            item["descricaoTelefonePrincipal"] = "Sim";
         } else {
-            item["telefonePrincipal"] = "Não";
+            item["descricaoTelefonePrincipal"] = "Não";
         }
-        var WhatsApp = $('#telefoneWhatsApp').val();
         if (item["telefoneWhatsApp"]) {
-            if ($("#telefoneWhatsApp").is(':checked')) {
-                item["telefoneWhatsApp"] = true;
-            } else {
-                item["telefoneWhatsApp"] = false;
-            }
-            item["telefoneWhatsApp"] = "Sim";
+            item["descricaoTelefoneWhatsApp"] = "Sim";
         } else {
-            item["telefoneWhatsApp"] = "Não";
+            item["descricaoTelefoneWhatsApp"] = "Não";
         }
+        // var WhatsApp = $('#telefoneWhatsApp').val();
+        // if (item["telefoneWhatsApp"]) {
+        //     if ($("#telefoneWhatsApp").is(':checked')) {
+        //         item["telefoneWhatsApp"] = true;
+        //     } else {
+        //         item["telefoneWhatsApp"] = false;
+        //     }
+        //     item["telefoneWhatsApp"] = "Sim";
+        // } else {
+        //     item["telefoneWhatsApp"] = "Não";
+        // }
         fillTableTelefone();
         clearFormTelefone();
     }
@@ -787,16 +770,16 @@ include("inc/scripts.php");
 
             $("#tableTelefone tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTelefone + '"><i></i></label></td>'));
- 
+
             if (jsonTelefoneArray[i].telefone != undefined) {
                 clearFormTelefone();
                 // <a href="cadastroFuncionario.php">' </a>
                 row.append($('<td class="text-left" onclick="carregaTelefone(' + jsonTelefoneArray[i].sequencialTelefone + ');">' + jsonTelefoneArray[i].telefone + '</td>'));
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefonePrincipal + '</td>'));
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefoneWhatsApp + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].descricaoTelefonePrincipal + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].descricaoTelefoneWhatsApp + '</td>'));
             } else {
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefoneWhatsApp + '</td>'));
-                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].telefonePrincipal + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].descricaoTelefoneWhatsApp + '</td>'));
+                row.append($('<td class="text-left" >' + jsonTelefoneArray[i].descricaoTelefonePrincipal + '</td>'));
             }
         }
 
@@ -836,12 +819,12 @@ include("inc/scripts.php");
         var achouTelefonePrincipal = false;
         var telefonePrincipal = '';
 
-        // if ($('#telefonePrincipal').is(':checked')) {
-        //     telefonePrincipal = true;
-        // } else {
-        //     telefonePrincipal = false;
-        // }
-       
+        if ($('#telefonePrincipal').is(':checked')) {
+            telefonePrincipal = true;
+        } else {
+            telefonePrincipal = false;
+        }
+
         var sequencial = +$('#sequencialTelefone').val();
         var telefone = $('#telefone').val();
 
@@ -854,11 +837,10 @@ include("inc/scripts.php");
             }
             if (telefone !== "") {
                 if ((jsonTelefoneArray[i].telefone === telefone) && (jsonTelefoneArray[i].sequencialTelefone !== sequencial)) {
-                    achouTelefone = true;
+                    achouTelefonePrincipal = true;
                     break;
                 }
             }
-
         }
         if (achouTelefone === true) {
             smartAlert("Erro", "Este número já está na lista.", "error");
