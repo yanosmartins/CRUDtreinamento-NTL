@@ -83,7 +83,7 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section id="condicaoCheck" class="col col-1" hidden>
+                                                            <section id="condicaoCheck" class="col col-1">
                                                                 <!-- hidden -->
                                                                 <label class="label">Código</label>
                                                                 <label class="input">
@@ -195,7 +195,7 @@ include("inc/nav.php");
                                                                         <section class="col col-md-3">
                                                                             <label class="label">Telefone</label>
                                                                             <label class="input"><i class="icon-prepend fa fa-phone"></i>
-                                                                                <input id="telefone" name="telefone" type="text" class="form-control required" placeholder="(XX) XXXXX-XXXX" value="">
+                                                                                <input id="telefone" name="telefone" type="text" class="form-control" placeholder="(XX) XXXXX-XXXX" value="">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
@@ -260,13 +260,6 @@ include("inc/nav.php");
                                                                                 Principal
                                                                             </label>
                                                                         </section>
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <label class="checkbox ">
-                                                                                <input id="EmailCorporativo" name="EmailCorporativo" type="checkbox" value="false"><i></i>
-                                                                                Corporativo
-                                                                            </label>
-                                                                        </section>
                                                                         <section class="col col-auto">
                                                                             <label class="label">&nbsp;</label>
                                                                             <button id="btnAddEmail" type="button" class="btn btn-primary">
@@ -285,7 +278,6 @@ include("inc/nav.php");
                                                                                 <th></th>
                                                                                 <th class="text-left" style="min-width: 100px;">Email</th>
                                                                                 <th class="text-left">Principal</th>
-                                                                                <th class="text-left">Corporativo</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -581,7 +573,6 @@ include("inc/scripts.php");
             }
         }
         $("#nome").focus();
-
     }
     $("#nome").focus();
 
@@ -621,6 +612,8 @@ include("inc/scripts.php");
         var rg = $("#rg").val();
         var estadoCivil = $("#estadoCivil").val();
         var genero = $("#genero").val();
+        var jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+
 
         if (cpf === "") {
             smartAlert("Atenção", "Informe o cpf !", "error");
@@ -651,7 +644,7 @@ include("inc/scripts.php");
 
 
 
-        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero);
+        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray);
     }
 
 
@@ -748,17 +741,6 @@ include("inc/scripts.php");
         } else {
             item["descricaoTelefoneWhatsApp"] = "Não";
         }
-        // var WhatsApp = $('#telefoneWhatsApp').val();
-        // if (item["telefoneWhatsApp"]) {
-        //     if ($("#telefoneWhatsApp").is(':checked')) {
-        //         item["telefoneWhatsApp"] = true;
-        //     } else {
-        //         item["telefoneWhatsApp"] = false;
-        //     }
-        //     item["telefoneWhatsApp"] = "Sim";
-        // } else {
-        //     item["telefoneWhatsApp"] = "Não";
-        // }
         fillTableTelefone();
         clearFormTelefone();
     }

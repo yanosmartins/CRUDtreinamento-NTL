@@ -101,7 +101,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">CPF</label>
                                                                 <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                    <input id="cpf" maxlength="20" name="cpf" cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
+                                                                    <input id="cpf" name="cpf" cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
