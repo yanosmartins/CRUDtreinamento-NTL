@@ -424,6 +424,8 @@ include("inc/scripts.php");
 
         carregaPagina();
         carregaTelefone();
+        // carregaEmail();
+
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
@@ -613,6 +615,7 @@ include("inc/scripts.php");
         var estadoCivil = $("#estadoCivil").val();
         var genero = $("#genero").val();
         var jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+        // var jsonEmailArray = JSON.parse($("#jsonEmail").val());
 
 
         if (cpf === "") {
@@ -836,4 +839,167 @@ include("inc/scripts.php");
         }
         return true;
     }
+
+
+
+
+
+    function addEmail() {
+        var Email = $("#Email").val();
+        if (Email === "") {
+            smartAlert("Atenção", "Informe o Email !", "error");
+            $("#Email").focus();
+            return;
+        }
+
+        var item = $("#formEmail").toObject({
+            mode: 'combine',
+            skipEmpty: false
+        });
+
+        item["sequencialEmail"] = $("#sequencialEmail").val();
+
+        if (item["sequencialEmail"] === '') {
+            if (jsonEmailArray.length === 0) {
+                item["sequencialEmail"] = 1;
+            } else {
+                item["sequencialEmail"] = Math.max.apply(Math, jsonEmailArray.map(function(o) {
+                    return o.sequencialEmail;
+                })) + 1;
+            }
+            item["EmailId"] = 0;
+        } else {
+            item["sequencialEmail"] = +item["sequencialEmail"];
+        }
+
+        var index = -1;
+        $.each(jsonEmailArray, function(i, obj) {
+            if (+$('#sequencialEmail').val() === obj.sequencialEmail) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0)
+            jsonEmailArray.splice(index, 1, item);
+        else
+            jsonEmailArray.push(item);
+
+        $("#jsonEmail").val(JSON.stringify(jsonEmailArray));
+
+
+        if (item["EmailPrincipal"]) {
+            item["descricaoEmailPrincipal"] = "Sim";
+        } else {
+            item["descricaoEmailPrincipal"] = "Não";
+        }
+        if (item["EmailWhatsApp"]) {
+            item["descricaoEmailWhatsApp"] = "Sim";
+        } else {
+            item["descricaoEmailWhatsApp"] = "Não";
+        }
+        fillTableEmail();
+        clearFormEmail();
+    }
+
+    function fillTableEmail() {
+        $("#tableEmail tbody").empty();
+        for (var i = 0; i < jsonEmailArray.length; i++) {
+            var row = $('<tr />');
+
+            $("#tableEmail tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonEmailArray[i].sequencialEmail + '"><i></i></label></td>'));
+
+            if (jsonEmailArray[i].Email != undefined) {
+                clearFormEmail();
+                // <a href="cadastroFuncionario.php">' </a>
+                row.append($('<td class="text-left" onclick="carregaEmail(' + jsonEmailArray[i].sequencialEmail + ');">' + jsonEmailArray[i].Email + '</td>'));
+                row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailPrincipal + '</td>'));
+                row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailWhatsApp + '</td>'));
+            } else {
+                row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailWhatsApp + '</td>'));
+                row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailPrincipal + '</td>'));
+            }
+        }
+
+    }
+
+    function clearFormEmail() {
+        $("#Email").focus();
+        $("#Email").val('');
+        $("#sequencialEmail").val('');
+        $("#EmailPrincipal").prop('checked', false);
+        $("#EmailWhatsApp").prop('checked', false);
+
+    }
+
+    function excluiEmailTabela() {
+        var arrSequencial = [];
+        // $('#tableEmail input[type=checkbox]:checked').each(function() {
+        $('#tableEmail input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonEmailArray.length - 1; i >= 0; i--) {
+                var obj = jsonEmailArray[i];
+                if (jQuery.inArray(obj.sequencialEmail, arrSequencial) > -1) {
+                    jsonEmailArray.splice(i, 1);
+                }
+            }
+            $("#jsonEmail").val(JSON.stringify(jsonEmailArray));
+            fillTableEmail();
+        } else
+            smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
+        clearFormEmail();
+    }
+
+    function validaEmail() {
+        var achouEmail = false;
+        var achouEmailPrincipal = false;
+        var EmailPrincipal = '';
+
+        if ($('#EmailPrincipal').is(':checked')) {
+            EmailPrincipal = true;
+        } else {
+            EmailPrincipal = false;
+        }
+
+        var sequencial = +$('#sequencialEmail').val();
+        var Email = $('#Email').val();
+
+        for (i = jsonEmailArray.length - 1; i >= 0; i--) {
+            if (EmailPrincipal == true) {
+                if ((jsonEmailArray[i].EmailPrincipal == EmailPrincipal) && (jsonEmailArray[i].sequencialEmail !== sequencial)) {
+                    achouEmailPrincipal = true;
+                    break;
+                }
+            }
+            if (Email !== "") {
+                if ((jsonEmailArray[i].Email === Email) && (jsonEmailArray[i].sequencialEmail !== sequencial)) {
+                    achouEmailPrincipal = true;
+                    break;
+                }
+            }
+        }
+        if (achouEmail === true) {
+            smartAlert("Erro", "Este número já está na lista.", "error");
+            clearFormEmail();
+            return false;
+        }
+        if (achouEmailPrincipal === true) {
+            smartAlert("Erro", "Já existe um Email Principal na lista.", "error");
+            clearFormEmail();
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+
+
+
+
+
 </script>
