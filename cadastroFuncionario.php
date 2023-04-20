@@ -83,8 +83,7 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section id="condicaoCheck" class="col col-1">
-                                                                <!-- hidden -->
+                                                            <section id="condicaoCheck" class="col col-1 hidden">                                                             
                                                                 <label class="label">Código</label>
                                                                 <label class="input">
                                                                     <input id="codigo" name="codigo" type="text" class="readonly" readonly>
@@ -240,10 +239,10 @@ include("inc/nav.php");
                                                                 </div>
                                                             </div>
 
+                                                            <input id="jsonEmail" name="jsonEmail" type="hidden" value="[]">
                                                             <div id="formEmail" class="col-sm-6">
                                                                 <input id="EmailId" name="EmailId" type="hidden" value="">
                                                                 <input id="descricaoEmailPrincipal" name="descricaoEmailPrincipal" type="hidden" value="">
-                                                                <input id="descricaoEmailCorporativo" name="descricaoEmailCorporativo" type="hidden" value="">
                                                                 <input id="sequencialEmail" name="sequencialEmail" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
@@ -385,12 +384,14 @@ include("inc/scripts.php");
 
 
         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+        jsonEmailArray = JSON.parse($("#jsonEmail").val());
 
         $("#cpf").mask('999.999.999-99');
         $("#rg").mask('99.999.999-9');
         $("#dataNascimento").mask('99/99/9999');
         $("#telefone").mask('(99) 99999-9999');
-
+        // $("#Email").mask('AZaz@az.com');
+        
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
             if (validaData(data) == false) {
@@ -421,10 +422,20 @@ include("inc/scripts.php");
         $("#btnRemoverTelefone").on("click", function() {
             excluiTelefoneTabela();
         });
+        $("#btnAddEmail").on("click", function() {
+            if (validaEmail())
+                addEmail();
+        });
+        $("#btnRemoverEmail").on("click", function() {
+            excluiEmailTabela();
+        });
+
+
+
 
         carregaPagina();
         carregaTelefone();
-        // carregaEmail();
+        carregaEmail();
 
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
@@ -516,6 +527,20 @@ include("inc/scripts.php");
             }
             if (item.telefoneWhatsApp == true) {
                 $("#telefoneWhatsApp").prop("checked", true);
+            }
+        }
+    }
+
+    function carregaEmail(sequencialEmail) {
+        var arr = jQuery.grep(jsonEmailArray, function(item, i) {
+            return (item.sequencialEmail === sequencialEmail);
+        });
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#Email").val(item.Email);
+            $("#sequencialEmail").val(item.sequencialEmail);
+            if (item.EmailPrincipal == true) {
+                $("#EmailPrincipal").prop("checked", true);
             }
         }
     }
@@ -615,7 +640,7 @@ include("inc/scripts.php");
         var estadoCivil = $("#estadoCivil").val();
         var genero = $("#genero").val();
         var jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
-        // var jsonEmailArray = JSON.parse($("#jsonEmail").val());
+        var jsonEmailArray = JSON.parse($("#jsonEmail").val());
 
 
         if (cpf === "") {
@@ -841,9 +866,6 @@ include("inc/scripts.php");
     }
 
 
-
-
-
     function addEmail() {
         var Email = $("#Email").val();
         if (Email === "") {
@@ -901,7 +923,6 @@ include("inc/scripts.php");
         fillTableEmail();
         clearFormEmail();
     }
-
     function fillTableEmail() {
         $("#tableEmail tbody").empty();
         for (var i = 0; i < jsonEmailArray.length; i++) {
@@ -915,13 +936,10 @@ include("inc/scripts.php");
                 // <a href="cadastroFuncionario.php">' </a>
                 row.append($('<td class="text-left" onclick="carregaEmail(' + jsonEmailArray[i].sequencialEmail + ');">' + jsonEmailArray[i].Email + '</td>'));
                 row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailPrincipal + '</td>'));
-                row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailWhatsApp + '</td>'));
             } else {
-                row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailWhatsApp + '</td>'));
                 row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailPrincipal + '</td>'));
             }
         }
-
     }
 
     function clearFormEmail() {
@@ -929,13 +947,10 @@ include("inc/scripts.php");
         $("#Email").val('');
         $("#sequencialEmail").val('');
         $("#EmailPrincipal").prop('checked', false);
-        $("#EmailWhatsApp").prop('checked', false);
-
     }
 
     function excluiEmailTabela() {
         var arrSequencial = [];
-        // $('#tableEmail input[type=checkbox]:checked').each(function() {
         $('#tableEmail input[type=checkbox]:checked').each(function() {
             arrSequencial.push(parseInt($(this).val()));
         });
@@ -949,7 +964,7 @@ include("inc/scripts.php");
             $("#jsonEmail").val(JSON.stringify(jsonEmailArray));
             fillTableEmail();
         } else
-            smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
+            smartAlert("Erro", "Selecione pelo menos um Email para excluir.", "error");
         clearFormEmail();
     }
 
@@ -993,13 +1008,4 @@ include("inc/scripts.php");
         }
         return true;
     }
-
-
-
-
-
-
-
-
-
 </script>
