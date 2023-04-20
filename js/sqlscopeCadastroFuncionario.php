@@ -35,7 +35,6 @@ return;
 
 function gravar()
 {
-
     $reposit = new reposit();
 
     if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
@@ -51,7 +50,7 @@ function gravar()
     $dataNascimento = implode("-", array_reverse(explode("/", $dataNascimento)));
     $rg = $_POST['rg'];
     $genero = $_POST['genero'];
-    $estadoCivil= (int)$_POST['estadoCivil'];
+    $estadoCivil = (int)$_POST['estadoCivil'];
 
 
     $comum = new comum();
@@ -65,9 +64,22 @@ function gravar()
             ->add('telefoneWhatsApp', $item['telefoneWhatsApp'])
             // ->add('sequencialTelefone', $item['sequencialTelefone'])
             // ->add('telefoneId', $item['telefoneId'])
-            ;
+        ;
     }
     $xmlTelefone = $comum->formatarString($xmlTelefone);
+
+
+
+    $comum = new comum();
+    $strArrayEmail = $_POST['jsonEmailArray'];
+    $arrayEmail = $strArrayEmail;
+    $xmlEmail = new \FluidXml\FluidXml('ArrayOfEmail', ['encoding' => '']);
+    foreach ($arrayEmail as $item) {
+        $xmlEmail->addChild('emailFuncionario', true) //nome da tabela
+            ->add('Email', $item['Email']) //setando o campo e definindo o valor
+            ->add('EmailPrincipal', $item['EmailPrincipal']);
+    }
+    $xmlEmail = $comum->formatarString($xmlEmail);
 
 
     $sql = "dbo.Funcionario_Atualiza 
@@ -79,7 +91,8 @@ function gravar()
             '$rg',
             '$genero',           
             '$estadoCivil',
-             $xmlTelefone
+             $xmlTelefone,
+             $xmlEmail
             ";
 
 
@@ -94,35 +107,34 @@ function gravar()
     return;
 }
 
-function VerificaCPF(){
-////////verifica registros duplicados
+function VerificaCPF()
+{
+    ////////verifica registros duplicados
 
     $cpf = $_POST["cpf"];
-    
+
     $sql = "SELECT cpf, codigo FROM dbo.funcionario WHERE cpf='$cpf'";
     //achou 
-    
+
     $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);    
-    
+    $result = $reposit->RunQuery($sql);
+
     ////! ANTES É NEGAÇÃO
-    if (!$result){
+    if (!$result) {
         echo  'success#';
-    }
-    else{
+    } else {
         $mensagem = "CPF já registrado!";
-        echo "failed#" . $mensagem .' ';    
+        echo "failed#" . $mensagem . ' ';
     }
-    
 }
 
 
 
-function ValidaCPF() {
- 
+function ValidaCPF()
+{
     // Extrai somente os números
     $cpf = $_POST["cpf"];
-    $cpf = preg_replace( '/[^0-9]/is', '', $cpf );
+    $cpf = preg_replace('/[^0-9]/is', '', $cpf);
 
     // Verifica se foi informado todos os digitos corretamente
     if (strlen($cpf) != 11) {
@@ -149,42 +161,35 @@ function ValidaCPF() {
     }
     echo "success";
     return;
-
 }
 
 
-function VerificaRG(){
+function VerificaRG()
+{
     ////////verifica registros duplicados
-    
-        $rg = $_POST["rg"];
-        
-        $sql = "SELECT rg FROM dbo.funcionario WHERE rg='$rg'";
-        //achou 
-        $reposit = new reposit();
-        $result = $reposit->RunQuery($sql);    
 
-        ////! ANTES É NEGAÇÃO
-        if (!$result){
-            echo  'success#';
-        }
-        else{
-            $mensagem = "RG já registrado!";
-            echo "failed#" . $mensagem .' ';
-        }
-        
+    $rg = $_POST["rg"];
+
+    $sql = "SELECT rg FROM dbo.funcionario WHERE rg='$rg'";
+    //achou 
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+
+    ////! ANTES É NEGAÇÃO
+    if (!$result) {
+        echo  'success#';
+    } else {
+        $mensagem = "RG já registrado!";
+        echo "failed#" . $mensagem . ' ';
     }
+}
 
 
 
 function excluir()
 {
-
     $reposit = new reposit();
-   
-
-
     $id = $_POST["id"];
-
     if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
         $mensagem = "Selecione um usuário.";
         echo "failed#" . $mensagem . ' ';
@@ -195,7 +200,7 @@ function excluir()
     $usuario = $_SESSION['login'];
     $usuario = "'" . $usuario . "'";
 
-    $result = $reposit->update('dbo.funcionario' .'|'.'ativo = 0'.'|'.'codigo ='.$id);
+    $result = $reposit->update('dbo.funcionario' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
 
 
     $reposit = new reposit();
@@ -212,17 +217,9 @@ function excluir()
 
 function recupera()
 {
-    
-
     $id = $_POST["codigo"];
-    
-
-
 
     $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento, genero, estadoCivil FROM dbo.funcionario WHERE codigo = $id";
-    // $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, GF.descricao as genero from dbo.funcionario FU
-    // LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
-
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -242,18 +239,18 @@ function recupera()
         $dataNascimento = explode("-", $dataNascimento);
         $dataNascimento = $dataNascimento[2] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
 
-     
+
 
         $out =  $id . "^" .
             $ativo . "^" .
             $nomeCompleto . "^" .
             $cpf . "^" .
-            $rg. "^" .
-            $dataNascimento. "^" .
-            $estadoCivil. "^" .
+            $rg . "^" .
+            $dataNascimento . "^" .
+            $estadoCivil . "^" .
             $genero;
-            
-  if ($out == "") {
+
+        if ($out == "") {
             echo "failed#";
         }
         if ($out != '') {

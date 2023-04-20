@@ -672,7 +672,7 @@ include("inc/scripts.php");
 
 
 
-        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray);
+        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray);
     }
 
 
@@ -967,6 +967,7 @@ include("inc/scripts.php");
             smartAlert("Erro", "Selecione pelo menos um Email para excluir.", "error");
         clearFormEmail();
     }
+    
 
     function validaEmail() {
         var achouEmail = false;
