@@ -219,7 +219,7 @@ function recupera()
 {
     $id = $_POST["codigo"];
 
-    $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento, genero, estadoCivil FROM dbo.funcionario WHERE codigo = $id";
+    $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento, genero, estadoCivil  FROM dbo.funcionario WHERE codigo = $id";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -239,8 +239,6 @@ function recupera()
         $dataNascimento = explode("-", $dataNascimento);
         $dataNascimento = $dataNascimento[2] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
 
-
-
         $out =  $id . "^" .
             $ativo . "^" .
             $nomeCompleto . "^" .
@@ -249,13 +247,33 @@ function recupera()
             $dataNascimento . "^" .
             $estadoCivil . "^" .
             $genero;
-
-        if ($out == "") {
-            echo "failed#";
-        }
-        if ($out != '') {
-            echo "sucess#" . $out;
-        }
-        return;
     }
+
+    
+    $sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";
+    $result = $reposit->RunQuery($sqlTelefone);
+    $contador = 0;
+    $jsonarray = array();
+    foreach ($result as $row){
+        $TelefonePrincipal = $row['principal']; 
+        $TelefoneWhatsApp =  $row['whatsapp'];
+
+        $contador++; //contador = contador + 1;
+        $jsonarray[] = array(
+            "principal" => $TelefonePrincipal,
+            "whatsapp" => $TelefoneWhatsApp
+        );
+        }
+    $strArrayTelefone = json_encode($jsonarray);
+
+
+
+
+
+    if ($out == "") {
+        echo "failed#";
+    } else {
+        echo "sucess#" . $out;
+    }
+    return;
 }

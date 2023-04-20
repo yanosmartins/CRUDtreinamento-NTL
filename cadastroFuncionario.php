@@ -83,7 +83,7 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
-                                                            <section id="condicaoCheck" class="col col-1 hidden">                                                             
+                                                            <section id="condicaoCheck" class="col col-1 hidden">
                                                                 <label class="label">Código</label>
                                                                 <label class="input">
                                                                     <input id="codigo" name="codigo" type="text" class="readonly" readonly>
@@ -194,7 +194,7 @@ include("inc/nav.php");
                                                                         <section class="col col-md-3">
                                                                             <label class="label">Telefone</label>
                                                                             <label class="input"><i class="icon-prepend fa fa-phone"></i>
-                                                                                <input id="telefone" name="telefone" type="text" class="form-control" placeholder="(XX) XXXXX-XXXX" value="">
+                                                                                <input id="telefone" class="required" name="telefone" type="text" class="form-control" placeholder="(XX) XXXXX-XXXX" value="">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
@@ -241,7 +241,6 @@ include("inc/nav.php");
 
                                                             <input id="jsonEmail" name="jsonEmail" type="hidden" value="[]">
                                                             <div id="formEmail" class="col-sm-6">
-                                                                <input id="EmailId" name="EmailId" type="hidden" value="">
                                                                 <input id="descricaoEmailPrincipal" name="descricaoEmailPrincipal" type="hidden" value="">
                                                                 <input id="sequencialEmail" name="sequencialEmail" type="hidden" value="">
                                                                 <div class="form-group">
@@ -249,7 +248,7 @@ include("inc/nav.php");
                                                                         <section class="col col-md-6">
                                                                             <label class="label">Email</label>
                                                                             <label class="input"><i class="icon-prepend fa fa-at"></i>
-                                                                                <input id="Email" maxlength="50" name="Email" type="text" value="">
+                                                                                <input id="Email" maxlength="50" class="required" name="Email" type="text" value="">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
@@ -391,7 +390,7 @@ include("inc/scripts.php");
         $("#dataNascimento").mask('99/99/9999');
         $("#telefone").mask('(99) 99999-9999');
         // $("#Email").mask('AZaz@az.com');
-        
+
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
             if (validaData(data) == false) {
@@ -436,6 +435,7 @@ include("inc/scripts.php");
         carregaPagina();
         carregaTelefone();
         carregaEmail();
+        // validarEmail();
 
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
@@ -592,6 +592,8 @@ include("inc/scripts.php");
                             var dataNascimento = dataNascimento.split("/")[2];
                             var idade = (anoAtual - dataNascimento);
                             $("#idade").val(idade);
+                            var jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+                            var jsonEmailArray = JSON.parse($("#jsonEmail").val());
                             return;
                         }
                     }
@@ -674,9 +676,6 @@ include("inc/scripts.php");
 
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray);
     }
-
-
-    /////////////////////////////////
 
     function validaData(data) {
         var data = document.getElementById("dataNascimento").value; // pega o valor do input
@@ -865,7 +864,6 @@ include("inc/scripts.php");
         return true;
     }
 
-
     function addEmail() {
         var Email = $("#Email").val();
         if (Email === "") {
@@ -923,6 +921,7 @@ include("inc/scripts.php");
         fillTableEmail();
         clearFormEmail();
     }
+
     function fillTableEmail() {
         $("#tableEmail tbody").empty();
         for (var i = 0; i < jsonEmailArray.length; i++) {
@@ -967,7 +966,6 @@ include("inc/scripts.php");
             smartAlert("Erro", "Selecione pelo menos um Email para excluir.", "error");
         clearFormEmail();
     }
-    
 
     function validaEmail() {
         var achouEmail = false;
@@ -1009,4 +1007,9 @@ include("inc/scripts.php");
         }
         return true;
     }
+
+    // function validarEmail(Email) {
+    //     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //     return regex.test(Email);
+    // }
 </script>

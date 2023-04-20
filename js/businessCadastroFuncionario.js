@@ -52,11 +52,11 @@ function cpfverificado(cpf) {
             if (data.indexOf('success') < 0) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
-                if (piece[0] === "success") {
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    return;
-                }
-                else {
+                if (piece[0] !== "success") {
+                //     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                //     return;
+                // }
+                // else {
                     mensagem = "Opa! CPF já registrado.";
                     document.getElementById('cpf').value = "";
                     $("#cpf").focus();
@@ -83,9 +83,9 @@ function cpfvalidado(cpf) {
         data: { funcao: "ValidaCPF", cpf: cpf },
 
         success: function (data) {
-            if (data.trim() === 'success') {
-                smartAlert("Sucesso", "CPF válido!", "success");
-            } else {
+            if (data.trim() !== 'success') {
+            //     smartAlert("Sucesso", "CPF válido!", "success");
+            // } else {
                 smartAlert("Atenção", "CPF Inválido!", "error");
                 document.getElementById('cpf').value = "";
                 $("#cpf").focus();
@@ -113,11 +113,11 @@ function RGverificado(rg) {
             if (data.indexOf('success') < 0) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
-                if (piece[0] === "success") {
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    return;
-                }
-                else {
+                if (piece[0] !== "success") {
+                //     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                //     return;
+                // }
+                // else {
                     mensagem = "RG já registrado.";
                     smartAlert("Atenção", mensagem, "error");
                     document.getElementById('rg').value = "";
@@ -178,10 +178,7 @@ function recuperaUsuario(id, callback) {
         url: 'js/sqlscopeCadastroFuncionario.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: {
-            funcao: 'recupera',
-            codigo: id
-        }, //valores enviados ao script      
+        data: { funcao: 'recupera', codigo: id}, //valores enviados ao script      
         success: function (data) {
             callback(data);
         }
