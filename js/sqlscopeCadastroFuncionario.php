@@ -259,13 +259,24 @@ function recupera()
     foreach ($result as $contador => $item) {
         $sequencialTelefone = $contador + 1;
 
-
+        // if($item['telefonePrincipal'] == 1){
+        //     $descricaoTelefonePrincipal = 'Sim';
+        // }else{
+        //     $descricaoTelefonePrincipal = 'Não';
+        // }
+        //  if($item['telefoneWhatsApp']){
+        //     $descricaoTelefoneWhatsApp = 'Sim';
+        // }else{
+        //     $descricaoTelefoneWhatsApp = 'Não';
+        // }
 
         array_push($arrayTelefone, [
             'codigo' => $item['codigo'],
             'telefone' => $item['telefone'],
-            // 'descricaoTelefonePrincipal' => $descricaoTelefonePrincipal,
-            // 'descricaoTelefoneWhatsApp' => $descricaoTelefoneWhatsApp,
+            'telefonePrincipal' => $item['principal'],
+            'telefoneWhatsApp' => $item['whatsapp'],
+            // 'telefonePrincipal' => $descricaoTelefonePrincipal,
+            // 'telefoneWhatsApp' => $descricaoTelefoneWhatsApp,
             'sequencialTelefone' => $sequencialTelefone
 
         ]);
@@ -277,7 +288,7 @@ function recupera()
     if ($out == "") {
         echo "failed#";
     } else {
-        echo "sucess#" . $out;
+        echo "sucess#" . $out ."#". $jsonTelefone;
     }
     return;
 }

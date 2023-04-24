@@ -381,7 +381,6 @@ include("inc/scripts.php");
         //     reverse: true
         // });
 
-
         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         jsonEmailArray = JSON.parse($("#jsonEmail").val());
 
@@ -389,7 +388,6 @@ include("inc/scripts.php");
         $("#rg").mask('99.999.999-9');
         $("#dataNascimento").mask('99/99/9999');
         $("#telefone").mask('(99) 99999-9999');
-        // $("#Email").mask('AZaz@az.com');
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -401,47 +399,17 @@ include("inc/scripts.php");
                 // disableButton();
             }
         });
-
         $("#cpf").on("change", function() {
             let data = $("#cpf").val()
             VerificaCPF()
             ValidaCPF()
         });
-
         $("#rg").on("change", function() {
             VerificaRG()
         });
     
 
-        $("#btnAddTelefone").on("click", function() {
-            if (validaTelefone())
-                addTelefone();
-        });
-        
-        $("#btnRemoverTelefone").on("click", function() {
-            excluiTelefoneTabela();
-        });
-
-        $("#btnAddEmail").on("click", function() {
-            validarEmail();   
-            // if (validarEmail == true) {
-                // addEmail();
-            // }              
-        });
-
-        $("#btnRemoverEmail").on("click", function() {
-            excluiEmailTabela();
-        });
-
-
-
-
-        carregaPagina();
-        carregaTelefone();
-        carregaEmail();
-
-
-
+       
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -451,6 +419,27 @@ include("inc/scripts.php");
                 }
             }
         }));
+
+        carregaPagina();
+        carregaTelefone();
+        carregaEmail();
+
+        $("#btnAddTelefone").on("click", function() {
+            if (validaTelefone())
+                addTelefone();
+        });       
+        $("#btnRemoverTelefone").on("click", function() {
+            excluiTelefoneTabela();
+        });
+        $("#btnAddEmail").on("click", function() {
+            validarEmail();   
+            // if (validarEmail == true) {
+                // addEmail();
+            // }              
+        });
+        $("#btnRemoverEmail").on("click", function() {
+            excluiEmailTabela();
+        });
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -599,11 +588,12 @@ include("inc/scripts.php");
                             var dataNascimento = dataNascimento.split("/")[2];
                             var idade = (anoAtual - dataNascimento);
                             $("#idade").val(idade);
-                            var jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
+                            $('#jsonTelefone').val(strArrayTelefone)
+                            var jsonTelefoneArray = JSON.parse($('#jsonTelefone').val());                            
                             var jsonEmailArray = JSON.parse($("#jsonEmail").val());
-                            fillTableTelefone();
+                            fillTableTelefone(jsonTelefoneArray);
                             fillTableEmail();
-                            return;
+                            return; 
                         }
                     }
 
@@ -781,17 +771,27 @@ include("inc/scripts.php");
         clearFormTelefone();
     }
 
-    function fillTableTelefone() {
+    function fillTableTelefone(jsonTelefoneArray) {
         $("#tableTelefone tbody").empty();
         for (var i = 0; i < jsonTelefoneArray.length; i++) {
             var row = $('<tr />');
 
             $("#tableTelefone tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTelefone + '"><i></i></label></td>'));
-
+  
             if (jsonTelefoneArray[i].telefone != undefined) {
                 clearFormTelefone();
-                // <a href="cadastroFuncionario.php">' </a>
+                if (jsonTelefoneArray[i].telefonePrincipal == 1) {
+                    jsonTelefoneArray[i].descricaoTelefonePrincipal = "Sim";
+                }else {
+                jsonTelefoneArray[i].descricaoTelefonePrincipal = "Não";
+                }
+                if (jsonTelefoneArray[i].telefoneWhat == 1) {
+                    jsonTelefoneArray[i].descricaoTelefoneWhatsApp = "Sim";
+                }else {
+                jsonTelefoneArray[i].descricaoTelefoneWhatsApp = "Não";
+                }
+
                 row.append($('<td class="text-left" onclick="carregaTelefone(' + jsonTelefoneArray[i].sequencialTelefone + ');">' + jsonTelefoneArray[i].telefone + '</td>'));
                 row.append($('<td class="text-left" >' + jsonTelefoneArray[i].descricaoTelefonePrincipal + '</td>'));
                 row.append($('<td class="text-left" >' + jsonTelefoneArray[i].descricaoTelefoneWhatsApp + '</td>'));
@@ -809,7 +809,6 @@ include("inc/scripts.php");
         $("#sequencialTelefone").val('');
         $("#telefonePrincipal").prop('checked', false);
         $("#telefoneWhatsApp").prop('checked', false);
-
     }
 
     function excluiTelefoneTabela() {
