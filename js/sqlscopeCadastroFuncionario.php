@@ -249,24 +249,28 @@ function recupera()
             $genero;
     }
 
-    
+
     $sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";
+    $reposit = new reposit();
     $result = $reposit->RunQuery($sqlTelefone);
+
     $contador = 0;
-    $jsonarray = array();
-    foreach ($result as $row){
-        $TelefonePrincipal = $row['principal']; 
-        $TelefoneWhatsApp =  $row['whatsapp'];
-
-        $contador++; //contador = contador + 1;
-        $jsonarray[] = array(
-            "principal" => $TelefonePrincipal,
-            "whatsapp" => $TelefoneWhatsApp
-        );
-        }
-    $strArrayTelefone = json_encode($jsonarray);
+    $arrayTelefone = [];
+    foreach ($result as $contador => $item) {
+        $sequencialTelefone = $contador + 1;
 
 
+
+        array_push($arrayTelefone, [
+            'codigo' => $item['codigo'],
+            'telefone' => $item['telefone'],
+            // 'descricaoTelefonePrincipal' => $descricaoTelefonePrincipal,
+            // 'descricaoTelefoneWhatsApp' => $descricaoTelefoneWhatsApp,
+            'sequencialTelefone' => $sequencialTelefone
+
+        ]);
+    }
+    $jsonTelefone = json_encode($arrayTelefone);
 
 
 

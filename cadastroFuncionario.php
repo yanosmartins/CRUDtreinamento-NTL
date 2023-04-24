@@ -248,7 +248,7 @@ include("inc/nav.php");
                                                                         <section class="col col-md-6">
                                                                             <label class="label">Email</label>
                                                                             <label class="input"><i class="icon-prepend fa fa-at"></i>
-                                                                                <input id="Email" maxlength="50" class="required" name="Email" type="text" value="">
+                                                                                <input id="Email" maxlength="50" class="required" name="Email" type="email" value="">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-md-2">
@@ -406,25 +406,29 @@ include("inc/scripts.php");
             let data = $("#cpf").val()
             VerificaCPF()
             ValidaCPF()
-
         });
 
         $("#rg").on("change", function() {
             VerificaRG()
         });
-
+    
 
         $("#btnAddTelefone").on("click", function() {
             if (validaTelefone())
                 addTelefone();
         });
+        
         $("#btnRemoverTelefone").on("click", function() {
             excluiTelefoneTabela();
         });
+
         $("#btnAddEmail").on("click", function() {
-            if (validaEmail())
-                addEmail();
+            validarEmail();   
+            // if (validarEmail == true) {
+                // addEmail();
+            // }              
         });
+
         $("#btnRemoverEmail").on("click", function() {
             excluiEmailTabela();
         });
@@ -435,7 +439,7 @@ include("inc/scripts.php");
         carregaPagina();
         carregaTelefone();
         carregaEmail();
-        // validarEmail();
+
 
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
@@ -492,9 +496,8 @@ include("inc/scripts.php");
             voltar();
         });
     });
+
     /////////////////////fim dos eventos
-
-
 
     function VerificaCPF() {
         var cpf = $("#cpf").val();
@@ -529,6 +532,7 @@ include("inc/scripts.php");
                 $("#telefoneWhatsApp").prop("checked", true);
             }
         }
+        $("#telefone").focus();
     }
 
     function carregaEmail(sequencialEmail) {
@@ -543,6 +547,7 @@ include("inc/scripts.php");
                 $("#EmailPrincipal").prop("checked", true);
             }
         }
+        $("#Email").focus();
     }
 
     function carregaPagina() {
@@ -575,6 +580,7 @@ include("inc/scripts.php");
                             var dataNascimento = piece[5];
                             var estadoCivil = piece[6];
                             var genero = piece[7];
+                            var Email = piece[8];
                             // var dataNascimento = piece[5];
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(id);
@@ -585,6 +591,7 @@ include("inc/scripts.php");
                             $("#estadoCivil").val(estadoCivil);
                             $("#dataNascimento").val(dataNascimento);
                             $("#genero").val(genero);
+                            $("#Email").val(Email);
                             ///////////////////////////////////////////////////////////////////////////////
                             var dataagora = new Date()
                             var anoAtual = dataagora.getFullYear();
@@ -594,6 +601,8 @@ include("inc/scripts.php");
                             $("#idade").val(idade);
                             var jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
                             var jsonEmailArray = JSON.parse($("#jsonEmail").val());
+                            fillTableTelefone();
+                            fillTableEmail();
                             return;
                         }
                     }
@@ -846,19 +855,19 @@ include("inc/scripts.php");
             }
             if (telefone !== "") {
                 if ((jsonTelefoneArray[i].telefone === telefone) && (jsonTelefoneArray[i].sequencialTelefone !== sequencial)) {
-                    achouTelefonePrincipal = true;
+                    achouTelefone = true;
                     break;
                 }
             }
         }
         if (achouTelefone === true) {
             smartAlert("Erro", "Este número já está na lista.", "error");
-            clearFormTelefone();
+            $("#telefone").focus();
             return false;
         }
         if (achouTelefonePrincipal === true) {
             smartAlert("Erro", "Já existe um Telefone Principal na lista.", "error");
-            clearFormTelefone();
+            $("#telefone").focus();
             return false;
         }
         return true;
@@ -990,26 +999,39 @@ include("inc/scripts.php");
             }
             if (Email !== "") {
                 if ((jsonEmailArray[i].Email === Email) && (jsonEmailArray[i].sequencialEmail !== sequencial)) {
-                    achouEmailPrincipal = true;
+                    achouEmail = true;
                     break;
                 }
             }
         }
         if (achouEmail === true) {
-            smartAlert("Erro", "Este número já está na lista.", "error");
-            clearFormEmail();
+            smartAlert("Erro", "Este Email já está na lista.", "error");
+            $("#Email").focus();
             return false;
         }
         if (achouEmailPrincipal === true) {
             smartAlert("Erro", "Já existe um Email Principal na lista.", "error");
-            clearFormEmail();
+            $("#Email").focus();
             return false;
         }
+        addEmail();
         return true;
+        
     }
 
-    // function validarEmail(Email) {
-    //     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //     return regex.test(Email);
-    // }
+    function validarEmail() {  
+            var er = new RegExp(/^[A-Za-z0-9-.]+@[A-Za-z0-9-.]{2,}.[A-Za-z0-9]{2,}(.[A-Za-z0-9])?/);
+            var email = $('#Email').val();
+            if (!er.test(email)) {
+                smartAlert("Erro", "Preencha o campo email corretamente.", "error");
+                var controleEmail = 1;
+                return false;
+            } else{
+                validaEmail();  
+            }
+            return true;
+
+            
+        };
+   
 </script>
