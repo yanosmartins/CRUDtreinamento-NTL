@@ -407,9 +407,7 @@ include("inc/scripts.php");
         $("#rg").on("change", function() {
             VerificaRG()
         });
-    
-
-       
+     
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -581,6 +579,8 @@ include("inc/scripts.php");
                             $("#dataNascimento").val(dataNascimento);
                             $("#genero").val(genero);
                             $("#Email").val(Email);
+                            $('#jsonTelefone').val(strArrayTelefone)
+                            $('#jsonEmail').val(strArrayEmail)
                             ///////////////////////////////////////////////////////////////////////////////
                             var dataagora = new Date()
                             var anoAtual = dataagora.getFullYear();
@@ -588,10 +588,9 @@ include("inc/scripts.php");
                             var dataNascimento = dataNascimento.split("/")[2];
                             var idade = (anoAtual - dataNascimento);
                             $("#idade").val(idade);
-                            $('#jsonTelefone').val(strArrayTelefone)
-                            var jsonTelefoneArray = JSON.parse($('#jsonTelefone').val());                            
-                            var jsonEmailArray = JSON.parse($("#jsonEmail").val());
-                            fillTableTelefone(jsonTelefoneArray);
+                            jsonTelefoneArray = JSON.parse(strArrayTelefone);                            
+                            jsonEmailArray = JSON.parse(strArrayEmail);
+                            fillTableTelefone();
                             fillTableEmail();
                             return; 
                         }
@@ -602,7 +601,7 @@ include("inc/scripts.php");
         }
         $("#nome").focus();
     }
-    $("#nome").focus();
+  
 
     function novo() {
         $(location).attr('href', 'cadastroFuncionario.php');
@@ -771,7 +770,7 @@ include("inc/scripts.php");
         clearFormTelefone();
     }
 
-    function fillTableTelefone(jsonTelefoneArray) {
+    function fillTableTelefone() {
         $("#tableTelefone tbody").empty();
         for (var i = 0; i < jsonTelefoneArray.length; i++) {
             var row = $('<tr />');
@@ -780,13 +779,13 @@ include("inc/scripts.php");
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTelefone + '"><i></i></label></td>'));
   
             if (jsonTelefoneArray[i].telefone != undefined) {
-                clearFormTelefone();
+                // clearFormTelefone();
                 if (jsonTelefoneArray[i].telefonePrincipal == 1) {
                     jsonTelefoneArray[i].descricaoTelefonePrincipal = "Sim";
                 }else {
                 jsonTelefoneArray[i].descricaoTelefonePrincipal = "Não";
                 }
-                if (jsonTelefoneArray[i].telefoneWhat == 1) {
+                if (jsonTelefoneArray[i].telefoneWhatsApp == 1) {
                     jsonTelefoneArray[i].descricaoTelefoneWhatsApp = "Sim";
                 }else {
                 jsonTelefoneArray[i].descricaoTelefoneWhatsApp = "Não";
