@@ -285,10 +285,52 @@ function recupera()
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+$sqlEmail = "SELECT email, principalFROM dbo.emailFuncionario WHERE funcionarioId = $id";
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sqlEmail);
+
+    $contador = 0;
+    $arrayEmail = [];
+    foreach ($result as $contador => $item) {
+        $sequencialEmail = $contador + 1;
+
+        // if($item['EmailPrincipal'] == 1){
+        //     $descricaoEmailPrincipal = 'Sim';
+        // }else{
+        //     $descricaoEmailPrincipal = 'Não';
+        // }
+        //  if($item['EmailWhatsApp']){
+        //     $descricaoEmailWhatsApp = 'Sim';
+        // }else{
+        //     $descricaoEmailWhatsApp = 'Não';
+        // }
+
+        array_push($arrayEmail, [
+            'codigo' => $item['codigo'],
+            'Email' => $item['email'],
+            'EmailPrincipal' => $item['principal'],
+            'sequencialEmail' => $sequencialEmail
+
+        ]);
+    }
+    $jsonEmail = json_encode($arrayEmail);
+
+
+
+
+
+
+
+
+
+
+
     if ($out == "") {
         echo "failed#";
     } else {
-        echo "sucess#" . $out ."#". $jsonTelefone;
+        echo "sucess#" . $out ."#". $jsonTelefone ."#". $jsonEmail;
     }
     return;
 }
