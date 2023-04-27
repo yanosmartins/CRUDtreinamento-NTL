@@ -117,12 +117,20 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php
+                                        $url = explode("?", $_SERVER["REQUEST_URI"]); ////essas linhas fazem a leitura do codigo "id" na url
+                                        $codigo = explode("=", $url[1]);
+                                        $codigoBtn = (int)$codigo[1];
+                                        $esconderBtn = "none";
+                                        if ($codigoBtn != 0) {
+                                            $esconderBtn = "block"; /// permite aparecer o botao
+                                        }
+                                        ?>                                       
                                         
-                                        
-                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
-                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir">
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtn ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
@@ -235,6 +243,7 @@ include("inc/scripts.php");
 
         $("#btnGravar").on("click", function() {
             gravar();
+            document.getElementById("btnGravar").disabled = true;
 
         });
 
