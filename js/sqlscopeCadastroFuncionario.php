@@ -8,15 +8,12 @@ $funcao = $_POST["funcao"];
 if ($funcao == 'gravar') {
     call_user_func($funcao);
 }
-
 if ($funcao == 'recupera') {
     call_user_func($funcao);
 }
-
 if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
-
 if ($funcao == 'recuperarDadosUsuario') {
     call_user_func($funcao);
 }
@@ -29,8 +26,6 @@ if ($funcao == 'ValidaCPF') {
 if ($funcao == 'VerificaRG') {
     call_user_func($funcao);
 }
-
-
 return;
 
 function gravar()
@@ -128,8 +123,6 @@ function VerificaCPF()
     }
 }
 
-
-
 function ValidaCPF()
 {
     // Extrai somente os números
@@ -167,14 +160,11 @@ function ValidaCPF()
 function VerificaRG()
 {
     ////////verifica registros duplicados
-
     $rg = $_POST["rg"];
-
     $sql = "SELECT rg FROM dbo.funcionario WHERE rg='$rg'";
     //achou 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-
     ////! ANTES É NEGAÇÃO
     if (!$result) {
         echo  'success#';
@@ -183,8 +173,6 @@ function VerificaRG()
         echo "failed#" . $mensagem . ' ';
     }
 }
-
-
 
 function excluir()
 {
@@ -214,7 +202,6 @@ function excluir()
     return;
 }
 
-
 function recupera()
 {
     $id = $_POST["codigo"];
@@ -223,11 +210,9 @@ function recupera()
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-
     $out = "";
 
     if ($row = $result[0]) {
-
         $id = (int)$row['codigo'];
         $ativo = (int)$row['ativo'];
         $nomeCompleto = (string)$row['nome'];
@@ -248,8 +233,6 @@ function recupera()
             $estadoCivil . "^" .
             $genero;
     }
-
-
     $sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";
     $reposit = new reposit();
     $result = $reposit->RunQuery($sqlTelefone);
@@ -258,17 +241,6 @@ function recupera()
     $arrayTelefone = [];
     foreach ($result as $contador => $item) {
         $sequencialTelefone = $contador + 1;
-
-        // if($item['telefonePrincipal'] == 1){
-        //     $descricaoTelefonePrincipal = 'Sim';
-        // }else{
-        //     $descricaoTelefonePrincipal = 'Não';
-        // }
-        //  if($item['telefoneWhatsApp']){
-        //     $descricaoTelefoneWhatsApp = 'Sim';
-        // }else{
-        //     $descricaoTelefoneWhatsApp = 'Não';
-        // }
 
         array_push($arrayTelefone, [
             'codigo' => $item['codigo'],
@@ -285,9 +257,9 @@ function recupera()
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$sqlEmail = "SELECT email, principalFROM dbo.emailFuncionario WHERE funcionarioId = $id";
+    $sqlEmail = "SELECT email, principal FROM dbo.emailFuncionario WHERE funcionarioId = $id";
     $reposit = new reposit();
     $result = $reposit->RunQuery($sqlEmail);
 
@@ -295,17 +267,6 @@ $sqlEmail = "SELECT email, principalFROM dbo.emailFuncionario WHERE funcionarioI
     $arrayEmail = [];
     foreach ($result as $contador => $item) {
         $sequencialEmail = $contador + 1;
-
-        // if($item['EmailPrincipal'] == 1){
-        //     $descricaoEmailPrincipal = 'Sim';
-        // }else{
-        //     $descricaoEmailPrincipal = 'Não';
-        // }
-        //  if($item['EmailWhatsApp']){
-        //     $descricaoEmailWhatsApp = 'Sim';
-        // }else{
-        //     $descricaoEmailWhatsApp = 'Não';
-        // }
 
         array_push($arrayEmail, [
             'codigo' => $item['codigo'],
@@ -317,20 +278,10 @@ $sqlEmail = "SELECT email, principalFROM dbo.emailFuncionario WHERE funcionarioI
     }
     $jsonEmail = json_encode($arrayEmail);
 
-
-
-
-
-
-
-
-
-
-
     if ($out == "") {
         echo "failed#";
     } else {
-        echo "sucess#" . $out ."#". $jsonTelefone ."#". $jsonEmail;
+        echo "sucess#" . $out . "#" . $jsonTelefone . "#" . $jsonEmail;
     }
     return;
 }

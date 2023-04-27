@@ -129,6 +129,7 @@ include("inc/nav.php");
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
                                                                     <select id="genero" name="genero">
+                                                                    <option value="" selected>Todos</option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
@@ -165,10 +166,10 @@ include("inc/nav.php");
 
                                                 </div>
                                                 <footer>
-                                                    <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                    <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                    <button id="btnNovo" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                                    <button id="btnNovo" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Novo">
                                                         <span class="fa fa-file"></span>
                                                     </button>
 

@@ -153,13 +153,7 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-                                                            <!-- <section class="col col-2 ">
-                                                                <label class="label">&nbsp;</label>
-                                                                <label id="labelAtivo" class="checkbox ">
-                                                                    <input checked="checked" id="ativo" name="ativo" type="checkbox" value="true"><i></i>
-                                                                    Ativo
-                                                                </label>
-                                                            </section> -->
+ 
                                                         </div>
                                                         <!-- teste -->
                                                     </fieldset>
@@ -387,7 +381,7 @@ include("inc/scripts.php");
         $("#cpf").mask('999.999.999-99');
         $("#rg").mask('99.999.999-9');
         $("#dataNascimento").mask('99/99/9999');
-        $("#telefone").mask('(99) 99999-9999');
+        $("#telefone").mask('(99) 9 9999-9999');
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -919,11 +913,6 @@ include("inc/scripts.php");
             item["descricaoEmailPrincipal"] = "Sim";
         } else {
             item["descricaoEmailPrincipal"] = "Não";
-        }
-        if (item["EmailWhatsApp"]) {
-            item["descricaoEmailWhatsApp"] = "Sim";
-        } else {
-            item["descricaoEmailWhatsApp"] = "Não";
         }
         fillTableEmail();
         clearFormEmail();
