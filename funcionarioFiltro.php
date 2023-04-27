@@ -169,13 +169,13 @@ include("inc/nav.php");
                                                     <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                    <button id="btnNovo" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Novo">
-                                                        <span class="fa fa-file"></span>
+                                                    <button id="btnNovo" name="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                        <span class="fa fa-file-o"></span>
                                                     </button>
 
                                                     <?php if ($condicaoGravarOK) { ?>
                                                         <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
-                                                            <span class="fa fa-file"></span>
+                                                            <span class="fa fa-file-o""></span>
                                                         </button>
                                                     <?php } ?>
                                                 </footer>
@@ -241,7 +241,7 @@ include("inc/scripts.php");
         });
 
         $('#btnNovo').on("click", function() {
-            // novo();
+            novo();
         });
     })
 
@@ -272,6 +272,6 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'funcionarioCadastro.php');
+        $(location).attr('href', 'cadastroFuncionario.php');
     }
 </script>

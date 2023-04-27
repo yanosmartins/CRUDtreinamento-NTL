@@ -117,14 +117,16 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward " ></span>
-                                        </button>
+                                        
+                                        
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir">
                                             <span class="fa fa-trash"></span>
+                                        </button>
+                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                            <span class="fa fa-backward " ></span>
                                         </button>
                                     </footer>
                                 </form>
@@ -297,10 +299,11 @@ include("inc/scripts.php");
         gravaGenero(codigo, descricao, ativo);
     }  
     
-    function novo() {
-        $(location).attr('href', 'TBcadastroGenero.php');
+
+    function voltar(){
+        $(location).attr('href', 'TBGeneroFiltro.php');
     }
-    
+
     function excluir() {
         var ativo = $("#ativo").val();
         var codigo = $("#codigo").val();
@@ -308,4 +311,9 @@ include("inc/scripts.php");
         
         excluiGenero(codigo, ativo);
     }
+    function novo() {
+        $(location).attr('href', 'TBcadastroGenero.php');
+    }
+    
+    
 </script>
