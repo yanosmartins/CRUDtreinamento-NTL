@@ -297,16 +297,17 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:<?php echo $esconderBtnGravar ?>">
+                                        
+                                        <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:block">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
-                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <!-- <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-file-o"></span>
-                                        </button>
-                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir">
+                                        </button> -->
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnGravar ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
-                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
+                                        <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar" style="display:block">
                                             <span class="fa fa-backward "></span>
                                         </button>
 
@@ -476,9 +477,7 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-    });
-
-    /////////////////////fim dos eventos
+    }); ////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
 
     function VerificaCPF() {
         var cpf = $("#cpf").val();
@@ -586,6 +585,7 @@ include("inc/scripts.php");
                             jsonEmailArray = JSON.parse(strArrayEmail);
                             fillTableTelefone();
                             fillTableEmail();
+                          
                             return; 
                         }
                     }
@@ -594,8 +594,8 @@ include("inc/scripts.php");
             }
         }
         $("#nome").focus();
+
     }
-  
 
     function novo() {
         $(location).attr('href', 'cadastroFuncionario.php');
@@ -614,7 +614,7 @@ include("inc/scripts.php");
     function voltar() {
         $(location).attr('href', 'funcionarioFiltro.php');
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     function VerificaCPF() {
         var cpf = $("#cpf").val();
         cpfverificado(cpf);
@@ -663,10 +663,9 @@ include("inc/scripts.php");
             $("#estadoCivil").focus();
             return;
         }
-
-
-
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray);
+        <?php $esconderBtnGravar = "none" ?>
+
     }
 
     function validaData(data) {
@@ -793,7 +792,7 @@ include("inc/scripts.php");
                 row.append($('<td class="text-left" >' + jsonTelefoneArray[i].descricaoTelefonePrincipal + '</td>'));
             }
         }
-
+        clearFormTelefone();
     }
 
     function clearFormTelefone() {
@@ -935,6 +934,7 @@ include("inc/scripts.php");
                 row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailPrincipal + '</td>'));
             }
         }
+       
     }
 
     function clearFormEmail() {
@@ -1010,15 +1010,12 @@ include("inc/scripts.php");
             var er = new RegExp(/^[A-Za-z0-9-.]+@[A-Za-z0-9-.]{2,}.[A-Za-z0-9]{2,}(.[A-Za-z0-9])?/);
             var email = $('#Email').val();
             if (!er.test(email)) {
-                smartAlert("Erro", "Preencha o campo email corretamente.", "error");
+                smartAlert("Erro", "Email Inválido!", "error");
                 var controleEmail = 1;
                 return false;
             } else{
                 validaEmail();  
             }
-            return true;
-
-            
-        };
-   
+            return true;   
+        };   
 </script>
