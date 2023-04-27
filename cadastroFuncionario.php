@@ -5,6 +5,7 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
+
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 //$condicaoAcessarOK = (in_array('USUARIO_ACESSAR', $arrayPermissao, true));
 // $condicaoGravarOK = (in_array('USUARIO_GRAVAR', $arrayPermissao, true));
@@ -151,14 +152,13 @@ include("inc/nav.php");
                                                             </section>
 
                                                         </div>
-                                                        <!-- teste -->
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="panel-body no-padding">
+                                    <div class="panel-body no-padding"> <!--accordion de contato-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
@@ -279,6 +279,105 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                     </div>
+
+
+                                    <div class="panel-group smart-accordion-default" id="accordion"> <!--accordion de Endereço-->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseEndereco" class="" id="accordionEndereco">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Endereço
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseEndereco" class="panel-collapse collapse in">
+                                                <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">CEP:</label>
+                                                                <label class="input">
+                                                                <input id="cpf" name="cep" class="required cpf-mask" type="text" value="" placeholder="XXXXX-XXX">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Logradouro:</label>
+                                                                <label class="input">
+                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Número:</label>
+                                                                <label class="input">
+                                                                <input id="cpf" name="numero" class="required cpf-mask" type="text" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Complemento:</label>
+                                                                <label class="input">
+                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">UF:</label>
+                                                                <label class="input">
+                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Bairro:</label>
+                                                                <label class="input">
+                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Cidade:</label>
+                                                                <label class="input">
+                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <!-- teste -->
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                     <footer>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
