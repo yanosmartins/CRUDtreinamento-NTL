@@ -60,7 +60,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Usuário</h2>
+                            <h2>Funcionário</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -129,7 +129,7 @@ include("inc/nav.php");
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
                                                                     <select id="genero" name="genero">
-                                                                    <option value="" selected>Todos</option>
+                                                                        <option value="" selected>Todos</option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
@@ -144,38 +144,40 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Nascimento - Início</label>
+                                                                <label class="input">
+                                                                    <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                </label>
+                                                            </section>
+
+
+                                                            <section class="col col-2">
+                                                                <label class="label">Data de Nascimento - Fim</label>
+                                                                <label class="input">
+                                                                    <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                </label>
+                                                            </section>
                                                         </div>
 
-
-                                                        <section class="col col-2">
-                                                            <label class="label">Data de Nascimento - Início</label>
-                                                            <label class="input">
-                                                                <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
-                                                            </label>
-                                                        </section>
-
-
-                                                        <section class="col col-2">
-                                                            <label class="label">Data de Nascimento - Fim</label>
-                                                            <label class="input">
-                                                                <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
-                                                            </label>
-                                                        </section>
+                                                       
+                                                            
+                                                            
                                                     </fieldset>
+                                                
 
+                                            </div>
+                                            <footer>
+                                                <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                                    <span class="fa fa-search"></span>
+                                                </button>
+                                                <button id="btnNovo" name="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                    <span class="fa fa-file-o"></span>
+                                                </button>
 
-                                                </div>
-                                                <footer>
-                                                    <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
-                                                        <span class="fa fa-search"></span>
-                                                    </button>
-                                                    <button id="btnNovo" name="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
-                                                        <span class="fa fa-file-o"></span>
-                                                    </button>
-
-                                                    <?php if ($condicaoGravarOK) { ?>
-                                                        <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
-                                                            <span class="fa fa-file-o""></span>
+                                                <?php if ($condicaoGravarOK) { ?>
+                                                    <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                        <span class="fa fa-file-o""></span>
                                                         </button>
                                                     <?php } ?>
                                                 </footer>
@@ -234,9 +236,16 @@ include("inc/scripts.php");
     $("#dataNascimento").mask('99/99/9999');
     $("#dataNascimentoInicio").mask('99/99/9999');
     $("#dataNascimentoFim").mask('99/99/9999');
+
     $(document).ready(function() {
 
+        $("#dataNascimentoFim").on("change", function() {
+            validarDataFim();
+        });
+
+
         $('#btnSearch').on("click", function() {
+            // if(validarDataFim == true)
             listarFiltro();
         });
 
@@ -244,6 +253,28 @@ include("inc/scripts.php");
             novo();
         });
     })
+
+    function validarDataFim() {
+
+        var dataAgora = new Date();
+        var dd = dataAgora.getDate();
+        var mm = (dataAgora.getMonth() + 1);
+        var yyyy = dataAgora.getFullYear();
+
+        var dataHoje = dd + "/" + mm + "/" + yyyy;
+
+        var dataNascimentoFim = $('#dataNascimentoFim').val();
+        if (dataNascimentoFim > dataHoje) {
+            $("#dataNascimentoFim").focus();
+            $("#dataNascimentoFim").val('');
+            smartAlert("Erro", "Data final inválida.", "error");
+        }
+        // else{
+        //     return true;
+        // }
+
+
+    }
 
     function listarFiltro() {
         var nome = $('#nome').val();
@@ -255,8 +286,6 @@ include("inc/scripts.php");
         var dataNascimentoInicio = $('#dataNascimentoInicio').val();
         var dataNascimentoFim = $('#dataNascimentoFim').val();
         var genero = $('#genero').val();
-
-
 
         $('#resultadoBusca').load('funcionarioFiltroListagem.php?', {
             nomeFiltro: nome,

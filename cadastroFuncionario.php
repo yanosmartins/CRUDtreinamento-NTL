@@ -15,22 +15,18 @@ require_once("inc/config.ui.php");
 //     header("Location:login.php");
 // }
 
-$esconderBtnGravar = "";
+$esconderBtn = "";
 if ($condicaoGravarOK === false) {
-    $esconderBtnGravar = "none";
+    $esconderBtn = "none";
 }
 
-// $esconderBtnExcluir = "";
-// if ($condicaoExcluirOK === false) {
-//     $esconderBtnExcluir = "none";
-// }
 
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Usuário";
+$page_title = "Funcionário";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -297,14 +293,14 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        
+                                        <?php $esconderBtn = "none" ?>
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:block">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
-                                        <!-- <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <!-- <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtn ?>">
                                             <span class="fa fa-file-o"></span>
                                         </button> -->
-                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtnGravar ?>">
+                                        <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtn ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar" style="display:block">
@@ -425,10 +421,7 @@ include("inc/scripts.php");
             excluiTelefoneTabela();
         });
         $("#btnAddEmail").on("click", function() {
-            validarEmail();   
-            // if (validarEmail == true) {
-                // addEmail();
-            // }              
+            validarEmail();             
         });
         $("#btnRemoverEmail").on("click", function() {
             excluiEmailTabela();
@@ -585,7 +578,7 @@ include("inc/scripts.php");
                             jsonEmailArray = JSON.parse(strArrayEmail);
                             fillTableTelefone();
                             fillTableEmail();
-                          
+                            <?php $esconderBtnGravar = "block" ?>
                             return; 
                         }
                     }
@@ -664,7 +657,7 @@ include("inc/scripts.php");
             return;
         }
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray);
-        <?php $esconderBtnGravar = "none" ?>
+        <?php $esconderBtn = "none" ?>
 
     }
 
