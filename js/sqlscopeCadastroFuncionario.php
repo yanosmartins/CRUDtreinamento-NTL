@@ -28,6 +28,18 @@ if ($funcao == 'VerificaRG') {
 }
 return;
 
+
+// function esconderBtn()
+// {
+//     $codigoBtn = (int)$_POST["id"];;
+//     if ($codigoBtn != 0){
+//         $esconderBtn = "block";
+//     }
+//     echo $esconderBtn;
+//     return;
+
+// }
+
 function gravar()
 {
     $reposit = new reposit();

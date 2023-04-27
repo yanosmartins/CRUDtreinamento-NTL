@@ -149,7 +149,7 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
- 
+
                                                         </div>
                                                         <!-- teste -->
                                                     </fieldset>
@@ -293,13 +293,22 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        <?php $esconderBtn = "none" ?>
+                                        <?php
+                                        $url = explode("?", $_SERVER["REQUEST_URI"]); ////essas linhas fazem a leitura do codigo "id" na url
+                                        $codigo = explode("=", $url[1]);
+                                        $codigoBtn = (int)$codigo[1];
+                                        $esconderBtn = "none";
+                                        if ($codigoBtn != 0) {
+                                            $esconderBtn = "block";
+                                        }
+                                        ?>
+
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:block">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
-                                        <!-- <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtn ?>">
+                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtn ?>">
                                             <span class="fa fa-file-o"></span>
-                                        </button> -->
+                                        </button>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtn ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
@@ -398,7 +407,7 @@ include("inc/scripts.php");
         $("#rg").on("change", function() {
             VerificaRG()
         });
-     
+
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -408,7 +417,7 @@ include("inc/scripts.php");
                 }
             }
         }));
-
+        // escondeButton();
         carregaPagina();
         carregaTelefone();
         carregaEmail();
@@ -416,12 +425,12 @@ include("inc/scripts.php");
         $("#btnAddTelefone").on("click", function() {
             if (validaTelefone())
                 addTelefone();
-        });       
+        });
         $("#btnRemoverTelefone").on("click", function() {
             excluiTelefoneTabela();
         });
         $("#btnAddEmail").on("click", function() {
-            validarEmail();             
+            validarEmail();
         });
         $("#btnRemoverEmail").on("click", function() {
             excluiEmailTabela();
@@ -523,6 +532,12 @@ include("inc/scripts.php");
         $("#Email").focus();
     }
 
+    // function escondeButton(){
+    //     var id = +$("#codigo").val();
+    //     escondeBtn(id);
+    //     return;
+    // }
+
     function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
@@ -574,12 +589,11 @@ include("inc/scripts.php");
                             var dataNascimento = dataNascimento.split("/")[2];
                             var idade = (anoAtual - dataNascimento);
                             $("#idade").val(idade);
-                            jsonTelefoneArray = JSON.parse(strArrayTelefone);                            
+                            jsonTelefoneArray = JSON.parse(strArrayTelefone);
                             jsonEmailArray = JSON.parse(strArrayEmail);
                             fillTableTelefone();
                             fillTableEmail();
-                            <?php $esconderBtnGravar = "block" ?>
-                            return; 
+                            return;
                         }
                     }
 
@@ -608,11 +622,6 @@ include("inc/scripts.php");
         $(location).attr('href', 'funcionarioFiltro.php');
     }
 
-    function VerificaCPF() {
-        var cpf = $("#cpf").val();
-        cpfverificado(cpf);
-        return;
-    }
 
     function gravar() {
         var id = +($("#codigo").val());
@@ -763,18 +772,18 @@ include("inc/scripts.php");
 
             $("#tableTelefone tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonTelefoneArray[i].sequencialTelefone + '"><i></i></label></td>'));
-  
+
             if (jsonTelefoneArray[i].telefone != undefined) {
                 // clearFormTelefone();
                 if (jsonTelefoneArray[i].telefonePrincipal == 1) {
                     jsonTelefoneArray[i].descricaoTelefonePrincipal = "Sim";
-                }else {
-                jsonTelefoneArray[i].descricaoTelefonePrincipal = "Não";
+                } else {
+                    jsonTelefoneArray[i].descricaoTelefonePrincipal = "Não";
                 }
                 if (jsonTelefoneArray[i].telefoneWhatsApp == 1) {
                     jsonTelefoneArray[i].descricaoTelefoneWhatsApp = "Sim";
-                }else {
-                jsonTelefoneArray[i].descricaoTelefoneWhatsApp = "Não";
+                } else {
+                    jsonTelefoneArray[i].descricaoTelefoneWhatsApp = "Não";
                 }
 
                 row.append($('<td class="text-left" onclick="carregaTelefone(' + jsonTelefoneArray[i].sequencialTelefone + ');">' + jsonTelefoneArray[i].telefone + '</td>'));
@@ -927,7 +936,7 @@ include("inc/scripts.php");
                 row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailPrincipal + '</td>'));
             }
         }
-       
+
     }
 
     function clearFormEmail() {
@@ -996,19 +1005,19 @@ include("inc/scripts.php");
         }
         addEmail();
         return true;
-        
+
     }
 
-    function validarEmail() {  
-            var er = new RegExp(/^[A-Za-z0-9-.]+@[A-Za-z0-9-.]{2,}.[A-Za-z0-9]{2,}(.[A-Za-z0-9])?/);
-            var email = $('#Email').val();
-            if (!er.test(email)) {
-                smartAlert("Erro", "Email Inválido!", "error");
-                var controleEmail = 1;
-                return false;
-            } else{
-                validaEmail();  
-            }
-            return true;   
-        };   
+    function validarEmail() {
+        var er = new RegExp(/^[A-Za-z0-9-.]+@[A-Za-z0-9-.]{2,}.[A-Za-z0-9]{2,}(.[A-Za-z0-9])?/);
+        var email = $('#Email').val();
+        if (!er.test(email)) {
+            smartAlert("Erro", "Email Inválido!", "error");
+            var controleEmail = 1;
+            return false;
+        } else {
+            validaEmail();
+        }
+        return true;
+    };
 </script>
