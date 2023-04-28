@@ -29,7 +29,7 @@ function gravar()
     $ativo = (int)$_POST['ativo'];
     $codigo = (int)$_POST['codigo'];
 
-    $sql = "dbo.Genero_Atualiza 
+    $sql = "dbo.Dependentes_Atualiza 
     $codigo
     ,'$descricao'
     ,$ativo
@@ -53,7 +53,7 @@ function gravar()
 function recupera()
 {
     $codigo = $_POST["codigo"];
-    $sql = "SELECT generoAtivo, descricao FROM dbo.generoFuncionario WHERE codigo = $codigo";
+    $sql = "SELECT dependenteAtivo, descricao FROM dbo.dependentesFuncionario WHERE codigo = $codigo";
 
 
 
@@ -63,7 +63,7 @@ function recupera()
     $out = "";
 
     if ($row = $result[0]) {
-        $ativo = (int)$row['generoAtivo'];
+        $ativo = (int)$row['dependenteAtivo'];
         $descricao = $row['descricao'];
 
         $out =  $ativo . "^" .
@@ -89,7 +89,7 @@ function excluir()
 
     session_start();
 
-    $result = $reposit->update('dbo.generoFuncionario' .'|'.'generoAtivo = 0'.'|'.'codigo ='.$codigo);
+    $result = $reposit->update('dbo.dependentesFuncionario' .'|'.'dependenteAtivo = 0'.'|'.'codigo ='.$codigo);
 
     $reposit = new reposit();
 

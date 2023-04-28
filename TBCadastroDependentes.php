@@ -89,17 +89,13 @@ include("inc/nav.php");
                                                                 <label class="input">
                                                                     <input id="descricao" maxlength="255" name="nome" class="required">
                                                                 </label>
-                                                            </section>                                                                                                                     -->
+                                                            </section>                                                                                                                     
                                                         </div>
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-
-
-                                    
+                                    </div>                                  
                                     <footer>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
@@ -162,7 +158,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/TBbusinessCadastroGenero.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/TBbusinessCadastroDependentes.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -258,7 +254,7 @@ include("inc/scripts.php");
             var idx = id.split("=");
             var idd = idx[1];
             if (idd !== "") {
-                recuperaGenero(idd,
+                recuperaDependentes(idd,
                     function(data) {
                         if (data.indexOf('failed') > -1) {
                             return;
@@ -302,12 +298,12 @@ include("inc/scripts.php");
             return;
         }
 
-        gravaGenero(codigo, descricao, ativo);
+        gravaDependentes(codigo, descricao, ativo);
     }  
     
 
     function voltar(){
-        $(location).attr('href', 'TBGeneroFiltro.php');
+        $(location).attr('href', 'TBDependentesFiltro.php');
     }
 
     function excluir() {
@@ -315,10 +311,10 @@ include("inc/scripts.php");
         var codigo = $("#codigo").val();
 
         
-        excluiGenero(codigo, ativo);
+        excluiDependentes(codigo, ativo);
     }
     function novo() {
-        $(location).attr('href', 'TBcadastroGenero.php');
+        $(location).attr('href', 'TBcadastroDependentes.php');
     }
     
     

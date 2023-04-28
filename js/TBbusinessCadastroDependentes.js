@@ -1,6 +1,6 @@
-function gravaGenero(codigo, descricao, ativo) {
+function gravaDependentes(codigo, descricao, ativo) {
     $.ajax({
-        url: 'js/TBsqlscopeCadastroGenero.php',
+        url: 'js/TBsqlscopeCadastroDependentes.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: "gravar", codigo:codigo, descricao: descricao, ativo: ativo}, //valores enviados ao script     
@@ -35,9 +35,9 @@ function gravaGenero(codigo, descricao, ativo) {
 
 }
 
-function excluiGenero(codigo) {
+function excluiDependentes(codigo) {
     $.ajax({
-        url: 'js/TBsqlscopeCadastroGenero.php', //caminho do arquivo a ser executado
+        url: 'js/TBsqlscopeCadastroDependentes.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: 'excluir', codigo:codigo }, //valores enviados ao script     
@@ -70,42 +70,9 @@ function excluiGenero(codigo) {
 }
 
 
-// function excluirGenero(id) {
-//     $.ajax({
-//         url: 'js/sqlscopeTabelaBasicaGenero.php', //caminho do arquivo a ser executado
-//         dataType: 'html', //tipo do retorno
-//         type: 'post', //metodo de envio
-//         data: { funcao: 'excluir', id: id }, //valores enviados ao script
-//         success: function (data, textStatus) {
-//             if (textStatus === 'success') {
-//                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-//                 voltar();
-//             } else {
-//                 smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-//             }
-//         }, error: function (xhr, er) {
-//             console.log(xhr, er);
-//         }
-//     });
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function recuperaGenero(id, callback) {
+function recuperaDependentes(id, callback) {
     $.ajax({
-        url: 'js/TBsqlscopeCadastroGenero.php', //caminho do arquivo a ser executado
+        url: 'js/TBsqlscopeCadastroDependentes.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: {
