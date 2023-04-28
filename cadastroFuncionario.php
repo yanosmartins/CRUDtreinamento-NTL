@@ -299,45 +299,46 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">CEP:</label>
                                                                 <label class="input">
-                                                                <input id="cpf" name="cep" class="required cpf-mask" type="text" value="" placeholder="XXXXX-XXX">
+                                                                    <input id="cep" name="cep" class="required cpf-mask" type="text" value="" placeholder="XXXXX-XXX">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Logradouro:</label>
                                                                 <label class="input">
-                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                    <input id="logradouro" maxlength="255" name="logradouro" class="required" value="">
                                                                 </label>
                                                             </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Número:</label>
-                                                                <label class="input">
-                                                                <input id="cpf" name="numero" class="required cpf-mask" type="text" value="">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Complemento:</label>
-                                                                <label class="input">
-                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
-                                                                </label>
-                                                            </section>
+                                                            
                                                             <section class="col col-2">
                                                                 <label class="label">UF:</label>
                                                                 <label class="input">
-                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                    <input id="uf" maxlength="255" name="nome" class="required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Bairro:</label>
                                                                 <label class="input">
-                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                    <input id="bairro" maxlength="255" name="bairro" class="required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Cidade:</label>
                                                                 <label class="input">
-                                                                <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                    <input id="cidade" maxlength="255" name="cidade" class="required" value="">
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Número:</label>
+                                                                <label class="input">
+                                                                    <input id="numero" name="numero" class="required numero-mask" type="text" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Complemento:</label>
+                                                                <label class="input">
+                                                                    <input id="complemento" maxlength="255" name="complemento" class="required" value="">
+                                                                </label>
+                                                            </section>                                                          
                                                         </div>
                                                         <!-- teste -->
                                                     </fieldset>
@@ -345,37 +346,6 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                                     <footer>
@@ -487,6 +457,7 @@ include("inc/scripts.php");
         $("#rg").mask('99.999.999-9');
         $("#dataNascimento").mask('99/99/9999');
         $("#telefone").mask('(99) 9 9999-9999');
+        $("#cep").mask('99999-999');
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -506,6 +477,53 @@ include("inc/scripts.php");
         $("#rg").on("change", function() {
             VerificaRG()
         });
+
+        $("#cep").on("change", function() {
+
+            //Nova variável "cep" somente com dígitos.
+            var cep = $("#cep").val().replace(/\D/g, '');
+
+            //Verifica se campo cep possui valor informado.
+            if (cep != "") {
+
+                //Expressão regular para validar o CEP.
+                var validacep = /^[0-9]{8}$/;
+
+                //Valida o formato do CEP.
+                if (validacep.test(cep)) {
+
+            
+                    //Consulta o webservice viacep.com.br/
+                    $.getJSON("//viacep.com.br/ws/" + cep + "/json/?callback=?", function(dados) {
+
+                        if (!("erro" in dados)) {
+                            //Atualiza os campos com os valores da consulta.
+                            $("#logradouro").val(dados.logradouro);
+                            $("#bairro").val(dados.bairro);
+                            $("#cidade").val(dados.localidade);
+                            $("#uf").val(dados.uf);
+                            $("#numero").focus();
+                        } //end if.
+                        else {
+                            //CEP pesquisado não foi encontrado.
+                            console.log("CEP não encontrado.");
+                        }
+
+                    });
+                } //end if.
+                else {
+                    console.log("Formato de CEP inválido.");
+                }
+                
+                
+            } //end if.
+        });
+
+
+
+
+
+
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
@@ -631,12 +649,6 @@ include("inc/scripts.php");
         }
         $("#Email").focus();
     }
-
-    // function escondeButton(){
-    //     var id = +$("#codigo").val();
-    //     escondeBtn(id);
-    //     return;
-    // }
 
     function carregaPagina() {
         var urlx = window.document.URL.toString();
@@ -1120,4 +1132,12 @@ include("inc/scripts.php");
         }
         return true;
     };
+
+
+
+    function buscarCEP() {
+
+
+
+    }
 </script>
