@@ -671,14 +671,13 @@ include("inc/scripts.php");
                             var dataNascimento = piece[5];
                             var estadoCivil = piece[6];
                             var genero = piece[7];
-                            var Email = piece[8];
-                            var cep = piece[9];
-                            var logradouro = piece[10];
-                            var uf = piece[11];
-                            var bairro = piece[12];
-                            var cidade = piece[13];
-                            var numero = piece[14];
-                            var complemento = piece[15];
+                            var cep = piece[8];
+                            var logradouro = piece[9];
+                            var uf = piece[10];
+                            var bairro = piece[11];
+                            var cidade = piece[12];
+                            var numero = piece[13];
+                            var complemento = piece[14];
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(id);
                             $("#ativo").val(ativo);
@@ -1073,8 +1072,14 @@ include("inc/scripts.php");
             $("#tableEmail tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonEmailArray[i].sequencialEmail + '"><i></i></label></td>'));
 
+
             if (jsonEmailArray[i].Email != undefined) {
                 clearFormEmail();
+                if (jsonEmailArray[i].EmailPrincipal == 1) {
+                    jsonEmailArray[i].descricaoEmailPrincipal = "Sim";
+                } else {
+                    jsonEmailArray[i].descricaoEmailPrincipal = "Não";
+                }
                 // <a href="cadastroFuncionario.php">' </a>
                 row.append($('<td class="text-left" onclick="carregaEmail(' + jsonEmailArray[i].sequencialEmail + ');">' + jsonEmailArray[i].Email + '</td>'));
                 row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailPrincipal + '</td>'));
