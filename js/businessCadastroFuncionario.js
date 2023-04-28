@@ -1,9 +1,27 @@
-function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray) {
+function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, cep, logradouro, uf, bairro, cidade, numero, complemento) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "gravar", id: id, ativo: ativo, cpf: cpf, nome: nome, dataNascimento: dataNascimento, rg: rg, estadoCivil: estadoCivil, genero: genero, jsonTelefoneArray:jsonTelefoneArray, jsonEmailArray:jsonEmailArray}, //valores enviados ao script     
+        data: {
+            funcao: "gravar", id: id,
+            ativo: ativo,
+            cpf: cpf,
+            nome: nome,
+            dataNascimento: dataNascimento,
+            rg: rg,
+            estadoCivil: estadoCivil,
+            genero: genero,
+            jsonTelefoneArray: jsonTelefoneArray,
+            jsonEmailArray: jsonEmailArray,
+            cep: cep,
+            logradouro: logradouro,
+            uf: uf,
+            bairro: bairro,
+            cidade: cidade,
+            numero: numero,
+            complemento: complemento
+        }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -53,10 +71,10 @@ function cpfverificado(cpf) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
                 if (piece[0] !== "success") {
-                //     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                //     return;
-                // }
-                // else {
+                    //     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    //     return;
+                    // }
+                    // else {
                     mensagem = "Opa! CPF já registrado.";
                     document.getElementById('cpf').value = "";
                     $("#cpf").focus();
@@ -84,8 +102,8 @@ function cpfvalidado(cpf) {
 
         success: function (data) {
             if (data.trim() !== 'success') {
-            //     smartAlert("Sucesso", "CPF válido!", "success");
-            // } else {
+                //     smartAlert("Sucesso", "CPF válido!", "success");
+                // } else {
                 smartAlert("Atenção", "CPF Inválido!", "error");
                 document.getElementById('cpf').value = "";
                 $("#cpf").focus();
@@ -114,10 +132,10 @@ function RGverificado(rg) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
                 if (piece[0] !== "success") {
-                //     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                //     return;
-                // }
-                // else {
+                    //     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                    //     return;
+                    // }
+                    // else {
                     mensagem = "RG já registrado.";
                     smartAlert("Atenção", mensagem, "error");
                     document.getElementById('rg').value = "";
@@ -178,7 +196,7 @@ function recuperaUsuario(id, callback) {
         url: 'js/sqlscopeCadastroFuncionario.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: 'recupera', codigo: id}, //valores enviados ao script      
+        data: { funcao: 'recupera', codigo: id }, //valores enviados ao script      
         success: function (data) {
             callback(data);
         }

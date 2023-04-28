@@ -308,7 +308,7 @@ include("inc/nav.php");
                                                                     <input id="logradouro" maxlength="255" name="logradouro" class="required" value="">
                                                                 </label>
                                                             </section>
-                                                            
+
                                                             <section class="col col-2">
                                                                 <label class="label">UF:</label>
                                                                 <label class="input">
@@ -336,9 +336,9 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Complemento:</label>
                                                                 <label class="input">
-                                                                    <input id="complemento" maxlength="255" name="complemento" class="required" value="">
+                                                                    <input id="complemento" maxlength="255" name="complemento" value="">
                                                                 </label>
-                                                            </section>                                                          
+                                                            </section>
                                                         </div>
                                                         <!-- teste -->
                                                     </fieldset>
@@ -362,6 +362,7 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
+
                                         <?php
                                         $url = explode("?", $_SERVER["REQUEST_URI"]); ////essas linhas fazem a leitura do codigo "id" na url
                                         $codigo = explode("=", $url[1]);
@@ -452,6 +453,7 @@ include("inc/scripts.php");
 
         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         jsonEmailArray = JSON.parse($("#jsonEmail").val());
+        
 
         $("#cpf").mask('999.999.999-99');
         $("#rg").mask('99.999.999-9');
@@ -469,61 +471,42 @@ include("inc/scripts.php");
                 // disableButton();
             }
         });
+
         $("#cpf").on("change", function() {
             let data = $("#cpf").val()
             VerificaCPF()
             ValidaCPF()
         });
+
         $("#rg").on("change", function() {
             VerificaRG()
         });
 
         $("#cep").on("change", function() {
-
-            //Nova variável "cep" somente com dígitos.
-            var cep = $("#cep").val().replace(/\D/g, '');
-
-            //Verifica se campo cep possui valor informado.
-            if (cep != "") {
-
-                //Expressão regular para validar o CEP.
-                var validacep = /^[0-9]{8}$/;
-
-                //Valida o formato do CEP.
-                if (validacep.test(cep)) {
-
-            
-                    //Consulta o webservice viacep.com.br/
-                    $.getJSON("//viacep.com.br/ws/" + cep + "/json/?callback=?", function(dados) {
-
-                        if (!("erro" in dados)) {
-                            //Atualiza os campos com os valores da consulta.
+            var cep = $("#cep").val().replace(/\D/g, ''); //Nova variável "cep" somente com dígitos.            
+            if (cep != "") { //Verifica se campo cep possui valor informado.               
+                var validacep = /^[0-9]{8}$/; //Expressão regular para validar o CEP.              
+                if (validacep.test(cep)) { //Valida o formato do CEP.
+                    $.getJSON("//viacep.com.br/ws/" + cep + "/json/?callback=?", function(dados) { //Consulta o webservice viacep.com.br/
+                        if (!("erro" in dados)) { //Atualiza os campos com os valores da consulta.                            
                             $("#logradouro").val(dados.logradouro);
                             $("#bairro").val(dados.bairro);
                             $("#cidade").val(dados.localidade);
                             $("#uf").val(dados.uf);
                             $("#numero").focus();
+                            $("#numero").val("");
+                            $("#complemento").val("");
                         } //end if.
                         else {
-                            //CEP pesquisado não foi encontrado.
-                            console.log("CEP não encontrado.");
+                            console.log("CEP não encontrado."); //CEP pesquisado não foi encontrado.
                         }
-
                     });
                 } //end if.
                 else {
                     console.log("Formato de CEP inválido.");
                 }
-                
-                
             } //end if.
         });
-
-
-
-
-
-
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
@@ -534,7 +517,7 @@ include("inc/scripts.php");
                 }
             }
         }));
-        // escondeButton();
+
         carregaPagina();
         carregaTelefone();
         carregaEmail();
@@ -543,15 +526,19 @@ include("inc/scripts.php");
             if (validaTelefone())
                 addTelefone();
         });
+
         $("#btnRemoverTelefone").on("click", function() {
             excluiTelefoneTabela();
         });
+
         $("#btnAddEmail").on("click", function() {
             validarEmail();
         });
+
         $("#btnRemoverEmail").on("click", function() {
             excluiEmailTabela();
         });
+
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -573,6 +560,7 @@ include("inc/scripts.php");
                 }
             }]
         });
+
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
 
@@ -586,17 +574,20 @@ include("inc/scripts.php");
                 $('#dlgSimpleExcluir').dialog('open');
             }
         });
+
         $("#btnNovo").on("click", function() {
             novo();
         });
+
         $("#btnGravar").on("click", function() {
             gravar();
             document.getElementById("btnGravar").disabled = true;
-
         });
+
         $("#btnVoltar").on("click", function() {
             voltar();
         });
+
     }); ////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
 
     function VerificaCPF() {
@@ -734,7 +725,6 @@ include("inc/scripts.php");
         $(location).attr('href', 'funcionarioFiltro.php');
     }
 
-
     function gravar() {
         var id = +($("#codigo").val());
         var ativo = 1;
@@ -749,8 +739,15 @@ include("inc/scripts.php");
         var genero = $("#genero").val();
         var jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         var jsonEmailArray = JSON.parse($("#jsonEmail").val());
+        var cep = $("#cep").val();
+        var logradouro = $("#logradouro").val();
+        var uf = $("#uf").val();
+        var bairro = $("#bairro").val();
+        var cidade = $("#cidade").val();
+        var numero = $("#numero").val();
+        var complemento = $("#complemento").val();
 
-
+       
         if (cpf === "") {
             smartAlert("Atenção", "Informe o cpf !", "error");
             $("#cpf").focus();
@@ -777,7 +774,32 @@ include("inc/scripts.php");
             $("#estadoCivil").focus();
             return;
         }
-        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray);
+        if (cep == "") {
+            smartAlert("Atenção", "Informe o CEP!", "error");
+            $("#cep").focus();
+            return;
+        }
+        if (logradouro == "") {
+            smartAlert("Atenção", "Informe o Logradouro do seu endereço", "error");
+            $("#logradouro").focus();
+            return;
+        }
+        if (uf == "") {
+            smartAlert("Atenção", "Informe a Unidade Federativa de sua residência!", "error");
+            $("#uf").focus();
+            return;
+        }
+        if (bairro == "") {
+            smartAlert("Atenção", "Informe o seu Bairro!", "error");
+            $("#bairro").focus();
+            return;
+        }
+        if (cidade == "") {
+            smartAlert("Atenção", "Informe a sua Cidade!", "error");
+            $("#cidade").focus();
+            return;
+        }
+        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, cep, logradouro, uf, bairro, cidade, numero, complemento);
         <?php $esconderBtn = "none" ?>
 
     }
@@ -1132,12 +1154,4 @@ include("inc/scripts.php");
         }
         return true;
     };
-
-
-
-    function buscarCEP() {
-
-
-
-    }
 </script>

@@ -28,18 +28,6 @@ if ($funcao == 'VerificaRG') {
 }
 return;
 
-
-// function esconderBtn()
-// {
-//     $codigoBtn = (int)$_POST["id"];;
-//     if ($codigoBtn != 0){
-//         $esconderBtn = "block";
-//     }
-//     echo $esconderBtn;
-//     return;
-
-// }
-
 function gravar()
 {
     $reposit = new reposit();
@@ -58,7 +46,13 @@ function gravar()
     $rg = $_POST['rg'];
     $genero = $_POST['genero'];
     $estadoCivil = (int)$_POST['estadoCivil'];
-
+    $cep = $_POST['cep'];
+    $logradouro = $_POST['logradouro'];
+    $uf = $_POST['uf'];
+    $bairro = $_POST['bairro'];
+    $cidade = $_POST['cidade'];
+    $numero = $_POST['numero'];
+    $complemento = $_POST['complemento'];
 
     $comum = new comum();
     $strArrayTelefone = $_POST['jsonTelefoneArray'];
@@ -68,14 +62,9 @@ function gravar()
         $xmlTelefone->addChild('telefoneFuncionario', true) //nome da tabela
             ->add('telefone', $item['telefone']) //setando o campo e definindo o valor
             ->add('telefonePrincipal', $item['telefonePrincipal'])
-            ->add('telefoneWhatsApp', $item['telefoneWhatsApp'])
-            // ->add('sequencialTelefone', $item['sequencialTelefone'])
-            // ->add('telefoneId', $item['telefoneId'])
-        ;
+            ->add('telefoneWhatsApp', $item['telefoneWhatsApp']);
     }
     $xmlTelefone = $comum->formatarString($xmlTelefone);
-
-
 
     $comum = new comum();
     $strArrayEmail = $_POST['jsonEmailArray'];
@@ -88,7 +77,6 @@ function gravar()
     }
     $xmlEmail = $comum->formatarString($xmlEmail);
 
-
     $sql = "dbo.Funcionario_Atualiza 
             $id, 
             $ativo,
@@ -98,10 +86,16 @@ function gravar()
             '$rg',
             '$genero',           
             '$estadoCivil',
-             $xmlTelefone,
-             $xmlEmail
+            '$xmlTelefone',
+            '$xmlEmail',
+            '$cep',
+            '$logradouro',
+            '$uf',
+            '$bairro',
+            '$cidade',
+            '$numero',
+            '$complemento'
             ";
-
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
@@ -168,7 +162,6 @@ function ValidaCPF()
     return;
 }
 
-
 function VerificaRG()
 {
     ////////verifica registros duplicados
@@ -184,34 +177,6 @@ function VerificaRG()
         $mensagem = "RG já registrado!";
         echo "failed#" . $mensagem . ' ';
     }
-}
-
-function excluir()
-{
-    $reposit = new reposit();
-    $id = $_POST["id"];
-    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
-        $mensagem = "Selecione um usuário.";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    }
-
-    session_start();
-    $usuario = $_SESSION['login'];
-    $usuario = "'" . $usuario . "'";
-
-    $result = $reposit->update('dbo.funcionario' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
-
-
-    $reposit = new reposit();
-
-    if ($result < 1) {
-        echo ('failed#');
-        return;
-    }
-
-    echo 'sucess#' . $result;
-    return;
 }
 
 function recupera()
@@ -295,5 +260,33 @@ function recupera()
     } else {
         echo "sucess#" . $out . "#" . $jsonTelefone . "#" . $jsonEmail;
     }
+    return;
+}
+
+function excluir()
+{
+    $reposit = new reposit();
+    $id = $_POST["id"];
+    if ((empty($_POST['id']) || (!isset($_POST['id'])) || (is_null($_POST['id'])))) {
+        $mensagem = "Selecione um usuário.";
+        echo "failed#" . $mensagem . ' ';
+        return;
+    }
+
+    session_start();
+    $usuario = $_SESSION['login'];
+    $usuario = "'" . $usuario . "'";
+
+    $result = $reposit->update('dbo.funcionario' . '|' . 'ativo = 0' . '|' . 'codigo =' . $id);
+
+
+    $reposit = new reposit();
+
+    if ($result < 1) {
+        echo ('failed#');
+        return;
+    }
+
+    echo 'sucess#' . $result;
     return;
 }
