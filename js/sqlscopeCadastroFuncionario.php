@@ -183,7 +183,7 @@ function recupera()
 {
     $id = $_POST["codigo"];
 
-    $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento, genero, estadoCivil  FROM dbo.funcionario WHERE codigo = $id";
+    $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento, estadoCivil, genero, cep, logradouro, uf, bairro, cidade, numero, complemento  FROM dbo.funcionario WHERE codigo = $id";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -200,6 +200,14 @@ function recupera()
         $dataNascimento = (string)$row['dataNascimento'];
         $dataNascimento = explode("-", $dataNascimento);
         $dataNascimento = $dataNascimento[2] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
+        $cep = (string)$row['cep'];
+        $logradouro = (string)$row['logradouro'];
+        $uf = (string)$row['uf'];
+        $bairro = (string)$row['bairro'];
+        $cidade = (string)$row['cidade'];
+        $numero = (string)$row['numero'];
+        $complemento = (string)$row['complemento'];
+
 
         $out =  $id . "^" .
             $ativo . "^" .
@@ -208,8 +216,16 @@ function recupera()
             $rg . "^" .
             $dataNascimento . "^" .
             $estadoCivil . "^" .
-            $genero;
+            $genero . "^" .
+            $cep . "^" .
+            $logradouro . "^" .
+            $uf . "^" .
+            $bairro . "^" .
+            $cidade . "^" .
+            $numero . "^" .
+            $complemento;
     }
+    
     $sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";
     $reposit = new reposit();
     $result = $reposit->RunQuery($sqlTelefone);

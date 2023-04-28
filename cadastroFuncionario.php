@@ -453,7 +453,7 @@ include("inc/scripts.php");
 
         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         jsonEmailArray = JSON.parse($("#jsonEmail").val());
-        
+
 
         $("#cpf").mask('999.999.999-99');
         $("#rg").mask('99.999.999-9');
@@ -672,7 +672,13 @@ include("inc/scripts.php");
                             var estadoCivil = piece[6];
                             var genero = piece[7];
                             var Email = piece[8];
-                            // var dataNascimento = piece[5];
+                            var cep = piece[9];
+                            var logradouro = piece[10];
+                            var uf = piece[11];
+                            var bairro = piece[12];
+                            var cidade = piece[13];
+                            var numero = piece[14];
+                            var complemento = piece[15];
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(id);
                             $("#ativo").val(ativo);
@@ -683,10 +689,17 @@ include("inc/scripts.php");
                             $("#dataNascimento").val(dataNascimento);
                             $("#genero").val(genero);
                             $("#Email").val(Email);
-                            $('#jsonTelefone').val(strArrayTelefone)
-                            $('#jsonEmail').val(strArrayEmail)
-                            ///////////////////////////////////////////////////////////////////////////////
-                            var dataagora = new Date()
+                            $('#jsonTelefone').val(strArrayTelefone);
+                            $('#jsonEmail').val(strArrayEmail);
+                            $('#cep').val(cep);
+                            $('#logradouro').val(logradouro);
+                            $('#uf').val(uf);
+                            $('#bairro').val(bairro);
+                            $('#cidade').val(cidade);
+                            $('#numero').val(numero);
+                            $('#complemento').val(complemento);
+                           
+                            var dataagora = new Date() // parte do calculo da idade.
                             var anoAtual = dataagora.getFullYear();
                             var dataNascimento = $("#dataNascimento").val();
                             var dataNascimento = dataNascimento.split("/")[2];
@@ -699,7 +712,6 @@ include("inc/scripts.php");
                             return;
                         }
                     }
-
                 );
             }
         }
@@ -747,7 +759,7 @@ include("inc/scripts.php");
         var numero = $("#numero").val();
         var complemento = $("#complemento").val();
 
-       
+
         if (cpf === "") {
             smartAlert("Atenção", "Informe o cpf !", "error");
             $("#cpf").focus();

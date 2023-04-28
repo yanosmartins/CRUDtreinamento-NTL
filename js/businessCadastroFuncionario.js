@@ -114,7 +114,6 @@ function cpfvalidado(cpf) {
     });
 }
 
-
 function RGverificado(rg) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php',
@@ -154,8 +153,6 @@ function RGverificado(rg) {
     return '';
 }
 
-
-
 function excluirUsuario(id) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php', //caminho do arquivo a ser executado
@@ -189,7 +186,6 @@ function excluirUsuario(id) {
         }
     });
 }
-
 
 function recuperaUsuario(id, callback) {
     $.ajax({
