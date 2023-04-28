@@ -65,7 +65,7 @@ include("inc/nav.php");
                         <div>
                             <div class="widget-body no-padding">
                                 <form class="smart-form client-form" id="formUsuario" method="post">
-                                    <div class="panel-group smart-accordion-default" id="accordion">
+                                    <div class="panel-group smart-accordion-default" id="accordion"><!--accordion de Cadastro-->
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
@@ -157,6 +157,7 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <div class="panel-body no-padding"> <!--accordion de contato-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
@@ -346,6 +347,135 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!--accordion de contato-->
+                                    <!-- <div class="panel-body no-padding">
+                                        <div class="panel-group smart-accordion-default" id="accordion">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseContato" class="" id="accordionContato">
+                                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                            Dependentes
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapseContato" class="panel-collapse collapse in">
+                                                    <div class="panel-body no-padding">
+
+                                                        <fieldset>
+                                                            <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
+                                                            <div id="formTelefone" class="col-sm-6 required">
+                                                                <input id="descricaoTelefonePrincipal" type="hidden" value="">
+                                                                <input id="descricaoTelefoneWhatsApp" type="hidden" value="">
+                                                                <input id="sequencialTelefone" type="hidden" value="">
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <section class="col col-md-3">
+                                                                            <label class="label">Telefone</label>
+                                                                            <label class="input"><i class="icon-prepend fa fa-phone"></i>
+                                                                                <input id="telefone" class="required" name="telefone" type="text" class="form-control" placeholder="(XX) XXXXX-XXXX" value="">
+                                                                            </label>
+                                                                        </section>
+                                                                        <section class="col col-md-2">
+                                                                            <label class="label">&nbsp;</label>
+                                                                            <label class="checkbox">
+                                                                                <input id="telefonePrincipal" name="telefonePrincipal" type="checkbox" value="true"><i></i>
+                                                                                Principal
+                                                                            </label>
+                                                                        </section>
+                                                                        <section class="col col-md-2">
+                                                                            <label class="label">&nbsp;</label>
+                                                                            <label class="checkbox ">
+                                                                                <input id="telefoneWhatsApp" name="telefoneWhatsApp" type="checkbox" value="true"><i></i>
+                                                                                WhatsApp
+                                                                            </label>
+                                                                        </section>
+
+                                                                        <section class="col col-md-3">
+                                                                            <label class="label">&nbsp;</label>
+                                                                            <button id="btnAddTelefone" type="button" class="btn btn-primary">
+                                                                                <i class="fa fa-plus"></i>
+                                                                            </button>
+                                                                            <button id="btnRemoverTelefone" type="button" class="btn btn-danger">
+                                                                                <i class="fa fa-minus"></i>
+                                                                            </button>
+                                                                        </section>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                    <table id="tableTelefone" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                        <thead>
+                                                                            <tr role="row">
+                                                                                <th></th>
+                                                                                <th class="text-left" style="min-width: 500%;">Telefone</th>
+                                                                                <th class="text-left">Principal</th>
+                                                                                <th class="text-left">WhatsApp</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+
+                                                            <input id="jsonEmail" name="jsonEmail" type="hidden" value="[]">
+                                                            <div id="formEmail" class="col-sm-6">
+                                                                <input id="descricaoEmailPrincipal" name="descricaoEmailPrincipal" type="hidden" value="">
+                                                                <input id="sequencialEmail" name="sequencialEmail" type="hidden" value="">
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <section class="col col-md-6">
+                                                                            <label class="label">Email</label>
+                                                                            <label class="input"><i class="icon-prepend fa fa-at"></i>
+                                                                                <input id="Email" maxlength="50" class="required" name="Email" type="email" value="">
+                                                                            </label>
+                                                                        </section>
+                                                                        <section class="col col-md-2">
+                                                                            <label class="label">&nbsp;</label>
+                                                                            <label class="checkbox ">
+                                                                                <input id="EmailPrincipal" name="EmailPrincipal" type="checkbox" value="true" checked><i></i>
+                                                                                Principal
+                                                                            </label>
+                                                                        </section>
+                                                                        <section class="col col-auto">
+                                                                            <label class="label">&nbsp;</label>
+                                                                            <button id="btnAddEmail" type="button" class="btn btn-primary">
+                                                                                <i class="fa fa-plus"></i>
+                                                                            </button>
+                                                                            <button id="btnRemoverEmail" type="button" class="btn btn-danger">
+                                                                                <i class="fa fa-minus"></i>
+                                                                            </button>
+                                                                        </section>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                    <table id="tableEmail" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                        <thead>
+                                                                            <tr role="row">
+                                                                                <th></th>
+                                                                                <th class="text-left" style="min-width: 100px;">Email</th>
+                                                                                <th class="text-left">Principal</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+
+
+
+
+
+
 
 
                                     <footer>
@@ -697,7 +827,7 @@ include("inc/scripts.php");
                             $('#cidade').val(cidade);
                             $('#numero').val(numero);
                             $('#complemento').val(complemento);
-                           
+
                             var dataagora = new Date() // parte do calculo da idade.
                             var anoAtual = dataagora.getFullYear();
                             var dataNascimento = $("#dataNascimento").val();

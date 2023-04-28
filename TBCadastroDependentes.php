@@ -30,7 +30,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Gênero";
+$page_title = "Dependentes";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -63,7 +63,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Gênero</h2>
+                            <h2>Dependentes</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -85,24 +85,21 @@ include("inc/nav.php");
                                                         <input id="codigo" type="text" value="<?= $_GET['codigo']?>" hidden>
                                                         <div class="row">
                                                         <section class="col col-2">
-                                                                <label class="label">Descrição de Gênero:</label>
+                                                                <label class="label">Descrição de Dependentes:</label>
                                                                 <label class="input">
                                                                     <input id="descricao" maxlength="255" name="nome" class="required">
                                                                 </label>
-                                                            </section>
-                                                            <!-- <section class="col col-2" hidden>
-                                                                <label class="label">&nbsp;</label>
-                                                                <label id="labelAtivo" class="checkbox ">
-                                                                    <input checked="checked" id="ativo" name="ativo" type="checkbox" value="true"><i></i>
-                                                                    Ativo
-                                                                </label>
-                                                            </section>                                                                                                                      -->
+                                                            </section>                                                                                                                     -->
                                                         </div>
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+
+
+                                    
                                     <footer>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
