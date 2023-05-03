@@ -65,7 +65,8 @@ include("inc/nav.php");
                         </header>
                         <div>
                             <div class="widget-body no-padding">
-                                <form class="smart-form client-form" id="formUsuario" method="post">
+                                <form class="smart-form client-form" id="formFuncionario" method="post">
+
                                     <div class="panel-group smart-accordion-default" id="accordion"><!--accordion de Cadastro-->
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -77,7 +78,7 @@ include("inc/nav.php");
                                                     </a>
                                                 </h4>
                                             </div>
-                                            <div id="collapseCadastro" class="panel-collapse collapse in">
+                                            <div id="collapseCadastro" class="panel-collapse collapse in"> <!--accordion funcionario-->
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
@@ -91,7 +92,7 @@ include("inc/nav.php");
                                                         <div class="row">
                                                         </div>
                                                         <div class="row">
-                                                            <section class="col col-2">
+                                                            <section class="col col-3">
                                                                 <label class="label">Nome do funcionário:</label>
                                                                 <label class="input">
                                                                     <input id="nome" maxlength="255" name="nome" class="required" value="">
@@ -162,7 +163,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">PIS/PASEP:</label>
                                                                 <label class="input">
-                                                                    <input id="pispasep" type="text" >
+                                                                    <input id="pispasep" type="text">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -171,7 +172,6 @@ include("inc/nav.php");
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="panel-body no-padding"> <!--accordion de contato-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
@@ -295,182 +295,154 @@ include("inc/nav.php");
                                         </div>
                                     </div>
 
+                                    <div class="panel-body no-padding"><!--accordion de Endereço-->
+                                        <div class="panel-group smart-accordion-default" id="accordion">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseEndereco" class="" id="accordionEndereco">
+                                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                            Endereço
+                                                        </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapseEndereco" class="panel-collapse collapse in">
+                                                    <div class="panel-body no-padding">
+                                                        <fieldset>
+                                                            <div class="row">
+                                                                <section class="col col-2">
+                                                                    <label class="label">CEP:</label>
+                                                                    <label class="input">
+                                                                        <input id="cep" name="cep" class="required cpf-mask" type="text" value="" placeholder="XXXXX-XXX">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Logradouro:</label>
+                                                                    <label class="input">
+                                                                        <input id="logradouro" maxlength="255" name="logradouro" class="required" value="">
+                                                                    </label>
+                                                                </section>
 
-                                    <div class="panel-group smart-accordion-default" id="accordion"> <!--accordion de Endereço-->
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseEndereco" class="" id="accordionEndereco">
-                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                        Endereço
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="collapseEndereco" class="panel-collapse collapse in">
-                                                <div class="panel-body no-padding">
-                                                    <fieldset>
-                                                        <div class="row">
-                                                            <section class="col col-2">
-                                                                <label class="label">CEP:</label>
-                                                                <label class="input">
-                                                                    <input id="cep" name="cep" class="required cpf-mask" type="text" value="" placeholder="XXXXX-XXX">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Logradouro:</label>
-                                                                <label class="input">
-                                                                    <input id="logradouro" maxlength="255" name="logradouro" class="required" value="">
-                                                                </label>
-                                                            </section>
-
-                                                            <section class="col col-2">
-                                                                <label class="label">UF:</label>
-                                                                <label class="input">
-                                                                    <input id="uf" maxlength="255" name="nome" class="required" value="">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Bairro:</label>
-                                                                <label class="input">
-                                                                    <input id="bairro" maxlength="255" name="bairro" class="required" value="">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Cidade:</label>
-                                                                <label class="input">
-                                                                    <input id="cidade" maxlength="255" name="cidade" class="required" value="">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Número:</label>
-                                                                <label class="input">
-                                                                    <input id="numero" name="numero" class="required numero-mask" type="text" value="">
-                                                                </label>
-                                                            </section>
-                                                            <section class="col col-2">
-                                                                <label class="label">Complemento:</label>
-                                                                <label class="input">
-                                                                    <input id="complemento" maxlength="255" name="complemento" value="">
-                                                                </label>
-                                                            </section>
-                                                        </div>
-                                                        <!-- teste -->
-                                                    </fieldset>
+                                                                <section class="col col-2">
+                                                                    <label class="label">UF:</label>
+                                                                    <label class="input">
+                                                                        <input id="uf" maxlength="255" name="nome" class="required" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Bairro:</label>
+                                                                    <label class="input">
+                                                                        <input id="bairro" maxlength="255" name="bairro" class="required" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Cidade:</label>
+                                                                    <label class="input">
+                                                                        <input id="cidade" maxlength="255" name="cidade" class="required" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Número:</label>
+                                                                    <label class="input">
+                                                                        <input id="numero" name="numero" class="required numero-mask" type="text" value="">
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-2">
+                                                                    <label class="label">Complemento:</label>
+                                                                    <label class="input">
+                                                                        <input id="complemento" maxlength="255" name="complemento" value="">
+                                                                    </label>
+                                                                </section>
+                                                            </div>
+                                                            <!-- teste -->
+                                                        </fieldset>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!--accordion de contato-->
-                                    <!-- <div class="panel-body no-padding">
+                                    <div class="panel-body no-padding"><!--accordion de Dependentes-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
                                                     <h4 class="panel-title">
-                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseContato" class="" id="accordionContato">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseDependentes" class="" id="accordionDependentes">
                                                             <i class="fa fa-lg fa-angle-down pull-right"></i>
                                                             <i class="fa fa-lg fa-angle-up pull-right"></i>
                                                             Dependentes
                                                         </a>
                                                     </h4>
                                                 </div>
-                                                <div id="collapseContato" class="panel-collapse collapse in">
+                                                <div id="collapseDependentes" class="panel-collapse collapse in">
                                                     <div class="panel-body no-padding">
-
                                                         <fieldset>
-                                                            <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
-                                                            <div id="formTelefone" class="col-sm-6 required">
-                                                                <input id="descricaoTelefonePrincipal" type="hidden" value="">
-                                                                <input id="descricaoTelefoneWhatsApp" type="hidden" value="">
-                                                                <input id="sequencialTelefone" type="hidden" value="">
+                                                            <input id="jsonDependente" name="jsonDependente" type="hidden" value="[]">
+                                                            <div id="formDependente" class="col-sm-10 required">
+                                                                <input id="sequencialDependente" type="hidden" value="">
+                                                                <input id="nomeDependenteTabela" type="hidden" value="">
+                                                                <input id="cpfDependenteTabela" type="hidden" value="">
+                                                                <input id="dataNascimentoDependenteTabela" type="hidden" value="">
+                                                                <input id="tipoDependenteTabela" type="hidden" value="">
                                                                 <div class="form-group">
                                                                     <div class="row">
-                                                                        <section class="col col-md-3">
-                                                                            <label class="label">Telefone</label>
-                                                                            <label class="input"><i class="icon-prepend fa fa-phone"></i>
-                                                                                <input id="telefone" class="required" name="telefone" type="text" class="form-control" placeholder="(XX) XXXXX-XXXX" value="">
+                                                                        <section class="col col-3">
+                                                                            <label class="label">Nome do Dependente:</label>
+                                                                            <label class="input">
+                                                                                <input id="nomeDependente" maxlength="255" name="nome" class="required" value="">
                                                                             </label>
                                                                         </section>
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <label class="checkbox">
-                                                                                <input id="telefonePrincipal" name="telefonePrincipal" type="checkbox" value="true"><i></i>
-                                                                                Principal
+                                                                        <section class="col col-2">
+                                                                            <label class="label">CPF:</label>
+                                                                            <label class="input"><i class="icon-prepend fa fa-user"></i>
+                                                                                <input id="cpfDependente" name="cpf" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
                                                                             </label>
                                                                         </section>
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <label class="checkbox ">
-                                                                                <input id="telefoneWhatsApp" name="telefoneWhatsApp" type="checkbox" value="true"><i></i>
-                                                                                WhatsApp
+                                                                        <section class="col col-2">
+                                                                            <label class="label">Data de Nascimento:</label>
+                                                                            <label class="input">
+                                                                                <input id="dataNascimentoDependente" type="text" class="datepicker required" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                            </label>
+                                                                        </section>
+                                                                        <section class="col col-2 col-auto">
+                                                                            <label class="label">Tipo de Dependente:</label>
+                                                                            <label class="select">
+                                                                                <select id="tipoDependente" class="required">
+                                                                                    <?php
+                                                                                    $reposit = new reposit();
+                                                                                    $sql = "SELECT codigo, descricao FROM dbo.dependentesFuncionario where dependenteAtivo = 1 ORDER BY codigo";
+                                                                                    $result = $reposit->RunQuery($sql);
+                                                                                    foreach ($result as $row) {
+                                                                                        $codigo = $row['codigo'];
+                                                                                        $descricao = $row['descricao'];
+                                                                                        echo '<option>' . $descricao . '</option>';
+                                                                                    }
+                                                                                    ?>
+                                                                                </select><i></i>
                                                                             </label>
                                                                         </section>
 
                                                                         <section class="col col-md-3">
                                                                             <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddTelefone" type="button" class="btn btn-primary">
+                                                                            <button id="btnAddDependente" type="button" class="btn btn-primary">
                                                                                 <i class="fa fa-plus"></i>
                                                                             </button>
-                                                                            <button id="btnRemoverTelefone" type="button" class="btn btn-danger">
+                                                                            <button id="btnRemoverDependente" type="button" class="btn btn-danger">
                                                                                 <i class="fa fa-minus"></i>
                                                                             </button>
                                                                         </section>
                                                                     </div>
                                                                 </div>
-                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableTelefone" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                <div class="table-responsive" style="min-height: 115px;  border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                    <table id="tableDependente" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                         <thead>
                                                                             <tr role="row">
                                                                                 <th></th>
-                                                                                <th class="text-left" style="min-width: 500%;">Telefone</th>
-                                                                                <th class="text-left">Principal</th>
-                                                                                <th class="text-left">WhatsApp</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-
-                                                            <input id="jsonEmail" name="jsonEmail" type="hidden" value="[]">
-                                                            <div id="formEmail" class="col-sm-6">
-                                                                <input id="descricaoEmailPrincipal" name="descricaoEmailPrincipal" type="hidden" value="">
-                                                                <input id="sequencialEmail" name="sequencialEmail" type="hidden" value="">
-                                                                <div class="form-group">
-                                                                    <div class="row">
-                                                                        <section class="col col-md-6">
-                                                                            <label class="label">Email</label>
-                                                                            <label class="input"><i class="icon-prepend fa fa-at"></i>
-                                                                                <input id="Email" maxlength="50" class="required" name="Email" type="email" value="">
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <label class="checkbox ">
-                                                                                <input id="EmailPrincipal" name="EmailPrincipal" type="checkbox" value="true" checked><i></i>
-                                                                                Principal
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-auto">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddEmail" type="button" class="btn btn-primary">
-                                                                                <i class="fa fa-plus"></i>
-                                                                            </button>
-                                                                            <button id="btnRemoverEmail" type="button" class="btn btn-danger">
-                                                                                <i class="fa fa-minus"></i>
-                                                                            </button>
-                                                                        </section>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableEmail" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                        <thead>
-                                                                            <tr role="row">
-                                                                                <th></th>
-                                                                                <th class="text-left" style="min-width: 100px;">Email</th>
-                                                                                <th class="text-left">Principal</th>
+                                                                                <th class="text-left">Nome</th>
+                                                                                <th class="text-left">CPF</th>
+                                                                                <th class="text-left">Data de Nascimento</th>
+                                                                                <th class="text-left">Tipo</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -483,14 +455,7 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> -->
-
-
-
-
-
-
-
+                                    </div>
 
                                     <footer>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
@@ -589,22 +554,21 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
-    $(document).ready(function() {
-        //EVENTO CONSTANTE
-        // $("#cpf").mask('999.999.999-99', {
-        //     reverse: true
-        // });
+    $(document).ready(function() { //EVENTOS CONSTANTE
 
         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         jsonEmailArray = JSON.parse($("#jsonEmail").val());
-
+        jsonDependenteArray = JSON.parse($("#jsonDependente").val());
 
         $("#cpf").mask('999.999.999-99');
+        $("#cpfDependente").mask('999.999.999-99');
         $("#rg").mask('99.999.999-9');
         $("#dataNascimento").mask('99/99/9999');
+        $("#dataNascimentoDependente").mask('99/99/9999');
         $("#telefone").mask('(99) 9 9999-9999');
         $("#cep").mask('99999-999');
         $("#pispasep").mask('999.99999.99-9');
+
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
             if (validaData(data) == false) {
@@ -629,13 +593,13 @@ include("inc/scripts.php");
         $("#primeiroEmprego").on("change", function() {
 
             let primeiroEmprego = +($("#primeiroEmprego").val())
-            
-            if (primeiroEmprego){
+
+            if (primeiroEmprego) {
                 $("#pispasep").prop("disabled", true);
-                $("#pispasep").addClass("readonly");   
-                $("#pispasep").val('');            
-            }else{     
-                $("#pispasep").val('');           
+                $("#pispasep").addClass("readonly");
+                $("#pispasep").val('');
+            } else {
+                $("#pispasep").val('');
                 $("#pispasep").prop("disabled", false);
                 $("#pispasep").removeAttr("disabled");
                 $("#pispasep").removeClass("readonly");
@@ -686,6 +650,13 @@ include("inc/scripts.php");
         $("#btnAddTelefone").on("click", function() {
             if (validaTelefone())
                 addTelefone();
+        });
+        $("#btnAddDependente").on("click", function() {
+            // if (validaDependente())
+            addDependente();
+        });
+        $("#btnRemoverDependente").on("click", function() {
+            excluiDependenteTabela();
         });
 
         $("#btnRemoverTelefone").on("click", function() {
@@ -858,6 +829,7 @@ include("inc/scripts.php");
                             $('#cidade').val(cidade);
                             $('#numero').val(numero);
                             $('#complemento').val(complemento);
+                            $('#jsonDependente').val(strArrayDependente);
 
                             var dataagora = new Date() // parte do calculo da idade.
                             var anoAtual = dataagora.getFullYear();
@@ -867,6 +839,7 @@ include("inc/scripts.php");
                             $("#idade").val(idade);
                             jsonTelefoneArray = JSON.parse(strArrayTelefone);
                             jsonEmailArray = JSON.parse(strArrayEmail);
+                            jsonDependenteArray = JSON.parse(strArrayDependente);
                             fillTableTelefone();
                             fillTableEmail();
                             return;
@@ -918,6 +891,7 @@ include("inc/scripts.php");
         var cidade = $("#cidade").val();
         var numero = $("#numero").val();
         var complemento = $("#complemento").val();
+        var jsonDependenteArray = JSON.parse($("#jsonDependente").val());
 
 
         if (cpf === "") {
@@ -1241,7 +1215,6 @@ include("inc/scripts.php");
                 } else {
                     jsonEmailArray[i].descricaoEmailPrincipal = "Não";
                 }
-                // <a href="cadastroFuncionario.php">' </a>
                 row.append($('<td class="text-left" onclick="carregaEmail(' + jsonEmailArray[i].sequencialEmail + ');">' + jsonEmailArray[i].Email + '</td>'));
                 row.append($('<td class="text-left" >' + jsonEmailArray[i].descricaoEmailPrincipal + '</td>'));
             } else {
@@ -1332,4 +1305,111 @@ include("inc/scripts.php");
         }
         return true;
     };
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function addDependente() {
+        var nomeDependente = $("#nomeDependente").val();
+        var cpfDependente = $("#cpfDependente").val();
+        var dataNascimentoDependente = $("#dataNascimentoDependente").val();
+        var tipoDependente = $("#tipoDependente").val();
+        if (nomeDependente === "") {
+            smartAlert("Atenção", "Informe o nome do Dependente!", "error");
+            $("#nomeDependente").focus();
+            return;
+        }
+        if (cpfDependente === "") {
+            smartAlert("Atenção", "Informe o CPF do Dependente!", "error");
+            $("#cpfDependente").focus();
+            return;
+        }
+        if (dataNascimentoDependente === "") {
+            smartAlert("Atenção", "Informe a data de nascimento do Dependente!", "error");
+            $("#dataNascimentoDependente").focus();
+            return;
+        }
+
+        var item = $("#formDependente").toObject({
+            mode: 'combine',
+            skipEmpty: false
+        });
+
+        item["sequencialDependente"] = $("#sequencialDependente").val();
+
+        if (item["sequencialDependente"] === '') {
+            if (jsonDependenteArray.length === 0) {
+                item["sequencialDependente"] = 1;
+            } else {
+                item["sequencialDependente"] = Math.max.apply(Math, jsonDependenteArray.map(function(o) {
+                    return o.sequencialDependente;
+                })) + 1;
+            }
+        } else {
+            item["sequencialDependente"] = +item["sequencialDependente"];
+        }
+
+        var index = -1;
+        $.each(jsonDependenteArray, function(i, obj) {
+            if (+$('#sequencialDependente').val() === obj.sequencialDependente) {
+                index = i;
+                return false;
+            }
+        });
+
+        item["cpfDependente"] = $('#cpfDependente').val()
+        item["dataNascimentoDependente"] = $('#dataNascimentoDependente').val()
+        item["tipoDependente"] = $('#tipoDependente').val()
+
+        if (index >= 0)
+            jsonDependenteArray.splice(index, 1, item);
+        else
+            jsonDependenteArray.push(item);
+
+        $("#jsonDependente").val(JSON.stringify(jsonDependenteArray));
+        fillTableDependente();
+        clearFormDependente();
+    }
+
+    function fillTableDependente() {
+        $("#tableDependente tbody").empty();
+        for (var i = 0; i < jsonDependenteArray.length; i++) {
+            var row = $('<tr />');
+            $("#tableDependente tbody").append(row);
+            row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonDependenteArray[i].sequencialDependente + '"><i></i></label></td>'));
+            row.append($('<td class="text-left" >' + jsonDependenteArray[i].nome + '</td>'));
+            row.append($('<td class="text-left" >' + jsonDependenteArray[i].cpfDependente + '</td>'));
+            row.append($('<td class="text-left" >' + jsonDependenteArray[i].dataNascimentoDependente + '</td>'));
+            row.append($('<td class="text-left" >' + jsonDependenteArray[i].tipoDependente + '</td>'));
+        }
+        clearFormDependente();
+    }
+
+    function clearFormDependente() {
+        $("#nomeDependente").focus();
+        $("#nomeDependente").val('');
+        $("#sequencialDependente").val('');
+        $("#cpfDependente").val('');
+        $("#dataNascimentoDependente").val('');
+        $("#tipoDependente").val('');
+    }
+
+    function excluiDependenteTabela() {
+        var arrSequencial = [];
+        // $('#tableDependente input[type=checkbox]:checked').each(function() {
+        $('#tableDependente input[type=checkbox]:checked').each(function() {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+        if (arrSequencial.length > 0) {
+            for (i = jsonDependenteArray.length - 1; i >= 0; i--) {
+                var obj = jsonDependenteArray[i];
+                if (jQuery.inArray(obj.sequencialDependente, arrSequencial) > -1) {
+                    jsonDependenteArray.splice(i, 1);
+                }
+            }
+            $("#jsonDependente").val(JSON.stringify(jsonDependenteArray));
+            fillTableDependente();
+        } else
+            smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
+        clearFormDependente();
+    }
 </script>
