@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Gênero";
+$page_title = "Dependentes";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["tabelaBasica"]["sub"]["genero"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["dependente"]["active"] = true;
 
 include("inc/nav.php");
 ?>
@@ -60,7 +60,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Gênero</h2>
+                            <h2>Dependentes</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -82,9 +82,9 @@ include("inc/nav.php");
                                                         <div class="row">
                                                         
                                                             <section class="col col-2 col-auto">
-                                                                <label class="label">Gênero</label>
+                                                                <label class="label">Dependente:</label>
                                                                 <label class="select">
-                                                                    <select id="descricao" name="genero">
+                                                                    <select id="descricao" name="dependente">
                                                                     <option value="" selected>Todos</option>
                                                                         <?php
                                                                         $reposit = new reposit();
@@ -101,7 +101,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="ativo">Ativo</label>
+                                                                <label class="label" for="ativo">Ativo:</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
                                                                         <option value="" selected>Todos</option>
@@ -189,13 +189,13 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
         var codigo = $('#descricao').val();
 
-        $('#resultadoBusca').load('TBGeneroFiltroListagem.php?', {
+        $('#resultadoBusca').load('TBDependentesFiltroListagem.php?', {
            codigoFiltro: codigo,
             ativoFiltro: ativo
         });
     }
 
     function novo() {
-        $(location).attr('href', 'TBCadastroGenero.php');
+        $(location).attr('href', 'TBCadastroDependentes.php');
     }
 </script>

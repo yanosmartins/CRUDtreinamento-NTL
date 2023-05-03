@@ -74,7 +74,7 @@ if (true) {
         $page_nav['configuracao']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBGeneroFiltro.php"));
     }
     if (true) {
-        $page_nav['configuracao']['sub'] += array("dependenteFiltro" => array("title" => "Dependentes", "url" => APP_URL . "/dependentesFiltro.php"));
+        $page_nav['configuracao']['sub'] += array("dependenteFiltro" => array("title" => "Dependentes", "url" => APP_URL . "/TBDependentesFiltro.php"));
     }
     // if (true) {
     //     $page_nav['configuracao']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/usuarioGrupoFiltro.php"));
