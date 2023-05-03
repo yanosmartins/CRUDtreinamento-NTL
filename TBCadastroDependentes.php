@@ -31,7 +31,7 @@ if ($condicaoGravarOK === false) {
   E.G. $page_title = "Custom Title" */
 
 $page_title = "Dependentes";
-
+$page_nav["tabelaBasica"]["sub"]["dependente"]["active"] = true;
 /* ---------------- END PHP Custom Scripts ------------- */
 
 //include header

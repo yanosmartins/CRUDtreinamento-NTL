@@ -45,13 +45,13 @@ include "js/repositorio.php";
                     //     $ativo = "Não";
                     // }
                     // A linha abaixo é um operador ternário. Um if/else em uma única linha. Neste exemplo, foram rudizadas 5 linhas em 1.
-                    $ativoFiltro == 1 ? $ativo = "Sim": $ativo = "Não";
-                    
-                        echo '<tr >';
-                        echo '<td class="text-left"><a href="TBCadastroDependentes.php?codigo=' . $codigo . '">' . $codigoFiltro . '<a></td>';
-                        echo '<td class="text-left">' . $ativo . '</td>';
-                        echo '</tr >';
-                    }
+                    $ativoFiltro == 1 ? $ativo = "Sim" : $ativo = "Não";
+
+                    echo '<tr >';
+                    echo '<td class="text-left"><a href="TBCadastroDependentes.php?codigo=' . $codigo . '">' . $codigoFiltro . '<a></td>';
+                    echo '<td class="text-left">' . $ativo . '</td>';
+                    echo '</tr >';
+                }
                 ?>
             </tbody>
         </table>
