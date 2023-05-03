@@ -316,9 +316,7 @@ include("inc/scripts.php");
 
     function excluir() {
         var ativo = $("#ativo").val();
-        var codigo = $("#codigo").val();
-
-        
+        var codigo = $("#codigo").val();        
         excluiGenero(codigo, ativo);
     }
     function novo() {

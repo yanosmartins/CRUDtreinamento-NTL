@@ -91,18 +91,6 @@ function excluiGenero(codigo) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 function recuperaGenero(id, callback) {
     $.ajax({
         url: 'js/TBsqlscopeCadastroGenero.php', //caminho do arquivo a ser executado

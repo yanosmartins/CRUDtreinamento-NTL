@@ -28,6 +28,7 @@ if ($condicaoGravarOK === false) {
   E.G. $page_title = "Custom Title" */
 
 $page_title = "Funcionário";
+// $page_nav["cadastro"]["sub"]["Funcionário"]["active"] = true;
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -114,11 +115,10 @@ include("inc/nav.php");
                                                                     <input id="dataNascimento" name="dataNascimento" type="text" class="datepicker required" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-1">
                                                                 <label class="label">Idade:</label>
                                                                 <label class="input">
-                                                                    <input id="idade" name="idade" type="text" class="readonly">
+                                                                    <input id="idade" name="idade" type="text" class="readonly" readonly>
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -150,7 +150,21 @@ include("inc/nav.php");
                                                                     </select><i></i>
                                                                 </label>
                                                             </section>
-
+                                                            <section class="col col-2">
+                                                                <label class="label" for="Sexo">Primeiro Emprego:</label>
+                                                                <label class="select">
+                                                                    <select id="primeiroEmprego" class="required">
+                                                                        <option value="hidden"></option>
+                                                                        <option value="0">Não</option>
+                                                                        <option value="1">Sim</option>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">PIS/PASEP:</label>
+                                                                <label class="input">
+                                                                    <input id="pispasep" type="text" >
+                                                                </label>
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -590,7 +604,7 @@ include("inc/scripts.php");
         $("#dataNascimento").mask('99/99/9999');
         $("#telefone").mask('(99) 9 9999-9999');
         $("#cep").mask('99999-999');
-
+        $("#pispasep").mask('999.99999.99-9');
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
             if (validaData(data) == false) {
@@ -610,6 +624,23 @@ include("inc/scripts.php");
 
         $("#rg").on("change", function() {
             VerificaRG()
+        });
+
+        $("#primeiroEmprego").on("change", function() {
+
+            let primeiroEmprego = +($("#primeiroEmprego").val())
+            
+            if (primeiroEmprego){
+                $("#pispasep").prop("disabled", true);
+                $("#pispasep").addClass("readonly");   
+                $("#pispasep").val('');            
+            }else{     
+                $("#pispasep").val('');           
+                $("#pispasep").prop("disabled", false);
+                $("#pispasep").removeAttr("disabled");
+                $("#pispasep").removeClass("readonly");
+                $("#pispasep").addClass("required");
+            }
         });
 
         $("#cep").on("change", function() {
