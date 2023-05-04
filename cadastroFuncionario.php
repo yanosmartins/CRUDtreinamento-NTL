@@ -390,13 +390,13 @@ include("inc/nav.php");
                                                                         <section class="col col-3">
                                                                             <label class="label">Nome do Dependente:</label>
                                                                             <label class="input">
-                                                                                <input id="nomeDependente" maxlength="255" name="nome" class="required" value="">
+                                                                                <input id="nomeDependente" maxlength="255" class="required" value="">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-2">
                                                                             <label class="label">CPF:</label>
                                                                             <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                                <input id="cpfDependente" name="cpf" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
+                                                                                <input id="cpfDependente" name="cpfDependente" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
                                                                             </label>
                                                                         </section>
                                                                         <section class="col col-2">
@@ -945,7 +945,7 @@ include("inc/scripts.php");
             $("#cidade").focus();
             return;
         }
-        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, cep, logradouro, uf, bairro, cidade, numero, complemento);
+        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento);
         <?php $esconderBtn = "none" ?>
 
     }
@@ -1306,7 +1306,6 @@ include("inc/scripts.php");
         return true;
     };
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     function addDependente() {
         var nomeDependente = $("#nomeDependente").val();
@@ -1355,7 +1354,7 @@ include("inc/scripts.php");
                 return false;
             }
         });
-
+        item["nomeDependente"] = $('#nomeDependente').val()
         item["cpfDependente"] = $('#cpfDependente').val()
         item["dataNascimentoDependente"] = $('#dataNascimentoDependente').val()
         item["tipoDependente"] = $('#tipoDependente').val()
@@ -1376,7 +1375,7 @@ include("inc/scripts.php");
             var row = $('<tr />');
             $("#tableDependente tbody").append(row);
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonDependenteArray[i].sequencialDependente + '"><i></i></label></td>'));
-            row.append($('<td class="text-left" >' + jsonDependenteArray[i].nome + '</td>'));
+            row.append($('<td class="text-left" >' + jsonDependenteArray[i].nomeDependente + '</td>'));
             row.append($('<td class="text-left" >' + jsonDependenteArray[i].cpfDependente + '</td>'));
             row.append($('<td class="text-left" >' + jsonDependenteArray[i].dataNascimentoDependente + '</td>'));
             row.append($('<td class="text-left" >' + jsonDependenteArray[i].tipoDependente + '</td>'));

@@ -1,4 +1,4 @@
-function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, cep, logradouro, uf, bairro, cidade, numero, complemento) {
+function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php',
         dataType: 'html', //tipo do retorno
@@ -14,6 +14,7 @@ function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil,
             genero: genero,
             jsonTelefoneArray: jsonTelefoneArray,
             jsonEmailArray: jsonEmailArray,
+            jsonDependenteArray: jsonDependenteArray,
             cep: cep,
             logradouro: logradouro,
             uf: uf,

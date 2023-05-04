@@ -315,7 +315,7 @@ include("inc/scripts.php");
 
 
         $("#btnBaterPonto").on("click", function() {
-            $(location).attr('href', 'prototipo_pontoEletronicoDiario.php');
+            $(location).attr('href', 'funcionarioFiltro.php');
         });
 
         $("#btnPontoMensal").on("click", function() {

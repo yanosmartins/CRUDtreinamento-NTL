@@ -77,6 +77,24 @@ function gravar()
     }
     $xmlEmail = $comum->formatarString($xmlEmail);
 
+
+    $comum = new comum();
+    $strArrayDependente = $_POST['jsonDependenteArray'];
+    $arrayDependente = $strArrayDependente;
+    $xmlDependente = new \FluidXml\FluidXml('ArrayOfDependente', ['encoding' => '']);
+    foreach ($arrayDependente as $item) {
+        $xmlDependente->addChild('dependentesListaFuncionario', true) //nome da tabela
+            ->add('dependente', $item['Dependente']) //setando o campo e definindo o valor
+            ->add('nomeDependente', $item['nomeDependente'])
+            ->add('cpfDependente', $item['cpfDependente'])
+            ->add('dataNascimentoDependente', $item['dataNascimentoDependente'])
+            ->add('tipoDependente', $item['tipoDependente']);
+
+    }
+    $xmlDependente = $comum->formatarString($xmlDependente);
+
+
+
     $sql = "dbo.Funcionario_Atualiza 
             $id, 
             $ativo,
@@ -94,7 +112,8 @@ function gravar()
             '$bairro',
             '$cidade',
             '$numero',
-            '$complemento'
+            '$complemento',
+            $xmlDependente
             ";
 
     $reposit = new reposit();
