@@ -838,8 +838,6 @@ include("inc/scripts.php");
                             $('#complemento').val(complemento);
                             $('#primeiroEmprego').val(primeiroEmprego);
                             verificaPrimeiroEmprego();
-
-
                             $('#pispasep').val(pisPasep);
                             var dataagora = new Date() // parte do calculo da idade.
                             var anoAtual = dataagora.getFullYear();
