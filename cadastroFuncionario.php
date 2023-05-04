@@ -317,7 +317,7 @@ include("inc/nav.php");
                                                                         <input id="cep" name="cep" class="required cpf-mask" type="text" value="" placeholder="XXXXX-XXX">
                                                                     </label>
                                                                 </section>
-                                                                <section class="col col-2">
+                                                                <section class="col col-3">
                                                                     <label class="label">Logradouro:</label>
                                                                     <label class="input">
                                                                         <input id="logradouro" maxlength="255" name="logradouro" class="required" value="">
@@ -773,6 +773,23 @@ include("inc/scripts.php");
         $("#Email").focus();
     }
 
+    function carregaDependente(sequencialDependente) {
+        var arr = jQuery.grep(jsonDependenteArray, function(item, i) {
+            return (item.sequencialDependente === sequencialDependente);
+        });
+        if (arr.length > 0) {
+            var item = arr[0];
+            $("#nomeDependente").val(item.nomeDependente);
+            $("#sequencialDependente").val(item.sequencialDependente);
+            $("#nomeDependente").val(item.nomeDependente);
+            $("#cpfDependente").val(item.cpfDependente);
+            $("#dataNascimentoDependente").val(item.dataNascimentoDependente);
+            $("#tipoDependente").val(item.tipoDependente);
+
+        }
+        $("#Dependente").focus();
+    }
+
     function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
@@ -822,6 +839,7 @@ include("inc/scripts.php");
                             $("#Email").val(Email);
                             $('#jsonTelefone').val(strArrayTelefone);
                             $('#jsonEmail').val(strArrayEmail);
+                            $('#jsonDependente').val(strArrayDependente);
                             $('#cep').val(cep);
                             $('#logradouro').val(logradouro);
                             $('#uf').val(uf);
@@ -829,7 +847,7 @@ include("inc/scripts.php");
                             $('#cidade').val(cidade);
                             $('#numero').val(numero);
                             $('#complemento').val(complemento);
-                            $('#jsonDependente').val(strArrayDependente);
+                           
 
                             var dataagora = new Date() // parte do calculo da idade.
                             var anoAtual = dataagora.getFullYear();
@@ -842,6 +860,7 @@ include("inc/scripts.php");
                             jsonDependenteArray = JSON.parse(strArrayDependente);
                             fillTableTelefone();
                             fillTableEmail();
+                            fillTableDependente();
                             return;
                         }
                     }
@@ -1374,8 +1393,9 @@ include("inc/scripts.php");
         for (var i = 0; i < jsonDependenteArray.length; i++) {
             var row = $('<tr />');
             $("#tableDependente tbody").append(row);
+                        
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonDependenteArray[i].sequencialDependente + '"><i></i></label></td>'));
-            row.append($('<td class="text-left" >' + jsonDependenteArray[i].nomeDependente + '</td>'));
+            row.append($('<td class="text-left" onclick="carregaDependente(' + jsonDependenteArray[i].sequencialDependente + ');">' + jsonDependenteArray[i].nomeDependente + '</td>'));
             row.append($('<td class="text-left" >' + jsonDependenteArray[i].cpfDependente + '</td>'));
             row.append($('<td class="text-left" >' + jsonDependenteArray[i].dataNascimentoDependente + '</td>'));
             row.append($('<td class="text-left" >' + jsonDependenteArray[i].tipoDependente + '</td>'));

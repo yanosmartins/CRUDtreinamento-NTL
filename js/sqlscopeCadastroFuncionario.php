@@ -89,7 +89,6 @@ function gravar()
             ->add('cpfDependente', $item['cpfDependente'])
             ->add('dataNascimentoDependente', $item['dataNascimentoDependente'])
             ->add('tipoDependente', $item['tipoDependente']);
-
     }
     $xmlDependente = $comum->formatarString($xmlDependente);
 
@@ -244,7 +243,7 @@ function recupera()
             $numero . "^" .
             $complemento;
     }
-    
+
     $sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";
     $reposit = new reposit();
     $result = $reposit->RunQuery($sqlTelefone);
@@ -290,10 +289,35 @@ function recupera()
     }
     $jsonEmail = json_encode($arrayEmail);
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    $sqlDependente = "SELECT nome, cpf, dataNascimento, tipo FROM dbo.dependentesListaFuncionario WHERE funcionarioId = $id";
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sqlDependente);
+
+    $contador = 0;
+    $arrayDependente = [];
+    foreach ($result as $contador => $item) {
+        $sequencialDependente = $contador + 1;
+
+        array_push($arrayDependente, [
+            'nomeDependente' => $item['nome'],
+            'cpfDependente' => $item['cpf'],
+            'dataNascimentoDependente' => $item['dataNascimento'],
+            'tipoDependente' => $item['tipo'],
+            'sequencialDependente' => $sequencialDependente
+
+        ]);
+    }
+    $jsonDependente = json_encode($arrayDependente);
+
+
+
+
     if ($out == "") {
         echo "failed#";
     } else {
-        echo "sucess#" . $out . "#" . $jsonTelefone . "#" . $jsonEmail;
+        echo "sucess#" . $out . "#" . $jsonTelefone . "#" . $jsonEmail . "#" . $jsonDependente;
     }
     return;
 }
