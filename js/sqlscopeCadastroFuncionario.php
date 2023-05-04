@@ -81,7 +81,7 @@ function gravar()
     $comum = new comum();
     $strArrayDependente = $_POST['jsonDependenteArray'];
     $arrayDependente = $strArrayDependente;
-    $xmlDependente = new \FluidXml\FluidXml('ArrayOfDependente', ['encoding' => '']);
+    $xmlDependente = new \FluidXml\FluidXml('ArrayOfDependentes', ['encoding' => '']);
     foreach ($arrayDependente as $item) {
         $xmlDependente->addChild('dependentesListaFuncionario', true) //nome da tabela
             ->add('dependente', $item['Dependente']) //setando o campo e definindo o valor
