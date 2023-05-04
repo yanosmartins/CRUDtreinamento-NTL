@@ -205,7 +205,7 @@ function recupera()
 {
     $id = $_POST["codigo"];
 
-    $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento, estadoCivil, genero, cep, logradouro, uf, bairro, cidade, numero, complemento  FROM dbo.funcionario WHERE codigo = $id";
+    $sql = "SELECT codigo, nome, ativo, cpf, rg, dataNascimento, estadoCivil, genero, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pisPasep  FROM dbo.funcionario WHERE codigo = $id";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -229,6 +229,9 @@ function recupera()
         $cidade = (string)$row['cidade'];
         $numero = (string)$row['numero'];
         $complemento = (string)$row['complemento'];
+        $primeiroEmprego = (string)$row['primeiroEmprego'];
+        $pisPasep = (string)$row['pisPasep'];
+        
 
 
         $out =  $id . "^" .
@@ -245,7 +248,11 @@ function recupera()
             $bairro . "^" .
             $cidade . "^" .
             $numero . "^" .
-            $complemento;
+            $complemento . "^" .
+            $primeiroEmprego. "^" .
+            $pisPasep
+            
+            ;
     }
 
     $sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";

@@ -195,10 +195,9 @@ include("inc/nav.php");
                                     </div>
                                 </form>
                             </div>
-                                <div id=" resultadoBusca">
+                                <div id="resultadoBusca">
                                             </div>
-                                        </div>
-                                    </div>
+
                 </article>
             </div>
         </section>
@@ -303,9 +302,8 @@ include("inc/scripts.php");
             rgFiltro: rg,
             estadoCivilFiltro: estadoCivil,
             generoFiltro: genero,
-            ativoFiltro: ativo,
-            primeiroEmpregoFiltro: primeiroEmprego,
-            pisPasepFiltro: pisPasep       
+            ativoFiltro: ativo
+
         });
     }
 

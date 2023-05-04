@@ -160,7 +160,7 @@ include("inc/nav.php");
                                                                         <option value="1">Sim</option>
                                                                     </select><i></i>
                                                             </section>
-                                                            <section class="col col-2 hidden" id="pisSection">
+                                                            <section class="col col-2" id="pisSection">
                                                                 <label class="label">PIS/PASEP:</label>
                                                                 <label class="input">
                                                                     <input id="pispasep" type="text">
@@ -836,6 +836,8 @@ include("inc/scripts.php");
                             var cidade = piece[12];
                             var numero = piece[13];
                             var complemento = piece[14];
+                            var primeiroEmprego = piece[15];
+                            var pisPasep = piece[16];
                             //Associa as varíaveis recuperadas pelo javascript com seus respectivos campos html.
                             $("#codigo").val(id);
                             $("#ativo").val(ativo);
@@ -856,6 +858,8 @@ include("inc/scripts.php");
                             $('#cidade').val(cidade);
                             $('#numero').val(numero);
                             $('#complemento').val(complemento);
+                            $('#primeiroEmprego').val(primeiroEmprego);
+                            $('#pispasep').val(pisPasep);
 
 
                             var dataagora = new Date() // parte do calculo da idade.

@@ -144,8 +144,8 @@ include "js/repositorio.php";
                         1 => 'Solteiro',
                         2 => 'Casado',
                         3 => 'Separado',
-                        4=> 'Divorciado',
-                        5=> 'Viúvo'
+                        4 => 'Divorciado',
+                        5 => 'Viúvo'
                     };
                     $estadoCivilFiltro = $valor_de_retorno;
 
@@ -157,6 +157,13 @@ include "js/repositorio.php";
                     } else {
                         $ativoFiltro = "Não";
                     }
+                    $primeiroEmpregoFiltro = (int) $row['primeiroEmprego'];
+                    if ($primeiroEmpregoFiltro == 1) {
+                        $primeiroEmpregoFiltro = "Sim";
+                    } else {
+                        $primeiroEmpregoFiltro = "Não";
+                    }
+
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="cadastroFuncionario.php?id=' . $id . '">' . $nomeFiltro . '</a></td>';
