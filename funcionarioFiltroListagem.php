@@ -13,6 +13,8 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Estado Civil</th>
                     <th class="text-left" style="min-width:30px;">Gênero</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
+                    <th class="text-left" style="min-width:35px;">Primeiro Emprego</th>
+                    <th class="text-left" style="min-width:35px;">Pis/Pasep</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +25,8 @@ include "js/repositorio.php";
                 $dataNascimentoFiltro = "";
                 $dataNascimentoInicio = "";
                 $dataNascimentoFim = "";
+                $primeiroEmprego = "";
+                $pispasep = "";
 
                 $where = " WHERE (0 = 0)";
 
@@ -74,8 +78,21 @@ include "js/repositorio.php";
                     $ativoFiltro = $_POST["ativoFiltro"];
                     $where = $where . " AND FU.ativo =" . $ativoFiltro;
                 }
+                $primeiroEmpregoFiltro = "";
+                $primeiroEmpregoFiltro = $_POST["primeiroEmpregoFiltro"];
+                if ($_POST["primeiroEmpregoFiltro"] != "") {
+                    $primeiroEmpregoFiltro = $_POST["primeiroEmpregoFiltro"];
+                    $where = $where . " AND FU.primeiroEmprego =" . $primeiroEmpregoFiltro;
+                }
+                $pisPasepFiltro = "";
+                $pisPasepFiltro = $_POST["pisPasepFiltro"];
+                if ($_POST["pisPasepFiltro"] != "") {
+                    $pisPasepFiltro = $_POST["pisPasepFiltro"];
+                    $where = $where . " AND FU.pisPasep =" . $pisPasepFiltro;
+                }
 
-                $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, GF.descricao as genero 
+
+                $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
                 from dbo.funcionario FU
                 LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
                 //   $sql = "SELECT GF.codigo, GF.descricao, F.ativo  from dbo.generoFuncionario AS GF
@@ -93,6 +110,8 @@ include "js/repositorio.php";
                     $cpfFiltro = $row['cpf'];;
                     $rgFiltro = $row['rg'];
                     $generoFiltro = $row['genero'];
+                    $primeiroEmpregoFiltro = $row['primeiroEmprego'];
+                    $pisPasepFiltro = $row['pisPasep'];
 
                     $dataNascimentoFiltro = $row['dataNascimento'];
                     if ($dataNascimentoFiltro) {
@@ -147,6 +166,8 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $estadoCivilFiltro . '</td>';
                     echo '<td class="text-left">' . $generoFiltro . '</td>';
                     echo '<td class="text-left">' . $ativoFiltro . '</td>';
+                    echo '<td class="text-left">' . $primeiroEmpregoFiltro . '</td>';
+                    echo '<td class="text-left">' . $pisPasepFiltro . '</td>';
                     echo '</tr >';
                 }
                 ?>

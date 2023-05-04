@@ -150,34 +150,43 @@ include("inc/nav.php");
                                                                     <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
                                                             </section>
-
-
                                                             <section class="col col-2">
                                                                 <label class="label">Data de Nascimento - Fim</label>
                                                                 <label class="input">
                                                                     <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
                                                             </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Primeiro Emprego:</label>
+                                                                <label class="select">
+                                                                    <select id="primeiroEmprego">
+                                                                        <option></option>
+                                                                        <option value="0">Não</option>
+                                                                        <option value="1">Sim</option>
+                                                                    </select><i></i>
+                                                            </section>
+                                                            <section class="col col-2" id="pisSection">
+                                                                <label class="label">PIS/PASEP:</label>
+                                                                <label class="input">
+                                                                    <input id="pispasep" type="text">
+                                                                </label>
+                                                            </section>
                                                         </div>
-
-                                                       
-                                                            
-                                                            
                                                     </fieldset>
-                                                
+                                                </div>
 
-                                            </div>
-                                            <footer>
-                                                <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
-                                                    <span class="fa fa-search"></span>
-                                                </button>
-                                                <button id="btnNovo" name="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
-                                                    <span class="fa fa-file-o"></span>
-                                                </button>
 
-                                                <?php if ($condicaoGravarOK) { ?>
-                                                    <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
-                                                        <span class="fa fa-file-o""></span>
+                                                <footer>
+                                                    <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                                        <span class="fa fa-search"></span>
+                                                    </button>
+                                                    <button id="btnNovo" name="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                        <span class="fa fa-file-o"></span>
+                                                    </button>
+
+                                                    <?php if ($condicaoGravarOK) { ?>
+                                                        <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                            <span class="fa fa-file-o""></span>
                                                         </button>
                                                     <?php } ?>
                                                 </footer>
@@ -186,9 +195,10 @@ include("inc/nav.php");
                                     </div>
                                 </form>
                             </div>
-                            <div id="resultadoBusca"></div>
-                        </div>
-                    </div>
+                                <div id=" resultadoBusca">
+                                            </div>
+                                        </div>
+                                    </div>
                 </article>
             </div>
         </section>
@@ -269,11 +279,6 @@ include("inc/scripts.php");
             $("#dataNascimentoFim").val('');
             smartAlert("Erro", "Data final inválida.", "error");
         }
-        // else{
-        //     return true;
-        // }
-
-
     }
 
     function listarFiltro() {
@@ -286,6 +291,8 @@ include("inc/scripts.php");
         var dataNascimentoInicio = $('#dataNascimentoInicio').val();
         var dataNascimentoFim = $('#dataNascimentoFim').val();
         var genero = $('#genero').val();
+        var primeiroEmprego = $('#primeiroEmprego').val();
+        var pisPasep = $('#pispasep').val();
 
         $('#resultadoBusca').load('funcionarioFiltroListagem.php?', {
             nomeFiltro: nome,
@@ -296,7 +303,9 @@ include("inc/scripts.php");
             rgFiltro: rg,
             estadoCivilFiltro: estadoCivil,
             generoFiltro: genero,
-            ativoFiltro: ativo
+            ativoFiltro: ativo,
+            primeiroEmpregoFiltro: primeiroEmprego,
+            pisPasepFiltro: pisPasep       
         });
     }
 
