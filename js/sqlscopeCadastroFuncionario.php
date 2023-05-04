@@ -251,7 +251,6 @@ function recupera()
             $complemento . "^" .
             $primeiroEmprego. "^" .
             $pisPasep
-            
             ;
     }
 
@@ -269,14 +268,11 @@ function recupera()
             'telefone' => $item['telefone'],
             'telefonePrincipal' => $item['principal'],
             'telefoneWhatsApp' => $item['whatsapp'],
-            // 'telefonePrincipal' => $descricaoTelefonePrincipal,
-            // 'telefoneWhatsApp' => $descricaoTelefoneWhatsApp,
             'sequencialTelefone' => $sequencialTelefone
 
         ]);
     }
     $jsonTelefone = json_encode($arrayTelefone);
-
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
