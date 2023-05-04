@@ -53,6 +53,8 @@ function gravar()
     $cidade = $_POST['cidade'];
     $numero = $_POST['numero'];
     $complemento = $_POST['complemento'];
+    $primeiroEmprego = $_POST['primeiroEmprego'];
+    $pispasep = $_POST['pispasep'];
 
     $comum = new comum();
     $strArrayTelefone = $_POST['jsonTelefoneArray'];
@@ -112,7 +114,9 @@ function gravar()
             '$cidade',
             '$numero',
             '$complemento',
-            $xmlDependente
+            $xmlDependente,
+            '$primeiroEmprego',
+            '$pispasep'
             ";
 
     $reposit = new reposit();

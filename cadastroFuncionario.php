@@ -136,7 +136,7 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
-                                                                    <select id="genero" class="required" name="genero">
+                                                                <select id="genero" class="required" name="genero">
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
@@ -912,6 +912,7 @@ include("inc/scripts.php");
         var genero = $("#genero").val();
         var jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         var jsonEmailArray = JSON.parse($("#jsonEmail").val());
+        var jsonDependenteArray = JSON.parse($("#jsonDependente").val());
         var cep = $("#cep").val();
         var logradouro = $("#logradouro").val();
         var uf = $("#uf").val();
@@ -919,7 +920,9 @@ include("inc/scripts.php");
         var cidade = $("#cidade").val();
         var numero = $("#numero").val();
         var complemento = $("#complemento").val();
-        var jsonDependenteArray = JSON.parse($("#jsonDependente").val());
+        var primeiroEmprego = $("#primeiroEmprego").val();
+        var pispasep = $("#pispasep").val();
+        
 
 
         if (cpf === "") {
@@ -973,7 +976,18 @@ include("inc/scripts.php");
             $("#cidade").focus();
             return;
         }
-        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento);
+        if (primeiroEmprego == "") {
+            smartAlert("Atenção", "Informe se é o Primeiro Emprego!", "error");
+            $("#primeiroEmprego").focus();
+            return;
+        }
+
+        if (primeiroEmprego == "") {
+            smartAlert("Atenção", "Informe se é o Primeiro Emprego!", "error");
+            $("#primeiroEmprego").focus();
+            return;
+        }
+        gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);
         <?php $esconderBtn = "none" ?>
 
     }
