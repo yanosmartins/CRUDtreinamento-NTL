@@ -136,7 +136,7 @@ include("inc/nav.php");
                                                             <section class="col col-2 col-auto">
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
-                                                                <select id="genero" class="required" name="genero">
+                                                                    <select id="genero" class="required" name="genero">
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
@@ -155,15 +155,14 @@ include("inc/nav.php");
                                                                 <label class="label" for="Sexo">Primeiro Emprego:</label>
                                                                 <label class="select">
                                                                     <select id="primeiroEmprego" class="required">
-                                                                        <option></option>
                                                                         <option value="0">Não</option>
-                                                                        <option value="1">Sim</option>
+                                                                        <option value="1" selected>Sim</option>
                                                                     </select><i></i>
                                                             </section>
-                                                            <section class="col col-2" id="pisSection">
+                                                            <section class="col col-2">
                                                                 <label class="label">PIS/PASEP:</label>
                                                                 <label class="input">
-                                                                    <input id="pispasep" type="text">
+                                                                    <input id="pispasep" class="required" type="text">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -591,28 +590,7 @@ include("inc/scripts.php");
         });
 
         $("#primeiroEmprego").on("change", function() {
-
-            let primeiroEmprego = ($("#primeiroEmprego").val())
-
-            if (primeiroEmprego != "") {
-                if (primeiroEmprego == 1) {
-
-                    $("#pispasep").prop("disabled", true);
-                    $("#pispasep").addClass("readonly");
-                    $("#pispasep").val('');
-                    $("#pisSection").removeClass("hidden");
-                } else if (primeiroEmprego == 0) {
-                    $("#pispasep").val('');
-                    $("#pispasep").prop("disabled", false);
-                    $("#pispasep").removeAttr("disabled");
-                    $("#pispasep").removeClass("readonly");
-                    $("#pisSection").removeClass("hidden");
-                    $("#pispasep").addClass("required");
-                }
-            } else {
-                $("#pisSection").addClass("hidden");
-            }
-
+            verificaPrimeiroEmprego();
 
         });
 
@@ -651,7 +629,7 @@ include("inc/scripts.php");
                 }
             }
         }));
-
+        verificaPrimeiroEmprego();
         carregaPagina();
         carregaTelefone();
         carregaEmail();
@@ -859,9 +837,10 @@ include("inc/scripts.php");
                             $('#numero').val(numero);
                             $('#complemento').val(complemento);
                             $('#primeiroEmprego').val(primeiroEmprego);
+                            verificaPrimeiroEmprego();
+
+
                             $('#pispasep').val(pisPasep);
-
-
                             var dataagora = new Date() // parte do calculo da idade.
                             var anoAtual = dataagora.getFullYear();
                             var dataNascimento = $("#dataNascimento").val();
@@ -882,6 +861,23 @@ include("inc/scripts.php");
         }
         $("#nome").focus();
 
+    }
+
+    function verificaPrimeiroEmprego() {
+        let primeiroEmprego = ($("#primeiroEmprego").val())
+
+
+        if (primeiroEmprego == 1) {
+            $("#pispasep").addClass("readonly");
+            $("#pispasep").prop("disabled", true);
+            $("#pispasep").val('');
+        } else if (primeiroEmprego == 0) {
+            $("#pispasep").val('');
+            $("#pispasep").prop("disabled", false);
+            $("#pispasep").removeAttr("disabled");
+            $("#pispasep").removeClass("readonly");
+            $("#pispasep").addClass("required");
+        }
     }
 
     function novo() {
@@ -926,7 +922,7 @@ include("inc/scripts.php");
         var complemento = $("#complemento").val();
         var primeiroEmprego = $("#primeiroEmprego").val();
         var pispasep = $("#pispasep").val();
-        
+
 
 
         if (cpf === "") {
