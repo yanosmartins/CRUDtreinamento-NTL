@@ -155,12 +155,12 @@ include("inc/nav.php");
                                                                 <label class="label" for="Sexo">Primeiro Emprego:</label>
                                                                 <label class="select">
                                                                     <select id="primeiroEmprego" class="required">
-                                                                        <option value="hidden"></option>
+                                                                        <option></option>
                                                                         <option value="0">Não</option>
                                                                         <option value="1">Sim</option>
                                                                     </select><i></i>
                                                             </section>
-                                                            <section class="col col-2">
+                                                            <section class="col col-2 hidden" id="pisSection">
                                                                 <label class="label">PIS/PASEP:</label>
                                                                 <label class="input">
                                                                     <input id="pispasep" type="text">
@@ -592,19 +592,28 @@ include("inc/scripts.php");
 
         $("#primeiroEmprego").on("change", function() {
 
-            let primeiroEmprego = +($("#primeiroEmprego").val())
+            let primeiroEmprego = ($("#primeiroEmprego").val())
 
-            if (primeiroEmprego) {
-                $("#pispasep").prop("disabled", true);
-                $("#pispasep").addClass("readonly");
-                $("#pispasep").val('');
+            if (primeiroEmprego != "") {
+                if (primeiroEmprego == 1) {
+
+                    $("#pispasep").prop("disabled", true);
+                    $("#pispasep").addClass("readonly");
+                    $("#pispasep").val('');
+                    $("#pisSection").removeClass("hidden");
+                } else if (primeiroEmprego == 0) {
+                    $("#pispasep").val('');
+                    $("#pispasep").prop("disabled", false);
+                    $("#pispasep").removeAttr("disabled");
+                    $("#pispasep").removeClass("readonly");
+                    $("#pisSection").removeClass("hidden");
+                    $("#pispasep").addClass("required");
+                }
             } else {
-                $("#pispasep").val('');
-                $("#pispasep").prop("disabled", false);
-                $("#pispasep").removeAttr("disabled");
-                $("#pispasep").removeClass("readonly");
-                $("#pispasep").addClass("required");
+                $("#pisSection").addClass("hidden");
             }
+
+
         });
 
         $("#cep").on("change", function() {
@@ -847,7 +856,7 @@ include("inc/scripts.php");
                             $('#cidade').val(cidade);
                             $('#numero').val(numero);
                             $('#complemento').val(complemento);
-                           
+
 
                             var dataagora = new Date() // parte do calculo da idade.
                             var anoAtual = dataagora.getFullYear();
@@ -1393,7 +1402,7 @@ include("inc/scripts.php");
         for (var i = 0; i < jsonDependenteArray.length; i++) {
             var row = $('<tr />');
             $("#tableDependente tbody").append(row);
-                        
+
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonDependenteArray[i].sequencialDependente + '"><i></i></label></td>'));
             row.append($('<td class="text-left" onclick="carregaDependente(' + jsonDependenteArray[i].sequencialDependente + ');">' + jsonDependenteArray[i].nomeDependente + '</td>'));
             row.append($('<td class="text-left" >' + jsonDependenteArray[i].cpfDependente + '</td>'));

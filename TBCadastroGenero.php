@@ -239,7 +239,7 @@ include("inc/scripts.php");
             if (id !== 0) {
                 $('#dlgSimpleExcluir').dialog('open');
             }
-            excluir();
+            
         });
 
         $("#btnGravar").on("click", function() {
@@ -254,7 +254,7 @@ include("inc/scripts.php");
     });
 
 
- function carregaPagina() {
+    function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
         if (params.length === 2) {
