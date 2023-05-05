@@ -591,7 +591,6 @@ include("inc/scripts.php");
 
         $("#primeiroEmprego").on("change", function() {
             verificaPrimeiroEmprego();
-
         });
 
         $("#cep").on("change", function() {
@@ -707,7 +706,8 @@ include("inc/scripts.php");
             voltar();
         });
 
-    }); ////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
+    });
+ ////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
 
     function VerificaCPF() {
         var cpf = $("#cpf").val();

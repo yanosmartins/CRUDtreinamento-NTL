@@ -155,12 +155,19 @@ include("inc/nav.php");
                                                                 <label class="input">
                                                                     <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
+
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">CEP:</label>
+                                                                <label class="input">
+                                                                    <input id="cep" name="cep" type="text" value="" placeholder="XXXXX-XXX">
+                                                                </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Primeiro Emprego:</label>
                                                                 <label class="select">
                                                                     <select id="primeiroEmprego">
-                                                                        <option></option>
+                                                                        <option value="" selected>Todos</option>
                                                                         <option value="0">Não</option>
                                                                         <option value="1">Sim</option>
                                                                     </select><i></i>
@@ -194,9 +201,13 @@ include("inc/nav.php");
                                         </div>
                                     </div>
                                 </form>
+                            
+                            
                             </div>
                                 <div id="resultadoBusca">
                                             </div>
+
+
 
                 </article>
             </div>
@@ -245,12 +256,31 @@ include("inc/scripts.php");
     $("#dataNascimento").mask('99/99/9999');
     $("#dataNascimentoInicio").mask('99/99/9999');
     $("#dataNascimentoFim").mask('99/99/9999');
+    $("#pispasep").mask('999.99999.99-9');
+    $("#cep").mask('99999-999');
 
     $(document).ready(function() {
 
         $("#dataNascimentoFim").on("change", function() {
             validarDataFim();
         });
+
+        $("#primeiroEmprego").on("change", function() {
+            let primeiroEmprego = ($("#primeiroEmprego").val())
+
+            if (primeiroEmprego == 1) {
+                $("#pispasep").addClass("readonly");
+                $("#pispasep").prop("disabled", true);
+                $("#pispasep").val('');
+            } else if (primeiroEmprego == 0) {
+                $("#pispasep").val('');
+                $("#pispasep").prop("disabled", false);
+                $("#pispasep").removeAttr("disabled");
+                $("#pispasep").removeClass("readonly");
+
+            }
+        });
+
 
 
         $('#btnSearch').on("click", function() {
@@ -261,6 +291,10 @@ include("inc/scripts.php");
         $('#btnNovo').on("click", function() {
             novo();
         });
+
+
+
+
     })
 
     function validarDataFim() {
@@ -290,6 +324,7 @@ include("inc/scripts.php");
         var dataNascimentoInicio = $('#dataNascimentoInicio').val();
         var dataNascimentoFim = $('#dataNascimentoFim').val();
         var genero = $('#genero').val();
+        var cep = $('#cep').val();
         var primeiroEmprego = $('#primeiroEmprego').val();
         var pisPasep = $('#pispasep').val();
 
@@ -303,6 +338,7 @@ include("inc/scripts.php");
             estadoCivilFiltro: estadoCivil,
             generoFiltro: genero,
             ativoFiltro: ativo,
+            cepFiltro: cep,
             primeiroEmpregoFiltro: primeiroEmprego,
             pisPasepFiltro: pisPasep
         });

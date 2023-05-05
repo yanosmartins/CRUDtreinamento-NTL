@@ -12,9 +12,10 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:30px;">Data de Nascimento</th>
                     <th class="text-left" style="min-width:30px;">Estado Civil</th>
                     <th class="text-left" style="min-width:30px;">Gênero</th>
-                    <th class="text-left" style="min-width:35px;">Ativo</th>
+                    <th class="text-left" style="min-width:35px;">CEP</th>
                     <th class="text-left" style="min-width:35px;">Primeiro Emprego</th>
                     <th class="text-left" style="min-width:35px;">Pis/Pasep</th>
+                    <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +26,7 @@ include "js/repositorio.php";
                 $dataNascimentoFiltro = "";
                 $dataNascimentoInicio = "";
                 $dataNascimentoFim = "";
+                $cepFiltro = "";
                 $primeiroEmprego = "";
                 $pispasep = "";
 
@@ -71,12 +73,9 @@ include "js/repositorio.php";
                     $generoFiltro = $_POST["generoFiltro"];
                     $where = $where . " AND GF.codigo =" . $generoFiltro;
                 }
-
-                $ativoFiltro = "";
-                $ativoFiltro = $_POST["ativoFiltro"];
-                if ($_POST["ativoFiltro"] != "") {
-                    $ativoFiltro = $_POST["ativoFiltro"];
-                    $where = $where . " AND FU.ativo =" . $ativoFiltro;
+                if ($_POST["cepFiltro"] != "") {
+                    $cepFiltro = $_POST["cepFiltro"];
+                    $where = $where . " AND (FU.cep = '$cepFiltro')";
                 }
                 $primeiroEmpregoFiltro = "";
                 $primeiroEmpregoFiltro = $_POST["primeiroEmpregoFiltro"];
@@ -88,11 +87,17 @@ include "js/repositorio.php";
                 $pisPasepFiltro = $_POST["pisPasepFiltro"];
                 if ($_POST["pisPasepFiltro"] != "") {
                     $pisPasepFiltro = $_POST["pisPasepFiltro"];
-                    $where = $where . " AND FU.pisPasep =" . $pisPasepFiltro;
+                    $where = $where . " AND (FU.pisPasep = '$pisPasepFiltro')";
                 }
-
-
-                $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
+                $ativoFiltro = "";
+                $ativoFiltro = $_POST["ativoFiltro"];
+                if ($_POST["ativoFiltro"] != "") {
+                    $ativoFiltro = $_POST["ativoFiltro"];
+                    $where = $where . " AND FU.ativo =" . $ativoFiltro;
+                }
+                
+                
+                $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
                 from dbo.funcionario FU
                 LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
                 //   $sql = "SELECT GF.codigo, GF.descricao, F.ativo  from dbo.generoFuncionario AS GF
@@ -110,6 +115,7 @@ include "js/repositorio.php";
                     $cpfFiltro = $row['cpf'];;
                     $rgFiltro = $row['rg'];
                     $generoFiltro = $row['genero'];
+                    $cepFiltro = $row['cep'];
                     $primeiroEmpregoFiltro = $row['primeiroEmprego'];
                     $pisPasepFiltro = $row['pisPasep'];
 
@@ -172,9 +178,10 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $dataNascimentoFiltro . '</td>';
                     echo '<td class="text-left">' . $estadoCivilFiltro . '</td>';
                     echo '<td class="text-left">' . $generoFiltro . '</td>';
-                    echo '<td class="text-left">' . $ativoFiltro . '</td>';
+                    echo '<td class="text-left">' . $cepFiltro . '</td>';
                     echo '<td class="text-left">' . $primeiroEmpregoFiltro . '</td>';
                     echo '<td class="text-left">' . $pisPasepFiltro . '</td>';
+                    echo '<td class="text-left">' . $ativoFiltro . '</td>';
                     echo '</tr >';
                 }
                 ?>
