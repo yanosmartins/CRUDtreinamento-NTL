@@ -302,8 +302,9 @@ include("inc/scripts.php");
             rgFiltro: rg,
             estadoCivilFiltro: estadoCivil,
             generoFiltro: genero,
-            ativoFiltro: ativo
-
+            ativoFiltro: ativo,
+            primeiroEmpregoFiltro: primeiroEmprego,
+            pisPasepFiltro: pisPasep
         });
     }
 
