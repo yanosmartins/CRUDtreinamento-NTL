@@ -144,17 +144,23 @@ if ($condicaoTabelaBasicaOk) {
 
 
 //CADASTRO
-// $page_nav['cadastro'] = array("title" => "Cadastro", "icon" => " fa-pencil-square-o");
-// $page_nav['cadastro']['sub'] = array();
-//      
+$page_nav['cadastro'] = array("title" => "Cadastro", "icon" => " fa-pencil-square-o");
+$page_nav['cadastro']['sub'] = array();
+//
+if (true) {
+    $page_nav['cadastro']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/cadastroFuncionario.php"));
+}   
+if (true) {
+    $page_nav['cadastro']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBCadastroGenero.php"));
+}   
+if (true) {
+    $page_nav['cadastro']['sub'] += array("dependenteFiltro" => array("title" => "Dependentes", "url" => APP_URL . "/TBCadastroDependentes.php"));
+}   
 
 
 
 
 
-// if (true) {
-//     $page_nav['cadastro']['sub'] += array("" => array("title" => "Gênero", "url" => APP_URL . "/generoFuncionarioCadastro.php"));
-// }
 // if (true) {
 //     $page_nav['cadastro']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/usuarioGrupoFiltro.php"));
 // }

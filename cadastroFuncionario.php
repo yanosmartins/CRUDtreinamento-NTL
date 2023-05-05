@@ -37,6 +37,7 @@ $page_title = "Funcionário";
 //Note: all css files are inside css/ folder
 $page_css[] = "your_style.css";
 include("inc/header.php");
+$page_nav["cadastro"]["sub"]["funcionario"]["active"] = true;
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
@@ -172,7 +173,7 @@ include("inc/nav.php");
                                         </div>
                                     </div>
 
-                                    <div class="panel-body no-padding"> <!--accordion de contato-->
+                                    <div class="panel-group smart-accordion-default"> <!--accordion de contato-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
@@ -294,7 +295,7 @@ include("inc/nav.php");
                                         </div>
                                     </div>
 
-                                    <div class="panel-body no-padding"><!--accordion de Endereço-->
+                                    <div class="panel-group smart-accordion-default"><!--accordion de Endereço-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
@@ -362,7 +363,7 @@ include("inc/nav.php");
                                         </div>
                                     </div>
 
-                                    <div class="panel-body no-padding"><!--accordion de Dependentes-->
+                                    <div class="panel-group smart-accordion-default"><!--accordion de Dependentes-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
