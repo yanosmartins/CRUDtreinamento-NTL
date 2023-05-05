@@ -150,12 +150,14 @@ $page_nav['cadastro']['sub'] = array();
 if (true) {
     $page_nav['cadastro']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/cadastroFuncionario.php"));
 }   
-if (true) {
-    $page_nav['cadastro']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBCadastroGenero.php"));
-}   
-if (true) {
-    $page_nav['cadastro']['sub'] += array("dependenteFiltro" => array("title" => "Dependentes", "url" => APP_URL . "/TBCadastroDependentes.php"));
-}   
+
+
+// if (true) {
+//     $page_nav['cadastro']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBCadastroGenero.php"));
+// }   
+// if (true) {
+//     $page_nav['cadastro']['sub'] += array("dependenteFiltro" => array("title" => "Dependentes", "url" => APP_URL . "/TBCadastroDependentes.php"));
+// }   
 
 
 
