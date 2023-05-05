@@ -116,6 +116,7 @@ function cpfvalidado(cpf) {
         }
     });
 }
+
 function cpfDependenteValidado(cpfDependente) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php',
@@ -124,13 +125,15 @@ function cpfDependenteValidado(cpfDependente) {
         data: { funcao: "validaCpfDependente", cpfDependente: cpfDependente },
 
         success: function (data) {
-            if (data.trim() !== 'success') {
-                //     smartAlert("Sucesso", "CPF válido!", "success");
-                // } else {
+            if (data.trim() == "failed") {                 
                 smartAlert("Atenção", "CPF do dependente é inválido!", "error");
                 document.getElementById('cpfDependente').value = "";
-                $("#cpfDependente").focus();
+                $("#cpfDependente").focus(); 
+                
             }
+            // else{
+            //     smartAlert("SIMMMM", "Passoou!", "success");
+            // }
         }, 
         error: function (xhr, er) {
             console.log(xhr, er);

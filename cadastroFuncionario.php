@@ -167,7 +167,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                        
+
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -1455,16 +1455,14 @@ include("inc/scripts.php");
     }
 
     function validaDependente() {
-        
+
         var sequencialDependente = +$('#sequencialDependente').val();
         var cpf = $('#cpf').val();
         var cpfDependente = $('#cpfDependente').val();
         var nomeDependente = $('#nomeDependente').val();
         var achouDependenteNomeDuplicado = false;
         var achouDependenteCPFDuplicado = false;
-        if (cpfDependente == cpf) {
-            achouDependente = true;
-        }
+
         for (i = jsonDependenteArray.length - 1; i >= 0; i--) {
             if (nomeDependente !== "") {
                 if ((jsonDependenteArray[i].nomeDependente === nomeDependente) && (jsonDependenteArray[i].sequencialDependente !== sequencialDependente)) {
@@ -1490,6 +1488,19 @@ include("inc/scripts.php");
             $("#cpfDependente").focus();
             return false;
         }
+        if (cpf != "") {
+            if (cpfDependente != "") {
+                if (cpfDependente == cpf) {
+                    smartAlert("Erro", "CPF igual ao Funcionário.", "error");
+                    $("#cpfDependente").focus();
+                    $("#cpfDependente").val("");
+                } else {
+                    cpfDependenteValidado(cpfDependente);
+                }
+            }
+        }
+
+        
         addDependente();
         return true;
 
@@ -1499,21 +1510,19 @@ include("inc/scripts.php");
         var sequencialDependente = +$('#sequencialDependente').val();
         var cpf = $('#cpf').val();
         var cpfDependente = $('#cpfDependente').val();
-        var nomeDependente = $('#nomeDependente').val();
         var achouDependenteDuplicado = false;
+
         if (cpf != "") {
-            if (cpfDependente == cpf) {
-                smartAlert("Erro", "CPF igual ao Funcionário.", "error");
-                $("#cpfDependente").focus();
-                $("#cpfDependente").val("");
+            if (cpfDependente != "") {
+                if (cpfDependente == cpf) {
+                    smartAlert("Erro", "CPF igual ao Funcionário.", "error");
+                    $("#cpfDependente").focus();
+                    $("#cpfDependente").val("");
+                } else {
+                    cpfDependenteValidado(cpfDependente);
+                }
             }
         }
-        validaCpfDependente()
-    }
 
-    function validaCpfDependente() {
-        var cpfDependente = $("#cpfDependente").val();
-        cpfDependenteValidado(cpfDependente);
-        return;
     }
 </script>
