@@ -116,6 +116,27 @@ function cpfvalidado(cpf) {
         }
     });
 }
+function cpfDependenteValidado(cpfDependente) {
+    $.ajax({
+        url: 'js/sqlscopeCadastroFuncionario.php',
+        type: 'post',
+        dataType: "html",
+        data: { funcao: "validaCpfDependente", cpfDependente: cpfDependente },
+
+        success: function (data) {
+            if (data.trim() !== 'success') {
+                //     smartAlert("Sucesso", "CPF válido!", "success");
+                // } else {
+                smartAlert("Atenção", "CPF do dependente é inválido!", "error");
+                document.getElementById('cpfDependente').value = "";
+                $("#cpfDependente").focus();
+            }
+        }, 
+        error: function (xhr, er) {
+            console.log(xhr, er);
+        }
+    });
+}
 
 function RGverificado(rg) {
     $.ajax({

@@ -167,6 +167,7 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
+                                                        
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -579,15 +580,17 @@ include("inc/scripts.php");
                 // disableButton();
             }
         });
-
         $("#cpf").on("change", function() {
             let data = $("#cpf").val()
             VerificaCPF()
             ValidaCPF()
-        });
 
+        });
         $("#rg").on("change", function() {
             VerificaRG()
+        });
+        $("#cpfDependente").on("change", function() {
+            verificaDependente()
         });
 
         $("#primeiroEmprego").on("change", function() {
@@ -639,8 +642,7 @@ include("inc/scripts.php");
                 addTelefone();
         });
         $("#btnAddDependente").on("click", function() {
-            // if (validaDependente())
-            addDependente();
+            validaDependente();
         });
         $("#btnRemoverDependente").on("click", function() {
             excluiDependenteTabela();
@@ -708,7 +710,7 @@ include("inc/scripts.php");
         });
 
     });
- ////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
 
     function VerificaCPF() {
         var cpf = $("#cpf").val();
@@ -864,7 +866,6 @@ include("inc/scripts.php");
 
     function verificaPrimeiroEmprego() {
         let primeiroEmprego = ($("#primeiroEmprego").val())
-
 
         if (primeiroEmprego == 1) {
             $("#pispasep").addClass("readonly");
@@ -1347,7 +1348,6 @@ include("inc/scripts.php");
         return true;
     };
 
-
     function addDependente() {
         var nomeDependente = $("#nomeDependente").val();
         var cpfDependente = $("#cpfDependente").val();
@@ -1452,5 +1452,68 @@ include("inc/scripts.php");
         } else
             smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
         clearFormDependente();
+    }
+
+    function validaDependente() {
+        
+        var sequencialDependente = +$('#sequencialDependente').val();
+        var cpf = $('#cpf').val();
+        var cpfDependente = $('#cpfDependente').val();
+        var nomeDependente = $('#nomeDependente').val();
+        var achouDependenteNomeDuplicado = false;
+        var achouDependenteCPFDuplicado = false;
+        if (cpfDependente == cpf) {
+            achouDependente = true;
+        }
+        for (i = jsonDependenteArray.length - 1; i >= 0; i--) {
+            if (nomeDependente !== "") {
+                if ((jsonDependenteArray[i].nomeDependente === nomeDependente) && (jsonDependenteArray[i].sequencialDependente !== sequencialDependente)) {
+                    achouDependenteNomeDuplicado = true;
+                    break;
+                }
+            }
+            if (cpfDependente !== "") {
+                if ((jsonDependenteArray[i].cpfDependente === cpfDependente) && (jsonDependenteArray[i].sequencialDependente !== sequencialDependente)) {
+                    achouDependenteCPFDuplicado = true;
+                    break;
+                }
+            }
+
+        }
+        if (achouDependenteNomeDuplicado === true) {
+            smartAlert("Erro", "Este nome já está na lista.", "error");
+            $("#nomeDependente").focus();
+            return false;
+        }
+        if (achouDependenteCPFDuplicado === true) {
+            smartAlert("Erro", "Este CPF já está na lista.", "error");
+            $("#cpfDependente").focus();
+            return false;
+        }
+        addDependente();
+        return true;
+
+    }
+
+    function verificaDependente() {
+        var sequencialDependente = +$('#sequencialDependente').val();
+        var cpf = $('#cpf').val();
+        var cpfDependente = $('#cpfDependente').val();
+        var nomeDependente = $('#nomeDependente').val();
+        var achouDependenteDuplicado = false;
+        if (cpf != "") {
+            if (cpfDependente == cpf) {
+                smartAlert("Erro", "CPF igual ao Funcionário.", "error");
+                $("#cpfDependente").focus();
+                $("#cpfDependente").val("");
+            }
+        }
+        validaCpfDependente()
+    }
+
+    function validaCpfDependente() {
+        var cpfDependente = $("#cpfDependente").val();
+        cpfDependenteValidado(cpfDependente);
+        return;
     }
 </script>

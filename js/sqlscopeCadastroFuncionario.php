@@ -23,6 +23,10 @@ if ($funcao == 'VerificaCPF') {
 if ($funcao == 'ValidaCPF') {
     call_user_func($funcao);
 }
+if ($funcao == 'validaCpfDependente'){
+    call_user_func($funcao);
+}
+
 if ($funcao == 'VerificaRG') {
     call_user_func($funcao);
 }
@@ -184,6 +188,36 @@ function ValidaCPF()
     return;
 }
 
+function validaCpfDependente()
+{
+    // Extrai somente os números
+    $cpfDependente = $_POST["cpfDependente"];
+    $cpfDependente = preg_replace('/[^0-9]/is', '', $cpfDependente);
+    // Verifica se foi informado todos os digitos corretamente
+    if (strlen($cpfDependente) != 11) {
+        echo "failed";
+        return;
+    }
+    // Verifica se foi informada uma sequência de digitos repetidos. Ex: 111.111.111-11
+    if (preg_match('/(\d)\1{10}/', $cpfDependente)) {
+        echo "failed";
+        return;
+    }
+    // Faz o calculo para validar o CPF
+    for ($t = 9; $t < 11; $t++) {
+        for ($d = 0, $c = 0; $c < $t; $c++) {
+            $d += $cpfDependente[$c] * (($t + 1) - $c);
+        }
+        $d = ((10 * $d) % 11) % 10;
+        if ($cpfDependente[$c] != $d) {
+            echo "failed";
+            return;
+        }
+    }
+    echo "success";
+    return;
+}
+
 function VerificaRG()
 {
     ////////verifica registros duplicados
@@ -231,7 +265,7 @@ function recupera()
         $complemento = (string)$row['complemento'];
         $primeiroEmprego = (string)$row['primeiroEmprego'];
         $pisPasep = (string)$row['pisPasep'];
-        
+
 
 
         $out =  $id . "^" .
@@ -249,9 +283,8 @@ function recupera()
             $cidade . "^" .
             $numero . "^" .
             $complemento . "^" .
-            $primeiroEmprego. "^" .
-            $pisPasep
-            ;
+            $primeiroEmprego . "^" .
+            $pisPasep;
     }
 
     $sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";
