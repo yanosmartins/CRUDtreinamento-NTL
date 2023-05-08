@@ -16,6 +16,7 @@ include "js/repositorio.php";
                     <th class="text-left" style="min-width:35px;">Primeiro Emprego</th>
                     <th class="text-left" style="min-width:35px;">Pis/Pasep</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
+                    <th class="text-left" style="min-width:35px;">PDF</th>
                 </tr>
             </thead>
             <tbody>
@@ -182,6 +183,8 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $primeiroEmpregoFiltro . '</td>';
                     echo '<td class="text-left">' . $pisPasepFiltro . '</td>';
                     echo '<td class="text-left">' . $ativoFiltro . '</td>';
+                    echo '<td class="text-left"><a href="pdfExemplo.php"><button type="button" id="btnPDF" class="fa fa-file-pdf-o" aria-hidden="true" title="PDF" style="display:block"></a></td>';
+                    // echo '<td class="text-left"><a href="pdfExemplo.php?id=' . $id . '"><button type="button" id="btnPDF" class="btn btn-success" aria-hidden="true" title="PDF" style="display:block"></a></td>';
                     echo '</tr >';
                 }
                 ?>

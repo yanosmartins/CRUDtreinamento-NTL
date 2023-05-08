@@ -56,7 +56,6 @@ function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil,
     return '';
 
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function cpfverificado(cpf) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php',

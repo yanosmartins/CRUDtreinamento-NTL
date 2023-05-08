@@ -202,7 +202,9 @@ include("inc/scripts.php");
 
         $("#descricao").on("change", function() {
             verificaGenero()
-        });
+        });      
+
+
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -248,6 +250,9 @@ include("inc/scripts.php");
         $("#btnGravar").on("click", function() {
             gravar();
             document.getElementById("btnGravar").disabled = true;
+            setTimeout(function(){
+                document.getElementById("btnGravar").disabled = false
+            }, 1500)
 
         });
 
@@ -308,7 +313,6 @@ include("inc/scripts.php");
             $("#descricao").focus();
             return;
         }
-
         gravaGenero(codigo, descricao, ativo);
     }
 

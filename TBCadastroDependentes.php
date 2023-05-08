@@ -240,7 +240,9 @@ include("inc/scripts.php");
         $("#btnGravar").on("click", function() {
             gravar();
             document.getElementById("btnGravar").disabled = true;
-
+            setTimeout(function(){
+                document.getElementById("btnGravar").disabled = false
+            }, 1500)
         });
 
         $("#btnVoltar").on("click", function() {

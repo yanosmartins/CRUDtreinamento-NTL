@@ -647,19 +647,15 @@ include("inc/scripts.php");
         $("#btnRemoverDependente").on("click", function() {
             excluiDependenteTabela();
         });
-
         $("#btnRemoverTelefone").on("click", function() {
             excluiTelefoneTabela();
         });
-
         $("#btnAddEmail").on("click", function() {
             validarEmail();
         });
-
         $("#btnRemoverEmail").on("click", function() {
             excluiEmailTabela();
         });
-
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -681,7 +677,6 @@ include("inc/scripts.php");
                 }
             }]
         });
-
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
 
@@ -695,21 +690,22 @@ include("inc/scripts.php");
                 $('#dlgSimpleExcluir').dialog('open');
             }
         });
-
         $("#btnNovo").on("click", function() {
             novo();
         });
-
         $("#btnGravar").on("click", function() {
             gravar();
             document.getElementById("btnGravar").disabled = true;
-        });
+            setTimeout(function(){
+                document.getElementById("btnGravar").disabled = false
+            }, 1500)
 
+        });
         $("#btnVoltar").on("click", function() {
             voltar();
         });
     });
-                                    ////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
 
     function VerificaCPF() {
         var cpf = $("#cpf").val();
@@ -1160,7 +1156,7 @@ include("inc/scripts.php");
             $("#jsonTelefone").val(JSON.stringify(jsonTelefoneArray));
             fillTableTelefone();
         } else
-            smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
+            smartAlert("Erro", "Selecione pelo menos um Telefone para excluir.", "error");
         clearFormTelefone();
     }
 
@@ -1467,7 +1463,7 @@ include("inc/scripts.php");
             $("#jsonDependente").val(JSON.stringify(jsonDependenteArray));
             fillTableDependente();
         } else
-            smartAlert("Erro", "Selecione pelo menos um Projeto para excluir.", "error");
+            smartAlert("Erro", "Selecione pelo menos um Dependente para excluir.", "error");
         clearFormDependente();
     }
 
