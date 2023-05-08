@@ -183,7 +183,8 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $primeiroEmpregoFiltro . '</td>';
                     echo '<td class="text-left">' . $pisPasepFiltro . '</td>';
                     echo '<td class="text-left">' . $ativoFiltro . '</td>';
-                    echo '<td class="text-left"><a href="pdfExemplo.php"><button type="button" id="btnPDF" class="fa fa-file-pdf-o" aria-hidden="true" title="PDF" style="display:block"></a></td>';
+                    
+                    echo '<td class="text-left"><button type="button" href="pdfExemplo.php" id="btnPDF" class="btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
                     // echo '<td class="text-left"><a href="pdfExemplo.php?id=' . $id . '"><button type="button" id="btnPDF" class="btn btn-success" aria-hidden="true" title="PDF" style="display:block"></a></td>';
                     echo '</tr >';
                 }

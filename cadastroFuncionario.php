@@ -829,7 +829,6 @@ include("inc/scripts.php");
                             $("#estadoCivil").val(estadoCivil);
                             $("#dataNascimento").val(dataNascimento);
                             $("#genero").val(genero);
-                            $("#Email").val(Email);
                             $('#jsonTelefone').val(strArrayTelefone);
                             $('#jsonEmail').val(strArrayEmail);
                             $('#jsonDependente').val(strArrayDependente);

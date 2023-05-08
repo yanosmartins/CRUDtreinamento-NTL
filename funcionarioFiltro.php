@@ -191,24 +191,19 @@ include("inc/nav.php");
                                                         <span class="fa fa-file-o"></span>
                                                     </button>
 
-                                                    <?php if ($condicaoGravarOK) { ?>
-                                                        <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
-                                                            <span class="fa fa-file-o""></span>
-                                                        </button>
-                                                    <?php } ?>
+
+                                                    <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                        <span class="fa fa-file-o"></span>
+                                                    </button>
                                                 </footer>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
-                            
-                            
                             </div>
-                                <div id="resultadoBusca">
-                                            </div>
-
-
-
+                            <div id="resultadoBusca"></div>
+                        </div>
+                    </div>
                 </article>
             </div>
         </section>
