@@ -201,6 +201,9 @@ include("inc/scripts.php");
                 }
             }
         }));
+        $("#descricao").on("change", function() {
+            verificaDependente()
+        });
 
 
         $('#dlgSimpleExcluir').dialog({
@@ -309,10 +312,14 @@ include("inc/scripts.php");
     function excluir() {
         var ativo = $("#ativo").val();
         var codigo = $("#codigo").val();
-
-        
         excluiDependentes(codigo, ativo);
     }
+    function verificaDependente() {
+        var descricao = $("#descricao").val();
+        dependenteVerificado(descricao);
+        return;
+    }
+
     function novo() {
         $(location).attr('href', 'TBcadastroDependentes.php');
     }

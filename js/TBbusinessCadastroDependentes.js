@@ -69,7 +69,6 @@ function excluiDependentes(codigo) {
     });
 }
 
-
 function recuperaDependentes(id, callback) {
     $.ajax({
         url: 'js/TBsqlscopeCadastroDependentes.php', //caminho do arquivo a ser executado
@@ -88,5 +87,39 @@ function recuperaDependentes(id, callback) {
     });
 
     return;
+}
+function dependenteVerificado(descricao) {
+    $.ajax({
+        url: 'js/TBsqlscopeCadastroDependentes.php',
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: "verificaDependente", descricao: descricao }, //valores enviados ao script     
+        beforeSend: function () {
+            //função chamada antes de realizar o ajax
+        },
+        complete: function () {
+            //função executada depois de terminar o ajax
+        },
+        success: function (data, textStatus) {
+            if (data.indexOf('success') < 0) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
+                if (piece[0] !== "success") {
+                    mensagem = "Tipo de dependente já registrado.";
+                    smartAlert("Atenção", mensagem, "error");
+                    document.getElementById('descricao').value = "";
+                    $("#descricao").focus();
+                    return;
+                }
+            }
+            ////////////////////////////////////////
+            //retorno dos dados
+        },
+        error: function (xhr, er) {
+            //tratamento de erro
+            console.log(xhr, er)
+        }
+    });
+    return '';
 }
 

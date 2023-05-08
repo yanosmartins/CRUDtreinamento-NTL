@@ -16,7 +16,9 @@ if ($funcao == 'recupera') {
 if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
-
+if ($funcao == 'verificaDependente') {
+    call_user_func($funcao);
+}
 
 return;
 
@@ -45,10 +47,6 @@ function gravar()
     echo $ret;
     return;
 }
-
-
-
-
 
 function recupera()
 {
@@ -101,3 +99,18 @@ function excluir()
     return;
 }
 
+function verificaDependente()
+{
+    $descricao = $_POST["descricao"];
+    $sql = "SELECT descricao FROM dbo.dependentesFuncionario WHERE descricao='$descricao'";
+    //achou 
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    ////! ANTES É NEGAÇÃO
+    if (!$result) {
+        echo  'success#';
+    } else {
+        $mensagem = "Tipo de dependente já registrado!";
+        echo "failed#" . $mensagem . ' ';
+    }
+}
