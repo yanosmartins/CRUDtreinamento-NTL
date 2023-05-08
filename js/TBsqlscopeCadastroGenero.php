@@ -17,6 +17,9 @@ if ($funcao == 'excluir') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'verificaGenero') {
+    call_user_func($funcao);
+}
 
 return;
 
@@ -46,9 +49,22 @@ function gravar()
     return;
 }
 
-
-
-
+function verificaGenero()
+{
+    ////////verifica registros duplicados
+    $descricao = $_POST["descricao"];
+    $sql = "SELECT descricao FROM dbo.generoFuncionario WHERE descricao='$descricao'";
+    //achou 
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    ////! ANTES É NEGAÇÃO
+    if (!$result) {
+        echo  'success#';
+    } else {
+        $mensagem = "Gênero já registrado!";
+        echo "failed#" . $mensagem . ' ';
+    }
+}
 
 function recupera()
 {

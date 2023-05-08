@@ -985,8 +985,13 @@ include("inc/scripts.php");
         if (primeiroEmprego == "") {
             smartAlert("Atenção", "Informe se é o Primeiro Emprego!", "error");
             $("#primeiroEmprego").focus();
-            return;
+            if (pispasep == "") {
+                smartAlert("Atenção", "Informe o Pis!", "error");
+                $("#primeiroEmprego").focus();
+            }
         }
+
+
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);
         <?php $esconderBtn = "none" ?>
 
@@ -1500,7 +1505,7 @@ include("inc/scripts.php");
             }
         }
 
-        
+
         addDependente();
         return true;
 

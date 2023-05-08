@@ -70,24 +70,40 @@ function excluiGenero(codigo) {
 }
 
 
-// function excluirGenero(id) {
-//     $.ajax({
-//         url: 'js/sqlscopeTabelaBasicaGenero.php', //caminho do arquivo a ser executado
-//         dataType: 'html', //tipo do retorno
-//         type: 'post', //metodo de envio
-//         data: { funcao: 'excluir', id: id }, //valores enviados ao script
-//         success: function (data, textStatus) {
-//             if (textStatus === 'success') {
-//                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-//                 voltar();
-//             } else {
-//                 smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
-//             }
-//         }, error: function (xhr, er) {
-//             console.log(xhr, er);
-//         }
-//     });
-// }
+function generoVerificado(descricao) {
+    $.ajax({
+        url: 'js/TBsqlscopeCadastroGenero.php',
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: "verificaGenero", descricao: descricao }, //valores enviados ao script     
+        beforeSend: function () {
+            //função chamada antes de realizar o ajax
+        },
+        complete: function () {
+            //função executada depois de terminar o ajax
+        },
+        success: function (data, textStatus) {
+            if (data.indexOf('success') < 0) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
+                if (piece[0] !== "success") {
+                    mensagem = "Gênero já registrado.";
+                    smartAlert("Atenção", mensagem, "error");
+                    document.getElementById('descricao').value = "";
+                    $("#descricao").focus();
+                    return;
+                }
+            }
+            ////////////////////////////////////////
+            //retorno dos dados
+        },
+        error: function (xhr, er) {
+            //tratamento de erro
+            console.log(xhr, er)
+        }
+    });
+    return '';
+}
 
 
 

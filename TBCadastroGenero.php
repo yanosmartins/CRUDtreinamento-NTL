@@ -83,9 +83,9 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <input id="codigo" type="text" value="<?= $_GET['codigo']?>" hidden>
+                                                        <input id="codigo" type="text" value="<?= $_GET['codigo'] ?>" hidden>
                                                         <div class="row">
-                                                        <section class="col col-2">
+                                                            <section class="col col-2">
                                                                 <label class="label">Descrição de Gênero:</label>
                                                                 <label class="input">
                                                                     <input id="descricao" maxlength="255" name="nome" class="required">
@@ -126,8 +126,8 @@ include("inc/nav.php");
                                         if ($codigoBtn != 0) {
                                             $esconderBtn = "block"; /// permite aparecer o botao
                                         }
-                                        ?>                                       
-                                        
+                                        ?>
+
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
@@ -135,7 +135,7 @@ include("inc/nav.php");
                                             <span class="fa fa-trash"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward " ></span>
+                                            <span class="fa fa-backward "></span>
                                         </button>
                                     </footer>
                                 </form>
@@ -193,13 +193,16 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
-    
     //     //EVENTO CONSTANTE
     $(document).ready(function() {
 
 
+
         carregaPagina();
 
+        $("#descricao").on("change", function() {
+            verificaGenero()
+        });
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -239,7 +242,7 @@ include("inc/scripts.php");
             if (id !== 0) {
                 $('#dlgSimpleExcluir').dialog('open');
             }
-            
+
         });
 
         $("#btnGravar").on("click", function() {
@@ -295,7 +298,7 @@ include("inc/scripts.php");
         var descricao = $("#descricao").val();
         var codigo = $("#codigo").val();
         var ativo = 1;
-        
+
         if ($("#ativo").is(':checked')) {
             ativo = 1;
         }
@@ -307,21 +310,25 @@ include("inc/scripts.php");
         }
 
         gravaGenero(codigo, descricao, ativo);
-    }  
-    
+    }
 
-    function voltar(){
+    function verificaGenero() {
+        var descricao = $("#descricao").val();
+        generoVerificado(descricao);
+        return;
+    }
+
+    function voltar() {
         $(location).attr('href', 'TBGeneroFiltro.php');
     }
 
     function excluir() {
         var ativo = $("#ativo").val();
-        var codigo = $("#codigo").val();        
+        var codigo = $("#codigo").val();
         excluiGenero(codigo, ativo);
     }
+
     function novo() {
         $(location).attr('href', 'TBcadastroGenero.php');
     }
-    
-    
 </script>
