@@ -569,7 +569,6 @@ include("inc/scripts.php");
         $("#telefone").mask('(99) 9 9999-9999');
         $("#cep").mask('99999-999');
         $("#pispasep").mask('999.99999.99-9');
-        // $("#uf").mask('AZ');
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -593,11 +592,9 @@ include("inc/scripts.php");
         $("#cpfDependente").on("change", function() {
             verificaDependente()
         });
-
         $("#primeiroEmprego").on("change", function() {
             verificaPrimeiroEmprego();
         });
-
         $("#cep").on("change", function() {
             var cep = $("#cep").val().replace(/\D/g, ''); //Nova variável "cep" somente com dígitos.            
             if (cep != "") { //Verifica se campo cep possui valor informado.               
@@ -711,9 +708,8 @@ include("inc/scripts.php");
         $("#btnVoltar").on("click", function() {
             voltar();
         });
-
     });
-    ////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
+                                    ////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
 
     function VerificaCPF() {
         var cpf = $("#cpf").val();
@@ -732,6 +728,7 @@ include("inc/scripts.php");
         RGverificado(rg);
         return;
     }
+
     function verificaPispasep() {
         var pispasep = $("#pispasep").val();
         pispasepVerificado(pispasep);
@@ -997,6 +994,14 @@ include("inc/scripts.php");
                 return;
             }
         }
+        for (var i = 0; i < jsonTelefoneArray.length; i++) {
+         }
+
+        if (jsonTelefoneArray.length < 1 && jsonEmailArray.length < 1) {
+            smartAlert("Atenção", "Adicione pelo menos um meio de contato!", "error");
+            $("#telefone").focus();
+            return;
+        }
 
 
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);
@@ -1132,8 +1137,8 @@ include("inc/scripts.php");
     }
 
     function clearFormTelefone() {
-        $("#telefone").focus();
         $("#telefone").val('');
+        $("#telefone").focus();
         $("#sequencialTelefone").val('');
         $("#telefonePrincipal").prop('checked', false);
         $("#telefoneWhatsApp").prop('checked', false);

@@ -85,7 +85,6 @@ function gravar()
     }
     $xmlEmail = $comum->formatarString($xmlEmail);
 
-
     $comum = new comum();
     $strArrayDependente = $_POST['jsonDependenteArray'];
     $arrayDependente = $strArrayDependente;
@@ -99,8 +98,6 @@ function gravar()
             ->add('tipoDependente', $item['tipoDependente']);
     }
     $xmlDependente = $comum->formatarString($xmlDependente);
-
-
 
     $sql = "dbo.Funcionario_Atualiza 
             $id, 
