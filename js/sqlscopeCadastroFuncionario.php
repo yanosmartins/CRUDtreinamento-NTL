@@ -26,8 +26,10 @@ if ($funcao == 'ValidaCPF') {
 if ($funcao == 'validaCpfDependente'){
     call_user_func($funcao);
 }
-
 if ($funcao == 'VerificaRG') {
+    call_user_func($funcao);
+}
+if ($funcao == 'verificaPispasep') {
     call_user_func($funcao);
 }
 return;
@@ -231,6 +233,23 @@ function VerificaRG()
         echo  'success#';
     } else {
         $mensagem = "RG já registrado!";
+        echo "failed#" . $mensagem . ' ';
+    }
+}
+
+function verificaPispasep()
+{
+    ////////verifica registros duplicados
+    $pispasep = $_POST["pispasep"];
+    $sql = "SELECT pisPasep FROM dbo.funcionario WHERE pispasep='$pispasep'";
+    //achou 
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    ////! ANTES É NEGAÇÃO
+    if (!$result) {
+        echo  'success#';
+    } else {
+        $mensagem = "Pis/Pasep já registrado!";
         echo "failed#" . $mensagem . ' ';
     }
 }

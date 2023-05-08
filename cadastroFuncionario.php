@@ -328,7 +328,7 @@ include("inc/nav.php");
                                                                 <section class="col col-2">
                                                                     <label class="label">UF:</label>
                                                                     <label class="input">
-                                                                        <input id="uf" maxlength="255" name="nome" class="required" value="">
+                                                                        <input id="uf" maxlength="2" name="nome" class="required" value="">
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-2">
@@ -569,6 +569,7 @@ include("inc/scripts.php");
         $("#telefone").mask('(99) 9 9999-9999');
         $("#cep").mask('99999-999');
         $("#pispasep").mask('999.99999.99-9');
+        // $("#uf").mask('AZ');
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -622,7 +623,9 @@ include("inc/scripts.php");
                 }
             } //end if.
         });
-
+        $("#pispasep").on("change", function() {
+            verificaPispasep()
+        });
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -727,6 +730,11 @@ include("inc/scripts.php");
     function VerificaRG() {
         var rg = $("#rg").val();
         RGverificado(rg);
+        return;
+    }
+    function verificaPispasep() {
+        var pispasep = $("#pispasep").val();
+        pispasepVerificado(pispasep);
         return;
     }
 
@@ -982,12 +990,11 @@ include("inc/scripts.php");
             return;
         }
 
-        if (primeiroEmprego == "") {
-            smartAlert("Atenção", "Informe se é o Primeiro Emprego!", "error");
-            $("#primeiroEmprego").focus();
+        if (primeiroEmprego == 0) {
             if (pispasep == "") {
                 smartAlert("Atenção", "Informe o Pis!", "error");
-                $("#primeiroEmprego").focus();
+                $("#pispasep").focus();
+                return;
             }
         }
 

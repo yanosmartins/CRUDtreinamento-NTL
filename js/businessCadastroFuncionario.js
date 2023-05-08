@@ -21,7 +21,7 @@ function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil,
             bairro: bairro,
             cidade: cidade,
             numero: numero,
-            complemento: complemento, 
+            complemento: complemento,
             primeiroEmprego: primeiroEmprego,
             pispasep: pispasep
         }, //valores enviados ao script     
@@ -125,16 +125,16 @@ function cpfDependenteValidado(cpfDependente) {
         data: { funcao: "validaCpfDependente", cpfDependente: cpfDependente },
 
         success: function (data) {
-            if (data.trim() == "failed") {                 
+            if (data.trim() == "failed") {
                 smartAlert("Atenção", "CPF do dependente é inválido!", "error");
                 document.getElementById('cpfDependente').value = "";
-                $("#cpfDependente").focus(); 
-                
+                $("#cpfDependente").focus();
+
             }
             // else{
             //     smartAlert("SIMMMM", "Passoou!", "success");
             // }
-        }, 
+        },
         error: function (xhr, er) {
             console.log(xhr, er);
         }
@@ -179,6 +179,42 @@ function RGverificado(rg) {
     });
     return '';
 }
+function pispasepVerificado(pispasep) {
+    $.ajax({
+        url: 'js/sqlscopeCadastroFuncionario.php',
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: "verificaPispasep", pispasep: pispasep }, //valores enviados ao script     
+        beforeSend: function () {
+            //função chamada antes de realizar o ajax
+        },
+        complete: function () {
+            //função executada depois de terminar o ajax
+        },
+        success: function (data, textStatus) {
+            if (data.indexOf('success') < 0) {
+                var piece = data.split("#");
+                var mensagem = piece[1];
+                if (piece[0] !== "success") {
+                    mensagem = "Pis/Pasep já registrado.";
+                    smartAlert("Atenção", mensagem, "error");
+                    document.getElementById('pispasep').value = "";
+                    $("#pispasep").focus();
+                    return;
+                }
+            }
+            ////////////////////////////////////////
+            //retorno dos dados
+        },
+        error: function (xhr, er) {
+            //tratamento de erro
+            console.log(xhr, er)
+        }
+    });
+    return '';
+}
+
+
 
 function excluirUsuario(id) {
     $.ajax({
