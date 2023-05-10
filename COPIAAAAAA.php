@@ -82,16 +82,7 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in"> <!--accordion funcionario-->
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">
-                                                            <section id="condicaoCheck" class="col col-1 hidden">
-                                                                <label class="label">Código</label>
-                                                                <label class="input">
-                                                                    <input id="codigo" name="codigo" type="text" class="readonly" readonly>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-                                                        <div class="row">
-                                                        </div>
+                                                        
                                                         <div class="row">
                                                             <section class="col col-3">
                                                                 <label class="label">Nome do funcionário:</label>
@@ -174,7 +165,8 @@ include("inc/nav.php");
                                         </div>
                                     </div>
 
-                                     <!--accordion de contato-->
+
+                                     <!--accordion de cadastro contato-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
@@ -186,16 +178,12 @@ include("inc/nav.php");
                                                         </a>
                                                     </h4>
                                                 </div>
-                                                <div id="collapseContato" class="panel-collapse collapse in">
+                                                <div id="collapseContato" class="panel-collapse collapse in"> <!--accordion de contato-->
                                                     <div class="panel-body no-padding">
 
                                                         <fieldset>
-                                                            <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
-                                                            <div id="formTelefone" class="col-sm-6 required">
-                                                                <input id="descricaoTelefonePrincipal" type="hidden" value="">
-                                                                <input id="descricaoTelefoneWhatsApp" type="hidden" value="">
-                                                                <input id="sequencialTelefone" type="hidden" value="">
-                                                                <div class="form-group">
+                                                            
+                                                                
                                                                     <div class="row">
                                                                         <section class="col col-md-3">
                                                                             <label class="label">Telefone</label>
@@ -228,8 +216,8 @@ include("inc/nav.php");
                                                                             </button>
                                                                         </section>
                                                                     </div>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                
+                                                                <!-- <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
                                                                     <table id="tableTelefone" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                                         <thead>
                                                                             <tr role="row">
@@ -242,53 +230,8 @@ include("inc/nav.php");
                                                                         <tbody>
                                                                         </tbody>
                                                                     </table>
-                                                                </div>
-                                                            </div>
-
-                                                            <input id="jsonEmail" name="jsonEmail" type="hidden" value="[]">
-                                                            <div id="formEmail" class="col-sm-6">
-                                                                <input id="descricaoEmailPrincipal" name="descricaoEmailPrincipal" type="hidden" value="">
-                                                                <input id="sequencialEmail" name="sequencialEmail" type="hidden" value="">
-                                                                <div class="form-group">
-                                                                    <div class="row">
-                                                                        <section class="col col-md-6">
-                                                                            <label class="label">Email</label>
-                                                                            <label class="input"><i class="icon-prepend fa fa-at"></i>
-                                                                                <input id="Email" maxlength="50" class="required" name="Email" type="email" value="">
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <label class="checkbox ">
-                                                                                <input id="EmailPrincipal" name="EmailPrincipal" type="checkbox" value="true" checked><i></i>
-                                                                                Principal
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-auto">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddEmail" type="button" class="btn btn-primary">
-                                                                                <i class="fa fa-plus"></i>
-                                                                            </button>
-                                                                            <button id="btnRemoverEmail" type="button" class="btn btn-danger">
-                                                                                <i class="fa fa-minus"></i>
-                                                                            </button>
-                                                                        </section>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableEmail" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                        <thead>
-                                                                            <tr role="row">
-                                                                                <th></th>
-                                                                                <th class="text-left" style="min-width: 100px;">Email</th>
-                                                                                <th class="text-left">Principal</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
+                                                                </div> -->
+                                                            
                                                         </fieldset>
                                                     </div>
                                                 </div>
@@ -296,7 +239,7 @@ include("inc/nav.php");
                                         </div>
                                     
 
-                                   <!--accordion de Endereço-->
+                                    <div class="panel-group smart-accordion-default"><!--accordion de Endereço-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
@@ -362,9 +305,9 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                    
+                                    </div>
 
-                                    <!--accordion de Dependentes-->
+                                    <div class="panel-group smart-accordion-default"><!--accordion de Dependentes-->
                                         <div class="panel-group smart-accordion-default" id="accordion">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
@@ -456,7 +399,32 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                    
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                                     <footer>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
@@ -473,15 +441,7 @@ include("inc/nav.php");
                                             </div>
                                         </div>
 
-                                        <?php
-                                        $url = explode("?", $_SERVER["REQUEST_URI"]); ////essas linhas fazem a leitura do codigo "id" na url
-                                        $codigo = explode("=", $url[1]);
-                                        $codigoBtn = (int)$codigo[1];
-                                        $esconderBtn = "none";
-                                        if ($codigoBtn != 0) {
-                                            $esconderBtn = "block";
-                                        }
-                                        ?>
+
 
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:block">
                                             <span class="fa fa-floppy-o"></span>
@@ -696,7 +656,7 @@ include("inc/scripts.php");
         $("#btnGravar").on("click", function() {
             gravar();
             document.getElementById("btnGravar").disabled = true;
-            setTimeout(function(){
+            setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
 
@@ -989,8 +949,7 @@ include("inc/scripts.php");
                 return;
             }
         }
-        for (var i = 0; i < jsonTelefoneArray.length; i++) {
-         }
+        for (var i = 0; i < jsonTelefoneArray.length; i++) {}
 
         if (jsonTelefoneArray.length < 1 && jsonEmailArray.length < 1) {
             smartAlert("Atenção", "Adicione pelo menos um meio de contato!", "error");
