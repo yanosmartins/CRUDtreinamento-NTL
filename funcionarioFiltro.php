@@ -189,19 +189,15 @@ include("inc/nav.php");
                                                     </button>
                                                     <button id="btnNovo" name="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
                                                         <span class="fa fa-file-o"></span>
-                                                    </button>
-
-
-                                                    <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
-                                                        <span class="fa fa-file-o"></span>
-                                                    </button>
-                                                </footer>
+                                                    </button>   
+                                                    </footer>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                            <div id="resultadoBusca"></div>
+                            <div id="resultadoBusca">
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -286,8 +282,9 @@ include("inc/scripts.php");
         $('#btnNovo').on("click", function() {
             novo();
         });
-
-
+        $('#btnPdf').on("click", function() {
+            pdfFuncionario();
+        });
 
 
     })
@@ -341,5 +338,8 @@ include("inc/scripts.php");
 
     function novo() {
         $(location).attr('href', 'cadastroFuncionario.php');
+    }
+    function pdfFuncionario() {
+        $(location).attr('href', 'pdfExemplo.php');
     }
 </script>
