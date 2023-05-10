@@ -85,7 +85,7 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Nome do funcionário:</label>
                                                                 <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" class="required" value="">
+                                                                    <input id="nome" maxlength="255" name="nome" class="required nome" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -160,7 +160,7 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-      
+
                                         <div class="panel panel-default"><!--accordion de contato-->
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
@@ -339,7 +339,7 @@ include("inc/nav.php");
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="panel panel-default"><!--accordion de Dependentes-->
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
@@ -365,7 +365,7 @@ include("inc/nav.php");
                                                                     <section class="col col-3">
                                                                         <label class="label">Nome do Dependente:</label>
                                                                         <label class="input">
-                                                                            <input id="nomeDependente" maxlength="255" class="required" value="">
+                                                                            <input id="nomeDependente" maxlength="255" class="required nome" value="">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
@@ -549,6 +549,13 @@ include("inc/scripts.php");
         $("#telefone").mask('(99) 9 9999-9999');
         $("#cep").mask('99999-999');
         $("#pispasep").mask('999.99999.99-9');
+
+
+        $(".nome").on("change", function() {
+            if (/[0-9!#$&*-_/\^~+?.;,:][()]/g.test(this.value));
+            smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
+            $("#nome").val('');
+        })
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()

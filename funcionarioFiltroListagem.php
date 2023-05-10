@@ -183,7 +183,8 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $primeiroEmpregoFiltro . '</td>';
                     echo '<td class="text-left">' . $pisPasepFiltro . '</td>';
                     echo '<td class="text-left">' . $ativoFiltro . '</td>';
-                    echo '<td class="text-left"><button type="button" class="btnPdfFuncionario btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
+                    // echo '<td class="text-left"><button type="button" class="btnPdfFuncionario btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
+                    echo '<td class="text-left"><a href="pdfExemplo.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
                     echo '</tr >';
                 }
                 ?>
@@ -276,10 +277,21 @@ include "js/repositorio.php";
     });
 
 
-
-
     function pdfFuncionario() {
-        $(location).attr('href', 'pdfExemplo.php');
+        $(location).attr('href', 'pdfExemplo.php?id= ');
+       
     }
+
+//     function listarRelatorioFuncionariosAfetados(codRelatorio) {
+//         var id =
+//     // var dataRelatorio = dataRelatorio;
+//     // var dataValidade = dataValidade;
+//     var codRelatorio = codRelatorio;
+//     $('#resultadoFuncionariosAfetadosBusca').load('saudeSegurancaTrabalho_PPRAFiltroHistoricoListagem.php?', {
+//       // dataRelatorio: dataRelatorio,
+//       // dataValidade: dataValidade,
+//       codRelatorio: codRelatorio
+//     });
+// }
 
 </script>

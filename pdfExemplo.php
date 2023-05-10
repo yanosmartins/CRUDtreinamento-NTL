@@ -141,10 +141,14 @@ $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 8);
 
 
+
+$id = $_GET["id"];
+
 // $sql = "SELECT nome, cpf, dataNascimento, genero, ativo FROM dbo.funcionario  WHERE (0=0)";
 $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
                 from dbo.funcionario FU 
-                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero  WHERE (0=0)";
+                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero WHERE FU.codigo = " .  $id;
+$sql = $sql . $where;
 $reposit = new reposit();
 $resultQuery = $reposit->RunQuery($sql);
 $i = 22;
@@ -157,7 +161,7 @@ foreach ($resultQuery as $row) {
     $dataNascimento = explode(" ", $dataNascimento);
     $dataNascimento = explode("-", $dataNascimento[0]);
     $dataNascimento =  $dataNascimento[2] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
-    $genero = $row['genero'];    
+    $genero = $row['genero'];
     $ativo = +$row['ativo'];
     if ($ativo == 1) {
         $ativo = 'Sim';
@@ -180,7 +184,7 @@ foreach ($resultQuery as $row) {
 
     $pdf->setY($i);
     $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    $pdf->setX(0+$margem);
+    $pdf->setX(0 + $margem);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $nome), 0, 0, "L", 0);
     $pdf->SetFont($tipoDeFonte, '', 8);
 
@@ -207,10 +211,6 @@ foreach ($resultQuery as $row) {
     $pdf->setX(160);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "L", 0);
     $pdf->SetFont($tipoDeFonte, '', 8);
-
-
-
-
 }
 
 $pdf->Ln(8);
