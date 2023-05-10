@@ -67,7 +67,6 @@ include("inc/nav.php");
                         <div>
                             <div class="widget-body no-padding">
                                 <form class="smart-form client-form" id="formFuncionario" method="post">
-
                                     <div class="panel-group smart-accordion-default" id="accordion"><!--accordion de Cadastro-->
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -82,16 +81,6 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in"> <!--accordion funcionario-->
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <div class="row">
-                                                            <section id="condicaoCheck" class="col col-1 hidden">
-                                                                <label class="label">Código</label>
-                                                                <label class="input">
-                                                                    <input id="codigo" name="codigo" type="text" class="readonly" readonly>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-                                                        <div class="row">
-                                                        </div>
                                                         <div class="row">
                                                             <section class="col col-3">
                                                                 <label class="label">Nome do funcionário:</label>
@@ -167,296 +156,280 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+      
+                                        <div class="panel panel-default"><!--accordion de contato-->
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseContato" class="" id="accordionContato">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Contato
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseContato" class="panel-collapse collapse">
+                                                <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
+                                                        <div id="formTelefone" class="col-sm-6 required">
+                                                            <input id="descricaoTelefonePrincipal" type="hidden" value="">
+                                                            <input id="descricaoTelefoneWhatsApp" type="hidden" value="">
+                                                            <input id="sequencialTelefone" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-md-3">
+                                                                        <label class="label">Telefone</label>
+                                                                        <label class="input"><i class="icon-prepend fa fa-phone"></i>
+                                                                            <input id="telefone" class="required" name="telefone" type="text" class="form-control" placeholder="(XX) XXXXX-XXXX" value="">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <label class="checkbox">
+                                                                            <input id="telefonePrincipal" name="telefonePrincipal" type="checkbox" value="true"><i></i>
+                                                                            Principal
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <label class="checkbox ">
+                                                                            <input id="telefoneWhatsApp" name="telefoneWhatsApp" type="checkbox" value="true"><i></i>
+                                                                            WhatsApp
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-3">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddTelefone" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverTelefone" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableTelefone" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th></th>
+                                                                            <th class="text-left" style="min-width: 500%;">Telefone</th>
+                                                                            <th class="text-left">Principal</th>
+                                                                            <th class="text-left">WhatsApp</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <input id="jsonEmail" name="jsonEmail" type="hidden" value="[]">
+                                                        <div id="formEmail" class="col-sm-6">
+                                                            <input id="descricaoEmailPrincipal" name="descricaoEmailPrincipal" type="hidden" value="">
+                                                            <input id="sequencialEmail" name="sequencialEmail" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-md-6">
+                                                                        <label class="label">Email</label>
+                                                                        <label class="input"><i class="icon-prepend fa fa-at"></i>
+                                                                            <input id="Email" maxlength="50" class="required" name="Email" type="email" value="">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-md-2">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <label class="checkbox ">
+                                                                            <input id="EmailPrincipal" name="EmailPrincipal" type="checkbox" value="true" checked><i></i>
+                                                                            Principal
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-auto">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddEmail" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverEmail" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableEmail" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th></th>
+                                                                            <th class="text-left" style="min-width: 100px;">Email</th>
+                                                                            <th class="text-left">Principal</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        <div class="panel panel-default"> <!--accordion de Endereço-->
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseEndereco" class="" id="accordionEndereco">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Endereço
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseEndereco" class="panel-collapse collapse">
+                                                <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <div class="row">
+                                                            <section class="col col-2">
+                                                                <label class="label">CEP:</label>
+                                                                <label class="input">
+                                                                    <input id="cep" name="cep" class="required cpf-mask" type="text" value="" placeholder="XXXXX-XXX">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-3">
+                                                                <label class="label">Logradouro:</label>
+                                                                <label class="input">
+                                                                    <input id="logradouro" maxlength="255" name="logradouro" class="required" value="">
+                                                                </label>
+                                                            </section>
+
+                                                            <section class="col col-2">
+                                                                <label class="label">UF:</label>
+                                                                <label class="input">
+                                                                    <input id="uf" maxlength="2" name="nome" class="required" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Bairro:</label>
+                                                                <label class="input">
+                                                                    <input id="bairro" maxlength="255" name="bairro" class="required" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Cidade:</label>
+                                                                <label class="input">
+                                                                    <input id="cidade" maxlength="255" name="cidade" class="required" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Número:</label>
+                                                                <label class="input">
+                                                                    <input id="numero" name="numero" class="required numero-mask" type="text" value="">
+                                                                </label>
+                                                            </section>
+                                                            <section class="col col-2">
+                                                                <label class="label">Complemento:</label>
+                                                                <label class="input">
+                                                                    <input id="complemento" maxlength="255" name="complemento" value="">
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <!-- teste -->
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="panel panel-default"><!--accordion de Dependentes-->
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseDependentes" class="" id="accordionDependentes">
+                                                        <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                        <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                        Dependentes
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseDependentes" class="panel-collapse collapse">
+                                                <div class="panel-body no-padding">
+                                                    <fieldset>
+                                                        <input id="jsonDependente" name="jsonDependente" type="hidden" value="[]">
+                                                        <div id="formDependente" class="col-sm-10 required">
+                                                            <input id="sequencialDependente" type="hidden" value="">
+                                                            <input id="nomeDependenteTabela" type="hidden" value="">
+                                                            <input id="cpfDependenteTabela" type="hidden" value="">
+                                                            <input id="dataNascimentoDependenteTabela" type="hidden" value="">
+                                                            <input id="tipoDependenteTabela" type="hidden" value="">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <section class="col col-3">
+                                                                        <label class="label">Nome do Dependente:</label>
+                                                                        <label class="input">
+                                                                            <input id="nomeDependente" maxlength="255" class="required" value="">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label class="label">CPF:</label>
+                                                                        <label class="input"><i class="icon-prepend fa fa-user"></i>
+                                                                            <input id="cpfDependente" name="cpfDependente" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2">
+                                                                        <label class="label">Data de Nascimento:</label>
+                                                                        <label class="input">
+                                                                            <input id="dataNascimentoDependente" type="text" class="datepicker required" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                        </label>
+                                                                    </section>
+                                                                    <section class="col col-2 col-auto">
+                                                                        <label class="label">Tipo de Dependente:</label>
+                                                                        <label class="select">
+                                                                            <select id="tipoDependente" class="required">
+                                                                                <?php
+                                                                                $reposit = new reposit();
+                                                                                $sql = "SELECT codigo, descricao FROM dbo.dependentesFuncionario where dependenteAtivo = 1 ORDER BY codigo";
+                                                                                $result = $reposit->RunQuery($sql);
+                                                                                foreach ($result as $row) {
+                                                                                    $codigo = $row['codigo'];
+                                                                                    $descricao = $row['descricao'];
+                                                                                    echo '<option>' . $descricao . '</option>';
+                                                                                }
+                                                                                ?>
+                                                                            </select><i></i>
+                                                                        </label>
+                                                                    </section>
+
+                                                                    <section class="col col-md-3">
+                                                                        <label class="label">&nbsp;</label>
+                                                                        <button id="btnAddDependente" type="button" class="btn btn-primary">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                        <button id="btnRemoverDependente" type="button" class="btn btn-danger">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </section>
+                                                                </div>
+                                                            </div>
+                                                            <div class="table-responsive" style="min-height: 115px;  border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                <table id="tableDependente" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                    <thead>
+                                                                        <tr role="row">
+                                                                            <th></th>
+                                                                            <th class="text-left">Nome</th>
+                                                                            <th class="text-left">CPF</th>
+                                                                            <th class="text-left">Data de Nascimento</th>
+                                                                            <th class="text-left">Tipo</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                     <!--accordion de contato-->
-                                        <div class="panel-group smart-accordion-default" id="accordion">
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <h4 class="panel-title">
-                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseContato" class="" id="accordionContato">
-                                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                            Contato
-                                                        </a>
-                                                    </h4>
-                                                </div>
-                                                <div id="collapseContato" class="panel-collapse collapse in">
-                                                    <div class="panel-body no-padding">
-
-                                                        <fieldset>
-                                                            <input id="jsonTelefone" name="jsonTelefone" type="hidden" value="[]">
-                                                            <div id="formTelefone" class="col-sm-6 required">
-                                                                <input id="descricaoTelefonePrincipal" type="hidden" value="">
-                                                                <input id="descricaoTelefoneWhatsApp" type="hidden" value="">
-                                                                <input id="sequencialTelefone" type="hidden" value="">
-                                                                <div class="form-group">
-                                                                    <div class="row">
-                                                                        <section class="col col-md-3">
-                                                                            <label class="label">Telefone</label>
-                                                                            <label class="input"><i class="icon-prepend fa fa-phone"></i>
-                                                                                <input id="telefone" class="required" name="telefone" type="text" class="form-control" placeholder="(XX) XXXXX-XXXX" value="">
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <label class="checkbox">
-                                                                                <input id="telefonePrincipal" name="telefonePrincipal" type="checkbox" value="true"><i></i>
-                                                                                Principal
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <label class="checkbox ">
-                                                                                <input id="telefoneWhatsApp" name="telefoneWhatsApp" type="checkbox" value="true"><i></i>
-                                                                                WhatsApp
-                                                                            </label>
-                                                                        </section>
-
-                                                                        <section class="col col-md-3">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddTelefone" type="button" class="btn btn-primary">
-                                                                                <i class="fa fa-plus"></i>
-                                                                            </button>
-                                                                            <button id="btnRemoverTelefone" type="button" class="btn btn-danger">
-                                                                                <i class="fa fa-minus"></i>
-                                                                            </button>
-                                                                        </section>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableTelefone" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                        <thead>
-                                                                            <tr role="row">
-                                                                                <th></th>
-                                                                                <th class="text-left" style="min-width: 500%;">Telefone</th>
-                                                                                <th class="text-left">Principal</th>
-                                                                                <th class="text-left">WhatsApp</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-
-                                                            <input id="jsonEmail" name="jsonEmail" type="hidden" value="[]">
-                                                            <div id="formEmail" class="col-sm-6">
-                                                                <input id="descricaoEmailPrincipal" name="descricaoEmailPrincipal" type="hidden" value="">
-                                                                <input id="sequencialEmail" name="sequencialEmail" type="hidden" value="">
-                                                                <div class="form-group">
-                                                                    <div class="row">
-                                                                        <section class="col col-md-6">
-                                                                            <label class="label">Email</label>
-                                                                            <label class="input"><i class="icon-prepend fa fa-at"></i>
-                                                                                <input id="Email" maxlength="50" class="required" name="Email" type="email" value="">
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-md-2">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <label class="checkbox ">
-                                                                                <input id="EmailPrincipal" name="EmailPrincipal" type="checkbox" value="true" checked><i></i>
-                                                                                Principal
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-auto">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddEmail" type="button" class="btn btn-primary">
-                                                                                <i class="fa fa-plus"></i>
-                                                                            </button>
-                                                                            <button id="btnRemoverEmail" type="button" class="btn btn-danger">
-                                                                                <i class="fa fa-minus"></i>
-                                                                            </button>
-                                                                        </section>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px; width:95%; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableEmail" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                        <thead>
-                                                                            <tr role="row">
-                                                                                <th></th>
-                                                                                <th class="text-left" style="min-width: 100px;">Email</th>
-                                                                                <th class="text-left">Principal</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </fieldset>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    
-
-                                   <!--accordion de Endereço-->
-                                        <div class="panel-group smart-accordion-default" id="accordion">
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <h4 class="panel-title">
-                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseEndereco" class="" id="accordionEndereco">
-                                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                            Endereço
-                                                        </a>
-                                                    </h4>
-                                                </div>
-                                                <div id="collapseEndereco" class="panel-collapse collapse in">
-                                                    <div class="panel-body no-padding">
-                                                        <fieldset>
-                                                            <div class="row">
-                                                                <section class="col col-2">
-                                                                    <label class="label">CEP:</label>
-                                                                    <label class="input">
-                                                                        <input id="cep" name="cep" class="required cpf-mask" type="text" value="" placeholder="XXXXX-XXX">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-3">
-                                                                    <label class="label">Logradouro:</label>
-                                                                    <label class="input">
-                                                                        <input id="logradouro" maxlength="255" name="logradouro" class="required" value="">
-                                                                    </label>
-                                                                </section>
-
-                                                                <section class="col col-2">
-                                                                    <label class="label">UF:</label>
-                                                                    <label class="input">
-                                                                        <input id="uf" maxlength="2" name="nome" class="required" value="">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Bairro:</label>
-                                                                    <label class="input">
-                                                                        <input id="bairro" maxlength="255" name="bairro" class="required" value="">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Cidade:</label>
-                                                                    <label class="input">
-                                                                        <input id="cidade" maxlength="255" name="cidade" class="required" value="">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Número:</label>
-                                                                    <label class="input">
-                                                                        <input id="numero" name="numero" class="required numero-mask" type="text" value="">
-                                                                    </label>
-                                                                </section>
-                                                                <section class="col col-2">
-                                                                    <label class="label">Complemento:</label>
-                                                                    <label class="input">
-                                                                        <input id="complemento" maxlength="255" name="complemento" value="">
-                                                                    </label>
-                                                                </section>
-                                                            </div>
-                                                            <!-- teste -->
-                                                        </fieldset>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    
-
-                                    <!--accordion de Dependentes-->
-                                        <div class="panel-group smart-accordion-default" id="accordion">
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <h4 class="panel-title">
-                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseDependentes" class="" id="accordionDependentes">
-                                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                                            Dependentes
-                                                        </a>
-                                                    </h4>
-                                                </div>
-                                                <div id="collapseDependentes" class="panel-collapse collapse in">
-                                                    <div class="panel-body no-padding">
-                                                        <fieldset>
-                                                            <input id="jsonDependente" name="jsonDependente" type="hidden" value="[]">
-                                                            <div id="formDependente" class="col-sm-10 required">
-                                                                <input id="sequencialDependente" type="hidden" value="">
-                                                                <input id="nomeDependenteTabela" type="hidden" value="">
-                                                                <input id="cpfDependenteTabela" type="hidden" value="">
-                                                                <input id="dataNascimentoDependenteTabela" type="hidden" value="">
-                                                                <input id="tipoDependenteTabela" type="hidden" value="">
-                                                                <div class="form-group">
-                                                                    <div class="row">
-                                                                        <section class="col col-3">
-                                                                            <label class="label">Nome do Dependente:</label>
-                                                                            <label class="input">
-                                                                                <input id="nomeDependente" maxlength="255" class="required" value="">
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-2">
-                                                                            <label class="label">CPF:</label>
-                                                                            <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                                <input id="cpfDependente" name="cpfDependente" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-2">
-                                                                            <label class="label">Data de Nascimento:</label>
-                                                                            <label class="input">
-                                                                                <input id="dataNascimentoDependente" type="text" class="datepicker required" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
-                                                                            </label>
-                                                                        </section>
-                                                                        <section class="col col-2 col-auto">
-                                                                            <label class="label">Tipo de Dependente:</label>
-                                                                            <label class="select">
-                                                                                <select id="tipoDependente" class="required">
-                                                                                    <?php
-                                                                                    $reposit = new reposit();
-                                                                                    $sql = "SELECT codigo, descricao FROM dbo.dependentesFuncionario where dependenteAtivo = 1 ORDER BY codigo";
-                                                                                    $result = $reposit->RunQuery($sql);
-                                                                                    foreach ($result as $row) {
-                                                                                        $codigo = $row['codigo'];
-                                                                                        $descricao = $row['descricao'];
-                                                                                        echo '<option>' . $descricao . '</option>';
-                                                                                    }
-                                                                                    ?>
-                                                                                </select><i></i>
-                                                                            </label>
-                                                                        </section>
-
-                                                                        <section class="col col-md-3">
-                                                                            <label class="label">&nbsp;</label>
-                                                                            <button id="btnAddDependente" type="button" class="btn btn-primary">
-                                                                                <i class="fa fa-plus"></i>
-                                                                            </button>
-                                                                            <button id="btnRemoverDependente" type="button" class="btn btn-danger">
-                                                                                <i class="fa fa-minus"></i>
-                                                                            </button>
-                                                                        </section>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="table-responsive" style="min-height: 115px;  border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                                    <table id="tableDependente" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                        <thead>
-                                                                            <tr role="row">
-                                                                                <th></th>
-                                                                                <th class="text-left">Nome</th>
-                                                                                <th class="text-left">CPF</th>
-                                                                                <th class="text-left">Data de Nascimento</th>
-                                                                                <th class="text-left">Tipo</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </fieldset>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    
 
                                     <footer>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
@@ -560,7 +533,14 @@ include("inc/scripts.php");
         jsonTelefoneArray = JSON.parse($("#jsonTelefone").val());
         jsonEmailArray = JSON.parse($("#jsonEmail").val());
         jsonDependenteArray = JSON.parse($("#jsonDependente").val());
+        $('.accordion').on('click', function() {
 
+            // Fecha todos os acordeões que não são o atualmente clicado
+            $('.accordion').not(this).removeClass('collapsed');
+
+            // Abre ou fecha o acordeão atualmente clicado, dependendo do seu estado atual
+            $(this).toggleClass('collapsed');
+        });
         $("#cpf").mask('999.999.999-99');
         $("#cpfDependente").mask('999.999.999-99');
         $("#rg").mask('99.999.999-9');
@@ -696,7 +676,7 @@ include("inc/scripts.php");
         $("#btnGravar").on("click", function() {
             gravar();
             document.getElementById("btnGravar").disabled = true;
-            setTimeout(function(){
+            setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
 
@@ -989,8 +969,7 @@ include("inc/scripts.php");
                 return;
             }
         }
-        for (var i = 0; i < jsonTelefoneArray.length; i++) {
-         }
+        for (var i = 0; i < jsonTelefoneArray.length; i++) {}
 
         if (jsonTelefoneArray.length < 1 && jsonEmailArray.length < 1) {
             smartAlert("Atenção", "Adicione pelo menos um meio de contato!", "error");
@@ -1538,3 +1517,11 @@ include("inc/scripts.php");
 
     }
 </script>
+<!-- <div class="row">
+    <section id="condicaoCheck" class="col col-1 hidden">
+        <label class="label">Código</label>
+        <label class="input">
+            <input id="codigo" name="codigo" type="text" class="readonly" readonly>
+        </label>
+    </section>
+</div> -->
