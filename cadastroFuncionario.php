@@ -82,6 +82,14 @@ include("inc/nav.php");
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
                                                         <div class="row">
+                                                            <section id="condicaoCheck" class="col col-1 hidden">
+                                                                <label class="label">Código</label>
+                                                                <label class="input">
+                                                                    <input id="codigo" name="codigo" type="text" class="readonly" readonly>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+                                                        <div class="row">
                                                             <section class="col col-3">
                                                                 <label class="label">Nome do funcionário:</label>
                                                                 <label class="input">
@@ -365,7 +373,7 @@ include("inc/nav.php");
                                                                     <section class="col col-3">
                                                                         <label class="label">Nome do Dependente:</label>
                                                                         <label class="input">
-                                                                            <input id="nomeDependente" maxlength="255" class="required nome" value="">
+                                                                            <input id="nomeDependente" maxlength="255" class="required nome." value="">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
@@ -551,11 +559,11 @@ include("inc/scripts.php");
         $("#pispasep").mask('999.99999.99-9');
 
 
-        $(".nome").on("change", function() {
-            if (/[0-9!#$&*-_/\^~+?.;,:][()]/g.test(this.value));
-            smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
-            $("#nome").val('');
-        })
+        // $(".nome").on("change", function() {
+        //     if (/[0-9!#$&*-_/\^~+?.;,:][()]/g.test(this.value));
+        //     smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
+        //     $("#nome").val('');
+        // })
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -1524,11 +1532,3 @@ include("inc/scripts.php");
 
     }
 </script>
-<!-- <div class="row">
-    <section id="condicaoCheck" class="col col-1 hidden">
-        <label class="label">Código</label>
-        <label class="input">
-            <input id="codigo" name="codigo" type="text" class="readonly" readonly>
-        </label>
-    </section>
-</div> -->
