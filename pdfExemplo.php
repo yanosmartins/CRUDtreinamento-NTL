@@ -124,8 +124,8 @@ $pdf->SetFont($tipoDeFonte, '', 8);
 
 $pdf->setY(20);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setX(100);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASCIMENTO'), 0, 0, "C", 0);
+$pdf->setX(95);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASC.'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 8);
 
 $pdf->setY(20);
@@ -136,7 +136,7 @@ $pdf->SetFont($tipoDeFonte, '', 8);
 
 $pdf->setY(20);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setX(155);
+$pdf->setX(156);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 8);
 
@@ -167,6 +167,16 @@ foreach ($resultQuery as $row) {
 
 
     $i += 5;
+
+
+
+
+
+
+
+
+
+
 
     $pdf->setY($i);
     $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
