@@ -183,7 +183,7 @@ include "js/repositorio.php";
                     echo '<td class="text-left">' . $primeiroEmpregoFiltro . '</td>';
                     echo '<td class="text-left">' . $pisPasepFiltro . '</td>';
                     echo '<td class="text-left">' . $ativoFiltro . '</td>';
-                    echo '<td class="text-left"><button type="button" id="btnPdf" class="btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
+                    echo '<td class="text-left"><button type="button" class="btnPdfFuncionario btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
                     echo '</tr >';
                 }
                 ?>
@@ -211,7 +211,7 @@ include "js/repositorio.php";
         };
 
 
-        $('#btnPdf').on("click", function() {
+        $('.btnPdfFuncionario').on("click", function() {
             pdfFuncionario();
         });
 
