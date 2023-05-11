@@ -559,11 +559,24 @@ include("inc/scripts.php");
         $("#pispasep").mask('999.99999.99-9');
 
 
-        // $(".nome").on("change", function() {
-        //     if (/[0-9!#$&*-_/\^~+?.;,:][()]/g.test(this.value));
-        //     smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
-        //     $("#nome").val('');
-        // })
+        // $("#nome").on("change", function() {
+        //     var nome = $("#nome").val();
+        //     if (nome != "") { //Verifica se campo cep possui valor informado.               
+        //         var validanome = /[0-9!#$&*-_/\^~+?.;,:][()]/g; //Expressão regular para validar o CEP.              
+        //         if (validanome.test(nome)) {
+
+        //         }else{
+        //             // smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
+        //         }
+
+        //     }
+        // });
+
+
+        // if (/[0-9!#$&*-_/\^~+?.;,:][()]/g.test(nome));
+        // smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
+        // $("#nome").val('');
+
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -589,6 +602,9 @@ include("inc/scripts.php");
         });
         $("#primeiroEmprego").on("change", function() {
             verificaPrimeiroEmprego();
+        });
+        $("#dataNascimentoDependente").on("change", function() {
+            verificaData();
         });
         $("#cep").on("change", function() {
             var cep = $("#cep").val().replace(/\D/g, ''); //Nova variável "cep" somente com dígitos.            
@@ -1035,6 +1051,25 @@ include("inc/scripts.php");
 
     }
 
+    function verificaData() {
+
+        var dataAgora = new Date();
+        var dd = dataAgora.getDate();
+        var mm = (dataAgora.getMonth() + 1);
+        var yyyy = dataAgora.getFullYear();
+
+        var dataHoje = dd + "/" + mm + "/" + yyyy;
+
+        var dataNascimentoDependente = $('#dataNascimentoDependente').val();
+        if (dataNascimentoDependente > dataHoje) {
+            $("#dataNascimentoDependente").val('');
+            $("#dataNascimentoDependente").focus();            
+            smartAlert("Erro", "Data inválida.", "error");
+            return;
+        }
+
+    }
+
     function addTelefone() {
         var telefone = $("#telefone").val();
         if (telefone === "") {
@@ -1183,12 +1218,12 @@ include("inc/scripts.php");
         }
         if (achouTelefone === true) {
             smartAlert("Erro", "Este número já está na lista.", "error");
-            $("#telefone").focus();
+            clearFormTelefone();
             return false;
         }
         if (achouTelefonePrincipal === true) {
             smartAlert("Erro", "Já existe um Telefone Principal na lista.", "error");
-            $("#telefone").focus();
+            clearFormTelefone();
             return false;
         }
         return true;
