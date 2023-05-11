@@ -49,7 +49,7 @@ include("inc/nav.php");
 <!-- MAIN PANEL -->
 <div id="main" role="main">
     <?php
-    $breadcrumbs["Configurações"] = "";
+    $breadcrumbs["Cadastro"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -560,17 +560,12 @@ include("inc/scripts.php");
 
 
         $("#nome").on("change", function() {
-            var nome = $("#nome").val();
-            if (nome != "") { //Verifica se campo cep possui valor informado.               
-                var validanome = /[0-9!#$&*-_/\^~+?.;,:][()]/g; //Expressão regular para validar o CEP.              
-                if (validanome.test(nome)) {
-
-                }else{
-                    // smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
-                }
-
-            }
-        });
+            console.log(this.value)
+            if (/[0-9\!\#\$\&\*\-\_\/\\\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+                smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
+                $("#nome").val('');
+            };
+        })
 
 
         // if (/[0-9!#$&*-_/\^~+?.;,:][()]/g.test(nome));
@@ -934,14 +929,16 @@ include("inc/scripts.php");
         var primeiroEmprego = $("#primeiroEmprego").val();
         var pispasep = $("#pispasep").val();
 
-
-
+        if (nome.length === 0 || !nome.trim()) {
+            smartAlert("Atenção", "Informe o nome!", "error");
+            $("#nome").focus();
+            return;
+        }
         if (cpf === "") {
             smartAlert("Atenção", "Informe o cpf !", "error");
             $("#cpf").focus();
             return;
         }
-        // || (nome=="") || (dataNascimento=="")
         if (nome == "") {
             smartAlert("Atenção", "Informe o nome!", "error");
             $("#nome").focus();
@@ -1057,13 +1054,35 @@ include("inc/scripts.php");
         var dd = dataAgora.getDate();
         var mm = (dataAgora.getMonth() + 1);
         var yyyy = dataAgora.getFullYear();
-
+        var dataNascimento = $('#dataNascimento').val();
+        var dataNascimentoDependente = $('#dataNascimentoDependente').val();
+        var anoNascimento = anoNascimento.getFullYear;
+        var anoNascimentoDependente = anoNascimentoDependente.getFullYear;;
+        var idadeNascimento = (yyyy - anoNascimento);
+        var idadeNascimentoDependente = (yyyy - anoNascimentoDependente);
         var dataHoje = dd + "/" + mm + "/" + yyyy;
 
-        var dataNascimentoDependente = $('#dataNascimentoDependente').val();
+        if (dataNascimento > dataHoje) {
+            $("#dataNascimento").val('');
+            $("#dataNascimento").focus();
+            smartAlert("Erro", "Data inválida.", "error");
+            return;
+        }
+        if (idadeNascimento<0 || idadeNascimento>= 150 ) {
+            $("#dataNascimento").val('');
+            $("#dataNascimento").focus();
+            smartAlert("Erro", "Data inválida.", "error");
+            return;
+        }
+        if (idadeNascimentoDependente<0 || idadeNascimentoDependente>= 150 ) {
+            $("#dataNascimentoDependente").val('');
+            $("#dataNascimentoDependente").focus();
+            smartAlert("Erro", "Data inválida.", "error");
+            return;
+        }
         if (dataNascimentoDependente > dataHoje) {
             $("#dataNascimentoDependente").val('');
-            $("#dataNascimentoDependente").focus();            
+            $("#dataNascimentoDependente").focus();
             smartAlert("Erro", "Data inválida.", "error");
             return;
         }

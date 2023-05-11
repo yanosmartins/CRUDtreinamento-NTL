@@ -113,11 +113,12 @@ include("inc/nav.php");
                                                     </fieldset>
                                                 </div>
                                                 <footer>
-                                                <button type="button" id="btnNovo" class="btn btn-primary pull-left" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
-                                                <span class="fa fa-file-o"></span>
-                                                    <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
+                                                <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                                         <span class="fa fa-search"></span>
                                                     </button>
+                                                <button type="button" id="btnNovo" class="btn btn-primary pull-right" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                                <span class="fa fa-file-o"></span>
+                                                    
                                                     <?php if ($condicaoGravarOK) { ?>
                                                         <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
                                                             <span class="fa fa-backward"></span>
