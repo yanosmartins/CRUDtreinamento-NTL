@@ -373,7 +373,7 @@ include("inc/nav.php");
                                                                     <section class="col col-3">
                                                                         <label class="label">Nome do Dependente:</label>
                                                                         <label class="input">
-                                                                            <input id="nomeDependente" maxlength="255" class="required nome." value="">
+                                                                            <input id="nomeDependente" maxlength="255" class="required nome" value="">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
@@ -566,7 +566,13 @@ include("inc/scripts.php");
                 $("#nome").val('');
             };
         })
-
+        $("#nomeDependente").on("change", function() {
+            console.log(this.value)
+            if (/[0-9\!\#\$\&\*\-\_\/\\\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+                smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
+                $("#nomeDependente").val('');
+            };
+        })
 
         // if (/[0-9!#$&*-_/\^~+?.;,:][()]/g.test(nome));
         // smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
@@ -599,7 +605,13 @@ include("inc/scripts.php");
             verificaPrimeiroEmprego();
         });
         $("#dataNascimentoDependente").on("change", function() {
-            verificaData();
+            var dataNascimentoDependente = $("#dataNascimentoDependente").val();
+            if (validarDataDependente(dataNascimentoDependente) == false) {
+                smartAlert("Atenção", "Data Inválida!", "error");
+                $("#idade").val("");
+                $("#dataNascimentoDependente").val("");
+            }
+            validarDataDependente();
         });
         $("#cep").on("change", function() {
             var cep = $("#cep").val().replace(/\D/g, ''); //Nova variável "cep" somente com dígitos.            
@@ -1048,45 +1060,40 @@ include("inc/scripts.php");
 
     }
 
-    function verificaData() {
+    function validarDataDependente() {
+        var data = $("#dataNascimentoDependente").val();
+        data = data.replace(/\//g, "/");
+        var data_array = data.split("/"); //responsável por quebrar a data em array
 
-        var dataAgora = new Date();
-        var dd = dataAgora.getDate();
-        var mm = (dataAgora.getMonth() + 1);
-        var yyyy = dataAgora.getFullYear();
-        var dataNascimento = $('#dataNascimento').val();
-        var dataNascimentoDependente = $('#dataNascimentoDependente').val();
-        var anoNascimento = anoNascimento.getFullYear;
-        var anoNascimentoDependente = anoNascimentoDependente.getFullYear;;
-        var idadeNascimento = (yyyy - anoNascimento);
-        var idadeNascimentoDependente = (yyyy - anoNascimentoDependente);
-        var dataHoje = dd + "/" + mm + "/" + yyyy;
+        //Inserir formato DD/MM/YYYY
+        if (data_array[0].length != 4) {
+            data = data_array[2] + "-" + data_array[1] + "-" + data_array[0];
+        }
 
-        if (dataNascimento > dataHoje) {
-            $("#dataNascimento").val('');
-            $("#dataNascimento").focus();
-            smartAlert("Erro", "Data inválida.", "error");
-            return;
+        //Calculo da idade referente a Data de Nascimento
+        var hoje = new Date();
+        var nasc = new Date(data);
+        var idade = hoje.getFullYear() - nasc.getFullYear();
+        var m = hoje.getMonth() - nasc.getMonth();
+        if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
+
+        if (idade <= 0) {
+            // alert("Usuários com menos de 18 anos não podem ser cadastrados.");
+            $("#idade").val(idade)
+            $("#btnGravar").prop('disabled', false);
+            return false;
         }
-        if (idadeNascimento<0 || idadeNascimento>= 150 ) {
-            $("#dataNascimento").val('');
-            $("#dataNascimento").focus();
-            smartAlert("Erro", "Data inválida.", "error");
-            return;
-        }
-        if (idadeNascimentoDependente<0 || idadeNascimentoDependente>= 150 ) {
-            $("#dataNascimentoDependente").val('');
-            $("#dataNascimentoDependente").focus();
-            smartAlert("Erro", "Data inválida.", "error");
-            return;
-        }
-        if (dataNascimentoDependente > dataHoje) {
-            $("#dataNascimentoDependente").val('');
-            $("#dataNascimentoDependente").focus();
-            smartAlert("Erro", "Data inválida.", "error");
+
+        if (idade >= 18 && idade <= 120) {
+            // smartAlert("Sucesso","Data permitida.", "success")
+            $("#idade").val(idade)
+            $("#btnGravar").prop('disabled', false);
             return;
         }
 
+        //Idade superior a 50 não altera o cadastro
+
+        if (hoje) return false;
     }
 
     function addTelefone() {

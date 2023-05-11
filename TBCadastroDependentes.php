@@ -82,20 +82,20 @@ include("inc/nav.php");
                                             <div id="collapseCadastro" class="panel-collapse collapse in">
                                                 <div class="panel-body no-padding">
                                                     <fieldset>
-                                                        <input id="codigo" type="text" value="<?= $_GET['codigo']?>" hidden>
+                                                        <input id="codigo" type="text" value="<?= $_GET['codigo'] ?>" hidden>
                                                         <div class="row">
-                                                        <section class="col col-2">
+                                                            <section class="col col-2">
                                                                 <label class="label">Descrição de Dependentes:</label>
                                                                 <label class="input">
                                                                     <input id="descricao" maxlength="255" name="nome" class="required">
                                                                 </label>
-                                                            </section>                                                                                                                     
+                                                            </section>
                                                         </div>
                                                     </fieldset>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>                                  
+                                    </div>
                                     <footer>
                                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluir" aria-labelledby="ui-id-1" style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
@@ -118,8 +118,8 @@ include("inc/nav.php");
                                         if ($codigoBtn != 0) {
                                             $esconderBtn = "block"; /// permite aparecer o botao
                                         }
-                                        ?>                                       
-                                        
+                                        ?>
+
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
@@ -127,7 +127,7 @@ include("inc/nav.php");
                                             <span class="fa fa-trash"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar">
-                                            <span class="fa fa-backward " ></span>
+                                            <span class="fa fa-backward "></span>
                                         </button>
                                     </footer>
                                 </form>
@@ -185,7 +185,6 @@ include("inc/scripts.php");
 
 
 <script language="JavaScript" type="text/javascript">
-    
     //     //EVENTO CONSTANTE
     $(document).ready(function() {
 
@@ -240,7 +239,7 @@ include("inc/scripts.php");
         $("#btnGravar").on("click", function() {
             gravar();
             document.getElementById("btnGravar").disabled = true;
-            setTimeout(function(){
+            setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
         });
@@ -251,7 +250,7 @@ include("inc/scripts.php");
     });
 
 
- function carregaPagina() {
+    function carregaPagina() {
         var urlx = window.document.URL.toString();
         var params = urlx.split("?");
         if (params.length === 2) {
@@ -292,22 +291,22 @@ include("inc/scripts.php");
         var descricao = $("#descricao").val();
         var codigo = $("#codigo").val();
         var ativo = 1;
-        
+
         if ($("#ativo").is(':checked')) {
             ativo = 1;
         }
 
-        if (descricao == "") {
-            smartAlert("Atenção", "Campo de descrição não pode ser vazio!", "error");
+        if (descricao.length === 0 || !descricao.trim()) {
+            smartAlert("Atenção", "Informe o nome!", "error");
             $("#descricao").focus();
             return;
         }
 
         gravaDependentes(codigo, descricao, ativo);
-    }  
-    
+    }
 
-    function voltar(){
+
+    function voltar() {
         $(location).attr('href', 'TBDependentesFiltro.php');
     }
 
@@ -316,15 +315,24 @@ include("inc/scripts.php");
         var codigo = $("#codigo").val();
         excluiDependentes(codigo, ativo);
     }
+
     function verificaDependente() {
+        $("#descricao").on("change", function() {
+            console.log(this.value)
+            if (/[0-9\!\#\$\&\*\-\_\/\\\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+                smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
+                $("#descricao").val('');
+                return;
+            };
+        })
+
         var descricao = $("#descricao").val();
         dependenteVerificado(descricao);
+
         return;
     }
 
     function novo() {
         $(location).attr('href', 'TBcadastroDependentes.php');
     }
-    
-    
 </script>

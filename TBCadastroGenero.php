@@ -199,10 +199,17 @@ include("inc/scripts.php");
 
 
         carregaPagina();
-
         $("#descricao").on("change", function() {
+
+            console.log(this.value)
+            if (/[0-9\!\#\$\&\*\-\_\/\\\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+                smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
+                $("#descricao").val('');
+                return;
+            }
+
             verificaGenero()
-        });      
+        });
 
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
@@ -250,7 +257,7 @@ include("inc/scripts.php");
         $("#btnGravar").on("click", function() {
             gravar();
             document.getElementById("btnGravar").disabled = true;
-            setTimeout(function(){
+            setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
 
@@ -308,8 +315,8 @@ include("inc/scripts.php");
             ativo = 1;
         }
 
-        if (descricao == "") {
-            smartAlert("Atenção", "Campo de descrição não pode ser vazio!", "error");
+        if (descricao.length === 0 || !descricao.trim()) {
+            smartAlert("Atenção", "Informe o nome!", "error");
             $("#descricao").focus();
             return;
         }
@@ -317,6 +324,7 @@ include("inc/scripts.php");
     }
 
     function verificaGenero() {
+
         var descricao = $("#descricao").val();
         generoVerificado(descricao);
         return;

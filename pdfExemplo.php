@@ -101,8 +101,7 @@ $fontWeight = 'B';
 
 
 
-$pdf->Line(5, 5, 205, 5); //primeira linha
-$pdf->Line(5, 12, 205, 12);
+
 
 $pdf->setY(9);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
@@ -111,31 +110,87 @@ $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'RELATÓRIO INDIVIDUAL DO FUNC
 $pdf->SetFont($tipoDeFonte, '', 20);
 
 
-$pdf->setY(20);
+
+$pdf->setY(16);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setX(10);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'NOME:'), 0, 0, "C", 0);
+$pdf->setX(85);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DADOS DO FUNCIONÁRIO'), 0, 0, "C", 0);
+$pdf->SetFont($tipoDeFonte, '', 20);
+
+
+
+$pdf->Line(5, 5, 205, 5); //horizontal 1
+$pdf->Line(5, 12, 205, 12);//horizontal abaixo
+$pdf->Line(25, 19, 185, 19); //menor
+$pdf->Line(25, 19, 185, 19); //menor
+$pdf->Line(25, 19, 185, 19); //menor
+$pdf->Line(5, 5, 5, 290); //vertical 1
+$pdf->Line(205, 5, 205, 290); //vertical 2
+$pdf->Line(5, 290, 205, 290); //horizontal 2
+
+// $pdf->Line(66, 5, 66, 290); //teste  
+
+
+$pdf->setY(24);
+$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+$pdf->setX(5);
+$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'NOME:'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 8);
 
-$pdf->setY(20);
+$pdf->setY(24);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 $pdf->setX(60);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CPF:'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 8);
 
-// $pdf->setY(20);
+$pdf->setY(24);
+$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+$pdf->setX(115);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASC.:'), 0, 0, "C", 0);
+$pdf->SetFont($tipoDeFonte, '', 8);
+
+$pdf->setY(24);
+$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+$pdf->setX(162);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO:'), 0, 0, "C", 0);
+$pdf->SetFont($tipoDeFonte, '', 8);
+
+
+$pdf->setY(30);
+$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+$pdf->setX(12);
+$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'EST. CIVIL.:'), 0, 0, "C", 0);
+$pdf->SetFont($tipoDeFonte, '', 8);
+
+$pdf->setY(30);
+$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+$pdf->setX(63);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'GÊNERO:'), 0, 0, "C", 0);
+$pdf->SetFont($tipoDeFonte, '', 8);
+
+$pdf->setY(24);
+$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+$pdf->setX(115);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "C", 0);
+$pdf->SetFont($tipoDeFonte, '', 8);
+
+
+
+// $pdf->setY(32);
 // $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-// $pdf->setX(95);
-// $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASC.'), 0, 0, "C", 0);
+// $pdf->setX();
+// $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'EST. CIVIL:'), 0, 0, "C", 0);
 // $pdf->SetFont($tipoDeFonte, '', 8);
 
-// $pdf->setY(20);
+
+
+// $pdf->setY(24);
 // $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 // $pdf->setX(130);
 // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'GÊNERO'), 0, 0, "C", 0);
 // $pdf->SetFont($tipoDeFonte, '', 8);
 
-// $pdf->setY(20);
+// $pdf->setY(24);
 // $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 // $pdf->setX(156);
 // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO'), 0, 0, "C", 0);
@@ -149,6 +204,7 @@ $id = $_GET["id"];
 $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
                 from dbo.funcionario FU 
                 LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero WHERE FU.codigo = " .  $id;
+
 $sql = $sql . $where;
 $reposit = new reposit();
 $resultQuery = $reposit->RunQuery($sql);
@@ -156,6 +212,7 @@ $i = 22;
 $margem = 5;
 
 foreach ($resultQuery as $row) {
+    
     $nome = $row['nome'];
     $cpf = $row['cpf'];
     $dataNascimento = $row['dataNascimento'];
@@ -163,7 +220,23 @@ foreach ($resultQuery as $row) {
     $dataNascimento = explode("-", $dataNascimento[0]);
     $dataNascimento =  $dataNascimento[2] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
     $genero = $row['genero'];
+    $estadoCivil = (int)$row['estadoCivil'];
+
+    $valor_de_retorno = match ($estadoCivil) {
+        1 => 'Solteiro',
+        2 => 'Casado',
+        3 => 'Separado',
+        4 => 'Divorciado',
+        5 => 'Viúvo'
+    };
+    $estadoCivil = $valor_de_retorno;
+
+
+
+
+
     $ativo = +$row['ativo'];
+    
     if ($ativo == 1) {
         $ativo = 'Sim';
     } else {
@@ -175,99 +248,43 @@ foreach ($resultQuery as $row) {
 
 
 
-    $pdf->setY(20);
+    $pdf->setY(24);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->setX(20 + $margem);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $nome), 0, 0, "L", 0);
     $pdf->SetFont($tipoDeFonte, '', 8);
 
-    $pdf->setY(20);
+    $pdf->setY(24);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(68 + $margem);
+    $pdf->setX(70 + $margem);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cpf), 0, 0, "L", 0);
     $pdf->SetFont($tipoDeFonte, '', 8);
 
-    // $pdf->setY($i);
-    // $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    // $pdf->setX(90);
-    // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $dataNascimento), 0, 0, "L", 0);
-    // $pdf->SetFont($tipoDeFonte, '', 8);
+    $pdf->setY(24);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(135 + $margem);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $dataNascimento), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, '', 8);
 
-    // $pdf->setY($i);
-    // $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    // $pdf->setX(133);
-    // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $genero), 0, 0, "L", 0);
-    // $pdf->SetFont($tipoDeFonte, '', 8);
+    $pdf->setY(24);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(178);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, '', 8);
 
-    // $pdf->setY($i);
-    // $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    // $pdf->setX(160);
-    // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "L", 0);
-    // $pdf->SetFont($tipoDeFonte, '', 8);
+    $pdf->setY(30);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(38);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $estadoCivil), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, '', 8);
+
+    $pdf->setY(30);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(82);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $genero), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, '', 8);
+
 }
 
 $pdf->Ln(8);
 $pdf->Output();
-
-
-
-
-
-
-
-
-
-
-// $pdf->setY(20);
-// $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-// $pdf->setX(100);
-// $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CPF'), 0, 0, "C", 0);
-// $pdf->SetFont($tipoDeFonte, '', 8);
-
-// $pdf->setY(20);
-// $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-// $pdf->setX(125);
-// $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO'), 0, 0, "C", 0);
-// $pdf->SetFont($tipoDeFonte, '', 8);
-// $pdf->setY(20);
-// $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-// $pdf->setX(100);
-// $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'RG'), 0, 0, "C", 0);
-// $pdf->SetFont($tipoDeFonte, '', 8);
-
-// $pdf->setY(20);
-// $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-// $pdf->setX(65);
-// $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASCIMENTO'), 0, 0, "C", 0);
-// $pdf->SetFont($tipoDeFonte, '', 8);
-
-// $pdf->setY(20);
-// $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-// $pdf->setX(100);
-// $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ESTADO CIVIL'), 0, 0, "C", 0);
-// $pdf->SetFont($tipoDeFonte, '', 8);
-
-// $pdf->setY(20);
-// $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-// $pdf->setX(100);
-// $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'GENERO'), 0, 0, "C", 0);
-// $pdf->SetFont($tipoDeFonte, '', 8);
-
-
-    // $pdf->setY($i);
-    // $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    // $pdf->setX(62);
-    // $pdf->multiCell(20, -1, iconv('UTF-8', 'windows-1252', $dataNascimento ), 0, 0, "C", 0);
-    // $pdf->SetFont($tipoDeFonte, '', 8);
-
-    // $pdf->setY($i);
-    // $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    // $pdf->setX(100);
-    // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cpf), 0, 0, "C", 0);
-    // $pdf->SetFont($tipoDeFonte, '', 8);
-
-    // $pdf->setY($i);
-    // $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    // $pdf->setX(125);
-    // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "C", 0);
-    // $pdf->SetFont($tipoDeFonte, '', 8);           
