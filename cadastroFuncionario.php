@@ -559,18 +559,18 @@ include("inc/scripts.php");
         $("#pispasep").mask('999.99999.99-9');
 
 
-        // $("#nome").on("change", function() {
-        //     var nome = $("#nome").val();
-        //     if (nome != "") { //Verifica se campo cep possui valor informado.               
-        //         var validanome = /[0-9!#$&*-_/\^~+?.;,:][()]/g; //Expressão regular para validar o CEP.              
-        //         if (validanome.test(nome)) {
+        $("#nome").on("change", function() {
+            var nome = $("#nome").val();
+            if (nome != "") { //Verifica se campo cep possui valor informado.               
+                var validanome = /[0-9!#$&*-_/\^~+?.;,:][()]/g; //Expressão regular para validar o CEP.              
+                if (validanome.test(nome)) {
 
-        //         }else{
-        //             // smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
-        //         }
+                }else{
+                    // smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
+                }
 
-        //     }
-        // });
+            }
+        });
 
 
         // if (/[0-9!#$&*-_/\^~+?.;,:][()]/g.test(nome));
