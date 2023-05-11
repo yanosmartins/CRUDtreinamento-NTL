@@ -128,7 +128,7 @@ $pdf->Line(5, 5, 5, 290); //vertical 1
 $pdf->Line(205, 5, 205, 290); //vertical 2
 $pdf->Line(5, 290, 205, 290); //horizontal 2
 
-// $pdf->Line(66, 5, 66, 290); //teste  
+// $pdf->Line(120, 5, 120, 290); //teste  
 
 
 $pdf->setY(24);
@@ -168,9 +168,9 @@ $pdf->setX(63);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'GÊNERO:'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 8);
 
-$pdf->setY(24);
+$pdf->setY(30);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setX(115);
+$pdf->setX(105);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 8);
 
@@ -221,6 +221,7 @@ foreach ($resultQuery as $row) {
     $dataNascimento =  $dataNascimento[2] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
     $genero = $row['genero'];
     $estadoCivil = (int)$row['estadoCivil'];
+    $cep = $row['cep'];
 
     $valor_de_retorno = match ($estadoCivil) {
         1 => 'Solteiro',
@@ -282,6 +283,12 @@ foreach ($resultQuery as $row) {
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->setX(82);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $genero), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, '', 8);
+    
+    $pdf->setY(30);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(120);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
     $pdf->SetFont($tipoDeFonte, '', 8);
 
 }

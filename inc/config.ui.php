@@ -58,24 +58,58 @@ $login = "'" . $login . "'";
 $page_nav = array("home" => array("title" => "Home", "icon" => "fa-home", "url" => APP_URL . "/index.php"));
 
 
+
+
+
+
+
+
+
+
+//CADASTRO
+$page_nav['cadastro'] = array("title" => "Cadastro", "icon" => " fa-pencil-square-o");
+$page_nav['cadastro']['sub'] = array();
+//
+if (true) {
+    $page_nav['cadastro']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/funcionarioFiltro.php"));
+}   
+
+
+// if (true) {
+//     $page_nav['cadastro']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBCadastroGenero.php"));  /cadastroFuncionario.php
+// }   
+// if (true) {
+//     $page_nav['cadastro']['sub'] += array("dependenteFiltro" => array("title" => "Dependentes", "url" => APP_URL . "/TBCadastroDependentes.php"));
+// }   
+
+
+
+
+
+
+
+
+
+
+
 //Configurações 
 
 
-if (true) {
-    $page_nav['configuracao'] = array("title" => "Configurações", "icon" => "fa-gear fa-spin");
+// if (true) {
+//     $page_nav['configuracao'] = array("title" => "Configurações", "icon" => "fa-gear fa-spin");
 
-    $page_nav['configuracao']['sub'] = array();
+//     $page_nav['configuracao']['sub'] = array();
 
 
-    if (true) {
-        $page_nav['configuracao']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/funcionarioFiltro.php"));
-    }
-    if (true) {
-        $page_nav['configuracao']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBGeneroFiltro.php"));
-    }
-    if (true) {
-        $page_nav['configuracao']['sub'] += array("dependenteFiltro" => array("title" => "Dependentes", "url" => APP_URL . "/TBDependentesFiltro.php"));
-    }
+//     if (true) {
+//         $page_nav['configuracao']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . ""));
+//     }
+//     if (true) {
+//         $page_nav['configuracao']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBGeneroFiltro.php"));
+//     }
+//     if (true) {
+//         $page_nav['configuracao']['sub'] += array("dependenteFiltro" => array("title" => "Dependentes", "url" => APP_URL . "/TBDependentesFiltro.php"));
+//     }
     // if (true) {
     //     $page_nav['configuracao']['sub'] += array("grupo" => array("title" => "Grupo", "url" => APP_URL . "/usuarioGrupoFiltro.php"));
     // }
@@ -91,7 +125,7 @@ if (true) {
     // if (true) {
     //     $page_nav['configuracao']['sub'] += array("parametro" => array("title" => "Parâmetros", "url" => APP_URL . "/parametros.php"));
     // }
-}
+// }
 
 
 
@@ -102,10 +136,10 @@ if ($condicaoTabelaBasicaOk) {
     $page_nav['tabelaBasica']['sub'] = array();
 
     if (true) {
-        $page_nav['tabelaBasica']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBCadastroGenero.php"));
+        $page_nav['tabelaBasica']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBGeneroFiltro.php"));
     }
     if (true) {
-        $page_nav['tabelaBasica']['sub'] += array("dependente" => array("title" => "Dependentes", "url" => APP_URL . "/TBCadastroDependentes.php"));
+        $page_nav['tabelaBasica']['sub'] += array("dependente" => array("title" => "Dependentes", "url" => APP_URL . "/TBDependentesFiltro.php"));
     }
 
 
@@ -141,23 +175,6 @@ if ($condicaoTabelaBasicaOk) {
     //     $page_nav['tabelaBasica']['sub'] += array("status" => array("title" => "Status", "url" => APP_URL . "/tabelaBasica_statusFiltro.php")); //SYSCB 
     // }
 }
-
-
-//CADASTRO
-$page_nav['cadastro'] = array("title" => "Cadastro", "icon" => " fa-pencil-square-o");
-$page_nav['cadastro']['sub'] = array();
-//
-if (true) {
-    $page_nav['cadastro']['sub'] += array("funcionario" => array("title" => "Funcionário", "url" => APP_URL . "/cadastroFuncionario.php"));
-}   
-
-
-// if (true) {
-//     $page_nav['cadastro']['sub'] += array("genero" => array("title" => "Gênero", "url" => APP_URL . "/TBCadastroGenero.php"));
-// }   
-// if (true) {
-//     $page_nav['cadastro']['sub'] += array("dependenteFiltro" => array("title" => "Dependentes", "url" => APP_URL . "/TBCadastroDependentes.php"));
-// }   
 
 
 

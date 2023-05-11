@@ -899,7 +899,7 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'cadastroFuncionario.php');
+        $(location).attr('href', 'funcionarioFiltro.php');
     }
 
     function excluir() {

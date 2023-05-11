@@ -36,7 +36,7 @@ include("inc/header.php");
 
 //include left panel (navigation)
 //follow the tree in inc/config.ui.php
-$page_nav["configuracao"]["sub"]["dependenteFiltro"]["active"] = true;
+$page_nav["tabelaBasica"]["sub"]["dependente"]["active"] = true;
 
 include("inc/nav.php");
 ?>
