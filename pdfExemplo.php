@@ -128,8 +128,9 @@ $pdf->Line(5, 5, 5, 290); //vertical 1
 $pdf->Line(205, 5, 205, 290); //vertical 2
 $pdf->Line(5, 290, 205, 290); //horizontal 2
 
-// $pdf->Line(120, 5, 120, 290); //teste  
 
+$pdf->Line(25, 41, 185, 41); //menor
+$pdf->Line(25, 41, 185, 41); //menor
 
 $pdf->setY(24);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
@@ -151,7 +152,7 @@ $pdf->SetFont($tipoDeFonte, '', 8);
 
 $pdf->setY(24);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setX(162);
+$pdf->setX(172);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO:'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 8);
 
@@ -170,11 +171,15 @@ $pdf->SetFont($tipoDeFonte, '', 8);
 
 $pdf->setY(30);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setX(105);
+$pdf->setX(95);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 8);
 
-
+$pdf->setY(30);
+$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+$pdf->setX(146);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PIS/PASEP:'), 0, 0, "C", 0);
+$pdf->SetFont($tipoDeFonte, '', 8);
 
 // $pdf->setY(32);
 // $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
@@ -220,6 +225,7 @@ foreach ($resultQuery as $row) {
     $dataNascimento = explode("-", $dataNascimento[0]);
     $dataNascimento =  $dataNascimento[2] . "/" . $dataNascimento[1] . "/" . $dataNascimento[0];
     $genero = $row['genero'];
+    $pispasep = $row['pisPasep'];
     $estadoCivil = (int)$row['estadoCivil'];
     $cep = $row['cep'];
 
@@ -269,7 +275,7 @@ foreach ($resultQuery as $row) {
 
     $pdf->setY(24);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(178);
+    $pdf->setX(190);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "L", 0);
     $pdf->SetFont($tipoDeFonte, '', 8);
 
@@ -287,10 +293,15 @@ foreach ($resultQuery as $row) {
     
     $pdf->setY(30);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(120);
+    $pdf->setX(110);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
     $pdf->SetFont($tipoDeFonte, '', 8);
 
+    $pdf->setY(30);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(166);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $pispasep), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, '', 8);
 }
 
 $pdf->Ln(8);
