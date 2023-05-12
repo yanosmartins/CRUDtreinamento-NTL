@@ -360,7 +360,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Número:</label>
                                                                 <label class="input">
-                                                                    <input id="numero" name="numero" class="required numero-mask" type="text" value="">
+                                                                    <input id="numero" name="numero" class="required numero numero-mask" type="text" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -601,6 +601,13 @@ include("inc/scripts.php");
                 smartAlert("Atenção", `${campo} inválido, use apenas Letras`, "error");
             };
         })
+        $(".numero").on("change", function() {
+            let campo = '';
+            if (/[\!\#\$\&\*\\_\/\"\\^\~\+\?\\;\@\\:\]\[\(\)]/g.test(this.value)) {
+                smartAlert("Atenção", "inválido, use apenas Números", "error");
+            };
+        })
+
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -1033,7 +1040,7 @@ include("inc/scripts.php");
             }
         }
         if (pispasep == "___._____.__-_") {
-            smartAlert("Atenção", "Informe o Pis!", "error");
+            smartAlert("Atenção", "Pis Inválido!", "error");
             $("#pispasep").focus();
             return;
         }
