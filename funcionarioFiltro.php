@@ -190,7 +190,7 @@ include("inc/nav.php");
                                                     <button id="btnNovo" name="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
                                                         <span class="fa fa-file-o"></span>
                                                     </button>
-                                                    <button id="btnPdfLista" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                    <button id="btnPdfLista" type="button" class="btn btn-danger pull-right" title="Novo">
                                                         <span class="fa fa-file-pdf-o"></span>
                                                     </button>                                                  
                                                    

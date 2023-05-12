@@ -157,6 +157,9 @@ include "js/repositorio.php";
                     $estadoCivilFiltro = $valor_de_retorno;
 
 
+                    
+
+
 
                     $ativoFiltro = (int) $row['ativo'];
                     if ($ativoFiltro == 1) {
@@ -170,21 +173,26 @@ include "js/repositorio.php";
                     } else {
                         $primeiroEmpregoFiltro = "Não";
                     }
+                    if ($pisPasepFiltro == "") {
+                        $pisPasepFiltro = "Nenhum";
+                    }
+
+                    
 
 
                     echo '<tr >';
                     echo '<td class="text-left"><a href="cadastroFuncionario.php?id=' . $id . '">' . $nomeFiltro . '</a></td>';
-                    echo '<td class="text-left">' . $cpfFiltro . '</td>';
-                    echo '<td class="text-left">' . $rgFiltro . '</td>';
-                    echo '<td class="text-left">' . $dataNascimentoFiltro . '</td>';
-                    echo '<td class="text-left">' . $estadoCivilFiltro . '</td>';
-                    echo '<td class="text-left">' . $generoFiltro . '</td>';
-                    echo '<td class="text-left">' . $cepFiltro . '</td>';
-                    echo '<td class="text-left">' . $primeiroEmpregoFiltro . '</td>';
-                    echo '<td class="text-left">' . $pisPasepFiltro . '</td>';
-                    echo '<td class="text-left">' . $ativoFiltro . '</td>';
-                    // echo '<td class="text-left"><button type="button" class="btnPdfFuncionario btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
-                    echo '<td class="text-left"><a href="pdfExemplo.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
+                    echo '<td class="text-center">' . $cpfFiltro . '</td>';
+                    echo '<td class="text-center">' . $rgFiltro . '</td>';
+                    echo '<td class="text-center">' . $dataNascimentoFiltro . '</td>';
+                    echo '<td class="text-center">' . $estadoCivilFiltro . '</td>';
+                    echo '<td class="text-center">' . $generoFiltro . '</td>';
+                    echo '<td class="text-center">' . $cepFiltro . '</td>';
+                    echo '<td class="text-center">' . $primeiroEmpregoFiltro . '</td>';
+                    echo '<td class="text-center">' . $pisPasepFiltro . '</td>';
+                    echo '<td class="text-center">' . $ativoFiltro . '</td>';
+                    // echo '<td class="text-center"><button type="button" class="btnPdfFuncionario btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
+                    echo '<td class="text-center"><a href="pdfExemplo.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-danger"><i class=" fa fa-file-pdf-o"></i></button></td>';
                     echo '</tr >';
                 }
                 ?>

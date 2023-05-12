@@ -589,19 +589,19 @@ include("inc/scripts.php");
 
         $(".nome").on("change", function() {
             let campo = '';
-            if (/[0-9\!\#\$\&\*\-\_\/\\\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
-                this.id == "nome" ? campo = 'Nome' : campo = 'Nome Dependente';  // iternario
-                
+            if (/[0-9\!\#\$\&\*\-\_\/\"\\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
+                this.id == "nome" ? campo = 'Nome' : campo = 'Nome Dependente'; // iternario
+
                 // if( this.id == "nome"  ){
                 //     campo = "Nome"
                 // }else{
                 //     campo = "Nome Dependete"
                 // }
 
-                smartAlert("Atenção", `${campo} inválido, use apenas Letras`, "error");                               
+                smartAlert("Atenção", `${campo} inválido, use apenas Letras`, "error");
             };
         })
-        
+
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
             if (validaData(data) == false) {
@@ -1031,14 +1031,19 @@ include("inc/scripts.php");
                 $("#pispasep").focus();
                 return;
             }
-        }        
+        }
+        if (pispasep == "___._____.__-_") {
+            smartAlert("Atenção", "Informe o Pis!", "error");
+            $("#pispasep").focus();
+            return;
+        }
         var umTelefonePrincipal = false;
         for (var i = 0; i < jsonTelefoneArray.length; i++) {
             if (jsonTelefoneArray[i].telefonePrincipal == true) {
                 umTelefonePrincipal = true;
             }
         }
-        if (umTelefonePrincipal!= true){
+        if (umTelefonePrincipal != true) {
             smartAlert("Atenção", "Adicione pelo menos um Telefone como Pincipal!", "error");
             $("#telefone").focus();
             return;
@@ -1050,13 +1055,13 @@ include("inc/scripts.php");
                 umEmailPrincipal = true;
             }
         }
-        if (umEmailPrincipal!= true){
+        if (umEmailPrincipal != true) {
             smartAlert("Atenção", "Adicione pelo menos um Email como Pincipal!", "error");
             $("#email").focus();
             return;
 
         }
-      
+
 
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);
         <?php $esconderBtn = "none" ?>
@@ -1117,14 +1122,14 @@ include("inc/scripts.php");
         var m = hoje.getMonth() - nasc.getMonth();
         if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
 
-        if (idade <= 0) {
+        if (idade < 0) {
             // alert("Usuários com menos de 18 anos não podem ser cadastrados.");
             $("#idade").val(idade)
             $("#btnGravar").prop('disabled', false);
             return false;
         }
 
-        if (idade >= 18 && idade <= 120) {
+        if (idade >= 0 && idade <= 120) {
             // smartAlert("Sucesso","Data permitida.", "success")
             $("#idade").val(idade)
             $("#btnGravar").prop('disabled', false);
