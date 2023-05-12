@@ -587,21 +587,21 @@ include("inc/scripts.php");
         $("#pispasep").mask('999.99999.99-9');
 
 
-        $("#nome").on("change", function() {
-            console.log(this.value)
-            if (/[0-9\!\#\$\&\*\-\_\/\\\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
-                smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
-                $("#nome").val('');
-            };
-        })
-        $("#nomeDependente").on("change", function() {
-            console.log(this.value)
-            if (/[0-9\!\#\$\&\*\-\_\/\\\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
-                smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
-                $("#nomeDependente").val('');
-            };
-        })
+        $(".nome").on("change", function() {
+            let campo = '';
+            if (/[0-9\!\#\$\&\*\-\_\/\\\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
+                this.id == "nome" ? campo = 'Nome' : campo = 'Nome Dependente';  // iternario
+                
+                // if( this.id == "nome"  ){
+                //     campo = "Nome"
+                // }else{
+                //     campo = "Nome Dependete"
+                // }
 
+                smartAlert("Atenção", `${campo} inválido, use apenas Letras`, "error");                               
+            };
+        })
+        
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
             if (validaData(data) == false) {
