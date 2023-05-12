@@ -312,10 +312,38 @@ include("inc/nav.php");
                                                             </section>
 
                                                             <section class="col col-2">
-                                                                <label class="label">UF:</label>
-                                                                <label class="input">
-                                                                    <input id="uf" maxlength="2" name="nome" class="required" value="">
-                                                                </label>
+                                                                <label class="label" for="Sexo">UF:</label>
+                                                                <label class="select">
+                                                                    <select id="uf" class="required">
+                                                                        <option SELECTED></option>
+                                                                        <option value="AC">AC</option>
+                                                                        <option value="AL">AL</option>
+                                                                        <option value="AP">AP</option>
+                                                                        <option value="AM">AM</option>
+                                                                        <option value="BA">BA</option>
+                                                                        <option value="CE">CE</option>
+                                                                        <option value="DF">DF</option>
+                                                                        <option value="ES">ES</option>
+                                                                        <option value="GO">GO</option>
+                                                                        <option value="MA">MA</option>
+                                                                        <option value="MT">MT</option>
+                                                                        <option value="MS">MS</option>
+                                                                        <option value="MG">MG</option>
+                                                                        <option value="PA">PA</option>
+                                                                        <option value="PB">PB</option>
+                                                                        <option value="PR">PR</option>
+                                                                        <option value="PE">PE</option>
+                                                                        <option value="PI">PI</option>
+                                                                        <option value="RJ">RJ</option>
+                                                                        <option value="RN">RN</option>
+                                                                        <option value="RS">RS</option>
+                                                                        <option value="RO">RO</option>
+                                                                        <option value="RR">RR</option>
+                                                                        <option value="SC">SC</option>
+                                                                        <option value="SP">SP</option>
+                                                                        <option value="SE">SE</option>
+                                                                        <option value="TO">TO</option>
+                                                                    </select><i></i>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Bairro:</label>
@@ -573,11 +601,6 @@ include("inc/scripts.php");
                 $("#nomeDependente").val('');
             };
         })
-
-        // if (/[0-9!#$&*-_/\^~+?.;,:][()]/g.test(nome));
-        // smartAlert("Atenção", "Nome Inválido, apenas Letras!", "error");
-        // $("#nome").val('');
-
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -961,7 +984,7 @@ include("inc/scripts.php");
             $("#dataNascimento").focus();
             return;
         }
-        if (rg == "") {
+        if (rg == "" || rg == "__.___.___-_") {
             smartAlert("Atenção", "Informe o seu RG!", "error");
             $("#rg").focus();
             return;
@@ -971,7 +994,7 @@ include("inc/scripts.php");
             $("#estadoCivil").focus();
             return;
         }
-        if (cep == "") {
+        if (cep == "" || cep == "_____-___") {
             smartAlert("Atenção", "Informe o CEP!", "error");
             $("#cep").focus();
             return;
@@ -1003,7 +1026,7 @@ include("inc/scripts.php");
         }
 
         if (primeiroEmprego == 0) {
-            if (pispasep == "") {
+            if (pispasep == "" || pisPasep == "___._____.__-_") {
                 smartAlert("Atenção", "Informe o Pis!", "error");
                 $("#pispasep").focus();
                 return;
@@ -1012,6 +1035,7 @@ include("inc/scripts.php");
         for (var i = 0; i < jsonTelefoneArray.length; i++) {}
 
         if (jsonTelefoneArray.length < 1 && jsonEmailArray.length < 1) {
+            
             smartAlert("Atenção", "Adicione pelo menos um meio de contato!", "error");
             $("#telefone").focus();
             return;
