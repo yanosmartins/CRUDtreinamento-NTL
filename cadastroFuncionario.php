@@ -1026,21 +1026,37 @@ include("inc/scripts.php");
         }
 
         if (primeiroEmprego == 0) {
-            if (pispasep == "" || pisPasep == "___._____.__-_") {
+            if (pispasep == "" || pispasep == "___._____.__-_") {
                 smartAlert("Atenção", "Informe o Pis!", "error");
                 $("#pispasep").focus();
                 return;
             }
+        }        
+        var umTelefonePrincipal = false;
+        for (var i = 0; i < jsonTelefoneArray.length; i++) {
+            if (jsonTelefoneArray[i].telefonePrincipal == true) {
+                umTelefonePrincipal = true;
+            }
         }
-        for (var i = 0; i < jsonTelefoneArray.length; i++) {}
-
-        if (jsonTelefoneArray.length < 1 && jsonEmailArray.length < 1) {
-            
-            smartAlert("Atenção", "Adicione pelo menos um meio de contato!", "error");
+        if (umTelefonePrincipal!= true){
+            smartAlert("Atenção", "Adicione pelo menos um Telefone como Pincipal!", "error");
             $("#telefone").focus();
             return;
         }
 
+        var umEmailPrincipal = false;
+        for (var i = 0; i < jsonEmailArray.length; i++) {
+            if (jsonEmailArray[i].EmailPrincipal == true) {
+                umEmailPrincipal = true;
+            }
+        }
+        if (umEmailPrincipal!= true){
+            smartAlert("Atenção", "Adicione pelo menos um Email como Pincipal!", "error");
+            $("#email").focus();
+            return;
+
+        }
+      
 
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);
         <?php $esconderBtn = "none" ?>
@@ -1122,7 +1138,7 @@ include("inc/scripts.php");
 
     function addTelefone() {
         var telefone = $("#telefone").val();
-        if (telefone === "") {
+        if (telefone === "" || telefone === "(__) _ ____-____") {
             smartAlert("Atenção", "Informe o Telefone !", "error");
             $("#telefone").focus();
             return;

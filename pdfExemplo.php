@@ -203,7 +203,7 @@ $id = $_GET["id"];
 // $sql = "SELECT nome, cpf, dataNascimento, genero, ativo FROM dbo.funcionario  WHERE (0=0)";
 $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
                 from dbo.funcionario FU 
-                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero WHERE FU.codigo = " .  $id;
+                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero WHERE FU.codigo = ". $id;
 
 $sql = $sql . $where;
 $reposit = new reposit();
