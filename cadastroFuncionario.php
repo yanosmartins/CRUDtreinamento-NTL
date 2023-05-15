@@ -589,7 +589,7 @@ include("inc/scripts.php");
 
         $(".nome").on("change", function() {
             let campo = '';
-            if (/[0-9\!\#\$\&\*\-\_\/\"\\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
+            if (/[0-9\!\#\$\&\*\'\-\_\/\"\\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
                 this.id == "nome" ? campo = 'Nome' : campo = 'Nome Dependente'; // iternario
 
                 // if( this.id == "nome"  ){
@@ -603,7 +603,7 @@ include("inc/scripts.php");
         })
         $(".numero").on("change", function() {
             let campo = '';
-            if (/[\!\#\$\&\*\\_\/\"\\^\~\+\?\\;\@\\:\]\[\(\)]/g.test(this.value)) {
+            if (/[\!\#\$\&\*\'\_\/\"\\^\~\+\?\\;\@\\:\]\[\(\)]/g.test(this.value)) {
                 smartAlert("Atenção", "inválido, use apenas Números", "error");
                 return;
             };
