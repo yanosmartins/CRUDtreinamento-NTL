@@ -264,7 +264,7 @@ function recupera()
     if ($row = $result[0]) {
         $id = (int)$row['codigo'];
         $ativo = (int)$row['ativo'];
-        $nomeCompleto = (string)$row['nome'];
+        $nomeCompleto = $row['nome'];
         $cpf = (string)$row['cpf'];
         $rg = (string)$row['rg'];
         $estadoCivil = (int)$row['estadoCivil'];

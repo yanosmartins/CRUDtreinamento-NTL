@@ -93,7 +93,7 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Nome do funcionário:</label>
                                                                 <label class="input">
-                                                                    <input id="nome" maxlength="255" name="nome" class="required nome" value="">
+                                                                    <input id="nome" name="nome" class="required nome" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">

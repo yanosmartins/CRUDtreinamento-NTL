@@ -200,18 +200,16 @@ include("inc/scripts.php");
                 }
             }
         }));
-        // $("#descricao").on("change", function() {
-        //     verificaDependente()
-        // });
+    
         $("#descricao").on("change", function() {
             console.log(this.value)
-            if (/[0-9\!\#\$\&\*\-\_\/\'\\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+            if (/[0-9\!\#\$\&\*\-\_\/\ã\â\à\é\ê\í\ó\õ\ô\ú\ç\á\Á\Ã\Â\À\É\Ê\Í\Ó\Õ\Ô\Ú\Ç\'\é\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
                 smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
                 $("#descricao").val('');
                 return;
             }
+            verificaDependente()    
         })
-
 
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
@@ -249,9 +247,9 @@ include("inc/scripts.php");
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-            if (verificaDependente()){
+           if(verificaDependente() != true){
                 gravar();
-            }
+           }
         });
 
         $("#btnVoltar").on("click", function() {
@@ -326,12 +324,13 @@ include("inc/scripts.php");
         excluiDependentes(codigo, ativo);
     }
 
-    function verificaDependente() {       
+    function verificaDependente() {
         var descricao = $("#descricao").val();
-        dependenteVerificado(descricao);               
+        dependenteVerificado(descricao);
+        return;
     }
 
     function novo() {
-        $(location).attr('href', 'TBcadastroDependentes.php');
+        $(location).attr('href', 'TBDependenteFiltro.php');
     }
 </script>
