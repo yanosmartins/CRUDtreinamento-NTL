@@ -111,6 +111,6 @@ function verificaDependente()
         echo  'success#';
     } else {
         $mensagem = "Tipo de dependente já registrado!";
-        echo "failed#" . $mensagem . ' ';
+        echo 'failed#' . $mensagem . ' ';
     }
 }

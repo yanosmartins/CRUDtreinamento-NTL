@@ -200,9 +200,17 @@ include("inc/scripts.php");
                 }
             }
         }));
+        // $("#descricao").on("change", function() {
+        //     verificaDependente()
+        // });
         $("#descricao").on("change", function() {
-            verificaDependente()
-        });
+            console.log(this.value)
+            if (/[0-9\!\#\$\&\*\-\_\/\'\\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+                smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
+                $("#descricao").val('');
+                return;
+            }
+        })
 
 
         $('#dlgSimpleExcluir').dialog({
@@ -237,11 +245,13 @@ include("inc/scripts.php");
         });
 
         $("#btnGravar").on("click", function() {
-            gravar();
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
+            if (verificaDependente()){
+                gravar();
+            }
         });
 
         $("#btnVoltar").on("click", function() {
@@ -316,20 +326,9 @@ include("inc/scripts.php");
         excluiDependentes(codigo, ativo);
     }
 
-    function verificaDependente() {
-        $("#descricao").on("change", function() {
-            console.log(this.value)
-            if (/[0-9\!\#\$\&\*\-\_\/\\\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
-                smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
-                $("#descricao").val('');
-                return;
-            };
-        })
-
+    function verificaDependente() {       
         var descricao = $("#descricao").val();
-        dependenteVerificado(descricao);
-
-        return;
+        dependenteVerificado(descricao);               
     }
 
     function novo() {
