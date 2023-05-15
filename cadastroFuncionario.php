@@ -605,6 +605,7 @@ include("inc/scripts.php");
             let campo = '';
             if (/[\!\#\$\&\*\\_\/\"\\^\~\+\?\\;\@\\:\]\[\(\)]/g.test(this.value)) {
                 smartAlert("Atenção", "inválido, use apenas Números", "error");
+                return;
             };
         })
 

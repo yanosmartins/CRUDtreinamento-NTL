@@ -204,14 +204,22 @@ $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estado
                 from dbo.funcionario FU 
                 LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero WHERE FU.codigo = " . $id;
 
-$sql = $sql . $where;
+
+$sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";
+$sqlEmail = "SELECT email, principal FROM dbo.emailFuncionario WHERE funcionarioId = $id";
+
+
 $reposit = new reposit();
 $resultQuery = $reposit->RunQuery($sql);
-$i = 22;
+$reposit = new reposit();
+$resultQueryTelefone = $reposit->RunQuery($sqlTelefone);
+$reposit = new reposit();
+$resultQueryEmail = $reposit->RunQuery($sqlEmail);
+
+
 $margem = 5;
 
 foreach ($resultQuery as $row) {
-
     $nome = $row['nome'];
     $cpf = $row['cpf'];
     $rg = $row['rg'];
@@ -224,6 +232,8 @@ foreach ($resultQuery as $row) {
     $primeiroEmprego = $row['primeiroEmprego'];
     $estadoCivil = (int)$row['estadoCivil'];
     $cep = $row['cep'];
+    $ativo = +$row['ativo'];
+    $primeiroEmprego = (int) $row['primeiroEmprego'];
 
     $valor_de_retorno = match ($estadoCivil) {
         1 => 'Solteiro',
@@ -232,15 +242,14 @@ foreach ($resultQuery as $row) {
         4 => 'Divorciado',
         5 => 'Viúvo'
     };
-    $estadoCivil = $valor_de_retorno;
-    $ativo = +$row['ativo'];
 
+    $estadoCivil = $valor_de_retorno;
     if ($ativo == 1) {
         $ativo = 'Sim';
     } else {
         $ativo = 'Não';
     }
-    $primeiroEmprego = (int) $row['primeiroEmprego'];
+    
     if ($primeiroEmpreg == 1) {
         $primeiroEmprego = "Sim";
     } else {
@@ -250,7 +259,7 @@ foreach ($resultQuery as $row) {
         $pispasep = "Nenhum";
     }
 
-    $i += 5;
+   
 
 
     $pdf->setY(28);
@@ -312,51 +321,95 @@ foreach ($resultQuery as $row) {
     $pdf->Line(25, 50, 185, 50); //menor
     $pdf->Line(25, 50, 185, 50); //menor
 
-
-
-    
-
-
-    
-
-
-    $pdf->SetFont($tipoDeFonte, '', 8);
-    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    $pdf->setY(80);
-    $pdf->setX(15);
-    $pdf->SetFillColor(230, 0, 0);
-    $pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', 'TELEFONE:'), 1, 0, "C", 1);
-    $pdf->SetFillColor(255, 165, 0);
-
-    $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL:'), 1, 0, "C", 1);
-    $pdf->SetFillColor(0,230,0);
-    $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'WHATSAPP:'), 1, 0, "C", 1);
-    
-
-    $pdf->SetFont($tipoDeFonte, '', 8);
-    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    $pdf->setY(80);
-    $pdf->setX(100);
-    $pdf->SetFillColor(230, 0, 0);
-    $pdf->Cell(68, 5, iconv('UTF-8', 'windows-1252', 'EMAIL:'), 1, 0, "C", 1);
-    $pdf->SetFillColor(255, 165, 0);
-    $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL:'), 1, 0, "C", 1);
-    
-
-
-
-
-
-
-    // $pdf->SetFont('Arial', 'B', 14);
-    // // Table with 20 rows and 4 columns
-    // $pdf->SetWidths(array(10, 70, 30, 40, "C"));
-    
-    
-    // for ($i = 0; $i < 6; $i++) {
-    //     $pdf->MultiCell(20, 5, $ativo, 1, "C", false); //menor
-    // }
 }
+
+
+$i = 75;
+
+    $pdf->SetFont($tipoDeFonte, '', 8);
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setY($i);
+    $pdf->setX(15);
+    $pdf->SetFillColor(255, 160, 122);
+    $pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', 'TELEFONE:'), 1, 0, "C", 1);
+    $pdf->SetFillColor(238, 232, 170);
+    $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL:'), 1, 0, "C", 1);
+    $pdf->SetFillColor(144, 238, 144);
+    $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'WHATSAPP:'), 1, 0, "C", 1);
+
+    $pdf->SetFont($tipoDeFonte, '', 8);
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setY($i);
+    $pdf->setX(100);
+    $pdf->SetFillColor(255, 160, 122);
+    $pdf->Cell(68, 5, iconv('UTF-8', 'windows-1252', 'EMAIL:'), 1, 0, "C", 1);
+    $pdf->SetFillColor(238, 232, 170);
+    $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL:'), 1, 0, "C", 1);
+
+
+
+
+    $pdf->SetFillColor(238, 238, 238);
+    $pdf->SetTextColor(0, 0, 0);
+
+
+
+
+foreach ($resultQueryTelefone as $row) {
+    $telefone = $row['telefone'];
+    $principal = $row['principal'];
+    $whatsapp = $row['whatsapp'];
+
+    if ($principal == 1) {
+        $principal = 'Sim';
+    } else {
+        $principal = 'Não';
+    }
+    if ($whatsapp == 1) {
+        $whatsapp = 'Sim';
+    } else {
+        $whatsapp = 'Não';
+    }
+
+    $i += 5;
+
+    $pdf->setY($i);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(15);
+    $pdf->SetFont($tipoDeFonte, '', 8);
+    $pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', $telefone), 1, 0, "C", 0);
+    $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', $principal), 1, 0, "C", 0);
+    $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', $whatsapp), 1, 0, "C", 0);
+
+}
+
+
+$i = 75;
+foreach ($resultQueryEmail as $row) {
+    $email = $row['email'];
+    $principal = $row['principal'];
+    
+
+    if ($principal == 1) {
+        $principal = 'Sim';
+    } else {
+        $principal = 'Não';
+    }
+
+    $i += 5;
+
+    $pdf->setY($i);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(100);
+    $pdf->SetFont($tipoDeFonte, '', 8);
+    $pdf->Cell(68, 5, iconv('UTF-8', 'windows-1252', $email), 1, 0, "C", 0);
+    $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $principal), 1, 0, "C", 0);
+
+}
+
+
+
+
 
 
 
