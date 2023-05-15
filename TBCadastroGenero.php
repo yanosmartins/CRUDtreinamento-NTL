@@ -341,6 +341,6 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'TBcadastroGenero.php');
+        $(location).attr('href', 'TBGeneroFiltro.php');
     }
 </script>

@@ -203,7 +203,8 @@ include("inc/scripts.php");
     
         $("#descricao").on("change", function() {
             console.log(this.value)
-            if (/[0-9\!\#\$\&\*\-\_\/\ã\â\à\é\ê\í\ó\õ\ô\ú\ç\á\Á\Ã\Â\À\É\Ê\Í\Ó\Õ\Ô\Ú\Ç\'\é\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+            if (/[0-9\!\#\$\&\*\-\_\/\'\é\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+                // \ã\â\à\é\ê\í\ó\õ\ô\ú\ç\á\Á\Ã\Â\À\É\Ê\Í\Ó\Õ\Ô\Ú\Ç
                 smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
                 $("#descricao").val('');
                 return;
@@ -331,6 +332,6 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'TBDependenteFiltro.php');
+        $(location).attr('href', 'TBDependentesFiltro.php');
     }
 </script>
