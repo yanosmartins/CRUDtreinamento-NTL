@@ -191,8 +191,7 @@ include "js/repositorio.php";
                     echo '<td class="text-center">' . $primeiroEmpregoFiltro . '</td>';
                     echo '<td class="text-center">' . $pisPasepFiltro . '</td>';
                     echo '<td class="text-center">' . $ativoFiltro . '</td>';
-                    // echo '<td class="text-center"><button type="button" class="btnPdfFuncionario btn btn-info"><i class="fa fa-file-pdf-o"></i></button></td>';
-                    echo '<td class="text-center"><a href="pdfExemplo.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-danger"><i class=" fa fa-file-pdf-o"></i></button></td>';
+                    echo '<td class="text-center"><a href="pdfIndividual.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-danger"><i class=" fa fa-file-pdf-o"></i></button></td>';
                     echo '</tr >';
                 }
                 ?>
@@ -286,7 +285,7 @@ include "js/repositorio.php";
 
 
     function pdfFuncionario() {
-        $(location).attr('href', 'pdfExemplo.php?id= ');
+        $(location).attr('href', 'pdfIndividual.php?id= ');
        
     }
 

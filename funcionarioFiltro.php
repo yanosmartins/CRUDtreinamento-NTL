@@ -344,6 +344,6 @@ include("inc/scripts.php");
     }
     function pdfFuncionario() {
         // var id = id OU codigo
-        $(location).attr('href', 'pdfExemplo.php');
+        $(location).attr('href', 'pdfColetivo.php');
     }
 </script>
