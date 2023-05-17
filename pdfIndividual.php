@@ -81,6 +81,13 @@ class PDF extends FPDF
         $this->Cell(20, 7.5, 'Pagina ' . $this->pageno()); #Imprime o Número das Páginas
 
         $this->Ln(24); #Quebra de Linhas
+
+        $this->SetTextColor(255, 192, 203);
+        $this->Image('C:\inetpub\wwwroot\Cadastro\img\marcaDagua.png',35,45,135,145,'PNG'); 
+        
+         
+
+
     }
     function Footer()
     {
@@ -440,7 +447,7 @@ foreach ($resultQueryDependente as $row) {
     $cpf = $row['cpf'];
     $dataNascimento = $row['dataNascimento'];
     $tipo = $row['tipo'];
-    
+
     $split_nome = explode(" ", trim($nome));
     if (count($split_nome) > 2) {
         for ($contador = 1; (count($split_nome) - 1) > $contador; $contador++) {
