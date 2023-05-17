@@ -757,14 +757,14 @@ include("inc/scripts.php");
             novo();
         });
         $("#btnGravar").on("click", function() {
-            if (VerificaCPF() !== true) {
-                gravar();
-            }
+            
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-
+            if (VerificaCPF() !== true) {
+                gravar();
+            }
         });
         $("#btnVoltar").on("click", function() {
             voltar();
@@ -775,7 +775,6 @@ include("inc/scripts.php");
     function VerificaCPF() {
         var cpf = $("#cpf").val();
         cpfverificado(cpf);
-        return;
     }
 
     function ValidaCPF() {

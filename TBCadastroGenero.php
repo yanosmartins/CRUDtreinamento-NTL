@@ -207,8 +207,6 @@ include("inc/scripts.php");
             }
             verificaGenero()
         });
-
-
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -326,6 +324,7 @@ include("inc/scripts.php");
     function verificaGenero() {
         var descricao = $("#descricao").val();
         generoVerificado(descricao);
+        return true;
     }
 
     function voltar() {

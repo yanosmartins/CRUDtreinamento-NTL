@@ -331,6 +331,7 @@ include("inc/scripts.php");
     function verificaDependente() {
         var descricao = $("#descricao").val();
         dependenteVerificado(descricao);
+        
     }
 
     function novo() {
