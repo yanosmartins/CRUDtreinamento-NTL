@@ -91,7 +91,7 @@ function generoVerificado(descricao) {
                     smartAlert("Atenção", mensagem, "error");
                     document.getElementById('descricao').value = "";
                     $("#descricao").focus();
-                    return;
+                    // return;
                 }
             }
             ////////////////////////////////////////
