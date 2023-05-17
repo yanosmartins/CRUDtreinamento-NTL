@@ -239,22 +239,15 @@ foreach ($resultQuery as $row) {
     }
 
 
-
-
     //como os nomes são separados por espaço em branco então vamos criar o array a partir dos espaços
     $split_nome = explode(" ", trim($nome)); ////pesquisar dps
-
-
     //so vamos abreviar o nome se ele tiver pelo menos 2 sobrenomes
     if (count($split_nome) > 2) {
-
         //esse for inicia a partir da segunda posição do array para o primeiro nome ser desconsiderado
         for ($i = 1; (count($split_nome) - 1) > $i; $i++) {
-
             //claro que como existem dos|de|da|das
             // (Cristina DOS Santos) podemos omitir ou exibir sem abrevirar essas preposições, aqui no caso eu as mantenho sem alteração
             if (strlen($split_nome[$i]) > 3) {
-
                 //aqui será feito a abreviação com apenas a inicial da palavra a ser abreviada seguida de ponto
                 $split_nome[$i] = substr($split_nome[$i], 0, 1) . ".";
             }
@@ -449,6 +442,16 @@ foreach ($resultQueryDependente as $row) {
     $cpf = $row['cpf'];
     $dataNascimento = $row['dataNascimento'];
     $tipo = $row['tipo'];
+    
+    $split_nome = explode(" ", trim($nome));
+    if (count($split_nome) > 2) {
+        for ($contador = 1; (count($split_nome) - 1) > $contador; $contador++) {
+            if (strlen($split_nome[$contador]) > 3) {
+                $split_nome[$contador] = substr($split_nome[$contador], 0, 1) . ".";
+            }
+        }
+    }
+    $split_nome = implode(" ", $split_nome);
 
 
     $i += 5;
@@ -457,7 +460,7 @@ foreach ($resultQueryDependente as $row) {
     $pdf->setX(28.5);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->SetFont($tipoDeFonte, '', 8);
-    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $nome), 1, 0, "C", 1);
+    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $split_nome), 1, 0, "C", 1);
     $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $cpf), 1, 0, "C", 1);
     $pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', $dataNascimento), 1, 0, "C", 1);
     $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $tipo), 1, 0, "C", 1);
