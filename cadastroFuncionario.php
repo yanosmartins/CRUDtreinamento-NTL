@@ -757,7 +757,9 @@ include("inc/scripts.php");
             novo();
         });
         $("#btnGravar").on("click", function() {
-            gravar();
+            if (VerificaCPF() !== true) {
+                gravar();
+            }
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
@@ -1095,6 +1097,11 @@ include("inc/scripts.php");
             smartAlert("Atenção", "Informe o número do seu endereço!", "error");
             $("#cidade").focus();
             return;
+        }
+        if (VerificaCPF == true)
+        {
+            disabled
+
         }
 
 
