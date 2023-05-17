@@ -326,10 +326,8 @@ include("inc/scripts.php");
     }
 
     function verificaGenero() {
-
         var descricao = $("#descricao").val();
         generoVerificado(descricao);
-        return true;
     }
 
     function voltar() {

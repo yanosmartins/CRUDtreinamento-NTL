@@ -20,7 +20,7 @@ if ($funcao == 'verificaDependente') {
     call_user_func($funcao);
 }
 
-return;
+
 
 function gravar()
 {
@@ -112,5 +112,6 @@ function verificaDependente()
     } else {
         $mensagem = "Tipo de dependente já registradoooooo!";
         echo 'failed#' . $mensagem . ' ';
+        return true;
     }
 }

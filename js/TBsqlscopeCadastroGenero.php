@@ -63,6 +63,7 @@ function verificaGenero()
     } else {
         $mensagem = "Gênero já registrado!";
         echo "failed#" . $mensagem . ' ';
+        return true;
     }
 }
 
