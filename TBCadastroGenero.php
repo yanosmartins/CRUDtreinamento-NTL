@@ -255,12 +255,14 @@ include("inc/scripts.php");
         });
 
         $("#btnGravar").on("click", function() {
-            gravar();
+            
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-
+            if(verificaGenero() !== true){
+                gravar();
+            }
         });
 
         $("#btnVoltar").on("click", function() {
@@ -327,7 +329,7 @@ include("inc/scripts.php");
 
         var descricao = $("#descricao").val();
         generoVerificado(descricao);
-        return;
+        return true;
     }
 
     function voltar() {

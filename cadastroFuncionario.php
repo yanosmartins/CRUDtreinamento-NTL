@@ -591,7 +591,7 @@ include("inc/scripts.php");
             let campoId = '';
             if (/[0-9\!\#\$\&\*\'\-\_\/\"\\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
                 this.id == "nome" ? campo = 'Nome' : campo = 'Nome de Dependente'; // iternario
-                
+
                 // if( this.id == "nome"  ){
                 //     campo = "Nome"
                 // }else{
@@ -610,6 +610,7 @@ include("inc/scripts.php");
                 $("#numero").val("");
             };
         })
+
 
 
         $("#dataNascimento").on("change", function() {
@@ -668,7 +669,7 @@ include("inc/scripts.php");
                             $("#uf").val(dados.uf);
                             $("#numero").focus();
                             $("#numero").focus();
-                            
+
                         } //end if.
                         else {
                             console.log("CEP não encontrado."); //CEP pesquisado não foi encontrado.
@@ -1036,7 +1037,7 @@ include("inc/scripts.php");
         //     document.getElementById('pispasep').value = '';
         //      $("#pispasep").val('');
         // }
-        
+
         var umTelefonePrincipal = false;
         for (var i = 0; i < jsonTelefoneArray.length; i++) {
             if (jsonTelefoneArray[i].telefonePrincipal == true) {
@@ -1091,7 +1092,7 @@ include("inc/scripts.php");
             $("#cidade").focus();
             return;
         }
-       
+
 
 
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);
@@ -1479,18 +1480,24 @@ include("inc/scripts.php");
     }
 
     function validarEmail() {
-        var er = new RegExp(/^[A-Za-z0-9-.]+@[A-Za-z0-9-.]{2,}.[A-Za-z0-9]{2,}(.[A-Za-z0-9])?/);
         var email = $('#Email').val();
+        var er = new RegExp(/^[A-Za-z0-9-.]+@[A-Za-z0-9-.]{2,}.[A-Za-z0-9]{2,}(.[A-Za-z0-9])?/);
+        // if (/[\!\#\$\&\*\'\_\/\"\\^\~\+\?\\;\\:\]\[\(\)]/g.test(email.value)) {
+        //     smartAlert("Atenção", "inválido!", "error");
+        //     $("#email").val("");
+        // };
         if (!er.test(email)) {
-            smartAlert("Erro", "Email Inválido!", "error");
-            var controleEmail = 1;
-            return false;
-        } else {
-            validaEmail();
-        }
-        return true;
-    };
+        smartAlert("Erro", "Email Inválido!", "error");
+        var controleEmail = 1;
+        return false;
+    } else {
+        validaEmail();
+    }
+    return true;
+    }
 
+
+ 
     function addDependente() {
         var nomeDependente = $("#nomeDependente").val();
         var cpfDependente = $("#cpfDependente").val();

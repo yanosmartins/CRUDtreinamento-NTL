@@ -322,9 +322,9 @@ foreach ($resultQuery as $row) {
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "L", 0);
     $pdf->SetFont($tipoDeFonte, '', 8);
 
-    $pdf->Line(25, 50, 185, 50); //menor
-    $pdf->Line(25, 50, 185, 50); //menor
-    $pdf->Line(25, 50, 185, 50); //menor
+    // $pdf->Line(25, 50, 185, 50); //menor
+    // $pdf->Line(25, 50, 185, 50); //menor
+    // $pdf->Line(25, 50, 185, 50); //menor
 
 }
 
@@ -423,9 +423,9 @@ $pdf->setX(85);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'LISTA DE DEPENDENTES'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 20);
 
-$pdf->Line(25, $i + 3, 185, $i + 3); //menor
-$pdf->Line(25, $i + 3, 185, $i + 3); //menor
-$pdf->Line(25, $i + 3, 185, $i + 3); //menor
+$pdf->Line(25, $i + 5, 185, $i + 5); //menor
+$pdf->Line(25, $i + 5, 185, $i + 5); //menor
+$pdf->Line(25, $i + 5, 185, $i + 5); //menor
 
 
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);

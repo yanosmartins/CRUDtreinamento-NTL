@@ -110,7 +110,7 @@ function verificaDependente()
     if (!$result) {
         echo  'success#';
     } else {
-        $mensagem = "Tipo de dependente já registrado!";
+        $mensagem = "Tipo de dependente já registradoooooo!";
         echo 'failed#' . $mensagem . ' ';
     }
 }

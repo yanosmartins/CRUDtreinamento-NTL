@@ -248,7 +248,7 @@ include("inc/scripts.php");
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-           if(verificaDependente() != true){
+           if(verificaDependente() !== true){
                 gravar();
            }
         });
@@ -328,7 +328,7 @@ include("inc/scripts.php");
     function verificaDependente() {
         var descricao = $("#descricao").val();
         dependenteVerificado(descricao);
-        return;
+        return true;
     }
 
     function novo() {
