@@ -286,7 +286,7 @@ function recupera()
 
         $out =  $id . "^" .
             $ativo . "^" .
-            $nomeCompleto . "^" .
+            trim($nomeCompleto) . "^" .
             $cpf . "^" .
             $rg . "^" .
             $dataNascimento . "^" .
