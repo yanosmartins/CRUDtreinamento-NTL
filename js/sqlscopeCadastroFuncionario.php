@@ -61,6 +61,9 @@ function gravar()
     $complemento = $_POST['complemento'];
     $primeiroEmprego = $_POST['primeiroEmprego'];
     $pispasep = $_POST['pispasep'];
+    if ($pispasep == "___._____.__-_") {
+        $pispasep = "";
+    }
 
     $comum = new comum();
     $strArrayTelefone = $_POST['jsonTelefoneArray'];
@@ -280,9 +283,7 @@ function recupera()
         $numero = (string)$row['numero'];
         $complemento = (string)$row['complemento'];
         $primeiroEmprego = (string)$row['primeiroEmprego'];
-        $pisPasep = (string)$row['pisPasep'];
-
-
+        $pisPasep = (string)$row['pisPasep'];     
 
         $out =  $id . "^" .
             $ativo . "^" .

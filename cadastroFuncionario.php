@@ -315,7 +315,6 @@ include("inc/nav.php");
                                                                 <label class="label" for="Sexo">UF:</label>
                                                                 <label class="select">
                                                                     <select id="uf" class="required">
-                                                                        <option SELECTED></option>
                                                                         <option value="AC">AC</option>
                                                                         <option value="AL">AL</option>
                                                                         <option value="AP">AP</option>
@@ -401,25 +400,25 @@ include("inc/nav.php");
                                                                     <section class="col col-3">
                                                                         <label class="label">Nome do Dependente:</label>
                                                                         <label class="input">
-                                                                            <input id="nomeDependente" maxlength="255" class="required nome" value="">
+                                                                            <input id="nomeDependente" maxlength="255" class="nome" value="">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
                                                                         <label class="label">CPF:</label>
                                                                         <label class="input"><i class="icon-prepend fa fa-user"></i>
-                                                                            <input id="cpfDependente" name="cpfDependente" class="required cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
+                                                                            <input id="cpfDependente" name="cpfDependente" class="cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2">
                                                                         <label class="label">Data de Nascimento:</label>
                                                                         <label class="input">
-                                                                            <input id="dataNascimentoDependente" type="text" class="datepicker required" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                            <input id="dataNascimentoDependente" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-2 col-auto">
                                                                         <label class="label">Tipo de Dependente:</label>
                                                                         <label class="select">
-                                                                            <select id="tipoDependente" class="required">
+                                                                            <select id="tipoDependente" class="">
                                                                                 <?php
                                                                                 $reposit = new reposit();
                                                                                 $sql = "SELECT codigo, descricao FROM dbo.dependentesFuncionario where dependenteAtivo = 1 ORDER BY codigo";
@@ -589,23 +588,26 @@ include("inc/scripts.php");
 
         $(".nome").on("change", function() {
             let campo = '';
+            let campoId = '';
             if (/[0-9\!\#\$\&\*\'\-\_\/\"\\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
-                this.id == "nome" ? campo = 'Nome' : campo = 'Nome Dependente'; // iternario
-
+                this.id == "nome" ? campo = 'Nome' : campo = 'Nome de Dependente'; // iternario
+                
                 // if( this.id == "nome"  ){
                 //     campo = "Nome"
                 // }else{
                 //     campo = "Nome Dependete"
                 // }
-
+                this.id == "nome" ? campoId = '#nome' : campoId = '#nomeDependente';
                 smartAlert("Atenção", `${campo} inválido, use apenas Letras`, "error");
+                // document.getElementById( `${campoId}`).value = '';
+                $(`${campoId}`).val("");
             };
         })
         $(".numero").on("change", function() {
             let campo = '';
             if (/[\!\#\$\&\*\'\_\/\"\\^\~\+\?\\;\@\\:\]\[\(\)]/g.test(this.value)) {
                 smartAlert("Atenção", "inválido, use apenas Números", "error");
-                return;
+                $("#numero").val("");
             };
         })
 
@@ -635,6 +637,15 @@ include("inc/scripts.php");
         $("#primeiroEmprego").on("change", function() {
             verificaPrimeiroEmprego();
         });
+
+        // $("#pispasep").on("change", function() {
+        //     var pispasep = $("#pispasep").val()
+        //     if ($("#pispasep").val("___._____.__-_")){
+        //         $("#pispasep").val('');
+        //     }
+        // });
+
+
         $("#dataNascimentoDependente").on("change", function() {
             var dataNascimentoDependente = $("#dataNascimentoDependente").val();
             if (validarDataDependente(dataNascimentoDependente) == false) {
@@ -656,8 +667,8 @@ include("inc/scripts.php");
                             $("#cidade").val(dados.localidade);
                             $("#uf").val(dados.uf);
                             $("#numero").focus();
-                            $("#numero").val("");
-                            $("#complemento").val("");
+                            $("#numero").focus();
+                            
                         } //end if.
                         else {
                             console.log("CEP não encontrado."); //CEP pesquisado não foi encontrado.
@@ -987,20 +998,68 @@ include("inc/scripts.php");
             $("#nome").focus();
             return;
         }
-        if (dataNascimento == "") {
-            smartAlert("Atenção", "Informe a data de nascimento!", "error");
-            $("#dataNascimento").focus();
-            return;
-        }
         if (rg == "" || rg == "__.___.___-_") {
             smartAlert("Atenção", "Informe o seu RG!", "error");
             $("#rg").focus();
+            return;
+        }
+        if (dataNascimento == "") {
+            smartAlert("Atenção", "Informe a data de nascimento!", "error");
+            $("#dataNascimento").focus();
             return;
         }
         if (estadoCivil == "") {
             smartAlert("Atenção", "Informe o seu Estado Civil!", "error");
             $("#estadoCivil").focus();
             return;
+        }
+        if (genero == "") {
+            smartAlert("Atenção", "Informe o seu Gênero!", "error");
+            $("#genero").focus();
+            return;
+        }
+        if (primeiroEmprego == "") {
+            smartAlert("Atenção", "Informe se é o Primeiro Emprego!", "error");
+            $("#primeiroEmprego").focus();
+            return;
+        }
+
+        if (primeiroEmprego == 0) {
+            if (pispasep == "" || pispasep == "___._____.__-_") {
+                smartAlert("Atenção", "Informe o Pis!", "error");
+                $("#pispasep").focus();
+                return;
+            }
+        }
+
+        // if (pispasep == "___._____.__-_") {
+        //     document.getElementById('pispasep').value = '';
+        //      $("#pispasep").val('');
+        // }
+        
+        var umTelefonePrincipal = false;
+        for (var i = 0; i < jsonTelefoneArray.length; i++) {
+            if (jsonTelefoneArray[i].telefonePrincipal == true) {
+                umTelefonePrincipal = true;
+            }
+        }
+        if (umTelefonePrincipal != true) {
+            smartAlert("Atenção", "Adicione pelo menos um Telefone como Pincipal!", "error");
+            $("#telefone").focus();
+            return;
+        }
+
+        var umEmailPrincipal = false;
+        for (var i = 0; i < jsonEmailArray.length; i++) {
+            if (jsonEmailArray[i].EmailPrincipal == true) {
+                umEmailPrincipal = true;
+            }
+        }
+        if (umEmailPrincipal != true) {
+            smartAlert("Atenção", "Adicione pelo menos um Email como Pincipal!", "error");
+            $("#email").focus();
+            return;
+
         }
         if (cep == "" || cep == "_____-___") {
             smartAlert("Atenção", "Informe o CEP!", "error");
@@ -1027,48 +1086,12 @@ include("inc/scripts.php");
             $("#cidade").focus();
             return;
         }
-        if (primeiroEmprego == "") {
-            smartAlert("Atenção", "Informe se é o Primeiro Emprego!", "error");
-            $("#primeiroEmprego").focus();
+        if (numero == "") {
+            smartAlert("Atenção", "Informe o número do seu endereço!", "error");
+            $("#cidade").focus();
             return;
         }
-
-        if (primeiroEmprego == 0) {
-            if (pispasep == "" || pispasep == "___._____.__-_") {
-                smartAlert("Atenção", "Informe o Pis!", "error");
-                $("#pispasep").focus();
-                return;
-            }
-        }
-        if (pispasep == "___._____.__-_") {
-            smartAlert("Atenção", "Pis Inválido!", "error");
-            $("#pispasep").focus();
-            return;
-        }
-        var umTelefonePrincipal = false;
-        for (var i = 0; i < jsonTelefoneArray.length; i++) {
-            if (jsonTelefoneArray[i].telefonePrincipal == true) {
-                umTelefonePrincipal = true;
-            }
-        }
-        if (umTelefonePrincipal != true) {
-            smartAlert("Atenção", "Adicione pelo menos um Telefone como Pincipal!", "error");
-            $("#telefone").focus();
-            return;
-        }
-
-        var umEmailPrincipal = false;
-        for (var i = 0; i < jsonEmailArray.length; i++) {
-            if (jsonEmailArray[i].EmailPrincipal == true) {
-                umEmailPrincipal = true;
-            }
-        }
-        if (umEmailPrincipal != true) {
-            smartAlert("Atenção", "Adicione pelo menos um Email como Pincipal!", "error");
-            $("#email").focus();
-            return;
-
-        }
+       
 
 
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);

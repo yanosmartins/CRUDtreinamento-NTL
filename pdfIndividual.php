@@ -238,7 +238,6 @@ foreach ($resultQuery as $row) {
         $pispasep = "Nenhum";
     }
 
-
     //como os nomes são separados por espaço em branco então vamos criar o array a partir dos espaços
     $split_nome = explode(" ", trim($nome)); ////pesquisar dps
     //so vamos abreviar o nome se ele tiver pelo menos 2 sobrenomes
@@ -253,7 +252,6 @@ foreach ($resultQuery as $row) {
             }
         }
     }
-
     //aqui será impresso o nome resultante com a junção do array em favor de se obter uma string colando as posições do array com espaços em branco!
     $split_nome = implode(" ", $split_nome);
 
