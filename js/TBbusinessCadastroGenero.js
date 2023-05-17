@@ -61,7 +61,7 @@ function excluiGenero(codigo) {
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                 location.reload();
-               
+                novo();
             }
         },
         error: function (xhr, er) {

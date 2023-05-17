@@ -98,11 +98,8 @@ function recupera()
 
 function excluir()
 {
-
     $codigo = $_POST["codigo"];
     $reposit = new reposit();
-    
-    // $codigo = $_GET["codigo"];
 
     session_start();
 
