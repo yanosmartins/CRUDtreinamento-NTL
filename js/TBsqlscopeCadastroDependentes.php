@@ -65,7 +65,7 @@ function recupera()
         $descricao = $row['descricao'];
 
         $out =  $ativo . "^" .
-            $descricao;
+            trim($descricao);
 
         if ($out == "") {
             echo "failed#";

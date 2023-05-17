@@ -195,19 +195,16 @@ include("inc/scripts.php");
 <script language="JavaScript" type="text/javascript">
     //     //EVENTO CONSTANTE
     $(document).ready(function() {
-
-
-
         carregaPagina();
         $("#descricao").on("change", function() {
 
             console.log(this.value)
-            if (/[0-9\!\#\$\&\*\-\_\/\ã\â\à\é\ê\í\ó\õ\ô\ú\ç\á\Á\Ã\Â\À\É\Ê\Í\Ó\Õ\Ô\Ú\Ç\'\é\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+            if (/[0-9\!\#\$\&\*\-\_\/Ç\'\<\>\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+                // \ã\â\à\é\ê\í\ó\õ\ô\ú\ç\á\Á\Ã\Â\À\É\Ê\Í\Ó\Õ\Ô\Ú\é
                 smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
                 $("#descricao").val('');
                 return;
             }
-
             verificaGenero()
         });
 
@@ -250,17 +247,18 @@ include("inc/scripts.php");
 
             if (id !== 0) {
                 $('#dlgSimpleExcluir').dialog('open');
+
             }
 
         });
 
         $("#btnGravar").on("click", function() {
-            
+
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-            if(verificaGenero() !== true){
+            if (verificaGenero() !== true) {
                 gravar();
             }
         });
@@ -338,7 +336,8 @@ include("inc/scripts.php");
         var ativo = $("#ativo").val();
         var codigo = $("#codigo").val();
         excluiGenero(codigo, ativo);
-       
+        voltar()
+
     }
 
     function novo() {

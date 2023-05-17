@@ -589,7 +589,7 @@ include("inc/scripts.php");
         $(".nome").on("change", function() {
             let campo = '';
             let campoId = '';
-            if (/[0-9\!\#\$\&\*\'\-\_\/\"\\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
+            if (/[0-9\!\#\$\&\*\'\-\_\/\"\<\>\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
                 this.id == "nome" ? campo = 'Nome' : campo = 'Nome de Dependente'; // iternario
 
                 // if( this.id == "nome"  ){
@@ -605,7 +605,7 @@ include("inc/scripts.php");
         })
         $(".numero").on("change", function() {
             let campo = '';
-            if (/[\!\#\$\&\*\'\_\/\"\\^\~\+\?\\;\@\\:\]\[\(\)]/g.test(this.value)) {
+            if (/[\!\#\$\&\*\'\_\/\"\>\<\^\~\+\?\\;\@\\:\]\[\(\)]/g.test(this.value)) {
                 smartAlert("Atenção", "inválido, use apenas Números", "error");
                 $("#numero").val("");
             };
@@ -717,27 +717,7 @@ include("inc/scripts.php");
         $("#btnRemoverEmail").on("click", function() {
             excluiEmailTabela();
         });
-        $('#dlgSimpleExcluir').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
-            buttons: [{
-                html: "Excluir registro",
-                "class": "btn btn-success",
-                click: function() {
-                    $(this).dialog("close");
-                    excluir();
-                }
-            }, {
-                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
-                "class": "btn btn-default",
-                click: function() {
-                    $(this).dialog("close");
-                }
-            }]
-        });
+
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
 
@@ -750,6 +730,28 @@ include("inc/scripts.php");
             if (id !== 0) {
                 $('#dlgSimpleExcluir').dialog('open');
             }
+        });
+        $('#dlgSimpleExcluir').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Excluir registro",
+                "class": "btn btn-success",
+                click: function() {
+                    $(this).dialog("close");
+                    excluir();
+
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
         });
         $("#btnNovo").on("click", function() {
             novo();
@@ -953,6 +955,8 @@ include("inc/scripts.php");
             return;
         }
         excluirUsuario(id);
+        voltar()
+
     }
 
     function voltar() {
@@ -1487,17 +1491,15 @@ include("inc/scripts.php");
         //     $("#email").val("");
         // };
         if (!er.test(email)) {
-        smartAlert("Erro", "Email Inválido!", "error");
-        var controleEmail = 1;
-        return false;
-    } else {
-        validaEmail();
-    }
-    return true;
+            smartAlert("Erro", "Email Inválido!", "error");
+            var controleEmail = 1;
+            return false;
+        } else {
+            validaEmail();
+        }
+        return true;
     }
 
-
- 
     function addDependente() {
         var nomeDependente = $("#nomeDependente").val();
         var cpfDependente = $("#cpfDependente").val();

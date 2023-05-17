@@ -200,7 +200,7 @@ include("inc/scripts.php");
                 }
             }
         }));
-    
+
         $("#descricao").on("change", function() {
             console.log(this.value)
             if (/[0-9\!\#\$\&\*\-\_\/\'\é\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
@@ -209,8 +209,9 @@ include("inc/scripts.php");
                 $("#descricao").val('');
                 return;
             }
-            verificaDependente()    
+            verificaDependente()
         })
+
 
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
@@ -239,8 +240,9 @@ include("inc/scripts.php");
 
             if (id !== 0) {
                 $('#dlgSimpleExcluir').dialog('open');
+
             }
-            excluir();
+
         });
 
         $("#btnGravar").on("click", function() {
@@ -248,9 +250,9 @@ include("inc/scripts.php");
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-           if(verificaDependente() !== true){
+            if (verificaDependente() !== true) {
                 gravar();
-           }
+            }
         });
 
         $("#btnVoltar").on("click", function() {
@@ -323,12 +325,13 @@ include("inc/scripts.php");
         var ativo = $("#ativo").val();
         var codigo = $("#codigo").val();
         excluiDependentes(codigo, ativo);
+        voltar();
     }
 
     function verificaDependente() {
         var descricao = $("#descricao").val();
         dependenteVerificado(descricao);
-        
+
     }
 
     function novo() {

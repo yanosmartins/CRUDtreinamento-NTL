@@ -213,8 +213,6 @@ function pispasepVerificado(pispasep) {
     return '';
 }
 
-
-
 function excluirUsuario(id) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php', //caminho do arquivo a ser executado
@@ -239,14 +237,17 @@ function excluirUsuario(id) {
                 }
                 location.reload();
             } else {
+
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                location.reload();
+                voltar()
+                // location.reload();
             }
         },
         error: function (xhr, er) {
             //tratamento de erro
         }
     });
+    
 }
 
 function recuperaUsuario(id, callback) {
