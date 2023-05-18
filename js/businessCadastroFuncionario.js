@@ -130,9 +130,6 @@ function cpfDependenteValidado(cpfDependente) {
                 $("#cpfDependente").focus();
 
             }
-            // else{
-            //     smartAlert("SIMMMM", "Passoou!", "success");
-            // }
         },
         error: function (xhr, er) {
             console.log(xhr, er);

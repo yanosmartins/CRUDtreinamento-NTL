@@ -198,7 +198,7 @@ include("inc/nav.php");
                                                                     <section class="col col-md-2">
                                                                         <label class="label">&nbsp;</label>
                                                                         <label class="checkbox">
-                                                                            <input id="telefonePrincipal" name="telefonePrincipal" type="checkbox" value="true"><i></i>
+                                                                            <input id="telefonePrincipal" name="telefonePrincipal" type="checkbox" value="true" checked><i></i>
                                                                             Principal
                                                                         </label>
                                                                     </section>
@@ -589,9 +589,8 @@ include("inc/scripts.php");
         $(".nome").on("change", function() {
             let campo = '';
             let campoId = '';
-            if (/[0-9\!\#\$\&\*\'\-\_\/\"\<\>\^\~\+\?\.\;\@\,\:\]\[\(\)]/g.test(this.value)) {
-                this.id == "nome" ? campo = 'Nome' : campo = 'Nome de Dependente'; // iternario
-
+            if (/[0-9\!\#\$\&\*\'\§\|\\_\/\"\<\>\=\^\~\+\?\.\{\}\`\´\\;\@\,\:\]\[\(\)]/g.test(this.value)) {
+                this.id == "nome" ? campo = 'Nome' : campo = 'Nome de Dependente'; // iternario  = mesmo que um "if", porém reduzido a uma linha apenas
                 // if( this.id == "nome"  ){
                 //     campo = "Nome"
                 // }else{
@@ -627,6 +626,7 @@ include("inc/scripts.php");
             let data = $("#cpf").val()
             VerificaCPF()
             ValidaCPF()
+            verificaDependente()
 
         });
         $("#rg").on("change", function() {
@@ -1669,18 +1669,17 @@ include("inc/scripts.php");
         var cpf = $('#cpf').val();
         var cpfDependente = $('#cpfDependente').val();
         var achouDependenteDuplicado = false;
-
-        if (cpf != "") {
-            if (cpfDependente != "") {
+        
+            
                 if (cpfDependente == cpf) {
-                    smartAlert("Erro", "CPF igual ao Funcionário.", "error");
+                    smartAlert("Erro", "CPF do dependente igual ao do Funcionário.", "error");
                     $("#cpfDependente").focus();
                     $("#cpfDependente").val("");
                 } else {
                     cpfDependenteValidado(cpfDependente);
                 }
-            }
-        }
+            
+        
 
     }
 </script>
