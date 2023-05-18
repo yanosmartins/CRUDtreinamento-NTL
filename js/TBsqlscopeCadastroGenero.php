@@ -57,14 +57,24 @@ function verificaGenero()
     //achou 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    ////! ANTES É NEGAÇÃO
-    if (!$result) {
+
+
+    if (!$result) {    ////! ANTES É NEGAÇÃO
         echo  'success#';
     } else {
         $mensagem = "Gênero já registrado!";
         echo "failed#" . $mensagem . ' ';
         return true;
     }
+
+
+
+
+
+
+
+
+
 }
 
 function recupera()

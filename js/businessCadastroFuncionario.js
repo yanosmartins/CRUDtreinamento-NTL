@@ -56,12 +56,12 @@ function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil,
     return '';
 
 }
-function cpfverificado(cpf) {
+function cpfverificado(cpf, id) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "VerificaCPF", cpf: cpf }, //valores enviados ao script     
+        data: { funcao: "VerificaCPF", cpf: cpf, id:id }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -77,11 +77,11 @@ function cpfverificado(cpf) {
                     //     return;
                     // }
                     // else {
-                    mensagem = "Opa! CPF já registrado.";
+                    mensagem = "CPF do funcionário já registrado.";
                     document.getElementById('cpf').value = "";
                     $("#cpf").focus();
                     smartAlert("Atenção", mensagem, "error");
-                    return;
+                    return false;
                 }
             }
             ////////////////////////////////////////

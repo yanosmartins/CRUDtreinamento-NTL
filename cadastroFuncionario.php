@@ -602,6 +602,7 @@ include("inc/scripts.php");
                 $(`${campoId}`).val("");
             };
         })
+
         $(".numero").on("change", function() {
             let campo = '';
             if (/[\!\#\$\&\*\'\_\/\"\>\<\^\~\+\?\\;\@\\:\]\[\(\)]/g.test(this.value)) {
@@ -609,8 +610,6 @@ include("inc/scripts.php");
                 $("#numero").val("");
             };
         })
-
-
 
         $("#dataNascimento").on("change", function() {
             let data = $("#dataNascimento").val()
@@ -622,30 +621,29 @@ include("inc/scripts.php");
                 // disableButton();
             }
         });
+
         $("#cpf").on("change", function() {
             let data = $("#cpf").val()
-            VerificaCPF()
+            let cpfDependente = $("#cpfDependente").val()
             ValidaCPF()
-            verificaDependente()
+            if (cpfDependente != ""){
+                verificaDependente()
+            }
+            
 
         });
+
+
         $("#rg").on("change", function() {
             VerificaRG()
         });
+
         $("#cpfDependente").on("change", function() {
             verificaDependente()
         });
         $("#primeiroEmprego").on("change", function() {
             verificaPrimeiroEmprego();
         });
-
-        // $("#pispasep").on("change", function() {
-        //     var pispasep = $("#pispasep").val()
-        //     if ($("#pispasep").val("___._____.__-_")){
-        //         $("#pispasep").val('');
-        //     }
-        // });
-
 
         $("#dataNascimentoDependente").on("change", function() {
             var dataNascimentoDependente = $("#dataNascimentoDependente").val();
@@ -667,12 +665,18 @@ include("inc/scripts.php");
                             $("#bairro").val(dados.bairro);
                             $("#cidade").val(dados.localidade);
                             $("#uf").val(dados.uf);
-                            $("#numero").focus();
-                            $("#numero").focus();
 
+                            $("#numero").focus();
                         } //end if.
                         else {
-                            console.log("CEP não encontrado."); //CEP pesquisado não foi encontrado.
+                            smartAlert("Atenção", "CEP não encontrado!", "error"); //CEP pesquisado não foi encontrado.
+                            $("#logradouro").val("");
+                            $("#bairro").val("");
+                            $("#cidade").val("");
+                            $("#uf").val("");
+                            $("#numero").val("");
+                            $("#complemento").val("");
+                            $("#numero").focus();
                         }
                     });
                 } //end if.
@@ -680,6 +684,15 @@ include("inc/scripts.php");
                     console.log("Formato de CEP inválido.");
                 }
             } //end if.
+            if (cep == "") {
+                $("#logradouro").val("");
+                $("#bairro").val("");
+                $("#cidade").val("");
+                $("#uf").val("");
+                $("#numero").val("");
+                $("#complemento").val("");
+                $("#numero").focus();
+            }
         });
         $("#pispasep").on("change", function() {
             verificaPispasep()
@@ -757,12 +770,12 @@ include("inc/scripts.php");
             novo();
         });
         $("#btnGravar").on("click", function() {
-            
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-            if (VerificaCPF() !== true) {
+            VerificaCPF()
+            if (!VerificaCPF() != false ) {
                 gravar();
             }
         });
@@ -773,8 +786,11 @@ include("inc/scripts.php");
     ///////////////////////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
 
     function VerificaCPF() {
+        var id = $("#codigo").val();
         var cpf = $("#cpf").val();
-        cpfverificado(cpf);
+        if (cpf != ""){
+            cpfverificado(cpf, id);
+        }
     }
 
     function ValidaCPF() {
@@ -945,7 +961,7 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'funcionarioFiltro.php');
+        $(location).attr('href', 'cadastroFuncionario.php');
     }
 
     function excluir() {
@@ -1097,8 +1113,7 @@ include("inc/scripts.php");
             $("#cidade").focus();
             return;
         }
-        if (VerificaCPF == true)
-        {
+        if (VerificaCPF == true) {
             disabled
 
         }
@@ -1526,6 +1541,11 @@ include("inc/scripts.php");
             $("#dataNascimentoDependente").focus();
             return;
         }
+        if (!tipoDependente) {
+            smartAlert("Atenção", "Informe o tipo de Dependente!", "error");
+            $("#tipoDependente").focus();
+            return;
+        }
 
         var item = $("#formDependente").toObject({
             mode: 'combine',
@@ -1573,6 +1593,11 @@ include("inc/scripts.php");
         for (var i = 0; i < jsonDependenteArray.length; i++) {
             var row = $('<tr />');
             $("#tableDependente tbody").append(row);
+            if (jsonDependenteArray[i].tipoDependente == "") {
+                jsonDependenteArray[i].tipoDependente = "REMOVIDO"
+            }
+
+
 
             row.append($('<td><label class="checkbox"><input type="checkbox" name="checkbox" value="' + jsonDependenteArray[i].sequencialDependente + '"><i></i></label></td>'));
             row.append($('<td class="text-left" onclick="carregaDependente(' + jsonDependenteArray[i].sequencialDependente + ');">' + jsonDependenteArray[i].nomeDependente + '</td>'));
@@ -1669,17 +1694,17 @@ include("inc/scripts.php");
         var cpf = $('#cpf').val();
         var cpfDependente = $('#cpfDependente').val();
         var achouDependenteDuplicado = false;
-        
-            
-                if (cpfDependente == cpf) {
-                    smartAlert("Erro", "CPF do dependente igual ao do Funcionário.", "error");
-                    $("#cpfDependente").focus();
-                    $("#cpfDependente").val("");
-                } else {
-                    cpfDependenteValidado(cpfDependente);
-                }
-            
-        
+
+
+        if (cpfDependente == cpf) {
+            smartAlert("Erro", "CPF do dependente igual ao do Funcionário.", "error");
+            $("#cpfDependente").focus();
+            $("#cpfDependente").val("");
+        } else {
+            cpfDependenteValidado(cpfDependente);
+        }
+
+
 
     }
 </script>

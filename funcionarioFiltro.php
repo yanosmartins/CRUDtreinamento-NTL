@@ -191,6 +191,7 @@ include("inc/nav.php");
                                                         <span class="fa fa-file-o"></span>
                                                     </button>
                                                     <button id="btnPdfLista" type="button" class="btn btn-danger pull-right" title="Novo">
+                                                    <a href="pdfColetivo.php">
                                                         <span class="fa fa-file-pdf-o"></span>
                                                     </button>                                                  
                                                    

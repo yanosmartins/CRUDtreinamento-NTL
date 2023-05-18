@@ -38,12 +38,7 @@ function gravar()
 {
     $reposit = new reposit();
 
-    if ((empty($_POST['ativo'])) || (!isset($_POST['ativo'])) || (is_null($_POST['ativo']))) {
-        $ativo = 0;
-    } else {
-        $ativo = (int) $_POST["ativo"];
-    }
-
+    $ativo = 1;
     $id = (int)$_POST['id'];
     $nome = $_POST['nome'];
     $cpf = $_POST['cpf'];
@@ -141,20 +136,27 @@ function VerificaCPF()
     ////////verifica registros duplicados
 
     $cpf = $_POST["cpf"];
+    $id = $_POST["id"];
 
     $sql = "SELECT cpf, codigo FROM dbo.funcionario WHERE cpf='$cpf'";
+
     //achou 
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    ////! ANTES É NEGAÇÃO
-    if (!$result) {
-        echo  'success#';
-    } else {
-        $mensagem = "CPF já registrado!";
-        echo "failed#" . $mensagem . ' ';
+    
+    if ($id == 0){    
     }
+    else{
+        if (!$result) {
+            echo  'success#';
+        } else {  
+            echo "failed#";
+        }
+    }
+    ////! ANTES É NEGAÇÃO
+    
 }
 
 function ValidaCPF()

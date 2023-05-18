@@ -81,6 +81,13 @@ class PDF extends FPDF
         $this->Cell(20, 7.5, 'Pagina ' . $this->pageno()); #Imprime o Número das Páginas
 
         $this->Ln(24); #Quebra de Linhas
+
+        $this->SetTextColor(255, 192, 203);
+        $this->Image('C:\inetpub\wwwroot\Cadastro\img\marcaDagua.png',35,45,135,145,'PNG'); 
+        
+         
+
+
     }
     function Footer()
     {
@@ -107,15 +114,7 @@ $fontWeight = 'B';
 $pdf->setY(9);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 $pdf->setX(85);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'RELATÓRIO INDIVIDUAL DO FUNCIONÁRIO'), 0, 0, "C", 0);
-$pdf->SetFont($tipoDeFonte, '', 20);
-
-
-
-$pdf->setY(16);
-$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setX(85);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DADOS DO FUNCIONÁRIO'), 0, 0, "C", 0);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'RELATÓRIO DE FUNCIONÁRIOS'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 20);
 
 $pdf->Line(25, 19, 185, 19); //menor
@@ -132,45 +131,47 @@ $pdf->Line(5, 290, 205, 290); //horizontal 2
 
 
 
-$pdf->setY(28);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setX(5);
-$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'NOME:'), 0, 0, "C", 0);
+
 $pdf->setY(28);
+$pdf->setX(12);
+$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'NOME:'), 0, 0, "L", 0);
 
-$pdf->setX(70);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CPF:'), 0, 0, "C", 0);
 $pdf->setY(28);
+$pdf->setX(78);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASC.:'), 0, 0, "L", 0);////
 
-$pdf->setX(139);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASCIMENTO.:'), 0, 0, "C", 0);
 $pdf->setY(35);
+$pdf->setX(12);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CPF:'), 0, 0, "L", 0);
 
-$pdf->setX(12.55);
-$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'EST. CIVIL.:'), 0, 0, "C", 0);
 $pdf->setY(35);
+$pdf->setX(78);
+$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'ESTADO CIVIL:'), 0, 0, "L", 0);////
 
-$pdf->setX(73);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'GÊNERO:'), 0, 0, "C", 0);
-$pdf->setY(35);
-
-$pdf->setX(144);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PIS/PASEP:'), 0, 0, "C", 0);
 
 $pdf->setY(42);
-$pdf->setX(6);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'RG:'), 0, 0, "C", 0);
-$pdf->setY(42);
+$pdf->setX(12);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'RG:'), 0, 0, "L", 0);
 
-$pdf->setX(76);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PRIMEIRO EMPREGO:'), 0, 0, "C", 0);
 $pdf->setY(42);
+$pdf->setX(78);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PRIMEIRO EMPREGO:'), 0, 0, "L", 0);////
 
+
+$pdf->setY(28);
 $pdf->setX(154);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO:'), 0, 0, "C", 0);
-$pdf->SetFont($tipoDeFonte, '', 8);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'GÊNERO:'), 0, 0, "L", 0);
+
+$pdf->setY(35);
+$pdf->setX(154.5);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO:'), 0, 0, "L", 0);
 
 
+$pdf->setY(42);
+$pdf->setX(154);
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PIS:'), 0, 0, "L", 0);
+// $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PIS/PASEP:'), 0, 0, "L", 0);
 
 
 
@@ -238,67 +239,69 @@ foreach ($resultQuery as $row) {
         $pispasep = "Nenhum";
     }
 
+    //como os nomes são separados por espaço em branco então vamos criar o array a partir dos espaços
+    $split_nome = explode(" ", trim($nome)); ////pesquisar dps
+    //so vamos abreviar o nome se ele tiver pelo menos 2 sobrenomes
+    if (count($split_nome) > 2) {
+        //esse for inicia a partir da segunda posição do array para o primeiro nome ser desconsiderado
+        for ($i = 1; (count($split_nome) - 1) > $i; $i++) {
+            //claro que como existem dos|de|da|das
+            // (Cristina DOS Santos) podemos omitir ou exibir sem abrevirar essas preposições, aqui no caso eu as mantenho sem alteração
+            if (strlen($split_nome[$i]) > 3) {
+                //aqui será feito a abreviação com apenas a inicial da palavra a ser abreviada seguida de ponto
+                $split_nome[$i] = substr($split_nome[$i], 0, 1) . ".";
+            }
+        }
+    }
+    //aqui será impresso o nome resultante com a junção do array em favor de se obter uma string colando as posições do array com espaços em branco!
+    $split_nome = implode(" ", $split_nome);
 
+    // $comum = new comum();
+    // $split_nome = $comum->formatarString($split_nome);
 
-
-    $pdf->setY(28);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(20 + $margem);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $nome), 0, 0, "L", 0);
-    $pdf->SetFont($tipoDeFonte, '', 8);
 
-    $pdf->setY(28);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(80 + $margem);
+    $pdf->setY(28);    
+    $pdf->setX(25);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $split_nome), 0, 0, "L", 0);
+
+    $pdf->setY(35);
+    $pdf->setX(24);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cpf), 0, 0, "L", 0);
-    $pdf->SetFont($tipoDeFonte, '', 8);
+
+    $pdf->setY(42);
+    $pdf->setX(23);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $rg), 0, 0, "L", 0);
 
     $pdf->setY(28);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(170 + $margem);
+    $pdf->setX(110);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $dataNascimento), 0, 0, "L", 0);
-    $pdf->SetFont($tipoDeFonte, '', 8);
 
     $pdf->setY(35);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(38);
+    $pdf->setX(110);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $estadoCivil), 0, 0, "L", 0);
-    $pdf->SetFont($tipoDeFonte, '', 8);
-
-    $pdf->setY(35);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(92);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $genero), 0, 0, "L", 0);
-    $pdf->SetFont($tipoDeFonte, '', 8);
-
-    $pdf->setY(35);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(166);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $pispasep), 0, 0, "L", 0);
-    $pdf->SetFont($tipoDeFonte, '', 8);
 
     $pdf->setY(42);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(22);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $rg), 0, 0, "L", 0);
-    $pdf->SetFont($tipoDeFonte, '', 8);
-
-    $pdf->setY(42);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->setX(106.5);
+    $pdf->setX(120);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $primeiroEmprego), 0, 0, "L", 0);
-    $pdf->SetFont($tipoDeFonte, '', 8);
+    
+    $pdf->setY(28);
+    $pdf->setX(175);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $genero), 0, 0, "L", 0);
 
+    
 
-    $pdf->setY(42);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setY(35);
     $pdf->setX(175);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "L", 0);
-    $pdf->SetFont($tipoDeFonte, '', 8);
+    
+    $pdf->setY(42);
+    $pdf->setX(166);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $pispasep), 0, 0, "L", 0);
 
-    $pdf->Line(25, 50, 185, 50); //menor
-    $pdf->Line(25, 50, 185, 50); //menor
-    $pdf->Line(25, 50, 185, 50); //menor
+    // $pdf->Line(25, 50, 185, 50); //menor
+    // $pdf->Line(25, 50, 185, 50); //menor
+    // $pdf->Line(25, 50, 185, 50); //menor
 
 }
 
@@ -353,6 +356,9 @@ foreach ($resultQueryTelefone as $row) {
         $whatsapp = 'Não';
     }
 
+
+
+
     $i += 5;
 
     $pdf->setY($i);
@@ -394,9 +400,9 @@ $pdf->setX(85);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'LISTA DE DEPENDENTES'), 0, 0, "C", 0);
 $pdf->SetFont($tipoDeFonte, '', 20);
 
-$pdf->Line(25, $i + 3, 185, $i + 3); //menor
-$pdf->Line(25, $i + 3, 185, $i + 3); //menor
-$pdf->Line(25, $i + 3, 185, $i + 3); //menor
+$pdf->Line(25, $i + 5, 185, $i + 5); //menor
+$pdf->Line(25, $i + 5, 185, $i + 5); //menor
+$pdf->Line(25, $i + 5, 185, $i + 5); //menor
 
 
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
@@ -419,6 +425,16 @@ foreach ($resultQueryDependente as $row) {
     $dataNascimento = $row['dataNascimento'];
     $tipo = $row['tipo'];
 
+    $split_nome = explode(" ", trim($nome));
+    if (count($split_nome) > 2) {
+        for ($contador = 1; (count($split_nome) - 1) > $contador; $contador++) {
+            if (strlen($split_nome[$contador]) > 3) {
+                $split_nome[$contador] = substr($split_nome[$contador], 0, 1) . ".";
+            }
+        }
+    }
+    $split_nome = implode(" ", $split_nome);
+
 
     $i += 5;
 
@@ -426,7 +442,7 @@ foreach ($resultQueryDependente as $row) {
     $pdf->setX(28.5);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->SetFont($tipoDeFonte, '', 8);
-    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $nome), 1, 0, "C", 1);
+    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $split_nome), 1, 0, "C", 1);
     $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $cpf), 1, 0, "C", 1);
     $pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', $dataNascimento), 1, 0, "C", 1);
     $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $tipo), 1, 0, "C", 1);
@@ -452,13 +468,13 @@ $pdf->setX(25);
 $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'RUA:'), 0, 0, "C", 0);
 $pdf->setX(140);
 $pdf->Cell(83, -1, iconv('UTF-8', 'windows-1252', 'BAIRRO:'), 0, 0, "L", 0);
-$pdf->setY($i+7);
+$pdf->setY($i + 7);
 $pdf->setX(25);
 $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "C", 0);
 $pdf->Cell(85, -1, iconv('UTF-8', 'windows-1252', 'CIDADE:'), 0, 0, "C", 0);
 $pdf->setX(140.5);
 $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'UF:'), 0, 0, "C", 0);
-$pdf->setY($i+14);
+$pdf->setY($i + 14);
 $pdf->setX(32);
 $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'COMPLEMENTO:'), 0, 0, "L", 0);
 
@@ -477,21 +493,24 @@ foreach ($resultQuery as $row) {
     $cidade = $row['cidade'];
     $numero = $row['numero'];
     $complemento = $row['complemento'];
+    if ($complemento == "") {
+        $complemento = 'Nenhum';
+    }
 
     $ruaEnumero = $logradouro . ', ' . $numero;
     $pdf->setY($i);
     $pdf->setX(45);
-    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252',$ruaEnumero), 0, 0, "L", 0);
+    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', $ruaEnumero), 0, 0, "L", 0);
     $pdf->setX(156.5);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $bairro), 0, 0, "L", 0);
-    $pdf->setY($i+7);
+    $pdf->setY($i + 7);
     $pdf->setX(45);
     $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
     $pdf->setX(102);
     $pdf->Cell(102, -1, iconv('UTF-8', 'windows-1252', $cidade), 0, 0, "L", 0);
     $pdf->setX(157.5);;
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $uf), 0, 0, "L", 0);
-    $pdf->setY($i+14);
+    $pdf->setY($i + 14);
     $pdf->setX(60);
     $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', $complemento), 0, 0, "L", 0);
 
@@ -502,13 +521,12 @@ foreach ($resultQuery as $row) {
     // $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', $logradouro, ', ', $numero), 0, 0, "C", 0);
     // $pdf->setX(66);
     // $pdf->Cell(102, -1, iconv('UTF-8', 'windows-1252', $cidade), 0, 0, "C", 0);
-    
+
 
 
 
 
 }
-
 
 
 $pdf->Ln(8);
