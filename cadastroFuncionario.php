@@ -665,7 +665,6 @@ include("inc/scripts.php");
                             $("#bairro").val(dados.bairro);
                             $("#cidade").val(dados.localidade);
                             $("#uf").val(dados.uf);
-
                             $("#numero").focus();
                         } //end if.
                         else {
@@ -1054,22 +1053,17 @@ include("inc/scripts.php");
             }
         }
 
-        // if (pispasep == "___._____.__-_") {
-        //     document.getElementById('pispasep').value = '';
-        //      $("#pispasep").val('');
-        // }
-
-        var umTelefonePrincipal = false;
-        for (var i = 0; i < jsonTelefoneArray.length; i++) {
-            if (jsonTelefoneArray[i].telefonePrincipal == true) {
-                umTelefonePrincipal = true;
+            var umTelefonePrincipal = false;
+            for (var i = 0; i < jsonTelefoneArray.length; i++) {
+                if (jsonTelefoneArray[i].telefonePrincipal == true) {
+                    umTelefonePrincipal = true;
+                }
             }
-        }
-        if (umTelefonePrincipal != true) {
-            smartAlert("Atenção", "Adicione pelo menos um Telefone como Pincipal!", "error");
-            $("#telefone").focus();
-            return;
-        }
+            if (umTelefonePrincipal != true) {
+                smartAlert("Atenção", "Adicione pelo menos um Telefone como Pincipal!", "error");
+                $("#telefone").focus();
+                return;
+            }
 
         var umEmailPrincipal = false;
         for (var i = 0; i < jsonEmailArray.length; i++) {

@@ -181,8 +181,6 @@ include("inc/nav.php");
                                                         </div>
                                                     </fieldset>
                                                 </div>
-
-
                                                 <footer>
                                                     <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                                         <span class="fa fa-search"></span>
@@ -191,7 +189,6 @@ include("inc/nav.php");
                                                         <span class="fa fa-file-o"></span>
                                                     </button>
                                                     <button id="btnPdfLista" type="button" class="btn btn-danger pull-right" title="Novo">
-                                                    <a href="pdfColetivo.php">
                                                         <span class="fa fa-file-pdf-o"></span>
                                                     </button>                                                  
                                                    
@@ -294,7 +291,6 @@ include("inc/scripts.php");
     })
 
     function validarDataFim() {
-
         var dataAgora = new Date();
         var dd = dataAgora.getDate();
         var mm = (dataAgora.getMonth() + 1);
