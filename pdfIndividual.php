@@ -83,11 +83,7 @@ class PDF extends FPDF
         $this->Ln(24); #Quebra de Linhas
 
         $this->SetTextColor(255, 192, 203);
-        $this->Image('C:\inetpub\wwwroot\Cadastro\img\marcaDagua.png',35,45,135,145,'PNG'); 
-        
-         
-
-
+        $this->Image('C:\inetpub\wwwroot\Cadastro\img\marcaDagua.png', 35, 45, 135, 145, 'PNG');
     }
     function Footer()
     {
@@ -147,7 +143,7 @@ $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'NOME:'), 0, 0, "L", 0);
 
 $pdf->setY(28);
 $pdf->setX(78);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASC.:'), 0, 0, "L", 0);////
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASC.:'), 0, 0, "L", 0); ////
 
 $pdf->setY(35);
 $pdf->setX(12);
@@ -155,7 +151,7 @@ $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CPF:'), 0, 0, "L", 0);
 
 $pdf->setY(35);
 $pdf->setX(78);
-$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'ESTADO CIVIL:'), 0, 0, "L", 0);////
+$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'ESTADO CIVIL:'), 0, 0, "L", 0); ////
 
 
 $pdf->setY(42);
@@ -164,7 +160,7 @@ $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'RG:'), 0, 0, "L", 0);
 
 $pdf->setY(42);
 $pdf->setX(78);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PRIMEIRO EMPREGO:'), 0, 0, "L", 0);////
+$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PRIMEIRO EMPREGO:'), 0, 0, "L", 0); ////
 
 
 $pdf->setY(28);
@@ -187,20 +183,21 @@ $id = $_GET["id"];
 
 $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.logradouro, FU.uf, FU.bairro, FU.cidade, FU.numero, FU.complemento, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
                 from dbo.funcionario FU 
-                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero WHERE FU.codigo = " . $id;
+                FULL JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero WHERE FU.codigo = " . $id;
 
 
-$sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";
-$sqlEmail = "SELECT email, principal FROM dbo.emailFuncionario WHERE funcionarioId = $id";
+
+$sqlContato = " SELECT TF.funcionarioId, TF.telefone, TF.principal, TF.whatsapp, EF.email, EF.principal FROM dbo.telefoneFuncionario TF
+LEFT JOIN dbo.emailFuncionario EF on EF.funcionarioId = TF.funcionarioId  WHERE EF.funcionarioId = $id";
+
+
 $sqlDependente = "SELECT nome, cpf, dataNascimento, tipo FROM dbo.dependentesListaFuncionario WHERE funcionarioId = $id";
 
 
 $reposit = new reposit();
 $resultQuery = $reposit->RunQuery($sql);
 $reposit = new reposit();
-$resultQueryTelefone = $reposit->RunQuery($sqlTelefone);
-$reposit = new reposit();
-$resultQueryEmail = $reposit->RunQuery($sqlEmail);
+$resultQueryContato = $reposit->RunQuery($sqlContato);
 $reposit = new reposit();
 $resultQueryDependente = $reposit->RunQuery($sqlDependente);
 
@@ -246,7 +243,7 @@ foreach ($resultQuery as $row) {
     if ($pispasep == "") {
         $pispasep = "Nenhum";
     }
-    
+
     //como os nomes são separados por espaço em branco então vamos criar o array a partir dos espaços
     $split_nome = explode(" ", trim($nome)); ////pesquisar dps
     //so vamos abreviar o nome se ele tiver pelo menos 2 sobrenomes
@@ -269,7 +266,7 @@ foreach ($resultQuery as $row) {
 
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
 
-    $pdf->setY(28);    
+    $pdf->setY(28);
     $pdf->setX(25);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $split_nome), 0, 0, "L", 0);
 
@@ -292,17 +289,17 @@ foreach ($resultQuery as $row) {
     $pdf->setY(42);
     $pdf->setX(120);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $primeiroEmprego), 0, 0, "L", 0);
-    
+
     $pdf->setY(28);
     $pdf->setX(175);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $genero), 0, 0, "L", 0);
 
-    
+
 
     $pdf->setY(35);
     $pdf->setX(175);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "L", 0);
-    
+
     $pdf->setY(42);
     $pdf->setX(166);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $pispasep), 0, 0, "L", 0);
@@ -347,11 +344,22 @@ $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL'), 1, 0, "C", 1);
 $pdf->SetFillColor(238, 238, 238);
 $pdf->SetTextColor(0, 0, 0);
 
-
-foreach ($resultQueryTelefone as $row) {
+$i = 72;
+foreach ($resultQueryContato as $row) {
     $telefone = $row['telefone'];
     $principal = $row['principal'];
     $whatsapp = $row['whatsapp'];
+    $email = $row['email'];
+    $principal = $row['principal'];
+
+
+    if ($principal == 1) {
+        $principal = 'Sim';
+    } else {
+        $principal = 'Não';
+    }
+
+
 
     if ($principal == 1) {
         $principal = 'Sim';
@@ -363,10 +371,6 @@ foreach ($resultQueryTelefone as $row) {
     } else {
         $whatsapp = 'Não';
     }
-
-
-
-
     $i += 5;
 
     $pdf->setY($i);
@@ -376,30 +380,14 @@ foreach ($resultQueryTelefone as $row) {
     $pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', $telefone), 1, 0, "C", 0);
     $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', $principal), 1, 0, "C", 0);
     $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', $whatsapp), 1, 0, "C", 0);
-}
 
 
-$i = 72;
-foreach ($resultQueryEmail as $row) {
-    $email = $row['email'];
-    $principal = $row['principal'];
-
-
-    if ($principal == 1) {
-        $principal = 'Sim';
-    } else {
-        $principal = 'Não';
-    }
-
-    $i += 5;
-
-    $pdf->setY($i);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->setX(100);
     $pdf->SetFont($tipoDeFonte, '', 8);
     $pdf->Cell(68, 5, iconv('UTF-8', 'windows-1252', $email), 1, 0, "C", 0);
     $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $principal), 1, 0, "C", 0);
 }
+
 
 $i = $i + 25;
 $pdf->setY($i);
@@ -494,9 +482,6 @@ $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
 
 
 
-
-
-
 foreach ($resultQuery as $row) {
     $cep = $row['cep'];
     $logradouro = $row['logradouro'];
@@ -525,19 +510,6 @@ foreach ($resultQuery as $row) {
     $pdf->setY($i + 14);
     $pdf->setX(60);
     $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', $complemento), 0, 0, "L", 0);
-
-
-    // $i= $i + 7;
-    // $pdf->setY($i);
-    // $pdf->setX(65.5);
-    // $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', $logradouro, ', ', $numero), 0, 0, "C", 0);
-    // $pdf->setX(66);
-    // $pdf->Cell(102, -1, iconv('UTF-8', 'windows-1252', $cidade), 0, 0, "C", 0);
-
-
-
-
-
 }
 
 

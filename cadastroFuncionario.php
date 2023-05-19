@@ -307,7 +307,7 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Logradouro:</label>
                                                                 <label class="input">
-                                                                    <input id="logradouro" maxlength="255" name="logradouro" class="required" value="">
+                                                                    <input id="logradouro" maxlength="255" name="logradouro" class="nome"  class="required" value="">
                                                                 </label>
                                                             </section>
 
@@ -347,13 +347,13 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Bairro:</label>
                                                                 <label class="input">
-                                                                    <input id="bairro" maxlength="255" name="bairro" class="required" value="">
+                                                                    <input id="bairro" maxlength="255" class="nome"  name="bairro" class="required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Cidade:</label>
                                                                 <label class="input">
-                                                                    <input id="cidade" maxlength="255" name="cidade" class="required" value="">
+                                                                    <input id="cidade" maxlength="255" name="cidade" class="nome"  class="required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -365,7 +365,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Complemento:</label>
                                                                 <label class="input">
-                                                                    <input id="complemento" maxlength="255" name="complemento" value="">
+                                                                    <input id="complemento" maxlength="255" class="nome"  name="complemento" value="">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -590,16 +590,37 @@ include("inc/scripts.php");
             let campo = '';
             let campoId = '';
             if (/[0-9\!\#\$\&\*\'\§\|\\_\/\"\<\>\=\^\~\+\?\.\{\}\`\´\\;\@\,\:\]\[\(\)]/g.test(this.value)) {
-                this.id == "nome" ? campo = 'Nome' : campo = 'Nome de Dependente'; // iternario  = mesmo que um "if", porém reduzido a uma linha apenas
-                // if( this.id == "nome"  ){
-                //     campo = "Nome"
-                // }else{
-                //     campo = "Nome Dependete"
-                // }
-                this.id == "nome" ? campoId = '#nome' : campoId = '#nomeDependente';
+                if( this.id == "nome"  ){
+                    campo = "Nome"
+                    campoId = '#nome'
+                }
+                if( this.id == "nomeDependente"){
+                    campo = "Nome Dependente"
+                    campoId = '#nomeDependente'              
+                }
+                if( this.id == "complemento"){
+                    campo = "Complemento"
+                    campoId = '#complemento'              
+                }
+                if( this.id == "logradouro"){
+                    campo = "logradouro"
+                    campoId = '#logradouro'              
+                }
+                if( this.id == "bairro"){
+                    campo = "bairro"
+                    campoId = '#bairro'              
+                }
+                if( this.id == "cidade"){
+                    campo = "cidade"
+                    campoId = '#cidade'              
+                }
+                // this.id == "nome" ? campo = 'Nome' : campo = 'Nome de Dependente'; // iternario  = mesmo que um "if", porém reduzido a uma linha apenas
+                // this.id == "nome" ? campoId = '#nome' : campoId = '#nomeDependente';
                 smartAlert("Atenção", `${campo} inválido, use apenas Letras`, "error");
                 // document.getElementById( `${campoId}`).value = '';
                 $(`${campoId}`).val("");
+                $(`${campoId}`).focus();
+
             };
         })
 
@@ -626,10 +647,10 @@ include("inc/scripts.php");
             let data = $("#cpf").val()
             let cpfDependente = $("#cpfDependente").val()
             ValidaCPF()
-            if (cpfDependente != ""){
+            if (cpfDependente != "") {
                 verificaDependente()
             }
-            
+
 
         });
 
@@ -774,7 +795,7 @@ include("inc/scripts.php");
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
             VerificaCPF()
-            if (!VerificaCPF() != false ) {
+            if (!VerificaCPF() != false) {
                 gravar();
             }
         });
@@ -787,7 +808,7 @@ include("inc/scripts.php");
     function VerificaCPF() {
         var id = $("#codigo").val();
         var cpf = $("#cpf").val();
-        if (cpf != ""){
+        if (cpf != "") {
             cpfverificado(cpf, id);
         }
     }
@@ -926,6 +947,7 @@ include("inc/scripts.php");
                             var dataNascimento = $("#dataNascimento").val();
                             var dataNascimento = dataNascimento.split("/")[2];
                             var idade = (anoAtual - dataNascimento);
+                            idade -= 1;
                             $("#idade").val(idade);
                             jsonTelefoneArray = JSON.parse(strArrayTelefone);
                             jsonEmailArray = JSON.parse(strArrayEmail);
@@ -1053,17 +1075,17 @@ include("inc/scripts.php");
             }
         }
 
-            var umTelefonePrincipal = false;
-            for (var i = 0; i < jsonTelefoneArray.length; i++) {
-                if (jsonTelefoneArray[i].telefonePrincipal == true) {
-                    umTelefonePrincipal = true;
-                }
+        var umTelefonePrincipal = false;
+        for (var i = 0; i < jsonTelefoneArray.length; i++) {
+            if (jsonTelefoneArray[i].telefonePrincipal == true) {
+                umTelefonePrincipal = true;
             }
-            if (umTelefonePrincipal != true) {
-                smartAlert("Atenção", "Adicione pelo menos um Telefone como Pincipal!", "error");
-                $("#telefone").focus();
-                return;
-            }
+        }
+        if (umTelefonePrincipal != true) {
+            smartAlert("Atenção", "Adicione pelo menos um Telefone como Pincipal!", "error");
+            $("#telefone").focus();
+            return;
+        }
 
         var umEmailPrincipal = false;
         for (var i = 0; i < jsonEmailArray.length; i++) {
@@ -1193,6 +1215,7 @@ include("inc/scripts.php");
     }
 
     function addTelefone() {
+                    
         var telefone = $("#telefone").val();
         if (telefone === "" || telefone === "(__) _ ____-____") {
             smartAlert("Atenção", "Informe o Telefone !", "error");

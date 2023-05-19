@@ -138,23 +138,25 @@ function VerificaCPF()
     $cpf = $_POST["cpf"];
     $id = $_POST["id"];
 
-    $sql = "SELECT cpf, codigo FROM dbo.funcionario WHERE cpf='$cpf'";
+    $sql = "SELECT codigo, cpf FROM dbo.funcionario WHERE cpf='$cpf'";
 
     //achou 
+    $codigo = $_POST["codigo"];
+    $codigo = ['codigo'];
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     
-    if ($id == 0){    
-    }
-    else{
+    // if (!$id == $codigo){    
+    // }
+    // else{
         if (!$result) {
             echo  'success#';
         } else {  
             echo "failed#";
         }
-    }
+    // }
     ////! ANTES É NEGAÇÃO
     
 }

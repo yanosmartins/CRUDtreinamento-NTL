@@ -29,7 +29,7 @@ function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil,
             //função chamada antes de realizar o ajax
         },
         complete: function () {
-            ss
+            
             //função executada depois de terminar o ajax
         },
         ///////////////////////////////////////////////////
@@ -41,7 +41,7 @@ function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil,
                     smartAlert("Atenção", mensagem, "error");
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
+                    voltar()
                 }
 
                 return '';
