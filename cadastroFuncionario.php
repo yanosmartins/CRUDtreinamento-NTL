@@ -1588,7 +1588,7 @@ include("inc/scripts.php");
             var row = $('<tr />');
             $("#tableDependente tbody").append(row);
             if (jsonDependenteArray[i].tipoDependente == "") {
-                jsonDependenteArray[i].tipoDependente = "REMOVIDO"
+                jsonDependenteArray[i].tipoDependente = "---"
             }
 
 

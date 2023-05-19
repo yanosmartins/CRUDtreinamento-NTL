@@ -150,11 +150,15 @@ $resultQueryEmail = $reposit->RunQuery($sqlEmail);
 $reposit = new reposit();
 $resultQueryDependente = $reposit->RunQuery($sqlDependente);
 
-$i = 20;
+$i = 15;
 
 foreach ($resultQuery as $row) {
     $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
     $i = $i +5;
+    $contadorPrimeiro = 0;
+    if($contadorPrimeiro>0){
+        $i = $i - 5;
+    }
     $pdf->setY($i);
     $pdf->setX(12);
     $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'NOME:'), 0, 0, "L", 0);
@@ -200,13 +204,18 @@ foreach ($resultQuery as $row) {
     $pdf->setX(154);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "L", 0);
 
-    $i = $i + 7;
+    $i = $i + 5;
     $pdf->Line(5, $i, 205, $i); //menor
-
+    $contadorPrimeiro = $contadorPrimeiro +1;
 }
-$i = 20;
+
+$i = 15;
 foreach ($resultQuery as $row) {
     $i = $i +5;
+    $contadorPrimeiro = 0;
+    if($contadorPrimeiro>0){
+        $i = $i - 5;
+    }
     $nome = $row['nome'];
     $cpf = $row['cpf'];
     $rg = $row['rg'];
@@ -282,13 +291,14 @@ foreach ($resultQuery as $row) {
     $pdf->setY($i);
 
     $pdf->setX(34);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $endereco), 0, 0, "L", 0);
+    $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $endereco), 0, 0, "L", 0);
     $pdf->setX(165);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
 
-    $i = $i + 7;
+    $i = $i + 5;
     $pdf->Line(5, $i, 205, $i); //menor
 
+    $contadorPrimeiro = $contadorPrimeiro +1;
 }
 
 

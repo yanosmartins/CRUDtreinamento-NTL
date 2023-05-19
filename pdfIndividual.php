@@ -246,7 +246,7 @@ foreach ($resultQuery as $row) {
     if ($pispasep == "") {
         $pispasep = "Nenhum";
     }
-
+    
     //como os nomes são separados por espaço em branco então vamos criar o array a partir dos espaços
     $split_nome = explode(" ", trim($nome)); ////pesquisar dps
     //so vamos abreviar o nome se ele tiver pelo menos 2 sobrenomes
@@ -331,18 +331,18 @@ $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 $pdf->setY($i);
 $pdf->setX(15);
 $pdf->SetFillColor(255, 160, 122);
-$pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', 'TELEFONE:'), 1, 0, "C", 1);
+$pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', 'TELEFONE'), 1, 0, "C", 1);
 $pdf->SetFillColor(238, 232, 170);
-$pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL:'), 1, 0, "C", 1);
+$pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL'), 1, 0, "C", 1);
 $pdf->SetFillColor(144, 238, 144);
-$pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'WHATSAPP:'), 1, 0, "C", 1);
+$pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'WHATSAPP'), 1, 0, "C", 1);
 
 $pdf->setY($i);
 $pdf->setX(100);
 $pdf->SetFillColor(255, 160, 122);
-$pdf->Cell(68, 5, iconv('UTF-8', 'windows-1252', 'EMAIL:'), 1, 0, "C", 1);
+$pdf->Cell(68, 5, iconv('UTF-8', 'windows-1252', 'EMAIL'), 1, 0, "C", 1);
 $pdf->SetFillColor(238, 232, 170);
-$pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL:'), 1, 0, "C", 1);
+$pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL'), 1, 0, "C", 1);
 
 $pdf->SetFillColor(238, 238, 238);
 $pdf->SetTextColor(0, 0, 0);
@@ -421,10 +421,10 @@ $pdf->setY($i);
 $pdf->setX(28.5);
 $pdf->SetFillColor(173, 216, 230);
 
-$pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'NOME:'), 1, 0, "C", 1);
-$pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'CPF:'), 1, 0, "C", 1);
-$pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', 'DATA DE NASCIMENTO:'), 1, 0, "C", 1);
-$pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'TIPO:'), 1, 0, "C", 1);
+$pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'NOME'), 1, 0, "C", 1);
+$pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'CPF'), 1, 0, "C", 1);
+$pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', 'DATA DE NASCIMENTO'), 1, 0, "C", 1);
+$pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'TIPO'), 1, 0, "C", 1);
 $pdf->SetFillColor(255, 255, 255);
 
 foreach ($resultQueryDependente as $row) {
@@ -432,6 +432,10 @@ foreach ($resultQueryDependente as $row) {
     $cpf = $row['cpf'];
     $dataNascimento = $row['dataNascimento'];
     $tipo = $row['tipo'];
+
+    if ($tipo == "") {
+        $tipo = "---";
+    }
 
     $split_nome = explode(" ", trim($nome));
     if (count($split_nome) > 2) {
