@@ -187,9 +187,11 @@ $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estado
 
 
 
-$sqlContato = " SELECT TF.funcionarioId, TF.telefone, TF.principal, TF.whatsapp, EF.email, EF.principal FROM dbo.telefoneFuncionario TF
-LEFT JOIN dbo.emailFuncionario EF on EF.funcionarioId = TF.funcionarioId  WHERE EF.funcionarioId = $id";
 
+
+
+$sqlTelefone = " SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario WHERE funcionarioId = $id";
+$sqlEmail = "SELECT email, principal FROM dbo.emailFuncionario WHERE funcionarioId = $id";
 
 $sqlDependente = "SELECT nome, cpf, dataNascimento, tipo FROM dbo.dependentesListaFuncionario WHERE funcionarioId = $id";
 
@@ -197,7 +199,9 @@ $sqlDependente = "SELECT nome, cpf, dataNascimento, tipo FROM dbo.dependentesLis
 $reposit = new reposit();
 $resultQuery = $reposit->RunQuery($sql);
 $reposit = new reposit();
-$resultQueryContato = $reposit->RunQuery($sqlContato);
+$resultQueryTelefone = $reposit->RunQuery($sqlTelefone);
+$reposit = new reposit();
+$resultQueryEmail = $reposit->RunQuery($sqlEmail);
 $reposit = new reposit();
 $resultQueryDependente = $reposit->RunQuery($sqlDependente);
 
@@ -345,21 +349,11 @@ $pdf->SetFillColor(238, 238, 238);
 $pdf->SetTextColor(0, 0, 0);
 
 $i = 72;
-foreach ($resultQueryContato as $row) {
+
+foreach ($resultQueryTelefone as $row) {
     $telefone = $row['telefone'];
     $principal = $row['principal'];
     $whatsapp = $row['whatsapp'];
-    $email = $row['email'];
-    $principal = $row['principal'];
-
-
-    if ($principal == 1) {
-        $principal = 'Sim';
-    } else {
-        $principal = 'Não';
-    }
-
-
 
     if ($principal == 1) {
         $principal = 'Sim';
@@ -380,14 +374,29 @@ foreach ($resultQueryContato as $row) {
     $pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', $telefone), 1, 0, "C", 0);
     $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', $principal), 1, 0, "C", 0);
     $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', $whatsapp), 1, 0, "C", 0);
+}
 
 
+
+$i = 72;
+foreach ($resultQueryEmail as $row) {
+    $email = $row['email'];
+    $email =  substr_replace($email, '*****', 2, strpos($email, '@') - 4);
+    $principal = $row['principal'];
+
+    if ($principal == 1) {
+        $principal = 'Sim';
+    } else {
+        $principal = 'Não';
+    }
+    $i += 5;
+    $pdf->setY($i);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->setX(100);
     $pdf->SetFont($tipoDeFonte, '', 8);
     $pdf->Cell(68, 5, iconv('UTF-8', 'windows-1252', $email), 1, 0, "C", 0);
     $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $principal), 1, 0, "C", 0);
 }
-
 
 $i = $i + 25;
 $pdf->setY($i);
