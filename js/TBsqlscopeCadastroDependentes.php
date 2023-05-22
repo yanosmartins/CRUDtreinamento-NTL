@@ -109,9 +109,10 @@ function verificaDependente()
     ////! ANTES É NEGAÇÃO
     if (!$result) {
         echo  'success#';
+        return;
     } else {
-        $mensagem = "Tipo de dependente já registradoooooo!";
-        echo 'failed#' . $mensagem . ' ';
+        echo 'failed#';
+        return;
         
     }
 }

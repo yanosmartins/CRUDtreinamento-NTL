@@ -209,7 +209,6 @@ include("inc/scripts.php");
                 $("#descricao").val('');
                 return;
             }
-            verificaDependente()
         })
 
 
@@ -250,8 +249,8 @@ include("inc/scripts.php");
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-            if (verificaDependente() !== true) {
-                gravar();
+            if (verificaDependente()) {
+                gravar()
             }
         });
 
@@ -306,7 +305,6 @@ include("inc/scripts.php");
         if ($("#ativo").is(':checked')) {
             ativo = 1;
         }
-
         if (descricao.length === 0 || !descricao.trim()) {
             smartAlert("Atenção", "Informe o nome!", "error");
             $("#descricao").focus();
@@ -315,7 +313,6 @@ include("inc/scripts.php");
 
         gravaDependentes(codigo, descricao, ativo);
     }
-
 
     function voltar() {
         $(location).attr('href', 'TBDependentesFiltro.php');
@@ -331,7 +328,6 @@ include("inc/scripts.php");
     function verificaDependente() {
         var descricao = $("#descricao").val();
         dependenteVerificado(descricao);
-        
     }
 
     function novo() {

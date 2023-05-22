@@ -3,7 +3,7 @@ function gravaDependentes(codigo, descricao, ativo) {
         url: 'js/TBsqlscopeCadastroDependentes.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "gravar", codigo:codigo, descricao: descricao, ativo: ativo}, //valores enviados ao script     
+        data: { funcao: "gravar", codigo: codigo, descricao: descricao, ativo: ativo }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -40,7 +40,7 @@ function excluiDependentes(codigo) {
         url: 'js/TBsqlscopeCadastroDependentes.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: 'excluir', codigo:codigo }, //valores enviados ao script     
+        data: { funcao: 'excluir', codigo: codigo }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -77,13 +77,13 @@ function recuperaDependentes(id, callback) {
         data: {
             funcao: 'recupera',
             codigo: id,
-            
+
 
         }, //valores enviados ao script      
         success: function (data) {
             callback(data);
         }
-        
+
     });
 
     return;
@@ -103,23 +103,25 @@ function dependenteVerificado(descricao) {
         success: function (data, textStatus) {
             if (data.indexOf('success') < 0) {
                 var piece = data.split("#");
-                var mensagem = piece[1];
-                if (piece[0] !== "success") {
+                if (piece[0] != "success") {
                     mensagem = "Tipo de dependente já registrado.";
                     smartAlert("Atenção", mensagem, "error");
                     document.getElementById('descricao').value = "";
                     $("#descricao").focus();
-                    return;
+                    return false;
+                }
+                else {
+                    return true;
                 }
             }
             ////////////////////////////////////////
             //retorno dos dados
         },
+        
         error: function (xhr, er) {
             //tratamento de erro
             console.log(xhr, er)
         }
     });
-    return '';
 }
 
