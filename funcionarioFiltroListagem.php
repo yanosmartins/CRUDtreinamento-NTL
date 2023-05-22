@@ -191,7 +191,7 @@ include "js/repositorio.php";
                     echo '<td class="text-center">' . $primeiroEmpregoFiltro . '</td>';
                     echo '<td class="text-center">' . $pisPasepFiltro . '</td>';
                     echo '<td class="text-center">' . $ativoFiltro . '</td>';
-                    echo '<td class="text-center"><a href="pdfIndividual.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-danger"><i class=" fa fa-file-pdf-o"></i></button></td>';
+                    echo '<td class="text-center"><a href="pdfIndividual.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-warning"><i class=" fa fa-file-pdf-o"></i></button></td>';
                     echo '</tr >';
                 }
                 ?>

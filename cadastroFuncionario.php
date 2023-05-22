@@ -307,7 +307,7 @@ include("inc/nav.php");
                                                             <section class="col col-3">
                                                                 <label class="label">Logradouro:</label>
                                                                 <label class="input">
-                                                                    <input id="logradouro" maxlength="255" name="logradouro" class="nome"  class="required" value="">
+                                                                    <input id="logradouro" maxlength="255" name="logradouro" class="nome" class="required" value="">
                                                                 </label>
                                                             </section>
 
@@ -347,13 +347,13 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Bairro:</label>
                                                                 <label class="input">
-                                                                    <input id="bairro" maxlength="255" class="nome"  name="bairro" class="required" value="">
+                                                                    <input id="bairro" maxlength="255" class="nome" name="bairro" class="required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Cidade:</label>
                                                                 <label class="input">
-                                                                    <input id="cidade" maxlength="255" name="cidade" class="nome"  class="required" value="">
+                                                                    <input id="cidade" maxlength="255" name="cidade" class="nome" class="required" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
@@ -365,7 +365,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Complemento:</label>
                                                                 <label class="input">
-                                                                    <input id="complemento" maxlength="255" class="nome"  name="complemento" value="">
+                                                                    <input id="complemento" maxlength="255" class="nome" name="complemento" value="">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -500,6 +500,9 @@ include("inc/nav.php");
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtn ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
+                                        <button id="btnPdf" type="button" class="btn btn-warning pull-right" title="Novo" style="display:<?php echo $esconderBtn ?>">
+                                            <span class="fa fa-file-pdf-o"></span>
+                                        </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar" style="display:block">
                                             <span class="fa fa-backward "></span>
                                         </button>
@@ -590,29 +593,29 @@ include("inc/scripts.php");
             let campo = '';
             let campoId = '';
             if (/[0-9\!\#\$\&\*\'\§\|\\_\/\"\<\>\=\^\~\+\?\.\{\}\`\´\\;\@\,\:\]\[\(\)]/g.test(this.value)) {
-                if( this.id == "nome"  ){
+                if (this.id == "nome") {
                     campo = "Nome"
                     campoId = '#nome'
                 }
-                if( this.id == "nomeDependente"){
+                if (this.id == "nomeDependente") {
                     campo = "Nome Dependente"
-                    campoId = '#nomeDependente'              
+                    campoId = '#nomeDependente'
                 }
-                if( this.id == "complemento"){
+                if (this.id == "complemento") {
                     campo = "Complemento"
-                    campoId = '#complemento'              
+                    campoId = '#complemento'
                 }
-                if( this.id == "logradouro"){
+                if (this.id == "logradouro") {
                     campo = "logradouro"
-                    campoId = '#logradouro'              
+                    campoId = '#logradouro'
                 }
-                if( this.id == "bairro"){
+                if (this.id == "bairro") {
                     campo = "bairro"
-                    campoId = '#bairro'              
+                    campoId = '#bairro'
                 }
-                if( this.id == "cidade"){
+                if (this.id == "cidade") {
                     campo = "cidade"
-                    campoId = '#cidade'              
+                    campoId = '#cidade'
                 }
                 // this.id == "nome" ? campo = 'Nome' : campo = 'Nome de Dependente'; // iternario  = mesmo que um "if", porém reduzido a uma linha apenas
                 // this.id == "nome" ? campoId = '#nome' : campoId = '#nomeDependente';
@@ -650,8 +653,6 @@ include("inc/scripts.php");
             if (cpfDependente != "") {
                 verificaDependente()
             }
-
-
         });
 
 
@@ -788,6 +789,9 @@ include("inc/scripts.php");
         });
         $("#btnNovo").on("click", function() {
             novo();
+        });
+        $('#btnPdf').on("click", function() {
+            pdfContatoFuncionario();
         });
         $("#btnGravar").on("click", function() {
             document.getElementById("btnGravar").disabled = true;
@@ -1213,7 +1217,7 @@ include("inc/scripts.php");
     }
 
     function addTelefone() {
-                    
+
         var telefone = $("#telefone").val();
         if (telefone === "" || telefone === "(__) _ ____-____") {
             smartAlert("Atenção", "Informe o Telefone !", "error");
@@ -1718,8 +1722,10 @@ include("inc/scripts.php");
         } else {
             cpfDependenteValidado(cpfDependente);
         }
+    }
 
-
-
+    function pdfContatoFuncionario() {
+        var id = $('#codigo').val();
+        $(location).attr('href', 'pdfContatoFuncionario.php?id=' + id );
     }
 </script>
