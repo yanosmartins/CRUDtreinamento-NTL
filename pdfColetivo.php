@@ -91,7 +91,6 @@ class PDF extends FPDF
     }
 }
 
-
 $pdf = new PDF('P', 'mm', 'A4'); #Crio o PDF padrão RETRATO, Medida em Milímetro e papel A$
 $pdf->SetFillColor(238, 238, 238);
 $pdf->SetMargins(0, 0, 0); #Seta a Margin Esquerda com 20 milímetro, superrior com 20 milímetro e esquerda com 20 milímetros
@@ -102,9 +101,6 @@ $tamanhoFonte = 10;
 $tamanhoFonteMenor = 9;
 $tipoDeFonte = 'Courier';
 $fontWeight = 'B';
-
-
-
 
 
 $pdf->setY(9);
@@ -124,39 +120,33 @@ $pdf->Line(5, 5, 5, 290); //vertical 1
 $pdf->Line(205, 5, 205, 290); //vertical 2
 $pdf->Line(5, 290, 205, 290); //horizontal 2
 
-
-
-
 // $pdf->Line(5, $i, 205, $i); //menor
 // $pdf->Line(5, $i, 205, $i); //menor
-
 
 $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.logradouro, FU.uf, FU.bairro, FU.cidade, FU.numero, FU.complemento, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
                 from dbo.funcionario FU 
                 LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
-
-
-$sqlTelefone = "SELECT telefone, principal, whatsapp FROM dbo.telefoneFuncionario";
-$sqlEmail = "SELECT email, principal FROM dbo.emailFuncionario";
-$sqlDependente = "SELECT nome, cpf, dataNascimento, tipo FROM dbo.dependentesListaFuncionario";
+// $sqlTelefone = " SELECT telefone from dbo.telefoneFuncionario where principal = 1 and funcionarioId =";
+// $sqlEmail = "SELECT email, principal FROM dbo.emailFuncionario";
+// $sqlDependente = "SELECT nome, cpf, dataNascimento, tipo FROM dbo.dependentesListaFuncionario";
 
 
 $reposit = new reposit();
 $resultQuery = $reposit->RunQuery($sql);
-$reposit = new reposit();
-$resultQueryTelefone = $reposit->RunQuery($sqlTelefone);
-$reposit = new reposit();
-$resultQueryEmail = $reposit->RunQuery($sqlEmail);
-$reposit = new reposit();
-$resultQueryDependente = $reposit->RunQuery($sqlDependente);
+// $reposit = new reposit();
+// $resultQueryTelefone = $reposit->RunQuery($sqlTelefone);
+// $reposit = new reposit();
+// $resultQueryEmail = $reposit->RunQuery($sqlEmail);
+// $reposit = new reposit();
+// $resultQueryDependente = $reposit->RunQuery($sqlDependente);
 
 $i = 15;
 
 foreach ($resultQuery as $row) {
     $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    $i = $i +5;
+    $i = $i + 5;
     $contadorPrimeiro = 0;
-    if($contadorPrimeiro>0){
+    if ($contadorPrimeiro > 0) {
         $i = $i - 5;
     }
     $pdf->setY($i);
@@ -194,6 +184,20 @@ foreach ($resultQuery as $row) {
     $pdf->setX(154);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PIS:'), 0, 0, "L", 0);
 
+    // $i = $i + 5;
+
+    // $pdf->setY($i);
+    // $pdf->setX(12);
+    // $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'TELEFONE:'), 0, 0, "L", 0);
+
+    // $pdf->setY($i);
+    // $pdf->setX(78);
+    // $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'EMAIL:'), 0, 0, "L", 0);
+
+    // $pdf->setY($i);
+    // $pdf->setX(154);
+    // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'Nº DE DEPENDENTES:'), 0, 0, "L", 0);
+
     $i = $i + 5;
 
     $pdf->setY($i);
@@ -204,18 +208,27 @@ foreach ($resultQuery as $row) {
     $pdf->setX(154);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "L", 0);
 
+
     $i = $i + 5;
     $pdf->Line(5, $i, 205, $i); //menor
-    $contadorPrimeiro = $contadorPrimeiro +1;
+    $contadorPrimeiro = $contadorPrimeiro + 1;
 }
 
 $i = 15;
+
 foreach ($resultQuery as $row) {
-    $i = $i +5;
+    // foreach ($resultQueryTelefone as $row) {
+    // $telefone = $row['telefone'];
+
+
+    $i = $i + 5;
     $contadorPrimeiro = 0;
-    if($contadorPrimeiro>0){
+    if ($contadorPrimeiro > 0) {
         $i = $i - 5;
     }
+
+
+
     $nome = $row['nome'];
     $cpf = $row['cpf'];
     $rg = $row['rg'];
@@ -232,6 +245,7 @@ foreach ($resultQuery as $row) {
     $numero = $row['numero'];
     $bairro = $row['bairro'];
     $uf = $row['uf'];
+
 
     $valor_de_retorno = match ($estadoCivil) {
         1 => 'Solteiro',
@@ -251,8 +265,6 @@ foreach ($resultQuery as $row) {
     if ($pispasep == "") {
         $pispasep = "Nenhum";
     }
-
-    $endereco = $logradouro . ' - ' . $numero . ' - ' . $bairro . ', ' . $uf . '.';
 
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
 
@@ -285,40 +297,42 @@ foreach ($resultQuery as $row) {
     $pdf->setX(165);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $pispasep), 0, 0, "L", 0);
 
-    $i = $i + 5;
 
-
-
-
-
-
-
-
-
-    $split_endereco = explode(" ", trim($endereco));
-    if (count($split_endereco) >2) {
-        for ($contador = 1; (count($split_endereco) - 1) > $contador; $contador++) {
-            if (strlen($split_endereco[$contador]) > 2) {
-                $split_endereco[$contador] = substr($split_endereco[$contador], 0, 1) . ".";
+    $split_logradouro = explode(" ", trim($logradouro));
+    if (count($split_logradouro) > 2) {
+        for ($contador = 1; (count($split_logradouro) - 1) > $contador; $contador++) {
+            if (strlen($split_logradouro[$contador]) > 2) {
+                $split_logradouro[$contador] = substr($split_logradouro[$contador], 0, 1) . ".";
             }
         }
     }
-    $split_endereco = implode(" ", $split_endereco);
+    $split_logradouro = implode(" ", $split_logradouro);
 
+    $endereco = $split_logradouro . ' - ' . $numero . ' - ' . $bairro . ', ' . $uf . '.';
 
-
-
+    $i = $i + 5;
 
     $pdf->setY($i);
     $pdf->setX(34);
-    $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $split_endereco), 0, 0, "L", 0);
+    $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $endereco), 0, 0, "L", 0);
     $pdf->setX(165);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
 
-    $i = $i + 5;        
+    // $i = $i + 5;
+
+    // $pdf->setY($i);
+    // $pdf->setX(34);
+    // $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $telefone), 0, 0, "L", 0);
+    // $pdf->setX(165);
+    // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
+
+
+
+    $i = $i + 5;
     $pdf->Line(5, $i, 205, $i); //menor
 
-    $contadorPrimeiro = $contadorPrimeiro +1;
+    $contadorPrimeiro = $contadorPrimeiro + 1;
+    // }
 }
 
 $pdf->Ln(8);
