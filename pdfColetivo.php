@@ -126,19 +126,11 @@ $pdf->Line(5, 290, 205, 290); //horizontal 2
 $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.logradouro, FU.uf, FU.bairro, FU.cidade, FU.numero, FU.complemento, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
                 from dbo.funcionario FU 
                 LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
-// $sqlTelefone = " SELECT telefone from dbo.telefoneFuncionario where principal = 1 and funcionarioId =";
-// $sqlEmail = "SELECT email, principal FROM dbo.emailFuncionario";
-// $sqlDependente = "SELECT nome, cpf, dataNascimento, tipo FROM dbo.dependentesListaFuncionario";
+
 
 
 $reposit = new reposit();
 $resultQuery = $reposit->RunQuery($sql);
-// $reposit = new reposit();
-// $resultQueryTelefone = $reposit->RunQuery($sqlTelefone);
-// $reposit = new reposit();
-// $resultQueryEmail = $reposit->RunQuery($sqlEmail);
-// $reposit = new reposit();
-// $resultQueryDependente = $reposit->RunQuery($sqlDependente);
 
 $i = 15;
 
@@ -184,19 +176,19 @@ foreach ($resultQuery as $row) {
     $pdf->setX(154);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PIS:'), 0, 0, "L", 0);
 
-    // $i = $i + 5;
+    $i = $i + 5;
 
-    // $pdf->setY($i);
-    // $pdf->setX(12);
-    // $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'TELEFONE:'), 0, 0, "L", 0);
+    $pdf->setY($i);
+    $pdf->setX(12);
+    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'TELEFONE:'), 0, 0, "L", 0);
 
-    // $pdf->setY($i);
-    // $pdf->setX(78);
-    // $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'EMAIL:'), 0, 0, "L", 0);
+    $pdf->setY($i);
+    $pdf->setX(78);
+    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'EMAIL:'), 0, 0, "L", 0);
 
-    // $pdf->setY($i);
-    // $pdf->setX(154);
-    // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'Nº DE DEPENDENTES:'), 0, 0, "L", 0);
+    $pdf->setY($i);
+    $pdf->setX(154);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'Nº DE DEPENDENTES:'), 0, 0, "L", 0);
 
     $i = $i + 5;
 
@@ -217,8 +209,7 @@ foreach ($resultQuery as $row) {
 $i = 15;
 
 foreach ($resultQuery as $row) {
-    // foreach ($resultQueryTelefone as $row) {
-    // $telefone = $row['telefone'];
+
 
 
     $i = $i + 5;
@@ -228,7 +219,7 @@ foreach ($resultQuery as $row) {
     }
 
 
-
+    $codigo = $row['codigo'];
     $nome = $row['nome'];
     $cpf = $row['cpf'];
     $rg = $row['rg'];
@@ -312,19 +303,46 @@ foreach ($resultQuery as $row) {
 
     $i = $i + 5;
 
+    $sqlTelefone = "SELECT telefone from dbo.telefoneFuncionario where principal = 1 and funcionarioId = " . $codigo;
+    $sqlEmail = "SELECT email from dbo.emailFuncionario where principal = 1 and funcionarioId = " . $codigo;
+    $sqlDependente = "SELECT count(nome) as contador from dbo.dependentesListaFuncionario  where funcionarioId = " . $codigo;
+    $reposit = new reposit();
+    $resultQueryTelefone = $reposit->RunQuery($sqlTelefone);
+    $reposit = new reposit();
+    $resultQueryEmail = $reposit->RunQuery($sqlEmail);
+    $reposit = new reposit();
+    $resultQueryDependente = $reposit->RunQuery($sqlDependente);
+
+
+    foreach ($resultQueryTelefone as $row) {
+        $telefone = $row['telefone'];
+
+        $pdf->setY($i);
+        $pdf->setX(34);
+        $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $telefone), 0, 0, "L", 0);
+    }
+    foreach ($resultQueryEmail as $row) {
+        $email = $row['email'];
+        $email =  substr_replace($email, '****', 3, strpos($email, '@') - 4);
+        $pdf->setY($i);
+        $pdf->setX(94);
+        $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $email), 0, 0, "L", 0);
+    }
+    foreach ($resultQueryDependente as $row) {
+        $numeroDependentes = $row['contador'];
+        $pdf->setX(193);
+        $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $numeroDependentes), 0, 0, "L", 0);
+
+    }
+
+
+
+    $i = $i + 5;
     $pdf->setY($i);
     $pdf->setX(34);
     $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $endereco), 0, 0, "L", 0);
     $pdf->setX(165);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
-
-    // $i = $i + 5;
-
-    // $pdf->setY($i);
-    // $pdf->setX(34);
-    // $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $telefone), 0, 0, "L", 0);
-    // $pdf->setX(165);
-    // $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
 
 
 

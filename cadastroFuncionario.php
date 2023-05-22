@@ -1129,12 +1129,10 @@ include("inc/scripts.php");
             $("#cidade").focus();
             return;
         }
-        if (VerificaCPF == true) {
-            disabled
+        // if (VerificaCPF == true) {
+        //     disabled
 
-        }
-
-
+        // }
 
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);
         <?php $esconderBtn = "none" ?>
