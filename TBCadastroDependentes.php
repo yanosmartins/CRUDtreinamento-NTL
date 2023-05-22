@@ -202,13 +202,12 @@ include("inc/scripts.php");
         }));
 
         $("#descricao").on("change", function() {
-            console.log(this.value)
             if (/[0-9\!\#\$\&\*\-\_\/\'\é\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
-                // \ã\â\à\é\ê\í\ó\õ\ô\ú\ç\á\Á\Ã\Â\À\É\Ê\Í\Ó\Õ\Ô\Ú\Ç
                 smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
                 $("#descricao").val('');
                 return;
             }
+            verificaDependente()
         })
 
 
@@ -249,9 +248,8 @@ include("inc/scripts.php");
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-            if (verificaDependente()) {
-                gravar()
-            }
+            gravar()
+
         });
 
         $("#btnVoltar").on("click", function() {
@@ -310,8 +308,9 @@ include("inc/scripts.php");
             $("#descricao").focus();
             return;
         }
-
-        gravaDependentes(codigo, descricao, ativo);
+        var teste = verificaDependente();
+        if (verificaDependente())
+            gravaDependentes(codigo, descricao, ativo);
     }
 
     function voltar() {
