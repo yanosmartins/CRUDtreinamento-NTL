@@ -106,13 +106,10 @@ function verificaDependente()
     //achou 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    ////! ANTES É NEGAÇÃO
-    if (!$result) {
+    if (!$result) {    ////! ANTES É NEGAÇÃO
         echo  'success#';
-        return;
     } else {
-        echo 'failed#';
-        return;
-        
+        echo "failed#";
+        return true;
     }
 }

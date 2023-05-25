@@ -197,15 +197,12 @@ include("inc/scripts.php");
     $(document).ready(function() {
         carregaPagina();
         $("#descricao").on("change", function() {
-
             console.log(this.value)
             if (/[0-9\!\#\$\&\*\-\_\/Ç\'\<\>\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
-                // \ã\â\à\é\ê\í\ó\õ\ô\ú\ç\á\Á\Ã\Â\À\É\Ê\Í\Ó\Õ\Ô\Ú\é
                 smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
                 $("#descricao").val('');
                 return;
             }
-            verificaGenero()
         });
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
@@ -251,14 +248,12 @@ include("inc/scripts.php");
         });
 
         $("#btnGravar").on("click", function() {
+            verificaGenero()
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
-            }, 1500)
-            var teste = verificaGenero()
-            if (!verificaGenero())
                 gravar();
-            
+            }, 500)            
         });
 
         $("#btnVoltar").on("click", function() {
@@ -308,13 +303,8 @@ include("inc/scripts.php");
         var descricao = $("#descricao").val();
         var codigo = $("#codigo").val();
         var ativo = 1;
-
-        if ($("#ativo").is(':checked')) {
-            ativo = 1;
-        }
-
-        if (descricao.length === 0 || !descricao.trim()) {
-            smartAlert("Atenção", "Informe o nome!", "error");
+            if (descricao.length === 0 || !descricao.trim()) {
+            smartAlert("Atenção", "Informe o gênero!", "error");
             $("#descricao").focus();
             return;
         }

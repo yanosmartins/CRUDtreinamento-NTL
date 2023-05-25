@@ -244,12 +244,12 @@ include("inc/scripts.php");
         });
 
         $("#btnGravar").on("click", function() {
+            verificaDependente()
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
-            }, 1500)
-            gravar()
-
+                gravar()
+            }, 500)
         });
 
         $("#btnVoltar").on("click", function() {
@@ -295,22 +295,19 @@ include("inc/scripts.php");
         }
     }
 
+
+ 
     function gravar() {
+        // Variáveis que vão ser gravadas no banco:
         var descricao = $("#descricao").val();
         var codigo = $("#codigo").val();
         var ativo = 1;
-
-        if ($("#ativo").is(':checked')) {
-            ativo = 1;
-        }
-        if (descricao.length === 0 || !descricao.trim()) {
-            smartAlert("Atenção", "Informe o nome!", "error");
+            if (descricao.length === 0 || !descricao.trim()) {
+            smartAlert("Atenção", "Informe o gênero!", "error");
             $("#descricao").focus();
             return;
         }
-        var teste = verificaDependente();
-        if (verificaDependente())
-            gravaDependentes(codigo, descricao, ativo);
+        gravaDependentes(codigo, descricao, ativo);
     }
 
     function voltar() {

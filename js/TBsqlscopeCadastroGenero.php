@@ -62,8 +62,7 @@ function verificaGenero()
     if (!$result) {    ////! ANTES É NEGAÇÃO
         echo  'success#';
     } else {
-        $mensagem = "Gênero já registrado!";
-        echo "failed#" . $mensagem . ' ';
+        echo "failed#";
         return true;
     }
 

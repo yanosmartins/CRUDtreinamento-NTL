@@ -4,32 +4,23 @@ function gravaDependentes(codigo, descricao, ativo) {
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: "gravar", codigo: codigo, descricao: descricao, ativo: ativo }, //valores enviados ao script     
-        beforeSend: function () {
-            //função chamada antes de realizar o ajax
-        },
-        complete: function () {
-            //função executada depois de terminar o ajax
-        },
-        ///////////////////////////////////////////////////
-        success: function (data) {
+        function(data) {
             if (data.indexOf('sucess') < 0) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
                 if (mensagem !== "") {
                     smartAlert("Atenção", mensagem, "error");
+                    $("#btnGravar").prop('disabled', false);
                 } else {
-                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
+                    smartAlert("Atenção", "Operação não realizada!", "error");
+                    $("#btnGravar").prop('disabled', false);
                 }
-
                 return '';
+            } else {
+                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
+                novo();
             }
-            ////////////////////////////////////////
-            //retorno dos dados
-        },
-        error: function (xhr, er) {
-            //tratamento de erro
-        }
+        }        
     });
     return '';
 
@@ -108,10 +99,6 @@ function dependenteVerificado(descricao) {
                     smartAlert("Atenção", mensagem, "error");
                     document.getElementById('descricao').value = "";
                     $("#descricao").focus();
-                    return false;
-                }
-                else {
-                    return true;
                 }
             }
             ////////////////////////////////////////
@@ -124,4 +111,3 @@ function dependenteVerificado(descricao) {
         }
     });
 }
-

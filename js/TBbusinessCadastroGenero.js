@@ -69,7 +69,6 @@ function excluiGenero(codigo) {
     });
 }
 
-
 function generoVerificado(descricao) {
     $.ajax({
         url: 'js/TBsqlscopeCadastroGenero.php',
@@ -91,7 +90,6 @@ function generoVerificado(descricao) {
                     smartAlert("Atenção", mensagem, "error");
                     document.getElementById('descricao').value = "";
                     $("#descricao").focus();
-                    // return;
                 }
             }
             ////////////////////////////////////////
@@ -104,8 +102,6 @@ function generoVerificado(descricao) {
     });
     return '';
 }
-
-
 
 function recuperaGenero(id, callback) {
     $.ajax({
