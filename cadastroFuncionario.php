@@ -5,7 +5,6 @@ require_once("inc/init.php");
 //require UI configuration (nav, ribbon, etc.)
 require_once("inc/config.ui.php");
 
-
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 //$condicaoAcessarOK = (in_array('USUARIO_ACESSAR', $arrayPermissao, true));
 // $condicaoGravarOK = (in_array('USUARIO_GRAVAR', $arrayPermissao, true));
@@ -67,7 +66,7 @@ include("inc/nav.php");
                         <div>
                             <div class="widget-body no-padding">
                                 <form class="smart-form client-form" id="formFuncionario" method="post">
-                                    <div class="panel-group smart-accordion-default" id="accordion"><!--accordion de Cadastro-->
+                                    <div class="panel-group smart-accordion-default" id="accordion"><!--accordion GRUPO-->
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
@@ -313,7 +312,6 @@ include("inc/nav.php");
                                                                     <input id="logradouro" maxlength="255" name="logradouro" class="nome" class="required" value="">
                                                                 </label>
                                                             </section>
-
                                                             <section class="col col-2">
                                                                 <label class="label" for="Sexo">UF:</label>
                                                                 <label class="select">
@@ -373,7 +371,6 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                         </div>
-                                                        <!-- teste -->
                                                     </fieldset>
                                                 </div>
                                             </div>
@@ -730,6 +727,7 @@ include("inc/scripts.php");
                 }
             }
         }));
+
         verificaPrimeiroEmprego();
         carregaPagina();
         carregaTelefone();
@@ -739,18 +737,23 @@ include("inc/scripts.php");
             if (validaTelefone())
                 addTelefone();
         });
+
         $("#btnAddDependente").on("click", function() {
             validaDependente();
         });
+
         $("#btnRemoverDependente").on("click", function() {
             excluiDependenteTabela();
         });
+
         $("#btnRemoverTelefone").on("click", function() {
             excluiTelefoneTabela();
         });
+
         $("#btnAddEmail").on("click", function() {
             validarEmail();
         });
+
         $("#btnRemoverEmail").on("click", function() {
             excluiEmailTabela();
         });
@@ -766,6 +769,7 @@ include("inc/scripts.php");
                 $('#dlgSimpleExcluir').dialog('open');
             }
         });
+
         $('#dlgSimpleExcluir').dialog({
             autoOpen: false,
             width: 400,
@@ -788,12 +792,15 @@ include("inc/scripts.php");
                 }
             }]
         });
+
         $("#btnNovo").on("click", function() {
             novo();
         });
+
         $('#btnPdf').on("click", function() {
             pdfIndividual();
         });
+
         $("#btnGravar").on("click", function() {
             VerificaCPF()
             VerificaRG()
@@ -804,6 +811,7 @@ include("inc/scripts.php");
             }, 500)
 
         });
+
         $("#btnVoltar").on("click", function() {
             voltar();
         });
