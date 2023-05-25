@@ -256,7 +256,7 @@ include("inc/scripts.php");
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
             var teste = verificaGenero()
-            if (verificaGenero())
+            if (!verificaGenero())
                 gravar();
             
         });
