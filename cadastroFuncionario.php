@@ -505,7 +505,7 @@ include("inc/nav.php");
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtn ?>">
                                             <span class="fa fa-trash"></span>
                                         </button>
-                                        <button id="btnPdf" type="button" class="btn btn-warning pull-right" title="Novo" style="display:<?php echo $esconderBtn ?>">
+                                        <button id="btnPdf" type="button" class="btn btn-warning pull-right" title="PDF" style="display:<?php echo $esconderBtn ?>">
                                             <span class="fa fa-file-pdf-o"></span>
                                         </button>
                                         <button type="button" id="btnVoltar" class="btn btn-default" aria-hidden="true" title="Voltar" style="display:block">
@@ -759,13 +759,11 @@ include("inc/scripts.php");
 
         $("#btnExcluir").on("click", function() {
             var id = +$("#codigo").val();
-
             if (id === 0) {
                 smartAlert("Atenção", "Selecione um registro para excluir !", "error");
                 $("#nome").focus();
                 return;
             }
-
             if (id !== 0) {
                 $('#dlgSimpleExcluir').dialog('open');
             }
@@ -796,17 +794,16 @@ include("inc/scripts.php");
             novo();
         });
         $('#btnPdf').on("click", function() {
-            pdfContatoFuncionario();
+            pdfIndividual();
         });
         $("#btnGravar").on("click", function() {
+            VerificaCPF()
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
-                document.getElementById("btnGravar").disabled = false
-            }, 1500)
-            VerificaCPF()
-            if (!VerificaCPF() != false) {
+                document.getElementById("btnGravar").disabled = false   
                 gravar();
-            }
+            }, 500)
+           
         });
         $("#btnVoltar").on("click", function() {
             voltar();
@@ -815,10 +812,10 @@ include("inc/scripts.php");
     ///////////////////////////////////////////////////////////////////////////////fim dos eventos //////////////////////////////////////////////////////////////////////////////
 
     function VerificaCPF() {
-        var id = $("#codigo").val();
+        var codigo = $("#codigo").val();
         var cpf = $("#cpf").val();
         if (cpf != "") {
-            cpfverificado(cpf, id);
+            cpfverificado(cpf, codigo);
         }
     }
 
@@ -1662,7 +1659,6 @@ include("inc/scripts.php");
     }
 
     function validaDependente() {
-
         var sequencialDependente = +$('#sequencialDependente').val();
         var cpf = $('#cpf').val();
         var cpfDependente = $('#cpfDependente').val();
@@ -1706,8 +1702,6 @@ include("inc/scripts.php");
                 }
             }
         }
-
-
         addDependente();
         return true;
 
@@ -1718,8 +1712,6 @@ include("inc/scripts.php");
         var cpf = $('#cpf').val();
         var cpfDependente = $('#cpfDependente').val();
         var achouDependenteDuplicado = false;
-
-
         if (cpfDependente == cpf) {
             smartAlert("Erro", "CPF do dependente igual ao do Funcionário.", "error");
             $("#cpfDependente").focus();
@@ -1729,8 +1721,8 @@ include("inc/scripts.php");
         }
     }
 
-    function pdfContatoFuncionario() {
+    function pdfIndividual() {
         var id = $('#codigo').val();
-        $(location).attr('href', 'pdfContatoFuncionario.php?id=' + id);
+        $(location).attr('href', 'pdfIndividual.php?id=' + id);
     }
 </script>

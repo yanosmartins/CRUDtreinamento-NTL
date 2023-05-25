@@ -56,12 +56,12 @@ function gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil,
     return '';
 
 }
-function cpfverificado(cpf, id) {
+function cpfverificado(cpf, codigo) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "VerificaCPF", cpf: cpf, id:id }, //valores enviados ao script     
+        data: { funcao: "VerificaCPF", cpf: cpf, codigo:codigo }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },

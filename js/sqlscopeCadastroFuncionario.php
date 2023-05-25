@@ -23,7 +23,7 @@ if ($funcao == 'VerificaCPF') {
 if ($funcao == 'ValidaCPF') {
     call_user_func($funcao);
 }
-if ($funcao == 'validaCpfDependente'){
+if ($funcao == 'validaCpfDependente') {
     call_user_func($funcao);
 }
 if ($funcao == 'VerificaRG') {
@@ -136,9 +136,9 @@ function VerificaCPF()
     ////////verifica registros duplicados
 
     $cpf = $_POST["cpf"];
-    $id = $_POST["id"];
+    $codigo = $_POST["codigo"];
 
-    $sql = "SELECT codigo, cpf FROM dbo.funcionario WHERE cpf='$cpf'";
+    $sql = "SELECT codigo, cpf FROM dbo.funcionario WHERE cpf='$cpf' and codigo !='$codigo'";
 
     //achou 
     $codigo = $_POST["codigo"];
@@ -147,18 +147,18 @@ function VerificaCPF()
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
-    
+
     // if (!$id == $codigo){    
     // }
     // else{
-        if (!$result) {
-            echo  'success#';
-        } else {  
-            echo "failed#";
-        }
+    if (!$result) {
+        echo  'success#';
+    } else {
+        echo "failed#";
+    }
     // }
     ////! ANTES É NEGAÇÃO
-    
+
 }
 
 function ValidaCPF()
@@ -287,7 +287,7 @@ function recupera()
         $numero = (string)$row['numero'];
         $complemento = (string)$row['complemento'];
         $primeiroEmprego = (string)$row['primeiroEmprego'];
-        $pisPasep = (string)$row['pisPasep'];     
+        $pisPasep = (string)$row['pisPasep'];
 
         $out =  $id . "^" .
             $ativo . "^" .

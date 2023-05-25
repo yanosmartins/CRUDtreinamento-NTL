@@ -381,7 +381,7 @@ foreach ($resultQueryTelefone as $row) {
 $i = 72;
 foreach ($resultQueryEmail as $row) {
     $email = $row['email'];
-    $email =  substr_replace($email, '*****', 2, strpos($email, '@') - 4);
+    // $email =  substr_replace($email, '*****', 2, strpos($email, '@') - 4);
     $principal = $row['principal'];
 
     if ($principal == 1) {
