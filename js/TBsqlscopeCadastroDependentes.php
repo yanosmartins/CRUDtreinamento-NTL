@@ -102,7 +102,8 @@ function excluir()
 function verificaDependente()
 {
     $descricao = $_POST["descricao"];
-    $sql = "SELECT descricao FROM dbo.dependentesFuncionario WHERE descricao='$descricao'";
+    $codigo = $_POST["codigo"];
+    $sql = "SELECT descricao FROM dbo.dependentesFuncionario WHERE descricao='$descricao' and codigo !='$codigo'";
     //achou 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);

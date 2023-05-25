@@ -3,24 +3,32 @@ function gravaDependentes(codigo, descricao, ativo) {
         url: 'js/TBsqlscopeCadastroDependentes.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "gravar", codigo: codigo, descricao: descricao, ativo: ativo }, //valores enviados ao script     
-        function(data) {
+        data: { funcao: "gravar", codigo:codigo, descricao: descricao, ativo: ativo}, //valores enviados ao script     
+        beforeSend: function () {
+            //função chamada antes de realizar o ajax
+        },
+        complete: function () {
+            //função executada depois de terminar o ajax
+        },
+        ///////////////////////////////////////////////////
+        success: function (data) {
             if (data.indexOf('sucess') < 0) {
                 var piece = data.split("#");
                 var mensagem = piece[1];
                 if (mensagem !== "") {
                     smartAlert("Atenção", mensagem, "error");
-                    $("#btnGravar").prop('disabled', false);
                 } else {
-                    smartAlert("Atenção", "Operação não realizada!", "error");
-                    $("#btnGravar").prop('disabled', false);
+                    smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                 }
+
                 return '';
-            } else {
-                smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                novo();
             }
-        }        
+            ////////////////////////////////////////
+            //retorno dos dados
+        },
+        error: function (xhr, er) {
+            //tratamento de erro
+        }
     });
     return '';
 
@@ -48,10 +56,10 @@ function excluiDependentes(codigo) {
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                 }
-                location.reload();
+               
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                location.reload();
+                
             }
         },
         error: function (xhr, er) {
@@ -79,12 +87,12 @@ function recuperaDependentes(id, callback) {
 
     return;
 }
-function dependenteVerificado(descricao) {
+function dependenteVerificado(codigo, descricao) {
     $.ajax({
         url: 'js/TBsqlscopeCadastroDependentes.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "verificaDependente", descricao: descricao }, //valores enviados ao script     
+        data: { funcao: "verificaDependente", codigo: codigo, descricao: descricao }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },

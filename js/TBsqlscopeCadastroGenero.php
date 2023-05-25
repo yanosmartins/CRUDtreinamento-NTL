@@ -53,7 +53,11 @@ function verificaGenero()
 {
     ////////verifica registros duplicados
     $descricao = $_POST["descricao"];
-    $sql = "SELECT descricao FROM dbo.generoFuncionario WHERE descricao='$descricao'";
+    $codigo = $_POST["codigo"];
+    
+        $sql = "SELECT descricao FROM dbo.generoFuncionario WHERE descricao='$descricao' and codigo !='$codigo'";
+    
+
     //achou 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
@@ -65,7 +69,6 @@ function verificaGenero()
         echo "failed#";
         return true;
     }
-
 }
 
 function recupera()
@@ -104,7 +107,7 @@ function excluir()
 
     session_start();
 
-    $result = $reposit->update('dbo.generoFuncionario' .'|'.'generoAtivo = 0'.'|'.'codigo ='.$codigo);
+    $result = $reposit->update('dbo.generoFuncionario' . '|' . 'generoAtivo = 0' . '|' . 'codigo =' . $codigo);
 
     $reposit = new reposit();
 
@@ -115,4 +118,3 @@ function excluir()
     echo 'sucess#' . $result;
     return;
 }
-

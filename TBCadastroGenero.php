@@ -227,6 +227,7 @@ include("inc/scripts.php");
                 click: function() {
                     $(this).dialog("close");
                     excluir();
+                    voltar();
                 }
             }, {
                 html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
@@ -309,11 +310,13 @@ include("inc/scripts.php");
             return;
         }
         gravaGenero(codigo, descricao, ativo);
+        voltar();
     }
 
     function verificaGenero() {
         var descricao = $("#descricao").val();
-        generoVerificado(descricao);
+        var codigo = $("#codigo").val();
+        generoVerificado(codigo, descricao);
     }
 
     function voltar() {
@@ -325,7 +328,6 @@ include("inc/scripts.php");
         var codigo = $("#codigo").val();
         excluiGenero(codigo, ativo);
         voltar()
-
     }
 
     function novo() {

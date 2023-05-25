@@ -19,7 +19,7 @@ function gravaGenero(codigo, descricao, ativo) {
                     smartAlert("Atenção", mensagem, "error");
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    novo();
+                    voltar()
                 }
 
                 return '';
@@ -60,7 +60,7 @@ function excluiGenero(codigo) {
                 location.reload();
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                location.reload();
+                
             }
         },
         error: function (xhr, er) {
@@ -69,12 +69,12 @@ function excluiGenero(codigo) {
     });
 }
 
-function generoVerificado(descricao) {
+function generoVerificado(codigo, descricao) {
     $.ajax({
         url: 'js/TBsqlscopeCadastroGenero.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "verificaGenero", descricao: descricao }, //valores enviados ao script     
+        data: { funcao: "verificaGenero", codigo:codigo, descricao: descricao }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },

@@ -207,7 +207,6 @@ include("inc/scripts.php");
                 $("#descricao").val('');
                 return;
             }
-            verificaDependente()
         })
 
 
@@ -308,6 +307,7 @@ include("inc/scripts.php");
             return;
         }
         gravaDependentes(codigo, descricao, ativo);
+        voltar();
     }
 
     function voltar() {
@@ -323,7 +323,8 @@ include("inc/scripts.php");
 
     function verificaDependente() {
         var descricao = $("#descricao").val();
-        dependenteVerificado(descricao);
+        var codigo = $("#codigo").val();
+        dependenteVerificado(codigo, descricao);
     }
 
     function novo() {
