@@ -198,7 +198,7 @@ include("inc/scripts.php");
         carregaPagina();
         $("#descricao").on("change", function() {
             console.log(this.value)
-            if (/[0-9\!\#\$\&\*\-\_\/Ç\'\<\>\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+            if (/[0-9\!\#\$\&\*\\_\/Ç\'\<\>\^\~\+\?\.\;\,\:[\]]/g.test(this.value)) {
                 smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
                 $("#descricao").val('');
                 return;
@@ -254,7 +254,7 @@ include("inc/scripts.php");
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
                 gravar();
-            }, 500)            
+            }, 500)
         });
 
         $("#btnVoltar").on("click", function() {
@@ -304,7 +304,7 @@ include("inc/scripts.php");
         var descricao = $("#descricao").val();
         var codigo = $("#codigo").val();
         var ativo = 1;
-            if (descricao.length === 0 || !descricao.trim()) {
+        if (descricao.length === 0 || !descricao.trim()) {
             smartAlert("Atenção", "Informe o gênero!", "error");
             $("#descricao").focus();
             return;

@@ -228,7 +228,8 @@ function VerificaRG()
 {
     ////////verifica registros duplicados
     $rg = $_POST["rg"];
-    $sql = "SELECT rg FROM dbo.funcionario WHERE rg='$rg'";
+    $codigo = $_POST["codigo"];
+    $sql = "SELECT rg FROM dbo.funcionario WHERE rg='$rg' and codigo !='$codigo'";
     //achou 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);

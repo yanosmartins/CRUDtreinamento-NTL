@@ -136,7 +136,7 @@ include("inc/nav.php");
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
                                                                     <select id="genero" class="required" name="genero">
-                                                                    <option disabled selected></option>
+                                                                        <option disabled selected></option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
@@ -145,7 +145,7 @@ include("inc/nav.php");
                                                                         foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = $row['descricao'];
-                                                                            
+
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -369,7 +369,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Complemento:</label>
                                                                 <label class="input">
-                                                                    <input id="complemento" maxlength="255" class="nome" name="complemento" value="">
+                                                                    <input id="complemento" maxlength="255" name="complemento" value="">
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -423,7 +423,7 @@ include("inc/nav.php");
                                                                         <label class="label">Tipo de Dependente:</label>
                                                                         <label class="select">
                                                                             <select id="tipoDependente" class="">
-                                                                            <option disabled selected></option>
+                                                                                <option disabled selected></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
                                                                                 $sql = "SELECT codigo, descricao FROM dbo.dependentesFuncionario where dependenteAtivo = 1 ORDER BY codigo";
@@ -606,10 +606,7 @@ include("inc/scripts.php");
                     campo = "Nome Dependente"
                     campoId = '#nomeDependente'
                 }
-                if (this.id == "complemento") {
-                    campo = "Complemento"
-                    campoId = '#complemento'
-                }
+
                 if (this.id == "logradouro") {
                     campo = "logradouro"
                     campoId = '#logradouro'
@@ -630,6 +627,14 @@ include("inc/scripts.php");
                 $(`${campoId}`).focus();
 
             };
+        })
+
+        $("#complemento").on("change", function() {
+            if (/[\!\#\$\&\*\\_\Ç\'\<\>\^\~\+\?\.\;\,\[\]]/g.test(this.value)) {
+                $(`#complemento`).val("");
+                $(`#complemento`).focus();
+                smartAlert("Atenção", `Complemento inválido, use apenas Letras`, "error");
+            }
         })
 
         $(".numero").on("change", function() {
@@ -659,19 +664,12 @@ include("inc/scripts.php");
                 verificaDependente()
             }
         });
-
-
-        $("#rg").on("change", function() {
-            VerificaRG()
-        });
-
         $("#cpfDependente").on("change", function() {
             verificaDependente()
         });
         $("#primeiroEmprego").on("change", function() {
             verificaPrimeiroEmprego();
         });
-
         $("#dataNascimentoDependente").on("change", function() {
             var dataNascimentoDependente = $("#dataNascimentoDependente").val();
             if (validarDataDependente(dataNascimentoDependente) == false) {
@@ -798,12 +796,13 @@ include("inc/scripts.php");
         });
         $("#btnGravar").on("click", function() {
             VerificaCPF()
+            VerificaRG()
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
-                document.getElementById("btnGravar").disabled = false   
+                document.getElementById("btnGravar").disabled = false
                 gravar();
             }, 500)
-           
+
         });
         $("#btnVoltar").on("click", function() {
             voltar();
@@ -827,7 +826,8 @@ include("inc/scripts.php");
 
     function VerificaRG() {
         var rg = $("#rg").val();
-        RGverificado(rg);
+        var codigo = $("#codigo").val();
+        RGverificado(rg, codigo);
         return;
     }
 

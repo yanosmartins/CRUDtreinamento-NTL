@@ -202,7 +202,7 @@ include("inc/scripts.php");
         }));
 
         $("#descricao").on("change", function() {
-            if (/[0-9\!\#\$\&\*\-\_\/\'\é\^\~\+\?\.\;\,\:\]\[\(\)]/g.test(this.value)) {
+            if (/[0-9\!\#\$\&\*\\_\/Ç\'\<\>\^\~\+\?\.\;\,\:[\]]/g.test(this.value)) {
                 smartAlert("Atenção", "Nome inválido, use apenas Letras", "error");
                 $("#descricao").val('');
                 return;
@@ -295,13 +295,13 @@ include("inc/scripts.php");
     }
 
 
- 
+
     function gravar() {
         // Variáveis que vão ser gravadas no banco:
         var descricao = $("#descricao").val();
         var codigo = $("#codigo").val();
         var ativo = 1;
-            if (descricao.length === 0 || !descricao.trim()) {
+        if (descricao.length === 0 || !descricao.trim()) {
             smartAlert("Atenção", "Informe o gênero!", "error");
             $("#descricao").focus();
             return;

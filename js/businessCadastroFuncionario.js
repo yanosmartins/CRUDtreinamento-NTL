@@ -137,12 +137,12 @@ function cpfDependenteValidado(cpfDependente) {
     });
 }
 
-function RGverificado(rg) {
+function RGverificado(rg, codigo) {
     $.ajax({
         url: 'js/sqlscopeCadastroFuncionario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "VerificaRG", rg: rg }, //valores enviados ao script     
+        data: { funcao: "VerificaRG", rg: rg, codigo: codigo }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
