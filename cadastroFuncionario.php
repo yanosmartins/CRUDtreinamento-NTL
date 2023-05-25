@@ -123,8 +123,9 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label" for="Sexo">Estado Civil</label>
                                                                 <label class="select">
-                                                                    <select id="estadoCivil" class="required" name="ativo">
-                                                                        <option value="1" selected>Solteiro</option>
+                                                                    <select id="estadoCivil" class="required">
+                                                                        <option disabled selected></option>
+                                                                        <option value="1">Solteiro</option>
                                                                         <option value="2">Casado</option>
                                                                         <option value="3">Separado</option>
                                                                         <option value="4">Divorciado</option>
@@ -135,6 +136,7 @@ include("inc/nav.php");
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
                                                                     <select id="genero" class="required" name="genero">
+                                                                    <option disabled selected></option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
@@ -143,6 +145,7 @@ include("inc/nav.php");
                                                                         foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = $row['descricao'];
+                                                                            
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -315,6 +318,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="Sexo">UF:</label>
                                                                 <label class="select">
                                                                     <select id="uf" class="required">
+                                                                        <option disabled selected></option>
                                                                         <option value="AC">AC</option>
                                                                         <option value="AL">AL</option>
                                                                         <option value="AP">AP</option>
@@ -419,6 +423,7 @@ include("inc/nav.php");
                                                                         <label class="label">Tipo de Dependente:</label>
                                                                         <label class="select">
                                                                             <select id="tipoDependente" class="">
+                                                                            <option disabled selected></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
                                                                                 $sql = "SELECT codigo, descricao FROM dbo.dependentesFuncionario where dependenteAtivo = 1 ORDER BY codigo";
@@ -1055,12 +1060,12 @@ include("inc/scripts.php");
             $("#dataNascimento").focus();
             return;
         }
-        if (estadoCivil == "") {
+        if (!estadoCivil) {
             smartAlert("Atenção", "Informe o seu Estado Civil!", "error");
             $("#estadoCivil").focus();
             return;
         }
-        if (genero == "") {
+        if (!genero) {
             smartAlert("Atenção", "Informe o seu Gênero!", "error");
             $("#genero").focus();
             return;
@@ -1113,7 +1118,7 @@ include("inc/scripts.php");
             $("#logradouro").focus();
             return;
         }
-        if (uf == "") {
+        if (!uf) {
             smartAlert("Atenção", "Informe a Unidade Federativa de sua residência!", "error");
             $("#uf").focus();
             return;
@@ -1726,6 +1731,6 @@ include("inc/scripts.php");
 
     function pdfContatoFuncionario() {
         var id = $('#codigo').val();
-        $(location).attr('href', 'pdfContatoFuncionario.php?id=' + id );
+        $(location).attr('href', 'pdfContatoFuncionario.php?id=' + id);
     }
 </script>

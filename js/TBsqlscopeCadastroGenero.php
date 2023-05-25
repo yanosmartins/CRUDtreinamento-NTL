@@ -67,14 +67,6 @@ function verificaGenero()
         return true;
     }
 
-
-
-
-
-
-
-
-
 }
 
 function recupera()

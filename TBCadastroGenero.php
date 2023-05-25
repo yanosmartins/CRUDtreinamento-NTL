@@ -205,6 +205,7 @@ include("inc/scripts.php");
                 $("#descricao").val('');
                 return;
             }
+            verificaGenero()
         });
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
@@ -254,9 +255,10 @@ include("inc/scripts.php");
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
             }, 1500)
-            if (verificaGenero()) {
+            var teste = verificaGenero()
+            if (verificaGenero())
                 gravar();
-            }
+            
         });
 
         $("#btnVoltar").on("click", function() {
