@@ -47,7 +47,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Funcionário
+                            <h2>Início
                             </h2>
                         </header>
                         <div>
@@ -175,14 +175,14 @@ include("inc/nav.php");
                                                             </div>
                                                         </div>
 
-                                                        <div class="col col-md-10">
+                                                        <div class="col col-md-10" style=" display: flex; justify-content: space-around; margin-left: 25px;">
 
                                                             <div class="col col-md-2">
                                                                 <button type="button" class="btn  btnBaterPonto" name="btnBaterPonto" id="btnBaterPonto">
                                                                     <span class="fa fa-user fa-2x"></span><br>Funcionário
                                                                 </button><br>
                                                             </div>
-                                                            <div class="col col-md-2">
+                                                            <!-- <div class="col col-md-2">
                                                                 <button type="button" class="btn  btnPontoMensal" id="btnPontoMensal">
                                                                     <span class="fa fa-calendar fa-2x"></span><br> Ponto Mensal
                                                                 </button><br>
@@ -206,7 +206,7 @@ include("inc/nav.php");
                                                                 <button type="button" class="btn  btnAso" id="btnAso">
                                                                     <span class="fa fa fa-stethoscope fa-2x"></span><br>Consulta ASO
                                                                 </button><br>
-                                                            </div>
+                                                            </div> -->
 
                                                         </div>
 
@@ -334,7 +334,7 @@ include("inc/scripts.php");
             }
             $(location).attr('href', `funcionario_atestadoSaudeOcupacional.php?aso=${asoId}&id=${id}&ultimoAso=${ultimoAso}`);
         });
-        
+
 
         $("#btnFolhaMensal").on("click", function() {
             $(location).attr('href', 'funcionario_folhaDePontoPdf.php?id=<?php echo $id ?>');

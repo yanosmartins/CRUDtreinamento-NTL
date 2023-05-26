@@ -397,64 +397,93 @@ foreach ($resultQueryEmail as $row) {
     $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $principal), 1, 0, "C", 0);
 }
 
-$i = $i + 25;
-$pdf->setY($i);
-$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setX(85);
-$pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'LISTA DE DEPENDENTES'), 0, 0, "C", 0);
-$pdf->SetFont($tipoDeFonte, '', 20);
-
-$pdf->Line(25, $i + 5, 185, $i + 5); //menor
-$pdf->Line(25, $i + 5, 185, $i + 5); //menor
-$pdf->Line(25, $i + 5, 185, $i + 5); //menor
 
 
-$pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+
+$quantidadeDepedentes = (int)$resultQueryDependente;
+if ($quantidadeDepedentes >= 1) {
 
 
-$i = $i + 9;
-$pdf->setY($i);
-$pdf->setX(28.5);
-$pdf->SetFillColor(173, 216, 230);
-
-$pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'NOME'), 1, 0, "C", 1);
-$pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'CPF'), 1, 0, "C", 1);
-$pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', 'DATA DE NASCIMENTO'), 1, 0, "C", 1);
-$pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'TIPO'), 1, 0, "C", 1);
-$pdf->SetFillColor(255, 255, 255);
-
-foreach ($resultQueryDependente as $row) {
-    $nome = $row['nome'];
-    $cpf = $row['cpf'];
-    $dataNascimento = $row['dataNascimento'];
-    $tipo = $row['tipo'];
-
-    if ($tipo == "") {
-        $tipo = "---";
-    }
-
-    $split_nome = explode(" ", trim($nome));
-    if (count($split_nome) > 2) {
-        for ($contador = 1; (count($split_nome) - 1) > $contador; $contador++) {
-            if (strlen($split_nome[$contador]) > 3) {
-                $split_nome[$contador] = substr($split_nome[$contador], 0, 1) . ".";
-            }
-        }
-    }
-    $split_nome = implode(" ", $split_nome);
 
 
-    $i += 5;
 
+
+
+    $i = $i + 25;
+    $pdf->setY($i);
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(85);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'LISTA DE DEPENDENTES'), 0, 0, "C", 0);
+    $pdf->SetFont($tipoDeFonte, '', 20);
+
+    $pdf->Line(25, $i + 5, 185, $i + 5); //menor
+    $pdf->Line(25, $i + 5, 185, $i + 5); //menor
+    $pdf->Line(25, $i + 5, 185, $i + 5); //menor
+
+
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+
+
+    $i = $i + 9;
     $pdf->setY($i);
     $pdf->setX(28.5);
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-    $pdf->SetFont($tipoDeFonte, '', 8);
-    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $split_nome), 1, 0, "C", 1);
-    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $cpf), 1, 0, "C", 1);
-    $pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', $dataNascimento), 1, 0, "C", 1);
-    $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $tipo), 1, 0, "C", 1);
+    $pdf->SetFillColor(173, 216, 230);
+
+    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'NOME'), 1, 0, "C", 1);
+    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'CPF'), 1, 0, "C", 1);
+    $pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', 'DATA DE NASCIMENTO'), 1, 0, "C", 1);
+    $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'TIPO'), 1, 0, "C", 1);
+    $pdf->SetFillColor(255, 255, 255);
+
+    foreach ($resultQueryDependente as $row) {
+        $nome = $row['nome'];
+        $cpf = $row['cpf'];
+        $dataNascimento = $row['dataNascimento'];
+        $tipo = $row['tipo'];
+
+        if ($tipo == "") {
+            $tipo = "---";
+        }
+
+        $split_nome = explode(" ", trim($nome));
+        if (count($split_nome) > 2) {
+            for ($contador = 1; (count($split_nome) - 1) > $contador; $contador++) {
+                if (strlen($split_nome[$contador]) > 3) {
+                    $split_nome[$contador] = substr($split_nome[$contador], 0, 1) . ".";
+                }
+            }
+        }
+        $split_nome = implode(" ", $split_nome);
+
+
+        $i += 5;
+
+        $pdf->setY($i);
+        $pdf->setX(28.5);
+        $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+        $pdf->SetFont($tipoDeFonte, '', 8);
+        $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $split_nome), 1, 0, "C", 1);
+        $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $cpf), 1, 0, "C", 1);
+        $pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', $dataNascimento), 1, 0, "C", 1);
+        $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $tipo), 1, 0, "C", 1);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 $i = $i + 25;

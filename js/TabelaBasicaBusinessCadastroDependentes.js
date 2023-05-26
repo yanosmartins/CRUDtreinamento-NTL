@@ -1,6 +1,6 @@
-function gravaGenero(codigo, descricao, ativo) {
+function gravaDependentes(codigo, descricao, ativo) {
     $.ajax({
-        url: 'js/TBsqlscopeCadastroGenero.php',
+        url: 'js/TabelaBasicaSqlscopeCadastroDependentes.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         data: { funcao: "gravar", codigo:codigo, descricao: descricao, ativo: ativo}, //valores enviados ao script     
@@ -19,9 +19,7 @@ function gravaGenero(codigo, descricao, ativo) {
                     smartAlert("Atenção", mensagem, "error");
                 } else {
                     smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
-                    voltar()
                 }
-
                 return '';
             }
             ////////////////////////////////////////
@@ -35,12 +33,12 @@ function gravaGenero(codigo, descricao, ativo) {
 
 }
 
-function excluiGenero(codigo) {
+function excluiDependentes(codigo) {
     $.ajax({
-        url: 'js/TBsqlscopeCadastroGenero.php', //caminho do arquivo a ser executado
+        url: 'js/TabelaBasicaSqlscopeCadastroDependentes.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: 'excluir', codigo:codigo }, //valores enviados ao script     
+        data: { funcao: 'excluir', codigo: codigo }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -57,7 +55,7 @@ function excluiGenero(codigo) {
                 } else {
                     smartAlert("Atenção", "Operação não realizada - entre em contato com a GIR!", "error");
                 }
-                location.reload();
+               
             } else {
                 smartAlert("Sucesso", "Operação realizada com sucesso!", "success");
                 
@@ -69,12 +67,31 @@ function excluiGenero(codigo) {
     });
 }
 
-function generoVerificado(codigo, descricao) {
+function recuperaDependentes(id, callback) {
     $.ajax({
-        url: 'js/TBsqlscopeCadastroGenero.php',
+        url: 'js/TabelaBasicaSqlscopeCadastroDependentes.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: "verificaGenero", codigo:codigo, descricao: descricao }, //valores enviados ao script     
+        data: {
+            funcao: 'recupera',
+            codigo: id,
+
+
+        }, //valores enviados ao script      
+        success: function (data) {
+            callback(data);
+        }
+
+    });
+
+    return;
+}
+function dependenteVerificado(codigo, descricao) {
+    $.ajax({
+        url: 'js/TabelaBasicaSqlscopeCadastroDependentes.php',
+        dataType: 'html', //tipo do retorno
+        type: 'post', //metodo de envio
+        data: { funcao: "verificaDependente", codigo: codigo, descricao: descricao }, //valores enviados ao script     
         beforeSend: function () {
             //função chamada antes de realizar o ajax
         },
@@ -84,9 +101,8 @@ function generoVerificado(codigo, descricao) {
         success: function (data, textStatus) {
             if (data.indexOf('success') < 0) {
                 var piece = data.split("#");
-                var mensagem = piece[1];
-                if (piece[0] !== "success") {
-                    mensagem = "Gênero já registrado.";
+                if (piece[0] != "success") {
+                    mensagem = "Tipo de dependente já registrado.";
                     smartAlert("Atenção", mensagem, "error");
                     document.getElementById('descricao').value = "";
                     $("#descricao").focus();
@@ -95,31 +111,10 @@ function generoVerificado(codigo, descricao) {
             ////////////////////////////////////////
             //retorno dos dados
         },
+        
         error: function (xhr, er) {
             //tratamento de erro
             console.log(xhr, er)
         }
     });
-    return '';
 }
-
-function recuperaGenero(id, callback) {
-    $.ajax({
-        url: 'js/TBsqlscopeCadastroGenero.php', //caminho do arquivo a ser executado
-        dataType: 'html', //tipo do retorno
-        type: 'post', //metodo de envio
-        data: {
-            funcao: 'recupera',
-            codigo: id,
-            
-
-        }, //valores enviados ao script      
-        success: function (data) {
-            callback(data);
-        }
-        
-    });
-
-    return;
-}
-

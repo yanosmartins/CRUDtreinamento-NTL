@@ -6,7 +6,7 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-left" style="min-width:30px;">Dependente</th>
+                    <th class="text-left" style="min-width:30px;">Gênero</th>
                     <th class="text-left" style="min-width:35px;">Ativo</th>
                 </tr>
             </thead>
@@ -18,17 +18,17 @@ include "js/repositorio.php";
                 $codigoFiltro = $_POST["codigoFiltro"];
                 if ($_POST["codigoFiltro"] != "") {
                     $codigoFiltro = $_POST["codigoFiltro"];
-                    $where = $where . " AND dependente.[codigo] = " . $codigoFiltro;
+                    $where = $where . " AND genero.[codigo] = " . $codigoFiltro;
                 }
 
                 $ativoFiltro = "";
                 $ativoFiltro = $_POST["ativoFiltro"];
                 if ($_POST["ativoFiltro"] != "") {
                     $ativoFiltro = $_POST["ativoFiltro"];
-                    $where = $where . " AND dependente.[ativo] =" . $ativoFiltro;
+                    $where = $where . " AND genero.[ativo] =" . $ativoFiltro;
                 }
 
-                $sql = "SELECT codigo, descricao, ativo from dbo.dependente";
+                $sql = "SELECT codigo, descricao, ativo from dbo.genero";
 
                 $sql = $sql . $where;
                 $reposit = new reposit();
@@ -45,13 +45,13 @@ include "js/repositorio.php";
                     //     $ativo = "Não";
                     // }
                     // A linha abaixo é um operador ternário. Um if/else em uma única linha. Neste exemplo, foram rudizadas 5 linhas em 1.
-                    $ativoFiltro == 1 ? $ativo = "Sim" : $ativo = "Não";
+                    $ativoFiltro == 1 ? $ativo = "Sim": $ativo = "Não";
 
-                    echo '<tr >';
-                    echo '<td class="text-left"><a href="TBCadastroDependentes.php?codigo=' . $codigo . '">' . $codigoFiltro . '<a></td>';
-                    echo '<td class="text-left">' . $ativo . '</td>';
-                    echo '</tr >';
-                }
+                        echo '<tr >';
+                        echo '<td class="text-left"><a href="TabelaBasicaCadastroGenero.php?codigo=' . $codigo . '">' . $codigoFiltro . '<a></td>';
+                        echo '<td class="text-left">' . $ativo . '</td>';
+                        echo '</tr >';
+                    }
                 ?>
             </tbody>
         </table>

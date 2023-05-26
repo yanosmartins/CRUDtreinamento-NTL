@@ -190,13 +190,13 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
         var codigo = $('#descricao').val();
 
-        $('#resultadoBusca').load('TBDependentesFiltroListagem.php?', {
+        $('#resultadoBusca').load('TabelaBasicaDependentesFiltroListagem.php?', {
            codigoFiltro: codigo,
             ativoFiltro: ativo
         });
     }
 
     function novo() {
-        $(location).attr('href', 'TBCadastroDependentes.php');
+        $(location).attr('href', 'TabelaBasicaCadastroDependentes.php');
     }
 </script>

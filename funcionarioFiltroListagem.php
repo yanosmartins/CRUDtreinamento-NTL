@@ -187,7 +187,7 @@ include "js/repositorio.php";
                     echo '<td class="text-center">' . $primeiroEmpregoFiltro . '</td>';
                     echo '<td class="text-center">' . $pisPasepFiltro . '</td>';
                     echo '<td class="text-center">' . $ativoFiltro . '</td>';
-                    echo '<td class="text-center"><a href="pdfIndividual.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-warning"><i class=" fa fa-file-pdf-o"></i></button></td>';
+                    echo '<td class="text-center"><a href="pdfFuncionario.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-warning"><i class=" fa fa-file-pdf-o"></i></button></td>';
                     echo '</tr >';
                 }
                 ?>
@@ -281,7 +281,7 @@ include "js/repositorio.php";
 
 
     function pdfFuncionario() {
-        $(location).attr('href', 'pdfIndividual.php?id= ');
+        $(location).attr('href', 'pdfFuncionario.php?id= ');
        
     }
 

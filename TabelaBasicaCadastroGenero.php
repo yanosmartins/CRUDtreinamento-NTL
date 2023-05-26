@@ -166,7 +166,7 @@ include("inc/footer.php");
 include("inc/scripts.php");
 ?>
 
-<script src="<?php echo ASSETS_URL; ?>/js/TBbusinessCadastroGenero.js" type="text/javascript"></script>
+<script src="<?php echo ASSETS_URL; ?>/js/TabelaBasicabusinessCadastroGenero.js" type="text/javascript"></script>
 
 <!-- PAGE RELATED PLUGIN(S) 
 <script src="..."></script>-->
@@ -249,12 +249,15 @@ include("inc/scripts.php");
         });
 
         $("#btnGravar").on("click", function() {
+            var descricao = $("#descricao").val();
+            if (!descricao == ""){
             verificaGenero()
             document.getElementById("btnGravar").disabled = true;
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
                 gravar();
             }, 500)
+        }
         });
 
         $("#btnVoltar").on("click", function() {
@@ -320,7 +323,7 @@ include("inc/scripts.php");
     }
 
     function voltar() {
-        $(location).attr('href', 'TBGeneroFiltro.php');
+        $(location).attr('href', 'TabelaBasicaGeneroFiltro.php');
     }
 
     function excluir() {
@@ -331,6 +334,6 @@ include("inc/scripts.php");
     }
 
     function novo() {
-        $(location).attr('href', 'TBGeneroFiltro.php');
+        $(location).attr('href', 'TabelaBasicaGeneroFiltro.php');
     }
 </script>

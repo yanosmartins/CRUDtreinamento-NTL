@@ -189,13 +189,13 @@ include("inc/scripts.php");
         var ativo = $('#ativo').val();
         var codigo = $('#descricao').val();
 
-        $('#resultadoBusca').load('TBGeneroFiltroListagem.php?', {
+        $('#resultadoBusca').load('TabelaBasicaGeneroFiltroListagem.php?', {
            codigoFiltro: codigo,
             ativoFiltro: ativo
         });
     }
 
     function novo() {
-        $(location).attr('href', 'TBCadastroGenero.php');
+        $(location).attr('href', 'TabelaBasicaCadastroGenero.php');
     }
 </script>

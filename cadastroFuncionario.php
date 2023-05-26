@@ -123,7 +123,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="Sexo">Estado Civil</label>
                                                                 <label class="select">
                                                                     <select id="estadoCivil" class="required">
-                                                                        <option disabled selected></option>
+                                                                        <option hidden selected></option>
                                                                         <option value="1">Solteiro</option>
                                                                         <option value="2">Casado</option>
                                                                         <option value="3">Separado</option>
@@ -135,7 +135,7 @@ include("inc/nav.php");
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
                                                                     <select id="genero" class="required" name="genero">
-                                                                        <option disabled selected></option>
+                                                                        <option hidden selected></option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
@@ -696,7 +696,7 @@ include("inc/scripts.php");
                             $("#uf").val("");
                             $("#numero").val("");
                             $("#complemento").val("");
-                            $("#numero").focus();
+                            $("#cep").focus();
                         }
                     });
                 } //end if.
@@ -1733,6 +1733,6 @@ include("inc/scripts.php");
 
     function pdfIndividual() {
         var id = $('#codigo').val();
-        $(location).attr('href', 'pdfIndividual.php?id=' + id);
+        $(location).attr('href', 'pdfFuncionario.php?id=' + id);
     }
 </script>
