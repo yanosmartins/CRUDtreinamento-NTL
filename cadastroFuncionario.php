@@ -139,12 +139,11 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
-                                                                        FROM dbo.generoFuncionario where generoAtivo = 1 ORDER BY codigo";
+                                                                        FROM dbo.genero where ativo = 1 ORDER BY codigo";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
                                                                             $descricao = $row['descricao'];
-
                                                                             echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
@@ -423,7 +422,7 @@ include("inc/nav.php");
                                                                                 <option disabled selected></option>
                                                                                 <?php
                                                                                 $reposit = new reposit();
-                                                                                $sql = "SELECT codigo, descricao FROM dbo.dependentesFuncionario where dependenteAtivo = 1 ORDER BY codigo";
+                                                                                $sql = "SELECT codigo, descricao FROM dbo.dependente where ativo = 1 ORDER BY codigo";
                                                                                 $result = $reposit->RunQuery($sql);
                                                                                 foreach ($result as $row) {
                                                                                     $codigo = $row['codigo'];
@@ -496,8 +495,8 @@ include("inc/nav.php");
                                         <button type="button" id="btnGravar" class="btn btn-success" aria-hidden="true" title="Gravar" style="display:block">
                                             <span class="fa fa-floppy-o"></span>
                                         </button>
-                                        <button type="button" id="btnNovo" class="btn btn-primary" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtn ?>">
-                                            <span class="fa fa-file-o"></span>
+                                        <button type="button" id="btnNovo" class="btn btn-primary pull-left" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtn ?>">
+                                            <span class="fa fa-file-o pull-left"></span>
                                         </button>
                                         <button type="button" id="btnExcluir" class="btn btn-danger" aria-hidden="true" title="Excluir" style="display:<?php echo $esconderBtn ?>">
                                             <span class="fa fa-trash"></span>
@@ -808,7 +807,7 @@ include("inc/scripts.php");
             setTimeout(function() {
                 document.getElementById("btnGravar").disabled = false
                 gravar();
-            }, 500)
+            }, 800)
 
         });
 
@@ -835,7 +834,10 @@ include("inc/scripts.php");
     function VerificaRG() {
         var rg = $("#rg").val();
         var codigo = $("#codigo").val();
-        RGverificado(rg, codigo);
+        if (rg != "") {
+            RGverificado(rg, codigo);
+        }
+
         return;
     }
 
@@ -1045,7 +1047,7 @@ include("inc/scripts.php");
             $("#nome").focus();
             return;
         }
-        if (cpf === "") {
+        if (cpf == "" || cpf == "___.___.___-__") {
             smartAlert("Atenção", "Informe o cpf !", "error");
             $("#cpf").focus();
             return;

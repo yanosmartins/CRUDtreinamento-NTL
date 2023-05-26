@@ -123,9 +123,9 @@ $pdf->Line(5, 290, 205, 290); //horizontal 2
 // $pdf->Line(5, $i, 205, $i); //menor
 // $pdf->Line(5, $i, 205, $i); //menor
 
-$sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.logradouro, FU.uf, FU.bairro, FU.cidade, FU.numero, FU.complemento, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
+$sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.logradouro, FU.uf, FU.bairro, FU.cidade, FU.numero, FU.complemento, FU.primeiroEmprego, FU.pisPasep, G.descricao as genero 
                 from dbo.funcionario FU 
-                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
+                LEFT JOIN dbo.genero G on G.codigo = FU.genero";
 
 
 

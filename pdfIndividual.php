@@ -126,7 +126,6 @@ $pdf->Line(25, 19, 185, 19); //menor
 $pdf->Line(25, 19, 185, 19); //menor
 
 
-
 $pdf->Line(5, 5, 205, 5); //horizontal 1
 $pdf->Line(5, 12, 205, 12); //horizontal abaixo
 $pdf->Line(5, 5, 5, 290); //vertical 1
@@ -181,9 +180,9 @@ $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PIS:'), 0, 0, "L", 0);
 
 $id = $_GET["id"];
 
-$sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.logradouro, FU.uf, FU.bairro, FU.cidade, FU.numero, FU.complemento, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
+$sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.logradouro, FU.uf, FU.bairro, FU.cidade, FU.numero, FU.complemento, FU.primeiroEmprego, FU.pisPasep, G.descricao as genero 
                 from dbo.funcionario FU 
-                FULL JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero WHERE FU.codigo = " . $id;
+                FULL JOIN dbo.genero G on G.codigo = FU.genero WHERE FU.codigo = " . $id;
 
 
 

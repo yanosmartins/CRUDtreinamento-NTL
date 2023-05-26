@@ -46,7 +46,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Configurações"] = "";
+    $breadcrumbs["Tabela Básica"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -89,7 +89,7 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao
-                                                                        FROM dbo.dependentesFuncionario ORDER BY codigo";
+                                                                        FROM dbo.dependente ORDER BY codigo";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
@@ -116,11 +116,11 @@ include("inc/nav.php");
                                                 <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                <button type="button" id="btnNovo" class="btn btn-primary pull-right" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
+                                                <button type="button" id="btnNovo" class="btn btn-primary pull-left" aria-hidden="true" title="Novo" style="display:<?php echo $esconderBtnGravar ?>">
                                                 <span class="fa fa-file-o"></span>
                                                     
                                                     <?php if ($condicaoGravarOK) { ?>
-                                                        <button id="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                        <button id="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                                             <span class="fa fa-backward"></span>
                                                         </button>
                                                     <?php } ?>

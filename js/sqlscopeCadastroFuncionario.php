@@ -226,20 +226,32 @@ function validaCpfDependente()
 
 function VerificaRG()
 {
-    ////////verifica registros duplicados
-    $rg = $_POST["rg"];
-    $codigo = $_POST["codigo"];
-    $sql = "SELECT rg FROM dbo.funcionario WHERE rg='$rg' and codigo !='$codigo'";
-    //achou 
-    $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
-    ////! ANTES É NEGAÇÃO
-    if (!$result) {
-        echo  'success#';
-    } else {
-        $mensagem = "RG já registrado!";
-        echo "failed#" . $mensagem . ' ';
-    }
+  ////////verifica registros duplicados
+
+  $rg = $_POST["rg"];
+  $codigo = $_POST["codigo"];
+
+  $sql = "SELECT codigo, rg FROM dbo.funcionario WHERE rg='$rg' and codigo !='$codigo'";
+
+  //achou 
+  $codigo = $_POST["codigo"];
+  $codigo = ['codigo'];
+
+  $reposit = new reposit();
+  $result = $reposit->RunQuery($sql);
+
+
+  // if (!$id == $codigo){    
+  // }
+  // else{
+  if (!$result) {
+      echo  'success#';
+  } else {
+      echo "failed#";
+  }
+  // }
+  ////! ANTES É NEGAÇÃO
+
 }
 
 function verificaPispasep()

@@ -72,7 +72,7 @@ include "js/repositorio.php";
                 $generoFiltro = $_POST["generoFiltro"];
                 if ($_POST["generoFiltro"] != "") {
                     $generoFiltro = $_POST["generoFiltro"];
-                    $where = $where . " AND GF.codigo =" . $generoFiltro;
+                    $where = $where . " AND G.codigo =" . $generoFiltro;
                 }
                 if ($_POST["cepFiltro"] != "") {
                     $cepFiltro = $_POST["cepFiltro"];
@@ -98,13 +98,9 @@ include "js/repositorio.php";
                 }
                 
                 
-                $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.primeiroEmprego, FU.pisPasep, GF.descricao as genero 
+                $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.primeiroEmprego, FU.pisPasep, G.descricao as genero 
                 from dbo.funcionario FU
-                LEFT JOIN dbo.generoFuncionario GF on GF.codigo = FU.genero";
-                //   $sql = "SELECT GF.codigo, GF.descricao, F.ativo  from dbo.generoFuncionario AS GF
-                //   // LEFT JOIN dbo.funcionario as F on F.genero = GF.codigo";                
-                //  $sql = " SELECT codigo, descricao from dbo.generoFuncionario
-                //  ";
+                LEFT JOIN dbo.genero G on G.codigo = FU.genero";
 
                 $sql = $sql . $where;
                 $reposit = new reposit();

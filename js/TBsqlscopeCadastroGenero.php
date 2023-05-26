@@ -55,7 +55,7 @@ function verificaGenero()
     $descricao = $_POST["descricao"];
     $codigo = $_POST["codigo"];
     
-        $sql = "SELECT descricao FROM dbo.generoFuncionario WHERE descricao='$descricao' and codigo !='$codigo'";
+        $sql = "SELECT descricao FROM dbo.genero WHERE descricao='$descricao' and codigo !='$codigo'";
     
 
     //achou 
@@ -74,7 +74,7 @@ function verificaGenero()
 function recupera()
 {
     $codigo = $_POST["codigo"];
-    $sql = "SELECT generoAtivo, descricao FROM dbo.generoFuncionario WHERE codigo = $codigo";
+    $sql = "SELECT ativo, descricao FROM dbo.genero WHERE codigo = $codigo";
 
 
 
@@ -84,7 +84,7 @@ function recupera()
     $out = "";
 
     if ($row = $result[0]) {
-        $ativo = (int)$row['generoAtivo'];
+        $ativo = (int)$row['ativo'];
         $descricao = $row['descricao'];
 
         $out =  $ativo . "^" .
@@ -107,7 +107,7 @@ function excluir()
 
     session_start();
 
-    $result = $reposit->update('dbo.generoFuncionario' . '|' . 'generoAtivo = 0' . '|' . 'codigo =' . $codigo);
+    $result = $reposit->update('dbo.genero' . '|' . 'ativo = 0' . '|' . 'codigo =' . $codigo);
 
     $reposit = new reposit();
 

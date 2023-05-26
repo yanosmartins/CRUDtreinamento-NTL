@@ -158,11 +158,11 @@ function RGverificado(rg, codigo) {
                     //     return;
                     // }
                     // else {
-                    mensagem = "RG já registrado.";
-                    smartAlert("Atenção", mensagem, "error");
+                    mensagem = "RG do funcionário já registrado.";
                     document.getElementById('rg').value = "";
                     $("#rg").focus();
-                    return;
+                    smartAlert("Atenção", mensagem, "error");
+                    return false;
                 }
             }
             ////////////////////////////////////////

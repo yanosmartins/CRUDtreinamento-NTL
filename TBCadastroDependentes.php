@@ -50,7 +50,7 @@ include("inc/nav.php");
 <!-- MAIN PANEL -->
 <div id="main" role="main">
     <?php
-    $breadcrumbs["Configurações"] = "";
+    $breadcrumbs["Tabela Básica"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -85,7 +85,7 @@ include("inc/nav.php");
                                                         <input id="codigo" type="text" value="<?= $_GET['codigo'] ?>" hidden>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Descrição de Dependentes:</label>
+                                                                <label class="label">Descrição:</label>
                                                                 <label class="input">
                                                                     <input id="descricao" maxlength="255" name="nome" class="required">
                                                                 </label>

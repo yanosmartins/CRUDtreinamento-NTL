@@ -46,7 +46,7 @@ include("inc/nav.php");
     <?php
     //configure ribbon (breadcrumbs) array("name"=>"url"), leave url empty if no url
     //$breadcrumbs["New Crumb"] => "http://url.com"
-    $breadcrumbs["Configurações"] = "";
+    $breadcrumbs["Cadastro"] = "";
     include("inc/ribbon.php");
     ?>
 
@@ -133,7 +133,7 @@ include("inc/nav.php");
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
-                                                                        FROM dbo.generoFuncionario where generoAtivo = 1 ORDER BY codigo";
+                                                                        FROM dbo.genero where ativo = 1 ORDER BY codigo";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             $codigo = $row['codigo'];
@@ -185,7 +185,7 @@ include("inc/nav.php");
                                                     <button id="btnSearch" name="btnSearch" type="button" class="btn btn-primary pull-right" title="Buscar">
                                                         <span class="fa fa-search"></span>
                                                     </button>
-                                                    <button id="btnNovo" name="btnNovo" type="button" class="btn btn-primary pull-right" title="Novo">
+                                                    <button id="btnNovo" name="btnNovo" type="button" class="btn btn-primary pull-left" title="Novo">
                                                         <span class="fa fa-file-o"></span>
                                                     </button>
                                                     <button id="btnPdfLista" type="button" class="btn btn-danger pull-right" title="Novo">

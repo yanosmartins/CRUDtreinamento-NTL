@@ -51,7 +51,7 @@ function gravar()
 function recupera()
 {
     $codigo = $_POST["codigo"];
-    $sql = "SELECT dependenteAtivo, descricao FROM dbo.dependentesFuncionario WHERE codigo = $codigo";
+    $sql = "SELECT ativo, descricao FROM dbo.dependente WHERE codigo = $codigo";
 
 
 
@@ -61,7 +61,7 @@ function recupera()
     $out = "";
 
     if ($row = $result[0]) {
-        $ativo = (int)$row['dependenteAtivo'];
+        $ativo = (int)$row['ativo'];
         $descricao = $row['descricao'];
 
         $out =  $ativo . "^" .
@@ -87,7 +87,7 @@ function excluir()
 
     session_start();
 
-    $result = $reposit->update('dbo.dependentesFuncionario' .'|'.'dependenteAtivo = 0'.'|'.'codigo ='.$codigo);
+    $result = $reposit->update('dbo.dependente' .'|'.'ativo = 0'.'|'.'codigo ='.$codigo);
 
     $reposit = new reposit();
 
@@ -103,7 +103,7 @@ function verificaDependente()
 {
     $descricao = $_POST["descricao"];
     $codigo = $_POST["codigo"];
-    $sql = "SELECT descricao FROM dbo.dependentesFuncionario WHERE descricao='$descricao' and codigo !='$codigo'";
+    $sql = "SELECT descricao FROM dbo.dependente WHERE descricao='$descricao' and codigo !='$codigo'";
     //achou 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);

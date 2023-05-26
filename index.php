@@ -179,7 +179,7 @@ include("inc/nav.php");
 
                                                             <div class="col col-md-2">
                                                                 <button type="button" class="btn  btnBaterPonto" name="btnBaterPonto" id="btnBaterPonto">
-                                                                    <span class="fa fa-user"></span><br>Funcionário
+                                                                    <span class="fa fa-user fa-2x"></span><br>Funcionário
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-md-2">

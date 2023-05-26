@@ -18,17 +18,17 @@ include "js/repositorio.php";
                 $codigoFiltro = $_POST["codigoFiltro"];
                 if ($_POST["codigoFiltro"] != "") {
                     $codigoFiltro = $_POST["codigoFiltro"];
-                    $where = $where . " AND generoFuncionario.[codigo] = " . $codigoFiltro;
+                    $where = $where . " AND genero.[codigo] = " . $codigoFiltro;
                 }
 
                 $ativoFiltro = "";
                 $ativoFiltro = $_POST["ativoFiltro"];
                 if ($_POST["ativoFiltro"] != "") {
                     $ativoFiltro = $_POST["ativoFiltro"];
-                    $where = $where . " AND generoFuncionario.[generoAtivo] =" . $ativoFiltro;
+                    $where = $where . " AND genero.[ativo] =" . $ativoFiltro;
                 }
 
-                $sql = "SELECT codigo, descricao, generoAtivo from dbo.generoFuncionario";
+                $sql = "SELECT codigo, descricao, ativo from dbo.genero";
 
                 $sql = $sql . $where;
                 $reposit = new reposit();
@@ -37,7 +37,7 @@ include "js/repositorio.php";
                 foreach ($result as $row) {
                     $codigo = $row['codigo'];
                     $codigoFiltro = $row['descricao'];
-                    $ativoFiltro = (int) $row['generoAtivo'];
+                    $ativoFiltro = (int) $row['ativo'];
 
                     // if ($ativoFiltro == 1) {
                     //     $ativo = "Sim";
