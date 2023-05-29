@@ -837,7 +837,7 @@ include("inc/scripts.php");
 
     function ValidaCPF() {
         var cpf = $("#cpf").val();
-        if (cpf != "") 
+        if (cpf != "")
             cpfvalidado(cpf);
         return;
     }
@@ -1156,10 +1156,33 @@ include("inc/scripts.php");
             $("#cidade").focus();
             return;
         }
-        // if (VerificaCPF == true) {
-        //     disabled
+        var achouDependente = false;
+        for (var i = 0; i < jsonDependenteArray.length; i++) {
+            if (nome == jsonDependenteArray[i].nomeDependente) {
+                achouDependente = true;
+            }
+        }
 
-        // }
+        if (achouDependente == true) {
+            smartAlert("Atenção", "Conflito de nome com Dependente!", "error");
+            $("#nome").focus();
+            return;
+        }
+        var achouCpfDependente = false;
+        for (var i = 0; i < jsonDependenteArray.length; i++) {
+            if (cpf == jsonDependenteArray[i].cpfDependente) {
+                achouCpfDependente = true;
+            }
+        }
+
+        if (achouCpfDependente == true) {
+            smartAlert("Atenção", "Conflito de CPF com Dependente!", "error");
+            $("#cpf").focus();
+            return;
+        }
+
+
+
 
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);
         <?php $esconderBtn = "none" ?>
@@ -1720,10 +1743,10 @@ include("inc/scripts.php");
             }
         }
 
-        
+
         // var teste = verificaDependente();
         // teste = teste; 
-        
+
         // if (verificaDependente() !== false)
         addDependente();
     }
@@ -1739,7 +1762,7 @@ include("inc/scripts.php");
             $("#cpfDependente").focus();
             return false
         } else {
-                cpfDependenteValidado(cpfDependente);
+            cpfDependenteValidado(cpfDependente);
         }
     }
 
