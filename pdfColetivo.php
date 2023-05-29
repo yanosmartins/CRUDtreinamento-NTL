@@ -20,9 +20,16 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
 
 require_once('fpdf/fpdf.php');
+$sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.logradouro, FU.uf, FU.bairro, FU.cidade, FU.numero, FU.complemento, FU.primeiroEmprego, FU.pisPasep, G.descricao as genero 
+                from dbo.funcionario FU 
+                LEFT JOIN dbo.genero G on G.codigo = FU.genero";
+
+$reposit = new reposit();
+$resultQuery = $reposit->RunQuery($sql);
 
 class PDF extends FPDF
 {
+
     function Header()
     {
         global $codigo;
@@ -84,6 +91,8 @@ class PDF extends FPDF
 
         $this->SetTextColor(255, 192, 203);
         $this->Image('C:\inetpub\wwwroot\Cadastro\img\marcaDagua.png', 35, 45, 135, 145, 'PNG');
+        // $this->Image('C:\inetpub\wwwroot\Cadastro\img\logo.png', 80, 90, 80, 90, 'PNG');
+        // $this->Image('C:\inetpub\wwwroot\Cadastro\img\logo.png', 10, 278, 35, 9, 'PNG');
     }
     function Footer()
     {
@@ -123,93 +132,27 @@ $pdf->Line(5, 290, 205, 290); //horizontal 2
 // $pdf->Line(5, $i, 205, $i); //menor
 // $pdf->Line(5, $i, 205, $i); //menor
 
-$sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.logradouro, FU.uf, FU.bairro, FU.cidade, FU.numero, FU.complemento, FU.primeiroEmprego, FU.pisPasep, G.descricao as genero 
-                from dbo.funcionario FU 
-                LEFT JOIN dbo.genero G on G.codigo = FU.genero";
 
 
-
-$reposit = new reposit();
-$resultQuery = $reposit->RunQuery($sql);
 
 $i = 15;
 
+
+
+
+
+
+
 foreach ($resultQuery as $row) {
-    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    $i = $i + 5;
-    $contadorPrimeiro = 0;
-    if ($contadorPrimeiro > 0) {
-        $i = $i - 5;
+
+    if ($i > 240) {
+        $pdf->AddPage();
+        // $pdf->Line(5, 5, 205, 5); //horizontal 1
+        $pdf->Line(5, 12, 205, 12); //horizontal abaixo
+        // $pdf->Header();
+        // $pdf->Footer();
+        $i = 15;
     }
-    $pdf->setY($i);
-    $pdf->setX(12);
-    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'NOME:'), 0, 0, "L", 0);
-
-    $pdf->setY($i);
-    $pdf->setX(154.5);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO:'), 0, 0, "L", 0);
-
-    $i = $i + 5;
-    $pdf->setY($i);
-    $pdf->setX(78);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASC.:'), 0, 0, "L", 0);
-
-    $pdf->setY($i);
-    $pdf->setX(12);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CPF:'), 0, 0, "L", 0);
-
-    $pdf->setY($i);
-    $pdf->setX(154);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'GÊNERO:'), 0, 0, "L", 0);
-
-    $i = $i + 5;
-
-    $pdf->setY($i);
-    $pdf->setX(12);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'RG:'), 0, 0, "L", 0);
-
-    $pdf->setY($i);
-    $pdf->setX(78);
-    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'ESTADO CIVIL:'), 0, 0, "L", 0);
-
-    $pdf->setY($i);
-    $pdf->setX(154);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PIS:'), 0, 0, "L", 0);
-
-    $i = $i + 5;
-
-    $pdf->setY($i);
-    $pdf->setX(12);
-    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'TELEFONE:'), 0, 0, "L", 0);
-
-    $pdf->setY($i);
-    $pdf->setX(78);
-    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'EMAIL:'), 0, 0, "L", 0);
-
-    $pdf->setY($i);
-    $pdf->setX(154);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'Nº DE DEPENDENTES:'), 0, 0, "L", 0);
-
-    $i = $i + 5;
-
-    $pdf->setY($i);
-    $pdf->setX(12);
-    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'ENDEREÇO:'), 0, 0, "L", 0);
-
-    $pdf->setY($i);
-    $pdf->setX(154);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "L", 0);
-
-
-    $i = $i + 5;
-    $pdf->Line(5, $i, 205, $i); //menor
-    $contadorPrimeiro = $contadorPrimeiro + 1;
-}
-
-$i = 15;
-
-foreach ($resultQuery as $row) {
-
 
 
     $i = $i + 5;
@@ -257,38 +200,6 @@ foreach ($resultQuery as $row) {
         $pispasep = "Nenhum";
     }
 
-    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
-
-    $pdf->setY($i);
-    $pdf->setX(25);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $nome), 0, 0, "L", 0);
-
-    $pdf->setY($i);
-    $pdf->setX(170);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "L", 0);
-
-    $i = $i + 5;
-
-    $pdf->setY($i);
-
-    $pdf->setX(24);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cpf), 0, 0, "L", 0);
-    $pdf->setX(110);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $dataNascimento), 0, 0, "L", 0);
-    $pdf->setX(170);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $genero), 0, 0, "L", 0);
-
-    $i = $i + 5;
-    $pdf->setY($i);
-
-    $pdf->setX(22);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $rg), 0, 0, "L", 0);
-    $pdf->setX(108);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $estadoCivil), 0, 0, "L", 0);
-    $pdf->setX(165);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $pispasep), 0, 0, "L", 0);
-
-
     $split_logradouro = explode(" ", trim($logradouro));
     if (count($split_logradouro) > 2) {
         for ($contador = 1; (count($split_logradouro) - 1) > $contador; $contador++) {
@@ -301,57 +212,157 @@ foreach ($resultQuery as $row) {
 
     $endereco = $split_logradouro . ' - ' . $numero . ' - ' . $bairro . ', ' . $uf . '.';
 
+
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setY($i);
+    $pdf->setX(12);
+    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'NOME:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(25);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $nome), 0, 0, "L", 0);
+
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(154.5);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(170);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $ativo), 0, 0, "L", 0);
+
     $i = $i + 5;
 
+    $pdf->setY($i);
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(78);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DATA DE NASC.:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(110);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $dataNascimento), 0, 0, "L", 0);
+
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(12);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CPF:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(24);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cpf), 0, 0, "L", 0);
+
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(154);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'GÊNERO:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(170);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $genero), 0, 0, "L", 0);
+
+    $i = $i + 5;
+
+    $pdf->setY($i);
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(12);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'RG:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(22);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $rg), 0, 0, "L", 0);
+
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(78);
+    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'ESTADO CIVIL:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(108);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $estadoCivil), 0, 0, "L", 0);
+
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(154);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'PIS:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+    $pdf->setX(165);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $pispasep), 0, 0, "L", 0);
+
+    $i = $i + 5;
+    
+
     $sqlTelefone = "SELECT telefone from dbo.telefoneFuncionario where principal = 1 and funcionarioId = " . $codigo;
-    $sqlEmail = "SELECT email from dbo.emailFuncionario where principal = 1 and funcionarioId = " . $codigo;
-    $sqlDependente = "SELECT count(nome) as contador from dbo.dependentesListaFuncionario  where funcionarioId = " . $codigo;
     $reposit = new reposit();
     $resultQueryTelefone = $reposit->RunQuery($sqlTelefone);
-    $reposit = new reposit();
-    $resultQueryEmail = $reposit->RunQuery($sqlEmail);
-    $reposit = new reposit();
-    $resultQueryDependente = $reposit->RunQuery($sqlDependente);
-
 
     foreach ($resultQueryTelefone as $row) {
         $telefone = $row['telefone'];
-
         $pdf->setY($i);
+        $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+        $pdf->setX(12);
+        $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'TELEFONE:'), 0, 0, "L", 0);
+        $pdf->setY($i);
+        $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
         $pdf->setX(34);
         $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $telefone), 0, 0, "L", 0);
     }
+
+
+    $sqlEmail = "SELECT email from dbo.emailFuncionario where principal = 1 and funcionarioId = " . $codigo;
+
+    $reposit = new reposit();
+    $resultQueryEmail = $reposit->RunQuery($sqlEmail);
+
     foreach ($resultQueryEmail as $row) {
         $email = $row['email'];
-        $email =  substr_replace($email, '****', 3, strpos($email, '@') - 4);
-        $pdf->setY($i);
-        $pdf->setX(94);
+        $email = substr_replace($email, '****', 2, strpos($email, '@') - 4);
+
+        $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+        $pdf->setX(78);
+        $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'EMAIL:'), 0, 0, "L", 0);
+        $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+        $pdf->setX(95);
         $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $email), 0, 0, "L", 0);
     }
+
+
+
+
+    $sqlDependente = "SELECT count(nome) as contador from dbo.dependentesListaFuncionario  where funcionarioId = " . $codigo;
+    $reposit = new reposit();
+    $resultQueryDependente = $reposit->RunQuery($sqlDependente);
+
     foreach ($resultQueryDependente as $row) {
-        $numeroDependentes = $row['contador'];
-        $pdf->setX(193);
-        $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $numeroDependentes), 0, 0, "L", 0);
+        $dependente = (int)$resultQueryDependente;
+        $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+        $pdf->setX(154);
+        $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'Nº DE DEPENDENTES:'), 0, 0, "L", 0);
+        $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
+        $pdf->setX(192 );
+        $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $dependente), 0, 0, "L", 0);
 
     }
-
-
 
     $i = $i + 5;
     $pdf->setY($i);
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(12);
+    $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'ENDEREÇO:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->setX(34);
     $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $endereco), 0, 0, "L", 0);
+
+    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+    $pdf->setX(154);
+    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "L", 0);
+    $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->setX(165);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
 
-
-
     $i = $i + 5;
+
     $pdf->Line(5, $i, 205, $i); //menor
 
     $contadorPrimeiro = $contadorPrimeiro + 1;
+    $contadorPrimeiro = 0;
+    if ($contadorPrimeiro > 0) {
+        $i = $i - 5;
+    }
+
     // }
 }
+
+
+$i = $i + 5;
+
 
 $pdf->Ln(8);
 $pdf->Output();

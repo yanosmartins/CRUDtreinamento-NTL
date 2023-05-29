@@ -663,6 +663,7 @@ include("inc/scripts.php");
             //     verificaDependente()
             // }
         });
+
         $("#cpfDependente").on("change", function() {
             // verificaDependente()
         });
@@ -836,9 +837,8 @@ include("inc/scripts.php");
 
     function ValidaCPF() {
         var cpf = $("#cpf").val();
-        if (cpf != "") {
+        if (cpf != "") 
             cpfvalidado(cpf);
-        }
         return;
     }
 
