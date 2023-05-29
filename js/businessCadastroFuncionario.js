@@ -124,11 +124,11 @@ function cpfDependenteValidado(cpfDependente) {
         data: { funcao: "validaCpfDependente", cpfDependente: cpfDependente },
 
         success: function (data) {
-            if (data.trim() == "failed") {
+            if (data.trim() != "success") {
                 smartAlert("Atenção", "CPF do dependente é inválido!", "error");
                 document.getElementById('cpfDependente').value = "";
                 $("#cpfDependente").focus();
-
+                return false;
             }
         },
         error: function (xhr, er) {

@@ -119,11 +119,11 @@ $pdf->setY(16);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 $pdf->setX(85);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DADOS DO FUNCIONÁRIO'), 0, 0, "C", 0);
-$pdf->SetFont($tipoDeFonte, '', 20);
+$pdf->SetFont($tipoDeFonte, '', 2);
 
-$pdf->Line(25, 19, 185, 19); //menor
-$pdf->Line(25, 19, 185, 19); //menor
-$pdf->Line(25, 19, 185, 19); //menor
+$pdf->Line(5, 19, 205, 19); //menor
+$pdf->Line(5, 19, 205, 19); //menor
+$pdf->Line(5, 19, 205, 19); //menor
 
 
 $pdf->Line(5, 5, 205, 5); //horizontal 1
@@ -307,9 +307,9 @@ foreach ($resultQuery as $row) {
     $pdf->setX(166);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $pispasep), 0, 0, "L", 0);
 
-    // $pdf->Line(25, 50, 185, 50); //menor
-    // $pdf->Line(25, 50, 185, 50); //menor
-    // $pdf->Line(25, 50, 185, 50); //menor
+   // $pdf->Line(25,200, 185, 50); //menor
+   // $pdf->Line(25,200, 185, 50); //menor
+   // $pdf->Line(25,200, 185, 50); //menor
 
 }
 
@@ -318,11 +318,11 @@ $pdf->setY(60);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 $pdf->setX(85);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'DADOS DE CONTATO'), 0, 0, "C", 0);
-$pdf->SetFont($tipoDeFonte, '', 20);
+$pdf->SetFont($tipoDeFonte, '', 2);
 
-$pdf->Line(25, 63, 185, 63); //menor
-$pdf->Line(25, 63, 185, 63); //menor
-$pdf->Line(25, 63, 185, 63); //menor
+$pdf->Line(5, 63, 205, 63); //menor
+$pdf->Line(5, 63, 205, 63); //menor
+$pdf->Line(5, 63, 205, 63); //menor
 
 $i = 72;
 
@@ -416,9 +416,9 @@ if ($quantidadeDepedentes >= 1) {
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'LISTA DE DEPENDENTES'), 0, 0, "C", 0);
     $pdf->SetFont($tipoDeFonte, '', 20);
 
-    $pdf->Line(25, $i + 5, 185, $i + 5); //menor
-    $pdf->Line(25, $i + 5, 185, $i + 5); //menor
-    $pdf->Line(25, $i + 5, 185, $i + 5); //menor
+    $pdf->Line(5, $i + 5, 205, $i + 5); //menor
+    $pdf->Line(5, $i + 5, 205, $i + 5); //menor
+    $pdf->Line(5, $i + 5, 205, $i + 5); //menor
 
 
     $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
@@ -491,9 +491,9 @@ $pdf->setY($i);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 $pdf->setX(85);
 $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ENDEREÇO'), 0, 0, "C", 0);
-$pdf->Line(25, $i + 3, 185, $i + 3); //menor
-$pdf->Line(25, $i + 3, 185, $i + 3); //menor
-$pdf->Line(25, $i + 3, 185, $i + 3); //menor
+$pdf->Line(5, $i + 3, 205, $i + 3); //menor
+$pdf->Line(5, $i + 3, 205, $i + 3); //menor
+$pdf->Line(5, $i + 3, 205, $i + 3); //menor
 
 
 

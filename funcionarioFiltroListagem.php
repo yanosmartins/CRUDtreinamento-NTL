@@ -279,22 +279,4 @@ include "js/repositorio.php";
 
     });
 
-
-    function pdfFuncionario() {
-        $(location).attr('href', 'pdfFuncionario.php?id= ');
-       
-    }
-
-//     function listarRelatorioFuncionariosAfetados(codRelatorio) {
-//         var id =
-//     // var dataRelatorio = dataRelatorio;
-//     // var dataValidade = dataValidade;
-//     var codRelatorio = codRelatorio;
-//     $('#resultadoFuncionariosAfetadosBusca').load('saudeSegurancaTrabalho_PPRAFiltroHistoricoListagem.php?', {
-//       // dataRelatorio: dataRelatorio,
-//       // dataValidade: dataValidade,
-//       codRelatorio: codRelatorio
-//     });
-// }
-
 </script>

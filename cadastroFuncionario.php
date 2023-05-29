@@ -645,6 +645,7 @@ include("inc/scripts.php");
             let data = $("#dataNascimento").val()
             if (validaData(data) == false) {
                 smartAlert("Atenção", "Data inválida ", "error");
+
                 $("#idade").val("");
                 document.getElementById('dataNascimento').value = '';
                 $("#dataNascimento").focus();
@@ -655,13 +656,15 @@ include("inc/scripts.php");
         $("#cpf").on("change", function() {
             let data = $("#cpf").val()
             let cpfDependente = $("#cpfDependente").val()
-            ValidaCPF()
-            if (cpfDependente != "") {
-                verificaDependente()
+            if (data != "") {
+                ValidaCPF()
             }
+            // if (cpfDependente != "") {
+            //     verificaDependente()
+            // }
         });
         $("#cpfDependente").on("change", function() {
-            verificaDependente()
+            // verificaDependente()
         });
         $("#primeiroEmprego").on("change", function() {
             verificaPrimeiroEmprego();
@@ -670,7 +673,6 @@ include("inc/scripts.php");
             var dataNascimentoDependente = $("#dataNascimentoDependente").val();
             if (validarDataDependente(dataNascimentoDependente) == false) {
                 smartAlert("Atenção", "Data Inválida!", "error");
-                $("#idade").val("");
                 $("#dataNascimentoDependente").val("");
             }
             validarDataDependente();
@@ -715,7 +717,9 @@ include("inc/scripts.php");
             }
         });
         $("#pispasep").on("change", function() {
-            verificaPispasep()
+            var pispasep = $("#pispasep").val()
+            if (pispasep != "")
+                verificaPispasep()
         });
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
@@ -738,7 +742,12 @@ include("inc/scripts.php");
         });
 
         $("#btnAddDependente").on("click", function() {
-            validaDependente();
+            if (verificaDependente() != false) {
+                validaDependente()
+            }
+
+
+
         });
 
         $("#btnRemoverDependente").on("click", function() {
@@ -827,7 +836,9 @@ include("inc/scripts.php");
 
     function ValidaCPF() {
         var cpf = $("#cpf").val();
-        cpfvalidado(cpf);
+        if (cpf != "") {
+            cpfvalidado(cpf);
+        }
         return;
     }
 
@@ -1211,14 +1222,12 @@ include("inc/scripts.php");
 
         if (idade < 0) {
             // alert("Usuários com menos de 18 anos não podem ser cadastrados.");
-            $("#idade").val(idade)
             $("#btnGravar").prop('disabled', false);
             return false;
         }
 
         if (idade >= 0 && idade <= 120) {
             // smartAlert("Sucesso","Data permitida.", "success")
-            $("#idade").val(idade)
             $("#btnGravar").prop('disabled', false);
             return;
         }
@@ -1562,12 +1571,12 @@ include("inc/scripts.php");
             $("#nomeDependente").focus();
             return;
         }
-        if (cpfDependente === "") {
+        if (cpfDependente == "" || cpfDependente == "___.___.___-__") {
             smartAlert("Atenção", "Informe o CPF do Dependente!", "error");
             $("#cpfDependente").focus();
             return;
         }
-        if (dataNascimentoDependente === "") {
+        if (dataNascimentoDependente == "" || dataNascimentoDependente == "__/__/____") {
             smartAlert("Atenção", "Informe a data de nascimento do Dependente!", "error");
             $("#dataNascimentoDependente").focus();
             return;
@@ -1707,14 +1716,16 @@ include("inc/scripts.php");
                     smartAlert("Erro", "CPF igual ao Funcionário.", "error");
                     $("#cpfDependente").focus();
                     $("#cpfDependente").val("");
-                } else {
-                    cpfDependenteValidado(cpfDependente);
-                }
+                } else {}
             }
         }
-        addDependente();
-        return true;
 
+        
+        // var teste = verificaDependente();
+        // teste = teste; 
+        
+        // if (verificaDependente() !== false)
+        addDependente();
     }
 
     function verificaDependente() {
@@ -1722,12 +1733,13 @@ include("inc/scripts.php");
         var cpf = $('#cpf').val();
         var cpfDependente = $('#cpfDependente').val();
         var achouDependenteDuplicado = false;
-        if (cpfDependente == cpf) {
+        if (cpfDependente != "" && cpfDependente == cpf) {
             smartAlert("Erro", "CPF do dependente igual ao do Funcionário.", "error");
-            $("#cpfDependente").focus();
             $("#cpfDependente").val("");
+            $("#cpfDependente").focus();
+            return false
         } else {
-            cpfDependenteValidado(cpfDependente);
+                cpfDependenteValidado(cpfDependente);
         }
     }
 

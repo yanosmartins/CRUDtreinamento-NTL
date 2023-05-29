@@ -147,13 +147,13 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Data de Nascimento - Início</label>
                                                                 <label class="input">
-                                                                    <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                    <input id="dataNascimentoInicio" name="dataNascimentoInicio" type="text" class="datepicker datas" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
                                                                 <label class="label">Data de Nascimento - Fim</label>
                                                                 <label class="input">
-                                                                    <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
+                                                                    <input id="dataNascimentoFim" name="dataNascimentoFim" type="text" class="datepicker datas" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
 
                                                             </section>
@@ -190,9 +190,9 @@ include("inc/nav.php");
                                                     </button>
                                                     <button id="btnPdfLista" type="button" class="btn btn-danger pull-right" title="Novo">
                                                         <span class="fa fa-file-pdf-o"></span>
-                                                    </button>                                                  
-                                                   
-                                                    </footer>
+                                                    </button>
+
+                                                </footer>
                                             </div>
                                         </div>
                                     </div>
@@ -254,9 +254,11 @@ include("inc/scripts.php");
 
     $(document).ready(function() {
 
-        $("#dataNascimentoFim").on("change", function() {
-            validarDataFim();
-        });
+        $(".datas").on("change", function() {
+            var dataNascimentoInicio = $('#dataNascimentoInicio').val();
+            var dataNascimentoFim = $('#dataNascimentoFim').val();
+            validarData(dataNascimentoInicio, dataNascimentoFim);
+        })
 
         $("#primeiroEmprego").on("change", function() {
             let primeiroEmprego = ($("#primeiroEmprego").val())
@@ -276,8 +278,9 @@ include("inc/scripts.php");
 
 
 
+
+
         $('#btnSearch').on("click", function() {
-            // if(validarDataFim == true)
             listarFiltro();
         });
 
@@ -290,7 +293,9 @@ include("inc/scripts.php");
 
     })
 
-    function validarDataFim() {
+    function validarData(dataNascimentoInicio, dataNascimentoFim) { 
+  
+
         var dataAgora = new Date();
         var dd = dataAgora.getDate();
         var mm = (dataAgora.getMonth() + 1);
@@ -298,13 +303,34 @@ include("inc/scripts.php");
 
         var dataHoje = dd + "/" + mm + "/" + yyyy;
 
-        var dataNascimentoFim = $('#dataNascimentoFim').val();
-        if (dataNascimentoFim > dataHoje) {
-            $("#dataNascimentoFim").focus();
-            $("#dataNascimentoFim").val('');
-            smartAlert("Erro", "Data final inválida.", "error");
+        var campo;
+         
+        
+        dataNascimentoInicio != "" ? campo = 'Data Inicio' : campo = 'Data Fim'; // iternario
+
+        // dataNascimentoFim != "" ? campo = 'Data Inicial' : campo = 'Nome Final'; // iternario
+
+        // if( this.id == "nome"  ){
+        //     campo = "Nome"
+        // }else{
+        //     campo = "Nome Dependete"
+        // }
+
+        // smartAlert("Atenção", `${campo} inválido, use apenas Letras`, "error");
+
+
+        if (dataNascimentoFim > dataHoje || dataNascimentoInicio > dataHoje) {
+            $("#dataNascimentoInicio").val('');
+            $("#dataNascimentoFim").val('');    
+            smartAlert("Erro", `${campo} inválida.`, "error");
+            
         }
+        
     }
+
+
+
+
 
     function listarFiltro() {
         var nome = $('#nome').val();
@@ -339,6 +365,7 @@ include("inc/scripts.php");
     function novo() {
         $(location).attr('href', 'cadastroFuncionario.php');
     }
+
     function pdfFuncionario() {
         // var id = id OU codigo
         $(location).attr('href', 'pdfColetivo.php');
