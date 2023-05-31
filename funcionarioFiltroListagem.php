@@ -6,17 +6,17 @@ include "js/repositorio.php";
         <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
             <thead>
                 <tr role="row">
-                    <th class="text-center" style="min-width:30px;">Nome</th>
-                    <th class="text-center" style="min-width:30px;">CPF</th>
-                    <th class="text-center" style="min-width:30px;">RG</th>
+                    <th class="text-left" style="min-width:30px;">Nome</th>
+                    <th class="text-left" style="min-width:30px;">CPF</th>
+                    <th class="text-left" style="min-width:30px;">RG</th>
                     <th class="text-center" style="min-width:30px;">Data de Nascimento</th>
-                    <th class="text-center" style="min-width:30px;">Estado Civil</th>
-                    <th class="text-center" style="min-width:30px;">Gênero</th>
-                    <th class="text-center" style="min-width:35px;">CEP</th>
-                    <th class="text-center" style="min-width:35px;">Primeiro Emprego</th>
-                    <th class="text-center" style="min-width:35px;">Pis/Pasep</th>
-                    <th class="text-center" style="min-width:35px;">Ativo</th>
-                    <th class="text-center" style="min-width:35px;">PDF</th>
+                    <th class="text-left" style="min-width:30px;">Estado Civil</th>
+                    <th class="text-left" style="min-width:30px;">Gênero</th>
+                    <th class="text-left" style="min-width:35px;">CEP</th>
+                    <th class="text-left" style="min-width:35px;">Primeiro Emprego</th>
+                    <th class="text-left" style="min-width:35px;">Pis/Pasep</th>
+                    <th class="text-left" style="min-width:35px;">Ativo</th>
+                    <th class="text-left" style="min-width:35px;">PDF</th>
                 </tr>
             </thead>
             <tbody>
@@ -177,17 +177,17 @@ include "js/repositorio.php";
 
 
                     echo '<tr >';
-                    echo '<td class="text-center"><a href="cadastroFuncionario.php?id=' . $id . '">' . $nomeFiltro . '</a></td>';
-                    echo '<td class="text-center">' . $cpfFiltro . '</td>';
-                    echo '<td class="text-center">' . $rgFiltro . '</td>';
+                    echo '<td class="text-left"><a href="cadastroFuncionario.php?id=' . $id . '">' . $nomeFiltro . '</a></td>';
+                    echo '<td class="text-left">' . $cpfFiltro . '</td>';
+                    echo '<td class="text-left">' . $rgFiltro . '</td>';
                     echo '<td class="text-center">' . $dataNascimentoFiltro . '</td>';
-                    echo '<td class="text-center">' . $estadoCivilFiltro . '</td>';
-                    echo '<td class="text-center">' . $generoFiltro . '</td>';
-                    echo '<td class="text-center">' . $cepFiltro . '</td>';
-                    echo '<td class="text-center">' . $primeiroEmpregoFiltro . '</td>';
-                    echo '<td class="text-center">' . $pisPasepFiltro . '</td>';
-                    echo '<td class="text-center">' . $ativoFiltro . '</td>';
-                    echo '<td class="text-center"><a href="pdfFuncionario.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-warning"><i class=" fa fa-file-pdf-o"></i></button></td>';
+                    echo '<td class="text-left">' . $estadoCivilFiltro . '</td>';
+                    echo '<td class="text-left">' . $generoFiltro . '</td>';
+                    echo '<td class="text-left">' . $cepFiltro . '</td>';
+                    echo '<td class="text-left">' . $primeiroEmpregoFiltro . '</td>';
+                    echo '<td class="text-left">' . $pisPasepFiltro . '</td>';
+                    echo '<td class="text-left">' . $ativoFiltro . '</td>';
+                    echo '<td class="text-left"><a href="pdfFuncionario.php?id=' . $id  .'" class="btnPdfFuncionario btn btn-warning"><i class=" fa fa-file-pdf-o"></i></button></td>';
                     echo '</tr >';
                 }
                 ?>

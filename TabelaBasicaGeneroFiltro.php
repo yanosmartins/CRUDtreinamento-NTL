@@ -82,10 +82,10 @@ include("inc/nav.php");
                                                         <div class="row">
                                                         
                                                             <section class="col col-2 col-auto">
-                                                                <label class="label">Gênero</label>
+                                                                <label class="label">Descrição</label>
                                                                 <label class="select">
                                                                     <select id="descricao" name="genero">
-                                                                    <option value="" selected>Todos</option>
+                                                                    <option value="" selected></option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao
@@ -104,7 +104,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
-                                                                        <option value="" selected>Todos</option>
+                                                                        <option value="" selected></option>
                                                                         <option value="1" >Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>

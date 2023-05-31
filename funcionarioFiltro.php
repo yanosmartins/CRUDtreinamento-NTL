@@ -81,34 +81,34 @@ include("inc/nav.php");
                                                     <fieldset>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Nome do funcionário:</label>
+                                                                <label class="label">Nome</label>
                                                                 <label class="input">
                                                                     <input id="nome" maxlength="255" name="nome" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">RG:</label>
+                                                                <label class="label">RG</label>
                                                                 <label class="input"><i class="icon-prepend fa fa-user"></i>
                                                                     <input id="rg" name="rg" class="rg-mask" type="text" value="" placeholder="XX.XXX.XXX-X">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Data de Nascimento:</label>
+                                                                <label class="label">Data de Nascimento</label>
                                                                 <label class="input">
                                                                     <input id="dataNascimento" name="dataNascimento" type="text" class="datepicker" data-dateformat="dd/mm/yy" value="" placeholder="XX/XX/XXXX">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">CPF:</label>
+                                                                <label class="label">CPF</label>
                                                                 <label class="input"><i class="icon-prepend fa fa-user"></i>
                                                                     <input id="cpf" name="cpf" cpf-mask" type="text" value="" placeholder="XXX.XXX.XXX-XX">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="estadoCivil">Estado Civil:</label>
+                                                                <label class="label" for="estadoCivil">Estado Civil</label>
                                                                 <label class="select">
                                                                     <select id="estadoCivil" name="estadoCivil">
-                                                                        <option value="" selected>Todos</option>
+                                                                        <option value="" selected></option>
                                                                         <option value="1">Solteiro</option>
                                                                         <option value="2">Casado</option>
                                                                         <option value="3">Separado</option>
@@ -120,7 +120,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
-                                                                        <option value="" selected>Todos</option>
+                                                                        <option value="" selected></option>
                                                                         <option value="1">Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>
@@ -129,7 +129,7 @@ include("inc/nav.php");
                                                                 <label class="label">Gênero</label>
                                                                 <label class="select">
                                                                     <select id="genero" name="genero">
-                                                                        <option value="" selected>Todos</option>
+                                                                        <option value="" selected></option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao 
@@ -158,22 +158,22 @@ include("inc/nav.php");
 
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">CEP:</label>
+                                                                <label class="label">CEP</label>
                                                                 <label class="input">
                                                                     <input id="cep" name="cep" type="text" value="" placeholder="XXXXX-XXX">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label">Primeiro Emprego:</label>
+                                                                <label class="label">Primeiro Emprego</label>
                                                                 <label class="select">
                                                                     <select id="primeiroEmprego">
-                                                                        <option value="" selected>Todos</option>
+                                                                        <option value="" selected></option>
                                                                         <option value="0">Não</option>
                                                                         <option value="1">Sim</option>
                                                                     </select><i></i>
                                                             </section>
                                                             <section class="col col-2" id="pisSection">
-                                                                <label class="label">PIS/PASEP:</label>
+                                                                <label class="label">PIS/PASEP</label>
                                                                 <label class="input">
                                                                     <input id="pispasep" type="text">
                                                                 </label>

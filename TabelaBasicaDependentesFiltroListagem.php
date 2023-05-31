@@ -15,9 +15,8 @@ include "js/repositorio.php";
                 $where = " WHERE (0 = 0)";
 
                 $codigoFiltro = "";
-                $codigoFiltro = $_POST["codigoFiltro"];
-                if ($_POST["codigoFiltro"] != "") {
-                    $codigoFiltro = $_POST["codigoFiltro"];
+                $codigoFiltro = $_POST["codigoFiltro"]; // dps vc aplica nos outros aqui nessa lnha ele ja coloca o valor na variavel
+                if ($codigoFiltro != "") {
                     $where = $where . " AND dependente.[codigo] = " . $codigoFiltro;
                 }
 

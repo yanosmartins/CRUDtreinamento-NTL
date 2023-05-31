@@ -24,7 +24,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Dependentes";
+$page_title = "Dependente";
 
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -60,7 +60,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Dependentes</h2>
+                            <h2>Dependente</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -82,10 +82,10 @@ include("inc/nav.php");
                                                         <div class="row">
                                                         
                                                             <section class="col col-2 col-auto">
-                                                                <label class="label">Dependente:</label>
+                                                                <label class="label">Dependente</label>
                                                                 <label class="select">
                                                                     <select id="descricao" name="dependente">
-                                                                    <option value="" selected>Todos</option>
+                                                                    <option value="" selected></option>
                                                                         <?php
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, descricao
@@ -101,10 +101,10 @@ include("inc/nav.php");
                                                                 </label>
                                                             </section>
                                                             <section class="col col-2">
-                                                                <label class="label" for="ativo">Ativo:</label>
+                                                                <label class="label" for="ativo">Ativo</label>
                                                                 <label class="select">
                                                                     <select id="ativo" name="ativo">
-                                                                        <option value="" selected>Todos</option>
+                                                                        <option value="" selected></option>
                                                                         <option value="1" >Sim</option>
                                                                         <option value="0">Não</option>
                                                                     </select><i></i>

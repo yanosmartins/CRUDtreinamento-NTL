@@ -30,7 +30,7 @@ if ($condicaoGravarOK === false) {
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
   E.G. $page_title = "Custom Title" */
 
-$page_title = "Dependentes";
+$page_title = "Dependente";
 $page_nav["tabelaBasica"]["sub"]["dependente"]["active"] = true;
 /* ---------------- END PHP Custom Scripts ------------- */
 
@@ -63,7 +63,7 @@ include("inc/nav.php");
                     <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-deletebutton="false" data-widget-sortable="false">
                         <header>
                             <span class="widget-icon"><i class="fa fa-cog"></i></span>
-                            <h2>Dependentes</h2>
+                            <h2>Dependente</h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -85,7 +85,7 @@ include("inc/nav.php");
                                                         <input id="codigo" type="text" value="<?= $_GET['codigo'] ?>" hidden>
                                                         <div class="row">
                                                             <section class="col col-2">
-                                                                <label class="label">Descrição:</label>
+                                                                <label class="label">Descrição</label>
                                                                 <label class="input">
                                                                     <input id="descricao" maxlength="255" name="nome" class="required">
                                                                 </label>
