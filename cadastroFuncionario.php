@@ -190,7 +190,7 @@ include("inc/nav.php");
                                                             <input id="sequencialTelefone" type="hidden" value="">
                                                             <div class="form-group">
                                                                 <div class="row">
-                                                                    <section class="col col-md-3" >
+                                                                    <section class="col col-md-3">
                                                                         <label class="label">Telefone</label>
                                                                         <label class="input"><i class="icon-prepend fa fa-phone"></i>
                                                                             <input id="telefone" class="required" name="telefone" type="text" class="form-control" placeholder="(XX) XXXXX-XXXX" value="">
@@ -427,7 +427,7 @@ include("inc/nav.php");
                                                                                 foreach ($result as $row) {
                                                                                     $codigo = $row['codigo'];
                                                                                     $descricao = $row['descricao'];
-                                                                                    echo '<option>' . $descricao . '</option>';
+                                                                                    echo '<option value = ' . $codigo .  '>' . $descricao . '</option>';
                                                                                 }
                                                                                 ?>
                                                                             </select><i></i>
@@ -904,7 +904,7 @@ include("inc/scripts.php");
             $("#nomeDependente").val(item.nomeDependente);
             $("#cpfDependente").val(item.cpfDependente);
             $("#dataNascimentoDependente").val(item.dataNascimentoDependente);
-            $("#tipoDependente").val(item.tipoDependente);
+            $("#tipoDependente").val(item.dependente);
 
         }
         $("#Dependente").focus();
@@ -1591,6 +1591,7 @@ include("inc/scripts.php");
         var cpfDependente = $("#cpfDependente").val();
         var dataNascimentoDependente = $("#dataNascimentoDependente").val();
         var tipoDependente = $("#tipoDependente").val();
+        var descricaoTipoDependente = $("#DescricaotipoDependenteTabela").val();
         if (nomeDependente === "") {
             smartAlert("Atenção", "Informe o nome do Dependente!", "error");
             $("#nomeDependente").focus();
@@ -1642,7 +1643,8 @@ include("inc/scripts.php");
         item["cpfDependente"] = $('#cpfDependente').val()
         item["dataNascimentoDependente"] = $('#dataNascimentoDependente').val()
         item["tipoDependente"] = $('#tipoDependente').val()
-
+        item["descricaoTipoDependente"] = $( "#tipoDependente option:selected" ).text();
+        
         if (index >= 0)
             jsonDependenteArray.splice(index, 1, item);
         else
@@ -1667,7 +1669,8 @@ include("inc/scripts.php");
             row.append($('<td class="text-left" onclick="carregaDependente(' + jsonDependenteArray[i].sequencialDependente + ');">' + jsonDependenteArray[i].nomeDependente + '</td>'));
             row.append($('<td class="text-left" >' + jsonDependenteArray[i].cpfDependente + '</td>'));
             row.append($('<td class="text-left" >' + jsonDependenteArray[i].dataNascimentoDependente + '</td>'));
-            row.append($('<td class="text-left" >' + jsonDependenteArray[i].tipoDependente + '</td>'));
+            row.append($('<td class="text-left" >' + jsonDependenteArray[i].descricaoTipoDependente + '</td>'));
+            
         }
         clearFormDependente();
     }

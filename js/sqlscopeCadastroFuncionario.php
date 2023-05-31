@@ -336,7 +336,6 @@ function recupera()
             'telefonePrincipal' => $item['principal'],
             'telefoneWhatsApp' => $item['whatsapp'],
             'sequencialTelefone' => $sequencialTelefone
-
         ]);
     }
     $jsonTelefone = json_encode($arrayTelefone);
@@ -358,14 +357,16 @@ function recupera()
             'Email' => $item['email'],
             'EmailPrincipal' => $item['principal'],
             'sequencialEmail' => $sequencialEmail
-
         ]);
     }
     $jsonEmail = json_encode($arrayEmail);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    $sqlDependente = "SELECT nome, cpf, dataNascimento, tipo FROM dbo.dependentesListaFuncionario WHERE funcionarioId = $id";
+    $sqlDependente = "SELECT D.descricao, DLF.nome, DLF.cpf, DLF.dataNascimento, DLF.tipo FROM dbo.dependentesListaFuncionario DLF
+    LEFT JOIN dbo.dependente D on D.codigo = DLF.tipo WHERE funcionarioId = $id";
+
+
     $reposit = new reposit();
     $result = $reposit->RunQuery($sqlDependente);
 
@@ -378,9 +379,9 @@ function recupera()
             'nomeDependente' => $item['nome'],
             'cpfDependente' => $item['cpf'],
             'dataNascimentoDependente' => $item['dataNascimento'],
-            'tipoDependente' => $item['tipo'],
+            'dependente' => $item['tipo'],
+            'descricaoTipoDependente' => $item['descricao'],
             'sequencialDependente' => $sequencialDependente
-
         ]);
     }
     $jsonDependente = json_encode($arrayDependente);
