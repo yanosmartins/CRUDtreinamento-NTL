@@ -659,23 +659,21 @@ include("inc/scripts.php");
             if (data != "") {
                 ValidaCPF()
             }
-            
+
         });
 
-        $("#cpfDependente").on("change", function() {
-            // verificaDependente()
-        });
         $("#primeiroEmprego").on("change", function() {
             verificaPrimeiroEmprego();
         });
+
         $("#dataNascimentoDependente").on("change", function() {
             var dataNascimentoDependente = $("#dataNascimentoDependente").val();
             if (validarDataDependente(dataNascimentoDependente) == false) {
                 smartAlert("Atenção", "Data Inválida!", "error");
                 $("#dataNascimentoDependente").val("");
             }
-            validarDataDependente();
         });
+
         $("#cep").on("change", function() {
             var cep = $("#cep").val().replace(/\D/g, ''); //Nova variável "cep" somente com dígitos.            
             if (cep != "") { //Verifica se campo cep possui valor informado.               
@@ -715,11 +713,13 @@ include("inc/scripts.php");
                 $("#numero").focus();
             }
         });
+
         $("#pispasep").on("change", function() {
             var pispasep = $("#pispasep").val()
             if (pispasep != "")
                 verificaPispasep()
         });
+        
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -1240,15 +1240,15 @@ include("inc/scripts.php");
             return false;
         }
 
-        if (idade >= 0 && idade <= 120) {
+        if (idade >= 0 && idade <= 100) {
             // smartAlert("Sucesso","Data permitida.", "success")
             $("#btnGravar").prop('disabled', false);
             return;
+
+            //Idade superior a 50 não altera o cadastro
+
+            if (hoje) return false;
         }
-
-        //Idade superior a 50 não altera o cadastro
-
-        if (hoje) return false;
     }
 
     function addTelefone() {
@@ -1638,7 +1638,7 @@ include("inc/scripts.php");
             jsonDependenteArray.push(item);
 
         $("#jsonDependente").val(JSON.stringify(jsonDependenteArray));
-        
+
         fillTableDependente();
         clearFormDependente();
     }
@@ -1734,9 +1734,6 @@ include("inc/scripts.php");
                 } else {}
             }
         }
-
-
-
         addDependente();
     }
 
@@ -1745,13 +1742,13 @@ include("inc/scripts.php");
         var cpf = $('#cpf').val();
         var cpfDependente = $('#cpfDependente').val();
         var achouDependenteDuplicado = false;
-        
+
         if (cpfDependente != "" && cpfDependente == cpf) {
             smartAlert("Erro", "CPF do dependente igual ao do Funcionário.", "error");
             $("#cpfDependente").val("");
             $("#cpfDependente").focus();
             return false
-        }else{
+        } else {
             cpfDependenteValidado(cpfDependente)
         }
     }
