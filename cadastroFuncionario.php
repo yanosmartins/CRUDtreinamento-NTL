@@ -659,9 +659,7 @@ include("inc/scripts.php");
             if (data != "") {
                 ValidaCPF()
             }
-            // if (cpfDependente != "") {
-            //     verificaDependente()
-            // }
+            
         });
 
         $("#cpfDependente").on("change", function() {
@@ -743,12 +741,7 @@ include("inc/scripts.php");
         });
 
         $("#btnAddDependente").on("click", function() {
-            if (verificaDependente() != false) {
-                validaDependente()
-            }
-
-
-
+            verificaDependente();
         });
 
         $("#btnRemoverDependente").on("click", function() {
@@ -1180,8 +1173,6 @@ include("inc/scripts.php");
             $("#cpf").focus();
             return;
         }
-
-
 
 
         gravaFuncionario(id, ativo, cpf, nome, dataNascimento, rg, estadoCivil, genero, jsonTelefoneArray, jsonEmailArray, jsonDependenteArray, cep, logradouro, uf, bairro, cidade, numero, complemento, primeiroEmprego, pispasep);
@@ -1647,6 +1638,7 @@ include("inc/scripts.php");
             jsonDependenteArray.push(item);
 
         $("#jsonDependente").val(JSON.stringify(jsonDependenteArray));
+        
         fillTableDependente();
         clearFormDependente();
     }
@@ -1744,10 +1736,7 @@ include("inc/scripts.php");
         }
 
 
-        // var teste = verificaDependente();
-        // teste = teste; 
 
-        // if (verificaDependente() !== false)
         addDependente();
     }
 
@@ -1756,13 +1745,14 @@ include("inc/scripts.php");
         var cpf = $('#cpf').val();
         var cpfDependente = $('#cpfDependente').val();
         var achouDependenteDuplicado = false;
+        
         if (cpfDependente != "" && cpfDependente == cpf) {
             smartAlert("Erro", "CPF do dependente igual ao do Funcionário.", "error");
             $("#cpfDependente").val("");
             $("#cpfDependente").focus();
             return false
-        } else {
-            cpfDependenteValidado(cpfDependente);
+        }else{
+            cpfDependenteValidado(cpfDependente)
         }
     }
 
