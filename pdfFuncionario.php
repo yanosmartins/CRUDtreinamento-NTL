@@ -263,6 +263,7 @@ foreach ($resultQuery as $row) {
     }
     //aqui será impresso o nome resultante com a junção do array em favor de se obter uma string colando as posições do array com espaços em branco!
     $split_nome = implode(" ", $split_nome);
+    $split_nome = mb_strimwidth($split_nome, 0, 23, "...");
 
     // $comum = new comum();
     // $split_nome = $comum->formatarString($split_nome);
@@ -379,7 +380,7 @@ foreach ($resultQueryTelefone as $row) {
 
 $i = 72;
 foreach ($resultQueryEmail as $row) {
-    $email = $row['email'];
+    $email = mb_strimwidth($row['email'], 0, 35, "...");
     // $email =  substr_replace($email, '*****', 2, strpos($email, '@') - 4);
     $principal = $row['principal'];
 
@@ -402,12 +403,6 @@ foreach ($resultQueryEmail as $row) {
 
 $quantidadeDepedentes = (int)$resultQueryDependente;
 if ($quantidadeDepedentes >= 1) {
-
-
-
-
-
-
 
     $i = $i + 25;
     $pdf->setY($i);
@@ -521,15 +516,16 @@ $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
 
 foreach ($resultQuery as $row) {
     $cep = $row['cep'];
-    $logradouro = $row['logradouro'];
+    $logradouro = mb_strimwidth($row['logradouro'], 0, 35, "...");
     $uf = $row['uf'];
-    $bairro = $row['bairro'];
-    $cidade = $row['cidade'];
+    $bairro = mb_strimwidth($row['bairro'], 0, 20, "...");
+    $cidade = mb_strimwidth($row['cidade'], 0, 20, "...");
     $numero = $row['numero'];
-    $complemento = $row['complemento'];
+    $complemento = mb_strimwidth($row['complemento'], 0, 20, "...");
     if ($complemento == "") {
         $complemento = 'Nenhum';
     }
+    
 
     $ruaEnumero = $logradouro . ', ' . $numero;
     $pdf->setY($i);

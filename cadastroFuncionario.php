@@ -360,7 +360,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Número</label>
                                                                 <label class="input">
-                                                                    <input id="numero" name="numero" class="required numero numero-mask" type="text" value="">
+                                                                    <input id="numero" name="numero" maxlength="15" class="required numero numero-mask" type="text" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3">
