@@ -308,13 +308,20 @@ foreach ($resultQuery as $row) {
     $pdf->setX(166);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $pispasep), 0, 0, "L", 0);
 
-   // $pdf->Line(25,200, 185, 50); //menor
-   // $pdf->Line(25,200, 185, 50); //menor
-   // $pdf->Line(25,200, 185, 50); //menor
+    // $pdf->Line(25,200, 185, 50); //menor
+    // $pdf->Line(25,200, 185, 50); //menor
+    // $pdf->Line(25,200, 185, 50); //menor
 
 }
 
-
+if ($i > 240) {
+    $pdf->AddPage();
+    // $pdf->Line(5, 5, 205, 5); //horizontal 1
+    $pdf->Line(5, 12, 205, 12); //horizontal abaixo
+    // $pdf->Header();
+    // $pdf->Footer();
+    $i = 15;
+}
 $pdf->setY(60);
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 $pdf->setX(85);
@@ -325,11 +332,11 @@ $pdf->Line(5, 63, 205, 63); //menor
 $pdf->Line(5, 63, 205, 63); //menor
 $pdf->Line(5, 63, 205, 63); //menor
 
-$i = 72;
+$j = 72;
 
 
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-$pdf->setY($i);
+$pdf->setY($j);
 $pdf->setX(15);
 $pdf->SetFillColor(255, 160, 122);
 $pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', 'TELEFONE'), 1, 0, "C", 1);
@@ -338,7 +345,7 @@ $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL'), 1, 0, "C", 1);
 $pdf->SetFillColor(144, 238, 144);
 $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', 'WHATSAPP'), 1, 0, "C", 1);
 
-$pdf->setY($i);
+$pdf->setY($j);
 $pdf->setX(100);
 $pdf->SetFillColor(255, 160, 122);
 $pdf->Cell(68, 5, iconv('UTF-8', 'windows-1252', 'EMAIL'), 1, 0, "C", 1);
@@ -348,9 +355,11 @@ $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'PRINCIPAL'), 1, 0, "C", 1);
 $pdf->SetFillColor(238, 238, 238);
 $pdf->SetTextColor(0, 0, 0);
 
-$i = 72;
+$j = 72;
+
 
 foreach ($resultQueryTelefone as $row) {
+
     $telefone = $row['telefone'];
     $principal = $row['principal'];
     $whatsapp = $row['whatsapp'];
@@ -365,20 +374,28 @@ foreach ($resultQueryTelefone as $row) {
     } else {
         $whatsapp = 'Não';
     }
-    $i += 5;
 
-    $pdf->setY($i);
+    $j += 5;
+    $pdf->setY($j);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->setX(15);
     $pdf->SetFont($tipoDeFonte, '', 8);
     $pdf->Cell(30, 5, iconv('UTF-8', 'windows-1252', $telefone), 1, 0, "C", 0);
     $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', $principal), 1, 0, "C", 0);
     $pdf->Cell(23, 5, iconv('UTF-8', 'windows-1252', $whatsapp), 1, 0, "C", 0);
+    if ($j > 240) {
+        $pdf->AddPage();
+        // $pdf->Line(5, 5, 205, 5); //horizontal 1
+        $pdf->Line(5, 12, 205, 12); //horizontal abaixo
+        // $pdf->Header();
+        // $pdf->Footer();
+        $i = 15;
+    }
 }
 
 
-
 $i = 72;
+
 foreach ($resultQueryEmail as $row) {
     $email = mb_strimwidth($row['email'], 0, 35, "...");
     // $email =  substr_replace($email, '*****', 2, strpos($email, '@') - 4);
@@ -389,6 +406,9 @@ foreach ($resultQueryEmail as $row) {
     } else {
         $principal = 'Não';
     }
+
+
+
     $i += 5;
     $pdf->setY($i);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
@@ -396,42 +416,71 @@ foreach ($resultQueryEmail as $row) {
     $pdf->SetFont($tipoDeFonte, '', 8);
     $pdf->Cell(68, 5, iconv('UTF-8', 'windows-1252', $email), 1, 0, "C", 0);
     $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $principal), 1, 0, "C", 0);
+
+
+    if ($i > 240) {
+        $pdf->AddPage();
+        // $pdf->Line(5, 5, 205, 5); //horizontal 1
+        $pdf->Line(5, 12, 205, 12); //horizontal abaixo
+        // $pdf->Header();
+        // $pdf->Footer();
+        $i = 15;
+    }
 }
 
+$i = $i + 25;
 
+if ($i > 200 || $j>200) {
+    $pdf->AddPage();
+    // $pdf->Line(5, 5, 205, 5); //horizontal 1
+    $pdf->Line(5, 12, 205, 12); //horizontal abaixo
+    // $pdf->Header();
+    // $pdf->Footer();
+    $i = 15;
+}
 
 
 $quantidadeDepedentes = (int)$resultQueryDependente;
 if ($quantidadeDepedentes >= 1) {
 
-    $i = $i + 25;
-    $pdf->setY($i);
-    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    $pdf->setX(85);
-    $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'LISTA DE DEPENDENTES'), 0, 0, "C", 0);
-    $pdf->SetFont($tipoDeFonte, '', 20);
 
-    $pdf->Line(5, $i + 5, 205, $i + 5); //menor
-    $pdf->Line(5, $i + 5, 205, $i + 5); //menor
-    $pdf->Line(5, $i + 5, 205, $i + 5); //menor
-
-
-    $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-
-
-    $i = $i + 9;
-    $pdf->setY($i);
-    $pdf->setX(28.5);
-    $pdf->SetFillColor(173, 216, 230);
-
-    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'NOME'), 1, 0, "C", 1);
-    $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'CPF'), 1, 0, "C", 1);
-    $pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', 'DATA DE NASCIMENTO'), 1, 0, "C", 1);
-    $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'TIPO'), 1, 0, "C", 1);
-    $pdf->SetFillColor(255, 255, 255);
 
     foreach ($resultQueryDependente as $row) {
+        
+
+
+        if ($titulo < 1) {
+
+
+
+            $pdf->setY($i);
+            $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+            $pdf->setX(85);
+            $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'LISTA DE DEPENDENTES'), 0, 0, "C", 0);
+            $pdf->SetFont($tipoDeFonte, '', 20);
+
+            $pdf->Line(5, $i + 5, 205, $i + 5); //menor
+            $pdf->Line(5, $i + 5, 205, $i + 5); //menor
+            $pdf->Line(5, $i + 5, 205, $i + 5); //menor
+
+
+            $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
+
+
+            $i = $i + 9;
+            $pdf->setY($i);
+            $pdf->setX(28.5);
+            $pdf->SetFillColor(173, 216, 230);
+
+            $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'NOME'), 1, 0, "C", 1);
+            $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', 'CPF'), 1, 0, "C", 1);
+            $pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', 'DATA DE NASCIMENTO'), 1, 0, "C", 1);
+            $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', 'TIPO'), 1, 0, "C", 1);
+            $pdf->SetFillColor(255, 255, 255);
+        }
+        $titulo = 1;
         $nome = $row['nome'];
+
         $cpf = $row['cpf'];
         $dataNascimento = $row['dataNascimento'];
         $tipo = $row['tipo'];
@@ -461,20 +510,18 @@ if ($quantidadeDepedentes >= 1) {
         $pdf->Cell(40, 5, iconv('UTF-8', 'windows-1252', $cpf), 1, 0, "C", 1);
         $pdf->Cell(48, 5, iconv('UTF-8', 'windows-1252', $dataNascimento), 1, 0, "C", 1);
         $pdf->Cell(25, 5, iconv('UTF-8', 'windows-1252', $tipo), 1, 0, "C", 1);
+        
+        if ($i > 240) {
+            $pdf->AddPage();
+            // $pdf->Line(5, 5, 205, 5); //horizontal 1
+            $pdf->Line(5, 12, 205, 12); //horizontal abaixo
+            // $pdf->Header();
+            // $pdf->Footer();
+            $i = 15;
+        }
+
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -516,6 +563,15 @@ $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
 
 
 foreach ($resultQuery as $row) {
+    if ($i > 240) {
+        $pdf->AddPage();
+        // $pdf->Line(5, 5, 205, 5); //horizontal 1
+        $pdf->Line(5, 12, 205, 12); //horizontal abaixo
+        // $pdf->Header();
+        // $pdf->Footer();
+        $i = 15;
+    }
+
     $cep = $row['cep'];
     $logradouro = mb_strimwidth($row['logradouro'], 0, 35, "...");
     $uf = $row['uf'];
@@ -526,7 +582,8 @@ foreach ($resultQuery as $row) {
     if ($complemento == "") {
         $complemento = 'Nenhum';
     }
-    
+
+
 
     $ruaEnumero = $logradouro . ', ' . $numero;
     $pdf->setY($i);
