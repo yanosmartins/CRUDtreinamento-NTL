@@ -182,11 +182,12 @@ include("inc/nav.php");
                                                                     <span class="fa fa-user fa-2x"></span><br>Funcionário
                                                                 </button><br>
                                                             </div>
-                                                            <!-- <div class="col col-md-2">
+                                                            <div class="col col-md-2">
                                                                 <button type="button" class="btn  btnPontoMensal" id="btnPontoMensal">
                                                                     <span class="fa fa-calendar fa-2x"></span><br> Ponto Mensal
                                                                 </button><br>
                                                             </div>
+                                                            <!-- 
                                                             <div class="col col-md-2">
                                                                 <button type="button" class="btn  btnFolhaMensal" id="btnFolhaMensal">
                                                                     <span class="fa fa-file fa-2x"></span><br> Folha Mensal
@@ -322,7 +323,7 @@ include("inc/scripts.php");
             const id = $('#funcionario').val();
             const folha = $('#codigoFolha').val();
             const mesAno = $('#mesAno').val();
-            $(location).attr('href', `funcionario_folhaPontoMensalCadastro.php`);
+            $(location).attr('href', `pontoGir.php`);
         });
         $("#btnAso").on("click", function() {
             const id = $('#funcionarioAso').val();
