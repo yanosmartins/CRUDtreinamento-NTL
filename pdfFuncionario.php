@@ -496,18 +496,19 @@ $i = $i + 9;
 
 $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
 $pdf->setY($i);
-$pdf->setX(25);
-$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'RUA:'), 0, 0, "C", 0);
-$pdf->setX(140);
+$pdf->setX(20);
+$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'RUA:'), 0, 0, "L", 0);
+$pdf->setX(128);
 $pdf->Cell(83, -1, iconv('UTF-8', 'windows-1252', 'BAIRRO:'), 0, 0, "L", 0);
 $pdf->setY($i + 7);
-$pdf->setX(25);
-$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "C", 0);
-$pdf->Cell(85, -1, iconv('UTF-8', 'windows-1252', 'CIDADE:'), 0, 0, "C", 0);
-$pdf->setX(140.5);
-$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'UF:'), 0, 0, "C", 0);
+$pdf->setX(20);
+$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'CEP:'), 0, 0, "L", 0);
+$pdf->setX(60);
+$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'CIDADE:'), 0, 0, "L", 0);
+$pdf->setX(128.5);
+$pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'UF:'), 0, 0, "L", 0);
 $pdf->setY($i + 14);
-$pdf->setX(32);
+$pdf->setX(20);
 $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', 'COMPLEMENTO:'), 0, 0, "L", 0);
 
 $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
@@ -521,7 +522,7 @@ foreach ($resultQuery as $row) {
     $bairro = mb_strimwidth($row['bairro'], 0, 20, "...");
     $cidade = mb_strimwidth($row['cidade'], 0, 20, "...");
     $numero = $row['numero'];
-    $complemento = mb_strimwidth($row['complemento'], 0, 20, "...");
+    $complemento = mb_strimwidth(trim($row['complemento']), 0, 20, "...");
     if ($complemento == "") {
         $complemento = 'Nenhum';
     }
@@ -529,19 +530,19 @@ foreach ($resultQuery as $row) {
 
     $ruaEnumero = $logradouro . ', ' . $numero;
     $pdf->setY($i);
-    $pdf->setX(45);
+    $pdf->setX(32);
     $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', $ruaEnumero), 0, 0, "L", 0);
-    $pdf->setX(156.5);
+    $pdf->setX(148.5);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $bairro), 0, 0, "L", 0);
     $pdf->setY($i + 7);
-    $pdf->setX(45);
+    $pdf->setX(32);
     $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', $cep), 0, 0, "L", 0);
-    $pdf->setX(102);
+    $pdf->setX(80);
     $pdf->Cell(102, -1, iconv('UTF-8', 'windows-1252', $cidade), 0, 0, "L", 0);
-    $pdf->setX(157.5);;
+    $pdf->setX(142);;
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $uf), 0, 0, "L", 0);
     $pdf->setY($i + 14);
-    $pdf->setX(60);
+    $pdf->setX(53);
     $pdf->Cell(25, -1, iconv('UTF-8', 'windows-1252', $complemento), 0, 0, "L", 0);
 }
 

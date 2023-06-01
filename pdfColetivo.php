@@ -163,7 +163,7 @@ foreach ($resultQuery as $row) {
 
 
     $codigo = $row['codigo'];
-    $nome = $row['nome'];
+    $nome = mb_strimwidth(trim($row['nome']), 0, 55, "...");
     $cpf = $row['cpf'];
     $rg = $row['rg'];
     $dataNascimento = $row['dataNascimento'];
@@ -177,7 +177,7 @@ foreach ($resultQuery as $row) {
     $ativo = +$row['ativo'];
     $logradouro = $row['logradouro'];
     $numero = $row['numero'];
-    $bairro = $row['bairro'];
+    $bairro = mb_strimwidth($row['bairro'], 0, 20, "...");
     $uf = $row['uf'];
 
 
@@ -210,7 +210,9 @@ foreach ($resultQuery as $row) {
     }
     $split_logradouro = implode(" ", $split_logradouro);
 
-    $endereco = $split_logradouro . ' - ' . $numero . ' - ' . $bairro . ', ' . $uf . '.';
+
+
+    $endereco = $split_logradouro . ' - ' . $numero . ', ' . $uf . '.';
 
 
     $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
@@ -222,7 +224,7 @@ foreach ($resultQuery as $row) {
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', $nome), 0, 0, "L", 0);
 
     $pdf->SetFont($tipoDeFonte, $fontWeight, $tamanhoFonte);
-    $pdf->setX(154.5);
+    $pdf->setX(154);
     $pdf->Cell(20, -1, iconv('UTF-8', 'windows-1252', 'ATIVO:'), 0, 0, "L", 0);
     $pdf->SetFont($tipoDeFonte, $fontWeightRegular, $tamanhoFonte);
     $pdf->setX(170);
@@ -295,7 +297,7 @@ foreach ($resultQuery as $row) {
         $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $telefone), 0, 0, "L", 0);
     }
 
-
+  
     $sqlEmail = "SELECT email from dbo.emailFuncionario where principal = 1 and funcionarioId = " . $codigo;
 
     $reposit = new reposit();
@@ -312,7 +314,6 @@ foreach ($resultQuery as $row) {
         $pdf->setX(95);
         $pdf->Cell(118, -1, iconv('UTF-8', 'windows-1252', $email), 0, 0, "L", 0);
     }
-
 
 
 

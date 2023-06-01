@@ -193,7 +193,7 @@ include("inc/nav.php");
                                                                     <section class="col col-md-3">
                                                                         <label class="label">Telefone</label>
                                                                         <label class="input"><i class="icon-prepend fa fa-phone"></i>
-                                                                            <input id="telefone" class="required" name="telefone" type="text" class="form-control" placeholder="(XX) XXXXX-XXXX" value="">
+                                                                            <input id="telefone" class="required" name="telefone" type="text" class="form-control" onkeyup="mascaraFone(event)" placeholder="(XX) XXXXX-XXXX" value="">
                                                                         </label>
                                                                     </section>
                                                                     <section class="col col-md-2">
@@ -360,7 +360,7 @@ include("inc/nav.php");
                                                             <section class="col col-2">
                                                                 <label class="label">Número</label>
                                                                 <label class="input">
-                                                                    <input id="numero" name="numero" maxlength="15" class="required numero numero-mask" type="text" value="">
+                                                                    <input id="numero" name="numero" maxlength="9" class="required numero numero-mask" type="text" value="">
                                                                 </label>
                                                             </section>
                                                             <section class="col col-3">
@@ -585,7 +585,7 @@ include("inc/scripts.php");
         $("#rg").mask('99.999.999-9');
         $("#dataNascimento").mask('99/99/9999');
         $("#dataNascimentoDependente").mask('99/99/9999');
-        $("#telefone").mask('(99) 9 9999-9999');
+        // $("#telefone").mask('(99) 9 9999-9999');
         $("#cep").mask('99999-999');
 
 
@@ -1771,27 +1771,28 @@ include("inc/scripts.php");
     }
 
 
-    function mask(o, f) {
-        setTimeout(function() {
-            var v = mphone(o.value);
-            if (v != o.value) {
-                o.value = v;
-            }
-        }, 1);
-    }
 
-    function mphone(v) {
-        var r = v.replace(/\D/g, "");
-        r = r.replace(/^0/, "");
-        if (r.length > 10) {
-            r = r.replace(/^(\d\d)(\d{5})(\d{4}).*/, "($1) $2-$3");
-        } else if (r.length > 5) {
-            r = r.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, "($1) $2-$3");
-        } else if (r.length > 2) {
-            r = r.replace(/^(\d\d)(\d{0,5})/, "($1) $2");
-        } else {
-            r = r.replace(/^(\d*)/, "($1");
-        }
-        return r;
+    function mascaraFone(event) {
+    var valor = document.getElementById("telefone").attributes[0].ownerElement['value'];
+    var retorno = valor.replace(/\D/g, "");
+    retorno = retorno.replace(/^0/, "");
+    if (retorno.length > 10) {
+      retorno = retorno.replace(/^(\d\d)(\d{5})(\d{4}).*/, "($1) $2-$3");
+    } else if (retorno.length > 5) {
+      if (retorno.length == 6 && event.code == "Backspace") { 
+        // necessário pois senão o "-" fica sempre voltando ao dar backspace
+        return; 
+      } 
+      retorno = retorno.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+    } else if (retorno.length > 2) {
+      retorno = retorno.replace(/^(\d\d)(\d{0,5})/, "($1) $2");
+    } else {
+      if (retorno.length != 0) {
+        retorno = retorno.replace(/^(\d*)/, "($1");
+      }
     }
+    document.getElementById("telefone").attributes[0].ownerElement['value'] = retorno;
+  }
+
+
 </script>
