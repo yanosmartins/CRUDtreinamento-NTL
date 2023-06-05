@@ -1,30 +1,24 @@
-function gravarPonto(codigo, funcionario, mesAno, idFolha, dia, horaEntrada, horaSaida, inicioAlmoco, fimAlmoco, horaExtra, atraso, lancamento, observacao, status, diasAlterados,btnClicado, callback) {
+function gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso) {
     $.ajax({
         url: 'js/sqlscope_pontoEletronicoDiario.php',
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         async: false,
-        data: { funcao: 'gravar', 
-                codigo: codigo, 
-                funcionario: funcionario,
-                mesAno: mesAno, 
-                idFolha: idFolha, 
-                horaSaida: horaSaida, 
-                inicioAlmoco: inicioAlmoco, 
-                fimAlmoco: fimAlmoco, 
-                horaExtra: horaExtra, 
-                atraso: atraso, 
-                lancamento: lancamento, 
-                horaEntrada: horaEntrada, 
-                dia: dia, 
-                observacao: observacao, 
-                status: status, 
-                diasAlterados: diasAlterados,
-                btnClicado: btnClicado
-            },
+        data: {
+            funcao: 'gravar',
+            codigo: codigo,
+            idFolha: idFolha,
+            dia: dia,
+            horaEntrada: horaEntrada,
+            inicioAlmoco: inicioAlmoco,
+            fimAlmoco: fimAlmoco,
+            horaSaida: horaSaida,
+            horaExtra: horaExtra,
+            atraso: atraso
+        },
 
         success: function (data) {
-            callback(data);
+            (data);
         }
     });
 }
@@ -139,16 +133,17 @@ function verificaLancamento(lancamento, horaExtra, idFolha, dia, callback) {
     })
 }
 
-function confirmaRegistro(idFolha, dia,mesAno, callback) {
+function confirmaRegistro(idFolha, dia, mesAno, callback) {
     $.ajax({
         url: 'js/sqlscope_pontoEletronicoDiario.php', //caminho do arqivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: 'confirmaRegistro',
-                idFolha: idFolha,
-                dia: dia,
-                mesAno: mesAno
-            }, //valores enviados ao script
+        data: {
+            funcao: 'confirmaRegistro',
+            idFolha: idFolha,
+            dia: dia,
+            mesAno: mesAno
+        }, //valores enviados ao script
 
         success: function (data) {
             callback(data)
@@ -156,22 +151,23 @@ function confirmaRegistro(idFolha, dia,mesAno, callback) {
     })
 }
 
-function registrarPausa(idFolha, mesAno, dia, inicioPrimeiraPausa, fimPrimeiraPausa,inicioSegundaPausa, fimSegundaPausa,btnClicado, justificativaPausa, callback) {
+function registrarPausa(idFolha, mesAno, dia, inicioPrimeiraPausa, fimPrimeiraPausa, inicioSegundaPausa, fimSegundaPausa, btnClicado, justificativaPausa, callback) {
     $.ajax({
         url: 'js/sqlscope_pontoEletronicoDiario.php', //caminho do arqivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
-        data: { funcao: 'registrarPausa',
-                idFolha: idFolha,
-                mesAno: mesAno,
-                dia: dia,
-                inicioPrimeiraPausa: inicioPrimeiraPausa,
-                fimPrimeiraPausa: fimPrimeiraPausa,
-                inicioSegundaPausa: inicioSegundaPausa,
-                fimSegundaPausa: fimSegundaPausa,
-                btnClicado: btnClicado,
-                justificativaPausa: justificativaPausa
-            }, //valores enviados ao script
+        data: {
+            funcao: 'registrarPausa',
+            idFolha: idFolha,
+            mesAno: mesAno,
+            dia: dia,
+            inicioPrimeiraPausa: inicioPrimeiraPausa,
+            fimPrimeiraPausa: fimPrimeiraPausa,
+            inicioSegundaPausa: inicioSegundaPausa,
+            fimSegundaPausa: fimSegundaPausa,
+            btnClicado: btnClicado,
+            justificativaPausa: justificativaPausa
+        }, //valores enviados ao script
 
         success: function (data) {
             callback(data)
