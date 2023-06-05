@@ -183,6 +183,11 @@ include("inc/nav.php");
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-md-2">
+                                                                <button type="button" class="btn  btnBaterPonto" name="btnBaterPonto" id="btnBaterPontoGir">
+                                                                    <span class="fa fa-clock-o fa-2x"></span><br>Bater Ponto
+                                                                </button><br>
+                                                            </div>
+                                                            <div class="col col-md-2">
                                                                 <button type="button" class="btn  btnPontoMensal" id="btnPontoMensal">
                                                                     <span class="fa fa-calendar fa-2x"></span><br> Ponto Mensal
                                                                 </button><br>
@@ -317,6 +322,10 @@ include("inc/scripts.php");
 
         $("#btnBaterPonto").on("click", function() {
             $(location).attr('href', 'funcionarioFiltro.php');
+        });
+
+        $("#btnBaterPontoGir").on("click", function() {
+            $(location).attr('href', 'funcionario_pontoEletronicoDiario.php');
         });
 
         $("#btnPontoMensal").on("click", function() {
