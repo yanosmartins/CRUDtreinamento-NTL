@@ -23,13 +23,17 @@ function gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco,
     });
 }
 
-function recuperaPonto(funcionario, mesAno, dia, projeto, callback) {
+function recuperaPonto( mesAno, dia, codigo, callback) {
     $.ajax({
         url: 'js/sqlscope_pontoEletronicoDiario.php', //caminho do arquivo a ser executado
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         // async: false,
-        data: { funcao: 'recupera', funcionario: funcionario, mesAno: mesAno, dia: dia, projeto: projeto }, //valores enviados ao script      
+        data: { funcao: 'recupera',
+         mesAno: mesAno,
+        dia: dia,
+        codigo: codigo,
+        }, //valores enviados ao script      
         success: function (data) {
             callback(data);
         }

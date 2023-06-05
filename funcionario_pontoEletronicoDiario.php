@@ -698,6 +698,9 @@ include("inc/scripts.php");
             getHora(campo);
         });
 
+
+        carregaPonto()
+
         $("#btnSaida").on("click", function() {
             var inicioAlmoco = $("#inicioAlmoco").val();
             var fimAlmoco = $("#fimAlmoco").val();
@@ -1043,6 +1046,9 @@ include("inc/scripts.php");
         recuperaDados();
     });
 
+    function voltar() {
+        $(location).attr('href', 'funcionario_pontoEletronicoDiario.php');
+    }
 
     function gravar() {
         let agora = new Date()
@@ -1067,15 +1073,125 @@ include("inc/scripts.php");
         var horaSaida = $("#horaSaida").val();
         var horaExtra = $("#horaExtra").val();
         var atraso = $("#atraso").val();
-        
 
         gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso)
     }
 
 
-    function voltar() {
-        $(location).attr('href', 'funcionario_pontoEletronicoDiario.php');
+
+
+    function carregaPonto() {
+        const mesAno = moment().format('YYYY-MM-DD');
+        const dataAtual = new Date();
+        const dia = dataAtual.getDate();
+
+        var codigo = $("#codigo").val();
+        codigo = 1;
+
+
+        $('#mesAno').val(mesAno);
+        recuperaPonto(mesAno, dia, codigo,
+            function(data) {
+                data = data.replace(/failed/g, '');
+                var piece = data.split("#");
+
+                var mensagem = piece[0];
+                var out = piece[1];
+
+                piece = out.split("^");
+
+                //Atributos do funcionário
+                var idFolha = piece[0];
+                var codigo = piece[1];
+                var horaEntrada = piece[2] || '00:00:00';
+                var inicioAlmoco = piece[3] || '00:00';
+                var fimAlmoco = piece[4] || '00:00';
+                var horaSaida = piece[5] || '00:00:00';
+                var horaExtra = piece[6] || '00:00:00';
+                var atraso = piece[7] || '00:00:00';
+
+
+                //Atributos do funcionário    
+                $("#idFolha").val(idFolha);
+                $("#codigo").val(codigo);
+                $("#horaEntrada").val(horaEntrada);
+                $("#horaSaida").val(horaSaida);
+                $("#inicioAlmoco").val(inicioAlmoco);
+                $("#fimAlmoco").val(fimAlmoco);
+                $("#horaExtra").val(horaExtra);
+                $("#atraso").val(atraso);
+
+                habilitaBotões()
+
+
+
+                if (horaEntrada != "") {
+                    $("#btnEntrada").prop('disabled', true);
+                }
+
+            });
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     function aleatorizarTempo(hora, expediente) {
         let separador = hora.split(':');
@@ -1257,7 +1373,7 @@ include("inc/scripts.php");
     //         }
     //     );
     // }
-    
+
     // function enviarEmail() {
     //     var codigoFuncionario = $("#funcionario").val();
     //     var horaAtual = $("#horaAtual").val();
