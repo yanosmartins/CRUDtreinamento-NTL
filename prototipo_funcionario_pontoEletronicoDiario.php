@@ -7,6 +7,7 @@ require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
 
+
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
@@ -127,17 +128,16 @@ include("inc/nav.php");
                                                                 </div>
                                                                 <div class="#"><br>
                                                                     <h4>Funcionário: <span id="#"><?php
+                                                                                                    $url = explode("?", $_SERVER["REQUEST_URI"]); ////essas linhas fazem a leitura do codigo "id" na url
+                                                                                                    $codigo = explode("=", $url[1]);
                                                                                                     $reposit = new reposit();
 
-                                                                                                    $sql = "SELECT F.codigo, F.nome 
-                                                                                                            FROM Ntl.funcionario F 
-                                                                                                            INNER JOIN Ntl.beneficioProjeto BP ON BP.funcionario = F.codigo
-                                                                                                            WHERE BP.dataDemissaoFuncionario IS NULL AND F.ativo = 1 AND F.codigo = " . $_SESSION['funcionario'];
+                                                                                                    $sql = "SELECT nome FROM dbo.funcionario where codigo = $codigo";
+
                                                                                                     $result = $reposit->RunQuery($sql);
                                                                                                     ?></span>
                                                                         <?php
                                                                         if ($row = $result[0]) {
-
                                                                             $codigo = (int) $row['codigo'];
                                                                             $nome = $row['nome'];
                                                                             // echo '<option id="funcionario" name="funcionario" value= ' . $codigo . ' selected>' . $nome . '</option>';
@@ -308,22 +308,22 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="col col-xs-12" style="margin-top: 15px;">
                                                             <div class="col col-xs-3">
-                                                                <button type="button" class="btn  btn-block btnEntrada" name="btnEntrada" id="btnEntrada" style="height: 100px; background-color:#05ad4f;" disabled>
+                                                                <button type="button" class="btn  btn-block btnEntrada" name="btnEntrada" id="btnEntrada" style="height: 100px; background-color:#05ad4f;">
                                                                     <span class="fa fa-sign-in"></span><br>Entrada
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-xs-3">
-                                                                <button type="button" class="btn  btn-block btnInicioAlmoco" id="btnInicioAlmoco" style=" background: #29c4e3; height:100px;" disabled>
+                                                                <button type="button" class="btn  btn-block btnInicioAlmoco" id="btnInicioAlmoco" style=" background: #29c4e3; height:100px;">
                                                                     <span class="fa fa-cutlery "></span><br> Inicio Intervalo
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-xs-3">
-                                                                <button type="button" class="btn  btn-block btnFimAlmoco" id="btnFimAlmoco" style="background: #d9d216; height:100px; " disabled>
+                                                                <button type="button" class="btn  btn-block btnFimAlmoco" id="btnFimAlmoco" style="background: #d9d216; height:100px; ">
                                                                     <span class="fa fa-cutlery"></span><br> Fim Intervalo
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-xs-3">
-                                                                <button type="button" class="btn  btn-block btnSaida" id="btnSaida" style="height: 100px;  background-color:#c42121;" disabled>
+                                                                <button type="button" class="btn  btn-block btnSaida" id="btnSaida" style="height: 100px;  background-color:#c42121;">
                                                                     <span class="fa fa-sign-out"></span><br>Saida
                                                                 </button><br>
                                                             </div>
@@ -697,6 +697,9 @@ include("inc/scripts.php");
             getHora(campo);
         });
 
+
+        carregaPonto()
+
         $("#btnSaida").on("click", function() {
             var inicioAlmoco = $("#inicioAlmoco").val();
             var fimAlmoco = $("#fimAlmoco").val();
@@ -789,7 +792,7 @@ include("inc/scripts.php");
                     $('#dlgSimpleFeriado').css('display', 'none');
                     $("#feriado").val(1);
                     gravar();
-                    enviarEmail();
+                    // enviarEmail();
                 }
             }, {
                 html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
@@ -832,7 +835,6 @@ include("inc/scripts.php");
                         justificar(btnClicado);
                     } else {
                         gravar();
-                        enviarEmail();
                     }
                 }
             }, {
@@ -878,7 +880,7 @@ include("inc/scripts.php");
             // e.preventDefault();
             e.stopPropagation();
 
-            if(modalHoraExtra != 1){
+            if (modalHoraExtra != 1) {
                 voltar();
             }
         });
@@ -1001,7 +1003,6 @@ include("inc/scripts.php");
                     $(this).dialog("close");
                     $('#dlgSimpleJustificativa').css('display', 'none');
                     gravar();
-                    enviarEmail();
                 }
             }, {
                 html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
@@ -1039,12 +1040,21 @@ include("inc/scripts.php");
         });
         $("#dlgSimpleJustificativaPausa").dialog("widget").find(".ui-dialog-titlebar-close").hide();
 
-        // getIpClient();
+        getIpClient();
         // carregaPonto();
         recuperaDados();
     });
 
+    function voltar() {
+        $(location).attr('href', 'funcionario_pontoEletronicoDiario.php');
+    }
+
     function gravar() {
+        let agora = new Date()
+        var mes = String(agora.getMonth() + 1).padStart(2, '0')
+        var ano = agora.getFullYear()
+        let dia = agora.getDate();
+        let mesAno = (agora.getMonth() + 1) + '/' + agora.getFullYear();
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnEntrada").prop('disabled', true);
@@ -1053,416 +1063,143 @@ include("inc/scripts.php");
         $("#btnFimAlmoco").prop('disabled', true);
 
         var codigo = $("#codigo").val();
-        var funcionario = $("#funcionario").val();
-        var mesAno = $("#mesAno").val();
+        codigo = 1;
         var idFolha = $("#idFolha").val();
-        var dataAtual = new Date();
-        var dia = dataAtual.getDate();
+        idFolha = 1;
         var horaEntrada = $("#horaEntrada").val();
-        var horaSaida = $("#horaSaida").val();
         var inicioAlmoco = $("#inicioAlmoco").val();
         var fimAlmoco = $("#fimAlmoco").val();
+        var horaSaida = $("#horaSaida").val();
         var horaExtra = $("#horaExtra").val();
         var atraso = $("#atraso").val();
-        var lancamento = $("#lancamento").val();
-        var observacao = $("#observacao").val();
-        var status = $('#status').val();
-        if (status == 0) {
-            status = 2;
-        }
 
-        var tipoEscala = $("#tipoEscala").val();
-        var escalaDia = $("#escalaDia").val();
+        gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso)
+    }
 
-        var feriado = $("#feriado").val();
 
-        let separador = $("#expediente").text();
-        if (!separador) {
-            separador = '00:00 - 00:00';
-        }
-        separador = separador.split("-");
-        separador[0] = separador[0].trim();
-        separador[1] = separador[1].trim();
 
-        if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
-        if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
 
-        const inicioExpediente = separador[0];
-        const fimExpediente = separador[1];
+    function carregaPonto() {
+        const mesAno = moment().format('YYYY-MM-DD');
+        const dataAtual = new Date();
+        const dia = dataAtual.getDate();
 
-        let intervalo = $("#intervalo").text();
-        if (!intervalo) {
-            intervalo = '00:00 - 00:00';
-        }
-        intervalo = intervalo.split("-");
-        let inicioIntervalo = intervalo[0].trim();
-        let fimIntervalo = intervalo[1].trim();
+        var codigo = $("#codigo").val();
+        codigo = 2;
 
-        // if (escalaDia == 2) {
-        //     var data = mesAno.split("-");
-        //     var date = new Date(data[0], data[1] - 1, dia);
-        //     var weekday = date.getDay();
 
-        //     if (weekday == 6) {
-        //         // Expediente Sabado
-        //         var inicioExpedienteSabado = $("#expedienteSabado option:selected").text() || '00:00 - 00:00';
-
-        //         separador = inicioExpedienteSabado.split("-");
-        //         inicioExpediente = separador[0].trim();
-        //         fimExpediente = separador[1].trim();
-
-        //         if (inicioExpediente.toString().length <= 5) inicioExpediente = inicioExpediente.concat(':00');
-        //         if (fimExpediente.toString().length <= 5) fimExpediente = fimExpediente.concat(':00');
-        //         parseHoraFim = parse(fimExpediente);
-        //         parseHoraInicio = parse(inicioExpedienteSabado);
-        //     }
-        // } else if (escalaDia == 3) {
-        //     var data = mesAno.split("-");
-        //     var date = new Date(data[0], data[1] - 1, dia);
-        //     var weekday = date.getDay();
-        //     if (weekday == 0) {
-        //         // Expediente Segunda a Domingo
-        //         var inicioExpedienteDomingo = $("#expedienteDomingo option:selected").text() || '00:00 - 00:00';
-
-        //         separador = inicioExpedienteDomingo.split("-");
-        //         inicioExpediente = separador[0].trim();
-        //         fimExpediente = separador[1].trim();
-
-        //         if (inicioExpediente.toString().length <= 5) inicioExpediente = inicioExpediente.concat(':00');
-        //         if (fimExpediente.toString().length <= 5) fimExpediente = fimExpediente.concat(':00');
-        //         parseHoraFim = parse(fimExpediente);
-        //         parseHoraInicio = parse(inicioExpedienteDomingo);
-        //     }
-
-        //     // if (weekday == 6) {
-        //     //     // Expediente Segunda a Sabado
-        //     //     var inicioExpedienteSabado = $("#expediente").text() || '00:00 - 00:00';
-
-        //     //     separador = inicioExpedienteSabado.split("-");
-        //     //     inicioExpediente = separador[0].trim();
-        //     //     fimExpediente = separador[1].trim();
-
-        //     //     if (inicioExpediente.toString().length <= 5) inicioExpediente = inicioExpediente.concat(':00');
-        //     //     if (fimExpediente.toString().length <= 5) fimExpediente = fimExpediente.concat(':00');
-        //     //     parseHoraFim = parse(fimExpediente);
-        //     //     parseHoraInicio = parse(inicioExpedienteSabado);
-        //     // }
-        // }
-
-        const inputHoraEntrada = aleatorizarTempo(horaEntrada, inicioExpediente);
-        const inputHoraSaida = aleatorizarTempo(horaSaida, fimExpediente)
-
-        //Escala normal
-        if (tipoEscala == 1) {
-            //Começo Cálculo de Hora Extra
-            if (toleranciaExtra || toleranciaAtraso) {
-                var parseToleranciaExtra = parse(toleranciaExtra)
-                parseToleranciaAtraso = parse(toleranciaAtraso)
-            } else if (toleranciaDia) {
-                var parseToleranciaExtra = parse(toleranciaDia)
-                parseToleranciaAtraso = parse(toleranciaDia)
-            }
-
-            atraso = "00:00:00";
-            horaExtra = "00:00:00";
-
-            if (inputHoraSaida != "00:00:00") {
-
-                var entrada = horaEntrada.split(':');
-                entrada = entrada[0] + ":" + entrada[1];
-
-                if ((entrada > inicioAlmoco) && (entrada > fimAlmoco)) {
-                    inicioAlmoco = "00:00";
-                    fimAlmoco = "00:00";
-                }
-
-                if ((horaSaida <= inicioAlmoco) || (horaSaida <= fimAlmoco)) {
-                    inicioAlmoco = "00:00";
-                    fimAlmoco = "00:00";
-                }
-
-                const parseHoraEntrada = parse(inputHoraEntrada)
-                const parseHoraSaida = parse(inputHoraSaida)
-                const parseHoraInicio = parse(inicioExpediente)
-                const parseHoraFim = parse(fimExpediente)
-
-                let jornadaNormal = duracao(inicioExpediente, fimExpediente);
-
-                var almoco = parse(fimIntervalo) - parse(inicioIntervalo);
-                jornadaNormal = jornadaNormal - almoco;
-
-                const jornadaNormalToleranteExtra = jornadaNormal + parseToleranciaExtra
-                const jornadaNormalToleranteAtraso = jornadaNormal - parseToleranciaExtra
-                // quantidade de minutos efetivamente trabalhados
-                let jornada = duracao(inputHoraEntrada, inputHoraSaida);
-
-                if (inicioAlmoco != '00:00' && fimAlmoco != '00:00') {
-                    var almoco = parse(fimAlmoco) - parse(inicioAlmoco);
-                    jornada = jornada - almoco;
-                }
-
-                // diferença entre as jornadas
-                let diff = Math.abs(jornada - jornadaNormal);
-
-                var weekday = dataAtual.getDay();
-
-                if ((feriado == 1 || weekday == 0 || folgaCobertura == 1) && escalaDia != 3) {
-                    let horas = Math.floor(jornada / Math.pow(60, 2));
-                    jornada = jornada - (horas * 3600);
-                    let minutos = Math.floor(jornada / 60);
-                    let segundos = jornada - (minutos * 60);
-
-                    if (horas.toString().length < 2) horas = `0${horas}`;
-                    if (minutos.toString().length < 2) minutos = `0${minutos}`;
-                    if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-                    horaExtra = (`${horas}:${minutos}:${segundos}`);
-                } else {
-                    if (diff != 0 && folgaCobertura != 1) {
-                        let horas = Math.floor(diff / Math.pow(60, 2));
-                        diff = diff - (horas * 3600);
-                        let minutos = Math.floor(diff / 60);
-                        let segundos = diff - (minutos * 60);
-
-                        if (horas.toString().length < 2) horas = `0${horas}`;
-                        if (minutos.toString().length < 2) minutos = `0${minutos}`;
-                        if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-                        if (jornada > jornadaNormalToleranteExtra) {
-                            horaExtra = (`${horas}:${minutos}:${segundos}`);
-                        } else if (jornada < jornadaNormalToleranteAtraso) {
-                            atraso = (`${horas}:${minutos}:${segundos}`)
-                        }
-                    }else if(folgaCobertura == 1){
-                        let horas = Math.floor(jornada / Math.pow(60, 2));
-                        jornada = jornada - (horas * 3600);
-                        let minutos = Math.floor(jornada / 60);
-                        let segundos = jornada - (minutos * 60);
-
-                        if (horas.toString().length < 2) horas = `0${horas}`;
-                        if (minutos.toString().length < 2) minutos = `0${minutos}`;
-                        if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-                        horaExtra = (`${horas}:${minutos}:${segundos}`);
-                    }
-                }
-            }
-            //Fim Cálculo de Hora Extra
-        }
-
-        //Revezamento
-        if (tipoEscala == 2) {
-            if (inicioExpediente < fimExpediente) {
-                //Começo Cálculo de Hora Extra
-                if (toleranciaExtra || toleranciaAtraso) {
-                    var parseToleranciaExtra = parse(toleranciaExtra)
-                    parseToleranciaAtraso = parse(toleranciaAtraso)
-                } else if (toleranciaDia) {
-                    var parseToleranciaExtra = parse(toleranciaDia)
-                    parseToleranciaAtraso = parse(toleranciaDia)
-                }
-
-                atraso = "00:00:00";
-                horaExtra = "00:00:00";
-
-                if (horaSaida != "00:00:00") {
-                    //valor em segundos
-                    const parseHoraEntrada = parse(inputHoraEntrada)
-                    const parseHoraSaida = parse(inputHoraSaida)
-                    const parseHoraInicio = parse(inicioExpediente)
-                    const parseHoraFim = parse(fimExpediente)
-
-                    //calculo
-
-                    let jornadaNormal = duracao(inicioExpediente, fimExpediente);
-
-                    var almoco = parse(fimIntervalo) - parse(inicioIntervalo);
-                    jornadaNormal = jornadaNormal - almoco;
-
-                    const jornadaNormalToleranteExtra = jornadaNormal + parseToleranciaExtra
-                    const jornadaNormalToleranteAtraso = jornadaNormal - parseToleranciaExtra
-                    // quantidade de minutos efetivamente trabalhados
-                    let jornada = duracao(inputHoraEntrada, inputHoraSaida);
-
-                    if (inicioAlmoco != '00:00' && fimAlmoco != '00:00') {
-                        var almoco = parse(fimAlmoco) - parse(inicioAlmoco);
-                        jornada = jornada - almoco;
-                    }
-
-                    // diferença entre as jornadas
-                    let diff = Math.abs(jornada - jornadaNormal);
-
-                    if (diff != 0 && folgaCobertura != 1) {
-                        let horas = Math.floor(diff / Math.pow(60, 2));
-                        diff = diff - (horas * 3600);
-                        let minutos = Math.floor(diff / 60);
-                        let segundos = diff - (minutos * 60);
-
-                        if (horas.toString().length < 2) horas = `0${horas}`;
-                        if (minutos.toString().length < 2) minutos = `0${minutos}`;
-                        if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-                        if (jornada > jornadaNormalToleranteExtra) {
-                            horaExtra = (`${horas}:${minutos}:${segundos}`);
-                        } else if (jornada < jornadaNormalToleranteAtraso) {
-                            atraso = (`${horas}:${minutos}:${segundos}`)
-                        }
-                    }else if(folgaCobertura == 1){
-                        let horas = Math.floor(jornada / Math.pow(60, 2));
-                        jornada = jornada - (horas * 3600);
-                        let minutos = Math.floor(jornada / 60);
-                        let segundos = jornada - (minutos * 60);
-
-                        if (horas.toString().length < 2) horas = `0${horas}`;
-                        if (minutos.toString().length < 2) minutos = `0${minutos}`;
-                        if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-                        horaExtra = (`${horas}:${minutos}:${segundos}`);
-                    }
-                }
-                //Fim Cálculo de Hora Extra
-            }
-        }
-        //Verificação de Atraso
-
-        separador = atraso.split(':');
-        let h = Number(separador[0]);
-        let m = Number(separador[1]);
-
-        if (toleranciaAtraso) {
-            var separadorTolerancia = toleranciaAtraso.split(':');
-        } else if (toleranciaDia) {
-            var separadorTolerancia = toleranciaDia.split(':');
-        }
-        let hTolerancia = Number(separadorTolerancia[0]);
-        let mTolerancia = Number(separadorTolerancia[1]);
-
-        if (m < mTolerancia && h == 0) {
-            atraso = "00:00:00"
-        }
-
-        //Fim da Verificação de Atraso
-
-        //Verificação de Extra
-        separador = horaExtra.split(':');
-        h = Number(separador[0]);
-        m = Number(separador[1]);
-
-        if (toleranciaExtra) {
-            separadorTolerancia = toleranciaExtra.split(':');
-        } else if (toleranciaDia) {
-            separadorTolerancia = toleranciaDia.split(':');
-        }
-        hTolerancia = Number(separadorTolerancia[0]);
-        mTolerancia = Number(separadorTolerancia[1]);
-
-        if (m <= mTolerancia && h == 0) {
-            horaExtra = "00:00:00"
-        }
-
-        if (horaExtra != "00:00:00" && horaExtra != "" && inputHoraSaida != "00:00:00") {
-            smartAlert("Aviso", "O funcionário possui horas extras", "info");
-            verificaAutorizacao(dia);
-        }
-        // if (atraso != "00:00:00" && atraso != "" && inputHoraSaida != "00:00:00") {
-        //     smartAlert("Aviso", "O funcionário possui atrasos", "info");
-        // }
-
-        //Fim da Verificação de Extra
-
-        var ipEntrada = "";
-        var ipSaida = "";
-        var registraAlmoco = $("#registraAlmoco").val();
-
-        if (registraAlmoco == 1) {
-            if ((horaEntrada != '00:00:00') && (inicioAlmoco == '00:00') && (fimAlmoco == '00:00') && (horaSaida == '00:00:00')) {
-                var ipEntrada = $('#ip').val();
-                if (ipEntrada == "") {
-                    smartAlert("Atenção", "Não foi possível registrar o ponto, tente novamente!", "error");
-                    voltar();
-                }
-            }
-        } else {
-            if ((horaEntrada != '00:00:00') && (horaSaida == '00:00:00')) {
-                var ipEntrada = $('#ip').val();
-                if (ipEntrada == "") {
-                    smartAlert("Atenção", "Não foi possível registrar o ponto, tente novamente!", "error");
-                    voltar();
-                }
-            }
-            if ((inicioAlmoco == '00:00') || (fimAlmoco == '00:00')) {
-                $('#modalErro').modal('show');
-                return;
-            }
-        }
-
-        if (horaSaida != '00:00:00') {
-            var ipSaida = $('#ip').val();
-            if (ipSaida == "") {
-                smartAlert("Atenção", "Não foi possível registrar o ponto, tente novamente!", "error");
-                voltar();
-            }
-        }
-
-        if (btnClicado != 'lancamento') {
-            arrDiasAlterados.push({
-                dia: dia,
-                horaEntrada: horaEntrada,
-                horaSaida: horaSaida,
-                inicioAlmoco: inicioAlmoco,
-                fimAlmoco: fimAlmoco,
-                ipEntrada: ipEntrada,
-                ipSaida: ipSaida,
-            });
-        }
-        var diasAlterados = arrDiasAlterados;
-
-        gravarPonto(codigo, funcionario, mesAno, idFolha, dia, horaEntrada, horaSaida, inicioAlmoco, fimAlmoco, horaExtra, atraso, lancamento, observacao, status, diasAlterados, btnClicado,
+        $('#mesAno').val(mesAno);
+        recuperaPonto(mesAno, dia, codigo,
             function(data) {
+                data = data.replace(/failed/g, '');
+                var piece = data.split("#");
 
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        return false;
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
-                        return false;
-                    }
-                } else {
-                    var piece = data.split("#");
-                    var mensagem = piece[2];
-                    if (!mensagem) {
-                        smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
+                var mensagem = piece[0];
+                var out = piece[1];
 
-                    } else {
-                        out = mensagem.split("#");
-                        mensagem = out[0];
-                        autorizacaoExtra = out[1];
+                piece = out.split("^");
 
-                        smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
+                //Atributos do funcionário
+                var idFolha = piece[0];
+                var codigo = piece[1];
+                var horaEntrada = piece[2] || '00:00:00';
+                var inicioAlmoco = piece[3] || '00:00:00';
+                var fimAlmoco = piece[4] || '00:00:00';
+                var horaSaida = piece[5] || '00:00:00';
+                var horaExtra = piece[6] || '00:00:00';
+                var atraso = piece[7] || '00:00:00';
 
-                        // smartAlert("Aviso", mensagem, "info");
 
-                    }
+                //Atributos do funcionário    
+                $("#idFolha").val(idFolha);
+                $("#codigo").val(codigo);
+                $("#horaEntrada").val(horaEntrada);
+                $("#inicioAlmoco").val(inicioAlmoco);
+                $("#fimAlmoco").val(fimAlmoco);
+                $("#horaSaida").val(horaSaida);
+                $("#horaExtra").val(horaExtra);
+                $("#atraso").val(atraso);
 
-                    if (btnClicado != 'lancamento') {
-                        confirmarRegistro(idFolha, dia, btnClicado, mesAno);
-                        if (autorizacaoExtra == 1) {
-                            $('#modalAutorizacao').modal('show');
-                        }
-                    } else {
-                        voltar();
-                    }
+                // habilitaBotões()
+
+
+
+                if (horaEntrada != "00:00:00") {
+                    $("#btnEntrada").prop('disabled', true);
                 }
-            }
-        );
+                if (inicioAlmoco != "00:00:00") {
+                    $("#btnInicioAlmoco").prop('disabled', true);
+                }
+                if (fimAlmoco != "00:00:00") {
+                    $("#btnFimAlmoco").prop('disabled', true);
+                }
+                if (horaSaida != "00:00:00") {
+                    $("#btnHoraSaida").prop('disabled', true);
+                }
+
+            });
     }
 
-    function voltar() {
-        $(location).attr('href', 'funcionario_pontoEletronicoDiario.php');
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     function aleatorizarTempo(hora, expediente) {
         let separador = hora.split(':');
@@ -1505,184 +1242,184 @@ include("inc/scripts.php");
         return (parse(fimExpediente) - parse(inicioExpediente));
     }
 
-    function carregaPonto() {
-        const mesAno = moment().format('YYYY-MM-DD');
+    // function carregaPonto() {
+    //     const mesAno = moment().format('YYYY-MM-DD');
 
-        const funcionario = $("#funcionario").val();
-        const dataAtual = new Date();
-        const dia = dataAtual.getDate();
-        const projeto = <?php echo $_SESSION['projeto']; ?>
+    //     const funcionario = $("#funcionario").val();
+    //     const dataAtual = new Date();
+    //     const dia = dataAtual.getDate();
+    //     const projeto = <?php echo $_SESSION['projeto']; ?>
 
-        $('#mesAno').val(mesAno);
-        recuperaPonto(funcionario, mesAno, dia, projeto,
-            function(data) {
-                data = data.replace(/failed/g, '');
-                var piece = data.split("#");
+    //     $('#mesAno').val(mesAno);
+    //     recuperaPonto(funcionario, mesAno, dia, projeto,
+    //         function(data) {
+    //             data = data.replace(/failed/g, '');
+    //             var piece = data.split("#");
 
-                var mensagem = piece[0];
-                var out = piece[1];
+    //             var mensagem = piece[0];
+    //             var out = piece[1];
 
-                piece = out.split("^");
+    //             piece = out.split("^");
 
-                //Atributos do funcionário
-                var idFolha = piece[0];
-                var codigoDetalhe = piece[1];
-                var horaEntrada = piece[2] || '00:00:00';
-                var horaSaida = piece[3] || '00:00:00';
-                var inicioAlmoco = piece[4] || '00:00';
-                var fimAlmoco = piece[5] || '00:00';
-                var horaExtra = piece[6] || '00:00:00';
-                var atraso = piece[7] || '00:00:00';
-                var lancamento = piece[8];
-                var status = piece[9];
-                var descricaoStatus = piece[10];
-                var registraAlmoco = piece[11];
-                var registraPonto = piece[12];
-                var tipoEscala = piece[13];
-                var layoutFolhaPonto = piece[14] || 1;
-                toleranciaAtraso = piece[15];
-                toleranciaExtra = piece[16];
-                toleranciaDia = piece[17];
-                // var verificaIp = piece[18];
-                var ferias = piece[19];
-                var escalaDia = piece[20];
-                var intervaloSabado = piece[21];
-                var intervaloDomingo = piece[22];
-                var registraPausa = piece[23];
+    //             //Atributos do funcionário
+    //             var idFolha = piece[0];
+    //             var codigoDetalhe = piece[1];
+    //             var horaEntrada = piece[2] || '00:00:00';
+    //             var horaSaida = piece[3] || '00:00:00';
+    //             var inicioAlmoco = piece[4] || '00:00';
+    //             var fimAlmoco = piece[5] || '00:00';
+    //             var horaExtra = piece[6] || '00:00:00';
+    //             var atraso = piece[7] || '00:00:00';
+    //             var lancamento = piece[8];
+    //             var status = piece[9];
+    //             var descricaoStatus = piece[10];
+    //             var registraAlmoco = piece[11];
+    //             var registraPonto = piece[12];
+    //             var tipoEscala = piece[13];
+    //             var layoutFolhaPonto = piece[14] || 1;
+    //             toleranciaAtraso = piece[15];
+    //             toleranciaExtra = piece[16];
+    //             toleranciaDia = piece[17];
+    //             // var verificaIp = piece[18];
+    //             var ferias = piece[19];
+    //             var escalaDia = piece[20];
+    //             var intervaloSabado = piece[21];
+    //             var intervaloDomingo = piece[22];
+    //             var registraPausa = piece[23];
 
-                if (registraPausa == 1) {
-                    $("#horarioPausa, #btnPausas").removeClass("hidden");
-                    $("#horarioPausa, #btnPausas").addClass("show");
-                } else {
-                    $("#horarioPausa, #btnPausas").removeClass("show");
-                    $("#horarioPausa, #btnPausas").addClass("hidden");
-                }
+    //             if (registraPausa == 1) {
+    //                 $("#horarioPausa, #btnPausas").removeClass("hidden");
+    //                 $("#horarioPausa, #btnPausas").addClass("show");
+    //             } else {
+    //                 $("#horarioPausa, #btnPausas").removeClass("show");
+    //                 $("#horarioPausa, #btnPausas").addClass("hidden");
+    //             }
 
-                var inicioPrimeiraPausa = piece[24];
-                var fimPrimeiraPausa = piece[25];
-                var inicioSegundaPausa = piece[26];
-                var fimSegundaPausa = piece[27];
-                var folga = piece[28];
-                var documento = piece[29];
-                folgaCobertura = piece[30];
+    //             var inicioPrimeiraPausa = piece[24];
+    //             var fimPrimeiraPausa = piece[25];
+    //             var inicioSegundaPausa = piece[26];
+    //             var fimSegundaPausa = piece[27];
+    //             var folga = piece[28];
+    //             var documento = piece[29];
+    //             folgaCobertura = piece[30];
 
-                //Atributos do funcionário    
-                $("#idFolha").val(idFolha);
-                $("#codigo").val(codigoDetalhe);
-                $("#horaEntrada").val(horaEntrada);
-                $("#horaSaida").val(horaSaida);
-                $("#inicioAlmoco").val(inicioAlmoco);
-                $("#fimAlmoco").val(fimAlmoco);
-                $("#horaExtra").val(horaExtra);
-                $("#atraso").val(atraso);
-                $("#lancamento").val(lancamento);
-                $("#status").val(status);
-                $("#registraAlmoco").val(registraAlmoco);
-                $("#tipoEscala").val(tipoEscala);
-                $("#layoutFolhaPonto").val(layoutFolhaPonto);
-                // $("#verificaIp").val(verificaIp);
-                $("#escalaDia").val(escalaDia);
-                // Pausas
-                $("#inicioPrimeiraPausa").val(inicioPrimeiraPausa);
-                $("#fimPrimeiraPausa").val(fimPrimeiraPausa);
-                $("#inicioSegundaPausa").val(inicioSegundaPausa);
-                $("#fimSegundaPausa").val(fimSegundaPausa);
+    //             //Atributos do funcionário    
+    //             $("#idFolha").val(idFolha);
+    //             $("#codigo").val(codigoDetalhe);
+    //             $("#horaEntrada").val(horaEntrada);
+    //             $("#horaSaida").val(horaSaida);
+    //             $("#inicioAlmoco").val(inicioAlmoco);
+    //             $("#fimAlmoco").val(fimAlmoco);
+    //             $("#horaExtra").val(horaExtra);
+    //             $("#atraso").val(atraso);
+    //             $("#lancamento").val(lancamento);
+    //             $("#status").val(status);
+    //             $("#registraAlmoco").val(registraAlmoco);
+    //             $("#tipoEscala").val(tipoEscala);
+    //             $("#layoutFolhaPonto").val(layoutFolhaPonto);
+    //             // $("#verificaIp").val(verificaIp);
+    //             $("#escalaDia").val(escalaDia);
+    //             // Pausas
+    //             $("#inicioPrimeiraPausa").val(inicioPrimeiraPausa);
+    //             $("#fimPrimeiraPausa").val(fimPrimeiraPausa);
+    //             $("#inicioSegundaPausa").val(inicioSegundaPausa);
+    //             $("#fimSegundaPausa").val(fimSegundaPausa);
 
-                habilitaBotões();
+    //             habilitaBotões();
 
-                if ((registraPonto == 0) || (ferias == 1) || (folga == 1 && folgaCobertura != 1) || (documento == 1)) {
-                    desabilitaBotões();
-                } else {
-                    if (horaEntrada != "00:00:00") {
-                        $("#btnEntrada").prop('disabled', true);
-                    }
-                    if (horaSaida != "00:00:00") {
-                        $("#btnSaida").prop('disabled', true);
-                    }
-                    if (inicioAlmoco != "00:00") {
-                        $("#btnInicioAlmoco").prop('disabled', true);
-                    }
-                    if (fimAlmoco != "00:00") {
-                        $("#btnFimAlmoco").prop('disabled', true);
-                    }
-                    if (descricaoStatus == "Fechado" || (folga == 1 && folgaCobertura == 1)) {
-                        $("#lancamento").prop('disabled', true);
-                        $("#btnLancamento").prop('disabled', true);
-                    }
-                    // var data = mesAno.split("-");
-                    // var date = new Date(data[0] + "-" + data[1] + "-" + dia);
-                    var weekday = dataAtual.getDay();
+    //             if ((registraPonto == 0) || (ferias == 1) || (folga == 1 && folgaCobertura != 1) || (documento == 1)) {
+    //                 desabilitaBotões();
+    //             } else {
+    //                 if (horaEntrada != "00:00:00") {
+    //                     $("#btnEntrada").prop('disabled', true);
+    //                 }
+    //                 if (horaSaida != "00:00:00") {
+    //                     $("#btnSaida").prop('disabled', true);
+    //                 }
+    //                 if (inicioAlmoco != "00:00") {
+    //                     $("#btnInicioAlmoco").prop('disabled', true);
+    //                 }
+    //                 if (fimAlmoco != "00:00") {
+    //                     $("#btnFimAlmoco").prop('disabled', true);
+    //                 }
+    //                 if (descricaoStatus == "Fechado" || (folga == 1 && folgaCobertura == 1)) {
+    //                     $("#lancamento").prop('disabled', true);
+    //                     $("#btnLancamento").prop('disabled', true);
+    //                 }
+    //                 // var data = mesAno.split("-");
+    //                 // var date = new Date(data[0] + "-" + data[1] + "-" + dia);
+    //                 var weekday = dataAtual.getDay();
 
-                    if (tipoEscala == 1) {
-                        // Se for sabado e não tiver intervalo
-                        if ((weekday == 6) && (intervaloSabado == 0)) {
-                            $("#btnInicioAlmoco").prop('disabled', true);
-                            $("#btnFimAlmoco").prop('disabled', true);
-                        }
+    //                 if (tipoEscala == 1) {
+    //                     // Se for sabado e não tiver intervalo
+    //                     if ((weekday == 6) && (intervaloSabado == 0)) {
+    //                         $("#btnInicioAlmoco").prop('disabled', true);
+    //                         $("#btnFimAlmoco").prop('disabled', true);
+    //                     }
 
-                        // Se for domingo e não tiver intervalo
-                        if ((weekday == 0) && (intervaloDomingo == 0)) {
-                            $("#btnInicioAlmoco").prop('disabled', true);
-                            $("#btnFimAlmoco").prop('disabled', true);
-                        }
-                    }
+    //                     // Se for domingo e não tiver intervalo
+    //                     if ((weekday == 0) && (intervaloDomingo == 0)) {
+    //                         $("#btnInicioAlmoco").prop('disabled', true);
+    //                         $("#btnFimAlmoco").prop('disabled', true);
+    //                     }
+    //                 }
 
-                    if (inicioPrimeiraPausa) {
-                        $("#btnInicioPrimeiraPausa").prop('disabled', true);
-                    }
-                    if (fimPrimeiraPausa) {
-                        $("#btnFimPrimeiraPausa").prop('disabled', true);
-                    }
-                    if (inicioSegundaPausa) {
-                        $("#btnInicioSegundaPausa").prop('disabled', true);
-                    }
-                    if (fimSegundaPausa) {
-                        $("#btnFimSegundaPausa").prop('disabled', true);
-                    }
-                }
+    //                 if (inicioPrimeiraPausa) {
+    //                     $("#btnInicioPrimeiraPausa").prop('disabled', true);
+    //                 }
+    //                 if (fimPrimeiraPausa) {
+    //                     $("#btnFimPrimeiraPausa").prop('disabled', true);
+    //                 }
+    //                 if (inicioSegundaPausa) {
+    //                     $("#btnInicioSegundaPausa").prop('disabled', true);
+    //                 }
+    //                 if (fimSegundaPausa) {
+    //                     $("#btnFimSegundaPausa").prop('disabled', true);
+    //                 }
+    //             }
 
-            }
-        );
-    }
+    //         }
+    //     );
+    // }
 
-    function enviarEmail() {
-        var codigoFuncionario = $("#funcionario").val();
-        var horaAtual = $("#horaAtual").val();
+    // function enviarEmail() {
+    //     var codigoFuncionario = $("#funcionario").val();
+    //     var horaAtual = $("#horaAtual").val();
 
-        enviaEmail(codigoFuncionario, horaAtual,
-            function(data) {
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        return false;
-                    } else {
-                        return false;
-                    }
-                }
-            }
-        );
-    }
+    //     enviaEmail(codigoFuncionario, horaAtual,
+    //         function(data) {
+    //             if (data.indexOf('sucess') < 0) {
+    //                 var piece = data.split("#");
+    //                 var mensagem = piece[1];
+    //                 if (mensagem !== "") {
+    //                     return false;
+    //                 } else {
+    //                     return false;
+    //                 }
+    //             }
+    //         }
+    //     );
+    // }
 
     async function getIpClient() {
         try {
             const response = await axios.get('https://api.ipify.org?format=json');
-            if(verificaIp == 1){
+            if (verificaIp == 1) {
                 $('#ip').val(response.data['ip']);
                 validarIp(response.data['ip']);
-            }else{
+            } else {
                 $('#ip').val(response.data['ip']);
-                carregaPonto();
+                // carregaPonto();
             }
 
         } catch (error) {
-            if(verificaIp == 1){
+            if (verificaIp == 1) {
                 $("#ipInvalido").html("Não foi possivel verificar o IP!");
                 $("#modalIp").modal('show');
-            }else{
-                carregaPonto();
+            } else {
+                // carregaPonto();
             }
-           
+
         }
     }
 
@@ -1693,41 +1430,41 @@ include("inc/scripts.php");
         return true;
     }
 
-    function validarIp(ip) {
+    // function validarIp(ip) {
 
-        // var ip = $("#ip").val();
-        var projeto = <?php echo $_SESSION['projeto']; ?>
+    //     // var ip = $("#ip").val();
+    //     var projeto = <?php echo $_SESSION['projeto']; ?>
 
-        validaIp(ip, projeto,
-            function(data) {
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[1];
-                    if (mensagem !== "") {
-                        smartAlert("Atenção", mensagem, "error");
-                        $("#ipInvalido").html("O IP "+ip+" não é permitido para registro de ponto!");
-                        $("#modalIp").modal('show');
-                        return false;
-                    } else {
-                        smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
-                        return false;
-                    }
-                } else {
-                    carregaPonto()
+    //     validaIp(ip, projeto,
+    //         function(data) {
+    //             if (data.indexOf('sucess') < 0) {
+    //                 var piece = data.split("#");
+    //                 var mensagem = piece[1];
+    //                 if (mensagem !== "") {
+    //                     smartAlert("Atenção", mensagem, "error");
+    //                     $("#ipInvalido").html("O IP "+ip+" não é permitido para registro de ponto!");
+    //                     $("#modalIp").modal('show');
+    //                     return false;
+    //                 } else {
+    //                     smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
+    //                     return false;
+    //                 }
+    //             } else {
+    //                 carregaPonto()
 
-                    // if (tipoEscala == 1) {
-                    //     verificarFeriado();
-                    // } else {
-                    //     $('#dlgSimplePonto').dialog('open');
+    //                 // if (tipoEscala == 1) {
+    //                 //     verificarFeriado();
+    //                 // } else {
+    //                 //     $('#dlgSimplePonto').dialog('open');
 
-                    //     if (horaRetorno) {
-                    //         $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
-                    //     }
-                    // }
-                }
-            }
-        );
-    }
+    //                 //     if (horaRetorno) {
+    //                 //         $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
+    //                 //     }
+    //                 // }
+    //             }
+    //         }
+    //     );
+    // }
 
     function imprimir() {
         const id = $('#funcionario').val();
@@ -1737,13 +1474,13 @@ include("inc/scripts.php");
         const layoutFolhaPonto = $("#layoutFolhaPonto").val();
 
         // if (tipoEscala == 1) {
-            if (layoutFolhaPonto == 1) {
-                window.open(`funcionario_folhaDePontoPdfPontoEletronico.php?data=${mesAno}`); // Analitica/Detalhada
-            } else if (layoutFolhaPonto == 2) {
-                window.open(`prototipo_folhaDePontoPdfPontoEletronico.php?data=${mesAno}`); // Sintética/Simples
-            } else if(layoutFolhaPonto == 3){
-                window.open(`funcionario_folhaPontoPdfPontoEletronico.php?data=${mesAno}`); // Híbrida(Antiga)
-            }
+        if (layoutFolhaPonto == 1) {
+            window.open(`funcionario_folhaDePontoPdfPontoEletronico.php?data=${mesAno}`); // Analitica/Detalhada
+        } else if (layoutFolhaPonto == 2) {
+            window.open(`prototipo_folhaDePontoPdfPontoEletronico.php?data=${mesAno}`); // Sintética/Simples
+        } else if (layoutFolhaPonto == 3) {
+            window.open(`funcionario_folhaPontoPdfPontoEletronico.php?data=${mesAno}`); // Híbrida(Antiga)
+        }
         // } else {
         //     window.open(`funcionario_folhaPontoRevezamentoPdf.php?data=${mesAno}`);
         // }
@@ -1785,19 +1522,19 @@ include("inc/scripts.php");
 
     }
 
-    function habilitaBotões() {
-        $("#btnEntrada").prop('disabled', false);
-        $("#btnSaida").prop('disabled', false);
-        $("#btnInicioAlmoco").prop('disabled', false);
-        $("#btnFimAlmoco").prop('disabled', false);
-        $("#lancamento").prop('disabled', false);
-        $("#btnLancamento").prop('disabled', false);
+    // function habilitaBotões() {
+    //     $("#btnEntrada").prop('disabled', false);
+    //     $("#btnSaida").prop('disabled', false);
+    //     $("#btnInicioAlmoco").prop('disabled', false);
+    //     $("#btnFimAlmoco").prop('disabled', false);
+    //     $("#lancamento").prop('disabled', false);
+    //     $("#btnLancamento").prop('disabled', false);
 
-        $("#btnInicioPrimeiraPausa").prop('disabled', false);
-        $("#btnFimPrimeiraPausa").prop('disabled', false);
-        $("#btnInicioSegundaPausa").prop('disabled', false);
-        $("#btnFimSegundaPausa").prop('disabled', false);
-    }
+    //     $("#btnInicioPrimeiraPausa").prop('disabled', false);
+    //     $("#btnFimPrimeiraPausa").prop('disabled', false);
+    //     $("#btnInicioSegundaPausa").prop('disabled', false);
+    //     $("#btnFimSegundaPausa").prop('disabled', false);
+    // }
 
     function verificaAutorizacao(dia) {
         var dia = dia;
@@ -1930,13 +1667,13 @@ include("inc/scripts.php");
                         return;
                     }
 
-                    if(inicioExpediente < fimExpediente){
+                    if (inicioExpediente < fimExpediente) {
                         if (parse(hora) > (fimExpediente - parse('01:00:00'))) {
                             $("#inicioPrimeiraPausa").val('')
                             smartAlert("Atenção", "A pausa não pode ser registrada com menos de 1h para o fim do expediente!", "error");
                             return;
                         }
-                    }else{
+                    } else {
                         if (horaEntrada == '00:00:00' && parse(hora) > (fimExpediente - parse('01:00:00'))) {
                             $("#inicioPrimeiraPausa").val('')
                             smartAlert("Atenção", "A pausa não pode ser registrada com menos de 1h para o fim do expediente!", "error");
@@ -1980,13 +1717,13 @@ include("inc/scripts.php");
                         return;
                     }
 
-                    if(inicioExpediente < fimExpediente){
+                    if (inicioExpediente < fimExpediente) {
                         if (parse(hora) > (fimExpediente - parse('01:00:00'))) {
                             $("#inicioPrimeiraPausa").val('')
                             smartAlert("Atenção", "A pausa não pode ser registrada com menos de 1h para o fim do expediente!", "error");
                             return;
                         }
-                    }else{
+                    } else {
                         if (horaEntrada == '00:00:00' && parse(hora) > (fimExpediente - parse('01:00:00'))) {
                             $("#inicioPrimeiraPausa").val('')
                             smartAlert("Atenção", "A pausa não pode ser registrada com menos de 1h para o fim do expediente!", "error");
@@ -2030,15 +1767,15 @@ include("inc/scripts.php");
                 //         return;
                 //     }
                 // } else {
-                    if (tipoEscala == 1) {
-                        verificarFeriado();
-                    } else {
-                        $('#dlgSimplePonto').dialog('open');
+                if (tipoEscala == 1) {
+                    verificarFeriado();
+                } else {
+                    $('#dlgSimplePonto').dialog('open');
 
-                        if (horaRetorno) {
-                            $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
-                        }
+                    if (horaRetorno) {
+                        $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
                     }
+                }
                 // }
             }
         });
@@ -2250,7 +1987,7 @@ include("inc/scripts.php");
 
         return `${horas}:${minutos}:${segundos}`;
     }
-    
+
     function recuperaDados() {
         const funcionario = $("#funcionario").val();
         $.ajax({
@@ -2275,7 +2012,7 @@ include("inc/scripts.php");
                 verificaIp = piece[0];
 
                 // if(verificaIp == 1){
-                    getIpClient();
+                getIpClient();
                 // }else{
                 //     carregaPonto();
                 // }
