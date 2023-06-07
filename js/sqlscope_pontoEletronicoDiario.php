@@ -57,7 +57,45 @@ return;
 
 function gravar()
 {
+    $reposit = new reposit(); //Abre a conexão.
+    session_start();
 
+    $idFolha = (int)$_POST['idFolha'];
+    $codigo = (int)$_POST['codigo'];
+    $dia = (int)$_POST['dia'];
+    $horaEntrada = (string)$_POST['horaEntrada'];
+    $inicioAlmoco = (string)$_POST['inicioAlmoco'];
+    $fimAlmoco = (string)$_POST['fimAlmoco'];
+    $horaSaida = (string)$_POST['horaSaida'];
+    $horaExtra = (string)$_POST['horaExtra'];
+    $atraso = (string)$_POST['atraso'];
+
+
+    $sql = "folhaPontoMensalDetalheDiario_Atualiza
+        $codigo,
+        $idFolha,
+        $dia,
+        '$horaEntrada',
+        '$inicioAlmoco',
+        '$fimAlmoco',
+        '$horaSaida',
+        '$horaExtra',
+        '$atraso'
+        ";
+
+    $reposit = new reposit();
+    $result = $reposit->Execprocedure($sql);
+
+    $ret = 'success#';
+    if ($result < 1) {
+        $ret = 'failed#';
+    }
+    echo $ret;
+    return;
+}
+
+function gravarAAA()
+{
     $reposit = new reposit(); //Abre a conexão.
 
     session_start();
@@ -683,226 +721,235 @@ function gravar()
 function recupera()
 {
 
-    if ((empty($_POST["funcionario"])) || (!isset($_POST["funcionario"])) || (is_null($_POST["funcionario"]))) {
-        $mensagem = "Nenhum parâmetro de pesquisa foi informado.";
-        echo "failed#" . $mensagem . ' ';
-        return;
-    } else {
-        $id = (int) $_POST["funcionario"];
-    }
-    $diaMesAno = $_POST["mesAno"];
-    $mesAno = preg_replace("/\d\d$/", "01", $diaMesAno);
-    $dia = (int) $_POST["dia"];
-    $projeto = (int) $_POST["projeto"];
 
-    $sql = "SELECT FPM.codigo, FPM.status, FD.dia, FD.folhaPontoMensal,FD.codigo AS codigoDetalhe,FD.horaEntrada,FD.horaSaida,FD.inicioAlmoco,
-            FD.fimAlmoco,FD.horaExtra,FD.atraso, FD.lancamento, S.descricao
-            FROM Funcionario.folhaPontoMensal FPM
-            LEFT JOIN Funcionario.folhaPontoMensalDetalheDiario FD ON FD.folhaPontoMensal = FPM.codigo
-            LEFT JOIN Ntl.status S ON S.codigo = FPM.status
-            LEFT JOIN Ntl.funcionario F ON F.codigo = FPM.funcionario
-            INNER JOIN Ntl.beneficioProjeto BP ON BP.funcionario = F.codigo
-            WHERE (0=0) AND FPM.funcionario = $id AND mesAno ='$mesAno' AND dia = $dia AND BP.ativo = 1";
+
+
+    $funcionario = (int) $_POST["funcionario"];
+    $idFolha = (int) $_POST["idFolha"];
+    
+
+        $mesAno = $_POST["mesAno"];
+    // $mesAno = preg_replace("/\d\d$/", "01", $diaMesAno);
+    $dia = (int) $_POST["dia"];
+    // $projeto = (int) $_POST["projeto"];
+
+
+
+    $sql = "SELECT codigo FROM dbo.folhaPontoMensal WHERE funcionarioId = $funcionario AND mesAno = '$mesAno'";
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    if ($row = $result[0]) {
+        $idFolha = (int)$row['codigo'];
+    }
+
+
+    $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
+    // $sql = "SELECT FPM.codigo, FPM.status, FD.dia, FD.folhaPontoMensal,FD.codigo AS codigoDetalhe,FD.horaEntrada,FD.horaSaida,FD.inicioAlmoco,
+    //         FD.fimAlmoco,FD.horaExtra,FD.atraso, FD.lancamento, S.descricao
+    //         FROM Funcionario.folhaPontoMensal FPM
+    //         LEFT JOIN Funcionario.folhaPontoMensalDetalheDiario FD ON FD.folhaPontoMensal = FPM.codigo
+    //         LEFT JOIN Ntl.status S ON S.codigo = FPM.status
+    //         LEFT JOIN Ntl.funcionario F ON F.codigo = FPM.funcionario
+    //         INNER JOIN Ntl.beneficioProjeto BP ON BP.funcionario = F.codigo
+    //         WHERE (0=0) AND FPM.funcionario = $id AND mesAno ='$mesAno' AND dia = $dia AND BP.ativo = 1";
 
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
     $out = "";
     if ($row = $result[0]) {
-
-        $codigoDetalhe = (int)$row['codigoDetalhe'];
-        $idFolha = (int)$row['codigo'];
+        $codigo = $row['codigo'];
         $horaEntrada = $row['horaEntrada'];
-        $horaSaida = $row['horaSaida'];
         $inicioAlmoco = $row['inicioAlmoco'];
         $fimAlmoco = $row['fimAlmoco'];
+        $horaSaida = $row['horaSaida'];
         $horaExtra = $row['horaExtra'];
         $atraso = $row['atraso'];
-        $lancamento = (int)$row['lancamento'];
-        $status = (int)$row['status'];
-        $descricaoStatus = $row['descricao'];
+        // $lancamento = (int)$row['lancamento'];
+        // $status = (int)$row['status'];
+        // $descricaoStatus = $row['descricao'];
     }
 
-    $sql = "SELECT P.codigo, P.registraAlmoco, BP.horaInicio, BP.horaFim, BP.tipoEscala, P.layoutFolhaPonto, P.limiteEntrada AS 'limiteAtraso',
-            P.limiteSaida AS 'limiteExtra', P.toleranciaDia, BP.verificaIp,BP.registraPonto, BP.dataRegistro, BP.fimPonto,BP.escalaDia,BP.intervaloSabado,
-            BP.horaInicioSabado, BP.horaFimSabado,BP.intervaloDomingo,BP.horaInicioDomingo, BP.horaFimDomingo, BP.registraPausa, P.verificaIp as verificaIpProjeto
-            FROM Ntl.projeto P
-            INNER JOIN Ntl.beneficioProjeto BP ON BP.projeto = P.codigo
-            WHERE P.ativo = 1 AND P.codigo = $projeto AND BP.funcionario = $id AND BP.ativo = 1";
-    $result = $reposit->RunQuery($sql);
-    if ($row = $result[0]) {
-        $tipoEscala = $row['tipoEscala'];
-        $registraAlmoco = $row['registraAlmoco'];
-        $layoutFolhaPonto = (int)trim($row['layoutFolhaPonto']);
-        $toleranciaAtraso = trim($row['limiteAtraso']);
-        $toleranciaExtra = trim($row['limiteExtra']);
-        $toleranciaDia = trim($row['toleranciaDia']);
-        $verificaIp = $row['verificaIp'];
-        if(!$verificaIp){
-            $verificaIp = $row['verificaIpProjeto'];
-        }
-        $registraPonto = $row['registraPonto'];
-        $inicioRegistroPonto = $row['dataRegistro'];
-        $inicioRegistroPonto = explode(' ', $inicioRegistroPonto);
-        $fimRegistroPonto = $row['fimPonto'];
-        $fimRegistroPonto = explode(" ", $fimRegistroPonto);
-        $escalaDia = $row['escalaDia'];
-        $intervaloSabado = $row['intervaloSabado'];
-        $intervaloDomingo = $row['intervaloDomingo'];
+    // $sql = "SELECT P.codigo, P.registraAlmoco, BP.horaInicio, BP.horaFim, BP.tipoEscala, P.layoutFolhaPonto, P.limiteEntrada AS 'limiteAtraso',
+    //         P.limiteSaida AS 'limiteExtra', P.toleranciaDia, BP.verificaIp,BP.registraPonto, BP.dataRegistro, BP.fimPonto,BP.escalaDia,BP.intervaloSabado,
+    //         BP.horaInicioSabado, BP.horaFimSabado,BP.intervaloDomingo,BP.horaInicioDomingo, BP.horaFimDomingo, BP.registraPausa, P.verificaIp as verificaIpProjeto
+    //         FROM Ntl.projeto P
+    //         INNER JOIN Ntl.beneficioProjeto BP ON BP.projeto = P.codigo
+    //         WHERE P.ativo = 1 AND P.codigo = $projeto AND BP.funcionario = $id AND BP.ativo = 1";
+    // $result = $reposit->RunQuery($sql);
+    // if ($row = $result[0]) {
+    //     $tipoEscala = $row['tipoEscala'];
+    //     $registraAlmoco = $row['registraAlmoco'];
+    //     $layoutFolhaPonto = (int)trim($row['layoutFolhaPonto']);
+    //     $toleranciaAtraso = trim($row['limiteAtraso']);
+    //     $toleranciaExtra = trim($row['limiteExtra']);
+    //     $toleranciaDia = trim($row['toleranciaDia']);
+    //     $verificaIp = $row['verificaIp'];
+    //     if (!$verificaIp) {
+    //         $verificaIp = $row['verificaIpProjeto'];
+    //     }
+    //     $registraPonto = $row['registraPonto'];
+    //     $inicioRegistroPonto = $row['dataRegistro'];
+    //     $inicioRegistroPonto = explode(' ', $inicioRegistroPonto);
+    //     $fimRegistroPonto = $row['fimPonto'];
+    //     $fimRegistroPonto = explode(" ", $fimRegistroPonto);
+    //     $escalaDia = $row['escalaDia'];
+    //     $intervaloSabado = $row['intervaloSabado'];
+    //     $intervaloDomingo = $row['intervaloDomingo'];
 
-        // Registro de pausas para descanso
-        $registraPausa = $row['registraPausa'];
+    //     // Registro de pausas para descanso
+    //     $registraPausa = $row['registraPausa'];
 
-        if ($registraAlmoco == 0) {
-            $inicioAlmoco = $row['horaInicio'];
-            $fimAlmoco = $row['horaFim'];
-            // verifica se é sabado para pegar hora almoco sabado.
-            $diaSemana = date("w", strtotime($diaMesAno));
-            if ($diaSemana == 6) {
-                $inicioAlmoco = $row['horaInicioSabado'];
-                $fimAlmoco = $row['horaFimSabado'];
-            }
-            // verifica se é domingo para pegar hora almoco domingo.
-            if ($diaSemana == 0) {
-                $inicioAlmoco = $row['horaInicioDomingo'];
-                $fimAlmoco = $row['horaFimDomingo'];
-            }
-        }
+    //     if ($registraAlmoco == 0) {
+    //         $inicioAlmoco = $row['horaInicio'];
+    //         $fimAlmoco = $row['horaFim'];
+    //         // verifica se é sabado para pegar hora almoco sabado.
+    //         $diaSemana = date("w", strtotime($diaMesAno));
+    //         if ($diaSemana == 6) {
+    //             $inicioAlmoco = $row['horaInicioSabado'];
+    //             $fimAlmoco = $row['horaFimSabado'];
+    //         }
+    //         // verifica se é domingo para pegar hora almoco domingo.
+    //         if ($diaSemana == 0) {
+    //             $inicioAlmoco = $row['horaInicioDomingo'];
+    //             $fimAlmoco = $row['horaFimDomingo'];
+    //         }
+    //     }
+    // }
 
-    }
+    // if ($fimRegistroPonto[0] != "") {
+    //     if (($diaMesAno > $fimRegistroPonto[0]) || ($diaMesAno < $inicioRegistroPonto[0])) {
+    //         $registraPonto = 0;
+    //     }
+    // } else {
+    //     if (($diaMesAno < $inicioRegistroPonto[0])) {
+    //         $registraPonto = 0;
+    //     }
+    // }
 
-    if ($fimRegistroPonto[0] != "") {
-        if (($diaMesAno > $fimRegistroPonto[0]) || ($diaMesAno < $inicioRegistroPonto[0])) {
-            $registraPonto = 0;
-        }
-    } else {
-        if (($diaMesAno < $inicioRegistroPonto[0])) {
-            $registraPonto = 0;
-        }
-    }
+    // // Verifica se esta de férias
+    // $sqlFerias = "SELECT dataInicio, dataFim
+    //                 FROM Beneficio.funcionarioFerias 
+    //                 WHERE funcionario = $id AND mesAno = '$mesAno' AND ativo = 1";
+    // $resultFerias = $reposit->RunQuery($sqlFerias);
 
-    // Verifica se esta de férias
-    $sqlFerias = "SELECT dataInicio, dataFim
-                    FROM Beneficio.funcionarioFerias 
-                    WHERE funcionario = $id AND mesAno = '$mesAno' AND ativo = 1";
-    $resultFerias = $reposit->RunQuery($sqlFerias);
+    // $ferias = 0;
+    // if ($row = $resultFerias[0]) {
+    //     $dataInicio = $row['dataInicio'];
+    //     $dataFim = $row['dataFim'];
 
-    $ferias = 0;
-    if ($row = $resultFerias[0]) {
-        $dataInicio = $row['dataInicio'];
-        $dataFim = $row['dataFim'];
+    //     for ($i = $dataInicio; $i < $dataFim;) {
+    //         $i = date('Y-m-d', strtotime($i));
 
-        for ($i = $dataInicio; $i < $dataFim;) {
-            $i = date('Y-m-d', strtotime($i));
+    //         if ($i == $diaMesAno) {
+    //             $ferias = 1;
+    //             break;
+    //         }
+    //         $i = date('Y-m-d 00:00:00', strtotime("+1 days", strtotime($i)));
+    //     }
+    // }
 
-            if ($i == $diaMesAno) {
-                $ferias = 1;
-                break;
-            }
-            $i = date('Y-m-d 00:00:00', strtotime("+1 days", strtotime($i)));
-        }
-    }
+    // // Verifica se esta de folga
+    // $sqlFolga = "SELECT dataInicio, dataFim
+    //                 FROM Beneficio.folga
+    //                 WHERE funcionario = $id AND ('$diaMesAno' >= dataInicio AND '$diaMesAno' <= dataFim) AND ativo = 1";
+    // $resultFolga = $reposit->RunQuery($sqlFolga);
 
-    // Verifica se esta de folga
-    $sqlFolga = "SELECT dataInicio, dataFim
-                    FROM Beneficio.folga
-                    WHERE funcionario = $id AND ('$diaMesAno' >= dataInicio AND '$diaMesAno' <= dataFim) AND ativo = 1";
-    $resultFolga = $reposit->RunQuery($sqlFolga);
+    // $folga = 0;
+    // if ($row = $resultFolga[0]) {
+    //     $dataInicio = $row['dataInicio'];
+    //     $dataFim = $row['dataFim'];
 
-    $folga = 0;
-    if ($row = $resultFolga[0]) {
-        $dataInicio = $row['dataInicio'];
-        $dataFim = $row['dataFim'];
+    //     for ($i = $dataInicio; $i <= $dataFim;) {
+    //         $i = date('Y-m-d', strtotime($i));
 
-        for ($i = $dataInicio; $i <= $dataFim;) {
-            $i = date('Y-m-d', strtotime($i));
+    //         if ($i == $diaMesAno) {
+    //             $folga = 1;
+    //             break;
+    //         }
+    //         $i = date('Y-m-d 00:00:00', strtotime("+1 days", strtotime($i)));
+    //     }
+    // }
 
-            if ($i == $diaMesAno) {
-                $folga = 1;
-                break;
-            }
-            $i = date('Y-m-d 00:00:00', strtotime("+1 days", strtotime($i)));
-        }
-    }
+    // $folgaCobertura = 0;
+    // if ($folga == 1) {
+    //     $sqlFolgaCobertura = "SELECT * FROM Funcionario.solicitacaoAlteracaoFolga 
+    //                         WHERE funcionario = $id AND dataPrevistaFolga = '$diaMesAno' AND tipoFolga = 3";
+    //     $resultFolgaCobertura = $reposit->RunQuery($sqlFolgaCobertura);
 
-    $folgaCobertura = 0;
-    if($folga == 1){
-        $sqlFolgaCobertura = "SELECT * FROM Funcionario.solicitacaoAlteracaoFolga 
-                            WHERE funcionario = $id AND dataPrevistaFolga = '$diaMesAno' AND tipoFolga = 3";
-        $resultFolgaCobertura = $reposit->RunQuery($sqlFolgaCobertura);
+    //     if ($row = $resultFolgaCobertura[0]) {
+    //         $folgaCobertura = 1;
+    //     }
+    // }
 
-        if ($row = $resultFolgaCobertura[0]) {
-            $folgaCobertura = 1;
-        }
-    }
+    // // Verifica se tem documento validado pelo RH na data selecionada
+    // $sqlUpload = "SELECT UD.dataInicio, UD.dataFim, UD.lancamento, L.abonaAtraso
+    //                 FROM Funcionario.uploadDocumentoFolhaPonto UD
+    //                 INNER JOIN Ntl.lancamento L ON L.codigo = UD.lancamento
+    //                 WHERE UD.funcionario = $id AND ('$diaMesAno' >= UD.dataInicio AND '$diaMesAno' <= UD.dataFim) AND UD.status = 3";
+    // $resultUpload = $reposit->RunQuery($sqlUpload);
 
-    // Verifica se tem documento validado pelo RH na data selecionada
-    $sqlUpload = "SELECT UD.dataInicio, UD.dataFim, UD.lancamento, L.abonaAtraso
-                    FROM Funcionario.uploadDocumentoFolhaPonto UD
-                    INNER JOIN Ntl.lancamento L ON L.codigo = UD.lancamento
-                    WHERE UD.funcionario = $id AND ('$diaMesAno' >= UD.dataInicio AND '$diaMesAno' <= UD.dataFim) AND UD.status = 3";
-    $resultUpload = $reposit->RunQuery($sqlUpload);
+    // $documento = 0;
+    // if ($row = $resultUpload[0]) {
+    //     $dataInicio = $row['dataInicio'];
+    //     $dataFim = $row['dataFim'];
+    //     $abonaAtraso = $row['abonaAtraso'];
 
-    $documento = 0;
-    if ($row = $resultUpload[0]) {
-        $dataInicio = $row['dataInicio'];
-        $dataFim = $row['dataFim'];
-        $abonaAtraso = $row['abonaAtraso'];
+    //     for ($i = $dataInicio; $i <= $dataFim;) {
+    //         $i = date('Y-m-d', strtotime($i));
 
-        for ($i = $dataInicio; $i <= $dataFim;) {
-            $i = date('Y-m-d', strtotime($i));
+    //         if ($i == $diaMesAno && ($abonaAtraso == 0 || !$abonaAtraso)) {
+    //             $documento = 1;
+    //             break;
+    //         }
+    //         $i = date('Y-m-d 00:00:00', strtotime("+1 days", strtotime($i)));
+    //     }
+    // }
 
-            if ($i == $diaMesAno && ($abonaAtraso == 0 || !$abonaAtraso)) {
-                $documento = 1;
-                break;
-            }
-            $i = date('Y-m-d 00:00:00', strtotime("+1 days", strtotime($i)));
-        }
-    }
+    // $sqlPausa = "SELECT inicioPrimeiraPausa, fimPrimeiraPausa,inicioSegundaPausa, fimSegundaPausa
+    //             FROM Funcionario.pausasDescanso
+    //             WHERE folhaPontoMensal = $idFolha AND dia = $dia";
+    // $result = $reposit->RunQuery($sqlPausa);
 
-    $sqlPausa = "SELECT inicioPrimeiraPausa, fimPrimeiraPausa,inicioSegundaPausa, fimSegundaPausa
-                FROM Funcionario.pausasDescanso
-                WHERE folhaPontoMensal = $idFolha AND dia = $dia";
-    $result = $reposit->RunQuery($sqlPausa);
+    // if ($row = $result[0]) {
+    //     $inicioPrimeiraPausa = $row['inicioPrimeiraPausa'];
+    //     $fimPrimeiraPausa = $row['fimPrimeiraPausa'];
+    //     $inicioSegundaPausa = $row['inicioSegundaPausa'];
+    //     $fimSegundaPausa = $row['fimSegundaPausa'];
+    // }
 
-    if ($row = $result[0]) {
-        $inicioPrimeiraPausa = $row['inicioPrimeiraPausa'];
-        $fimPrimeiraPausa = $row['fimPrimeiraPausa'];
-        $inicioSegundaPausa = $row['inicioSegundaPausa'];
-        $fimSegundaPausa = $row['fimSegundaPausa'];
-    }
-
-    $out =   $idFolha . "^" .
-        $codigoDetalhe . "^" .
-        $horaEntrada . "^" .
-        $horaSaida . "^" .
-        $inicioAlmoco . "^" .
-        $fimAlmoco . "^" .
-        $horaExtra . "^" .
-        $atraso . "^" .
-        $lancamento . "^" .
-        $status . "^" .
-        $descricaoStatus . "^" .
-        $registraAlmoco . "^" .
-        $registraPonto . "^" .
-        $tipoEscala . "^" .
-        $layoutFolhaPonto . "^" .
-        $toleranciaAtraso . "^" .
-        $toleranciaExtra . "^" .
-        $toleranciaDia . "^" .
-        $verificaIp . "^" .
-        $ferias . "^" .
-        $escalaDia . "^" .
-        $intervaloSabado . "^" .
-        $intervaloDomingo . "^" .
-        $registraPausa . "^" .
-        $inicioPrimeiraPausa . "^" .
-        $fimPrimeiraPausa . "^" .
-        $inicioSegundaPausa . "^" .
-        $fimSegundaPausa . "^" .
-        $folga . "^" .
-        $documento . "^" .
-        $folgaCobertura;
+    $out =  $idFolha . "^" .
+            $codigo .  "^" .
+            $funcionario . "^" .
+            $horaEntrada . "^" .
+            $inicioAlmoco . "^" .
+            $fimAlmoco . "^" .
+            $horaSaida . "^" .
+            $horaExtra . "^" .
+            $atraso;
+    //     $lancamento . "^" .
+    //     $status . "^" .
+    //     $descricaoStatus . "^" .
+    //     $registraAlmoco . "^" .
+    //     $registraPonto . "^" .
+    //     $tipoEscala . "^" .
+    //     $layoutFolhaPonto . "^" .
+    //     $toleranciaAtraso . "^" .
+    //     $toleranciaExtra . "^" .
+    //     $toleranciaDia . "^" .
+    //     $verificaIp . "^" .
+    //     $ferias . "^" .
+    //     $escalaDia . "^" .
+    //     $intervaloSabado . "^" .
+    //     $intervaloDomingo . "^" .
+    //     $registraPausa . "^" .
+    //     $inicioPrimeiraPausa . "^" .
+    //     $fimPrimeiraPausa . "^" .
+    //     $inicioSegundaPausa . "^" .
+    //     $fimSegundaPausa . "^" .
+    //     $folga . "^" .
+    //     $documento . "^" .
+    //     $folgaCobertura;
 
     if ($out == "") {
         echo "failed#";
@@ -1403,7 +1450,8 @@ function consultaLancamentoAbono()
     return $out;
 }
 
-function recuperaDados(){
+function recuperaDados()
+{
     $reposit = new reposit();
     $funcionario = $_POST['funcionario'];
 
@@ -1416,7 +1464,7 @@ function recuperaDados(){
 
     $verificaIp = $result[0]['verificaIp'];
 
-    if(!$verificaIp){
+    if (!$verificaIp) {
         $verificaIp = $result[0]['verificaIpProjeto'];
     }
     echo "sucess#" . "$verificaIp";
