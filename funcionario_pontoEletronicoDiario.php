@@ -303,21 +303,25 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="col col-xs-12" style="margin-top: 15px;">
                                                             <div class="col col-xs-3">
+                                                            <label id="labelEntrada"></label>
                                                                 <button type="button" class="btn  btn-block btnEntrada" name="btnEntrada" id="btnEntrada" style="height: 100px; background-color:#05ad4f;" disabled>
                                                                     <span class="fa fa-sign-in"></span><br>Entrada
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-xs-3">
+                                                            <label id="labelInicioAlmoco"></label>
                                                                 <button type="button" class="btn  btn-block btnInicioAlmoco" id="btnInicioAlmoco" style=" background: #29c4e3; height:100px;" disabled>
                                                                     <span class="fa fa-cutlery "></span><br> Inicio Intervalo
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-xs-3">
+                                                            <label id="labelFimAlmoco"></label>
                                                                 <button type="button" class="btn  btn-block btnFimAlmoco" id="btnFimAlmoco" style="background: #d9d216; height:100px; " disabled>
                                                                     <span class="fa fa-cutlery"></span><br> Fim Intervalo
                                                                 </button><br>
                                                             </div>
                                                             <div class="col col-xs-3">
+                                                            <label id="labelSaida"></label>
                                                                 <button type="button" class="btn  btn-block btnSaida" id="btnSaida" style="height: 100px;  background-color:#c42121;" disabled>
                                                                     <span class="fa fa-sign-out"></span><br>Saida
                                                                 </button><br>
@@ -688,6 +692,7 @@ include("inc/scripts.php");
                 }
             }
         }));
+
 
         $("#btnEntrada").on("click", function() {
             resetaTempo();
@@ -1689,7 +1694,10 @@ include("inc/scripts.php");
 
 
 
-
+                $(`#labelEntrada`).text(horaEntrada);
+                $(`#labelInicioAlmoco`).text(inicioAlmoco);
+                $(`#labelFimAlmoco`).text(fimAlmoco);         
+                $(`#labelSaida`).text(horaSaida);
                 $("#codigo").val(codigo);
                 $("#idFolha").val(idFolha);
                 $("#horaEntrada").val(horaEntrada);
@@ -1698,7 +1706,7 @@ include("inc/scripts.php");
                 $("#horaSaida").val(horaSaida);
                 $("#horaExtra").val(horaExtra);
                 $("#atraso").val(atraso);
-                
+
                 // $("#lancamento").val(lancamento);
                 // $("#status").val(status);
                 // $("#registraAlmoco").val(registraAlmoco);
@@ -2427,4 +2435,24 @@ include("inc/scripts.php");
             $(location).attr('href', 'index.php');
         }, (tempo));
     }
+
+
+    function horaAgoraClick(botao) {
+        const agora = new Date()
+        const dia = agora.getDate().toString().padStart(2, '0')
+        const mes = String(agora.getMonth() + 1).padStart(2, '0')
+        const ano = agora.getFullYear()
+        const horas = agora.getHours();
+        const minutos = agora.getMinutes();
+        const segundos = agora.getSeconds();
+        const dataAtualClick = `${dia} / ${mes} / ${ano}`;
+        const horaAtualClick = `${horas} : ${minutos} : ${segundos}`;
+
+        const horaBotao = horaAtualClick;
+
+        mudaHoraClick(botao, horaBotao)
+        return
+    }
+
+
 </script>
