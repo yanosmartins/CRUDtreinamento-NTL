@@ -663,7 +663,7 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     var toleranciaExtra = "";
-    var toleranciaAtraso = "";
+    var toleranciaAtraso = "00:10:00";
     var toleranciaDia = "";
     var btnClicado = "";
     var horaRetorno = "";
@@ -839,7 +839,7 @@ include("inc/scripts.php");
                 "class": "btn btn-default",
                 click: function() {
                     $(this).dialog("close");
-                    location.reload();
+                    // location.reload();
                 }
             }]
         });
@@ -1045,7 +1045,7 @@ include("inc/scripts.php");
 
     function gravar() {
         const dataAtual = new Date();
-        const dia = dataAtual.getDate();        
+        const dia = dataAtual.getDate();
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnEntrada").prop('disabled', true);
         $("#btnSaida").prop('disabled', true);
@@ -1563,7 +1563,6 @@ include("inc/scripts.php");
         // const projeto = <?php
                             //  echo $_SESSION['projeto']; 
                             ?>
-
         $('#mesAno').val(mesAno);
         recuperaPonto(funcionario, mesAno, dia,
             function(data) {
@@ -1585,6 +1584,18 @@ include("inc/scripts.php");
                 var horaSaida = piece[6] || '00:00:00';
                 var horaExtra = piece[7] || '00:00:00';
                 var atraso = piece[8] || '00:00:00';
+                var horaEntradaEscala = piece[9];
+                var inicioIntervaloEscala = piece[10];
+                var fimIntervaloEscala = piece[11];
+                var horaSaidaEscala = piece[12];
+                var expedienteEscala = piece[13];
+                var intervaloEscala = piece[14];
+                var segundaEscala = piece[15];
+                var tercaEscala = piece[16];
+                var quartaEscala = piece[17];
+                var quintaEscala = piece[18];
+                var sextaEscala = piece[19];
+                var sabadoEscala = piece[20];
 
 
                 // if (registraPausa == 1) {
@@ -1604,6 +1615,29 @@ include("inc/scripts.php");
                 // folgaCobertura = piece[30];
 
                 //Atributos do funcionário    
+            
+                var horaPartida = horaEntrada.split(":");
+                    var hhEntrada = horaPartida[0];
+                    var mmEntrada = horaPartida[1];
+                    var ssEntrada = horaPartida[2];
+
+
+
+
+
+
+
+
+                if ()){
+                    atraso = horaEntrada - horaEntradaEscala;
+                }
+                
+
+
+                
+                
+                
+                
                 $("#codigo").val(codigo);
                 $("#idFolha").val(idFolha);
                 $("#horaEntrada").val(horaEntrada);
@@ -1630,7 +1664,10 @@ include("inc/scripts.php");
                 // if ((registraPonto == 0) || (ferias == 1) || (folga == 1 && folgaCobertura != 1) || (documento == 1)) {
                 //     desabilitaBotões();
                 // } else {
-                if (horaEntrada != "00:00:00") {
+
+                if (horaEntrada == "00:00:00") {
+                    $("#btnSaida").prop('disabled', true);
+                } else {
                     $("#btnEntrada").prop('disabled', true);
                 }
 
@@ -1643,6 +1680,9 @@ include("inc/scripts.php");
                 }
 
                 if (horaSaida != "00:00:00") {
+                    $("#btnEntrada").prop('disabled', true);
+                    $("#btnInicioAlmoco").prop('disabled', true);
+                    $("#btnFimAlmoco").prop('disabled', true);
                     $("#btnSaida").prop('disabled', true);
                 }
 

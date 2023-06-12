@@ -720,20 +720,10 @@ function gravarAAA()
 
 function recupera()
 {
-
-
-
-
     $funcionario = (int) $_POST["funcionario"];
     $idFolha = (int) $_POST["idFolha"];
-    
-
-        $mesAno = $_POST["mesAno"];
-    // $mesAno = preg_replace("/\d\d$/", "01", $diaMesAno);
+    $mesAno = $_POST["mesAno"];
     $dia = (int) $_POST["dia"];
-    // $projeto = (int) $_POST["projeto"];
-
-
 
     $sql = "SELECT codigo FROM dbo.folhaPontoMensal WHERE funcionarioId = $funcionario AND mesAno = '$mesAno'";
     $reposit = new reposit();
@@ -742,8 +732,9 @@ function recupera()
         $idFolha = (int)$row['codigo'];
     }
 
-
     $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
     // $sql = "SELECT FPM.codigo, FPM.status, FD.dia, FD.folhaPontoMensal,FD.codigo AS codigoDetalhe,FD.horaEntrada,FD.horaSaida,FD.inicioAlmoco,
     //         FD.fimAlmoco,FD.horaExtra,FD.atraso, FD.lancamento, S.descricao
     //         FROM Funcionario.folhaPontoMensal FPM
@@ -752,9 +743,6 @@ function recupera()
     //         LEFT JOIN Ntl.funcionario F ON F.codigo = FPM.funcionario
     //         INNER JOIN Ntl.beneficioProjeto BP ON BP.funcionario = F.codigo
     //         WHERE (0=0) AND FPM.funcionario = $id AND mesAno ='$mesAno' AND dia = $dia AND BP.ativo = 1";
-
-    $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
 
     $out = "";
     if ($row = $result[0]) {
@@ -765,10 +753,57 @@ function recupera()
         $horaSaida = $row['horaSaida'];
         $horaExtra = $row['horaExtra'];
         $atraso = $row['atraso'];
-        // $lancamento = (int)$row['lancamento'];
-        // $status = (int)$row['status'];
-        // $descricaoStatus = $row['descricao'];
     }
+
+
+
+    $sql = "SELECT escala from dbo.funcionario where codigo = $funcionario";
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    if ($row = $result[0]) {
+        $escala = $row['escala'];
+    }
+
+
+    $sql = "SELECT E.codigo, E.descricao, E.horaEntrada, E.inicioIntervalo, E.fimIntervalo, E.horaSaida, E.expediente, E.intervalo, E.domingo, E.segunda, E.terca, E.quarta, E.quinta, E.sexta, E.sabado from dbo.escala E
+            LEFT JOIN dbo.funcionario F on F.codigo = $funcionario WHERE E.codigo = $escala";
+
+    $reposit = new reposit();
+    $result = $reposit->RunQuery($sql);
+    if ($row = $result[0]) {
+        $horaEntradaEscala = $row['horaEntrada'];
+        $inicioIntervaloEscala = $row['inicioIntervalo'];
+        $fimIntervaloEscala = $row['fimIntervalo'];
+        $horaSaidaEscala = $row['horaSaida'];
+        $expedienteEscala = $row['expediente'];
+        $intervaloEscala = $row['intervalo'];
+        $segundaEscala = $row['segunda'];
+        $tercaEscala = $row['terca'];
+        $quartaEscala = $row['quarta'];
+        $quintaEscala = $row['quinta'];
+        $sextaEscala = $row['sexta'];
+        $sabadoEscala = $row['sabado'];
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // $sql = " SELECT FU.codigo, FU.ativo, FU.cpf, FU.rg, FU.dataNascimento, FU.estadoCivil, FU.nome, FU.cep, FU.primeiroEmprego, FU.pisPasep, G.descricao as genero 
+    // from dbo.funcionario FU
+    // LEFT JOIN dbo.genero G on G.codigo = FU.genero";
+
+
+
+
 
     // $sql = "SELECT P.codigo, P.registraAlmoco, BP.horaInicio, BP.horaFim, BP.tipoEscala, P.layoutFolhaPonto, P.limiteEntrada AS 'limiteAtraso',
     //         P.limiteSaida AS 'limiteExtra', P.toleranciaDia, BP.verificaIp,BP.registraPonto, BP.dataRegistro, BP.fimPonto,BP.escalaDia,BP.intervaloSabado,
@@ -919,14 +954,26 @@ function recupera()
     // }
 
     $out =  $idFolha . "^" .
-            $codigo .  "^" .
-            $funcionario . "^" .
-            $horaEntrada . "^" .
-            $inicioAlmoco . "^" .
-            $fimAlmoco . "^" .
-            $horaSaida . "^" .
-            $horaExtra . "^" .
-            $atraso;
+        $codigo .  "^" .
+        $funcionario . "^" .
+        $horaEntrada . "^" .
+        $inicioAlmoco . "^" .
+        $fimAlmoco . "^" .
+        $horaSaida . "^" .
+        $horaExtra . "^" .
+        $atraso . "^" .
+        $horaEntradaEscala . "^" .
+        $inicioIntervaloEscala . "^" .
+        $fimIntervaloEscala . "^" .
+        $horaSaidaEscala . "^" .
+        $expedienteEscala . "^" .
+        $intervaloEscala . "^" .
+        $segundaEscala . "^" .
+        $tercaEscala . "^" .
+        $quartaEscala . "^" .
+        $quintaEscala . "^" .
+        $sextaEscala . "^" .
+        $sabadoEscala;
     //     $lancamento . "^" .
     //     $status . "^" .
     //     $descricaoStatus . "^" .
