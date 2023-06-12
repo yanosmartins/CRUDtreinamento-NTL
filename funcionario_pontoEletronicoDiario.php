@@ -1617,7 +1617,7 @@ include("inc/scripts.php");
                 //Atributos do funcionário    
 
 
-               
+
 
 
 
@@ -1644,43 +1644,52 @@ include("inc/scripts.php");
                 var hhEntrada = Number(horaEntradaPartida[0]);
                 var mmEntrada = Number(horaEntradaPartida[1]);
                 var ssEntrada = Number(horaEntradaPartida[2]);
-                
-                if (hhEntrada >= hhTolerado){
-                    if (mmEntrada >= mmTolerado + 1){
+
+                if (hhEntrada >= hhTolerado) {
+                    if (mmEntrada >= mmTolerado) {
+
                         smartAlert("Erro", "O funcionário possui atraso", "erro");
 
                     }
                 }
-                
+
                 //CALCULO DE ATRASO
                 var hhAtraso = hhEntrada - hhEscala;
                 var mmAtraso = mmEntrada - mmEscala;
                 var ssAtraso = ssEntrada - ssEscala;
-                
-                if (ssAtraso > 60){
+
+                if (ssAtraso > 60) {
                     ssAtraso = ssAtraso - 60;
-                    mmAtraso +=1;
+                    mmAtraso += 1;
                 }
-                if (hhAtraso.toString().length == 1){
-                    hhAtraso = "0"+ hhAtraso;
+                if (mmAtraso > 60) {
+                    mmAtraso = mmAtraso - 60;
+                    hhAtraso += 1;
                 }
-                if (mmAtraso.toString().length == 1){
-                    mmAtraso = "0"+ mmAtraso;
+
+                if (hhAtraso.toString().length == 1) {
+                    hhAtraso = "0" + hhAtraso;
                 }
-                if (ssAtraso.toString().length == 1){
-                    ssAtraso = "0"+ ssAtraso;
+                if (mmAtraso.toString().length == 1) {
+                    mmAtraso = "0" + mmAtraso;
+                }
+                if (ssAtraso.toString().length == 1) {
+                    ssAtraso = "0" + ssAtraso;
                 }
 
                 atraso = hhAtraso + ":" + mmAtraso + ":" + ssAtraso;
 
+                // if (Number(hhAtraso) <= hhTolerancia && (Number(ssAtraso) <= ssTolerancia || Number(mmAtraso) <= mmTolerancia) ) {
+                //     atraso = "00:00:00";
+                // }
+
+                if (horaEntrada == "00:00:00") {
+                    atraso = "00:00:00";
+                }
 
 
 
-
-
-
-
-
+                
                 $("#codigo").val(codigo);
                 $("#idFolha").val(idFolha);
                 $("#horaEntrada").val(horaEntrada);
