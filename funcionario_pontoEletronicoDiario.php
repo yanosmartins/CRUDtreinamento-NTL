@@ -677,7 +677,7 @@ include("inc/scripts.php");
         resetaTempo();
 
 
-        // carregaPonto()
+        carregaPonto()
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
@@ -1615,29 +1615,72 @@ include("inc/scripts.php");
                 // folgaCobertura = piece[30];
 
                 //Atributos do funcionário    
-            
-                var horaPartida = horaEntrada.split(":");
-                    var hhEntrada = horaPartida[0];
-                    var mmEntrada = horaPartida[1];
-                    var ssEntrada = horaPartida[2];
+
+
+               
 
 
 
+                //HORA SETADA NA ESCALA
+                var horaEntradaEscalaPartida = horaEntradaEscala.split(":");
+                var hhEscala = Number(horaEntradaEscalaPartida[0]);
+                var mmEscala = Number(horaEntradaEscalaPartida[1]);
+                var ssEscala = Number(horaEntradaEscalaPartida[2]);
 
+                //MARGEM DE TOLERANCIA
+                var toleranciaPartida = toleranciaAtraso.split(":");
+                var hhTolerancia = Number(toleranciaPartida[0]);
+                var mmTolerancia = Number(toleranciaPartida[1]);
+                var ssTolerancia = Number(toleranciaPartida[2]);
 
+                //HORARIO TOLERADO (SOMA DA ESCALA COM A MARGEM DE TOLERANCIA)
+                var hhTolerado = Number(hhEscala) + Number(hhTolerancia);
+                var mmTolerado = Number(mmEscala) + Number(mmTolerancia);
+                var ssTolerado = Number(ssEscala) + Number(ssTolerancia);
+                var horarioTolerado = hhTolerado + ":" + mmTolerado + ":" + ssTolerado;
 
+                //HORARIO DE ENTRADA DO FUNCIONARIO
+                var horaEntradaPartida = horaEntrada.split(":");
+                var hhEntrada = Number(horaEntradaPartida[0]);
+                var mmEntrada = Number(horaEntradaPartida[1]);
+                var ssEntrada = Number(horaEntradaPartida[2]);
+                
+                if (hhEntrada >= hhTolerado){
+                    if (mmEntrada >= mmTolerado + 1){
+                        smartAlert("Erro", "O funcionário possui atraso", "erro");
 
-
-                if ()){
-                    atraso = horaEntrada - horaEntradaEscala;
+                    }
                 }
                 
+                //CALCULO DE ATRASO
+                var hhAtraso = hhEntrada - hhEscala;
+                var mmAtraso = mmEntrada - mmEscala;
+                var ssAtraso = ssEntrada - ssEscala;
+                
+                if (ssAtraso > 60){
+                    ssAtraso = ssAtraso - 60;
+                    mmAtraso +=1;
+                }
+                if (hhAtraso.toString().length == 1){
+                    hhAtraso = "0"+ hhAtraso;
+                }
+                if (mmAtraso.toString().length == 1){
+                    mmAtraso = "0"+ mmAtraso;
+                }
+                if (ssAtraso.toString().length == 1){
+                    ssAtraso = "0"+ ssAtraso;
+                }
+
+                atraso = hhAtraso + ":" + mmAtraso + ":" + ssAtraso;
 
 
-                
-                
-                
-                
+
+
+
+
+
+
+
                 $("#codigo").val(codigo);
                 $("#idFolha").val(idFolha);
                 $("#horaEntrada").val(horaEntrada);
