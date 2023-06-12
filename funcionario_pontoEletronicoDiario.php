@@ -1689,7 +1689,7 @@ include("inc/scripts.php");
 
 
 
-                
+
                 $("#codigo").val(codigo);
                 $("#idFolha").val(idFolha);
                 $("#horaEntrada").val(horaEntrada);
@@ -1698,6 +1698,7 @@ include("inc/scripts.php");
                 $("#horaSaida").val(horaSaida);
                 $("#horaExtra").val(horaExtra);
                 $("#atraso").val(atraso);
+                
                 // $("#lancamento").val(lancamento);
                 // $("#status").val(status);
                 // $("#registraAlmoco").val(registraAlmoco);
