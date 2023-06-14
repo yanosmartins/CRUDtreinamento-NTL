@@ -834,7 +834,7 @@ include("inc/scripts.php");
 
                     var entrada = parse($("#horaEntrada").val());
                     var saida = parse($("#horaSaida").val());
-                    var tolerancia = toleranciaAtraso || toleranciaDia;
+                    var tolerancia = $("#margemTolerancia").val();
                     toleranciaEntrada = inicioExpediente + parse(tolerancia);
                     toleranciaSaida = fimExpediente + parse(tolerancia);
                     if ((btnClicado == 'entrada') && (entrada > toleranciaEntrada)) {
