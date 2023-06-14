@@ -303,28 +303,25 @@ include("inc/nav.php");
                                                         </div>
                                                         <div class="col col-xs-12" style="margin-top: 15px;">
                                                             <div class="col col-xs-3">
-                                                            <label id="labelEntrada"></label>
+
                                                                 <button type="button" class="btn  btn-block btnEntrada" name="btnEntrada" id="btnEntrada" style="height: 100px; background-color:#05ad4f;" disabled>
-                                                                    <span class="fa fa-sign-in"></span><br>Entrada
-                                                                </button><br>
+                                                                    <span class="fa fa-sign-in"></span><br>Entrada<br><label id="labelEntrada"></label>
+                                                                </button>
                                                             </div>
                                                             <div class="col col-xs-3">
-                                                            <label id="labelInicioAlmoco"></label>
                                                                 <button type="button" class="btn  btn-block btnInicioAlmoco" id="btnInicioAlmoco" style=" background: #29c4e3; height:100px;" disabled>
-                                                                    <span class="fa fa-cutlery "></span><br> Inicio Intervalo
-                                                                </button><br>
+                                                                    <span class="fa fa-cutlery "></span><br> Inicio Intervalo<br><label id="labelInicioAlmoco"></label>
+                                                                </button>
                                                             </div>
                                                             <div class="col col-xs-3">
-                                                            <label id="labelFimAlmoco"></label>
                                                                 <button type="button" class="btn  btn-block btnFimAlmoco" id="btnFimAlmoco" style="background: #d9d216; height:100px; " disabled>
-                                                                    <span class="fa fa-cutlery"></span><br> Fim Intervalo
-                                                                </button><br>
+                                                                    <span class="fa fa-cutlery"></span><br> Fim Intervalo<br><label id="labelFimAlmoco"></label>
+                                                                </button>
                                                             </div>
                                                             <div class="col col-xs-3">
-                                                            <label id="labelSaida"></label>
                                                                 <button type="button" class="btn  btn-block btnSaida" id="btnSaida" style="height: 100px;  background-color:#c42121;" disabled>
-                                                                    <span class="fa fa-sign-out"></span><br>Saida
-                                                                </button><br>
+                                                                    <span class="fa fa-sign-out"></span><br>Saida<br><label id="labelSaida"></label>
+                                                                </button>
                                                             </div>
                                                         </div>
 
@@ -1652,9 +1649,9 @@ include("inc/scripts.php");
 
                 if (hhEntrada >= hhTolerado) {
                     if (mmEntrada >= mmTolerado) {
-
+                        if (ssEntrada > ssTolerado) {
                         smartAlert("Erro", "O funcionário possui atraso", "erro");
-
+                        }
                     }
                 }
 
@@ -1682,21 +1679,33 @@ include("inc/scripts.php");
                     ssAtraso = "0" + ssAtraso;
                 }
 
-                atraso = hhAtraso + ":" + mmAtraso + ":" + ssAtraso;
 
-                // if (Number(hhAtraso) <= hhTolerancia && (Number(ssAtraso) <= ssTolerancia || Number(mmAtraso) <= mmTolerancia) ) {
-                //     atraso = "00:00:00";
-                // }
 
-                if (horaEntrada == "00:00:00") {
+
+
+
+
+                if (hhEntrada >= hhTolerado && mmEntrada >= mmTolerado && ssEntrada > ssTolerado) {
+                    atraso = hhAtraso + ":" + mmAtraso + ":" + ssAtraso;
+                } else {
                     atraso = "00:00:00";
                 }
 
 
 
+
+
+
+                // if (Number(hhAtraso) <= hhTolerancia && (Number(ssAtraso) <= ssTolerancia || Number(mmAtraso) <= mmTolerancia) ) {
+                //     atraso = "00:00:00";
+                // }
+                if (horaEntrada == "00:00:00") {
+                    atraso = "00:00:00";
+                }
+
                 $(`#labelEntrada`).text(horaEntrada);
                 $(`#labelInicioAlmoco`).text(inicioAlmoco);
-                $(`#labelFimAlmoco`).text(fimAlmoco);         
+                $(`#labelFimAlmoco`).text(fimAlmoco);
                 $(`#labelSaida`).text(horaSaida);
                 $("#codigo").val(codigo);
                 $("#idFolha").val(idFolha);
@@ -1706,6 +1715,9 @@ include("inc/scripts.php");
                 $("#horaSaida").val(horaSaida);
                 $("#horaExtra").val(horaExtra);
                 $("#atraso").val(atraso);
+
+
+
 
                 // $("#lancamento").val(lancamento);
                 // $("#status").val(status);
@@ -1720,11 +1732,20 @@ include("inc/scripts.php");
                 // $("#inicioSegundaPausa").val(inicioSegundaPausa);
                 // $("#fimSegundaPausa").val(fimSegundaPausa);
 
+
+
+
+
                 habilitaBotões();
 
                 // if ((registraPonto == 0) || (ferias == 1) || (folga == 1 && folgaCobertura != 1) || (documento == 1)) {
                 //     desabilitaBotões();
                 // } else {
+
+
+
+
+
 
                 if (horaEntrada == "00:00:00") {
                     $("#btnSaida").prop('disabled', true);
@@ -1816,7 +1837,7 @@ include("inc/scripts.php");
                 validarIp(response.data['ip']);
             } else {
                 $('#ip').val(response.data['ip']);
-                carregaPonto();
+                // carregaPonto();
             }
 
         } catch (error) {
@@ -1824,7 +1845,7 @@ include("inc/scripts.php");
                 $("#ipInvalido").html("Não foi possivel verificar o IP!");
                 $("#modalIp").modal('show');
             } else {
-                carregaPonto();
+                // carregaPonto();
             }
 
         }
@@ -2453,6 +2474,4 @@ include("inc/scripts.php");
         mudaHoraClick(botao, horaBotao)
         return
     }
-
-
 </script>
