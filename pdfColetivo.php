@@ -132,15 +132,7 @@ $pdf->Line(5, 290, 205, 290); //horizontal 2
 // $pdf->Line(5, $i, 205, $i); //menor
 // $pdf->Line(5, $i, 205, $i); //menor
 
-
-
-
 $i = 15;
-
-
-
-
-
 
 
 foreach ($resultQuery as $row) {
@@ -154,13 +146,11 @@ foreach ($resultQuery as $row) {
         $i = 15;
     }
 
-
     $i = $i + 5;
     $contadorPrimeiro = 0;
     if ($contadorPrimeiro > 0) {
         $i = $i - 5;
     }
-
 
     $codigo = $row['codigo'];
     $nome = mb_strimwidth(trim($row['nome']), 0, 55, "...");

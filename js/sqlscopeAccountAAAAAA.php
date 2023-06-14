@@ -22,32 +22,21 @@ function validaSenha()
 
     if ($row = $result[0]) {
         $codigo = $row['codigo'];
-        if ($codigo) {
-            $sql = " SELECT restaurarSenha FROM ntl.usuario where codigo = $codigo";
-            $resultRestaura = $reposit->RunQuery($sql);
-            if ($rowRestaura = $resultRestaura[0]) {
-                $restauraSenha = $rowRestaura['restaurarSenha'];
-            }
-        }
         $funcionario = $row['funcionario'];
         $grupo = $row['grupo'];
         $nome = $row['nome'];
         $senhaBanco = $row['senha'];
-        $candidato = $row['candidato'];
-        $tipoUsuario = $row['tipoUsuario'];
         $reposit->FechaConexao();
         if ($funcionario) {
             $sql = " SELECT BP.codigo, BP.funcionario, BP.projeto
-            FROM Ntl.beneficioProjeto BP WHERE BP.funcionario = $funcionario AND BP.ativo = 1 AND BP.dataDemissaoFuncionario IS NULL";
+            FROM Ntl.beneficioProjeto BP WHERE BP.funcionario = $funcionario";
             $result = $reposit->RunQuery($sql);
 
             if ($row = $result[0]) {
                 $projeto = $row['projeto'];
             }
         }
-        $sqlSamu = "SELECT codigo FROM Ntl.projeto WHERE apelido = 'SAMU'";
-        $resultSamu = $reposit->RunQuery($sqlSamu);
-        $projetoSamu = $resultSamu[0]['codigo'];
+
 
         if ($senhaCript == $senhaBanco) {
             session_start();
@@ -56,12 +45,10 @@ function validaSenha()
             $_SESSION['funcionario'] = $funcionario;
             $_SESSION['projeto'] = $projeto;
             $_SESSION['grupo'] = $grupo;
-            $_SESSION['candidato'] = $candidato;
-            $_SESSION['tipoUsuario'] = $tipoUsuario;
 
             define("login", $login);
             session_write_close();
-            echo ('sucess#' . $nome . '#' . $login . '#' . $restauraSenha . '#' . $projetoSamu);
+            echo ('sucess#' . $nome . '#' . $login);
         } else {
             echo ('failed ') . $senha;
         }

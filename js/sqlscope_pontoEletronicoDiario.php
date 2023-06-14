@@ -765,7 +765,7 @@ function recupera()
     }
 
 
-    $sql = "SELECT E.codigo, E.descricao, E.horaEntrada, E.inicioIntervalo, E.fimIntervalo, E.horaSaida, E.expediente, E.intervalo, E.domingo, E.segunda, E.terca, E.quarta, E.quinta, E.sexta, E.sabado from dbo.escala E
+    $sql = "SELECT E.codigo, E.descricao, E.horaEntrada, E.inicioIntervalo, E.fimIntervalo, E.horaSaida, E.expediente, E.intervalo, E.domingo, E.segunda, E.terca, E.quarta, E.quinta, E.sexta, E.sabado, E.tolerancia from dbo.escala E
             LEFT JOIN dbo.funcionario F on F.codigo = $funcionario WHERE E.codigo = $escala";
 
     $reposit = new reposit();
@@ -783,6 +783,7 @@ function recupera()
         $quintaEscala = $row['quinta'];
         $sextaEscala = $row['sexta'];
         $sabadoEscala = $row['sabado'];
+        $toleranciaEscala = $row['tolerancia'];
     }
 
 
@@ -973,7 +974,8 @@ function recupera()
         $quartaEscala . "^" .
         $quintaEscala . "^" .
         $sextaEscala . "^" .
-        $sabadoEscala;
+        $sabadoEscala . "^" .
+        $toleranciaEscala;
     //     $lancamento . "^" .
     //     $status . "^" .
     //     $descricaoStatus . "^" .

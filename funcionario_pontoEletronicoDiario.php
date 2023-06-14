@@ -408,6 +408,14 @@ include("inc/nav.php");
                                                         <input id="inicioSegundaPausa" name="inicioSegundaPausa" type="text" class="hidden">
                                                         <input id="fimSegundaPausa" name="fimSegundaPausa" type="text" class="hidden">
 
+                                                        <input id="horaEntradaEscala" type="text" class="hidden">
+                                                        <input id="horaSaidaEscala" type="text" class="hidden">
+                                                        <input id="margemTolerancia" type="text" class="hidden">
+                                                        <input id="IntervaloEscala" type="text" class="hidden">
+                                                        <input id="atrasoAlmoco" type="text" class="hidden">
+
+
+
                                                         <input id="feriado" name="feriado" type="text" class="hidden">
 
                                                         <div class="row hidden">
@@ -663,7 +671,8 @@ include("inc/scripts.php");
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script language="JavaScript" type="text/javascript">
-    var toleranciaExtra = "";
+    var tolerancia = $("#margemTolerancia").val();
+    var toleranciaExtra = "00:10:00";
     var toleranciaAtraso = "00:10:00";
     var toleranciaDia = "";
     var btnClicado = "";
@@ -672,6 +681,7 @@ include("inc/scripts.php");
     var modalHoraExtra = "";
     var verificaIp = "";
     var autorizacaoExtra = '';
+
 
     var arrDiasAlterados = [];
     $(document).ready(function() {
@@ -1059,9 +1069,201 @@ include("inc/scripts.php");
         var horaEntrada = $("#horaEntrada").val();
         var inicioAlmoco = $("#inicioAlmoco").val();
         var fimAlmoco = $("#fimAlmoco").val();
+        var tolerancia = $("#margemTolerancia").val();
+        var intervalo = $("#IntervaloEscala").val();
         var horaSaida = $("#horaSaida").val();
-        var horaExtra = $("#horaExtra").val();
-        var atraso = $("#atraso").val();
+
+
+
+        //HORA ENTRADA SETADA NA ESCALA
+        var horaEntradaEscala = $("#horaEntradaEscala").val();
+        var horaEntradaEscalaPartida = horaEntradaEscala.split(":");
+        var hhEntradaEscala = Number(horaEntradaEscalaPartida[0]);
+        var mmEntradaEscala = Number(horaEntradaEscalaPartida[1]);
+        var ssEntradaEscala = Number(horaEntradaEscalaPartida[2]);
+
+        //MARGEM DE TOLERANCIA
+        var toleranciaPartida = tolerancia.split(":");
+        var hhTolerancia = Number(toleranciaPartida[0]);
+        var mmTolerancia = Number(toleranciaPartida[1]);
+        var ssTolerancia = Number(toleranciaPartida[2]);
+
+        //HORARIO TOLERADO ENTRADA (SOMA DA ESCALA COM A MARGEM DE TOLERANCIA)
+        var hhEntradaTolerado = Number(hhEntradaEscala) + Number(hhTolerancia);
+        var mmEntradaTolerado = Number(mmEntradaEscala) + Number(mmTolerancia);
+        var ssEntradaTolerado = Number(ssEntradaEscala) + Number(ssTolerancia);
+        var horarioEntradaTolerado = hhEntradaTolerado + ":" + mmEntradaTolerado + ":" + ssEntradaTolerado;
+
+        //HORARIO DE ENTRADA DO FUNCIONARIO DIVIDIDO
+        var horaEntradaPartida = horaEntrada.split(":");
+        var hhEntrada = Number(horaEntradaPartida[0]);
+        var mmEntrada = Number(horaEntradaPartida[1]);
+        var ssEntrada = Number(horaEntradaPartida[2]);
+
+
+
+        //CALCULO DE ATRASO
+        var hhAtraso = hhEntrada - hhEntradaEscala;
+        var mmAtraso = mmEntrada - mmEntradaEscala;
+        var ssAtraso = ssEntrada - ssEntradaEscala;
+
+        if (ssAtraso > 60) {
+            ssAtraso = ssAtraso - 60;
+            mmAtraso += 1;
+        }
+        if (mmAtraso > 60) {
+            mmAtraso = mmAtraso - 60;
+            hhAtraso += 1;
+        }
+        //formatacão das horas
+        if (hhAtraso.toString().length == 1) {
+            hhAtraso = "0" + hhAtraso;
+        }
+        if (mmAtraso.toString().length == 1) {
+            mmAtraso = "0" + mmAtraso;
+        }
+        if (ssAtraso.toString().length == 1) {
+            ssAtraso = "0" + ssAtraso;
+        }
+        //validacao da tolerancia
+        if (hhEntrada >= hhEntradaTolerado && mmEntrada >= mmEntradaTolerado && ssEntrada > ssEntradaTolerado) {
+            atraso = hhAtraso + ":" + mmAtraso + ":" + ssAtraso;
+        } else {
+            atraso = "00:00:00";
+        }
+
+        if (horaEntrada == "00:00:00") {
+            atraso = "00:00:00";
+        }
+
+
+        //==========================================================================================================
+
+
+        //INTERVALO
+        var intervaloPartido = intervalo.split(":");
+        var hhIntervalo = Number(intervaloPartido[0]);
+        var mmIntervalo = Number(intervaloPartido[1]);
+        var ssIntervalo = Number(intervaloPartido[2]);
+
+        //HORARIO DO INICIO DO INTERVALO DO FUNCIONARIO DIVIDIDO
+        var inicioAlmocoPartido = inicioAlmoco.split(":");
+        var hhInicioAlmoco = Number(inicioAlmocoPartido[0]);
+        var mmInicioAlmoco = Number(inicioAlmocoPartido[1]);
+        var ssInicioAlmoco = Number(inicioAlmocoPartido[2]);
+
+        //HORARIO TOLERADO DE INTERVALO (INICIO DO INTERVALO+ TEMPO DE INTERVALO NA ESCALA)
+        var hhAlmocoTolerado = Number(hhInicioAlmoco) + Number(hhIntervalo);
+        var mmAlmocoTolerado = Number(mmInicioAlmoco) + Number(mmIntervalo);
+        var ssAlmocoTolerado = Number(ssInicioAlmoco) + Number(ssIntervalo);
+
+        //HORARIO DO FIM DO INTERVALO DO FUNCIONARIO DIVIDIDO
+        var fimAlmocoPartido = fimAlmoco.split(":");
+        var hhFimAlmoco = Number(fimAlmocoPartido[0]);
+        var mmFimAlmoco = Number(fimAlmocoPartido[1]);
+        var ssFimAlmoco = Number(fimAlmocoPartido[2]);
+
+
+        //ATRASO DE INTERVALO
+        var hhAtrasoIntervalo = hhFimAlmoco - hhAlmocoTolerado;
+        var mmAtrasoIntervalo = mmFimAlmoco - mmAlmocoTolerado;
+        var ssAtrasoIntervalo = ssFimAlmoco - ssAlmocoTolerado;
+
+        if (ssAtrasoIntervalo > 60) {
+            ssAtrasoIntervalo = ssAtrasoIntervalo - 60;
+            mmAtrasoIntervalo += 1;
+        }
+        if (mmAtrasoIntervalo > 60) {
+            mmAtrasoIntervalo = mmAtrasoIntervalo - 60;
+            hhAtrasoIntervalo += 1;
+        }
+        //formatacão das horas
+        if (hhAtrasoIntervalo.toString().length == 1) {
+            hhAtrasoIntervalo = "0" + hhAtrasoIntervalo;
+        }
+        if (mmAtrasoIntervalo.toString().length == 1) {
+            mmAtrasoIntervalo = "0" + mmAtrasoIntervalo;
+        }
+        if (ssAtrasoIntervalo.toString().length == 1) {
+            ssAtrasoIntervalo = "0" + ssAtrasoIntervalo;
+        }
+
+        //validacao da tolerancia
+        if (hhFimAlmoco >= hhAlmocoTolerado && mmFimAlmoco >= mmAlmocoTolerado && ssFimAlmoco > ssAlmocoTolerado) {
+            atrasoAlmoco = hhAtrasoIntervalo + ":" + mmAtrasoIntervalo + ":" + ssAtrasoIntervalo;
+        } else {
+            atrasoAlmoco = "00:00:00";
+        }
+
+        $("#atrasoAlmoco").val(atrasoAlmoco);
+        //======================================================================================================================
+
+        //HORA SAIDA SETADA NA ESCALA
+        var horaSaidaEscala = $("#horaSaidaEscala").val();
+
+        var horaSaidaEscalaPartida = horaSaidaEscala.split(":");
+        var hhSaidaEscala = Number(horaSaidaEscalaPartida[0]);
+        var mmSaidaEscala = Number(horaSaidaEscalaPartida[1]);
+        var ssSaidaEscala = Number(horaSaidaEscalaPartida[2]);
+
+        //MARGEM DE TOLERANCIA
+        var toleranciaPartida = tolerancia.split(":");
+        var hhTolerancia = Number(toleranciaPartida[0]);
+        var mmTolerancia = Number(toleranciaPartida[1]);
+        var ssTolerancia = Number(toleranciaPartida[2]);
+
+        //HORARIO TOLERADO SAIDA (SOMA DA ESCALA COM A MARGEM DE TOLERANCIA)
+        var hhSaidaTolerado = Number(hhSaidaEscala) + Number(hhTolerancia);
+        var mmSaidaTolerado = Number(mmSaidaEscala) + Number(mmTolerancia);
+        var ssSaidaTolerado = Number(ssSaidaEscala) + Number(ssTolerancia);
+        var horarioSaidaTolerado = hhSaidaTolerado + ":" + mmSaidaTolerado + ":" + ssSaidaTolerado;
+
+        //HORARIO DE SAIDA DO FUNCIONARIO DIVIDIDO
+        var horaSaidaPartida = horaSaida.split(":");
+        var hhSaida = Number(horaSaidaPartida[0]);
+        var mmSaida = Number(horaSaidaPartida[1]);
+        var ssSaida = Number(horaSaidaPartida[2]);
+
+
+        //ALERTA DE SAIDA EXTRA
+        if (hhSaida >= hhSaidaTolerado) {
+            if (mmSaida >= mmSaidaTolerado) {
+                if (ssSaida > ssSaidaTolerado) {
+                    smartAlert("Erro", "O funcionário possui horas extras", "erro");
+                }
+            }
+        }
+
+
+        //CALCULO DE EXTRA
+        var hhExtra = hhSaida - hhSaidaEscala;
+        var mmExtra = mmSaida - mmSaidaEscala;
+        var ssExtra = ssSaida - ssSaidaEscala;
+
+        if (ssExtra > 60) {
+            ssExtra = ssExtra - 60;
+            mmExtra += 1;
+        }
+        if (mmExtra > 60) {
+            mmExtra = mmExtra - 60;
+            hhExtra += 1;
+        }
+        //formatacão das horas
+        if (hhExtra.toString().length == 1) {
+            hhExtra = "0" + hhExtra;
+        }
+        if (mmExtra.toString().length == 1) {
+            mmExtra = "0" + mmExtra;
+        }
+        if (ssExtra.toString().length == 1) {
+            ssExtra = "0" + ssExtra;
+        }
+        //validacao da tolerancia
+        if (hhSaida >= hhSaidaTolerado && mmSaida >= mmSaidaTolerado && ssSaida > ssSaidaTolerado) {
+            horaExtra = hhExtra + ":" + mmExtra + ":" + ssExtra;
+        } else {
+            horaExtra = "00:00:00";
+        }
 
         gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso,
             function(data) {
@@ -1598,6 +1800,8 @@ include("inc/scripts.php");
                 var quintaEscala = piece[18];
                 var sextaEscala = piece[19];
                 var sabadoEscala = piece[20];
+                var toleranciaEscala = piece[21];
+
 
 
                 // if (registraPausa == 1) {
@@ -1623,60 +1827,11 @@ include("inc/scripts.php");
 
 
 
-                //HORA SETADA NA ESCALA
-                var horaEntradaEscalaPartida = horaEntradaEscala.split(":");
-                var hhEscala = Number(horaEntradaEscalaPartida[0]);
-                var mmEscala = Number(horaEntradaEscalaPartida[1]);
-                var ssEscala = Number(horaEntradaEscalaPartida[2]);
-
-                //MARGEM DE TOLERANCIA
-                var toleranciaPartida = toleranciaAtraso.split(":");
-                var hhTolerancia = Number(toleranciaPartida[0]);
-                var mmTolerancia = Number(toleranciaPartida[1]);
-                var ssTolerancia = Number(toleranciaPartida[2]);
-
-                //HORARIO TOLERADO (SOMA DA ESCALA COM A MARGEM DE TOLERANCIA)
-                var hhTolerado = Number(hhEscala) + Number(hhTolerancia);
-                var mmTolerado = Number(mmEscala) + Number(mmTolerancia);
-                var ssTolerado = Number(ssEscala) + Number(ssTolerancia);
-                var horarioTolerado = hhTolerado + ":" + mmTolerado + ":" + ssTolerado;
-
-                //HORARIO DE ENTRADA DO FUNCIONARIO
-                var horaEntradaPartida = horaEntrada.split(":");
-                var hhEntrada = Number(horaEntradaPartida[0]);
-                var mmEntrada = Number(horaEntradaPartida[1]);
-                var ssEntrada = Number(horaEntradaPartida[2]);
-
-                if (hhEntrada >= hhTolerado) {
-                    if (mmEntrada >= mmTolerado) {
-                        if (ssEntrada > ssTolerado) {
-                        smartAlert("Erro", "O funcionário possui atraso", "erro");
-                        }
-                    }
+                if (atraso != "00:00:00") {
+                    smartAlert("Atenção", "O funcionário possui atraso", "error");
                 }
-
-                //CALCULO DE ATRASO
-                var hhAtraso = hhEntrada - hhEscala;
-                var mmAtraso = mmEntrada - mmEscala;
-                var ssAtraso = ssEntrada - ssEscala;
-
-                if (ssAtraso > 60) {
-                    ssAtraso = ssAtraso - 60;
-                    mmAtraso += 1;
-                }
-                if (mmAtraso > 60) {
-                    mmAtraso = mmAtraso - 60;
-                    hhAtraso += 1;
-                }
-
-                if (hhAtraso.toString().length == 1) {
-                    hhAtraso = "0" + hhAtraso;
-                }
-                if (mmAtraso.toString().length == 1) {
-                    mmAtraso = "0" + mmAtraso;
-                }
-                if (ssAtraso.toString().length == 1) {
-                    ssAtraso = "0" + ssAtraso;
+                if (horaExtra != "00:00:00") {
+                    smartAlert("Atenção", "O funcionário possui horas extras", "erro");
                 }
 
 
@@ -1685,23 +1840,6 @@ include("inc/scripts.php");
 
 
 
-                if (hhEntrada >= hhTolerado && mmEntrada >= mmTolerado && ssEntrada > ssTolerado) {
-                    atraso = hhAtraso + ":" + mmAtraso + ":" + ssAtraso;
-                } else {
-                    atraso = "00:00:00";
-                }
-
-
-
-
-
-
-                // if (Number(hhAtraso) <= hhTolerancia && (Number(ssAtraso) <= ssTolerancia || Number(mmAtraso) <= mmTolerancia) ) {
-                //     atraso = "00:00:00";
-                // }
-                if (horaEntrada == "00:00:00") {
-                    atraso = "00:00:00";
-                }
 
                 $(`#labelEntrada`).text(horaEntrada);
                 $(`#labelInicioAlmoco`).text(inicioAlmoco);
@@ -1713,8 +1851,14 @@ include("inc/scripts.php");
                 $("#inicioAlmoco").val(inicioAlmoco);
                 $("#fimAlmoco").val(fimAlmoco);
                 $("#horaSaida").val(horaSaida);
-                $("#horaExtra").val(horaExtra);
                 $("#atraso").val(atraso);
+                $("#horaExtra").val(horaExtra);
+                $("#margemTolerancia").val(toleranciaEscala);
+                $(`#horaEntradaEscala`).val(horaEntradaEscala);
+                $(`#horaSaidaEscala`).val(horaSaidaEscala);
+                $(`#IntervaloEscala`).val(intervaloEscala);
+
+
 
 
 
@@ -1926,7 +2070,7 @@ include("inc/scripts.php");
                 $('#dlgSimplePonto').dialog('open');
 
                 if (horaRetorno) {
-                    $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
+                    // $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
                 }
             } else {
                 data = data.replace(/failed/g, '');
@@ -2183,28 +2327,28 @@ include("inc/scripts.php");
                     return;
                 }
 
-                // if (verificaIp == 1) {
-                //     var ip = $("#ip").val();
+                if (verificaIp == 1) {
+                    var ip = $("#ip").val();
 
-                //     if (ip) {
-                //         validarIp();
-                //     } else {
-                //         campo = '#' + campo;
-                //         $(campo).val("");
-                //         smartAlert("Atenção", "Não foi possivel verificar o IP!", "error");
-                //         return;
-                //     }
-                // } else {
-                if (tipoEscala == 1) {
-                    verificarFeriado();
+                    if (ip) {
+                        validarIp();
+                    } else {
+                        campo = '#' + campo;
+                        $(campo).val("");
+                        smartAlert("Atenção", "Não foi possivel verificar o IP!", "error");
+                        return;
+                    }
                 } else {
-                    $('#dlgSimplePonto').dialog('open');
+                    if (tipoEscala == 1) {
+                        verificarFeriado();
+                    } else {
+                        $('#dlgSimplePonto').dialog('open');
 
-                    if (horaRetorno) {
-                        $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
+                        if (horaRetorno) {
+                            $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
+                        }
                     }
                 }
-                // }
             }
         });
     }
