@@ -672,8 +672,8 @@ include("inc/scripts.php");
 
 <script language="JavaScript" type="text/javascript">
     var tolerancia = $("#margemTolerancia").val();
-    var toleranciaExtra = "00:10:00";
-    var toleranciaAtraso = "00:10:00";
+    // var toleranciaExtra = "00:10:00";
+    // var toleranciaAtraso = "00:10:00";
     var toleranciaDia = "";
     var btnClicado = "";
     var horaRetorno = "";
