@@ -128,14 +128,15 @@ include("inc/nav.php");
                                                                     <h4>Funcionário: <span id="#"><?php
                                                                                                     $reposit = new reposit();
                                                                                                     $url = explode("=", $_SERVER["REQUEST_URI"]); ////essas linhas fazem a leitura do codigo "id" na url
-                                                                                                    $codigo = explode("=", (int)$url[1]);
+                                                                                                    $codigo = ($url[1]);
                                                                                                     $codigo = (int)$codigo;
-                                                                                                    $sql = "SELECT codigo, nome FROM dbo.funcionario WHERE codigo = $codigo";
+                                                                                                    $sql = "SELECT codigo, nome, escala FROM dbo.funcionario WHERE codigo = $codigo";
                                                                                                     $result = $reposit->RunQuery($sql);
                                                                                                     ?></span>
                                                                         <?php
                                                                         if ($row = $result[0]) {
                                                                             $nome = $row['nome'];
+                                                                            $escala = $row['escala'];
                                                                             // echo '<option id="funcionario" name="funcionario" value= ' . $codigo . ' selected>' . $nome . '</option>';
                                                                             $nome = mb_strtoupper($nome);
                                                                             echo "<input type='hidden' name='funcionario' id='funcionario' value='$codigo'";
@@ -145,42 +146,63 @@ include("inc/nav.php");
                                                                         ?>
                                                                     </h4>
                                                                 </div>
-                                                                <!-- <div class="row" style="display: inline-flex;">
+                                                                <div class="row" style="display: inline-flex;">
                                                                     <div class="col col-2" style="width:150px;">
                                                                         <h4>Expediente: <span id="#">
                                                                                 <?php
                                                                                 $hoje = getdate();
                                                                                 $diaSemana = $hoje["wday"];
+
+                                                                                $diaSemanaExtenso = $hoje["wday"];
+                                                                                $valor_de_retorno = match ($diaSemanaExtenso) {
+                                                                                    1 => 'segunda',
+                                                                                    2 => 'terca',
+                                                                                    3 => 'quarta',
+                                                                                    4 => 'quinta',
+                                                                                    5 => 'sexta',
+                                                                                    6 => 'sabado',
+                                                                                    7 => 'domingo',
+                                                                                };
+
+                                                                                $diaSemanaExtenso = $valor_de_retorno;
+
                                                                                 $reposit = new reposit();
-                                                                                $sqlExpediente = "SELECT codigo, funcionario,horaEntrada,horaSaida,horaEntradaSabado,horaSaidaSabado,horaEntradaDomingo,horaSaidaDomingo,tipoEscala, escalaDia
-                                                                                                    FROM Ntl.beneficioProjeto where ativo = 1 AND funcionario = " . $_SESSION['funcionario'];
+                                                                                $sqlExpediente = "SELECT horaEntrada, inicioIntervalo, fimIntervalo, horaSaida, $diaSemanaExtenso FROM dbo.escala where codigo = $escala"; //  AND funcionario = " . $_SESSION['funcionario'];
                                                                                 $resultExpediente = $reposit->RunQuery($sqlExpediente);
-                                                                                foreach ($resultExpediente as $row) {
-                                                                                    $codigo = (int) $row['codigo'];
-                                                                                    $horaEntrada = $row['horaEntrada'];
-                                                                                    $horaSaida = $row['horaSaida'];
-                                                                                    $tipoEscala = $row['tipoEscala'];
-                                                                                    $escalaDia = $row['escalaDia'];
-                                                                                    if ($tipoEscala == 1) {
-                                                                                        if ($escalaDia == 2) {
-                                                                                            if ($diaSemana == 6) {
-                                                                                                $horaEntrada = $row['horaEntradaSabado'];
-                                                                                                $horaSaida = $row['horaSaidaSabado'];
-                                                                                            }
-                                                                                        } else if ($escalaDia == 3) {
-                                                                                            if ($diaSemana == 6) {
-                                                                                                $horaEntrada = $row['horaEntradaSabado'];
-                                                                                                $horaSaida = $row['horaSaidaSabado'];
-                                                                                            }
-                                                                                            if ($diaSemana == 0) {
-                                                                                                $horaEntrada = $row['horaEntradaDomingo'];
-                                                                                                $horaSaida = $row['horaSaidaDomingo'];
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    $funcionario = $row['funcionario'];
-                                                                                    $expediente = true;
-                                                                                }
+                                                                                
+                                                                                // foreach ($resultExpediente as $row) {
+                                                                                // $diaSemanaValor = $row[$diaSemanaExtenso];
+                                                                                // }
+                                                                                // $diaSemanaValor =0;
+                                                                                // if ($diaSemanaValor == 1) {
+                                                                                    foreach ($resultExpediente as $row) {
+
+
+
+
+                                                                                        $codigo = (int) $row['codigo'];
+                                                                                        $horaEntrada = $row['horaEntrada'];
+                                                                                        $horaSaida = $row['horaSaida'];
+                                                                                        $inicioIntervalo = $row['inicioIntervalo'];
+                                                                                        $fimIntervalo = $row['fimIntervalo'];
+
+                                                                                        // Example 1
+                                                                                        $horaEntradaPartida = explode(":", $horaEntrada);
+                                                                                        $horaEntrada = $horaEntradaPartida[0] . ":" .  $horaEntradaPartida[1];
+                                                                                        // Example 1
+                                                                                        $horaSaidaPartida = explode(":", $horaSaida);
+                                                                                        $horaSaida = $horaSaidaPartida[0] . ":" .  $horaSaidaPartida[1];
+                                                                                        // Example 1
+                                                                                        $inicioIntervaloPartido = explode(":", $inicioIntervalo);
+                                                                                        $inicioIntervalo = $inicioIntervaloPartido[0] . ":" .  $inicioIntervaloPartido[1];
+                                                                                        // Example 1
+                                                                                        $fimIntervaloPartido = explode(":", $fimIntervalo);
+                                                                                        $fimIntervalo = $fimIntervaloPartido[0] . ":" .  $fimIntervaloPartido[1];
+                                                                                    }                                                                                    
+                                                                                // }
+                                                                                // else{ 
+                                                                                //     echo 'avisaFolga()';
+                                                                                // }
                                                                                 ?>
                                                                             </span>
                                                                             <?php
@@ -192,49 +214,16 @@ include("inc/nav.php");
                                                                     </div>
                                                                     <div class="col col-2" style="width:150px;">
                                                                         <h4>Intervalo: <span id="#">
-                                                                                <?php
-                                                                                // $hoje = getdate();
-                                                                                // $diaSemana = $hoje["wday"];
 
-                                                                                // $reposit = new reposit();
-                                                                                // $sqlIntervalo = "SELECT funcionario, horaInicio, horafim, horaInicioSabado, horaFimSabado, horaInicioDomingo, horaFimDomingo,tipoEscala, escalaDia
-                                                                                //                     FROM ntl.beneficioProjeto WHERE ativo = 1 AND funcionario = " . $_SESSION['funcionario'];
-                                                                                // $resultIntervalo = $reposit->RunQuery($sqlIntervalo);
-                                                                                // foreach ($resultIntervalo as $row) {
-                                                                                //     $codigo = (int) $row['codigo'];
-                                                                                //     $horaInicio = $row['horaInicio'];
-                                                                                //     $horafim = $row['horafim'];
-                                                                                //     $tipoEscala = $row['tipoEscala'];
-                                                                                //     $escalaDia = $row['escalaDia'];
-                                                                                //     if ($tipoEscala == 1) {
-                                                                                //         if ($escalaDia == 2) {
-                                                                                //             if ($diaSemana == 6) {
-                                                                                //                 $horaInicio = $row['horaInicioSabado'];
-                                                                                //                 $horafim = $row['horaFimSabado'];
-                                                                                //             }
-                                                                                //         } else if ($escalaDia == 3) {
-                                                                                //             if ($diaSemana == 6) {
-                                                                                //                 $horaInicio = $row['horaInicioSabado'];
-                                                                                //                 $horafim = $row['horaFimSabado'];
-                                                                                //             }
-                                                                                //             if ($diaSemana == 0) {
-                                                                                //                 $horaInicio = $row['horaInicioDomingo'];
-                                                                                //                 $horafim = $row['horaFimDomingo'];
-                                                                                //             }
-                                                                                //         }
-                                                                                //     }
-                                                                                //     $funcionario = $row['funcionario'];
-                                                                                // }
-                                                                                ?>
                                                                             </span>
                                                                             <?php
-                                                                            // if ($funcionario == $_SESSION['funcionario']) {
-                                                                            //     echo "<p id='intervalo' name='intervalo' data-funcionario='$funcionario' value='$codigo'>$horaInicio-$horafim</p>";
-                                                                            // }
+                                                                            if ($funcionario == $_SESSION['funcionario']) {
+                                                                                echo "<p id='intervalo' name='intervalo' data-funcionario='$funcionario' value='$codigo'>$inicioIntervalo-$fimIntervalo</p>";
+                                                                            }
                                                                             ?>
                                                                         </h4>
                                                                     </div>
-                                                                </div> -->
+                                                                </div>
                                                                 <h4 id="horarioPausa" class="hidden">Horários Previstos para Pausa: <span id="#">
                                                                         <?php
                                                                         $reposit = new reposit();
@@ -248,7 +237,6 @@ include("inc/nav.php");
                                                                             $fimPrimeiraPausa = $row['fimPrimeiraPausa'];
                                                                             $inicioSegundaPausa = $row['inicioSegundaPausa'];
                                                                             $fimSegundaPausa = $row['fimSegundaPausa'];
-
                                                                             $funcionario = $row['funcionario'];
                                                                         }
 
@@ -1828,10 +1816,17 @@ include("inc/scripts.php");
 
 
                 if (atraso != "00:00:00") {
-                    smartAlert("Atenção", "O funcionário possui atraso", "error");
+                    // smartAlert("Atenção", "O funcionário possui atraso", "error")
+                    $("#labelEntrada").css('font-weight', 'bold').css('color', 'red');
+                    // $("#labelEntrada").css('color', 'red');
+
+
+                    
+
                 }
                 if (horaExtra != "00:00:00") {
                     smartAlert("Atenção", "O funcionário possui horas extras", "erro");
+                    $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan    ');
                 }
 
 
@@ -2529,6 +2524,10 @@ include("inc/scripts.php");
                 console.log(xhr, er);
             }
         });
+    }
+    function avisaFolga() {
+        smartAlert("Atenção", "Dia de Folga!", "error");
+        return;
     }
 
     function converteHora(segundos) {
