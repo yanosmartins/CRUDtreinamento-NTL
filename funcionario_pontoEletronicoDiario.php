@@ -170,16 +170,13 @@ include("inc/nav.php");
                                                                                 $sqlExpediente = "SELECT horaEntrada, inicioIntervalo, fimIntervalo, horaSaida, $diaSemanaExtenso FROM dbo.escala where codigo = $escala"; //  AND funcionario = " . $_SESSION['funcionario'];
                                                                                 $resultExpediente = $reposit->RunQuery($sqlExpediente);
                                                                                 
-                                                                                // foreach ($resultExpediente as $row) {
-                                                                                // $diaSemanaValor = $row[$diaSemanaExtenso];
-                                                                                // }
-                                                                                // $diaSemanaValor =0;
-                                                                                // if ($diaSemanaValor == 1) {
+                                                                                foreach ($resultExpediente as $row) {
+                                                                                $diaSemanaValor = $row[$diaSemanaExtenso];
+                                                                                }
+                                                                                
+                                                                                if ($diaSemanaValor == 1) {
+                                                                                    $avisoFolga = '0';
                                                                                     foreach ($resultExpediente as $row) {
-
-
-
-
                                                                                         $codigo = (int) $row['codigo'];
                                                                                         $horaEntrada = $row['horaEntrada'];
                                                                                         $horaSaida = $row['horaSaida'];
@@ -199,10 +196,10 @@ include("inc/nav.php");
                                                                                         $fimIntervaloPartido = explode(":", $fimIntervalo);
                                                                                         $fimIntervalo = $fimIntervaloPartido[0] . ":" .  $fimIntervaloPartido[1];
                                                                                     }                                                                                    
-                                                                                // }
-                                                                                // else{ 
-                                                                                //     echo 'avisaFolga()';
-                                                                                // }
+                                                                                }
+                                                                                else{ 
+                                                                                   $avisoFolga='1';
+                                                                                }
                                                                                 ?>
                                                                             </span>
                                                                             <?php
@@ -401,6 +398,8 @@ include("inc/nav.php");
                                                         <input id="margemTolerancia" type="text" class="hidden">
                                                         <input id="IntervaloEscala" type="text" class="hidden">
                                                         <input id="atrasoAlmoco" type="text" class="hidden">
+                                                        <input id="obeservacaoAtraso" type="text" class="hidden">
+                                                        <input id="obeservacaoExtra" type="text" class="hidden">
 
 
 
@@ -773,6 +772,12 @@ include("inc/scripts.php");
             resetaTempo();
             imprimir();
         });
+
+        var avisaFolga = <?php echo $avisoFolga?>
+
+        if(avisaFolga == 1){
+            avisoDaFolga()
+        }
 
         $('#dlgSimpleFeriado').dialog({
             autoOpen: false,
@@ -1255,9 +1260,10 @@ include("inc/scripts.php");
 
 
 
-        var observacao = $("#observacao").val();
+        var observacaoAtraso = $("#justificativaAtraso").val();
+        var observacaoExtra = $("#observacaoExtra").val();
 
-        gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacao,
+        gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -2525,7 +2531,7 @@ include("inc/scripts.php");
             }
         });
     }
-    function avisaFolga() {
+    function avisoDaFolga() {
         smartAlert("Atenção", "Dia de Folga!", "error");
         return;
     }

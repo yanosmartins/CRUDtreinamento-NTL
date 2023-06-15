@@ -69,7 +69,9 @@ function gravar()
     $horaSaida = (string)$_POST['horaSaida'];
     $horaExtra = (string)$_POST['horaExtra'];
     $atraso = (string)$_POST['atraso'];
-    $observacao = (string)$_POST['observacao'];
+    $observacaoAtraso = (string)$_POST['observacaoAtraso'];
+    $observacaoExtra = (string)$_POST['observacaoExtra'];
+
 
 
     $sql = "folhaPontoMensalDetalheDiario_Atualiza
@@ -82,7 +84,8 @@ function gravar()
         '$horaSaida',
         '$horaExtra',
         '$atraso', 
-        '$observacao'
+        '$observacaoAtraso',
+        '$observacaoExtra'
         ";
 
     $reposit = new reposit();
