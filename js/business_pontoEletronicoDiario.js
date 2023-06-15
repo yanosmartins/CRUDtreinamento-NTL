@@ -1,4 +1,4 @@
-function gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, callback) {
+function gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, lancamento, callback) {
     $.ajax({
         url: 'js/sqlscope_pontoEletronicoDiario.php',
         dataType: 'html', //tipo do retorno
@@ -15,8 +15,9 @@ function gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco,
             horaSaida: horaSaida,
             horaExtra: horaExtra,
             atraso: atraso,
-            observacaoAtraso:observacaoAtraso,
-            observacaoExtra:observacaoExtra
+            justificativaAtraso: justificativaAtraso,
+            justificativaExtra: justificativaExtra,
+            lancamento: lancamento,
         },
 
         success: function (data) {

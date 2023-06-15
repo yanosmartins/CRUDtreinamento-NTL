@@ -69,8 +69,10 @@ function gravar()
     $horaSaida = (string)$_POST['horaSaida'];
     $horaExtra = (string)$_POST['horaExtra'];
     $atraso = (string)$_POST['atraso'];
-    $observacaoAtraso = (string)$_POST['observacaoAtraso'];
-    $observacaoExtra = (string)$_POST['observacaoExtra'];
+    $justificativaAtraso = (string)$_POST['justificativaAtraso'];
+    $justificativaExtra = (string)$_POST['justificativaExtra'];
+    $lancamento = (string)$_POST['lancamento'];
+    
 
 
 
@@ -84,8 +86,9 @@ function gravar()
         '$horaSaida',
         '$horaExtra',
         '$atraso', 
-        '$observacaoAtraso',
-        '$observacaoExtra'
+        '$justificativaAtraso',
+        '$justificativaExtra',
+        '$lancamento'
         ";
 
     $reposit = new reposit();
@@ -737,7 +740,7 @@ function recupera()
         $idFolha = (int)$row['codigo'];
     }
 
-    $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
+    $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
     // $sql = "SELECT FPM.codigo, FPM.status, FD.dia, FD.folhaPontoMensal,FD.codigo AS codigoDetalhe,FD.horaEntrada,FD.horaSaida,FD.inicioAlmoco,
@@ -758,6 +761,8 @@ function recupera()
         $horaSaida = $row['horaSaida'];
         $horaExtra = $row['horaExtra'];
         $atraso = $row['atraso'];
+        $observacaoAtraso = $row['observacaoAtraso'];
+        $observacaoExtra = $row['obser$observacaoExtra'];
     }
 
 
@@ -980,7 +985,9 @@ function recupera()
         $quintaEscala . "^" .
         $sextaEscala . "^" .
         $sabadoEscala . "^" .
-        $toleranciaEscala;
+        $toleranciaEscala . "^" .
+        $observacaoAtraso . "^" .
+        $observacaoExtra;
     //     $lancamento . "^" .
     //     $status . "^" .
     //     $descricaoStatus . "^" .

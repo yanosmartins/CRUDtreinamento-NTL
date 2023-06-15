@@ -169,11 +169,11 @@ include("inc/nav.php");
                                                                                 $reposit = new reposit();
                                                                                 $sqlExpediente = "SELECT horaEntrada, inicioIntervalo, fimIntervalo, horaSaida, $diaSemanaExtenso FROM dbo.escala where codigo = $escala"; //  AND funcionario = " . $_SESSION['funcionario'];
                                                                                 $resultExpediente = $reposit->RunQuery($sqlExpediente);
-                                                                                
+
                                                                                 foreach ($resultExpediente as $row) {
-                                                                                $diaSemanaValor = $row[$diaSemanaExtenso];
+                                                                                    $diaSemanaValor = $row[$diaSemanaExtenso];
                                                                                 }
-                                                                                
+                                                                                // $diaSemanaValor =0;
                                                                                 if ($diaSemanaValor == 1) {
                                                                                     $avisoFolga = '0';
                                                                                     foreach ($resultExpediente as $row) {
@@ -195,10 +195,11 @@ include("inc/nav.php");
                                                                                         // Example 1
                                                                                         $fimIntervaloPartido = explode(":", $fimIntervalo);
                                                                                         $fimIntervalo = $fimIntervaloPartido[0] . ":" .  $fimIntervaloPartido[1];
-                                                                                    }                                                                                    
-                                                                                }
-                                                                                else{ 
-                                                                                   $avisoFolga='1';
+                                                                                    }
+                                                                                } else {
+                                                                                    if ($codigo) {
+                                                                                        $avisoFolga = '1';
+                                                                                    }
                                                                                 }
                                                                                 ?>
                                                                             </span>
@@ -342,25 +343,15 @@ include("inc/nav.php");
                                                                     <select id="lancamento" name="lancamento" style="height: 40px; border-radius: 0px !important;">
                                                                         <option selected value="0"></option>
                                                                         <?php
+
                                                                         $reposit = new reposit();
-                                                                        $projeto = $_SESSION['projeto'];
-                                                                        $sql = "SELECT L.codigo, L.descricao FROM Ntl.lancamento L 
-                                                                            LEFT JOIN 
-                                                                            Ntl.lancamentoProjeto LP 
-                                                                            ON L.codigo = LP.lancamento
-                                                                            LEFT JOIN 
-                                                                            Ntl.projeto P 
-                                                                            ON P.codigo = LP.projeto
-                                                                            where L.ativo = 1 AND (P.codigo = " . $projeto . " OR P.codigo IS NULL) order by L.descricao";
+                                                                        $sql = "SELECT codigo, sigla, descricao FROM dbo.lancamento where ativo = 1 ORDER BY codigo";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $codigo = (int) $row['codigo'];
+                                                                            $codigo = $row['codigo'];
+                                                                            $sigla = $row['sigla'];
                                                                             $descricao = $row['descricao'];
-                                                                            if ($descricao == 'Atraso Abonado' || $descricao == "Hora Extra" || $descricao == "Atraso") {
-                                                                                echo '<option hidden value=' . $codigo . '>' . $descricao . '</option>';
-                                                                            } else {
-                                                                                echo '<option value=' . $codigo . '>' . $descricao . '</option>';
-                                                                            }
+                                                                            echo '<option value=' . $sigla . '>'. $descricao .'</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
@@ -387,7 +378,7 @@ include("inc/nav.php");
                                                         <input id="layoutFolhaPonto" name="layoutFolhaPonto" type="text" class="hidden">
                                                         <!-- <input id="verificaIp" name="verificaIp" type="text" class="hidden"> -->
                                                         <input id="registraPausa" name="registraPausa" type="text" class="hidden">
-                                                        <!-- <input id="codigoPausa" name="codigoPausa" type="text" class="hidden"> -->
+                                                        <!-- <input id="codigoPausa" name="codigoPausa" type="text" clasobservacaos="hidden"> -->
                                                         <input id="inicioPrimeiraPausa" name="inicioPrimeiraPausa" type="text" class="hidden">
                                                         <input id="fimPrimeiraPausa" name="fimPrimeiraPausa" type="text" class="hidden">
                                                         <input id="inicioSegundaPausa" name="inicioSegundaPausa" type="text" class="hidden">
@@ -398,8 +389,8 @@ include("inc/nav.php");
                                                         <input id="margemTolerancia" type="text" class="hidden">
                                                         <input id="IntervaloEscala" type="text" class="hidden">
                                                         <input id="atrasoAlmoco" type="text" class="hidden">
-                                                        <input id="obeservacaoAtraso" type="text" class="hidden">
-                                                        <input id="obeservacaoExtra" type="text" class="hidden">
+                                                        <input id="observacaoAtraso" type="text" class="hidden">
+                                                        <input id="observacaoExtra" type="text" class="hidden">
 
 
 
@@ -693,6 +684,7 @@ include("inc/scripts.php");
             var campo = 'Entrada';
             btnClicado = 'entrada';
             getHora(campo);
+
         });
 
         $("#btnSaida").on("click", function() {
@@ -773,9 +765,9 @@ include("inc/scripts.php");
             imprimir();
         });
 
-        var avisaFolga = <?php echo $avisoFolga?>
+        var avisaFolga = <?php echo $avisoFolga ?>
 
-        if(avisaFolga == 1){
+        if (avisaFolga == 1) {
             avisoDaFolga()
         }
 
@@ -1065,8 +1057,9 @@ include("inc/scripts.php");
         var tolerancia = $("#margemTolerancia").val();
         var intervalo = $("#IntervaloEscala").val();
         var horaSaida = $("#horaSaida").val();
-
-
+        var justificativaAtraso = $("#observacaoAtraso").val();
+        var justificativaExtra = $("#observacaoExtra").val();
+        var lancamento = $("#lancamento").val();
 
         //HORA ENTRADA SETADA NA ESCALA
         var horaEntradaEscala = $("#horaEntradaEscala").val();
@@ -1259,11 +1252,17 @@ include("inc/scripts.php");
         }
 
 
+        if (horaSaida != "00:00:00") {
+            var justificativaAtraso = $("#observacaoAtraso").val();
+            var justificativaExtra = $("#justificativa").val();
 
-        var observacaoAtraso = $("#justificativaAtraso").val();
-        var observacaoExtra = $("#observacaoExtra").val();
+        } else {
+            var justificativaAtraso = $("#justificativa").val();
+        }
 
-        gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra,
+
+
+        gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, lancamento,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -1799,6 +1798,8 @@ include("inc/scripts.php");
                 var sextaEscala = piece[19];
                 var sabadoEscala = piece[20];
                 var toleranciaEscala = piece[21];
+                var justificativaAtraso = piece[22];
+                var justificativaExtra = piece[23];
 
 
 
@@ -1827,7 +1828,7 @@ include("inc/scripts.php");
                     // $("#labelEntrada").css('color', 'red');
 
 
-                    
+
 
                 }
                 if (horaExtra != "00:00:00") {
@@ -1848,6 +1849,8 @@ include("inc/scripts.php");
                 $("#horaSaida").val(horaSaida);
                 $("#atraso").val(atraso);
                 $("#horaExtra").val(horaExtra);
+                $("#observacaoAtraso").val(justificativaAtraso);
+                $("#observacaoExtra").val(justificativaExtra);
                 $("#margemTolerancia").val(toleranciaEscala);
                 $(`#horaEntradaEscala`).val(horaEntradaEscala);
                 $(`#horaSaidaEscala`).val(horaSaidaEscala);
@@ -2531,6 +2534,7 @@ include("inc/scripts.php");
             }
         });
     }
+
     function avisoDaFolga() {
         smartAlert("Atenção", "Dia de Folga!", "error");
         return;
