@@ -1265,7 +1265,11 @@ include("inc/scripts.php");
             horaExtra = "00:00:00";
         }
 
-        gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso,
+
+
+        var observacao = $("#observacao").val();
+
+        gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacao,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
                     var piece = data.split("#");
@@ -1823,22 +1827,12 @@ include("inc/scripts.php");
                 //Atributos do funcionário    
 
 
-
-
-
-
                 if (atraso != "00:00:00") {
                     smartAlert("Atenção", "O funcionário possui atraso", "error");
                 }
                 if (horaExtra != "00:00:00") {
                     smartAlert("Atenção", "O funcionário possui horas extras", "erro");
                 }
-
-
-
-
-
-
 
 
                 $(`#labelEntrada`).text(horaEntrada);
@@ -1860,9 +1854,6 @@ include("inc/scripts.php");
 
 
 
-
-
-
                 // $("#lancamento").val(lancamento);
                 // $("#status").val(status);
                 // $("#registraAlmoco").val(registraAlmoco);
@@ -1877,18 +1868,11 @@ include("inc/scripts.php");
                 // $("#fimSegundaPausa").val(fimSegundaPausa);
 
 
-
-
-
                 habilitaBotões();
 
                 // if ((registraPonto == 0) || (ferias == 1) || (folga == 1 && folgaCobertura != 1) || (documento == 1)) {
                 //     desabilitaBotões();
                 // } else {
-
-
-
-
 
 
                 if (horaEntrada == "00:00:00") {
