@@ -771,7 +771,7 @@ function recupera()
         $idFolha = (int)$row['codigo'];
     }
 
-    $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, lancamento FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
+    $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, lancamento, atrasoAlmoco FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
     
@@ -787,7 +787,9 @@ function recupera()
         $atraso = $row['atraso'];
         $observacaoAtraso = $row['observacaoAtraso'];
         $observacaoExtra = $row['observacaoExtra'];
-        $lancamento = $row['lancamento'];          
+        $lancamento = $row['lancamento'];
+        $atrasoAlmoco = $row['atrasoAlmoco'];
+
     }
 
 
@@ -846,7 +848,8 @@ function recupera()
         $toleranciaEscala . "^" .
         $observacaoAtraso . "^" .
         $observacaoExtra . "^" .
-        $lancamento
+        $lancamento . "^" .
+        $atrasoAlmoco
         ;
 
         if ($out == "") {

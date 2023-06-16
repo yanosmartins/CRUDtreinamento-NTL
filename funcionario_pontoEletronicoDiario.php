@@ -1880,25 +1880,7 @@ include("inc/scripts.php");
                 var justificativaAtraso = piece[22];
                 var justificativaExtra = piece[23];
                 var lancamento = piece[24];
-
-
-                // if (registraPausa == 1) {
-                //     $("#horarioPausa, #btnPausas").removeClass("hidden");
-                //     $("#horarioPausa, #btnPausas").addClass("show");
-                // } else {
-                //     $("#horarioPausa, #btnPausas").removeClass("show");
-                //     $("#horarioPausa, #btnPausas").addClass("hidden");
-                // }
-
-                // var inicioPrimeiraPausa = piece[24];
-                // var fimPrimeiraPausa = piece[25];
-                // var inicioSegundaPausa = piece[26];
-                // var fimSegundaPausa = piece[27];
-                // var folga = piece[28];
-                // var documento = piece[29];
-                // folgaCobertura = piece[30];
-
-                //Atributos do funcionário    
+                var atrasoAlmoco = piece[25];
 
                 if (atraso != "00:00:00") {
                     // smartAlert("Atenção", "O funcionário possui atraso", "error")
@@ -1907,8 +1889,12 @@ include("inc/scripts.php");
                 }
                 if (horaExtra != "00:00:00") {
                     // smartAlert("Atenção", "O funcionário possui horas extras", "erro");
-                    $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan    ');
+                    $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan');
                 }
+                if (atrasoAlmoco !== "00:00:00") {
+                    $("#labelFimAlmoco").css('font-weight', 'bold').css('color', 'red');
+                }
+
 
 
                 $(`#labelEntrada`).text(horaEntrada);
@@ -1930,6 +1916,7 @@ include("inc/scripts.php");
                 $(`#horaSaidaEscala`).val(horaSaidaEscala);
                 $(`#IntervaloEscala`).val(intervaloEscala);
                 $(`#lancamento`).val(lancamento);
+                $(`#atrasoAlmoco`).val(atrasoAlmoco);
 
 
 
