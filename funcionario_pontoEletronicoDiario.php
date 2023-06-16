@@ -741,7 +741,7 @@ include("inc/scripts.php");
             if (lancamento == "") {
                 smartAlert("Atenção", "Selecione um lançamento!", "error");
                 return;
-            }else{
+            } else {
                 gravarLancamento()
             }
 
@@ -1144,17 +1144,41 @@ include("inc/scripts.php");
         var mmAlmocoTolerado = Number(mmInicioAlmoco) + Number(mmIntervalo);
         var ssAlmocoTolerado = Number(ssInicioAlmoco) + Number(ssIntervalo);
 
+        //FORMATACAO DE HORARIO TOLERADO
+        if (ssAlmocoTolerado > 60) {
+            ssAlmocoTolerado = ssAlmocoTolerado - 60;
+            mmAlmocoTolerado += 1;
+        }
+        if (mmAlmocoTolerado > 60) {
+            mmAlmocoTolerado = mmAlmocoTolerado - 60;
+            hhAlmocoTolerado += 1;
+        }
+
+
+
         //HORARIO DO FIM DO INTERVALO DO FUNCIONARIO DIVIDIDO
+        //  fimAlmoco = "14:09:05";//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         var fimAlmocoPartido = fimAlmoco.split(":");
         var hhFimAlmoco = Number(fimAlmocoPartido[0]);
         var mmFimAlmoco = Number(fimAlmocoPartido[1]);
         var ssFimAlmoco = Number(fimAlmocoPartido[2]);
 
-
         //ATRASO DE INTERVALO
         var hhAtrasoIntervalo = hhFimAlmoco - hhAlmocoTolerado;
         var mmAtrasoIntervalo = mmFimAlmoco - mmAlmocoTolerado;
         var ssAtrasoIntervalo = ssFimAlmoco - ssAlmocoTolerado;
+        
+
+        /////////////////////////////////////////////////////////
+        if (ssAtrasoIntervalo<0){
+            ssAtrasoIntervalo = 60 + ssAtrasoIntervalo;// SOMANDO POIS O VALOR PASSA COMO NEGATIVO E "(+)+(-)" = "-"
+            // mmAtrasoIntervalo-=1;
+        }
+        if (mmAtrasoIntervalo<0){
+            mmAtrasoIntervalo = 60 + mmAtrasoIntervalo;
+            // hhAtrasoIntervalo-=1;
+        }
+
 
         if (ssAtrasoIntervalo > 60) {
             ssAtrasoIntervalo = ssAtrasoIntervalo - 60;
@@ -1174,10 +1198,11 @@ include("inc/scripts.php");
         if (ssAtrasoIntervalo.toString().length == 1) {
             ssAtrasoIntervalo = "0" + ssAtrasoIntervalo;
         }
+        
 
         //validacao da tolerancia
-        if (hhFimAlmoco >= hhAlmocoTolerado && mmFimAlmoco >= mmAlmocoTolerado && ssFimAlmoco > ssAlmocoTolerado) {
-            atrasoAlmoco = hhAtrasoIntervalo + ":" + mmAtrasoIntervalo + ":" + ssAtrasoIntervalo;
+        if (hhAtrasoIntervalo >= hhIntervalo || mmAtrasoIntervalo >= mmIntervalo && ssAtrasoIntervalo > ssIntervalo) {
+            var atrasoAlmoco = hhAtrasoIntervalo + ":" + mmAtrasoIntervalo + ":" + ssAtrasoIntervalo;
         } else {
             atrasoAlmoco = "00:00:00";
         }
@@ -1211,15 +1236,6 @@ include("inc/scripts.php");
         var mmSaida = Number(horaSaidaPartida[1]);
         var ssSaida = Number(horaSaidaPartida[2]);
 
-
-        //ALERTA DE SAIDA EXTRA
-        if (hhSaida >= hhSaidaTolerado) {
-            if (mmSaida >= mmSaidaTolerado) {
-                if (ssSaida > ssSaidaTolerado) {
-                    smartAlert("Erro", "O funcionário possui horas extras", "erro");
-                }
-            }
-        }
 
 
         //CALCULO DE EXTRA
@@ -1263,46 +1279,61 @@ include("inc/scripts.php");
 
 
 
+        //ALERTA DE ATRASO E SAIDA
+        if (horaSaida == "00:00:00") {
+            if (inicioAlmoco == "00:00:00") {
+                if (fimAlmoco == "00:00:00") {
 
-
-
-
-
-        gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, lancamento,
-            function(data) {
-                if (data.indexOf('sucess') < 0) {
-                    var piece = data.split("#");
-                    var mensagem = piece[0];
-                    if (mensagem == "success") {
-                        smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
-                        // return false;
-                    } else {
-                        smartAlert("Atenção", mensagem, "error");
-                        // smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
-                        return false;
-                    }
-                } else {
-                    var piece = data.split("#");
-                    var mensagem = piece[2];
-                    if (!mensagem) {
-                        smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
-
-                    } else {
-                        out = mensagem.split("#");
-                        mensagem = out[0];
-                        autorizacaoExtra = out[1];
-
-                        smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
-
-                        // smartAlert("Aviso", mensagem, "info");
-
-                    }
+                    if (atraso != "00:00:00")
+                        smartAlert("Erro", "O funcionário possui atraso!", "error");
                 }
-                location.reload();
+            }
+        }
 
-            });
 
-       
+
+        if (horaExtra != "00:00:00") {
+            smartAlert("Erro", "O funcionário possui horas extras", "erro");
+        }
+
+
+
+        setTimeout(function() {
+            gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, atrasoAlmoco,
+                function(data) {
+                    if (data.indexOf('sucess') < 0) {
+                        var piece = data.split("#");
+                        var mensagem = piece[0];
+                        if (mensagem == "success") {
+                            smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
+                            // return false;
+                        } else {
+                            smartAlert("Atenção", mensagem, "error");
+                            // smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
+                            return false;
+                        }
+                    } else {
+                        var piece = data.split("#");
+                        var mensagem = piece[2];
+                        if (!mensagem) {
+                            smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
+
+                        } else {
+                            out = mensagem.split("#");
+                            mensagem = out[0];
+                            autorizacaoExtra = out[1];
+
+                            smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
+
+                            // smartAlert("Aviso", mensagem, "info");
+
+                        }
+                    }
+                    location.reload();
+
+                });
+        }, 500)
+
 
 
 
@@ -1721,42 +1752,42 @@ include("inc/scripts.php");
     }
 
     function gravarLancamento() {
-            const dataAtual = new Date();
-            const dia = dataAtual.getDate();
-            var codigo = $("#codigo").val();
-            var idFolha = $("#idFolha").val();
-            var lancamento = $("#lancamento").val();
-            gravaLancamento(codigo, idFolha, dia, lancamento,
-                function(data) {
-                    if (data.indexOf('sucess') < 0) {
-                        var piece = data.split("#");
-                        var mensagem = piece[0];
-                        if (mensagem == "success") {
-                            smartAlert("Sucesso", "Ocorrência lançada com sucesso!", "success");
-                            // return false;
-                        } else {
-                            smartAlert("Atenção", mensagem, "error");
-                            // smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
-                            return false;
-                        }
+        const dataAtual = new Date();
+        const dia = dataAtual.getDate();
+        var codigo = $("#codigo").val();
+        var idFolha = $("#idFolha").val();
+        var lancamento = $("#lancamento").val();
+        gravaLancamento(codigo, idFolha, dia, lancamento,
+            function(data) {
+                if (data.indexOf('sucess') < 0) {
+                    var piece = data.split("#");
+                    var mensagem = piece[0];
+                    if (mensagem == "success") {
+                        smartAlert("Sucesso", "Ocorrência lançada com sucesso!", "success");
+                        // return false;
                     } else {
-                        var piece = data.split("#");
-                        var mensagem = piece[2];
-                        if (!mensagem) {
-                            smartAlert("Sucesso", "Ocorrência lançada com sucesso!", "success");
-
-                        } else {
-                            out = mensagem.split("#");
-                            mensagem = out[0];
-                            autorizacaoExtra = out[1];
-
-                            smartAlert("Sucesso", "Ocorrência lançada com sucesso!", "success");
-                            // smartAlert("Aviso", mensagem, "info");
-                        }
+                        smartAlert("Atenção", mensagem, "error");
+                        // smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
+                        return false;
                     }
-                    location.reload();
-                });
-        }
+                } else {
+                    var piece = data.split("#");
+                    var mensagem = piece[2];
+                    if (!mensagem) {
+                        smartAlert("Sucesso", "Ocorrência lançada com sucesso!", "success");
+
+                    } else {
+                        out = mensagem.split("#");
+                        mensagem = out[0];
+                        autorizacaoExtra = out[1];
+
+                        smartAlert("Sucesso", "Ocorrência lançada com sucesso!", "success");
+                        // smartAlert("Aviso", mensagem, "info");
+                    }
+                }
+                location.reload();
+            });
+    }
 
     function voltar() {
         $(location).attr('href', 'funcionario_pontoEletronicoDiario.php');
@@ -1875,7 +1906,7 @@ include("inc/scripts.php");
                     // $("#labelEntrada").css('color', 'red');
                 }
                 if (horaExtra != "00:00:00") {
-                    smartAlert("Atenção", "O funcionário possui horas extras", "erro");
+                    // smartAlert("Atenção", "O funcionário possui horas extras", "erro");
                     $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan    ');
                 }
 
@@ -1899,6 +1930,9 @@ include("inc/scripts.php");
                 $(`#horaSaidaEscala`).val(horaSaidaEscala);
                 $(`#IntervaloEscala`).val(intervaloEscala);
                 $(`#lancamento`).val(lancamento);
+
+
+
 
 
 

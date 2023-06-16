@@ -75,7 +75,7 @@ function gravar()
     $atraso = (string)$_POST['atraso'];
     $justificativaAtraso = (string)$_POST['justificativaAtraso'];
     $justificativaExtra = (string)$_POST['justificativaExtra'];
-    $lancamento = (string)$_POST['lancamento'];  
+    $atrasoAlmoco = (string)$_POST['atrasoAlmoco'];  
 
     $sql = "folhaPontoMensalDetalheDiario_Atualiza
         $codigo,
@@ -89,7 +89,7 @@ function gravar()
         '$atraso', 
         '$justificativaAtraso',
         '$justificativaExtra',
-        '$lancamento'
+        '$atrasoAlmoco'
         ";
 
     $reposit = new reposit();
@@ -108,12 +108,15 @@ function gravarLancamento()
 {
     $reposit = new reposit(); //Abre a conexão.
     session_start();
-    $idFolha = (int)$_POST['idFolha'];
-    $dia = (int)$_POST['dia'];
+    $codigo = (int)$_POST['codigo'];
+    // $idFolha = (int)$_POST['idFolha'];
+    // $dia = (int)$_POST['dia'];
     $lancamento = (string)$_POST['lancamento'];  
 
-    $sql = "INSERT INTO dbo.folhaPontoMensalDetalheDiario (lancamento) values ('$lancamento') where dia = '$dia' and folhaPontoMensal = '$idFolha'
-        ";
+    // $sql = "UPDATE dbo.folhaPontoMensalDetalheDiario SET lancamento = '$lancamento' where dia = '$dia' and folhaPontoMensal = '$idFolha'";
+    $sql = "lancamento_Atualiza
+        $codigo,
+        '$lancamento'";
 
     $reposit = new reposit();
     $result = $reposit->Execprocedure($sql);
