@@ -183,16 +183,15 @@ include("inc/nav.php");
                                                                                         $inicioIntervalo = $row['inicioIntervalo'];
                                                                                         $fimIntervalo = $row['fimIntervalo'];
 
-                                                                                        // Example 1
                                                                                         $horaEntradaPartida = explode(":", $horaEntrada);
                                                                                         $horaEntrada = $horaEntradaPartida[0] . ":" .  $horaEntradaPartida[1];
-                                                                                        // Example 1
+
                                                                                         $horaSaidaPartida = explode(":", $horaSaida);
                                                                                         $horaSaida = $horaSaidaPartida[0] . ":" .  $horaSaidaPartida[1];
-                                                                                        // Example 1
+
                                                                                         $inicioIntervaloPartido = explode(":", $inicioIntervalo);
                                                                                         $inicioIntervalo = $inicioIntervaloPartido[0] . ":" .  $inicioIntervaloPartido[1];
-                                                                                        // Example 1
+
                                                                                         $fimIntervaloPartido = explode(":", $fimIntervalo);
                                                                                         $fimIntervalo = $fimIntervaloPartido[0] . ":" .  $fimIntervaloPartido[1];
                                                                                     }
@@ -341,17 +340,17 @@ include("inc/nav.php");
                                                                 <label class="label" for="lancamento">Ocorrência/Lançamento</label>
                                                                 <label class="select">
                                                                     <select id="lancamento" name="lancamento" style="height: 40px; border-radius: 0px !important;">
-                                                                        <option selected value="0"></option>
+                                                                        <option selected value=""></option>
                                                                         <?php
 
                                                                         $reposit = new reposit();
                                                                         $sql = "SELECT codigo, sigla, descricao FROM dbo.lancamento where ativo = 1 ORDER BY codigo";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
-                                                                            $codigo = $row['codigo'];
+                                                                            // $codigo = $row['codigo'];
                                                                             $sigla = $row['sigla'];
                                                                             $descricao = $row['descricao'];
-                                                                            echo '<option value=' . $sigla . '>'. $descricao .'</option>';
+                                                                            echo '<option value=' . $sigla . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>
@@ -692,7 +691,7 @@ include("inc/scripts.php");
             var fimAlmoco = $("#fimAlmoco").val();
             btnClicado = 'saida';
             resetaTempo();
-            if ((inicioAlmoco != "00:00") && (fimAlmoco == "00:00")) {
+            if ((inicioAlmoco != "00:00:00") && (fimAlmoco == "00:00:00")) {
                 $("#horaSaida").val('00:00:00');
                 smartAlert("Atenção", "Registre primeiro o fim do Intervalo!", "error");
                 return false;
@@ -706,7 +705,7 @@ include("inc/scripts.php");
             resetaTempo();
             var entrada = $("#horaEntrada").val();
             if (entrada == "00:00:00") {
-                $("#inicioAlmoco").val('00:00');
+                $("#inicioAlmoco").val('00:00:00');
                 smartAlert("Atenção", "Registre primeiro a hora de entrada!", "error");
                 return false;
             }
@@ -718,8 +717,8 @@ include("inc/scripts.php");
         $("#btnFimAlmoco").on("click", function() {
             resetaTempo();
             var inicioAlmoco = $("#inicioAlmoco").val();
-            if (inicioAlmoco == "00:00") {
-                $("#fimAlmoco").val('00:00');
+            if (inicioAlmoco == "00:00:00") {
+                $("#fimAlmoco").val('00:00:00');
                 smartAlert("Atenção", "Registre primeiro o inicio do Intervalo!", "error");
                 return false;
             }
@@ -739,21 +738,23 @@ include("inc/scripts.php");
             var extra = $("#horaExtra").val();
             btnClicado = 'lancamento';
 
-            if (lancamento == 0) {
+            if (lancamento == "") {
                 smartAlert("Atenção", "Selecione um lançamento!", "error");
                 return;
+            }else{
+                gravarLancamento()
             }
 
-            if (atraso != '00:00:00') {
-                abonarAtraso();
-                abateBancoHoras(lancamento, dia, horaEntrada, horaSaida, atraso);
-            }
-            if (extra != '00:00:00') {
-                compensarFalta(extra, dia, lancamento);
-            }
-            if ((atraso == '00:00:00') && (extra == '00:00:00')) {
-                gravar();
-            }
+            // if (atraso != '00:00:00') {
+            //     abonarAtraso();
+            //     abateBancoHoras(lancamento, dia, horaEntrada, horaSaida, atraso);
+            // }
+            // if (extra != '00:00:00') {
+            //     compensarFalta(extra, dia, lancamento);
+            // }
+            // if ((atraso == '00:00:00') && (extra == '00:00:00')) {
+            //     gravarLancamento();
+            // }
         });
 
         $('#btnVerificarIp').on("click", function() {
@@ -784,7 +785,7 @@ include("inc/scripts.php");
                     $(this).dialog("close");
                     $('#dlgSimpleFeriado').css('display', 'none');
                     $("#feriado").val(1);
-                    gravar();
+                    // gravar();
                     enviarEmail();
                 }
             }, {
@@ -1262,6 +1263,11 @@ include("inc/scripts.php");
 
 
 
+
+
+
+
+
         gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, lancamento,
             function(data) {
                 if (data.indexOf('sucess') < 0) {
@@ -1295,6 +1301,10 @@ include("inc/scripts.php");
                 location.reload();
 
             });
+
+       
+
+
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         // $("#btnEntrada").prop('disabled', true);
@@ -1710,6 +1720,44 @@ include("inc/scripts.php");
         // );
     }
 
+    function gravarLancamento() {
+            const dataAtual = new Date();
+            const dia = dataAtual.getDate();
+            var codigo = $("#codigo").val();
+            var idFolha = $("#idFolha").val();
+            var lancamento = $("#lancamento").val();
+            gravaLancamento(codigo, idFolha, dia, lancamento,
+                function(data) {
+                    if (data.indexOf('sucess') < 0) {
+                        var piece = data.split("#");
+                        var mensagem = piece[0];
+                        if (mensagem == "success") {
+                            smartAlert("Sucesso", "Ocorrência lançada com sucesso!", "success");
+                            // return false;
+                        } else {
+                            smartAlert("Atenção", mensagem, "error");
+                            // smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
+                            return false;
+                        }
+                    } else {
+                        var piece = data.split("#");
+                        var mensagem = piece[2];
+                        if (!mensagem) {
+                            smartAlert("Sucesso", "Ocorrência lançada com sucesso!", "success");
+
+                        } else {
+                            out = mensagem.split("#");
+                            mensagem = out[0];
+                            autorizacaoExtra = out[1];
+
+                            smartAlert("Sucesso", "Ocorrência lançada com sucesso!", "success");
+                            // smartAlert("Aviso", mensagem, "info");
+                        }
+                    }
+                    location.reload();
+                });
+        }
+
     function voltar() {
         $(location).attr('href', 'funcionario_pontoEletronicoDiario.php');
     }
@@ -1800,7 +1848,7 @@ include("inc/scripts.php");
                 var toleranciaEscala = piece[21];
                 var justificativaAtraso = piece[22];
                 var justificativaExtra = piece[23];
-
+                var lancamento = piece[24];
 
 
                 // if (registraPausa == 1) {
@@ -1821,15 +1869,10 @@ include("inc/scripts.php");
 
                 //Atributos do funcionário    
 
-
                 if (atraso != "00:00:00") {
                     // smartAlert("Atenção", "O funcionário possui atraso", "error")
                     $("#labelEntrada").css('font-weight', 'bold').css('color', 'red');
                     // $("#labelEntrada").css('color', 'red');
-
-
-
-
                 }
                 if (horaExtra != "00:00:00") {
                     smartAlert("Atenção", "O funcionário possui horas extras", "erro");
@@ -1855,6 +1898,7 @@ include("inc/scripts.php");
                 $(`#horaEntradaEscala`).val(horaEntradaEscala);
                 $(`#horaSaidaEscala`).val(horaSaidaEscala);
                 $(`#IntervaloEscala`).val(intervaloEscala);
+                $(`#lancamento`).val(lancamento);
 
 
 
@@ -1878,7 +1922,6 @@ include("inc/scripts.php");
                 //     desabilitaBotões();
                 // } else {
 
-
                 if (horaEntrada == "00:00:00") {
                     $("#btnSaida").prop('disabled', true);
                 } else {
@@ -1900,7 +1943,7 @@ include("inc/scripts.php");
                     $("#btnSaida").prop('disabled', true);
                 }
 
-
+                var weekday = dataAtual.getDay();
 
                 // if (descricaoStatus == "Fechado" || (folga == 1 && folgaCobertura == 1)) {
                 //     $("#lancamento").prop('disabled', true);
@@ -1908,7 +1951,6 @@ include("inc/scripts.php");
                 // }
                 // var data = mesAno.split("-");
                 // var date = new Date(data[0] + "-" + data[1] + "-" + dia);
-                var weekday = dataAtual.getDay();
 
                 // if (tipoEscala == 1) {
                 //     // Se for sabado e não tiver intervalo
@@ -2374,36 +2416,36 @@ include("inc/scripts.php");
 
     }
 
-    function compensarFalta(horaExtra, dia, lancamento) {
-        const idFolha = $('#idFolha').val();
-        let compensaFalta = 0;
+    // function compensarFalta(horaExtra, dia, lancamento) {
+    //     const idFolha = $('#idFolha').val();
+    //     let compensaFalta = 0;
 
-        verificaLancamento(lancamento, horaExtra, idFolha, dia, function(data) {
+    //     verificaLancamento(lancamento, horaExtra, idFolha, dia, function(data) {
 
-            data = data.replace(/failed/gi, '');
-            var piece = data.split("#");
+    //         data = data.replace(/failed/gi, '');
+    //         var piece = data.split("#");
 
-            var out = piece[1];
-            var mensagem = piece[2];
-            piece = out.split("^");
+    //         var out = piece[1];
+    //         var mensagem = piece[2];
+    //         piece = out.split("^");
 
-            compensaFalta = piece[0];
+    //         compensaFalta = piece[0];
 
-            if (compensaFalta == 1) {
-                $("#horaExtra").val("00:00:00");
-            }
+    //         if (compensaFalta == 1) {
+    //             $("#horaExtra").val("00:00:00");
+    //         }
 
-            if (mensagem) {
-                smartAlert("Atenção", mensagem, "error");
+    //         if (mensagem) {
+    //             smartAlert("Atenção", mensagem, "error");
 
-                $("#lancamento").val("");
-                return false;
-            }
+    //             $("#lancamento").val("");
+    //             return false;
+    //         }
 
-            gravar();
-            return;
-        })
-    }
+    //         gravar();
+    //         return;
+    //     })
+    // }
 
     function confirmarRegistro(idFolha, dia, btnClicado, mesAno) {
         confirmaRegistro(idFolha, dia, mesAno, function(data) {

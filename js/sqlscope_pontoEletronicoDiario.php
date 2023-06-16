@@ -9,6 +9,10 @@ if ($funcao == 'gravar') {
     call_user_func($funcao);
 }
 
+if ($funcao == 'gravarLancamento') {
+    call_user_func($funcao);
+}
+
 if ($funcao == 'recupera') {
     call_user_func($funcao);
 }
@@ -71,10 +75,7 @@ function gravar()
     $atraso = (string)$_POST['atraso'];
     $justificativaAtraso = (string)$_POST['justificativaAtraso'];
     $justificativaExtra = (string)$_POST['justificativaExtra'];
-    $lancamento = (string)$_POST['lancamento'];
-    
-
-
+    $lancamento = (string)$_POST['lancamento'];  
 
     $sql = "folhaPontoMensalDetalheDiario_Atualiza
         $codigo,
@@ -101,6 +102,33 @@ function gravar()
     echo $ret;
     return;
 }
+
+
+function gravarLancamento()
+{
+    $reposit = new reposit(); //Abre a conexão.
+    session_start();
+    $idFolha = (int)$_POST['idFolha'];
+    $dia = (int)$_POST['dia'];
+    $lancamento = (string)$_POST['lancamento'];  
+
+    $sql = "INSERT INTO dbo.folhaPontoMensalDetalheDiario (lancamento) values ('$lancamento') where dia = '$dia' and folhaPontoMensal = '$idFolha'
+        ";
+
+    $reposit = new reposit();
+    $result = $reposit->Execprocedure($sql);
+
+    $ret = 'success#';
+    if ($result < 1) {
+        $ret = 'failed#';
+    }
+    echo $ret;
+    return;
+}
+
+
+
+
 
 function gravarAAA()
 {
@@ -740,17 +768,10 @@ function recupera()
         $idFolha = (int)$row['codigo'];
     }
 
-    $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
+    $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, lancamento FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    // $sql = "SELECT FPM.codigo, FPM.status, FD.dia, FD.folhaPontoMensal,FD.codigo AS codigoDetalhe,FD.horaEntrada,FD.horaSaida,FD.inicioAlmoco,
-    //         FD.fimAlmoco,FD.horaExtra,FD.atraso, FD.lancamento, S.descricao
-    //         FROM Funcionario.folhaPontoMensal FPM
-    //         LEFT JOIN Funcionario.folhaPontoMensalDetalheDiario FD ON FD.folhaPontoMensal = FPM.codigo
-    //         LEFT JOIN Ntl.status S ON S.codigo = FPM.status
-    //         LEFT JOIN Ntl.funcionario F ON F.codigo = FPM.funcionario
-    //         INNER JOIN Ntl.beneficioProjeto BP ON BP.funcionario = F.codigo
-    //         WHERE (0=0) AND FPM.funcionario = $id AND mesAno ='$mesAno' AND dia = $dia AND BP.ativo = 1";
+    
 
     $out = "";
     if ($row = $result[0]) {
@@ -762,7 +783,8 @@ function recupera()
         $horaExtra = $row['horaExtra'];
         $atraso = $row['atraso'];
         $observacaoAtraso = $row['observacaoAtraso'];
-        $observacaoExtra = $row['obser$observacaoExtra'];
+        $observacaoExtra = $row['observacaoExtra'];
+        $lancamento = $row['lancamento'];          
     }
 
 
@@ -794,17 +816,57 @@ function recupera()
         $sextaEscala = $row['sexta'];
         $sabadoEscala = $row['sabado'];
         $toleranciaEscala = $row['tolerancia'];
+
     }
 
+    $out =  $idFolha . "^" .
+        $codigo .  "^" .
+        $funcionario . "^" .
+        $horaEntrada . "^" .
+        $inicioAlmoco . "^" .
+        $fimAlmoco . "^" .
+        $horaSaida . "^" .
+        $horaExtra . "^" .
+        $atraso . "^" .
+        $horaEntradaEscala . "^" .
+        $inicioIntervaloEscala . "^" .
+        $fimIntervaloEscala . "^" .
+        $horaSaidaEscala . "^" .
+        $expedienteEscala . "^" .
+        $intervaloEscala . "^" .
+        $segundaEscala . "^" .
+        $tercaEscala . "^" .
+        $quartaEscala . "^" .
+        $quintaEscala . "^" .
+        $sextaEscala . "^" .
+        $sabadoEscala . "^" .
+        $toleranciaEscala . "^" .
+        $observacaoAtraso . "^" .
+        $observacaoExtra . "^" .
+        $lancamento
+        ;
+
+        if ($out == "") {
+            echo "failed#";
+            return;
+        }
+    
+        echo "sucess#" . $out;
+        return;
 
 
 
 
 
 
-
-
-
+        // $sql = "SELECT FPM.codigo, FPM.status, FD.dia, FD.folhaPontoMensal,FD.codigo AS codigoDetalhe,FD.horaEntrada,FD.horaSaida,FD.inicioAlmoco,
+    //         FD.fimAlmoco,FD.horaExtra,FD.atraso, FD.lancamento, S.descricao
+    //         FROM Funcionario.folhaPontoMensal FPM
+    //         LEFT JOIN Funcionario.folhaPontoMensalDetalheDiario FD ON FD.folhaPontoMensal = FPM.codigo
+    //         LEFT JOIN Ntl.status S ON S.codigo = FPM.status
+    //         LEFT JOIN Ntl.funcionario F ON F.codigo = FPM.funcionario
+    //         INNER JOIN Ntl.beneficioProjeto BP ON BP.funcionario = F.codigo
+    //         WHERE (0=0) AND FPM.funcionario = $id AND mesAno ='$mesAno' AND dia = $dia AND BP.ativo = 1";
 
 
 
@@ -964,30 +1026,6 @@ function recupera()
     //     $fimSegundaPausa = $row['fimSegundaPausa'];
     // }
 
-    $out =  $idFolha . "^" .
-        $codigo .  "^" .
-        $funcionario . "^" .
-        $horaEntrada . "^" .
-        $inicioAlmoco . "^" .
-        $fimAlmoco . "^" .
-        $horaSaida . "^" .
-        $horaExtra . "^" .
-        $atraso . "^" .
-        $horaEntradaEscala . "^" .
-        $inicioIntervaloEscala . "^" .
-        $fimIntervaloEscala . "^" .
-        $horaSaidaEscala . "^" .
-        $expedienteEscala . "^" .
-        $intervaloEscala . "^" .
-        $segundaEscala . "^" .
-        $tercaEscala . "^" .
-        $quartaEscala . "^" .
-        $quintaEscala . "^" .
-        $sextaEscala . "^" .
-        $sabadoEscala . "^" .
-        $toleranciaEscala . "^" .
-        $observacaoAtraso . "^" .
-        $observacaoExtra;
     //     $lancamento . "^" .
     //     $status . "^" .
     //     $descricaoStatus . "^" .
@@ -1012,13 +1050,7 @@ function recupera()
     //     $documento . "^" .
     //     $folgaCobertura;
 
-    if ($out == "") {
-        echo "failed#";
-        return;
-    }
-
-    echo "sucess#" . $out;
-    return;
+ 
 }
 
 function validarIp()

@@ -1,6 +1,19 @@
-function gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, lancamento, callback) {
+function gravarPonto(codigo,
+     idFolha,
+     dia,
+     horaEntrada,
+     inicioAlmoco,
+     fimAlmoco,
+     horaSaida,
+     horaExtra,
+     atraso,
+     justificativaAtraso,
+     justificativaExtra,
+     lancamento,
+     callback) {
     $.ajax({
         url: 'js/sqlscope_pontoEletronicoDiario.php',
+
         dataType: 'html', //tipo do retorno
         type: 'post', //metodo de envio
         async: false,
@@ -25,6 +38,31 @@ function gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco,
         }
     });
 }
+
+function gravaLancamento(codigo,
+    idFolha,
+    dia,
+    lancamento,
+    callback) {
+   $.ajax({
+       url: 'js/sqlscope_pontoEletronicoDiario.php',
+       dataType: 'html', //tipo do retorno
+       type: 'post', //metodo de envio
+       async: false,
+       data: {
+           funcao: 'gravarLancamento',
+           codigo: codigo,
+           idFolha: idFolha,
+           dia: dia,
+           lancamento: lancamento,
+       },
+
+       success: function (data) {
+           callback(data);
+       }
+   });
+}
+
 
 function recuperaPonto(funcionario, mesAno, dia, callback) {
     $.ajax({
