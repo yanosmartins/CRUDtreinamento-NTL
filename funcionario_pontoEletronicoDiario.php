@@ -382,8 +382,8 @@ include("inc/nav.php");
                                                         <input id="fimPrimeiraPausa" name="fimPrimeiraPausa" type="text" class="hidden">
                                                         <input id="inicioSegundaPausa" name="inicioSegundaPausa" type="text" class="hidden">
                                                         <input id="fimSegundaPausa" name="fimSegundaPausa" type="text" class="hidden">
-
                                                         <input id="horaEntradaEscala" type="text" class="hidden">
+                                                        <input id="expedienteEscala" type="text" class="hidden">
                                                         <input id="horaSaidaEscala" type="text" class="hidden">
                                                         <input id="margemTolerancia" type="text" class="hidden">
                                                         <input id="IntervaloEscala" type="text" class="hidden">
@@ -1087,8 +1087,6 @@ include("inc/scripts.php");
         var mmEntrada = Number(horaEntradaPartida[1]);
         var ssEntrada = Number(horaEntradaPartida[2]);
 
-
-
         //CALCULO DE ATRASO
         var hhAtraso = hhEntrada - hhEntradaEscala;
         var mmAtraso = mmEntrada - mmEntradaEscala;
@@ -1113,8 +1111,8 @@ include("inc/scripts.php");
             ssAtraso = "0" + ssAtraso;
         }
         //validacao da tolerancia
-        if (hhEntrada >= hhEntradaTolerado && mmEntrada >= mmEntradaTolerado && ssEntrada > ssEntradaTolerado) {
-            atraso = hhAtraso + ":" + mmAtraso + ":" + ssAtraso;
+        if (hhAtraso>= hhTolerancia && mmAtraso>= mmTolerancia && ssAtraso > hhTolerancia) {
+            var atraso = hhAtraso + ":" + mmAtraso + ":" + ssAtraso;
         } else {
             atraso = "00:00:00";
         }
@@ -1220,7 +1218,6 @@ include("inc/scripts.php");
 
         //HORA SAIDA SETADA NA ESCALA
         var horaSaidaEscala = $("#horaSaidaEscala").val();
-
         var horaSaidaEscalaPartida = horaSaidaEscala.split(":");
         var hhSaidaEscala = Number(horaSaidaEscalaPartida[0]);
         var mmSaidaEscala = Number(horaSaidaEscalaPartida[1]);
@@ -1245,9 +1242,9 @@ include("inc/scripts.php");
         var ssSaida = Number(horaSaidaPartida[2]);
 
         //CALCULO DE EXTRA por saida
-        var hhExtraSaida = hhSaida - hhSaidaEscala;
-        var mmExtraSaida = mmSaida - mmSaidaEscala;
-        var ssExtraSaida = ssSaida - ssSaidaEscala;
+        var hhExtra = hhSaida - hhSaidaEscala;
+        var mmExtra = mmSaida - mmSaidaEscala;
+        var ssExtra = ssSaida - ssSaidaEscala;
 
         //////////////////////////////////////
 
@@ -1264,19 +1261,14 @@ include("inc/scripts.php");
         }
         if (Number(ssExtraEntrada) < 0) {
             ssExtraEntrada = ssExtraEntrada * -1;
-        }        //////////////////////////////////////
-
-        var hhExtra = hhExtraSaida + hhExtraEntrada;
-        var mmExtra = mmExtraSaida + mmExtraEntrada;
-        var ssExtra = ssExtraSaida + ssExtraEntrada;
+        }
 
 
-
-        if (ssExtra > 60) {
+        if (ssExtra >= 60) {
             ssExtra = ssExtra - 60;
             mmExtra += 1;
         }
-        if (mmExtra > 60) {
+        if (mmExtra >= 60) {
             mmExtra = mmExtra - 60;
             hhExtra += 1;
         }
@@ -1293,11 +1285,110 @@ include("inc/scripts.php");
         //validacao da tolerancia
         if (hhSaida >= hhSaidaTolerado && mmSaida >= mmSaidaTolerado && ssSaida > ssSaidaTolerado) {
             horaExtra = hhExtra + ":" + mmExtra + ":" + ssExtra;
+            smartAlert("Erro", "O funcionário possui horas extras", "erro");
         } else {
             horaExtra = "00:00:00";
         }
 
+        //total de horas NEGATIVAS
+        var hhNegativas = Number(hhAtraso) + Number(hhAtrasoIntervalo);
+        var mmNegativas = Number(mmAtraso) + Number(mmAtrasoIntervalo);
+        var ssNegativas = Number(ssAtraso) + Number(ssAtrasoIntervalo);
 
+        if (hhNegativas.toString().length == 1) {
+            hhNegativas = "0" + hhNegativas;
+        }
+        if (mmNegativas.toString().length == 1) {
+            mmNegativas = "0" + mmNegativas;
+        }
+        if (ssNegativas.toString().length == 1) {
+            ssNegativas = "0" + ssNegativas;
+        }
+
+
+        //total de horas POSITIVAS
+        var hhPositivas = Number(hhExtra) + Number(hhExtraEntrada);
+        var mmPositivas = Number(mmExtra) + Number(mmExtraEntrada);
+        var ssPositivas = Number(ssExtra) + Number(ssExtraEntrada);
+
+        if (ssPositivas >= 60) {
+            ssPositivas = ssPositivas - 60;
+            mmPositivas += 1;
+        }
+        if (mmPositivas >= 60) {
+            mmPositivas = mmPositivas - 60;
+            hhPositivas += 1;
+        }
+        if (hhPositivas.toString().length == 1) {
+            hhPositivas = "0" + hhPositivas;
+        }
+        if (mmPositivas.toString().length == 1) {
+            mmPositivas = "0" + mmPositivas;
+        }
+        if (ssPositivas.toString().length == 1) {
+            ssPositivas = "0" + ssPositivas;
+        }
+
+
+
+
+        //VALOR DO EXPEDIENTE TOTAL DO FUNCIONARIO
+        var expedienteEscala = $("#expedienteEscala").val();
+        var expedienteEscalaPartida = expedienteEscala.split(":");
+        var hhExpedienteEscala = Number(expedienteEscalaPartida[0]);
+        var mmExpedienteEscala = Number(expedienteEscalaPartida[1]);
+        var ssExpedienteEscala = Number(expedienteEscalaPartida[2]);
+
+        if (hhExpedienteEscala.toString().length == 1) {
+            hhExpedienteEscala = "0" + hhExpedienteEscala;
+        }
+        if (mmExpedienteEscala.toString().length == 1) {
+            mmExpedienteEscala = "0" + mmExpedienteEscala;
+        }
+        if (ssExpedienteEscala.toString().length == 1) {
+            ssExpedienteEscala = "0" + ssExpedienteEscala;
+        }
+
+        // var hhTotalDia = Number(hhExpedienteEscala) + Number(hhPositivas) - Number(hhNegativas);
+        // var mmTotalDia = Number(mmExpedienteEscala) + Number(mmPositivas) - Number(mmNegativas);
+        // var ssTotalDia = Number(ssExpedienteEscala) + Number(ssPositivas) - Number(ssNegativas);
+
+        var hhTotalDia = hhSaida - hhEntrada;
+        var mmTotalDia = mmSaida - mmEntrada;
+        var ssTotalDia = ssSaida - ssEntrada;
+
+        if (ssTotalDia < 0) {
+            ssTotalDia = 60 + ssTotalDia; // SOMANDO POIS O VALOR PASSA COMO NEGATIVO E "(+)+(-)" = "-"
+            mmTotalDia-=1;
+        }
+        if (mmTotalDia < 0) {
+            mmTotalDia = 60 + mmTotalDia;
+            hhTotalDia-=1;
+        }
+
+
+
+        if (hhTotalDia.toString().length == 1) {
+            hhTotalDia = "0" + hhTotalDia;
+        }
+        if (mmTotalDia.toString().length == 1) {
+            mmTotalDia = "0" + mmTotalDia;
+        }
+        if (ssTotalDia.toString().length == 1) {
+            ssTotalDia = "0" + ssTotalDia;
+        }
+
+
+        var horasPositivas = hhPositivas + ":" + mmPositivas + ":" + ssPositivas;
+        var horasNegativas = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
+        var horaTotalDia = hhTotalDia + ":" + mmTotalDia + ":" + ssTotalDia;
+
+
+
+
+
+
+        //seletor de justificativa (de atraso na entrada ou na saida)
         if (horaSaida != "00:00:00") {
             var justificativaAtraso = $("#observacaoAtraso").val();
             var justificativaExtra = $("#justificativa").val();
@@ -1307,8 +1398,7 @@ include("inc/scripts.php");
         }
 
 
-
-        //ALERTA DE ATRASO E SAIDA
+        //ALERTA DE ATRASO DE ENTRADA E DE SAIDA
         if (horaSaida == "00:00:00") {
             if (inicioAlmoco == "00:00:00") {
                 if (fimAlmoco == "00:00:00") {
@@ -1319,12 +1409,10 @@ include("inc/scripts.php");
             }
         }
 
-        if (horaExtra != "00:00:00") {
-            smartAlert("Erro", "O funcionário possui horas extras", "erro");
-        }
 
         setTimeout(function() {
             gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, atrasoAlmoco,
+                //  horasPositivas,
                 function(data) {
                     if (data.indexOf('sucess') < 0) {
                         var piece = data.split("#");
@@ -1492,6 +1580,8 @@ include("inc/scripts.php");
                 var lancamento = piece[24];
                 var atrasoAlmoco = piece[25] || '00:00:00';
 
+
+
                 if (atraso != "00:00:00") {
                     // smartAlert("Atenção", "O funcionário possui atraso", "error")
                     $("#labelEntrada").css('font-weight', 'bold').css('color', 'red');
@@ -1524,6 +1614,7 @@ include("inc/scripts.php");
                 $("#margemTolerancia").val(toleranciaEscala);
                 $(`#horaEntradaEscala`).val(horaEntradaEscala);
                 $(`#horaSaidaEscala`).val(horaSaidaEscala);
+                $(`#expedienteEscala`).val(expedienteEscala);
                 $(`#IntervaloEscala`).val(intervaloEscala);
                 $(`#lancamento`).val(lancamento);
                 $(`#atrasoAlmoco`).val(atrasoAlmoco);

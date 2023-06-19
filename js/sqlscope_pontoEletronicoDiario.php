@@ -76,6 +76,7 @@ function gravar()
     $justificativaAtraso = (string)$_POST['justificativaAtraso'];
     $justificativaExtra = (string)$_POST['justificativaExtra'];
     $atrasoAlmoco = (string)$_POST['atrasoAlmoco'];  
+    // $horasPositivas = (string)$_POST['horasPositivas'];  
 
     $sql = "folhaPontoMensalDetalheDiario_Atualiza
         $codigo,
