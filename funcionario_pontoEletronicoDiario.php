@@ -762,7 +762,7 @@ include("inc/scripts.php");
         });
 
         $('#btnPdf').on("click", function() {
-            resetaTempo();
+            // resetaTempo();
             imprimir();
         });
 
@@ -1714,6 +1714,15 @@ include("inc/scripts.php");
         );
     }
 
+
+    function imprimir() {
+        const idFolha = $('#idFolha').val();
+        $(location).attr('href', 'prototipo_folhaDePontoPdfPontoEletronicoPDF.php?idFolha=' + idFolha );
+    }
+
+
+
+
     function enviarEmail() {
         var codigoFuncionario = $("#funcionario").val();
         var horaAtual = $("#horaAtual").val();
@@ -1798,25 +1807,7 @@ include("inc/scripts.php");
         );
     }
 
-    function imprimir() {
-        const id = $('#funcionario').val();
-        const folha = $('#idFolha').val();
-        const mesAno = moment().startOf('month').format('YYYY-MM-DD');
-        const tipoEscala = $("#tipoEscala").val();
-        const layoutFolhaPonto = $("#layoutFolhaPonto").val();
-
-        // if (tipoEscala == 1) {
-        if (layoutFolhaPonto == 1) {
-            window.open(`funcionario_folhaDePontoPdfPontoEletronico.php?data=${mesAno}`); // Analitica/Detalhada
-        } else if (layoutFolhaPonto == 2) {
-            window.open(`prototipo_folhaDePontoPdfPontoEletronico.php?data=${mesAno}`); // Sintética/Simples
-        } else if (layoutFolhaPonto == 3) {
-            window.open(`funcionario_folhaPontoPdfPontoEletronico.php?data=${mesAno}`); // Híbrida(Antiga)
-        }
-        // } else {
-        //     window.open(`funcionario_folhaPontoRevezamentoPdf.php?data=${mesAno}`);
-        // }
-    }
+   
 
     function verificarFeriado() {
         var mesAno = $("#mesAno").val();
