@@ -375,9 +375,7 @@ include("inc/nav.php");
                                                         <input id="tipoEscala" name="tipoEscala" type="text" class="hidden">
                                                         <input id="escalaDia" name="escalaDia" type="text" class="hidden">
                                                         <input id="layoutFolhaPonto" name="layoutFolhaPonto" type="text" class="hidden">
-                                                        <!-- <input id="verificaIp" name="verificaIp" type="text" class="hidden"> -->
                                                         <input id="registraPausa" name="registraPausa" type="text" class="hidden">
-                                                        <!-- <input id="codigoPausa" name="codigoPausa" type="text" clasobservacaos="hidden"> -->
                                                         <input id="inicioPrimeiraPausa" name="inicioPrimeiraPausa" type="text" class="hidden">
                                                         <input id="fimPrimeiraPausa" name="fimPrimeiraPausa" type="text" class="hidden">
                                                         <input id="inicioSegundaPausa" name="inicioSegundaPausa" type="text" class="hidden">
@@ -390,7 +388,9 @@ include("inc/nav.php");
                                                         <input id="atrasoAlmoco" type="text" class="hidden">
                                                         <input id="observacaoAtraso" type="text" class="hidden">
                                                         <input id="observacaoExtra" type="text" class="hidden">
-
+                                                        <input id="horaTotalDia" type="text" class="hidden">
+                                                        <input id="horasPositivasDia" type="text" class="hidden">
+                                                        <input id="horasNegativasDia" type="text" class="hidden">
 
 
                                                         <input id="feriado" name="feriado" type="text" class="hidden">
@@ -1582,6 +1582,10 @@ include("inc/scripts.php");
                 var justificativaExtra = piece[23];
                 var lancamento = piece[24];
                 var atrasoAlmoco = piece[25] || '00:00:00';
+                var horaTotalDia = piece[26] || '00:00:00';
+                var horasPositivasDia = piece[27] || '00:00:00';
+                var horasNegativasDia = piece[28] || '00:00:00';
+
 
 
 
@@ -1621,8 +1625,9 @@ include("inc/scripts.php");
                 $(`#IntervaloEscala`).val(intervaloEscala);
                 $(`#lancamento`).val(lancamento);
                 $(`#atrasoAlmoco`).val(atrasoAlmoco);
-
-
+                $(`#horaTotalDia`).val(horaTotalDia);
+                $(`#horasPositivasDia`).val(horasPositivasDia);
+                $(`#horasNegativasDia`).val(horasNegativasDia);
 
 
 

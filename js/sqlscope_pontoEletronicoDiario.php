@@ -126,7 +126,7 @@ function recupera()
         $idFolha = (int)$row['codigo'];
     }
 
-    $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, lancamento, atrasoAlmoco FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
+    $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, lancamento, atrasoAlmoco, horaTotalDia, horasPositivasDia, horasNegativasDia FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
 
@@ -144,6 +144,9 @@ function recupera()
         $observacaoExtra = $row['observacaoExtra'];
         $lancamento = $row['lancamento'];
         $atrasoAlmoco = $row['atrasoAlmoco'];
+        $horaTotalDia = $row['horaTotalDia'];
+        $horasPositivasDia = $row['horasPositivasDia'];
+        $horasNegativasDia = $row['horasNegativasDia'];
     }
 
 
@@ -201,8 +204,11 @@ function recupera()
         $toleranciaEscala . "^" .
         $observacaoAtraso . "^" .
         $observacaoExtra . "^" .
-        $lancamento . "^" .
-        $atrasoAlmoco;
+        $lancamento . "^" .     
+        $atrasoAlmoco . "^" .
+        $horaTotalDia . "^" .
+        $horasPositivasDia . "^" .
+        $horasNegativasDia;
 
     if ($out == "") {
         echo "failed#";
