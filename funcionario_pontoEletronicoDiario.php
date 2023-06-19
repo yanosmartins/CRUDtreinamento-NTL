@@ -1123,9 +1123,7 @@ include("inc/scripts.php");
             atraso = "00:00:00";
         }
 
-
         //==========================================================================================================
-
 
         //INTERVALO
         var intervaloPartido = intervalo.split(":");
@@ -1163,48 +1161,58 @@ include("inc/scripts.php");
         var mmFimAlmoco = Number(fimAlmocoPartido[1]);
         var ssFimAlmoco = Number(fimAlmocoPartido[2]);
 
+
+
         //ATRASO DE INTERVALO
-        var hhAtrasoIntervalo = hhFimAlmoco - hhAlmocoTolerado;
-        var mmAtrasoIntervalo = mmFimAlmoco - mmAlmocoTolerado;
-        var ssAtrasoIntervalo = ssFimAlmoco - ssAlmocoTolerado;
-        
+        if (fimAlmoco != "00:00:00") {
+            var hhAtrasoIntervalo = hhFimAlmoco - hhAlmocoTolerado;
+            var mmAtrasoIntervalo = mmFimAlmoco - mmAlmocoTolerado;
+            var ssAtrasoIntervalo = ssFimAlmoco - ssAlmocoTolerado;
+        } else {
+            var hhAtrasoIntervalo = 0;
+            var mmAtrasoIntervalo = 0;
+            var ssAtrasoIntervalo = 0;
+        }
 
         /////////////////////////////////////////////////////////
-        if (ssAtrasoIntervalo<0){
-            ssAtrasoIntervalo = 60 + ssAtrasoIntervalo;// SOMANDO POIS O VALOR PASSA COMO NEGATIVO E "(+)+(-)" = "-"
-            // mmAtrasoIntervalo-=1;
-        }
-        if (mmAtrasoIntervalo<0){
-            mmAtrasoIntervalo = 60 + mmAtrasoIntervalo;
-            // hhAtrasoIntervalo-=1;
-        }
+        // if (ssAtrasoIntervalo < 0) {
+        //     ssAtrasoIntervalo = 60 + ssAtrasoIntervalo; // SOMANDO POIS O VALOR PASSA COMO NEGATIVO E "(+)+(-)" = "-"
+        //     // mmAtrasoIntervalo-=1;
+        // }
+        // if (mmAtrasoIntervalo < 0) {
+        //     mmAtrasoIntervalo = 60 + mmAtrasoIntervalo;
+        //     // hhAtrasoIntervalo-=1;
+        // }
 
 
-        if (ssAtrasoIntervalo > 60) {
-            ssAtrasoIntervalo = ssAtrasoIntervalo - 60;
-            mmAtrasoIntervalo += 1;
-        }
-        if (mmAtrasoIntervalo > 60) {
-            mmAtrasoIntervalo = mmAtrasoIntervalo - 60;
-            hhAtrasoIntervalo += 1;
-        }
-        //formatacão das horas
-        if (hhAtrasoIntervalo.toString().length == 1) {
-            hhAtrasoIntervalo = "0" + hhAtrasoIntervalo;
-        }
-        if (mmAtrasoIntervalo.toString().length == 1) {
-            mmAtrasoIntervalo = "0" + mmAtrasoIntervalo;
-        }
-        if (ssAtrasoIntervalo.toString().length == 1) {
-            ssAtrasoIntervalo = "0" + ssAtrasoIntervalo;
-        }
-        
-
-        //validacao da tolerancia
-        if (hhAtrasoIntervalo >= hhIntervalo || mmAtrasoIntervalo >= mmIntervalo && ssAtrasoIntervalo > ssIntervalo) {
-            var atrasoAlmoco = hhAtrasoIntervalo + ":" + mmAtrasoIntervalo + ":" + ssAtrasoIntervalo;
-        } else {
+        if (Number(ssAtrasoIntervalo) < 0 || Number(mmAtrasoIntervalo) < 0 || Number(hhAtrasoIntervalo) < 0) {
             atrasoAlmoco = "00:00:00";
+        } else {
+            if (ssAtrasoIntervalo > 60) {
+                ssAtrasoIntervalo = ssAtrasoIntervalo - 60;
+                mmAtrasoIntervalo += 1;
+            }
+            if (mmAtrasoIntervalo > 60) {
+                mmAtrasoIntervalo = mmAtrasoIntervalo - 60;
+                hhAtrasoIntervalo += 1;
+            }
+            //formatacão das horas
+            if (hhAtrasoIntervalo.toString().length == 1) {
+                hhAtrasoIntervalo = "0" + hhAtrasoIntervalo;
+            }
+            if (mmAtrasoIntervalo.toString().length == 1) {
+                mmAtrasoIntervalo = "0" + mmAtrasoIntervalo;
+            }
+            if (ssAtrasoIntervalo.toString().length == 1) {
+                ssAtrasoIntervalo = "0" + ssAtrasoIntervalo;
+            }
+
+            //validacao da tolerancia
+            if (hhAtrasoIntervalo >= hhIntervalo || mmAtrasoIntervalo >= mmIntervalo && ssAtrasoIntervalo > ssIntervalo) {
+                var atrasoAlmoco = hhAtrasoIntervalo + ":" + mmAtrasoIntervalo + ":" + ssAtrasoIntervalo;
+            } else {
+                atrasoAlmoco = "00:00:00";
+            }
         }
 
         $("#atrasoAlmoco").val(atrasoAlmoco);
@@ -1236,12 +1244,33 @@ include("inc/scripts.php");
         var mmSaida = Number(horaSaidaPartida[1]);
         var ssSaida = Number(horaSaidaPartida[2]);
 
+        //CALCULO DE EXTRA por saida
+        var hhExtraSaida = hhSaida - hhSaidaEscala;
+        var mmExtraSaida = mmSaida - mmSaidaEscala;
+        var ssExtraSaida = ssSaida - ssSaidaEscala;
+
+        //////////////////////////////////////
+
+        //CALCULO DE EXTRA por entrada
+        var hhExtraEntrada = hhEntradaEscala - hhEntrada;
+        var mmExtraEntrada = mmEntradaEscala - mmEntrada;
+        var ssExtraEntrada = ssEntradaEscala - ssEntrada;
+
+        if (Number(hhExtraEntrada) < 0) {
+            hhExtraEntrada = hhExtraEntrada * -1;
+        }
+        if (Number(mmExtraEntrada) < 0) {
+            mmExtraEntrada = mmExtraEntrada * -1;
+        }
+        if (Number(ssExtraEntrada) < 0) {
+            ssExtraEntrada = ssExtraEntrada * -1;
+        }        //////////////////////////////////////
+
+        var hhExtra = hhExtraSaida + hhExtraEntrada;
+        var mmExtra = mmExtraSaida + mmExtraEntrada;
+        var ssExtra = ssExtraSaida + ssExtraEntrada;
 
 
-        //CALCULO DE EXTRA
-        var hhExtra = hhSaida - hhSaidaEscala;
-        var mmExtra = mmSaida - mmSaidaEscala;
-        var ssExtra = ssSaida - ssSaidaEscala;
 
         if (ssExtra > 60) {
             ssExtra = ssExtra - 60;
@@ -1290,13 +1319,9 @@ include("inc/scripts.php");
             }
         }
 
-
-
         if (horaExtra != "00:00:00") {
             smartAlert("Erro", "O funcionário possui horas extras", "erro");
         }
-
-
 
         setTimeout(function() {
             gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, atrasoAlmoco,
@@ -1334,421 +1359,6 @@ include("inc/scripts.php");
                 });
         }, 500)
 
-
-
-
-        //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
-        // $("#btnEntrada").prop('disabled', true);
-        // $("#btnSaida").prop('disabled', true);
-        // $("#btnInicioAlmoco").prop('disabled', true);
-        // $("#btnFimAlmoco").prop('disabled', true);
-
-        // var codigo = $("#codigo").val();
-        // var funcionario = $("#funcionario").val();
-        // var mesAno = $("#mesAno").val();
-        // var idFolha = $("#idFolha").val();
-        // var dataAtual = new Date();
-        // var dia = dataAtual.getDate();
-        // var horaEntrada = $("#horaEntrada").val();
-        // var horaSaida = $("#horaSaida").val();
-        // var inicioAlmoco = $("#inicioAlmoco").val();
-        // var fimAlmoco = $("#fimAlmoco").val();
-        // var horaExtra = $("#horaExtra").val();
-        // var atraso = $("#atraso").val();
-        // var lancamento = $("#lancamento").val();
-        // var observacao = $("#observacao").val();
-        // var status = $('#status').val();
-        // if (status == 0) {
-        //     status = 2;
-        // }
-
-        // var tipoEscala = $("#tipoEscala").val();
-        // var escalaDia = $("#escalaDia").val();
-
-        // var feriado = $("#feriado").val();
-
-        // let separador = $("#expediente").text();
-        // if (!separador) {
-        //     separador = '00:00 - 00:00';
-        // }
-        // separador = separador.split("-");
-        // separador[0] = separador[0].trim();
-        // separador[1] = separador[1].trim();
-
-        // if (separador[0].toString().length <= 5) separador[0] = separador[0].concat(':00');
-        // if (separador[1].toString().length <= 5) separador[1] = separador[1].concat(':00');
-
-        // const inicioExpediente = separador[0];
-        // const fimExpediente = separador[1];
-
-        // let intervalo = $("#intervalo").text();
-        // if (!intervalo) {
-        //     intervalo = '00:00 - 00:00';
-        // }
-        // intervalo = intervalo.split("-");
-        // let inicioIntervalo = intervalo[0].trim();
-        // let fimIntervalo = intervalo[1].trim();
-
-        // // if (escalaDia == 2) {
-        // //     var data = mesAno.split("-");
-        // //     var date = new Date(data[0], data[1] - 1, dia);
-        // //     var weekday = date.getDay();
-
-        // //     if (weekday == 6) {
-        // //         // Expediente Sabado
-        // //         var inicioExpedienteSabado = $("#expedienteSabado option:selected").text() || '00:00 - 00:00';
-
-        // //         separador = inicioExpedienteSabado.split("-");
-        // //         inicioExpediente = separador[0].trim();
-        // //         fimExpediente = separador[1].trim();
-
-        // //         if (inicioExpediente.toString().length <= 5) inicioExpediente = inicioExpediente.concat(':00');
-        // //         if (fimExpediente.toString().length <= 5) fimExpediente = fimExpediente.concat(':00');
-        // //         parseHoraFim = parse(fimExpediente);
-        // //         parseHoraInicio = parse(inicioExpedienteSabado);
-        // //     }
-        // // } else if (escalaDia == 3) {
-        // //     var data = mesAno.split("-");
-        // //     var date = new Date(data[0], data[1] - 1, dia);
-        // //     var weekday = date.getDay();
-        // //     if (weekday == 0) {
-        // //         // Expediente Segunda a Domingo
-        // //         var inicioExpedienteDomingo = $("#expedienteDomingo option:selected").text() || '00:00 - 00:00';
-
-        // //         separador = inicioExpedienteDomingo.split("-");
-        // //         inicioExpediente = separador[0].trim();
-        // //         fimExpediente = separador[1].trim();
-
-        // //         if (inicioExpediente.toString().length <= 5) inicioExpediente = inicioExpediente.concat(':00');
-        // //         if (fimExpediente.toString().length <= 5) fimExpediente = fimExpediente.concat(':00');
-        // //         parseHoraFim = parse(fimExpediente);
-        // //         parseHoraInicio = parse(inicioExpedienteDomingo);
-        // //     }
-
-        // //     // if (weekday == 6) {
-        // //     //     // Expediente Segunda a Sabado
-        // //     //     var inicioExpedienteSabado = $("#expediente").text() || '00:00 - 00:00';
-
-        // //     //     separador = inicioExpedienteSabado.split("-");
-        // //     //     inicioExpediente = separador[0].trim();
-        // //     //     fimExpediente = separador[1].trim();
-
-        // //     //     if (inicioExpediente.toString().length <= 5) inicioExpediente = inicioExpediente.concat(':00');
-        // //     //     if (fimExpediente.toString().length <= 5) fimExpediente = fimExpediente.concat(':00');
-        // //     //     parseHoraFim = parse(fimExpediente);
-        // //     //     parseHoraInicio = parse(inicioExpedienteSabado);
-        // //     // }
-        // // }
-
-        // const inputHoraEntrada = aleatorizarTempo(horaEntrada, inicioExpediente);
-        // const inputHoraSaida = aleatorizarTempo(horaSaida, fimExpediente)
-
-        // //Escala normal
-        // if (tipoEscala == 1) {
-        //     //Começo Cálculo de Hora Extra
-        //     if (toleranciaExtra || toleranciaAtraso) {
-        //         var parseToleranciaExtra = parse(toleranciaExtra)
-        //         parseToleranciaAtraso = parse(toleranciaAtraso)
-        //     } else if (toleranciaDia) {
-        //         var parseToleranciaExtra = parse(toleranciaDia)
-        //         parseToleranciaAtraso = parse(toleranciaDia)
-        //     }
-
-        //     atraso = "00:00:00";
-        //     horaExtra = "00:00:00";
-
-        //     if (inputHoraSaida != "00:00:00") {
-
-        //         var entrada = horaEntrada.split(':');
-        //         entrada = entrada[0] + ":" + entrada[1];
-
-        //         if ((entrada > inicioAlmoco) && (entrada > fimAlmoco)) {
-        //             inicioAlmoco = "00:00";
-        //             fimAlmoco = "00:00";
-        //         }
-
-        //         if ((horaSaida <= inicioAlmoco) || (horaSaida <= fimAlmoco)) {
-        //             inicioAlmoco = "00:00";
-        //             fimAlmoco = "00:00";
-        //         }
-
-        //         const parseHoraEntrada = parse(inputHoraEntrada)
-        //         const parseHoraSaida = parse(inputHoraSaida)
-        //         const parseHoraInicio = parse(inicioExpediente)
-        //         const parseHoraFim = parse(fimExpediente)
-
-        //         let jornadaNormal = duracao(inicioExpediente, fimExpediente);
-
-        //         var almoco = parse(fimIntervalo) - parse(inicioIntervalo);
-        //         jornadaNormal = jornadaNormal - almoco;
-
-        //         const jornadaNormalToleranteExtra = jornadaNormal + parseToleranciaExtra
-        //         const jornadaNormalToleranteAtraso = jornadaNormal - parseToleranciaExtra
-        //         // quantidade de minutos efetivamente trabalhados
-        //         let jornada = duracao(inputHoraEntrada, inputHoraSaida);
-
-        //         if (inicioAlmoco != '00:00' && fimAlmoco != '00:00') {
-        //             var almoco = parse(fimAlmoco) - parse(inicioAlmoco);
-        //             jornada = jornada - almoco;
-        //         }
-
-        //         // diferença entre as jornadas
-        //         let diff = Math.abs(jornada - jornadaNormal);
-
-        //         var weekday = dataAtual.getDay();
-
-        //         if ((feriado == 1 || weekday == 0 || folgaCobertura == 1) && escalaDia != 3) {
-        //             let horas = Math.floor(jornada / Math.pow(60, 2));
-        //             jornada = jornada - (horas * 3600);
-        //             let minutos = Math.floor(jornada / 60);
-        //             let segundos = jornada - (minutos * 60);
-
-        //             if (horas.toString().length < 2) horas = `0${horas}`;
-        //             if (minutos.toString().length < 2) minutos = `0${minutos}`;
-        //             if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-        //             horaExtra = (`${horas}:${minutos}:${segundos}`);
-        //         } else {
-        //             if (diff != 0 && folgaCobertura != 1) {
-        //                 let horas = Math.floor(diff / Math.pow(60, 2));
-        //                 diff = diff - (horas * 3600);
-        //                 let minutos = Math.floor(diff / 60);
-        //                 let segundos = diff - (minutos * 60);
-
-        //                 if (horas.toString().length < 2) horas = `0${horas}`;
-        //                 if (minutos.toString().length < 2) minutos = `0${minutos}`;
-        //                 if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-        //                 if (jornada > jornadaNormalToleranteExtra) {
-        //                     horaExtra = (`${horas}:${minutos}:${segundos}`);
-        //                 } else if (jornada < jornadaNormalToleranteAtraso) {
-        //                     atraso = (`${horas}:${minutos}:${segundos}`)
-        //                 }
-        //             } else if (folgaCobertura == 1) {
-        //                 let horas = Math.floor(jornada / Math.pow(60, 2));
-        //                 jornada = jornada - (horas * 3600);
-        //                 let minutos = Math.floor(jornada / 60);
-        //                 let segundos = jornada - (minutos * 60);
-
-        //                 if (horas.toString().length < 2) horas = `0${horas}`;
-        //                 if (minutos.toString().length < 2) minutos = `0${minutos}`;
-        //                 if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-        //                 horaExtra = (`${horas}:${minutos}:${segundos}`);
-        //             }
-        //         }
-        //     }
-        //     //Fim Cálculo de Hora Extra
-        // }
-
-        // //Revezamento
-        // if (tipoEscala == 2) {
-        //     if (inicioExpediente < fimExpediente) {
-        //         //Começo Cálculo de Hora Extra
-        //         if (toleranciaExtra || toleranciaAtraso) {
-        //             var parseToleranciaExtra = parse(toleranciaExtra)
-        //             parseToleranciaAtraso = parse(toleranciaAtraso)
-        //         } else if (toleranciaDia) {
-        //             var parseToleranciaExtra = parse(toleranciaDia)
-        //             parseToleranciaAtraso = parse(toleranciaDia)
-        //         }
-
-        //         atraso = "00:00:00";
-        //         horaExtra = "00:00:00";
-
-        //         if (horaSaida != "00:00:00") {
-        //             //valor em segundos
-        //             const parseHoraEntrada = parse(inputHoraEntrada)
-        //             const parseHoraSaida = parse(inputHoraSaida)
-        //             const parseHoraInicio = parse(inicioExpediente)
-        //             const parseHoraFim = parse(fimExpediente)
-
-        //             //calculo
-
-        //             let jornadaNormal = duracao(inicioExpediente, fimExpediente);
-
-        //             var almoco = parse(fimIntervalo) - parse(inicioIntervalo);
-        //             jornadaNormal = jornadaNormal - almoco;
-
-        //             const jornadaNormalToleranteExtra = jornadaNormal + parseToleranciaExtra
-        //             const jornadaNormalToleranteAtraso = jornadaNormal - parseToleranciaExtra
-        //             // quantidade de minutos efetivamente trabalhados
-        //             let jornada = duracao(inputHoraEntrada, inputHoraSaida);
-
-        //             if (inicioAlmoco != '00:00' && fimAlmoco != '00:00') {
-        //                 var almoco = parse(fimAlmoco) - parse(inicioAlmoco);
-        //                 jornada = jornada - almoco;
-        //             }
-
-        //             // diferença entre as jornadas
-        //             let diff = Math.abs(jornada - jornadaNormal);
-
-        //             if (diff != 0 && folgaCobertura != 1) {
-        //                 let horas = Math.floor(diff / Math.pow(60, 2));
-        //                 diff = diff - (horas * 3600);
-        //                 let minutos = Math.floor(diff / 60);
-        //                 let segundos = diff - (minutos * 60);
-
-        //                 if (horas.toString().length < 2) horas = `0${horas}`;
-        //                 if (minutos.toString().length < 2) minutos = `0${minutos}`;
-        //                 if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-        //                 if (jornada > jornadaNormalToleranteExtra) {
-        //                     horaExtra = (`${horas}:${minutos}:${segundos}`);
-        //                 } else if (jornada < jornadaNormalToleranteAtraso) {
-        //                     atraso = (`${horas}:${minutos}:${segundos}`)
-        //                 }
-        //             } else if (folgaCobertura == 1) {
-        //                 let horas = Math.floor(jornada / Math.pow(60, 2));
-        //                 jornada = jornada - (horas * 3600);
-        //                 let minutos = Math.floor(jornada / 60);
-        //                 let segundos = jornada - (minutos * 60);
-
-        //                 if (horas.toString().length < 2) horas = `0${horas}`;
-        //                 if (minutos.toString().length < 2) minutos = `0${minutos}`;
-        //                 if (segundos.toString().length < 2) segundos = `0${segundos}`;
-
-        //                 horaExtra = (`${horas}:${minutos}:${segundos}`);
-        //             }
-        //         }
-        //         //Fim Cálculo de Hora Extra
-        //     }
-        // }
-        // //Verificação de Atraso
-
-        // separador = atraso.split(':');
-        // let h = Number(separador[0]);
-        // let m = Number(separador[1]);
-
-        // if (toleranciaAtraso) {
-        //     var separadorTolerancia = toleranciaAtraso.split(':');
-        // } else if (toleranciaDia) {
-        //     var separadorTolerancia = toleranciaDia.split(':');
-        // }
-        // let hTolerancia = Number(separadorTolerancia[0]);
-        // let mTolerancia = Number(separadorTolerancia[1]);
-
-        // if (m < mTolerancia && h == 0) {
-        //     atraso = "00:00:00"
-        // }
-
-        // //Fim da Verificação de Atraso
-
-        // //Verificação de Extra
-        // separador = horaExtra.split(':');
-        // h = Number(separador[0]);
-        // m = Number(separador[1]);
-
-        // if (toleranciaExtra) {
-        //     separadorTolerancia = toleranciaExtra.split(':');
-        // } else if (toleranciaDia) {
-        //     separadorTolerancia = toleranciaDia.split(':');
-        // }
-        // hTolerancia = Number(separadorTolerancia[0]);
-        // mTolerancia = Number(separadorTolerancia[1]);
-
-        // if (m <= mTolerancia && h == 0) {
-        //     horaExtra = "00:00:00"
-        // }
-
-        // if (horaExtra != "00:00:00" && horaExtra != "" && inputHoraSaida != "00:00:00") {
-        //     smartAlert("Aviso", "O funcionário possui horas extras", "info");
-        //     verificaAutorizacao(dia);
-        // }
-        // // if (atraso != "00:00:00" && atraso != "" && inputHoraSaida != "00:00:00") {
-        // //     smartAlert("Aviso", "O funcionário possui atrasos", "info");
-        // // }
-
-        // //Fim da Verificação de Extra
-
-        // var ipEntrada = "";
-        // var ipSaida = "";
-        // var registraAlmoco = $("#registraAlmoco").val();
-
-        // if (registraAlmoco == 1) {
-        //     if ((horaEntrada != '00:00:00') && (inicioAlmoco == '00:00') && (fimAlmoco == '00:00') && (horaSaida == '00:00:00')) {
-        //         var ipEntrada = $('#ip').val();
-        //         if (ipEntrada == "") {
-        //             smartAlert("Atenção", "Não foi possível registrar o ponto, tente novamente!", "error");
-        //             voltar();
-        //         }
-        //     }
-        // } else {
-        //     if ((horaEntrada != '00:00:00') && (horaSaida == '00:00:00')) {
-        //         var ipEntrada = $('#ip').val();
-        //         if (ipEntrada == "") {
-        //             smartAlert("Atenção", "Não foi possível registrar o ponto, tente novamente!", "error");
-        //             voltar();
-        //         }
-        //     }
-        //     if ((inicioAlmoco == '00:00') || (fimAlmoco == '00:00')) {
-        //         $('#modalErro').modal('show');
-        //         return;
-        //     }
-        // }
-
-        // if (horaSaida != '00:00:00') {
-        //     var ipSaida = $('#ip').val();
-        //     if (ipSaida == "") {
-        //         smartAlert("Atenção", "Não foi possível registrar o ponto, tente novamente!", "error");
-        //         voltar();
-        //     }
-        // }
-
-        // if (btnClicado != 'lancamento') {
-        //     arrDiasAlterados.push({
-        //         dia: dia,
-        //         horaEntrada: horaEntrada,
-        //         horaSaida: horaSaida,
-        //         inicioAlmoco: inicioAlmoco,
-        //         fimAlmoco: fimAlmoco,
-        //         ipEntrada: ipEntrada,
-        //         ipSaida: ipSaida,
-        //     });
-        // }
-        // var diasAlterados = arrDiasAlterados;
-
-        // gravarPonto(codigo, funcionario, mesAno, idFolha, dia, horaEntrada, horaSaida, inicioAlmoco, fimAlmoco, horaExtra, atraso, lancamento, observacao, status, diasAlterados, btnClicado,
-        // function(data) {
-
-        //     if (data.indexOf('sucess') < 0) {
-        //         var piece = data.split("#");
-        //         var mensagem = piece[1];
-        //         if (mensagem !== "") {
-        //             smartAlert("Atenção", mensagem, "error");
-        //             return false;
-        //         } else {
-        //             smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
-        //             return false;
-        //         }
-        //     } else {
-        //         var piece = data.split("#");
-        //         var mensagem = piece[2];
-        //         if (!mensagem) {
-        //             smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
-
-        //         } else {
-        //             out = mensagem.split("#");
-        //             mensagem = out[0];
-        //             autorizacaoExtra = out[1];
-
-        //             smartAlert("Sucesso", "Ponto marcado com sucesso!", "success");
-
-        //             // smartAlert("Aviso", mensagem, "info");
-
-        //         }
-
-        //         if (btnClicado != 'lancamento') {
-        //             confirmarRegistro(idFolha, dia, btnClicado, mesAno);
-        //             if (autorizacaoExtra == 1) {
-        //                 $('#modalAutorizacao').modal('show');
-        //             }
-        //         } else {
-        //             voltar();
-        //         }
-        //     }
-        // }
-        // );
     }
 
     function gravarLancamento() {
@@ -1864,23 +1474,23 @@ include("inc/scripts.php");
                 var horaSaida = piece[6] || '00:00:00';
                 var horaExtra = piece[7] || '00:00:00';
                 var atraso = piece[8] || '00:00:00';
-                var horaEntradaEscala = piece[9];
-                var inicioIntervaloEscala = piece[10];
-                var fimIntervaloEscala = piece[11];
-                var horaSaidaEscala = piece[12];
-                var expedienteEscala = piece[13];
-                var intervaloEscala = piece[14];
+                var horaEntradaEscala = piece[9] || '00:00:00';
+                var inicioIntervaloEscala = piece[10] || '00:00:00';
+                var fimIntervaloEscala = piece[11] || '00:00:00';
+                var horaSaidaEscala = piece[12] || '00:00:00';
+                var expedienteEscala = piece[13] || '00:00:00';
+                var intervaloEscala = piece[14] || '00:00:00';
                 var segundaEscala = piece[15];
                 var tercaEscala = piece[16];
                 var quartaEscala = piece[17];
                 var quintaEscala = piece[18];
                 var sextaEscala = piece[19];
                 var sabadoEscala = piece[20];
-                var toleranciaEscala = piece[21];
+                var toleranciaEscala = piece[21] || '00:00:00';
                 var justificativaAtraso = piece[22];
                 var justificativaExtra = piece[23];
                 var lancamento = piece[24];
-                var atrasoAlmoco = piece[25];
+                var atrasoAlmoco = piece[25] || '00:00:00';
 
                 if (atraso != "00:00:00") {
                     // smartAlert("Atenção", "O funcionário possui atraso", "error")
