@@ -75,8 +75,10 @@ function gravar()
     $atraso = (string)$_POST['atraso'];
     $justificativaAtraso = (string)$_POST['justificativaAtraso'];
     $justificativaExtra = (string)$_POST['justificativaExtra'];
-    $atrasoAlmoco = (string)$_POST['atrasoAlmoco'];  
-    // $horasPositivas = (string)$_POST['horasPositivas'];  
+    $atrasoAlmoco = (string)$_POST['atrasoAlmoco'];
+    $horaTotalDia = (string)$_POST['horaTotalDia'];
+    $horasPositivasDia = (string)$_POST['horasPositivasDia'];
+    $horasNegativasDia = (string)$_POST['horasNegativasDia'];
 
     $sql = "folhaPontoMensalDetalheDiario_Atualiza
         $codigo,
@@ -90,7 +92,10 @@ function gravar()
         '$atraso', 
         '$justificativaAtraso',
         '$justificativaExtra',
-        '$atrasoAlmoco'
+        '$atrasoAlmoco',
+        '$horaTotalDia',
+        '$horasPositivasDia',
+        '$horasNegativasDia'
         ";
 
     $reposit = new reposit();
@@ -124,7 +129,7 @@ function recupera()
     $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, lancamento, atrasoAlmoco FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
     $reposit = new reposit();
     $result = $reposit->RunQuery($sql);
-    
+
 
     $out = "";
     if ($row = $result[0]) {
@@ -139,7 +144,6 @@ function recupera()
         $observacaoExtra = $row['observacaoExtra'];
         $lancamento = $row['lancamento'];
         $atrasoAlmoco = $row['atrasoAlmoco'];
-
     }
 
 
@@ -171,7 +175,6 @@ function recupera()
         $sextaEscala = $row['sexta'];
         $sabadoEscala = $row['sabado'];
         $toleranciaEscala = $row['tolerancia'];
-
     }
 
     $out =  $idFolha . "^" .
@@ -199,17 +202,15 @@ function recupera()
         $observacaoAtraso . "^" .
         $observacaoExtra . "^" .
         $lancamento . "^" .
-        $atrasoAlmoco
-        ;
+        $atrasoAlmoco;
 
-        if ($out == "") {
-            echo "failed#";
-            return;
-        }
-    
-        echo "sucess#" . $out;
+    if ($out == "") {
+        echo "failed#";
         return;
- 
+    }
+
+    echo "sucess#" . $out;
+    return;
 }
 
 function validarIp()
@@ -268,7 +269,7 @@ function gravarLancamento()
     $codigo = (int)$_POST['codigo'];
     // $idFolha = (int)$_POST['idFolha'];
     // $dia = (int)$_POST['dia'];
-    $lancamento = (string)$_POST['lancamento'];  
+    $lancamento = (string)$_POST['lancamento'];
 
     // $sql = "UPDATE dbo.folhaPontoMensalDetalheDiario SET lancamento = '$lancamento' where dia = '$dia' and folhaPontoMensal = '$idFolha'";
     $sql = "lancamento_Atualiza

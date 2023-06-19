@@ -10,7 +10,9 @@ function gravarPonto(codigo,
      justificativaAtraso,
      justificativaExtra,
      atrasoAlmoco,
-    //  horasPositivas,
+     horaTotalDia,
+     horasPositivasDia,
+     horasNegativasDia,
      callback) {
     $.ajax({
         url: 'js/sqlscope_pontoEletronicoDiario.php',
@@ -32,7 +34,9 @@ function gravarPonto(codigo,
             justificativaAtraso: justificativaAtraso,
             justificativaExtra: justificativaExtra,
             atrasoAlmoco: atrasoAlmoco,
-            // horasPositivas:horasPositivas,
+            horaTotalDia:horaTotalDia,
+            horasPositivasDia:horasPositivasDia,
+            horasNegativasDia:horasNegativasDia,
         },
 
         success: function (data) {

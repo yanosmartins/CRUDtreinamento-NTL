@@ -1111,14 +1111,18 @@ include("inc/scripts.php");
             ssAtraso = "0" + ssAtraso;
         }
         //validacao da tolerancia
-        if (hhAtraso>= hhTolerancia && mmAtraso>= mmTolerancia && ssAtraso > hhTolerancia) {
+        if (hhAtraso >= hhTolerancia && mmAtraso >= mmTolerancia && ssAtraso > hhTolerancia) {
             var atraso = hhAtraso + ":" + mmAtraso + ":" + ssAtraso;
         } else {
             atraso = "00:00:00";
+            hhAtraso = "00";
+            mmAtraso = "00";
+            ssAtraso = "00";
         }
 
         if (horaEntrada == "00:00:00") {
             atraso = "00:00:00";
+
         }
 
         //==========================================================================================================
@@ -1283,7 +1287,7 @@ include("inc/scripts.php");
             ssExtra = "0" + ssExtra;
         }
         //validacao da tolerancia
-        if (hhSaida >= hhSaidaTolerado && mmSaida >= mmSaidaTolerado && ssSaida > ssSaidaTolerado) {
+        if (hhSaida >= hhSaidaTolerado || mmSaida >= mmSaidaTolerado && ssSaida > ssSaidaTolerado) {
             horaExtra = hhExtra + ":" + mmExtra + ":" + ssExtra;
             smartAlert("Erro", "O funcionário possui horas extras", "erro");
         } else {
@@ -1359,11 +1363,11 @@ include("inc/scripts.php");
 
         if (ssTotalDia < 0) {
             ssTotalDia = 60 + ssTotalDia; // SOMANDO POIS O VALOR PASSA COMO NEGATIVO E "(+)+(-)" = "-"
-            mmTotalDia-=1;
+            mmTotalDia -= 1;
         }
         if (mmTotalDia < 0) {
             mmTotalDia = 60 + mmTotalDia;
-            hhTotalDia-=1;
+            hhTotalDia -= 1;
         }
 
 
@@ -1379,9 +1383,9 @@ include("inc/scripts.php");
         }
 
 
-        var horasPositivas = hhPositivas + ":" + mmPositivas + ":" + ssPositivas;
-        var horasNegativas = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
         var horaTotalDia = hhTotalDia + ":" + mmTotalDia + ":" + ssTotalDia;
+        var horasPositivasDia = hhPositivas + ":" + mmPositivas + ":" + ssPositivas;
+        var horasNegativasDia = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
 
 
 
@@ -1411,8 +1415,7 @@ include("inc/scripts.php");
 
 
         setTimeout(function() {
-            gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, atrasoAlmoco,
-                //  horasPositivas,
+            gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, atrasoAlmoco, horaTotalDia, horasPositivasDia, horasNegativasDia,
                 function(data) {
                     if (data.indexOf('sucess') < 0) {
                         var piece = data.split("#");
