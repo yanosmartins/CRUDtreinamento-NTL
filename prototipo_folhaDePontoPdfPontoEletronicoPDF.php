@@ -51,7 +51,7 @@ if ($row = $result[0]) {
     $mesAno = $row['mesAno'];
 }
 
-$sqlFuncionario = "SELECT nome, ativo, escala, supervisor, empresa from dbo.funcionario where codigo = $codigoFuncionario";
+$sqlFuncionario = "SELECT nome, ativo, escala, supervisor, empresa, cargo from dbo.funcionario where codigo = $codigoFuncionario";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sqlFuncionario);
 
@@ -61,6 +61,7 @@ if ($row = $result[0]) {
     $codigoEscala = $row['escala'];
     $supervisor = $row['supervisor'];
     $codigoEmpresa = $row['empresa'];
+    $codigoCargo = $row['cargo'];
 }
 
 $sqlEmpresa = "SELECT nome AS empresa, cnpj, tipoLogradouro, logradouro, numero, complemento, bairro, uf
@@ -101,31 +102,28 @@ if ($row = $result[0]) {
 }
 
 
+$sqlCargo = "SELECT descricao FROM dbo.cargo where codigo = $codigoCargo";
+
+$reposit = new reposit();
+$result = $reposit->RunQuery($sqlCargo);
+if ($row = $result[0]) {
+    $cargo = $row['descricao'];
+}
 
 $mesAnoPartido = explode("-", $mesAno);
 $ano =  (int)$mesAnoPartido[0];
 $mesNumero = $mesAnoPartido[1];
 
-
-
-
-
 $valor_de_retorno = match ($mesNumero) {
-    '01'=> 'Janeiro',
-    '02'=> 'Fevereiro',
-    '03'=> 'Março',
-    '04'=> 'Abril',
-    '05'=> 'Maio',
-    '06'=> 'Junho'
+    '01' => 'Janeiro',
+    '02' => 'Fevereiro',
+    '03' => 'Março',
+    '04' => 'Abril',
+    '05' => 'Maio',
+    '06' => 'Junho'
 };
 
 $mesExtenso = $valor_de_retorno;
-
-
-
-
-
-
 
 
 
@@ -260,13 +258,11 @@ $pdf->SetFont('Arial', '', 8);
 $pdf->setY(21);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->setX(67);
-$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Cliente: $apelido"), 0, 0, "L", 0);
-if ($imprimeCargo == 1) {
-    $pdf->setY(25);
-    $pdf->SetFont('Arial', 'B', 8);
-    $pdf->setX(67);
-    $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Cargo: $cargo"), 0, 0, "L", 0);
-}
+$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Cliente: GIR"), 0, 0, "L", 0);
+$pdf->setY(25);
+$pdf->SetFont('Arial', 'B', 8);
+$pdf->setX(67);
+$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Cargo: $cargo"), 0, 0, "L", 0);
 $pdf->setY(21);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->setX(127);
@@ -571,7 +567,6 @@ if ($ponto) {
                     $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
                     $pdf->SetFont('Arial', 'B', 8);
                     break;
-
 
                     /////////////SABADO\\\\\\\\\\\\\\\
                 case 6:
@@ -981,391 +976,395 @@ if ($ponto) {
     }
 }
 // if (!$ponto) {
-//     $data = explode('-', $mesAno);
-//     $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
+    $data = explode('-', $mesAno);
+    $mes = (int)$data[1];
+    $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
 
-//     for ($dia = 1; $dia <= $totalDiasMes; $dia++) {
-//         $diadasemana = date('N', strtotime($ano . '-' . $mes . '-' . $dia));
-//         $diaferiado = new DateTime($ano . '-' . $mes . '-' . $dia);
+    for ($dia = 1; $dia <= $totalDiasMes; $dia++) {
+        $diadasemana = date('N', strtotime($ano . '-' . $mes . '-' . $dia));
+        $diaferiado = new DateTime($ano . '-' . $mes . '-' . $dia);
 
-//         if ($dia < 10) {
-//             $diaMesAno = preg_replace("/\d{2}$/", "0" . $dia, $mesAno);
-//         } else {
-//             $diaMesAno = preg_replace("/\d{2}$/", $dia, $mesAno);
-//         }
+        if ($dia < 10) {
+            $diaMesAno = preg_replace("/\d{2}$/", "0" . $dia, $mesAno);
+        } else {
+            $diaMesAno = preg_replace("/\d{2}$/", $dia, $mesAno);
+        }
 
-//         $dataAtual = new DateTime();
-//         $dataAtual = $dataAtual->format('Y-m-d');
+        $dataAtual = new DateTime();
+        $dataAtual = $dataAtual->format('Y-m-d');
 
-//         $folga = "";
-//         foreach ($diasFolgaArray as $diaFolga) {
-//             $dataInicio = explode(' ', $diaFolga['dataInicio']);
-//             $dataInicio = explode('-', $dataInicio[0]);
-//             $dataFim = explode(' ', $diaFolga['dataFim']);
-//             $dataFim = explode('-', $dataFim[0]);
-//             $quantidadeDias = $diaFolga['quantidadeDias'];
+        $folga = "";
+        // foreach ($diasFolgaArray as $diaFolga) {
+        //     $dataInicio = explode(' ', $diaFolga['dataInicio']);
+        //     $dataInicio = explode('-', $dataInicio[0]);
+        //     $dataFim = explode(' ', $diaFolga['dataFim']);
+        //     $dataFim = explode('-', $dataFim[0]);
+        //     $quantidadeDias = $diaFolga['quantidadeDias'];
 
-//             if ($quantidadeDias <= 2) {
-//                 if ($dataInicio[2] == $dia || $dataFim[2] == $dia) {
-//                     $folga = true;
-//                     break;
-//                 }
-//             } else {
-//                 if ($dia >= $dataInicio[2] && $dia <= $dataFim[2]) {
-//                     $folga = true;
-//                     break;
-//                 }
-//             }
-//         }
-        // LINHAS DA ESQUERDA PRA DIREITA // 
-        $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
-        $pdf->Line(16, $linhaverticalteste, 16, 33.1); // 1
-        $pdf->Line(32, $linhaverticalteste, 32, 33); // 2
-        $pdf->Line(49, $linhaverticalteste, 49, 39.1); // 3 
-        $pdf->Line(67, $linhaverticalteste, 67, 17); // 4 
-        $pdf->Line(86, $linhaverticalteste, 86, 33); // 5 
-        $pdf->Line(106, $linhaverticalteste, 106, 39.1); // 6
-        $pdf->Line(126, $linhaverticalteste, 126, 33); // 7
-        $pdf->Line(189, $linhaverticalteste, 189, 33); // 8 linha lado esquerdo do visto
-        $pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
+        //     if ($quantidadeDias <= 2) {
+        //         if ($dataInicio[2] == $dia || $dataFim[2] == $dia) {
+        //             $folga = true;
+        //             break;
+        //         }
+        //     } else {
+        //         if ($dia >= $dataInicio[2] && $dia <= $dataFim[2]) {
+        //             $folga = true;
+        //             break;
+        //         }
+        //     }
+        // }
+    }
+// LINHAS DA ESQUERDA PRA DIREITA // 
+$pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
+$pdf->Line(16, $linhaverticalteste, 16, 33.1); // 1
+$pdf->Line(32, $linhaverticalteste, 32, 33); // 2
+$pdf->Line(49, $linhaverticalteste, 49, 39.1); // 3 
+$pdf->Line(67, $linhaverticalteste, 67, 17); // 4 
+$pdf->Line(86, $linhaverticalteste, 86, 33); // 5 
+$pdf->Line(106, $linhaverticalteste, 106, 39.1); // 6
+$pdf->Line(126, $linhaverticalteste, 126, 33); // 7
+$pdf->Line(189, $linhaverticalteste, 189, 33); // 8 linha lado esquerdo do visto
+$pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
 
-        // $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
+$pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
 
-        // $pdf->Line(5, $linhahorizontalteste + 0.1, 205, $linhahorizontalteste + 0.1);
-        // $pdf->setY($linhavertical - 2.7);
+$pdf->Line(5, $linhahorizontalteste + 0.1, 205, $linhahorizontalteste + 0.1);
+$pdf->setY($linhavertical - 2.7);
 
-        // $pdf->setX(5);
-        // $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $dia . ""), 0, 0, "L", 0);
-        // $pdf->SetFont('Arial', 'B', 7);
+$pdf->setX(5);
+$pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $dia . ""), 0, 0, "L", 0);
+$pdf->SetFont('Arial', 'B', 7);
 
-        // switch ($diadasemana) {
-        //     case 1:
-        //         $pdf->setX(7);
-        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
-        //         $pdf->SetFont('Arial', 'B', 8);
-        //         break;
-        //     case 2:
-        //         $pdf->setX(7);
-        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
-        //         $pdf->SetFont('Arial', 'B', 8);
-        //         break;
-        //     case 3:
-        //         $pdf->setX(7);
-        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
-        //         $pdf->SetFont('Arial', 'B', 8);
-        //         break;
-        //     case 4:
-        //         $pdf->setX(7);
-        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
-        //         $pdf->SetFont('Arial', 'B', 8);
-        //         break;
-        //     case 5:
-        //         $pdf->setX(7);
-        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
-        //         $pdf->SetFont('Arial', 'B', 8);
-        //         break;
+switch ($diadasemana) {
+    case 1:
+        $pdf->setX(7);
+        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 8);
+        break;
+    case 2:
+        $pdf->setX(7);
+        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 8);
+        break;
+    case 3:
+        $pdf->setX(7);
+        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 8);
+        break;
+    case 4:
+        $pdf->setX(7);
+        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 8);
+        break;
+    case 5:
+        $pdf->setX(7);
+        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
+        $pdf->SetFont('Arial', 'B', 8);
+        break;
 
 
-//                 /////////////SABADO\\\\\\\\\\\\\\\
-//             case 6:
-//                 $pdf->setX(7);
-//                 $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
-//                 // cinza
-//                 if ($escalaDia == 1) {
-//                     $pdf->setX(16);
-//                     $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                     $pdf->setX(67);
-//                     $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-//                     $pdf->setX(125);
-//                     $pdf->Cell(64, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                     $pdf->setX(86.3);
-//                     $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA ENTRADA FALTA JUSTIFICADA
-//                     $pdf->setX(105);
-//                     $pdf->Cell(21,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA FALTA JUSTIFICADA
-//                     $pdf->setX(126);
-//                     $pdf->SetFont('Arial', 'B', 8);
-//                     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // descricao funcionario
-//                     $pdf->setX(169.35);
-//                     $pdf->Cell(35.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
-//                     $pdf->SetFont('Arial', 'B', 8);
-//                 }
-//                 // FIM CINZA
 
-//                 if ($registraPonto == 1 && ($inicioRegistroPonto[0] <= $diaMesAno) && ($escalaDia == 2 || $escalaDia == 3) && $diaMesAno < $dataAtual) {
-//                     $pdf->setX(126.8);
-//                     $pdf->SetFont('Arial', 'B', 8);
-//                     if ($fimRegistroPonto[0] != "") {
-//                         if ($fimRegistroPonto[0] >= $diaMesAno) {
-//                             $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-//                         }
-//                     } else {
-//                         if ($folga == true) {
-//                             $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
-//                         } else {
-//                             $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-//                         }
-//                     }
-//                 }
+                /////////////SABADO\\\\\\\\\\\\\\\
+            case 6:
+                $pdf->setX(7);
+                $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
+                // cinza
+                if ($escalaDia == 1) {
+                    $pdf->setX(16);
+                    $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                    $pdf->setX(67);
+                    $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
+                    $pdf->setX(125);
+                    $pdf->Cell(64, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                    $pdf->setX(86.3);
+                    $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA ENTRADA FALTA JUSTIFICADA
+                    $pdf->setX(105);
+                    $pdf->Cell(21,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA FALTA JUSTIFICADA
+                    $pdf->setX(126);
+                    $pdf->SetFont('Arial', 'B', 8);
+                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // descricao funcionario
+                    $pdf->setX(169.35);
+                    $pdf->Cell(35.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+                    $pdf->SetFont('Arial', 'B', 8);
+                }
+                // FIM CINZA
 
-//                 break;
+                if ($registraPonto == 1 && ($inicioRegistroPonto[0] <= $diaMesAno) && ($escalaDia == 2 || $escalaDia == 3) && $diaMesAno < $dataAtual) {
+                    $pdf->setX(126.8);
+                    $pdf->SetFont('Arial', 'B', 8);
+                    if ($fimRegistroPonto[0] != "") {
+                        if ($fimRegistroPonto[0] >= $diaMesAno) {
+                            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                        }
+                    } else {
+                        if ($folga == true) {
+                            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
+                        } else {
+                            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                        }
+                    }
+                }
 
-//                 /////////////DOMINGO\\\\\\\\\\\\\\\\\
-//             case 7:
-//                 $pdf->setX(7);
-//                 $pdf->SetFont('Arial', 'B', 7);
-//                 $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0); //DOMINGO
+                break;
 
-//                 // CINZA 
-//                 if ($tipoEscala == 1) { //Normal
-//                     if ($escalaDia != 3) {
-//                         $pdf->setX(16);
-//                         $pdf->Cell(15.65, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                         $pdf->setX(67);
-//                         $pdf->Cell(18.69, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                         $pdf->setX(130.35);
-//                         $pdf->Cell(42.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                         $pdf->SetFont('Arial', 'B', 8);
+                /////////////DOMINGO\\\\\\\\\\\\\\\\\
+            case 7:
+                $pdf->setX(7);
+                $pdf->SetFont('Arial', 'B', 7);
+                $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0); //DOMINGO
 
-//                         $pdf->setX(86.3);
-//                         $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA ENTRADA FALTA JUSTIFICADA
-//                         $pdf->setX(105);
-//                         $pdf->Cell(21,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA FALTA JUSTIFICADA
+                // CINZA 
+                if ($tipoEscala == 1) { //Normal
+                    if ($escalaDia != 3) {
+                        $pdf->setX(16);
+                        $pdf->Cell(15.65, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->setX(67);
+                        $pdf->Cell(18.69, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->setX(130.35);
+                        $pdf->Cell(42.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->SetFont('Arial', 'B', 8);
 
-//                         $pdf->setX(126);
-//                         $pdf->SetFont('Arial', 'B', 8);
-//                         $pdf->Cell(20,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                         $pdf->setX(169.35);
-//                         $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                         $pdf->SetFont('Arial', 'B', 8);
-//                     }
-//                     // FIM CINZA
-//                     if ($registraPonto == 1 && ($inicioRegistroPonto[0] <= $diaMesAno) && $escalaDia == 3 && ($diaMesAno < $dataAtual)) {
-//                         $pdf->setX(126.8);
-//                         $pdf->SetFont('Arial', 'B', 8);
-//                         if ($fimRegistroPonto[0] != "") {
-//                             if (($fimRegistroPonto[0] >= $diaMesAno)) {
-//                                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-//                             }
-//                         } else {
-//                             if ($folga == true) {
-//                                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
-//                             } else {
-//                                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-//                             }
-//                         }
-//                     }
-//                 }
-//                 break;
-//             default:
-//         }
+                        $pdf->setX(86.3);
+                        $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA ENTRADA FALTA JUSTIFICADA
+                        $pdf->setX(105);
+                        $pdf->Cell(21,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA FALTA JUSTIFICADA
 
-//         $pdf->setX(32.2);
-//         $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
-//         $pdf->setX(49.2);
-//         $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
+                        $pdf->setX(126);
+                        $pdf->SetFont('Arial', 'B', 8);
+                        $pdf->Cell(20,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->setX(169.35);
+                        $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->SetFont('Arial', 'B', 8);
+                    }
+                    // FIM CINZA
+                    if ($registraPonto == 1 && ($inicioRegistroPonto[0] <= $diaMesAno) && $escalaDia == 3 && ($diaMesAno < $dataAtual)) {
+                        $pdf->setX(126.8);
+                        $pdf->SetFont('Arial', 'B', 8);
+                        if ($fimRegistroPonto[0] != "") {
+                            if (($fimRegistroPonto[0] >= $diaMesAno)) {
+                                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                            }
+                        } else {
+                            if ($folga == true) {
+                                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
+                            } else {
+                                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                            }
+                        }
+                    }
+                }
+                break;
+            default:
+        }
 
-//         $pdf->setX(86.2);
-//         $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
-//         $pdf->setX(106.3);
-//         $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
+        $pdf->setX(32.2);
+        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
+        $pdf->setX(49.2);
+        $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
 
-//         if ($diadasemana != 6 && $diadasemana != 7) {
+        $pdf->setX(86.2);
+        $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
+        $pdf->setX(106.3);
+        $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
 
-//             $pdf->setX(86.3);
-//             $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA ENTRADA FALTA JUSTIFICADA
-//             $pdf->setX(106.2);
-//             $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA PREENCHIDA
+        if ($diadasemana != 6 && $diadasemana != 7) {
 
-//             if ($registraPonto == 1 && $inicioRegistroPonto[0] <= $diaMesAno && $diaMesAno < $dataAtual) {
-//                 $pdf->setX(126.8);
-//                 $pdf->SetFont('Arial', 'B', 8);
-//                 if ($fimRegistroPonto[0] != "") {
-//                     if (($fimRegistroPonto[0] >= $diaMesAno)) {
-//                         $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-//                     }
-//                 } else {
-//                     if ($folga == true) {
-//                         $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
-//                     } else {
-//                         $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-//                     }
-//                 }
-//             }
+            $pdf->setX(86.3);
+            $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA ENTRADA FALTA JUSTIFICADA
+            $pdf->setX(106.2);
+            $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA PREENCHIDA
 
-//             //Observacao
-//             $pdf->setX(126);
-//             $pdf->SetFont('Arial', 'B', 8);
-//             $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 0);
-//             $pdf->setX(169.35);
-//             $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 0);
-//             $pdf->SetFont('Arial', 'B', 8);
+            if ($registraPonto == 1 && $inicioRegistroPonto[0] <= $diaMesAno && $diaMesAno < $dataAtual) {
+                $pdf->setX(126.8);
+                $pdf->SetFont('Arial', 'B', 8);
+                if ($fimRegistroPonto[0] != "") {
+                    if (($fimRegistroPonto[0] >= $diaMesAno)) {
+                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                    }
+                } else {
+                    if ($folga == true) {
+                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
+                    } else {
+                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                    }
+                }
+            }
 
-//             if ($escalaDia != 3) {
-//                 foreach ($feriados as $feriado) {
-//                     if (mb_ereg("-$mes-" . str_pad($dia, 2, 0, STR_PAD_LEFT), $feriado["data"])) {
-//                         $pdf->SetFont('Arial', 'B', 8);
-//                         $pdf->setX(35);
-//                         $pdf->Cell(30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                         $pdf->Cell(120, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                         $pdf->Cell(20, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+            //Observacao
+            $pdf->setX(126);
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 0);
+            $pdf->setX(169.35);
+            $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 0);
+            $pdf->SetFont('Arial', 'B', 8);
 
-//                         $pdf->setX(16);
-//                         $pdf->Cell(17, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
+            if ($escalaDia != 3) {
+                foreach ($feriados as $feriado) {
+                    if (mb_ereg("-$mes-" . str_pad($dia, 2, 0, STR_PAD_LEFT), $feriado["data"])) {
+                        $pdf->SetFont('Arial', 'B', 8);
+                        $pdf->setX(35);
+                        $pdf->Cell(30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->Cell(120, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->Cell(20, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
 
-//                         $pdf->setX(17);
-//                         $pdf->Cell(12, 6.31, iconv('UTF-8', 'windows-1252', "FERIADO"), 0, 0, "L", 0);
-//                         $pdf->SetTextColor(0, 0, 0);
-//                     }
-//                 }
-//             }
+                        $pdf->setX(16);
+                        $pdf->Cell(17, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
 
-//             // Verifica se esta de férias
-//             // $sqlFerias = "SELECT dataInicio, dataFim, quantidadeDias 
-//             //             FROM Beneficio.funcionarioFerias 
-//             //             WHERE funcionario = $id AND mesAno = '$mesAno' AND ativo = 1";
-//             // $resultFerias = $reposit->RunQuery($sqlFerias);
+                        $pdf->setX(17);
+                        $pdf->Cell(12, 6.31, iconv('UTF-8', 'windows-1252', "FERIADO"), 0, 0, "L", 0);
+                        $pdf->SetTextColor(0, 0, 0);
+                    }
+                }
+            }
 
-//             $ferias = array();
-//             foreach ($resultFerias as $row) {
-//                 array_push($ferias, $row);
-//             }
-//             if ($ferias = $ferias[0]) {
-//                 $dataInicio = $ferias['dataInicio'];
-//                 $dataFim = $ferias['dataFim'];
+            // Verifica se esta de férias
+            // $sqlFerias = "SELECT dataInicio, dataFim, quantidadeDias 
+            //             FROM Beneficio.funcionarioFerias 
+            //             WHERE funcionario = $id AND mesAno = '$mesAno' AND ativo = 1";
+            // $resultFerias = $reposit->RunQuery($sqlFerias);
 
-//                 for ($i = $dataInicio; $i < $dataFim;) {
-//                     $i = date('Y-m-d', strtotime($i));
+            $ferias = array();
+            foreach ($resultFerias as $row) {
+                array_push($ferias, $row);
+            }
+            if ($ferias = $ferias[0]) {
+                $dataInicio = $ferias['dataInicio'];
+                $dataFim = $ferias['dataFim'];
 
-//                     if (mb_ereg("-$mes-" . str_pad($dia, 2, 0, STR_PAD_LEFT), $i)) {
-//                         $pdf->SetFont('Arial', 'B', 8);
-//                         $pdf->setX(35);
-//                         $pdf->Cell(30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                         $pdf->Cell(120, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-//                         $pdf->Cell(20, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                for ($i = $dataInicio; $i < $dataFim;) {
+                    $i = date('Y-m-d', strtotime($i));
 
-//                         $pdf->setX(16);
-//                         $pdf->Cell(17, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
+                    if (mb_ereg("-$mes-" . str_pad($dia, 2, 0, STR_PAD_LEFT), $i)) {
+                        $pdf->SetFont('Arial', 'B', 8);
+                        $pdf->setX(35);
+                        $pdf->Cell(30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->Cell(120, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->Cell(20, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
 
-//                         $pdf->setX(126.8);
+                        $pdf->setX(16);
+                        $pdf->Cell(17, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
 
-//                         $pdf->Cell(16.65, 6.61, iconv('UTF-8', 'windows-1252', "FÉRIAS"), 0, 0, "L", 0);
-//                         $pdf->SetTextColor(0, 0, 0);
-//                         break;
-//                     }
+                        $pdf->setX(126.8);
 
-//                     $i = date('Y-m-d 00:00:00', strtotime("+1 days", strtotime($i)));
-//                 }
-//             }
-//         }
+                        $pdf->Cell(16.65, 6.61, iconv('UTF-8', 'windows-1252', "FÉRIAS"), 0, 0, "L", 0);
+                        $pdf->SetTextColor(0, 0, 0);
+                        break;
+                    }
 
-//         $linhavertical += 6.9;
-//         $linhahorizontalteste += 6.9;
-//         $linhaverticalteste += 6.9;
+                    $i = date('Y-m-d 00:00:00', strtotime("+1 days", strtotime($i)));
+                }
+            }
+        }
+
+        $linhavertical += 6.9;
+        $linhahorizontalteste += 6.9;
+        $linhaverticalteste += 6.9;
 //     }
 // }
 
-// if (file_exists($img1)) {
-//     $pdf->Image($img1, 55, 98, 100); #Marca d'Agua da logo NTL no centro da folha 
-// }
 
-// $saldoMensal = $totalHorasExtra - $totalHorasAtraso;
-// $totalHorasExtra = sprintf("%02d%s%02d", floor($totalHorasExtra / 3600), ":", ($totalHorasExtra / 60) % 60);
-// $totalHorasAtraso = sprintf("%02d%s%02d", floor($totalHorasAtraso / 3600), ":", ($totalHorasAtraso / 60) % 60);
+if (file_exists($img1)) {
+    $pdf->Image($img1, 55, 98, 100); #Marca d'Agua da logo NTL no centro da folha 
+}
 
-// if ($saldoMensal < 0) {
-//     $saldoMensal = explode("-", $saldoMensal);
-//     $saldoMensal = sprintf("%02d%s%02d", floor($saldoMensal[1] / 3600), ":", ($saldoMensal[1] / 60) % 60);
-//     $saldoMensal = "- " . $saldoMensal;
-// } else {
-//     $saldoMensal = sprintf("%02d%s%02d", floor($saldoMensal / 3600), ":", ($saldoMensal / 60) % 60);
-// }
+$saldoMensal = $totalHorasExtra - $totalHorasAtraso;
+$totalHorasExtra = sprintf("%02d%s%02d", floor($totalHorasExtra / 3600), ":", ($totalHorasExtra / 60) % 60);
+$totalHorasAtraso = sprintf("%02d%s%02d", floor($totalHorasAtraso / 3600), ":", ($totalHorasAtraso / 60) % 60);
 
-// $y = $pdf->GetY();
-// $altura = $pdf->GetPageHeight();
+if ($saldoMensal < 0) {
+    $saldoMensal = explode("-", $saldoMensal);
+    $saldoMensal = sprintf("%02d%s%02d", floor($saldoMensal[1] / 3600), ":", ($saldoMensal[1] / 60) % 60);
+    $saldoMensal = "- " . $saldoMensal;
+} else {
+    $saldoMensal = sprintf("%02d%s%02d", floor($saldoMensal / 3600), ":", ($saldoMensal / 60) % 60);
+}
 
-// if ($y > ($altura - 2) ) {
-//     $pdf->AddPage();
+$y = $pdf->GetY();
+$altura = $pdf->GetPageHeight();
 
-//     $pdf->Line(5, 17, 205, 17); //primeira linha
-//     $pdf->Line(5, 17, 205, 17); //primeira linha
-//     $pdf->Line(5, 17, 205, 17); //primeira linha
-//     $pdf->Line(5, 17, 205, 17); //primeira linha
+if ($y > ($altura - 2) ) {
+    $pdf->AddPage();
 
-//     $linhavertical = 20;
-//     $linhahorizontalteste = 25;
-//     $linhaverticalteste = 24;
-// }
+    $pdf->Line(5, 17, 205, 17); //primeira linha
+    $pdf->Line(5, 17, 205, 17); //primeira linha
+    $pdf->Line(5, 17, 205, 17); //primeira linha
+    $pdf->Line(5, 17, 205, 17); //primeira linha
 
-// $pdf->setY($linhaverticalteste - 5);
-// $pdf->setX(50);
-// $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "RESUMO"), 0, 0, "L", 0);
+    $linhavertical = 20;
+    $linhahorizontalteste = 25;
+    $linhaverticalteste = 24;
+}
 
-// $pdf->Line(49, $linhaverticalteste, 49, $linhaverticalteste + 14); //Linha lado esquerdo de horas negativas
+$pdf->setY($linhaverticalteste - 5);
+$pdf->setX(50);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "RESUMO"), 0, 0, "L", 0);
 
-// $pdf->setY($linhaverticalteste + 2);
-// $pdf->setX(5);
-// $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS POSITIVAS: $totalHorasExtra"), 0, 0, "L", 0);
+$pdf->Line(49, $linhaverticalteste, 49, $linhaverticalteste + 14); //Linha lado esquerdo de horas negativas
 
-// $pdf->setY($linhaverticalteste + 2);
-// $pdf->setX(50);
-// $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasAtraso"), 0, 0, "L", 0);
+$pdf->setY($linhaverticalteste + 2);
+$pdf->setX(5);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS POSITIVAS: $totalHorasExtra"), 0, 0, "L", 0);
 
-// $pdf->setY($linhaverticalteste + 11);
-// $pdf->setX(5);
-// $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO MENSAL: $saldoMensal"), 0, 0, "L", 0);
+$pdf->setY($linhaverticalteste + 2);
+$pdf->setX(50);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasAtraso"), 0, 0, "L", 0);
 
-// if ($bancoHoras) {
-//     foreach ($bancoHoras as $banco) {
-//         $horaPositiva = $banco['horaPositiva'];
+$pdf->setY($linhaverticalteste + 11);
+$pdf->setX(5);
+$pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO MENSAL: $saldoMensal"), 0, 0, "L", 0);
 
-//         $horaPositiva = explode(":", $horaPositiva);
-//         $horaPositiva = ($horaPositiva[0] * 3600) + ($horaPositiva[1] * 60) + $horaPositiva[2];
-//         $totalHorasPositiva += $horaPositiva; //Total em segundos
+if ($bancoHoras) {
+    foreach ($bancoHoras as $banco) {
+        $horaPositiva = $banco['horaPositiva'];
 
-//         $horaNegativa = $banco['horaNegativa'];
+        $horaPositiva = explode(":", $horaPositiva);
+        $horaPositiva = ($horaPositiva[0] * 3600) + ($horaPositiva[1] * 60) + $horaPositiva[2];
+        $totalHorasPositiva += $horaPositiva; //Total em segundos
 
-//         $horaNegativa = explode(":", $horaNegativa);
-//         $horaNegativa = ($horaNegativa[0] * 3600) + ($horaNegativa[1] * 60) + $horaNegativa[2];
-//         $totalHorasNegativa += $horaNegativa; //Total em segundos
-//     }
-//     $saldoBanco = $totalHorasPositiva - $totalHorasNegativa;
+        $horaNegativa = $banco['horaNegativa'];
 
-//     if ($saldoBanco < 0) {
-//         $saldoBanco = explode("-", $saldoBanco);
-//         $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco[1] / 3600), ":", ($saldoBanco[1] / 60) % 60);
-//         $saldoBanco = "- " . $saldoBanco;
-//     } else {
-//         $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco / 3600), ":", ($saldoBanco / 60) % 60);
-//     }
+        $horaNegativa = explode(":", $horaNegativa);
+        $horaNegativa = ($horaNegativa[0] * 3600) + ($horaNegativa[1] * 60) + $horaNegativa[2];
+        $totalHorasNegativa += $horaNegativa; //Total em segundos
+    }
+    $saldoBanco = $totalHorasPositiva - $totalHorasNegativa;
 
-//     $pdf->setY($linhaverticalteste + 11);
-//     $pdf->setX(50);
-//     $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO BANCO HORAS: $saldoBanco"), 0, 0, "L", 0);
-// }
+    if ($saldoBanco < 0) {
+        $saldoBanco = explode("-", $saldoBanco);
+        $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco[1] / 3600), ":", ($saldoBanco[1] / 60) % 60);
+        $saldoBanco = "- " . $saldoBanco;
+    } else {
+        $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco / 3600), ":", ($saldoBanco / 60) % 60);
+    }
 
-// $pdf->setY($linhaverticalteste - 5);
-// $pdf->setX(155);
-// $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ASSINATURAS"), 0, 0, "L", 0);
+    $pdf->setY($linhaverticalteste + 11);
+    $pdf->setX(50);
+    $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO BANCO HORAS: $saldoBanco"), 0, 0, "L", 0);
+}
 
-// $pdf->setY($linhaverticalteste + 2);
-// $pdf->setX(126);
-// $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "SUPERVISOR"), 0, 0, "L", 0);
+$pdf->setY($linhaverticalteste - 5);
+$pdf->setX(155);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ASSINATURAS"), 0, 0, "L", 0);
 
-// $pdf->setY($linhaverticalteste + 11);
-// $pdf->setX(126);
-// $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "FUNCIONARIO"), 0, 0, "L", 0);
+$pdf->setY($linhaverticalteste + 2);
+$pdf->setX(126);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "SUPERVISOR"), 0, 0, "L", 0);
 
-// $i = 0;
-// while ($i != 3) {
-//     $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste); //Linha fim documento
-//     $pdf->Line(5, $linhaverticalteste, 5, 17); //Linha lado esquerdo documento
-//     $pdf->Line(205, $linhaverticalteste, 205, 17); // Linha lado direito documento
-//     $pdf->Line(126, $linhaverticalteste, 126, 33); //Linha lado esquerdo de assinaturas
+$pdf->setY($linhaverticalteste + 11);
+$pdf->setX(126);
+$pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "FUNCIONARIO"), 0, 0, "L", 0);
 
-//     $i++;
-//     $linhahorizontalteste += 7;
-//     $linhaverticalteste += 7;
-// }
+$i = 0;
+while ($i != 3) {
+    $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste); //Linha fim documento
+    $pdf->Line(5, $linhaverticalteste, 5, 17); //Linha lado esquerdo documento
+    $pdf->Line(205, $linhaverticalteste, 205, 17); // Linha lado direito documento
+    $pdf->Line(126, $linhaverticalteste, 126, 33); //Linha lado esquerdo de assinaturas
+
+    $i++;
+    $linhahorizontalteste += 7;
+    $linhaverticalteste += 7;
+}
 
 // // RELATÓRIO DE PAUSAS
 // if ($registraPausa == 1) {
@@ -1532,20 +1531,20 @@ if ($ponto) {
 //             }
 //         }
 
-//         // LINHAS DA ESQUERDA PRA DIREITA // 
-//         $pdf->Line(16, $linhaverticalteste, 16, 33.1); // DIA
-//         $pdf->Line(52, $linhaverticalteste, 52, 33); // 3 ENTRE INICIO E FIM PRIMEIRA PAUSA
-//         $pdf->Line(86, $linhaverticalteste, 86, 33); // 5 ENTRE FIM PRIMEIRA PAUSA E INICIO SEGUNDA PAUSA
-//         $pdf->Line(170, $linhaverticalteste, 170, 33); // 8 linha lado esquerdo do visto
+        // // LINHAS DA ESQUERDA PRA DIREITA // 
+        // $pdf->Line(16, $linhaverticalteste, 16, 33.1); // DIA
+        // $pdf->Line(52, $linhaverticalteste, 52, 33); // 3 ENTRE INICIO E FIM PRIMEIRA PAUSA
+        // $pdf->Line(86, $linhaverticalteste, 86, 33); // 5 ENTRE FIM PRIMEIRA PAUSA E INICIO SEGUNDA PAUSA
+        // $pdf->Line(170, $linhaverticalteste, 170, 33); // 8 linha lado esquerdo do visto
 
-//         $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
+        // $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
 
-//         $pdf->Line(5, $linhahorizontalteste + 0.1, 205, $linhahorizontalteste + 0.1);
-//         $pdf->setY($linhavertical - 2.7);
+        // $pdf->Line(5, $linhahorizontalteste + 0.1, 205, $linhahorizontalteste + 0.1);
+        // $pdf->setY($linhavertical - 2.7);
 
-//         $pdf->setX(5);
-//         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $registro['dia'] . ""), 0, 0, "L", 0);
-//         $pdf->SetFont('Arial', 'B', 7);
+        // $pdf->setX(5);
+        // $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $registro['dia'] . ""), 0, 0, "L", 0);
+        // $pdf->SetFont('Arial', 'B', 7);
 
 //         switch ($diadasemana) {
 //             case 1:
