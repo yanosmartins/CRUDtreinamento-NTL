@@ -21,17 +21,13 @@ date_default_timezone_set('America/Sao_Paulo');
 
 require_once('fpdf/fpdf.php');
 
+$idFolha = (int)$_GET["idFolha"];
 
-$sqlFolhaPontoMensal = "SELECT codigo, funcionario, = '$idFolha'";
-
-$reposit = new reposit();
-$result = $reposit->RunQuery($sql);
-
-$idFolha = $_GET["idFolha"];
-$sql = "SELECT folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra,
- lancamento, atrasoAlmoco, horaTotalDia, horasPositivasDia, horasNegativasDia
-  FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = '$idFolha'";
-
+$sql = "SELECT FPMDD.folhaPontoMensal, FPMDD.dia, FPMDD.horaEntrada, FPMDD.inicioAlmoco, FPMDD.fimAlmoco, FPMDD.horaSaida, FPMDD.horaExtra, FPMDD.atraso, FPMDD.observacaoAtraso, FPMDD.observacaoExtra,
+FPMDD.lancamento, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.horasPositivasDia, FPMDD.horasNegativasDia, FPM.mesAno, FPM.funcionarioId as codigoFuncionario
+ FROM dbo.folhaPontoMensalDetalheDiario FPMDD
+ LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo  
+    where FPMDD.folhaPontoMensal = $idFolha ";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 
@@ -51,27 +47,25 @@ if ($row = $result[0]) {
     $lancamento = $row['lancamento'];
     $atrasoAlmoco = $row['atrasoAlmoco'];
     $horaTotalDia = $row['horaTotalDia'];
+    $codigoFuncionario = $row['codigoFuncionario'];
+    $mesAno = $row['mesAno'];
 }
 
+$sqlFuncionario = "SELECT nome, ativo, escala, supervisor, empresa from dbo.funcionario where codigo = $codigoFuncionario";
+$reposit = new reposit();
+$result = $reposit->RunQuery($sqlFuncionario);
 
+if ($row = $result[0]) {
+    $nome = $row['nome'];
+    $ativo = $row['ativo'];
+    $codigoEscala = $row['escala'];
+    $supervisor = $row['supervisor'];
+    $codigoEmpresa = $row['empresa'];
+}
 
- // // USANDO O PHP MATCH, EU CONSIGO REDUZIR A QUANTIDADE DE BLOCOS CONDICIONAIS
-//  $estadoCivilFiltro = (int)$row['estadoCivil'];
-
-//  $valor_de_retorno = match ($estadoCivilFiltro) {
-//      1 => 'Solteiro',
-//      2 => 'Casado',
-//      3 => 'Separado',
-//      4 => 'Divorciado',
-//      5 => 'Viúvo'
-//  };
-//  $estadoCivilFiltro = $valor_de_retorno;
-
-
-
-
-$sqlEmpresa = "SELECT TOP 1 nome AS empresa, cnpj, tipoLogradouro, logradouro, numero, complemento, bairro, uf
-                FROM dbo.empresa";
+$sqlEmpresa = "SELECT nome AS empresa, cnpj, tipoLogradouro, logradouro, numero, complemento, bairro, uf
+FROM dbo.empresa where codigo = $codigoEmpresa";
+$reposit = new reposit();
 $result = $reposit->RunQuery($sqlEmpresa);
 
 if ($row = $result[0]) {
@@ -84,6 +78,60 @@ if ($row = $result[0]) {
     $bairro = $row['bairro'];
     $uf = $row['uf'];
 }
+
+
+$sqlEscala = "SELECT descricao, horaEntrada, inicioIntervalo, fimIntervalo, horaSaida, expediente, intervalo, domingo, segunda, terca, quarta, quinta, sexta, sabado, tolerancia FROM dbo.escala where codigo = $codigoEscala";
+$reposit = new reposit();
+$result = $reposit->RunQuery($sqlEscala);
+
+if ($row = $result[0]) {
+    $horaEntradaEscala = $row['horaEntrada'];
+    $inicioIntervaloEscala = $row['inicioIntervalo'];
+    $fimIntervaloEscala = $row['fimIntervalo'];
+    $horaSaidaEscala = $row['horaSaida'];
+    $expedienteEscala = $row['expediente'];
+    $intervaloEscala = $row['intervalo'];
+    $segundaEscala = $row['segunda'];
+    $tercaEscala = $row['terca'];
+    $quartaEscala = $row['quarta'];
+    $quintaEscala = $row['quinta'];
+    $sextaEscala = $row['sexta'];
+    $sabadoEscala = $row['sabado'];
+    $toleranciaEscala = $row['tolerancia'];
+}
+
+
+
+$mesAnoPartido = explode("-", $mesAno);
+$ano =  (int)$mesAnoPartido[0];
+$mesNumero = $mesAnoPartido[1];
+
+
+
+
+
+$valor_de_retorno = match ($mesNumero) {
+    '01'=> 'Janeiro',
+    '02'=> 'Fevereiro',
+    '03'=> 'Março',
+    '04'=> 'Abril',
+    '05'=> 'Maio',
+    '06'=> 'Junho'
+};
+
+$mesExtenso = $valor_de_retorno;
+
+
+
+
+
+
+
+
+
+
+
+
 
 class PDF extends FPDF
 {
@@ -259,7 +307,7 @@ $pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Matricula:"), 0, 0, "L", 0);
 $pdf->SetFont('Arial', '', 8);
 $pdf->setX(20);
 $pdf->SetFont('Arial', 'B', 8);
-$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $matricula), 0, 0, "L", 0);
+$pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $codigoFuncionario), 0, 0, "L", 0);
 
 $pdf->Line(5, 33, 205, 33); //linha abaixo do nome e matricula
 
@@ -969,53 +1017,53 @@ if ($ponto) {
 //                 }
 //             }
 //         }
-//         // LINHAS DA ESQUERDA PRA DIREITA // 
-//         $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
-//         $pdf->Line(16, $linhaverticalteste, 16, 33.1); // 1
-//         $pdf->Line(32, $linhaverticalteste, 32, 33); // 2
-//         $pdf->Line(49, $linhaverticalteste, 49, 39.1); // 3 
-//         $pdf->Line(67, $linhaverticalteste, 67, 17); // 4 
-//         $pdf->Line(86, $linhaverticalteste, 86, 33); // 5 
-//         $pdf->Line(106, $linhaverticalteste, 106, 39.1); // 6
-//         $pdf->Line(126, $linhaverticalteste, 126, 33); // 7
-//         $pdf->Line(189, $linhaverticalteste, 189, 33); // 8 linha lado esquerdo do visto
-//         $pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
+        // LINHAS DA ESQUERDA PRA DIREITA // 
+        $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
+        $pdf->Line(16, $linhaverticalteste, 16, 33.1); // 1
+        $pdf->Line(32, $linhaverticalteste, 32, 33); // 2
+        $pdf->Line(49, $linhaverticalteste, 49, 39.1); // 3 
+        $pdf->Line(67, $linhaverticalteste, 67, 17); // 4 
+        $pdf->Line(86, $linhaverticalteste, 86, 33); // 5 
+        $pdf->Line(106, $linhaverticalteste, 106, 39.1); // 6
+        $pdf->Line(126, $linhaverticalteste, 126, 33); // 7
+        $pdf->Line(189, $linhaverticalteste, 189, 33); // 8 linha lado esquerdo do visto
+        $pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
 
-//         $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
+        // $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
 
-//         $pdf->Line(5, $linhahorizontalteste + 0.1, 205, $linhahorizontalteste + 0.1);
-//         $pdf->setY($linhavertical - 2.7);
+        // $pdf->Line(5, $linhahorizontalteste + 0.1, 205, $linhahorizontalteste + 0.1);
+        // $pdf->setY($linhavertical - 2.7);
 
-//         $pdf->setX(5);
-//         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $dia . ""), 0, 0, "L", 0);
-//         $pdf->SetFont('Arial', 'B', 7);
+        // $pdf->setX(5);
+        // $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $dia . ""), 0, 0, "L", 0);
+        // $pdf->SetFont('Arial', 'B', 7);
 
-//         switch ($diadasemana) {
-//             case 1:
-//                 $pdf->setX(7);
-//                 $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
-//                 $pdf->SetFont('Arial', 'B', 8);
-//                 break;
-//             case 2:
-//                 $pdf->setX(7);
-//                 $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
-//                 $pdf->SetFont('Arial', 'B', 8);
-//                 break;
-//             case 3:
-//                 $pdf->setX(7);
-//                 $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
-//                 $pdf->SetFont('Arial', 'B', 8);
-//                 break;
-//             case 4:
-//                 $pdf->setX(7);
-//                 $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
-//                 $pdf->SetFont('Arial', 'B', 8);
-//                 break;
-//             case 5:
-//                 $pdf->setX(7);
-//                 $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
-//                 $pdf->SetFont('Arial', 'B', 8);
-//                 break;
+        // switch ($diadasemana) {
+        //     case 1:
+        //         $pdf->setX(7);
+        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
+        //         $pdf->SetFont('Arial', 'B', 8);
+        //         break;
+        //     case 2:
+        //         $pdf->setX(7);
+        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
+        //         $pdf->SetFont('Arial', 'B', 8);
+        //         break;
+        //     case 3:
+        //         $pdf->setX(7);
+        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
+        //         $pdf->SetFont('Arial', 'B', 8);
+        //         break;
+        //     case 4:
+        //         $pdf->setX(7);
+        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
+        //         $pdf->SetFont('Arial', 'B', 8);
+        //         break;
+        //     case 5:
+        //         $pdf->setX(7);
+        //         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
+        //         $pdf->SetFont('Arial', 'B', 8);
+        //         break;
 
 
 //                 /////////////SABADO\\\\\\\\\\\\\\\
