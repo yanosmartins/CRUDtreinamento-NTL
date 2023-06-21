@@ -111,7 +111,6 @@ function gravar()
 
 
 
-
 function recupera()
 {
     $funcionario = (int) $_POST["funcionario"];
@@ -119,12 +118,30 @@ function recupera()
     $mesAno = $_POST["mesAno"];
     $dia = (int) $_POST["dia"];
 
-    $sql = "SELECT codigo FROM dbo.folhaPontoMensal WHERE funcionarioId = $funcionario AND mesAno = '$mesAno'";
-    $reposit = new reposit();
-    $result = $reposit->RunQuery($sql);
-    if ($row = $result[0]) {
-        $idFolha = (int)$row['codigo'];
+
+    while ($idFolha == 0) {
+        // bloco de código
+
+
+        $sql = "SELECT codigo FROM dbo.folhaPontoMensal WHERE funcionarioId = $funcionario AND mesAno = '$mesAno'";
+        $reposit = new reposit();
+        $result = $reposit->RunQuery($sql);
+
+        if ($row = $result[0]) {
+            $idFolha = (int)$row['codigo'];
+        } else {
+            $codigo = 0;
+            $ativo = 1;
+            $sql = "folhaPontoMensal_Atualiza
+        $codigo,
+        $funcionario,
+        '$mesAno',
+        $ativo
+        ";
+        }
+
     }
+
 
     $sql = "SELECT codigo, folhaPontoMensal, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, lancamento, atrasoAlmoco, horaTotalDia, horasPositivasDia, horasNegativasDia FROM dbo.folhaPontoMensalDetalheDiario where folhaPontoMensal = $idFolha AND dia = $dia";
     $reposit = new reposit();
@@ -204,7 +221,7 @@ function recupera()
         $toleranciaEscala . "^" .
         $observacaoAtraso . "^" .
         $observacaoExtra . "^" .
-        $lancamento . "^" .     
+        $lancamento . "^" .
         $atrasoAlmoco . "^" .
         $horaTotalDia . "^" .
         $horasPositivasDia . "^" .

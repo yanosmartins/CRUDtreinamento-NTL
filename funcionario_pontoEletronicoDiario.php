@@ -1044,6 +1044,13 @@ include("inc/scripts.php");
     function gravar() {
         const dataAtual = new Date();
         const dia = dataAtual.getDate();
+        var mes = dataAtual.getMonth();
+
+
+
+        mes += 1;
+
+
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnEntrada").prop('disabled', true);
         $("#btnSaida").prop('disabled', true);
@@ -1388,9 +1395,15 @@ include("inc/scripts.php");
         var horasNegativasDia = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
 
 
-
-
-
+        if (hhPositivas < 0) {
+            horasPositivasDia = "00:00:00";
+        }
+        if (hhNegativas < 0) {
+            horasNegativasDia = "00:00:00";
+        }
+        if (hhTotalDia < 0) {
+            horaTotalDia = "00:00:00";
+        }
 
         //seletor de justificativa (de atraso na entrada ou na saida)
         if (horaSaida != "00:00:00") {
@@ -1400,7 +1413,6 @@ include("inc/scripts.php");
         } else {
             var justificativaAtraso = $("#justificativa").val();
         }
-
 
         //ALERTA DE ATRASO DE ENTRADA E DE SAIDA
         if (horaSaida == "00:00:00") {
@@ -1412,7 +1424,6 @@ include("inc/scripts.php");
                 }
             }
         }
-
 
         setTimeout(function() {
             gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, atrasoAlmoco, horaTotalDia, horasPositivasDia, horasNegativasDia,
@@ -1586,9 +1597,6 @@ include("inc/scripts.php");
                 var horasPositivasDia = piece[27] || '00:00:00';
                 var horasNegativasDia = piece[28] || '00:00:00';
 
-
-
-
                 if (atraso != "00:00:00") {
                     // smartAlert("Atenção", "O funcionário possui atraso", "error")
                     $("#labelEntrada").css('font-weight', 'bold').css('color', 'red');
@@ -1601,8 +1609,6 @@ include("inc/scripts.php");
                 if (atrasoAlmoco !== "00:00:00") {
                     $("#labelFimAlmoco").css('font-weight', 'bold').css('color', 'red');
                 }
-
-
 
                 $(`#labelEntrada`).text(horaEntrada);
                 $(`#labelInicioAlmoco`).text(inicioAlmoco);
@@ -1717,7 +1723,7 @@ include("inc/scripts.php");
 
     function imprimir() {
         const idFolha = $('#idFolha').val();
-        $(location).attr('href', 'prototipo_folhaDePontoPdfPontoEletronicoPDF.php?idFolha=' + idFolha );
+        $(location).attr('href', 'prototipo_folhaDePontoPdfPontoEletronicoPDF.php?idFolha=' + idFolha);
     }
 
 
@@ -1807,7 +1813,7 @@ include("inc/scripts.php");
         );
     }
 
-   
+
 
     function verificarFeriado() {
         var mesAno = $("#mesAno").val();
