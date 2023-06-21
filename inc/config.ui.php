@@ -8,8 +8,8 @@ $breadcrumbs = array(
 );
 
 include_once "js/repositorio.php";
-session_start();
-$login = $_SESSION['login'];
+// session_start();
+// $login = $_SESSION['login'];
 $codigoLogin = $_SESSION['codigo'];
 $funcionario = $_SESSION['funcionario'];
 $projeto = $_SESSION['projeto'];

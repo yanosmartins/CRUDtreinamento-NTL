@@ -32,20 +32,20 @@ $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 
 
-// $ponto = array();
-// foreach ($result as $row) {
-//     array_push($ponto, [
-//         "codigo" => $row["codigo"],
-//         "dia" => $row["dia"],
-//         "horaEntrada" => $row["horaEntrada"],
-//         "inicioAlmoco" => $row["inicioAlmoco"],
-//         "fimAlmoco" => $row["fimAlmoco"],
-//         "horaSaida" => $row["horaSaida"],
-//         "horaExtra" => $row["horaExtra"],
-//         "atraso" => $row["atraso"],
-//         "lancamento" => $row["lancamento"],
-//     ]);
-// }
+$ponto = array();
+foreach ($result as $row) {
+    array_push($ponto, [
+        "codigo" => $row["codigo"],
+        "dia" => $row["dia"],
+        "horaEntrada" => $row["horaEntrada"],
+        "inicioAlmoco" => $row["inicioAlmoco"],
+        "fimAlmoco" => $row["fimAlmoco"],
+        "horaSaida" => $row["horaSaida"],
+        "horaExtra" => $row["horaExtra"],
+        "atraso" => $row["atraso"],
+        "lancamento" => $row["lancamento"],
+    ]);
+}
 
 if ($row = $result[0]) {
     $horaEntrada = $row['horaEntrada'];
@@ -993,48 +993,48 @@ $index = 0;
 //         }
 //     }
 // }
-// if (!$ponto) {
-    // $data = explode('-', $mesAno);
-    // $mes = (int)$data[1];
-    // $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
+// // if (!$ponto) {
+//     $data = explode('-', $mesAno);
+//     $mes = (int)$data[1];
+//     $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
 
-    // for ($dia = 1; $dia <= $totalDiasMes; $dia++) {
-    //     $diadasemana = date('N', strtotime($ano . '-' . $mes . '-' . $dia));
-    //     $diaferiado = new DateTime($ano . '-' . $mes . '-' . $dia);
+//     for ($dia = 1; $dia <= $totalDiasMes; $dia++) {
+//         $diadasemana = date('N', strtotime($ano . '-' . $mes . '-' . $dia));
+//         $diaferiado = new DateTime($ano . '-' . $mes . '-' . $dia);
 
-    //     if ($dia < 10) {
-    //         $diaMesAno = preg_replace("/\d{2}$/", "0" . $dia, $mesAno);
-    //     } else {
-    //         $diaMesAno = preg_replace("/\d{2}$/", $dia, $mesAno);
-    //     }
+//         if ($dia < 10) {
+//             $diaMesAno = preg_replace("/\d{2}$/", "0" . $dia, $mesAno);
+//         } else {
+//             $diaMesAno = preg_replace("/\d{2}$/", $dia, $mesAno);
+//         }
 
-    //     $dataAtual = new DateTime();
-    //     $dataAtual = $dataAtual->format('Y-m-d');
+//         $dataAtual = new DateTime();
+//         $dataAtual = $dataAtual->format('Y-m-d');
 
-        // $folga = "";
-        // foreach ($diasFolgaArray as $diaFolga) {
-        //     $dataInicio = explode(' ', $diaFolga['dataInicio']);
-        //     $dataInicio = explode('-', $dataInicio[0]);
-        //     $dataFim = explode(' ', $diaFolga['dataFim']);
-        //     $dataFim = explode('-', $dataFim[0]);
-        //     $quantidadeDias = $diaFolga['quantidadeDias'];
+//         // $folga = "";
+//         // foreach ($diasFolgaArray as $diaFolga) {
+//         //     $dataInicio = explode(' ', $diaFolga['dataInicio']);
+//         //     $dataInicio = explode('-', $dataInicio[0]);
+//         //     $dataFim = explode(' ', $diaFolga['dataFim']);
+//         //     $dataFim = explode('-', $dataFim[0]);
+//         //     $quantidadeDias = $diaFolga['quantidadeDias'];
 
-        //     if ($quantidadeDias <= 2) {
-        //         if ($dataInicio[2] == $dia || $dataFim[2] == $dia) {
-        //             $folga = true;
-        //             break;
-        //         }
-        //     } else {
-        //         if ($dia >= $dataInicio[2] && $dia <= $dataFim[2]) {
-        //             $folga = true;
-        //             break;
-        //         }
-        //     }
-        // }
+//         //     if ($quantidadeDias <= 2) {
+//         //         if ($dataInicio[2] == $dia || $dataFim[2] == $dia) {
+//         //             $folga = true;
+//         //             break;
+//         //         }
+//         //     } else {
+//         //         if ($dia >= $dataInicio[2] && $dia <= $dataFim[2]) {
+//         //             $folga = true;
+//         //             break;
+//         //         }
+//         //     }
+//         // }
     
     
     
-    // }
+//     }
 // // LINHAS DA ESQUERDA PRA DIREITA // 
 // $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 
 // $pdf->Line(16, $linhaverticalteste, 16, 33.1); // 1
@@ -1552,20 +1552,20 @@ $index = 0;
 //             }
 //         }
 
-        // // LINHAS DA ESQUERDA PRA DIREITA // 
-        // $pdf->Line(16, $linhaverticalteste, 16, 33.1); // DIA
-        // $pdf->Line(52, $linhaverticalteste, 52, 33); // 3 ENTRE INICIO E FIM PRIMEIRA PAUSA
-        // $pdf->Line(86, $linhaverticalteste, 86, 33); // 5 ENTRE FIM PRIMEIRA PAUSA E INICIO SEGUNDA PAUSA
-        // $pdf->Line(170, $linhaverticalteste, 170, 33); // 8 linha lado esquerdo do visto
+//         // LINHAS DA ESQUERDA PRA DIREITA // 
+//         $pdf->Line(16, $linhaverticalteste, 16, 33.1); // DIA
+//         $pdf->Line(52, $linhaverticalteste, 52, 33); // 3 ENTRE INICIO E FIM PRIMEIRA PAUSA
+//         $pdf->Line(86, $linhaverticalteste, 86, 33); // 5 ENTRE FIM PRIMEIRA PAUSA E INICIO SEGUNDA PAUSA
+//         $pdf->Line(170, $linhaverticalteste, 170, 33); // 8 linha lado esquerdo do visto
 
-        // $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
+//         $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste);
 
-        // $pdf->Line(5, $linhahorizontalteste + 0.1, 205, $linhahorizontalteste + 0.1);
-        // $pdf->setY($linhavertical - 2.7);
+//         $pdf->Line(5, $linhahorizontalteste + 0.1, 205, $linhahorizontalteste + 0.1);
+//         $pdf->setY($linhavertical - 2.7);
 
-        // $pdf->setX(5);
-        // $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $registro['dia'] . ""), 0, 0, "L", 0);
-        // $pdf->SetFont('Arial', 'B', 7);
+//         $pdf->setX(5);
+//         $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $registro['dia'] . ""), 0, 0, "L", 0);
+//         $pdf->SetFont('Arial', 'B', 7);
 
 //         switch ($diadasemana) {
 //             case 1:
