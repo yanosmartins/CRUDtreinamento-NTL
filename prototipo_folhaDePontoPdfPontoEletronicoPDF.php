@@ -31,6 +31,22 @@ FPMDD.lancamento, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.horasPositivasDi
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 
+
+$ponto = array();
+foreach ($result as $row) {
+    array_push($ponto, [
+        "codigo" => $row["codigo"],
+        "dia" => $row["dia"],
+        "horaEntrada" => $row["horaEntrada"],
+        "inicioAlmoco" => $row["inicioAlmoco"],
+        "fimAlmoco" => $row["fimAlmoco"],
+        "horaSaida" => $row["horaSaida"],
+        "horaExtra" => $row["horaExtra"],
+        "atraso" => $row["atraso"],
+        "lancamento" => $row["lancamento"],
+    ]);
+}
+
 if ($row = $result[0]) {
     $horaEntrada = $row['horaEntrada'];
     $horaSaida = $row['horaSaida'];
@@ -50,6 +66,8 @@ if ($row = $result[0]) {
     $codigoFuncionario = $row['codigoFuncionario'];
     $mesAno = $row['mesAno'];
 }
+
+
 
 $sqlFuncionario = "SELECT nome, ativo, escala, supervisor, empresa, cargo from dbo.funcionario where codigo = $codigoFuncionario";
 $reposit = new reposit();
@@ -426,39 +444,39 @@ if ($ponto) {
                 $pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
             }
 
-            $repetiu = 0;
-            $diadasemana = strftime('%u', strtotime($ano . '-' . $mes . '-' . $registro['dia']));
-            $diaferiado = new DateTime($ano . '-' . $mes . '-' . $registro['dia']);
-            if ($registro['dia'] < 10) {
-                $diaMesAno = preg_replace("/\d{2}$/", "0" . $registro['dia'], $mesAno);
-            } else {
-                $diaMesAno = preg_replace("/\d{2}$/", $registro['dia'], $mesAno);
-            }
-            $dataAtual = new DateTime();
-            $dataAtual = $dataAtual->format('Y-m-d');
-            if ($registro['horaExtra'] == "00:00:00") {
-                $registro['horaExtra'] = "";
-            }
-            if ($registro['atraso'] == "00:00:00") {
-                $registro['atraso'] = "";
-            }
+            // $repetiu = 0;
+            // $diadasemana = strftime('%u', strtotime($ano . '-' . $mes . '-' . $registro['dia']));
+            // $diaferiado = new DateTime($ano . '-' . $mes . '-' . $registro['dia']);
+            // if ($registro['dia'] < 10) {
+            //     $diaMesAno = preg_replace("/\d{2}$/", "0" . $registro['dia'], $mesAno);
+            // } else {
+            //     $diaMesAno = preg_replace("/\d{2}$/", $registro['dia'], $mesAno);
+            // }
+            // $dataAtual = new DateTime();
+            // $dataAtual = $dataAtual->format('Y-m-d');
+            // if ($registro['horaExtra'] == "00:00:00") {
+            //     $registro['horaExtra'] = "";
+            // }
+            // if ($registro['atraso'] == "00:00:00") {
+            //     $registro['atraso'] = "";
+            // }
 
-            $entrada = $registro['horaEntrada'];
-            if ($entrada == '00:00:00') {
-                $entrada = '';
-            }
-            $almocoInicio = $registro['inicioAlmoco'];
-            if ($almocoInicio == '00:00') {
-                $almocoInicio = '';
-            }
-            $almocoFim = $registro['fimAlmoco'];
-            if ($almocoFim == '00:00') {
-                $almocoFim = '';
-            }
-            $saida = $registro['horaSaida'];
-            if ($saida == '00:00:00') {
-                $saida = '';
-            }
+            // $entrada = $registro['horaEntrada'];
+            // if ($entrada == '00:00:00') {
+            //     $entrada = '';
+            // }
+            // $almocoInicio = $registro['inicioAlmoco'];
+            // if ($almocoInicio == '00:00') {
+            //     $almocoInicio = '';
+            // }
+            // $almocoFim = $registro['fimAlmoco'];
+            // if ($almocoFim == '00:00') {
+            //     $almocoFim = '';
+            // }
+            // $saida = $registro['horaSaida'];
+            // if ($saida == '00:00:00') {
+            //     $saida = '';
+            // }
 
             // Verifica se esta de férias
             // $sqlFerias = "SELECT dataInicio, dataFim, quantidadeDias 
@@ -993,7 +1011,7 @@ if ($ponto) {
         $dataAtual = new DateTime();
         $dataAtual = $dataAtual->format('Y-m-d');
 
-        $folga = "";
+        // $folga = "";
         // foreach ($diasFolgaArray as $diaFolga) {
         //     $dataInicio = explode(' ', $diaFolga['dataInicio']);
         //     $dataInicio = explode('-', $dataInicio[0]);
@@ -1013,6 +1031,9 @@ if ($ponto) {
         //         }
         //     }
         // }
+    
+    
+    
     }
 // LINHAS DA ESQUERDA PRA DIREITA // 
 $pdf->Line(5, $linhaverticalteste, 5, 17); // 0 

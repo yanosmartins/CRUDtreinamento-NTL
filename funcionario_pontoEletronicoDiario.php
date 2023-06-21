@@ -1395,13 +1395,13 @@ include("inc/scripts.php");
         var horasNegativasDia = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
 
 
-        if (hhPositivas < 0) {
+        if (hhPositivas < 0 || mmPositivas < 0 || ssPositivas < 0) {
             horasPositivasDia = "00:00:00";
         }
-        if (hhNegativas < 0) {
+        if (hhNegativas < 0 || mmNegativas < 0 || ssNegativas < 0) {
             horasNegativasDia = "00:00:00";
         }
-        if (hhTotalDia < 0) {
+        if (hhTotalDia < 0 || mmTotalDia < 0 || ssTotalDia < 0) {
             horaTotalDia = "00:00:00";
         }
 
