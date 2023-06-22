@@ -31,41 +31,131 @@ FPMDD.lancamento, L.descricao, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.hor
     where FPMDD.folhaPontoMensal = $idFolha";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
+       
+    if ($row = $result[0]) {
+        $horaEntrada = $row['horaEntrada'];
+        $horaSaida = $row['horaSaida'];
+        $folhaPontoMensal = $row['folhaPontoMensal '];
+        $dia = $row['dia'];
+        $horaEntrada = $row['horaEntrada'];
+        $almocoInicio = $row['inicioAlmoco'];
+        $fimAlmoco = $row['fimAlmoco'];
+        $horaSaida = $row['horaSaida'];
+        $horaExtra = $row['horaExtra'];
+        $atraso = $row['atraso'];
+        $observacaoAtraso = $row['observacaoAtraso'];
+        $observacaoExtra = $row['observacaoExtra'];
+        $lancamento = $row['lancamento'];
+        $atrasoAlmoco = $row['atrasoAlmoco'];
+        $horaTotalDia = $row['horaTotalDia'];
+        $codigoFuncionario = $row['codigoFuncionario'];
+        $mesAno = $row['mesAno'];
+    }
 
-$ponto = array();
-foreach ($result as $row) {
-    array_push($ponto, [
-        "codigo" => $row["codigo"],
-        "dia" => $row["dia"],
-        "horaEntrada" => $row["horaEntrada"],
-        "inicioAlmoco" => $row["inicioAlmoco"],
-        "fimAlmoco" => $row["fimAlmoco"],
-        "horaSaida" => $row["horaSaida"],
-        "horaExtra" => $row["horaExtra"],
-        "atraso" => $row["atraso"],
-        "descricaoLancamento" => $row["descricao"],
-    ]);
+    $ponto = array();
+// $ponto = [[
+//     "codigo" => "",
+//     "dia" => "",
+//     "horaEntrada" => "",
+//     "inicioAlmoco" => "",
+//     "fimAlmoco" => "",
+//     "horaSaida" => "",
+//     "horaExtra" => "",
+//     "atraso" => "",
+//     "descricaoLancamento" => "",
+
+//     ]];
+
+$data = explode('-', $mesAno);
+$mes = (int)$data[1];
+$totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
+
+$totalDiasMes = 30;
+$contador = 1;
+
+while ($contador < $totalDiasMes) {
+    $diaPonto = $result['dia'];
+
+    if ($contador == $diaPonto) {
+        array_push($ponto, [
+            "codigo" => $row["codigo"],
+            "dia" => $row["dia"],
+            "horaEntrada" => $row["horaEntrada"],
+            "inicioAlmoco" => $row["inicioAlmoco"],
+            "fimAlmoco" => $row["fimAlmoco"],
+            "horaSaida" => $row["horaSaida"],
+            "horaExtra" => $row["horaExtra"],
+            "atraso" => $row["atraso"],
+            "descricaoLancamento" => $row["descricao"],
+        ]);
+    }else{
+        array_push($ponto, [
+            "codigo" => "",
+            "dia" => "",
+            "horaEntrada" => "",
+            "inicioAlmoco" => "",
+            "fimAlmoco" => "",
+            "horaSaida" => "",
+            "horaExtra" => "",
+            "atraso" => "",
+            "descricaoLancamento" => ""
+        ]);
+    }
+
+
+    $contador++;
 }
 
-if ($row = $result[0]) {
-    $horaEntrada = $row['horaEntrada'];
-    $horaSaida = $row['horaSaida'];
-    $folhaPontoMensal = $row['folhaPontoMensal '];
-    $dia = $row['dia'];
-    $horaEntrada = $row['horaEntrada'];
-    $almocoInicio = $row['inicioAlmoco'];
-    $fimAlmoco = $row['fimAlmoco'];
-    $horaSaida = $row['horaSaida'];
-    $horaExtra = $row['horaExtra'];
-    $atraso = $row['atraso'];
-    $observacaoAtraso = $row['observacaoAtraso'];
-    $observacaoExtra = $row['observacaoExtra'];
-    $lancamento = $row['lancamento'];
-    $atrasoAlmoco = $row['atrasoAlmoco'];
-    $horaTotalDia = $row['horaTotalDia'];
-    $codigoFuncionario = $row['codigoFuncionario'];
-    $mesAno = $row['mesAno'];
-}
+
+
+
+
+
+// foreach( $result as $index  => $row ){
+//     $diaRow = (Int) $row['dia'];
+
+//     $diasCount = 0;
+//     $diaExistente = false;
+    
+//     while( $diasCount < 31 ){
+
+//         if ($diasCount == $diaRow) {
+//             array_push($ponto, [
+//                 "codigo" => $row["codigo"],
+//                 "dia" => $row["dia"],
+//                 "horaEntrada" => $row["horaEntrada"],
+//                 "inicioAlmoco" => $row["inicioAlmoco"],
+//                 "fimAlmoco" => $row["fimAlmoco"],
+//                 "horaSaida" => $row["horaSaida"],
+//                 "horaExtra" => $row["horaExtra"],
+//                 "atraso" => $row["atraso"],
+//                 "descricaoLancamento" => $row["descricao"],
+//             ]);
+//             $diaExistente = true;
+//         }else{
+            
+//             if( !isset( $ponto[$diasCount] ) ){
+
+//                 $ponto[$diasCount] = [
+//                     "codigo" =>'',
+//                     "dia" =>$diasCount,
+//                     "horaEntrada" =>'',
+//                     "inicioAlmoco" =>'',
+//                     "fimAlmoco" =>'',
+//                     "horaSaida" =>'',
+//                     "horaExtra" =>'',
+//                     "atraso" =>'',
+//                     "descricaoLancamento" =>''
+//                 ];
+//             }
+//         }
+        
+//         $diasCount++;
+//     }
+
+// } // CODIGO DO RAMON
+
+
 
 
 
@@ -384,14 +474,11 @@ $valorIndex = 0;
 $index = 0;
 
 
-$data = explode('-', $mesAno);
-$mes = (int)$data[1];
-$totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
 
 
 if ($ponto) {
 
-    while($repetiu < $totalDiasMes) {
+    while ($repetiu == 1) {
 
         if ($valorIndex != 0) {
             $index = $valorIndex + 1;
@@ -487,7 +574,7 @@ if ($ponto) {
             if ($saida == '00:00:00') {
                 $saida = '';
             }
-            
+
 
 
             // Verifica se esta de férias
@@ -1003,8 +1090,7 @@ if ($ponto) {
                 break;
             }
         }
-        $repetiu +=1;
-
+        $repetiu += 1;
     }
 }
 // // if (!$ponto) {
