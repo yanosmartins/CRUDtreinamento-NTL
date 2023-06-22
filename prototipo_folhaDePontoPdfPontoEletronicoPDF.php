@@ -24,13 +24,13 @@ require_once('fpdf/fpdf.php');
 $idFolha = (int)$_GET["idFolha"];
 
 $sql = "SELECT FPMDD.folhaPontoMensal, FPMDD.dia, FPMDD.horaEntrada, FPMDD.inicioAlmoco, FPMDD.fimAlmoco, FPMDD.horaSaida, FPMDD.horaExtra, FPMDD.atraso, FPMDD.observacaoAtraso, FPMDD.observacaoExtra,
-FPMDD.lancamento, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.horasPositivasDia, FPMDD.horasNegativasDia, FPM.mesAno, FPM.funcionarioId as codigoFuncionario
+FPMDD.lancamento, L.descricao, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.horasPositivasDia, FPMDD.horasNegativasDia, FPM.mesAno, FPM.funcionarioId as codigoFuncionario
  FROM dbo.folhaPontoMensalDetalheDiario FPMDD
- LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo  
-    where FPMDD.folhaPontoMensal = $idFolha ";
+ LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo
+ LEFT JOIN dbo.lancamento L on L.sigla = FPMDD.lancamento
+    where FPMDD.folhaPontoMensal = $idFolha";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
-
 
 $ponto = array();
 foreach ($result as $row) {
@@ -43,7 +43,7 @@ foreach ($result as $row) {
         "horaSaida" => $row["horaSaida"],
         "horaExtra" => $row["horaExtra"],
         "atraso" => $row["atraso"],
-        "lancamento" => $row["lancamento"],
+        "descricaoLancamento" => $row["descricao"],
     ]);
 }
 
@@ -66,6 +66,7 @@ if ($row = $result[0]) {
     $codigoFuncionario = $row['codigoFuncionario'];
     $mesAno = $row['mesAno'];
 }
+
 
 
 
@@ -363,11 +364,11 @@ $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "Negativas"), 0, 0, "L", 0);
 
 $pdf->setY(36);
 $pdf->setX(148);
-$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "OBSERVAÇÃO"), 0, 0, "C", 0);
+$pdf->Cell(32, 5, iconv('UTF-8', 'windows-1252', "OBSERVAÇÃO"), 0, 0, "C", 0);
 
-$pdf->setY(36);
-$pdf->setX(187);
-$pdf->MultiCell(20, 5, iconv('UTF-8', 'windows-1252', "ABONO"), 0, 'C', false);
+// $pdf->setY(36);
+// $pdf->setX(187);
+// $pdf->MultiCell(20, 5, iconv('UTF-8', 'windows-1252', "ABONO"), 0, 'C', false);
 // $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ATRASO ABONADO"), 0, 0, "L", 0);
 
 $pdf->Line(5, 43, 205, 43); // linha abaixo de diaas entrada saida observacao e visto
@@ -390,11 +391,12 @@ $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
 
 if ($ponto) {
 
-    while ($repetiu < $totalDiasMes) {
+    while($repetiu < $totalDiasMes) {
 
         if ($valorIndex != 0) {
             $index = $valorIndex + 1;
         }
+
         $tamanho = count($ponto) - $index;
 
         array_splice($ponto, 0, -$tamanho);
@@ -556,7 +558,7 @@ if ($ponto) {
                 $pdf->Line(86, $linhaverticalteste, 86, 33); // 5 
                 $pdf->Line(106, $linhaverticalteste, 106, 39.1); // 6
                 $pdf->Line(126, $linhaverticalteste, 126, 33); // 7
-                $pdf->Line(189, $linhaverticalteste, 189, 33); // 8 linha lado esquerdo do visto
+                // $pdf->Line(189, $linhaverticalteste, 189, 33); // 8 linha lado esquerdo do visto
                 $pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
             }
 
@@ -615,7 +617,7 @@ if ($ponto) {
                     }
                     // FIM CINZA
 
-                    if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00" && $registro['lancamento'] == '') {
+                    if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00" && $registro['descricaoLancamento'] == '') {
                         // ENTRADA IGUAL À ZERO 
                         if ($registraPonto == 1 && ($escalaDia == 2 || $escalaDia == 3) && $inicioRegistroPonto[0] <= $diaMesAno) {
                             $pdf->setX(126.8);
@@ -688,7 +690,7 @@ if ($ponto) {
 
                     $pdf->setX(126);
                     $pdf->SetFont('Arial', 'B', 8);
-                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['lancamento']), 0, 0, "C", 0); // descricao funcionario
+                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "C", 0); // descricao funcionario
 
                     break;
 
@@ -708,7 +710,7 @@ if ($ponto) {
                             $pdf->setX(130.35);
                             $pdf->Cell(42.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
                             // $pdf->setX(126);
-                            // $pdf->Cell(20,  6.61, iconv('UTF-8', 'windows-1252', $registro['lancamento']), 0, 0, "L", 1);
+                            // $pdf->Cell(20,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 1);
                             $pdf->setX(169.35);
                             $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
                         }
@@ -718,7 +720,7 @@ if ($ponto) {
                     $pdf->SetFont('Arial', 'B', 8);
                     if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00") {
                         if ($tipoEscala == 1) { //Normal
-                            if ($registraPonto == 1 && $escalaDia == 3 && $inicioRegistroPonto[0] <= $diaMesAno && $registro['lancamento'] == '') {
+                            if ($registraPonto == 1 && $escalaDia == 3 && $inicioRegistroPonto[0] <= $diaMesAno && $registro['descricaoLancamento'] == '') {
                                 $pdf->setX(126.8);
                                 $pdf->SetFont('Arial', 'B', 8);
                                 if ($fimRegistroPonto[0] != "") {
@@ -790,7 +792,7 @@ if ($ponto) {
 
                     $pdf->setX(126);
                     $pdf->SetFont('Arial', 'B', 8);
-                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['lancamento']), 0, 0, "C", 0); // descricao funcionario
+                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "C", 0); // descricao funcionario
 
                     break;
                 default:
@@ -813,7 +815,7 @@ if ($ponto) {
 
                 if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00") {
                     if ($tipoEscala == 1) {
-                        if ($registraPonto == 1 && $inicioRegistroPonto[0] <= $diaMesAno && $registro['lancamento'] == '') {
+                        if ($registraPonto == 1 && $inicioRegistroPonto[0] <= $diaMesAno && $registro['descricaoLancamento'] == '') {
                             $pdf->setX(126.8);
                             $pdf->SetFont('Arial', 'B', 8);
                             if ($fimRegistroPonto[0] != "") {
@@ -884,7 +886,7 @@ if ($ponto) {
                 //Observacao
                 $pdf->setX(126);
                 $pdf->SetFont('Arial', 'B', 8);
-                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['lancamento']), 0, 0, "C", 0);
+                $pdf->Cell(75,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "C", 0);
                 $pdf->setX(169.35);
                 if ($resultAtrasoAbonado) {
                     $pdf->Cell(55, 6.61, iconv('UTF-8', 'windows-1252', "X"), 0, 0, "C", 0);
@@ -920,7 +922,7 @@ if ($ponto) {
 
                                 $pdf->setX(126.8);
                                 $pdf->SetFont('Arial', 'B', 8);
-                                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['lancamento']), 0, 0, "C", 1); // descricao funcionario
+                                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "C", 1); // descricao funcionario
                             } else {
                                 $pdf->setX(17);
                                 $pdf->Cell(12, 6.31, iconv('UTF-8', 'windows-1252', "FERIADO"), 0, 0, "L", 0);
