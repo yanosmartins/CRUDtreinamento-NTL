@@ -65,25 +65,12 @@ $contador = 1;
 while ($contador <= $totalDiasMes) {
     $controle = 0;
 
-    while ($controle < 1) {
-        $diaPonto = ($result[$contador - 1])['dia'];
-    }
+    // while ($controle < 1){ 
+    // for ($i = 1; $i < 31; $i++) {
 
+    $diaPonto = ($result[$contador - 1])['dia'];
 
-    if ($contador == $diaPonto) {
-        array_push($ponto, [
-            "codigo" => $row["codigo"],
-            "dia" => $row["dia"],
-            "horaEntrada" => $row["horaEntrada"],
-            "inicioAlmoco" => $row["inicioAlmoco"],
-            "fimAlmoco" => $row["fimAlmoco"],
-            "horaSaida" => $row["horaSaida"],
-            "horaExtra" => $row["horaExtra"],
-            "atraso" => $row["atraso"],
-            "descricaoLancamento" => $row["descricao"]
-        ]);
-        // $row++;
-    } else {
+    while ($diaPonto != $contador && $contador <= $totalDiasMes) {
         $dadoSalvo = $ponto[$contador - 1];
         if ($dadoSalvo) {
 
@@ -100,7 +87,7 @@ while ($contador <= $totalDiasMes) {
                     "atraso" => $row["atraso"],
                     "descricaoLancamento" => $row["descricao"]
                 ];
-                $controle = 1;
+                // $controle = 1;
             } else {
                 array_push($ponto, [
                     "codigo" => "",
@@ -127,7 +114,76 @@ while ($contador <= $totalDiasMes) {
                 "descricaoLancamento" => ""
             ]);
         }
+        $contador++;
     }
+
+    if ($contador == $diaPonto) {
+        $sql2 = "SELECT codigo, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, lancamento
+        FROM dbo.folhaPontoMensalDetalheDiario WHERE dia = $diaPonto AND folhaPontoMensal = $idFolha";
+        $reposit = new reposit();
+        $result2 = $reposit->RunQuery($sql2);
+
+        if ($row2 = $result2[0]) {
+
+            array_push($ponto, [
+                "codigo" => $row2["codigo"],
+                "dia" => $row2["dia"],
+                "horaEntrada" => $row2["horaEntrada"],
+                "inicioAlmoco" => $row2["inicioAlmoco"],
+                "fimAlmoco" => $row2["fimAlmoco"],
+                "horaSaida" => $row2["horaSaida"],
+                "horaExtra" => $row2["horaExtra"],
+                "atraso" => $row2["atraso"],
+                "descricaoLancamento" => $row["descricao"]
+            ]);
+        }
+        // } else {
+        //     $dadoSalvo = $ponto[$contador - 1];
+        //     if ($dadoSalvo) {
+
+        //         if ($dadoSalvo['dia'] == $contador) {
+
+        //             $ponto[$diasCount] = [
+        //                 "codigo" => $row["codigo"],
+        //                 "dia" => $row["dia"],
+        //                 "horaEntrada" => $row["horaEntrada"],
+        //                 "inicioAlmoco" => $row["inicioAlmoco"],
+        //                 "fimAlmoco" => $row["fimAlmoco"],
+        //                 "horaSaida" => $row["horaSaida"],
+        //                 "horaExtra" => $row["horaExtra"],
+        //                 "atraso" => $row["atraso"],
+        //                 "descricaoLancamento" => $row["descricao"]
+        //             ];
+        //             // $controle = 1;
+        //         } else {
+        //             array_push($ponto, [
+        //                 "codigo" => "",
+        //                 "dia" => $contador,
+        //                 "horaEntrada" => "",
+        //                 "inicioAlmoco" => "",
+        //                 "fimAlmoco" => "",
+        //                 "horaSaida" => "",
+        //                 "horaExtra" => "",
+        //                 "atraso" => "",
+        //                 "descricaoLancamento" => ""
+        //             ]);
+        //         }
+        //     } else {
+        //         array_push($ponto, [
+        //             "codigo" => "",
+        //             "dia" => $contador,
+        //             "horaEntrada" => "",
+        //             "inicioAlmoco" => "",
+        //             "fimAlmoco" => "",
+        //             "horaSaida" => "",
+        //             "horaExtra" => "",
+        //             "atraso" => "",
+        //             "descricaoLancamento" => ""
+        //         ]);
+        //     }
+    }
+    // }
+    // }
     $contador++;
 }
 
