@@ -118,10 +118,7 @@ function recupera()
     $mesAno = $_POST["mesAno"];
     $dia = (int) $_POST["dia"];
 
-
     while ($idFolha == 0) {
-        // bloco de código
-
 
         $sql = "SELECT codigo FROM dbo.folhaPontoMensal WHERE funcionarioId = $funcionario AND mesAno = '$mesAno'";
         $reposit = new reposit();
@@ -133,13 +130,15 @@ function recupera()
             $codigo = 0;
             $ativo = 1;
             $sql = "folhaPontoMensal_Atualiza
-        $codigo,
-        $funcionario,
-        '$mesAno',
-        $ativo
-        ";
-        }
 
+             $codigo,
+            $funcionario,
+            '$mesAno',
+            $ativo
+            ";
+            $reposit = new reposit();
+            $result = $reposit->Execprocedure($sql);
+        }
     }
 
 
@@ -688,41 +687,41 @@ function registrarPausa()
         $fimSegundaPausa = 'NULL';
     }
 
-    if ($_POST['justificativaPausa']) {
-        // XML Justificativa
-        $comum = new comum();
-        $xmlJustificativa = new \FluidXml\FluidXml('ArrayOfJustificativa', ['encoding' => '']);
-        $xmlJustificativa->addChild('justificativa', true) //nome da tabela
-            ->add('folhaPontoMensal', $idFolha)
-            ->add('dia', $_POST['dia'])
-            ->add('observacao', $_POST['justificativaPausa'])
-            ->add('campo', $_POST['btnClicado']);
-        $xmlJustificativa = $comum->formatarString($xmlJustificativa);
-    } else {
-        $xmlJustificativa = 'NULL';
-    }
+    // if ($_POST['justificativaPausa']) {
+    //     // XML Justificativa
+    //     $comum = new comum();
+    //     $xmlJustificativa = new \FluidXml\FluidXml('ArrayOfJustificativa', ['encoding' => '']);
+    //     $xmlJustificativa->addChild('justificativa', true) //nome da tabela
+    //         ->add('folhaPontoMensal', $idFolha)
+    //         ->add('dia', $_POST['dia'])
+    //         ->add('observacao', $_POST['justificativaPausa'])
+    //         ->add('campo', $_POST['btnClicado']);
+    //     $xmlJustificativa = $comum->formatarString($xmlJustificativa);
+    // } else {
+    //     $xmlJustificativa = 'NULL';
+    // }
 
-    $sql = "Funcionario.pausasDescanso_Atualiza
-            $idFolha,
-            $funcionario,
-            $dia,
-            '$mesAno',
-            $inicioPrimeiraPausa,
-            $fimPrimeiraPausa,
-            $inicioSegundaPausa,
-            $fimSegundaPausa,
-            '$usuario',
-            $xmlJustificativa";
+    // $sql = "Funcionario.pausasDescanso_Atualiza
+    //         $idFolha,
+    //         $funcionario,
+    //         $dia,
+    //         '$mesAno',
+    //         $inicioPrimeiraPausa,
+    //         $fimPrimeiraPausa,
+    //         $inicioSegundaPausa,
+    //         $fimSegundaPausa,
+    //         '$usuario',
+    //         $xmlJustificativa";
 
-    $reposit = new reposit();
+    // $reposit = new reposit();
 
-    $result = $reposit->Execprocedure($sql);
-    $ret = 'sucess#';
-    if ($result < 1) {
-        $ret = 'failed#';
-    }
-    echo $ret;
-    return;
+    // $result = $reposit->Execprocedure($sql);
+    // $ret = 'sucess#';
+    // if ($result < 1) {
+    //     $ret = 'failed#';
+    // }
+    // echo $ret;
+    // return;
 }
 
 function consultaLancamentoAbono()

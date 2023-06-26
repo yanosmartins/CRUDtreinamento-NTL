@@ -1548,14 +1548,12 @@ include("inc/scripts.php");
     }
 
     function carregaPonto() {
-        const mesAno = moment().format('YYYY-MM');
-        const dataAtual = new Date();
-        const dia = dataAtual.getDate();
+        var mesAno = moment().format('YYYY-MM');
+        var dataAtual = new Date();
+        var dia = dataAtual.getDate();
 
-        const funcionario = $("#funcionario").val();
-        // const projeto = <?php
-                            //  echo $_SESSION['projeto']; 
-                            ?>
+        var funcionario = $("#funcionario").val();
+
         $('#mesAno').val(mesAno);
         recuperaPonto(funcionario, mesAno, dia,
             function(data) {
