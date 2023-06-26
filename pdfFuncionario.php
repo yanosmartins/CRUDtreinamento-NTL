@@ -197,11 +197,8 @@ $sqlDependente = "SELECT nome, cpf, dataNascimento, tipo FROM dbo.dependentesLis
 
 $reposit = new reposit();
 $resultQuery = $reposit->RunQuery($sql);
-$reposit = new reposit();
 $resultQueryTelefone = $reposit->RunQuery($sqlTelefone);
-$reposit = new reposit();
 $resultQueryEmail = $reposit->RunQuery($sqlEmail);
-$reposit = new reposit();
 $resultQueryDependente = $reposit->RunQuery($sqlDependente);
 
 

@@ -131,7 +131,7 @@ while ($contador <= $totalDiasMes) {
                 "horaSaida" => $row2["horaSaida"],
                 "horaExtra" => $row2["horaExtra"],
                 "atraso" => $row2["atraso"],
-                "descricaoLancamento" => $row["descricao"]
+                "descricaoLancamento" => $row2["descricao"]
             ]);
             $controleDiaPonto++;
         }
@@ -454,9 +454,6 @@ $repetiu = 1;
 $valorIndex = 0;
 $index = 0;
 
-
-
-
 if ($ponto) {
 
     while ($repetiu < $totalDiasMes) {
@@ -471,56 +468,62 @@ if ($ponto) {
 
         foreach ($ponto as $index => $registro) {
 
-            $y = $pdf->GetY();
-            $altura = $pdf->GetPageHeight();
 
-            if ($y > ($altura - 35)) {
 
-                $pdf->setY($linhaverticalteste - 5);
-                $pdf->setX(155);
-                $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ASSINATURAS"), 0, 0, "L", 0);
+            // if ($repetiu == $totalDiasMes) {
+            //     $yNOVO = $pdf->GetY();
+            //     // $pdf->Line(5, $yNOVO+14.3888, 205, $yNOVO+14.3888);
 
-                $pdf->setY($linhaverticalteste + 2);
-                $pdf->setX(126);
-                $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "SUPERVISOR"), 0, 0, "L", 0);
+            //     $altura = $pdf->GetPageHeight();
 
-                $pdf->setY($linhaverticalteste + 11);
-                $pdf->setX(126);
-                $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "FUNCIONARIO"), 0, 0, "L", 0);
+            //     if ($y > ($altura - 35)) {
 
-                $i = 0;
-                while ($i != 3) {
-                    $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste); //Linha fim documento
-                    $pdf->Line(5, $linhaverticalteste, 5, 17); //Linha lado esquerdo documento
-                    $pdf->Line(205, $linhaverticalteste, 205, 17); // Linha lado direito documento
-                    $pdf->Line(126, $linhaverticalteste, 126, 33); //Linha lado esquerdo de assinaturas
+            //         $pdf->setY($linhaverticalteste - 5);
+            //         $pdf->setX(155);
+            //         $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ASSINATURAS"), 0, 0, "L", 0);
 
-                    $i++;
-                    $linhahorizontalteste += 7;
-                    $linhaverticalteste += 7;
-                }
+            //         $pdf->setY($linhaverticalteste + 2);
+            //         $pdf->setX(126);
+            //         $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "SUPERVISOR"), 0, 0, "L", 0);
 
-                $pdf->AddPage();
+            //         $pdf->setY($linhaverticalteste + 11);
+            //         $pdf->setX(126);
+            //         $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "FUNCIONARIO"), 0, 0, "L", 0);
 
-                $pdf->Line(5, 17, 205, 17); //primeira linha
-                $pdf->Line(5, 17, 205, 17); //primeira linha
-                $pdf->Line(5, 17, 205, 17); //primeira linha
-                $pdf->Line(5, 17, 205, 17); //primeira linha
+            //         $i = 0;
+            //         while ($i != 3) {
+            //             $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste); //Linha fim documento
+            //             $pdf->Line(5, $linhaverticalteste, 5, 17); //Linha lado esquerdo documento
+            //             $pdf->Line(205, $linhaverticalteste, 205, 17); // Linha lado direito documento
+            //             $pdf->Line(126, $linhaverticalteste, 126, 33); //Linha lado esquerdo de assinaturas
 
-                $linhavertical = 20;
-                $linhahorizontalteste = 25;
-                $linhaverticalteste = 24;
+            //             $i++;
+            //             $linhahorizontalteste += 7;
+            //             $linhaverticalteste += 7;
+            //         }
 
-                $pdf->Line(16, $linhaverticalteste, 16, 17); // dia/entrada
-                $pdf->Line(32, $linhaverticalteste, 32, 17); // 2
-                $pdf->Line(49, $linhaverticalteste, 49, 17); // 3 
-                $pdf->Line(67, $linhaverticalteste, 67, 17); // 4 
-                $pdf->Line(86, $linhaverticalteste, 86, 17); // 5 
-                $pdf->Line(106, $linhaverticalteste, 106, 17); // 6
-                $pdf->Line(126, $linhaverticalteste, 126, 17); // 7
-                $pdf->Line(189, $linhaverticalteste, 189, 17); // 8 linha lado esquerdo do visto
-                $pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
-            }
+            //         $pdf->AddPage();
+
+            //         $pdf->Line(5, 17, 205, 17); //primeira linha
+            //         $pdf->Line(5, 17, 205, 17); //primeira linha
+            //         $pdf->Line(5, 17, 205, 17); //primeira linha
+            //         $pdf->Line(5, 17, 205, 17); //primeira linha
+
+            //         $linhavertical = 20;
+            //         $linhahorizontalteste = 25;
+            //         $linhaverticalteste = 24;
+
+            //         $pdf->Line(16, $linhaverticalteste, 16, 17); // dia/entrada
+            //         $pdf->Line(32, $linhaverticalteste, 32, 17); // 2
+            //         $pdf->Line(49, $linhaverticalteste, 49, 17); // 3 
+            //         $pdf->Line(67, $linhaverticalteste, 67, 17); // 4 
+            //         $pdf->Line(86, $linhaverticalteste, 86, 17); // 5 
+            //         $pdf->Line(106, $linhaverticalteste, 106, 17); // 6
+            //         $pdf->Line(126, $linhaverticalteste, 126, 17); // 7
+            //         $pdf->Line(189, $linhaverticalteste, 189, 17); // 8 linha lado esquerdo do visto
+            //         $pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
+            //     }
+            // }
 
             // $repetiu = 0;
             $diadasemana = strftime('%u', strtotime($ano . '-' . $mes . '-' . $registro['dia']));
@@ -1064,15 +1067,67 @@ if ($ponto) {
             $totalHorasAtraso += $horaAtraso; //Total em segundos
             // Fim
 
-            if ($repetiu == 1) {
-                $valorIndex = $index;
-                break;
-            }
+            // if ($repetiu == 1) {
+            //     $valorIndex = $index;
+            //     break;
+            // }
+            $repetiu += 1;
         }
-        $repetiu += 1;
-        // $index++;
     }
 }
+
+$y = $pdf->GetY();
+$pdf->Line(5, $y, 205, $y);
+
+
+$pdf->setY($linhaverticalteste - 5);
+$pdf->setX(155);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ASSINATURAS"), 0, 0, "L", 0);
+
+$pdf->setY($linhaverticalteste + 2);
+$pdf->setX(126);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "SUPERVISOR"), 0, 0, "L", 0);
+
+$pdf->setY($linhaverticalteste + 11);
+$pdf->setX(126);
+$pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "FUNCIONARIO"), 0, 0, "L", 0);
+
+$i = 0;
+
+while ($i != 3) {
+    $pdf->Line(5, $linhahorizontalteste, 205, $linhahorizontalteste); //Linha fim documento
+    $pdf->Line(5, $linhaverticalteste, 5, 17); //Linha lado esquerdo documento
+    $pdf->Line(205, $linhaverticalteste, 205, 17); // Linha lado direito documento
+    $pdf->Line(126, $linhaverticalteste, 126, 33); //Linha lado esquerdo de assinaturas
+
+    $i++;
+    $linhahorizontalteste += 7;
+    $linhaverticalteste += 7;
+}
+
+$pdf->AddPage();
+
+$pdf->Line(5, 17, 205, 17); //primeira linha
+$pdf->Line(5, 17, 205, 17); //primeira linha
+$pdf->Line(5, 17, 205, 17); //primeira linha
+$pdf->Line(5, 17, 205, 17); //primeira linha
+
+$linhavertical = 20;
+$linhahorizontalteste = 25;
+$linhaverticalteste = 24;
+
+$pdf->Line(16, $linhaverticalteste, 16, 17); // dia/entrada
+$pdf->Line(32, $linhaverticalteste, 32, 17); // 2
+$pdf->Line(49, $linhaverticalteste, 49, 17); // 3 
+$pdf->Line(67, $linhaverticalteste, 67, 17); // 4 
+$pdf->Line(86, $linhaverticalteste, 86, 17); // 5 
+$pdf->Line(106, $linhaverticalteste, 106, 17); // 6
+$pdf->Line(126, $linhaverticalteste, 126, 17); // 7
+$pdf->Line(189, $linhaverticalteste, 189, 17); // 8 linha lado esquerdo do visto
+$pdf->Line(205, $linhaverticalteste, 205, 17); // 9 
+
+
+
 // // if (!$ponto) {
 // $data = explode('-', $mesAno);
 // $mes = (int)$data[1];
