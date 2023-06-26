@@ -25,10 +25,10 @@ $idFolha = (int)$_GET["idFolha"];
 
 $sql = "SELECT FPMDD.folhaPontoMensal, FPMDD.dia, FPMDD.horaEntrada, FPMDD.inicioAlmoco, FPMDD.fimAlmoco, FPMDD.horaSaida, FPMDD.horaExtra, FPMDD.atraso, FPMDD.observacaoAtraso, FPMDD.observacaoExtra,
 FPMDD.lancamento, L.descricao, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.horasPositivasDia, FPMDD.horasNegativasDia, FPM.mesAno, FPM.funcionarioId as codigoFuncionario
- FROM dbo.folhaPontoMensalDetalheDiario FPMDD
- LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo
- LEFT JOIN dbo.lancamento L on L.sigla = FPMDD.lancamento
-    where FPMDD.folhaPontoMensal = $idFolha";
+FROM dbo.folhaPontoMensalDetalheDiario FPMDD
+LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo
+LEFT JOIN dbo.lancamento L on L.sigla = FPMDD.lancamento
+WHERE FPMDD.folhaPontoMensal = $idFolha";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
 
@@ -113,10 +113,10 @@ while ($contador <= $totalDiasMes) {
     if ($contador == $diaPonto) {
         $sql2 = "SELECT FPMDD.folhaPontoMensal, FPMDD.dia, FPMDD.horaEntrada, FPMDD.inicioAlmoco, FPMDD.fimAlmoco, FPMDD.horaSaida, FPMDD.horaExtra, FPMDD.atraso, FPMDD.observacaoAtraso, FPMDD.observacaoExtra,
         FPMDD.lancamento, L.descricao as descricao, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.horasPositivasDia, FPMDD.horasNegativasDia, FPM.mesAno, FPM.funcionarioId as codigoFuncionario
-         FROM dbo.folhaPontoMensalDetalheDiario FPMDD
-         LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo
-         LEFT JOIN dbo.lancamento L on L.sigla = FPMDD.lancamento
-            where FPMDD.folhaPontoMensal = $idFolha AND FPMDD.dia = $diaPonto";
+        FROM dbo.folhaPontoMensalDetalheDiario FPMDD
+        LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo
+        LEFT JOIN dbo.lancamento L on L.sigla = FPMDD.lancamento
+        WHERE FPMDD.folhaPontoMensal = $idFolha AND FPMDD.dia = $diaPonto";
         $reposit = new reposit();
         $result2 = $reposit->RunQuery($sql2);
 
@@ -133,124 +133,12 @@ while ($contador <= $totalDiasMes) {
                 "atraso" => $row2["atraso"],
                 "descricaoLancamento" => $row["descricao"]
             ]);
-            $controleDiaPonto += 1;
+            $controleDiaPonto++;
         }
     }
 
     $contador++;
 }
-
-
-
-
-// foreach( $result as $index  => $row ){
-//     $diaRow = (Int) $row['dia'];
-
-//     $diasCount = 0;
-//     $diaExistente = false;    
-//     while( $diasCount < $totalDiasMes ){
-
-
-//     if ($diasCount == $diaRow) {
-//         $dadoSalvo = $ponto[$diasCount];
-
-//         if( $dadoSalvo ){
-
-//             if( $dadoSalvo['dia'] == $diasCount){
-
-//                 $ponto[$diasCount] = [
-//                     "codigo" => $row["codigo"],
-//                     "dia" => $row["dia"],
-//                     "horaEntrada" => $row["horaEntrada"],
-//                     "inicioAlmoco" => $row["inicioAlmoco"],
-//                     "fimAlmoco" => $row["fimAlmoco"],
-//                     "horaSaida" => $row["horaSaida"],
-//                     "horaExtra" => $row["horaExtra"],
-//                     "atraso" => $row["atraso"],
-//                     "descricaoLancamento" => $row["descricao"],
-//                 ];
-//             }else{
-//                 array_push($ponto, [
-//                     "codigo" => "",
-//                     "dia" =>$diasCount,
-//                     "horaEntrada" => "",
-//                     "inicioAlmoco" => "",
-//                     "fimAlmoco" => "",
-//                     "horaSaida" => "",
-//                     "horaExtra" => "",
-//                     "atraso" => "",
-//                     "descricaoLancamento" => ""
-//                 ]);
-//             }
-//         }else{
-//             array_push($ponto, [
-//                 "codigo" => "",
-//                 "dia" =>$diasCount,
-//                 "horaEntrada" => "",
-//                 "inicioAlmoco" => "",
-//                 "fimAlmoco" => "",
-//                 "horaSaida" => "",
-//                 "horaExtra" => "",
-//                 "atraso" => "",
-//                 "descricaoLancamento" => ""
-//             ]);
-//         }
-//     }else{
-
-//         $dadoSalvo = $ponto[$diasCount];
-
-//         if( $dadoSalvo ){
-
-//             if( $dadoSalvo['dia'] == $diasCount){
-
-//                 $ponto[$diasCount] = [
-//                     "codigo" => $row["codigo"],
-//                     "dia" => $row["dia"],
-//                     "horaEntrada" => $row["horaEntrada"],
-//                     "inicioAlmoco" => $row["inicioAlmoco"],
-//                     "fimAlmoco" => $row["fimAlmoco"],
-//                     "horaSaida" => $row["horaSaida"],
-//                     "horaExtra" => $row["horaExtra"],
-//                     "atraso" => $row["atraso"],
-//                     "descricaoLancamento" => $row["descricao"],
-//                 ];
-//             }else{
-//                 array_push($ponto, [
-//                     "codigo" => "",
-//                     "dia" =>$diasCount,
-//                     "horaEntrada" => "",
-//                     "inicioAlmoco" => "",
-//                     "fimAlmoco" => "",
-//                     "horaSaida" => "",
-//                     "horaExtra" => "",
-//                     "atraso" => "",
-//                     "descricaoLancamento" => ""
-//                 ]);
-//             }
-//         }else{
-
-//             array_push($ponto, [
-//                 "codigo" => "",
-//                 "dia" =>$diasCount,
-//                 "horaEntrada" => "",
-//                 "inicioAlmoco" => "",
-//                 "fimAlmoco" => "",
-//                 "horaSaida" => "",
-//                 "horaExtra" => "",
-//                 "atraso" => "",
-//                 "descricaoLancamento" => ""
-//             ]);
-
-//         }
-//     }
-
-//         $diasCount++;
-
-
-//     }
-
-// } // CODIGO DO RAMON
-
 
 
 $sqlFuncionario = "SELECT nome, ativo, escala, supervisor, empresa, cargo from dbo.funcionario where codigo = $codigoFuncionario";
