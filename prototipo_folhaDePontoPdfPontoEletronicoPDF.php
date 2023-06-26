@@ -57,18 +57,12 @@ $ponto = array();
 $data = explode('-', ($result[0])['mesAno']);
 $mes = (int)$data[1];
 $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
-
-// $totalDiasMes = 30;
+$controleDiaPonto = 0;
 $contador = 1;
 
 
 while ($contador <= $totalDiasMes) {
-    $controle = 0;
-
-    // while ($controle < 1){ 
-    // for ($i = 1; $i < 31; $i++) {
-
-    $diaPonto = ($result[$contador - 1])['dia'];
+    $diaPonto = ($result[$controleDiaPonto])['dia'];
 
     while ($diaPonto != $contador && $contador <= $totalDiasMes) {
         $dadoSalvo = $ponto[$contador - 1];
@@ -87,7 +81,6 @@ while ($contador <= $totalDiasMes) {
                     "atraso" => $row["atraso"],
                     "descricaoLancamento" => $row["descricao"]
                 ];
-                // $controle = 1;
             } else {
                 array_push($ponto, [
                     "codigo" => "",
@@ -118,8 +111,12 @@ while ($contador <= $totalDiasMes) {
     }
 
     if ($contador == $diaPonto) {
-        $sql2 = "SELECT codigo, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, observacaoAtraso, observacaoExtra, lancamento
-        FROM dbo.folhaPontoMensalDetalheDiario WHERE dia = $diaPonto AND folhaPontoMensal = $idFolha";
+        $sql2 = "SELECT FPMDD.folhaPontoMensal, FPMDD.dia, FPMDD.horaEntrada, FPMDD.inicioAlmoco, FPMDD.fimAlmoco, FPMDD.horaSaida, FPMDD.horaExtra, FPMDD.atraso, FPMDD.observacaoAtraso, FPMDD.observacaoExtra,
+        FPMDD.lancamento, L.descricao as descricao, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.horasPositivasDia, FPMDD.horasNegativasDia, FPM.mesAno, FPM.funcionarioId as codigoFuncionario
+         FROM dbo.folhaPontoMensalDetalheDiario FPMDD
+         LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo
+         LEFT JOIN dbo.lancamento L on L.sigla = FPMDD.lancamento
+            where FPMDD.folhaPontoMensal = $idFolha AND FPMDD.dia = $diaPonto";
         $reposit = new reposit();
         $result2 = $reposit->RunQuery($sql2);
 
@@ -136,54 +133,10 @@ while ($contador <= $totalDiasMes) {
                 "atraso" => $row2["atraso"],
                 "descricaoLancamento" => $row["descricao"]
             ]);
+            $controleDiaPonto += 1;
         }
-        // } else {
-        //     $dadoSalvo = $ponto[$contador - 1];
-        //     if ($dadoSalvo) {
-
-        //         if ($dadoSalvo['dia'] == $contador) {
-
-        //             $ponto[$diasCount] = [
-        //                 "codigo" => $row["codigo"],
-        //                 "dia" => $row["dia"],
-        //                 "horaEntrada" => $row["horaEntrada"],
-        //                 "inicioAlmoco" => $row["inicioAlmoco"],
-        //                 "fimAlmoco" => $row["fimAlmoco"],
-        //                 "horaSaida" => $row["horaSaida"],
-        //                 "horaExtra" => $row["horaExtra"],
-        //                 "atraso" => $row["atraso"],
-        //                 "descricaoLancamento" => $row["descricao"]
-        //             ];
-        //             // $controle = 1;
-        //         } else {
-        //             array_push($ponto, [
-        //                 "codigo" => "",
-        //                 "dia" => $contador,
-        //                 "horaEntrada" => "",
-        //                 "inicioAlmoco" => "",
-        //                 "fimAlmoco" => "",
-        //                 "horaSaida" => "",
-        //                 "horaExtra" => "",
-        //                 "atraso" => "",
-        //                 "descricaoLancamento" => ""
-        //             ]);
-        //         }
-        //     } else {
-        //         array_push($ponto, [
-        //             "codigo" => "",
-        //             "dia" => $contador,
-        //             "horaEntrada" => "",
-        //             "inicioAlmoco" => "",
-        //             "fimAlmoco" => "",
-        //             "horaSaida" => "",
-        //             "horaExtra" => "",
-        //             "atraso" => "",
-        //             "descricaoLancamento" => ""
-        //         ]);
-        //     }
     }
-    // }
-    // }
+
     $contador++;
 }
 
@@ -714,8 +667,6 @@ if ($ponto) {
             if ($saida == '00:00:00') {
                 $saida = '';
             }
-
-
 
             // Verifica se esta de férias
             // $sqlFerias = "SELECT dataInicio, dataFim, quantidadeDias 
