@@ -61,6 +61,16 @@ $controleDiaPonto = 0;
 $contador = 1;
 
 
+$hhNegativaTotal = 0;
+$mmNegativaTotal = 0;
+$ssNegativaTotal = 0;
+
+
+
+
+
+$totalHorasPositivasMes = "00:00:00";
+$totalHorasNegativasMes = "00:00:00";
 
 
 while ($contador <= $totalDiasMes) {
@@ -82,8 +92,19 @@ while ($contador <= $totalDiasMes) {
                     "horaExtra" => $row["horaExtra"],
                     "atraso" => $row["atraso"],
                     "descricaoLancamento" => $row["descricao"],
-                    "diaFolga" => $row["diaFolga"]
+                    "diaFolga" => $row["diaFolga"],
+                    "horasPositivasDia" => $row["horasPositivasDia"],
+                    "horasNegativasDia" => $row["horasNegativasDia"]
                 ];
+                $horaNegativa = $row["horasNegativasDia"];
+                $horaNegativaPartida = explode(":", $horaNegativa);
+                $hhNegativa = (int)$horaNegativaPartida[0];
+                $mmNegativa = (int)$horaNegativaPartida[1];
+                $ssNegativa = (int)$horaNegativaPartida[2];
+
+                $hhNegativaTotal += $hhNegativa;
+                $mmNegativaTotal += $mmNegativa;
+                $ssNegativaTotal += $ssNegativa;
             } else {
                 array_push($ponto, [
                     "codigo" => "",
@@ -95,7 +116,9 @@ while ($contador <= $totalDiasMes) {
                     "horaExtra" => "",
                     "atraso" => "",
                     "descricaoLancamento" => "",
-                    "diaFolga" => ""
+                    "diaFolga" => "",
+                    "horasPositivasDia" => "",
+                    "horasNegativasDia" => ""
                 ]);
             }
         } else {
@@ -109,7 +132,9 @@ while ($contador <= $totalDiasMes) {
                 "horaExtra" => "",
                 "atraso" => "",
                 "descricaoLancamento" => "",
-                "diaFolga" => ""
+                "diaFolga" => "",
+                "horasPositivasDia" => "",
+                "horasNegativasDia" => ""
             ]);
         }
         $contador++;
@@ -137,8 +162,50 @@ while ($contador <= $totalDiasMes) {
                 "horaExtra" => $row2["horaExtra"],
                 "atraso" => $row2["atraso"],
                 "descricaoLancamento" => $row2["descricao"],
-                "diaFolga" => $row2["diaFolga"]
+                "diaFolga" => $row2["diaFolga"],
+                "horasPositivasDia" => $row2["horasPositivasDia"],
+                "horasNegativasDia" => $row2["horasNegativasDia"]
             ]);
+
+            $horaNegativa = $row2["horasNegativasDia"];
+            $horaNegativaPartida = explode(":", $horaNegativa);
+            $hhNegativa = (int)$horaNegativaPartida[0];
+            $mmNegativa = (int)$horaNegativaPartida[1];
+            $ssNegativa = (int)$horaNegativaPartida[2];
+
+            $hhNegativaTotal += $hhNegativa;
+            $mmNegativaTotal += $mmNegativa;
+            $ssNegativaTotal += $ssNegativa;
+
+            if ($ssNegativaTotal >= 60) {
+                $ssNegativaTotal = $ssNegativaTotal - 60;
+                $mmNegativaTotal += 1;
+            }
+            if ($mmNegativaTotal >= 60) {
+                $mmNegativaTotal = $mmNegativaTotal - 60;
+                $hhNegativaTotal += 1;
+            }
+
+            $horaPositiva = $row2["horasPositivasDia"];
+            $horaPositivaPartida = explode(":", $horaPositiva);
+            $hhPositiva = (int)$horaPositivaPartida[0];
+            $mmPositiva = (int)$horaPositivaPartida[1];
+            $ssPositiva = (int)$horaPositivaPartida[2];
+
+            $hhPositivaTotal += $hhPositiva;
+            $mmPositivaTotal += $mmPositiva;
+            $ssPositivaTotal += $ssPositiva;
+
+            if ($ssPositivaTotal >= 60) {
+                $ssPositivaTotal = $ssPositivaTotal - 60;
+                $mmPositivaTotal += 1;
+            }
+            if ($mmPositivaTotal >= 60) {
+                $mmPositivaTotal = $mmPositivaTotal - 60;
+                $hhPositivaTotal += 1;
+            }
+
+
             $controleDiaPonto++;
         }
     }
@@ -146,8 +213,85 @@ while ($contador <= $totalDiasMes) {
     $contador++;
 }
 
+$hhNegativaTotal = strval($hhNegativaTotal);
+$mmNegativaTotal = strval($mmNegativaTotal);
+$ssNegativaTotal = strval($ssNegativaTotal);
 
-$sqlFuncionario = "SELECT nome, ativo, escala, supervisor, empresa, cargo from dbo.funcionario where codigo = $codigoFuncionario";
+if (strlen($hhNegativaTotal) == 1) {
+    $hhNegativaTotal = "0"  . $hhNegativaTotal;
+}
+
+if (strlen($mmNegativaTotal) == 1) {
+    $mmNegativaTotal = "0"  . $mmNegativaTotal;
+}
+if (strlen($ssNegativaTotal) == 1) {
+    $ssNegativaTotal = "0"  . $ssNegativaTotal;
+}
+
+$totalHorasNegativasMes = $hhNegativaTotal . ":" . $mmNegativaTotal . ":" . $ssNegativaTotal;
+
+$hhPositivaTotal = strval($hhPositivaTotal);
+$mmPositivaTotal = strval($mmPositivaTotal);
+$ssPositivaTotal = strval($ssPositivaTotal);
+
+if (strlen($hhPositivaTotal) == 1) {
+    $hhPositivaTotal = "0"  . $hhPositivaTotal;
+}
+
+if (strlen($mmPositivaTotal) == 1) {
+    $mmPositivaTotal = "0"  . $mmPositivaTotal;
+}
+if (strlen($ssPositivaTotal) == 1) {
+    $ssPositivaTotal = "0"  . $ssPositivaTotal;
+}
+
+$totalHorasPositivasMes = $hhPositivaTotal . ":" . $mmPositivaTotal . ":" . $ssPositivaTotal;
+
+$hhBancoMensal = (int)$hhPositivaTotal - (int)$hhNegativaTotal;
+$mmBancoMensal = (int)$mmPositivaTotal - (int)$mmNegativaTotal;
+$ssBancoMensal = (int)$ssPositivaTotal - (int)$ssNegativaTotal;
+
+
+
+if ($hhBancoMensal || $mmBancoMensal || $ssBancoMensal) {
+    if ($ssBancoMensal < 0) {
+        $ssBancoMensal = $ssBancoMensal * -1;
+    }
+    if ($mmBancoMensal < 0) {
+        $mmBancoMensal = $mmBancoMensal * -1;
+    }
+    $hhBancoMensalTesteNegativo = explode("-", $hhBancoMensal);
+    $hhBancoMensal = $hhBancoMensalTesteNegativo[1];
+}
+
+$hhBancoMensal = strval($hhBancoMensal);
+$mmBancoMensal = strval($mmBancoMensal);
+$ssBancoMensal = strval($ssBancoMensal);
+
+
+if (strlen($hhBancoMensal) == 1) {
+    $hhBancoMensal = "0"  . $hhBancoMensal;
+}
+
+if (strlen($mmBancoMensal) == 1) {
+    $mmBancoMensal = "0"  . $mmBancoMensal;
+}
+if (strlen($ssBancoMensal) == 1) {
+    $ssBancoMensal = "0"  . $ssBancoMensal;
+}
+
+if (count($hhBancoMensalTesteNegativo) >1){
+
+    $saldoBancoMensal = "-" .$hhBancoMensal . ":" . $mmBancoMensal . ":" . $ssBancoMensal;
+}else{
+    $saldoBancoMensal = $hhBancoMensal . ":" . $mmBancoMensal . ":" . $ssBancoMensal;
+}
+
+
+
+
+
+$sqlFuncionario = "SELECT nome, ativo, escala, empresa, cargo from dbo.funcionario where codigo = $codigoFuncionario";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sqlFuncionario);
 
@@ -155,7 +299,6 @@ if ($row = $result[0]) {
     $nome = $row['nome'];
     $ativo = $row['ativo'];
     $codigoEscala = $row['escala'];
-    $supervisor = $row['supervisor'];
     $codigoEmpresa = $row['empresa'];
     $codigoCargo = $row['cargo'];
 }
@@ -509,14 +652,13 @@ if ($ponto) {
             $diaFolga = $registro['diaFolga'];
             if ($diaFolga == '1') {
                 $entrada = "-";
-                $almocoInicio="-";
-                $almocoFim="-";
+                $almocoInicio = "-";
+                $almocoFim = "-";
                 $saida = "-";
                 $registro['horaExtra'] = "-";
                 $registro['atraso'] = "-";
-
             }
-            
+
 
             $y = $pdf->GetY();
 
@@ -575,94 +717,87 @@ if ($ponto) {
                     $pdf->setX(7);
                     $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
                     // cinza
-                    if ($escalaDia == 1) { //Seg-Sex
+                    if ($sabadoEscala == 0) { //Seg-Sex
 
                         $pdf->setX(16);
                         $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
                         $pdf->setX(67);
                         $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-                        // $pdf->setX(126);
-                        // $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        // $pdf->setX(189);
-                        // $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+                        $pdf->setX(126);
+                        $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                        $pdf->setX(189);
+                        $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
                         $pdf->SetFont('Arial', 'B', 8);
                     }
                     // FIM CINZA
 
-                    if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00" && $registro['descricaoLancamento'] == '') {
-                        // ENTRADA IGUAL À ZERO 
-                        if ($registraPonto == 1 && ($escalaDia == 2 || $escalaDia == 3) && $inicioRegistroPonto[0] <= $diaMesAno) {
-                            $pdf->setX(126.8);
-                            $pdf->SetFont('Arial', 'B', 8);
-                            if ($fimRegistroPonto[0] != "") {
-                                if (($fimRegistroPonto[0] >= $diaMesAno) && $diaMesAno < $dataAtual) {
-                                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-                                }
-                            } else {
-                                if ($diaFerias == true) {
-                                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FÉRIAS"), 0, 0, "L", 0);
-                                } else if ($folga == true) {
-                                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
-                                } else if ($diaMesAno < $dataAtual) {
-                                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-                                }
-                            }
-                        }
-                    } else if ($entrada && $saida && $entrada > $saida) {
-                        $pdf->SetFont('Arial', 'B', 8);
+                    // if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00" && $registro['descricaoLancamento'] == '') {
+                    //     // ENTRADA IGUAL À ZERO 
+                    //     if ($registraPonto == 1 && ($escalaDia == 2 || $escalaDia == 3) && $inicioRegistroPonto[0] <= $diaMesAno) {
+                    //         $pdf->setX(126.8);
+                    //         $pdf->SetFont('Arial', 'B', 8);
+                    //         if ($fimRegistroPonto[0] != "") {
+                    //             if (($fimRegistroPonto[0] >= $diaMesAno) && $diaMesAno < $dataAtual) {
+                    //                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                    //             }
+                    //         } else {
+                    //             if ($diaFerias == true) {
+                    //                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FÉRIAS"), 0, 0, "L", 0);
+                    //             } else if ($folga == true) {
+                    //                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
+                    //             } else if ($diaMesAno < $dataAtual) {
+                    //                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                    //             }
+                    //         }
+                    //     }
+                    // } else if ($entrada && $saida && $entrada > $saida) {
+                    //     $pdf->SetFont('Arial', 'B', 8);
 
-                        $novaLinha = array();
-                        $novaLinha = [
-                            'dia' => $registro['dia']
-                        ];
-                        $novaLinha = $novaLinha + array('horaEntrada' => $entrada);
+                    //     $novaLinha = array();
+                    //     $novaLinha = [
+                    //         'dia' => $registro['dia']
+                    //     ];
+                    //     $novaLinha = $novaLinha + array('horaEntrada' => $entrada);
 
-                        $pdf->setX(66.85);
-                        $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
-                        $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
-                        $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
+                    //     $pdf->setX(66.85);
+                    //     $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
+                    //     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
+                    //     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
 
-                        if ($almocoInicio > $saida) {
-                            $novaLinha = $novaLinha + array('inicioAlmoco' => $almocoInicio);
-                        } else {
-                            $pdf->setX(32.2);
-                            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
-                        }
-                        if ($almocoFim > $saida) {
-                            $novaLinha = $novaLinha + array('fimAlmoco' => $almocoFim);
-                        } else {
-                            $pdf->setX(49.2);
-                            $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
-                        }
+                    //     if ($almocoInicio > $saida) {
+                    //         $novaLinha = $novaLinha + array('inicioAlmoco' => $almocoInicio);
+                    //     } else {
+                    //         $pdf->setX(32.2);
+                    //         $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
+                    //     }
+                    //     if ($almocoFim > $saida) {
+                    //         $novaLinha = $novaLinha + array('fimAlmoco' => $almocoFim);
+                    //     } else {
+                    //         $pdf->setX(49.2);
+                    //         $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
+                    //     }
 
 
-                        array_splice($ponto, $index + 1, 0, array($novaLinha));
-                        $repetiu = 1;
-                    } else {
-                        // ENTRADA DIFERENTE DE ZERO
-                        $pdf->SetFont('Arial', 'B', 8);
-                        $pdf->setX(14);
-                        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $entrada), 0, 0, "C", 0); // hora entrada
-                        $pdf->setX(32.2);
-                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
-                        $pdf->setX(49.2);
-                        $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
-                        $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
+                    //     array_splice($ponto, $index + 1, 0, array($novaLinha));
+                    //     $repetiu = 1;
+                    // } else {
+                    //     // ENTRADA DIFERENTE DE ZERO
+                    //     $pdf->SetFont('Arial', 'B', 8);
+                    //     $pdf->setX(14);
+                    //     $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $entrada), 0, 0, "C", 0); // hora entrada
+                    //     $pdf->setX(32.2);
+                    //     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
+                    //     $pdf->setX(49.2);
+                    //     $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
+                    //     $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
 
-                        $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
-                        $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
-                    }
-                    // else {
-                    //     // Campos de hora positiva e negativa em cinza
-                    //     $pdf->setX(86.3);
-                    //     $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
-                    //     $pdf->setX(106.2);
-                    //     $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
-                    // };
+                    //     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
+                    //     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
+                    // }
 
-                    $pdf->setX(126);
-                    $pdf->SetFont('Arial', 'B', 8);
-                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0); // descricao funcionario
+                    // $pdf->setX(126);
+                    // $pdf->SetFont('Arial', 'B', 8);
+                    // $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0); // descricao funcionario
 
                     break;
 
@@ -672,99 +807,50 @@ if ($ponto) {
                     $pdf->SetFont('Arial', 'B', 7);
                     $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0); //DOMINGO
 
-                    if ($tipoEscala == 1) { //Normal
-                        // CINZA 
-                        if ($escalaDia != 3) {
-                            $pdf->setX(16);
-                            $pdf->Cell(15.65, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                            $pdf->setX(67);
-                            $pdf->Cell(18.69, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                            $pdf->setX(130.35);
-                            $pdf->Cell(42.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                            // $pdf->setX(126);
-                            // $pdf->Cell(20,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 1);
-                            $pdf->setX(169.35);
-                            $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        }
-                        // FIM CINZA
-                    }
-
-                    $pdf->SetFont('Arial', 'B', 8);
-                    if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00") {
-                        if ($tipoEscala == 1) { //Normal
-                            if ($registraPonto == 1 && $escalaDia == 3 && $inicioRegistroPonto[0] <= $diaMesAno && $registro['descricaoLancamento'] == '') {
-                                $pdf->setX(126.8);
-                                $pdf->SetFont('Arial', 'B', 8);
-                                if ($fimRegistroPonto[0] != "") {
-                                    if (($fimRegistroPonto[0] >= $diaMesAno) && $diaMesAno < $dataAtual) {
-                                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-                                    }
-                                } else {
-                                    if ($diaFerias == true) {
-                                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FÉRIAS"), 0, 0, "L", 0);
-                                    } else if ($folga == true) {
-                                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
-                                    } else if ($diaMesAno < $dataAtual) {
-                                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-                                    }
-                                }
-                            }
-                        }
-                    } else if ($entrada && $saida && $entrada > $saida) {
-                        $pdf->SetFont('Arial', 'B', 8);
-
-                        $novaLinha = array();
-                        $novaLinha = [
-                            'dia' => $registro['dia']
-                        ];
-                        $novaLinha = $novaLinha + array('horaEntrada' => $entrada);
-
-                        $pdf->setX(66.85);
-                        $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
-                        $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
-                        $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
-
-                        if ($almocoInicio > $saida) {
-                            $novaLinha = $novaLinha + array('inicioAlmoco' => $almocoInicio);
-                        } else {
-                            $pdf->setX(32.2);
-                            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
-                        }
-                        if ($almocoFim > $saida) {
-                            $novaLinha = $novaLinha + array('fimAlmoco' => $almocoFim);
-                        } else {
-                            $pdf->setX(49.2);
-                            $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
-                        }
-
-                        array_splice($ponto, $index + 1, 0, array($novaLinha));
-                        $repetiu = 1;
-                    } else {
-                        // ENTRADA DIFERENTE DE ZERO
-                        $pdf->SetFont('Arial', 'B', 8);
-                        $pdf->setX(14);
-                        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $entrada), 0, 0, "C", 0); // hora entrada
-                        $pdf->setX(32.2);
-                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
-                        $pdf->setX(49.2);
-                        $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
-                        $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
-
-                        $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
-                        $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
-
-                    }
-                    // else {
-                    //     // ENTRADA = 00:00:00
-                    //     $pdf->setX(86.3);
-                    //     $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA ENTRADA FALTA JUSTIFICADA
-                    //     $pdf->setX(105);
-                    //     $pdf->Cell(21,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA FALTA JUSTIFICADA
+                    // if ($tipoEscala == 1) { //Normal
+                    //     // CINZA 
+                    //     if ($escalaDia != 3) {
+                    //         $pdf->setX(16);
+                    //         $pdf->Cell(15.65, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                    //         $pdf->setX(67);
+                    //         $pdf->Cell(18.69, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                    //         $pdf->setX(130.35);
+                    //         $pdf->Cell(42.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                    //         $pdf->setX(169.35);
+                    //         $pdf->Cell(35.5, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                    //     }
+                    //     // FIM CINZA
                     // }
 
-                    $pdf->setX(126);
-                    $pdf->SetFont('Arial', 'B', 8);
-                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0); // descricao funcionario
+                    // $pdf->SetFont('Arial', 'B', 8);
+                    // if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00") {
+                    //     if ($tipoEscala == 1) { //Normal
+                    //         if ($registraPonto == 1 && $escalaDia == 3 && $inicioRegistroPonto[0] <= $diaMesAno && $registro['descricaoLancamento'] == '') {
+                    //             $pdf->setX(126.8);
+                    //             $pdf->SetFont('Arial', 'B', 8);
+                    //             if ($fimRegistroPonto[0] != "") {
+                    //                 if (($fimRegistroPonto[0] >= $diaMesAno) && $diaMesAno < $dataAtual) {
+                    //                     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                    //                 }
+                    //             } else {
+                    //                 if ($diaFerias == true) {
+                    //                     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FÉRIAS"), 0, 0, "L", 0);
+                    //                 } else if ($folga == true) {
+                    //                     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
+                    //                 } else if ($diaMesAno < $dataAtual) {
+                    //                     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // } else if ($entrada && $saida && $entrada > $saida) {
+                    //     $pdf->SetFont('Arial', 'B', 8);
+
+                    //     $novaLinha = array();
+                    //     $novaLinha = [
+                    //         'dia' => $registro['dia']
+                    //     ];
+                    // }
 
                     break;
                 default:
@@ -848,12 +934,6 @@ if ($ponto) {
                     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
                     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
                 }
-                // else {
-                //     $pdf->setX(86.3);
-                //     $pdf->Cell(19.55,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA ENTRADA FALTA JUSTIFICADA
-                //     $pdf->setX(106.2);
-                //     $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA PREENCHIDA
-                // }
 
                 //Observacao
                 $pdf->setX(127);
@@ -903,7 +983,7 @@ if ($ponto) {
                             };
                         }
                     }
-                }   
+                }
             }
 
             $linhavertical += 6.9;
@@ -929,44 +1009,44 @@ $pdf->Line(49, $linhaverticalteste, 49, $linhaverticalteste + 14); //Linha lado 
 
 $pdf->setY($linhaverticalteste + 2);
 $pdf->setX(5);
-$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS POSITIVAS: $totalHorasExtra"), 0, 0, "L", 0);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS POSITIVAS: $totalHorasPositivasMes"), 0, 0, "L", 0);
 
 $pdf->setY($linhaverticalteste + 2);
 $pdf->setX(50);
-$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasAtraso"), 0, 0, "L", 0);
+$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasNegativasMes"), 0, 0, "L", 0);
 
 $pdf->setY($linhaverticalteste + 11);
 $pdf->setX(5);
-$pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO MENSAL: $saldoMensal"), 0, 0, "L", 0);
+$pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO MENSAL: $saldoBancoMensal"), 0, 0, "L", 0);
 
-if ($bancoHoras) {
-    foreach ($bancoHoras as $banco) {
-        $horaPositiva = $banco['horaPositiva'];
+// if ($bancoHoras) {
+//     foreach ($bancoHoras as $banco) {
+//         $horaPositiva = $banco['horaPositiva'];
 
-        $horaPositiva = explode(":", $horaPositiva);
-        $horaPositiva = ($horaPositiva[0] * 3600) + ($horaPositiva[1] * 60) + $horaPositiva[2];
-        $totalHorasPositiva += $horaPositiva; //Total em segundos
+//         $horaPositiva = explode(":", $horaPositiva);
+//         $horaPositiva = ($horaPositiva[0] * 3600) + ($horaPositiva[1] * 60) + $horaPositiva[2];
+//         $totalHorasPositiva += $horaPositiva; //Total em segundos
 
-        $horaNegativa = $banco['horaNegativa'];
+//         $horaNegativa = $banco['horaNegativa'];
 
-        $horaNegativa = explode(":", $horaNegativa);
-        $horaNegativa = ($horaNegativa[0] * 3600) + ($horaNegativa[1] * 60) + $horaNegativa[2];
-        $totalHorasNegativa += $horaNegativa; //Total em segundos
-    }
-    $saldoBanco = $totalHorasPositiva - $totalHorasNegativa;
+//         $horaNegativa = explode(":", $horaNegativa);
+//         $horaNegativa = ($horaNegativa[0] * 3600) + ($horaNegativa[1] * 60) + $horaNegativa[2];
+//         $totalHorasNegativa += $horaNegativa; //Total em segundos
+//     }
+//     $saldoBanco = $totalHorasPositiva - $totalHorasNegativa;
 
-    if ($saldoBanco < 0) {
-        $saldoBanco = explode("-", $saldoBanco);
-        $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco[1] / 3600), ":", ($saldoBanco[1] / 60) % 60);
-        $saldoBanco = "- " . $saldoBanco;
-    } else {
-        $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco / 3600), ":", ($saldoBanco / 60) % 60);
-    }
+//     if ($saldoBanco < 0) {
+//         $saldoBanco = explode("-", $saldoBanco);
+//         $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco[1] / 3600), ":", ($saldoBanco[1] / 60) % 60);
+//         $saldoBanco = "- " . $saldoBanco;
+//     } else {
+//         $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco / 3600), ":", ($saldoBanco / 60) % 60);
+//     }
 
-    $pdf->setY($linhaverticalteste + 11);
-    $pdf->setX(50);
-    $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO BANCO HORAS: $saldoBanco"), 0, 0, "L", 0);
-}
+//     $pdf->setY($linhaverticalteste + 11);
+//     $pdf->setX(50);
+//     $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO BANCO HORAS: $saldoBanco"), 0, 0, "L", 0);
+// }
 
 
 

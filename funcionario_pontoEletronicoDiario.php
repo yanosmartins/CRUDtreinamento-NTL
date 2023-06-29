@@ -7,7 +7,7 @@ require_once("inc/init.php");
 require_once("inc/config.ui.php");
 
 //colocar o tratamento de permissão sempre abaixo de require_once("inc/config.ui.php");
-  
+
 /* ---------------- PHP Custom Scripts ---------
 
   YOU CAN SET CONFIGURATION VARIABLES HERE BEFORE IT GOES TO NAV, RIBBON, ETC.
@@ -126,14 +126,15 @@ include("inc/nav.php");
                                                                 <div id="hora" style="font-size: 17px;">
                                                                 </div>
                                                                 <div class="#"><br>
-                                                                    <h4>Funcionário: <span id="#"><?php
-                                                                                                    $reposit = new reposit();
-                                                                                                    $url = explode("=", $_SERVER["REQUEST_URI"]); ////essas linhas fazem a leitura do codigo "id" na url
-                                                                                                    $codigo = ($url[1]);
-                                                                                                    $codigo = (int)$codigo;
-                                                                                                    $sql = "SELECT codigo, nome, escala FROM dbo.funcionario WHERE codigo = $codigo";
-                                                                                                    $result = $reposit->RunQuery($sql);
-                                                                                                    ?></span>
+                                                                    <h4>Funcionário: <span id="#">
+                                                                            <?php
+                                                                            $reposit = new reposit();
+                                                                            $url = explode("=", $_SERVER["REQUEST_URI"]); ////essas linhas fazem a leitura do codigo "id" na url
+                                                                            $codigo = ($url[1]);
+                                                                            $codigo = (int)$codigo;
+                                                                            $sql = "SELECT codigo, nome, escala FROM dbo.funcionario WHERE codigo = $codigo";
+                                                                            $result = $reposit->RunQuery($sql);
+                                                                            ?></span>
                                                                         <?php
                                                                         if ($row = $result[0]) {
                                                                             $nome = $row['nome'];
@@ -1275,7 +1276,7 @@ include("inc/scripts.php");
             ssExtraEntrada = ssExtraEntrada * -1;
         }
 
-        
+
 
 
         if (ssExtra >= 60) {
