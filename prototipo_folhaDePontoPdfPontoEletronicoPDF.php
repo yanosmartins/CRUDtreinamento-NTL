@@ -662,7 +662,7 @@ if ($ponto) {
 
                     $pdf->setX(126);
                     $pdf->SetFont('Arial', 'B', 8);
-                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "C", 0); // descricao funcionario
+                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0); // descricao funcionario
 
                     break;
 
@@ -764,7 +764,7 @@ if ($ponto) {
 
                     $pdf->setX(126);
                     $pdf->SetFont('Arial', 'B', 8);
-                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "C", 0); // descricao funcionario
+                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0); // descricao funcionario
 
                     break;
                 default:
@@ -856,9 +856,9 @@ if ($ponto) {
                 // }
 
                 //Observacao
-                $pdf->setX(126);
+                $pdf->setX(127);
                 $pdf->SetFont('Arial', 'B', 8);
-                $pdf->Cell(75,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "C", 0);
+                $pdf->Cell(75,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0);
                 $pdf->setX(169.35);
                 if ($resultAtrasoAbonado) {
                     $pdf->Cell(55, 6.61, iconv('UTF-8', 'windows-1252', "X"), 0, 0, "C", 0);
@@ -894,7 +894,7 @@ if ($ponto) {
 
                                 $pdf->setX(126.8);
                                 $pdf->SetFont('Arial', 'B', 8);
-                                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "C", 1); // descricao funcionario
+                                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 1); // descricao funcionario
                             } else {
                                 $pdf->setX(17);
                                 $pdf->Cell(12, 6.31, iconv('UTF-8', 'windows-1252', "FERIADO"), 0, 0, "L", 0);

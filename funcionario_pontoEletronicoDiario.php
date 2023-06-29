@@ -359,7 +359,7 @@ include("inc/nav.php");
                                                             </div>
                                                             <div class="col col-3"> 
                                                                 <label class="label" for="lancamento"></label>
-                                                                <button type="button" class="btn  btn-block btnLancamento" id="btnLancamento" style="height: 50px;  background-color:#8B0000;">
+                                                                <button type="button" class="btn  btn-block btnLancamento" id="btnLancamento" style="height: 50px;  background-color:#FF8C00;">
                                                                     <span class="">Lançar Ocorrência</span><br>
                                                                 </button><br>
                                                             </div>
