@@ -52,7 +52,6 @@ if ($row = $result[0]) {
     $mesAno = $row['mesAno'];
 }
 
-
 $ponto = array();
 $data = explode('-', ($result[0])['mesAno']);
 $mes = (int)$data[1];
@@ -60,14 +59,9 @@ $totalDiasMes = cal_days_in_month(CAL_GREGORIAN, $data[1], $data[0]);
 $controleDiaPonto = 0;
 $contador = 1;
 
-
 $hhNegativaTotal = 0;
 $mmNegativaTotal = 0;
 $ssNegativaTotal = 0;
-
-
-
-
 
 $totalHorasPositivasMes = "00:00:00";
 $totalHorasNegativasMes = "00:00:00";
@@ -251,8 +245,6 @@ $hhBancoMensal = (int)$hhPositivaTotal - (int)$hhNegativaTotal;
 $mmBancoMensal = (int)$mmPositivaTotal - (int)$mmNegativaTotal;
 $ssBancoMensal = (int)$ssPositivaTotal - (int)$ssNegativaTotal;
 
-
-
 if ($hhBancoMensal || $mmBancoMensal || $ssBancoMensal) {
     if ($ssBancoMensal < 0) {
         $ssBancoMensal = $ssBancoMensal * -1;
@@ -270,7 +262,6 @@ $hhBancoMensal = strval($hhBancoMensal);
 $mmBancoMensal = strval($mmBancoMensal);
 $ssBancoMensal = strval($ssBancoMensal);
 
-
 if (strlen($hhBancoMensal) < 2) {
     $hhBancoMensal = "0"  . $hhBancoMensal;
 }
@@ -281,18 +272,13 @@ if (strlen($ssBancoMensal) < 2) {
     $ssBancoMensal = "0"  . $ssBancoMensal;
 }
 
-
 if ($hhBancoMensalTesteNegativo) {
     if (count($hhBancoMensalTesteNegativo) > 1) {
-
         $saldoBancoMensal = "- " . $hhBancoMensal . ":" . $mmBancoMensal . ":" . $ssBancoMensal;
     }
 } else {
     $saldoBancoMensal = $hhBancoMensal . ":" . $mmBancoMensal . ":" . $ssBancoMensal;
 }
-
-
-
 
 $sqlFuncionario = "SELECT nome, ativo, escala, empresa, cargo from dbo.funcionario where codigo = $codigoFuncionario";
 $reposit = new reposit();
@@ -322,7 +308,6 @@ if ($row = $result[0]) {
     $uf = $row['uf'];
 }
 
-
 $sqlEscala = "SELECT descricao, horaEntrada, inicioIntervalo, fimIntervalo, horaSaida, expediente, intervalo, domingo, segunda, terca, quarta, quinta, sexta, sabado, tolerancia FROM dbo.escala where codigo = $codigoEscala";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sqlEscala);
@@ -342,7 +327,6 @@ if ($row = $result[0]) {
     $sabadoEscala = $row['sabado'];
     $toleranciaEscala = $row['tolerancia'];
 }
-
 
 $sqlCargo = "SELECT descricao FROM dbo.cargo where codigo = $codigoCargo";
 
@@ -366,11 +350,6 @@ $valor_de_retorno = match ($mesNumero) {
 };
 
 $mesExtenso = $valor_de_retorno;
-
-
-
-
-
 
 
 class PDF extends FPDF
@@ -425,17 +404,6 @@ class PDF extends FPDF
                 $this->Image($img1, $x4, $y4, 105, 105);
             }
         }
-        //        if ($nomeLogoRelatorio != "")
-        //        $this->SetFont('Arial', '', 8); #Seta a Fonte
-        //        $dataAux = new DateTime();
-        //        $dataAux->setTimezone(new DateTimeZone("GMT-3"));
-        //        $dataAtualizada = $dataAux->format('d/m/Y H:i:s');
-        //        $this->Cell(288, 0, $dataAtualizada, 0, 0, 'R', 0); #Título do Relatório
-        // $this->Cell(116, 1, "", 0, 1, 'C', 0); #Título do Relatório
-        // $this->Image($img, 7, 5, 13, 13); #logo da empresa
-        // $this->SetXY(190, 5);
-        // $this->SetFont('Arial', 'B', 8); #Seta a Fonte
-        // $this->Cell(20, 5, 'Pagina ' . $this->pageno()); #Imprime o Número das Páginas
 
         $this->Ln(24); #Quebra de Linhas
 
@@ -589,10 +557,6 @@ $pdf->setY(36);
 $pdf->setX(148);
 $pdf->Cell(32, 5, iconv('UTF-8', 'windows-1252', "OBSERVAÇÃO"), 0, 0, "C", 0);
 
-// $pdf->setY(36);
-// $pdf->setX(187);
-// $pdf->MultiCell(20, 5, iconv('UTF-8', 'windows-1252', "ABONO"), 0, 'C', false);
-// $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ATRASO ABONADO"), 0, 0, "L", 0);
 
 $pdf->Line(5, 43, 205, 43); // linha abaixo de diaas entrada saida observacao e visto
 $pdf->Line(32, 39, 67, 39); //linha abaixo do almoco
@@ -688,351 +652,212 @@ if ($ponto) {
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', "" . $registro['dia'] . ""), 0, 0, "L", 0);
             $pdf->SetFont('Arial', 'B', 7);
 
-            switch ($diadasemana) {
-                case 1:
-                    if ($segundaEscala == 0) { //Seg-Sex
+            
 
-                        $pdf->setX(16);
-                        $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(67);
-                        $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-                        $pdf->setX(126);
-                        $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(189);
-                        $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
-                        $pdf->SetFont('Arial', 'B', 8);
-                    }
-
-                    $pdf->setX(7);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
-                    $pdf->SetFont('Arial', 'B', 8);
-                    break;
-                case 2:
-                    if ($tercaEscala == 0) { //Seg-Sex
-
-                        $pdf->setX(16);
-                        $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(67);
-                        $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-                        $pdf->setX(126);
-                        $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(189);
-                        $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
-                        $pdf->SetFont('Arial', 'B', 8);
-                    }
-
-                    $pdf->setX(7);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
-                    $pdf->SetFont('Arial', 'B', 8);
-                    break;
-                case 3:
-                    if ($quartaEscala == 0) { //Seg-Sex
-
-                        $pdf->setX(16);
-                        $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(67);
-                        $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-                        $pdf->setX(126);
-                        $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(189);
-                        $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
-                        $pdf->SetFont('Arial', 'B', 8);
-                    }
-
-                    $pdf->setX(7);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
-                    $pdf->SetFont('Arial', 'B', 8);
-                    break;
-                case 4:
-                    if ($quintaEscala == 0) { //Seg-Sex
-
-                        $pdf->setX(16);
-                        $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(67);
-                        $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-                        $pdf->setX(126);
-                        $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(189);
-                        $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
-                        $pdf->SetFont('Arial', 'B', 8);
-                    }
-
-                    $pdf->setX(7);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
-                    $pdf->SetFont('Arial', 'B', 8);
-                    break;
-                case 5:
-                    if ($sextaEscala == 0) { //Seg-Sex
-
-                        $pdf->setX(16);
-                        $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(67);
-                        $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-                        $pdf->setX(126);
-                        $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(189);
-                        $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
-                        $pdf->SetFont('Arial', 'B', 8);
-                    }
-
-                    $pdf->setX(7);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
-                    $pdf->SetFont('Arial', 'B', 8);
-                    break;
-
-                    /////////////SABADO\\\\\\\\\\\\\\\
-                case 6:
-                    if ($sabadoEscala == 0) { //Seg-Sex
-
-                        $pdf->setX(16);
-                        $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(67);
-                        $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-                        $pdf->setX(126);
-                        $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(189);
-                        $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
-                        $pdf->SetFont('Arial', 'B', 8);
-                    }
-
-                    $pdf->setX(7);
-                    $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
-                    // cinza
-                    if ($sabadoEscala == 0) { //Seg-Sex
-
-                        $pdf->setX(16);
-                        $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(67);
-                        $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-                        $pdf->setX(126);
-                        $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(189);
-                        $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
-                        $pdf->SetFont('Arial', 'B', 8);
-                    }
-                    // FIM CINZA
-
-                    // if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00" && $registro['descricaoLancamento'] == '') {
-                    //     // ENTRADA IGUAL À ZERO 
-                    //     if ($registraPonto == 1 && ($escalaDia == 2 || $escalaDia == 3) && $inicioRegistroPonto[0] <= $diaMesAno) {
-                    //         $pdf->setX(126.8);
-                    //         $pdf->SetFont('Arial', 'B', 8);
-                    //         if ($fimRegistroPonto[0] != "") {
-                    //             if (($fimRegistroPonto[0] >= $diaMesAno) && $diaMesAno < $dataAtual) {
-                    //                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-                    //             }
-                    //         } else {
-                    //             if ($diaFerias == true) {
-                    //                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FÉRIAS"), 0, 0, "L", 0);
-                    //             } else if ($folga == true) {
-                    //                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
-                    //             } else if ($diaMesAno < $dataAtual) {
-                    //                 $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-                    //             }
-                    //         }
-                    //     }
-                    // } else if ($entrada && $saida && $entrada > $saida) {
-                    //     $pdf->SetFont('Arial', 'B', 8);
-
-                    //     $novaLinha = array();
-                    //     $novaLinha = [
-                    //         'dia' => $registro['dia']
-                    //     ];
-                    //     $novaLinha = $novaLinha + array('horaEntrada' => $entrada);
-
-                    //     $pdf->setX(66.85);
-                    //     $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
-                    //     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
-                    //     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
-
-                    //     if ($almocoInicio > $saida) {
-                    //         $novaLinha = $novaLinha + array('inicioAlmoco' => $almocoInicio);
-                    //     } else {
-                    //         $pdf->setX(32.2);
-                    //         $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
-                    //     }
-                    //     if ($almocoFim > $saida) {
-                    //         $novaLinha = $novaLinha + array('fimAlmoco' => $almocoFim);
-                    //     } else {
-                    //         $pdf->setX(49.2);
-                    //         $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
-                    //     }
-
-
-                    //     array_splice($ponto, $index + 1, 0, array($novaLinha));
-                    //     $repetiu = 1;
-                    // } else {
-                    //     // ENTRADA DIFERENTE DE ZERO
-                    //     $pdf->SetFont('Arial', 'B', 8);
-                    //     $pdf->setX(14);
-                    //     $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $entrada), 0, 0, "C", 0); // hora entrada
-                    //     $pdf->setX(32.2);
-                    //     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
-                    //     $pdf->setX(49.2);
-                    //     $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
-                    //     $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
-
-                    //     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
-                    //     $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
-                    // }
-
-                    // $pdf->setX(126);
-                    // $pdf->SetFont('Arial', 'B', 8);
-                    // $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0); // descricao funcionario
-
-                    break;
-
-                    /////////////DOMINGO\\\\\\\\\\\\\\\\\
-                case 7:
-                    if ($domingoEscala == 0) { //Seg-Sex
-
-                        $pdf->setX(16);
-                        $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(67);
-                        $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
-                        $pdf->setX(126);
-                        $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                        $pdf->setX(189);
-                        $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
-                        $pdf->SetFont('Arial', 'B', 8);
-                    }
-
-                    $pdf->setX(7);
-                    $pdf->SetFont('Arial', 'B', 7);
-                    $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0); //DOMINGO
-                    break;
-                default:
-            }
-
-            //CINZA
-            if ($registro['horaEntrada'] == "00:00:00") {
-                $pdf->setX(32.2);
-                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
-                $pdf->setX(49.2);
-                $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
-            }
-
-            $pdf->setX(86.2);
-            $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
-            $pdf->setX(106.3);
-            $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
-
-            if ($diadasemana != 6 && $diadasemana != 7) {
-
-                if (($registro['horaEntrada'] == "00:00:00") && $registro['horaSaida'] == "00:00:00") {
-                    if ($tipoEscala == 1) {
-                        if ($registraPonto == 1 && $inicioRegistroPonto[0] <= $diaMesAno && $registro['descricaoLancamento'] == '') {
-                            $pdf->setX(126.8);
-                            $pdf->SetFont('Arial', 'B', 8);
-                            if ($fimRegistroPonto[0] != "") {
-                                if (($fimRegistroPonto[0] >= $diaMesAno) && $diaMesAno < $dataAtual) {
-                                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-                                }
-                            } else {
-                                if ($ferias == true) {
-                                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FÉRIAS"), 0, 0, "L", 0);
-                                } else if ($folga == true) {
-                                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "FOLGA"), 0, 0, "L", 0);
-                                } else if ($diaMesAno < $dataAtual) {
-                                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', "Falta Injustificada"), 0, 0, "L", 0); //Lançamento de falta quando não tiver horário preenchido
-                                }
-                            }
-                        }
-                    }
-                } else if ($entrada && $saida && $entrada > $saida) {
-                    $pdf->SetFont('Arial', 'B', 8);
-
-                    $novaLinha = array();
-                    $novaLinha = [
-                        'dia' => $registro['dia']
-                    ];
-                    $novaLinha = $novaLinha + array('horaEntrada' => $entrada);
-
-                    $pdf->setX(66.85);
-                    $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
-                    $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
-                    $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
-
-                    if ($almocoInicio > $saida) {
-                        $novaLinha = $novaLinha + array('inicioAlmoco' => $almocoInicio);
-                    } else {
-                        $pdf->setX(32.2);
-                        $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
-                    }
-                    if ($almocoFim > $saida) {
-                        $novaLinha = $novaLinha + array('fimAlmoco' => $almocoFim);
-                    } else {
-                        $pdf->setX(49.2);
-                        $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
-                    }
-
-
-                    array_splice($ponto, $index + 1, 0, array($novaLinha));
-                    $repetiu = 1;
-                } else {
-                    $pdf->SetFont('Arial', 'B', 8);
-                    $pdf->setX(14);
-                    $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $entrada), 0, 0, "C", 0); // hora entrada
-                    $pdf->setX(32.2);
-                    $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 1); // inicio almoco
-                    $pdf->setX(49.2);
-                    $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 1); // fim almoco
-                    $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
-
-                    $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
-                    $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
-                }
-
-                //Observacao
-                $pdf->setX(127);
-                $pdf->SetFont('Arial', 'B', 8);
-                $pdf->Cell(75,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0);
-                $pdf->setX(169.35);
-                if ($resultAtrasoAbonado) {
-                    $pdf->Cell(55, 6.61, iconv('UTF-8', 'windows-1252', "X"), 0, 0, "C", 0);
-                }
-
-                $pdf->SetFont('Arial', 'B', 8);
-
-                if ($tipoEscala == 1 && $escalaDia != 3) {
-                    foreach ($feriados as $feriado) {
-                        if (mb_ereg("-$mes-" . str_pad($registro['dia'], 2, 0, STR_PAD_LEFT), $feriado["data"])) {
-                            $pdf->SetFont('Arial', 'B', 8);
-                            $pdf->setX(35);
-                            $pdf->Cell(30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                            $pdf->Cell(120, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
-                            $pdf->Cell(20, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                switch ($diadasemana) {
+                    case 1:
+                        
+                        if ($segundaEscala == 0) { //Seg-Sex
 
                             $pdf->setX(16);
-                            $pdf->Cell(17, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1);
-
-                            if ($registro['horaEntrada'] != "00:00:00") {
-                                $pdf->SetFont('Arial', 'B', 8);
-                                $pdf->setX(14);
-                                $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $registro['horaEntrada']), 0, 0, "C", 0);
-                                $pdf->SetFont('Arial', 'B', 8);
-                                $pdf->setX(32.2);
-                                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 0);
-                                $pdf->SetFont('Arial', 'B', 8);
-                                $pdf->setX(49.2);
-                                $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 0);
-                                $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 1); // HORA EXTRA SAIDA
-                                $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 1); // HORA POSITIVA
-                                $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 1); // HORA NEGATIVA
-
-                                $pdf->setX(126.8);
-                                $pdf->SetFont('Arial', 'B', 8);
-                                $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 1); // descricao funcionario
-                            } else {
-                                $pdf->setX(17);
-                                $pdf->Cell(12, 6.31, iconv('UTF-8', 'windows-1252', "FERIADO"), 0, 0, "L", 0);
-                                $pdf->SetTextColor(0, 0, 0);
-                                //LOCALIZAR
-                            };
+                            $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(67);
+                            $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
+                            $pdf->setX(126);
+                            $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(189);
+                            $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+                            $pdf->SetFont('Arial', 'B', 8);
                         }
-                    }
+
+                        $pdf->setX(7);
+                        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Seg"), 0, 0, "L", 0);
+                        $pdf->SetFont('Arial', 'B', 8);
+                        break;
+                    case 2:
+                        if ($tercaEscala == 0) { //Seg-Sex
+
+                            $pdf->setX(16);
+                            $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(67);
+                            $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
+                            $pdf->setX(126);
+                            $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(189);
+                            $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+                            $pdf->SetFont('Arial', 'B', 8);
+                        }
+
+                        $pdf->setX(7);
+                        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Ter"), 0, 0, "L", 0);
+                        $pdf->SetFont('Arial', 'B', 8);
+                        break;
+                    case 3:
+                        if ($quartaEscala == 0) { //Seg-Sex
+
+                            $pdf->setX(16);
+                            $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(67);
+                            $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
+                            $pdf->setX(126);
+                            $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(189);
+                            $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+                            $pdf->SetFont('Arial', 'B', 8);
+                        }
+
+                        $pdf->setX(7);
+                        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qua"), 0, 0, "L", 0);
+                        $pdf->SetFont('Arial', 'B', 8);
+                        break;
+                    case 4:
+                        if ($quintaEscala == 0) { //Seg-Sex
+                            // $pdf->setX(16);
+                            // $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            // $pdf->setX(67);
+                            // $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
+                            // $pdf->setX(126);
+                            // $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            // $pdf->setX(189);
+                            // $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+                            // $pdf->SetFont('Arial', 'B', 8);
+
+
+                            $pdf->SetFont('Arial', 'B', 8);
+                            $pdf->setX(14);
+                            $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // hora entrada
+                            $pdf->setX(32.2);
+                            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // inicio almoco
+                            $pdf->setX(49.2);
+                            $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // fim almoco
+                            $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA
+                
+                            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA POSITIVA
+                            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA NEGATIVA
+                            $pdf->SetFont('Arial', 'B', 8);
+                            $pdf->Cell(75,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);//observacao
+
+
+                        }
+
+                        $pdf->setX(7);
+                        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Qui"), 0, 0, "L", 0);
+                        $pdf->SetFont('Arial', 'B', 8);
+                        break;
+                    case 5:
+                        if ($sextaEscala == 0) { //Seg-Sex
+
+                            $pdf->setX(16);
+                            $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(67);
+                            $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
+                            $pdf->setX(126);
+                            $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(189);
+                            $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+                            $pdf->SetFont('Arial', 'B', 8);
+                        }
+
+                        $pdf->setX(7);
+                        $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', " - Sex"), 0, 0, "L", 0);
+                        $pdf->SetFont('Arial', 'B', 8);
+                        break;
+
+                        /////////////SABADO\\\\\\\\\\\\\\\
+                    case 6:
+                        if ($sabadoEscala == 0) { //Seg-Sex
+
+                            $pdf->setX(16);
+                            $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(67);
+                            $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
+                            $pdf->setX(126);
+                            $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(189);
+                            $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+                            $pdf->SetFont('Arial', 'B', 8);
+                        }
+
+                        $pdf->setX(7);
+                        $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Sab"), 0, 0, "L", 0);
+                        // FIM CINZA
+                        break;
+
+                        /////////////DOMINGO\\\\\\\\\\\\\\\\\
+                    case 7:
+                        if ($domingoEscala == 0) { //Seg-Sex
+
+                            $pdf->setX(16);
+                            $pdf->Cell(15.7, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(67);
+                            $pdf->Cell(18.8, 6.61, iconv('UTF-8', 'windows-1252',  ""), 0, 0, "L", 1);
+                            $pdf->setX(126);
+                            $pdf->Cell(70, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
+                            $pdf->setX(189);
+                            $pdf->Cell(16.30, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1); // visto cinza
+                            $pdf->SetFont('Arial', 'B', 8);
+
+
+                            $pdf->SetFont('Arial', 'B', 8);
+                            $pdf->setX(14);
+                            $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // hora entrada
+                            $pdf->setX(32.2);
+                            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // inicio almoco
+                            $pdf->setX(49.2);
+                            $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // fim almoco
+                            $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA EXTRA SAIDA
+                
+                            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA POSITIVA
+                            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 1); // HORA NEGATIVA
+                            $pdf->SetFont('Arial', 'B', 8);
+                            $pdf->Cell(75,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);//observacao
+                        }
+
+                        $pdf->setX(7);
+                        $pdf->SetFont('Arial', 'B', 7);
+                        $pdf->Cell(9, 7, iconv('UTF-8', 'windows-1252', " - Dom"), 0, 0, "L", 0); //DOMINGO
+                        break;
+                    default:
                 }
+            
+
+            //CINZA
+
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->setX(14);
+            $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $entrada), 0, 0, "C", 0); // hora entrada
+            $pdf->setX(32.2);
+            $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 0); // inicio almoco
+            $pdf->setX(49.2);
+            $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 0); // fim almoco
+            $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
+
+            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 0); // HORA POSITIVA
+            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 0); // HORA NEGATIVA
+            // }
+
+            //Observacao
+            $pdf->setX(127);
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->Cell(75,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0);
+            $pdf->setX(169.35);
+            if ($resultAtrasoAbonado) {
+                $pdf->Cell(55, 6.61, iconv('UTF-8', 'windows-1252', "X"), 0, 0, "C", 0);
             }
+            $pdf->SetFont('Arial', 'B', 8);
+
+            // if ($registro['horaEntrada'] == "") {
+            //     $pdf->setX(32.2);
+            //     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
+            //     $pdf->setX(49.2);
+            //     $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
+
+
+            //     $pdf->setX(86.2);
+            //     $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
+            //     $pdf->setX(106.3);
+            //     $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
+            // }
 
             $linhavertical += 6.9;
             $linhahorizontalteste += 6.9;
@@ -1066,37 +891,6 @@ $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasNe
 $pdf->setY($linhaverticalteste + 11);
 $pdf->setX(5);
 $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO MENSAL: $saldoBancoMensal"), 0, 0, "L", 0);
-
-// if ($bancoHoras) {
-//     foreach ($bancoHoras as $banco) {
-//         $horaPositiva = $banco['horaPositiva'];
-
-//         $horaPositiva = explode(":", $horaPositiva);
-//         $horaPositiva = ($horaPositiva[0] * 3600) + ($horaPositiva[1] * 60) + $horaPositiva[2];
-//         $totalHorasPositiva += $horaPositiva; //Total em segundos
-
-//         $horaNegativa = $banco['horaNegativa'];
-
-//         $horaNegativa = explode(":", $horaNegativa);
-//         $horaNegativa = ($horaNegativa[0] * 3600) + ($horaNegativa[1] * 60) + $horaNegativa[2];
-//         $totalHorasNegativa += $horaNegativa; //Total em segundos
-//     }
-//     $saldoBanco = $totalHorasPositiva - $totalHorasNegativa;
-
-//     if ($saldoBanco < 0) {
-//         $saldoBanco = explode("-", $saldoBanco);
-//         $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco[1] / 3600), ":", ($saldoBanco[1] / 60) % 60);
-//         $saldoBanco = "- " . $saldoBanco;
-//     } else {
-//         $saldoBanco = sprintf("%02d%s%02d", floor($saldoBanco / 3600), ":", ($saldoBanco / 60) % 60);
-//     }
-
-//     $pdf->setY($linhaverticalteste + 11);
-//     $pdf->setX(50);
-//     $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO BANCO HORAS: $saldoBanco"), 0, 0, "L", 0);
-// }
-
-
 
 $pdf->setY($linhaverticalteste - 5);
 $pdf->setX(155);
