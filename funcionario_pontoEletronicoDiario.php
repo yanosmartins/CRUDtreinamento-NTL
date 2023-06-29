@@ -1275,6 +1275,8 @@ include("inc/scripts.php");
             ssExtraEntrada = ssExtraEntrada * -1;
         }
 
+        
+
 
         if (ssExtra >= 60) {
             ssExtra = ssExtra - 60;
@@ -1306,6 +1308,16 @@ include("inc/scripts.php");
         var hhNegativas = Number(hhAtraso) + Number(hhAtrasoIntervalo);
         var mmNegativas = Number(mmAtraso) + Number(mmAtrasoIntervalo);
         var ssNegativas = Number(ssAtraso) + Number(ssAtrasoIntervalo);
+
+        if (Number(hhNegativas) < 0) {
+            hhNegativas = hhNegativas * -1;
+        }
+        if (Number(mmNegativas) < 0) {
+            mmNegativas = mmNegativas * -1;
+        }
+        if (Number(ssNegativas) < 0) {
+            ssNegativas = ssNegativas * -1;
+        }
 
         if (hhNegativas.toString().length == 1) {
             hhNegativas = "0" + hhNegativas;
