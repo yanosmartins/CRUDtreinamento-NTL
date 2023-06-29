@@ -837,8 +837,6 @@ $y = $pdf->GetY();
 $pdf->Line(5, $y, 205, $y);
 
 
-
-
 $pdf->setY($linhaverticalteste - 5);
 $pdf->setX(50);
 $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "RESUMO"), 0, 0, "L", 0);
@@ -849,7 +847,15 @@ $pdf->setY($linhaverticalteste + 2);
 $pdf->setX(5);
 $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS POSITIVAS: $totalHorasPositivasMes"), 0, 0, "L", 0);
 
+$pdf->SetFillColor(0, 0, 0);
+if ($totalHorasNegativasMes != "00:00:00") {
+    $pdf->SetFillColor(255, 160, 122);
+}
+$pdf->setY($linhaverticalteste);
+$pdf->setX(49.28);
+$pdf->Cell(76.5, 7, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasNegativasMes"), 0, 0, "L", 1);
 
+$pdf->SetFillColor(0, 0, 0);
 
 $pdf->setY($linhaverticalteste + 11);
 $pdf->setX(5);
@@ -867,14 +873,6 @@ $pdf->setY($linhaverticalteste + 11);
 $pdf->setX(126);
 $pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "FUNCIONARIO"), 0, 0, "L", 0);
 
-if ($totalHorasNegativasMes != "00:00:00") {
-    $pdf->SetTextColor(255, 0, 0);
-}
-$pdf->setY($linhaverticalteste + 2);
-$pdf->setX(50);
-$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasNegativasMes"), 0, 0, "L", 0);
-
-$pdf->SetTextColor(255, 255, 255);
 
 
 $i = 0;
