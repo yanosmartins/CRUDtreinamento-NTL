@@ -1405,8 +1405,10 @@ include("inc/scripts.php");
 
 
         var horaTotalDia = hhTotalDia + ":" + mmTotalDia + ":" + ssTotalDia;
-        var horasPositivasDia = hhPositivas + ":" + mmPositivas + ":" + ssPositivas;
-        var horasNegativasDia = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
+        if (horaSaida != "00:00:00") {
+            var horasPositivasDia = hhPositivas + ":" + mmPositivas + ":" + ssPositivas;
+            var horasNegativasDia = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
+        }
 
 
         if (hhPositivas < 0 || mmPositivas < 0 || ssPositivas < 0) {
