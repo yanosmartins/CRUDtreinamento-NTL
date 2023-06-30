@@ -1254,17 +1254,56 @@ include("inc/scripts.php");
         var mmSaida = Number(horaSaidaPartida[1]);
         var ssSaida = Number(horaSaidaPartida[2]);
 
-        //CALCULO DE EXTRA por saida
-        var hhExtra = hhSaida - hhSaidaEscala;
-        var mmExtra = mmSaida - mmSaidaEscala;
-        var ssExtra = ssSaida - ssSaidaEscala;
+
+
+
+
+        if (hhSaida >= hhSaidaTolerado && mmSaida <= mmSaidaTolerado && ssSaida <= ssSaidaTolerado) {
+            //CALCULO DE EXTRA por saida
+            var hhExtra = hhSaida - hhSaidaEscala;
+            var mmExtra = mmSaida - mmSaidaEscala;
+            var ssExtra = ssSaida - ssSaidaEscala;
+
+        } else {
+            hhExtra = "00";
+            mmExtra = "00";
+            ssExtra = "00";
+        }
+
+
+
+
+
+
+
+
+
 
         //////////////////////////////////////
 
-        //CALCULO DE EXTRA por entrada
-        var hhExtraEntrada = hhEntradaEscala - hhEntrada;
-        var mmExtraEntrada = mmEntradaEscala - mmEntrada;
-        var ssExtraEntrada = ssEntradaEscala - ssEntrada;
+
+        var hhEntradaPermitida = hhEntradaEscala + hhTolerancia;
+        var mmEntradaPermitida = mmEntradaEscala + mmTolerancia;
+        var ssEntradaPermitida = ssEntradaEscala + ssTolerancia;
+
+
+        if (hhEntrada <= hhEntradaPermitida && mmEntrada <= mmEntradaPermitida && ssEntrada <= ssEntradaPermitida) {
+            //calculo de hora extra por entrada
+            var hhExtraEntrada = hhEntradaEscala - hhEntrada;
+            var mmExtraEntrada = mmEntradaEscala - mmEntrada;
+            var ssExtraEntrada = ssEntradaEscala - ssEntrada;
+        } else {
+            hhExtraEntrada = "00";
+            mmExtraEntrada = "00";
+            ssExtraEntrada = "00";
+        }
+
+
+
+
+
+
+
 
         if (Number(hhExtraEntrada) < 0) {
             hhExtraEntrada = hhExtraEntrada * -1;
@@ -1298,18 +1337,94 @@ include("inc/scripts.php");
             ssExtra = "0" + ssExtra;
         }
         //validacao da tolerancia
-        if (hhSaida >= hhSaidaTolerado || mmSaida >= mmSaidaTolerado && ssSaida > ssSaidaTolerado) {
-            horaExtra = hhExtra + ":" + mmExtra + ":" + ssExtra;
+        horaExtra = hhExtra + ":" + mmExtra + ":" + ssExtra;
+        if (horaExtra != "00:00:00") {
             smartAlert("Erro", "O funcionário possui horas extras", "erro");
         } else {
             horaExtra = "00:00:00";
         }
 
-        //total de horas NEGATIVAS
-        var hhNegativas = Number(hhAtraso) + Number(hhAtrasoIntervalo);
-        var mmNegativas = Number(mmAtraso) + Number(mmAtrasoIntervalo);
-        var ssNegativas = Number(ssAtraso) + Number(ssAtrasoIntervalo);
 
+
+        //hora de saida permitida
+        var hhSaidaPermitida = hhSaidaEscala - hhTolerancia;
+        var mmSaidaPermitida = mmSaidaEscala - mmTolerancia;
+        var ssSaidaPermitida = ssSaidaEscala - ssTolerancia;
+        if (Number(hhSaidaPermitida) < 0) {
+            hhSaidaPermitida = hhSaidaPermitida * -1;
+        }
+        if (Number(mmSaidaPermitida) < 0) {
+            mmSaidaPermitida = 60 + mmSaidaPermitida;
+            hhSaidaPermitida -= 1;
+        }
+        if (Number(ssSaidaPermitida) < 0) {
+            ssSaidaPermitida = 60 + ssSaidaPermitida;
+            mmSaidaPermitida -= 1;
+        }
+
+
+        var hhSaidaAdiantada = hhSaidaPermitida - hhSaida;
+        var mmSaidaAdiantada = mmSaidaPermitida - mmSaida;
+        var ssSaidaAdiantada = ssSaidaPermitida - ssSaida;
+
+        if (Number(hhSaidaAdiantada) < 0) {
+            hhSaidaAdiantada = hhSaidaAdiantada * -1;
+        }
+        if (Number(mmSaidaAdiantada) < 0) {
+            mmSaidaAdiantada = mmSaidaAdiantada * -1;
+        }
+        if (Number(ssSaidaAdiantada) < 0) {
+            ssSaidaAdiantada = ssSaidaAdiantada * -1;
+        }
+
+        if (hhSaidaAdiantada.toString().length == 1) {
+            hhSaidaAdiantada = "0" + hhSaidaAdiantada;
+        }
+        if (mmSaidaAdiantada.toString().length == 1) {
+            mmSaidaAdiantada = "0" + mmSaidaAdiantada;
+        }
+        if (ssSaidaAdiantada.toString().length == 1) {
+            ssSaidaAdiantada = "0" + ssSaidaAdiantada;
+        }
+
+        var horaSaidaAdiantada = hhSaidaAdiantada + ":" + mmSaidaAdiantada + ":" + ssSaidaAdiantada;
+
+
+        if (horaSaidaAdiantada != "00:00:00") {
+            //calculo de hora extra por Saida
+            var hhSaidaAdiantada = hhSaidaEscala - hhSaida;
+            var mmSaidaAdiantada = mmSaidaEscala - mmSaida;
+            var ssSaidaAdiantada = ssSaidaEscala - ssSaida;
+            if (Number(hhSaidaAdiantada) < 0) {
+                hhSaidaAdiantada = hhSaidaAdiantada * -1;
+            }
+            if (Number(mmSaidaAdiantada) < 0) {
+                mmSaidaAdiantada = mmSaidaAdiantada * -1;
+            }
+            if (Number(ssSaidaAdiantada) < 0) {
+                ssSaidaAdiantada = ssSaidaAdiantada * -1;
+            }
+
+            if (hhSaidaAdiantada.toString().length == 1) {
+                hhSaidaAdiantada = "0" + hhSaidaAdiantada;
+            }
+            if (mmSaidaAdiantada.toString().length == 1) {
+                mmSaidaAdiantada = "0" + mmSaidaAdiantada;
+            }
+            if (ssSaidaAdiantada.toString().length == 1) {
+                ssSaidaAdiantada = "0" + ssSaidaAdiantada;
+            }
+        } else {
+            hhSaidaAdiantada = "00";
+            mmSaidaAdiantada = "00";
+            ssSaidaAdiantada = "00";
+        }
+
+
+        //total de horas NEGATIVAS
+        var hhNegativas = Number(hhAtraso) + Number(hhAtrasoIntervalo) + Number(hhSaidaAdiantada);
+        var mmNegativas = Number(mmAtraso) + Number(mmAtrasoIntervalo) + Number(mmSaidaAdiantada);
+        var ssNegativas = Number(ssAtraso) + Number(ssAtrasoIntervalo) + Number(ssSaidaAdiantada);
         if (Number(hhNegativas) < 0) {
             hhNegativas = hhNegativas * -1;
         }
