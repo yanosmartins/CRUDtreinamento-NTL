@@ -412,9 +412,9 @@ include("inc/nav.php");
                                         <button id="btnPdf" type="button" class="btn btn-primary" title="Gerar Pdf">
                                             <span class="fa fa-file-pdf-o"></span>
                                         </button>
-                                        <a href="https://meuip.com.br" target="_blank"> <button id="btnVerificarIp" type="button" class="btn btn-success" title="Verificar Ip">
+                                        <!-- <a href="https://meuip.com.br" target="_blank"> <button id="btnVerificarIp" type="button" class="btn btn-success" title="Verificar Ip">
                                                 Verificar meu Ip
-                                            </button></a>
+                                            </button></a> -->
                                         <!-- Modal para quando der erro por não ter carregado a pagina por completo -->
                                         <div class="modal fade" id="modalErro" tabindex="-1" role="dialog" aria-labelledby="modalErro" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
@@ -1451,6 +1451,8 @@ include("inc/scripts.php");
         var mmPositivas = Number(mmExtra) + Number(mmExtraEntrada);
         var ssPositivas = Number(ssExtra) + Number(ssExtraEntrada);
 
+
+
         if (ssPositivas >= 60) {
             ssPositivas = ssPositivas - 60;
             mmPositivas += 1;
@@ -1489,9 +1491,9 @@ include("inc/scripts.php");
             ssExpedienteEscala = "0" + ssExpedienteEscala;
         }
 
-        // var hhTotalDia = Number(hhExpedienteEscala) + Number(hhPositivas) - Number(hhNegativas);
-        // var mmTotalDia = Number(mmExpedienteEscala) + Number(mmPositivas) - Number(mmNegativas);
-        // var ssTotalDia = Number(ssExpedienteEscala) + Number(ssPositivas) - Number(ssNegativas);
+        var hhTotalDia = Number(hhExpedienteEscala) + Number(hhPositivas) - Number(hhNegativas);
+        var mmTotalDia = Number(mmExpedienteEscala) + Number(mmPositivas) - Number(mmNegativas);
+        var ssTotalDia = Number(ssExpedienteEscala) + Number(ssPositivas) - Number(ssNegativas);
 
         var hhTotalDia = hhSaida - hhEntrada;
         var mmTotalDia = mmSaida - mmEntrada;
@@ -1518,10 +1520,25 @@ include("inc/scripts.php");
             ssTotalDia = "0" + ssTotalDia;
         }
 
+        //////////aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        var hhPositivas = hhTotalDia - hhExpedienteEscala;
+        var mmPositivas = mmTotalDia - mmExpedienteEscala;
+        var ssPositivas = ssTotalDia - ssExpedienteEscala;
+
+
+//controle da horas positivas
+        if (hhTotalDia >= hhExpedienteEscala && mmTotalDia >= mmExpedienteEscala && ssTotalDia >= ssExpedienteEscala) {
+            var horasPositivasDiaOK = 1;
+        } else {
+            var horasPositivasDiaOK = 0;
+        }
+
 
         var horaTotalDia = hhTotalDia + ":" + mmTotalDia + ":" + ssTotalDia;
         if (horaSaida != "00:00:00") {
-            var horasPositivasDia = hhPositivas + ":" + mmPositivas + ":" + ssPositivas;
+            if (horasPositivasDiaOK = 1) {
+                var horasPositivasDia = hhPositivas + ":" + mmPositivas + ":" + ssPositivas;
+            }
             var horasNegativasDia = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
         }
 
