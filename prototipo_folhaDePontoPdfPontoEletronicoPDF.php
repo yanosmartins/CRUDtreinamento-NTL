@@ -596,11 +596,11 @@ if ($ponto) {
             }
             $dataAtual = new DateTime();
             $dataAtual = $dataAtual->format('Y-m-d');
-            if ($registro['horaExtra'] == "00:00:00") {
-                $registro['horaExtra'] = "";
+            if ($registro['horasPositivasDia'] == "00:00:00") {
+                $registro['horasPositivasDia'] = "";
             }
-            if ($registro['atraso'] == "00:00:00") {
-                $registro['atraso'] = "";
+            if ($registro['horasNegativasDia'] == "00:00:00") {
+                $registro['horasNegativasDia'] = "";
             }
 
             $entrada = $registro['horaEntrada'];
@@ -619,14 +619,19 @@ if ($ponto) {
             if ($saida == '00:00:00') {
                 $saida = '';
             }
+            $atraso = $registro['atraso'];
+            if ($atraso == '00:00:00') {
+                $atraso = '';
+            }
+
             $diaFolga = $registro['diaFolga'];
             if ($diaFolga == '1') {
                 $entrada = "-";
                 $almocoInicio = "-";
                 $almocoFim = "-";
                 $saida = "-";
-                $registro['horaExtra'] = "-";
-                $registro['atraso'] = "-";
+                $registro['horasPositivasDia'] = "-";
+                $registro['horasNegativasDia'] = "-";
             }
 
 
@@ -799,11 +804,18 @@ if ($ponto) {
             $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 0); // inicio almoco
             $pdf->setX(49.2);
             $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 0); // fim almoco
+            if ($saida != "-") {
+                if ($atraso != "") {
+                    $pdf->SetTextColor(255, 0, 0);
+                }
+            }
+
             $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
+            $pdf->SetTextColor(0, 0, 0);
 
-            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horaExtra']), 0, 0, "C", 0); // HORA POSITIVA
-            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['atraso']), 0, 0, "C", 0); // HORA NEGATIVA
+            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horasPositivasDia']), 0, 0, "C", 0); // HORA POSITIVA
 
+            $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horasNegativasDia']), 0, 0, "C", 0); // HORA NEGATIVA
             //Observacao
             $pdf->setX(127);
             $pdf->SetFont('Arial', 'B', 8);
@@ -827,7 +839,7 @@ $y = $pdf->GetY();
 $pdf->Line(5, $y, 205, $y);
 
 $pdf->SetFillColor(220, 220, 220); //CINZA TITULO
-$pdf->setY($linhaverticalteste-6.4);
+$pdf->setY($linhaverticalteste - 6.4);
 $pdf->setX(5);
 $pdf->Cell(200, 6.5, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
 $pdf->setX(50);
@@ -847,7 +859,7 @@ $pdf->setY($linhaverticalteste);
 $pdf->setX(5);
 $pdf->Cell(43.9, 7, iconv('UTF-8', 'windows-1252', "HORAS POSITIVAS: $totalHorasPositivasMes"), 0, 0, "L", 1);
 
-$pdf->SetFillColor(0, 0, 0);
+$pdf->SetFillColor(255, 255, 255);
 
 if ($totalHorasNegativasMes != "00:00:00") {
     $pdf->SetFillColor(255, 160, 122);
@@ -856,21 +868,25 @@ $pdf->setY($linhaverticalteste);
 $pdf->setX(49.22);
 $pdf->Cell(76.5, 7, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasNegativasMes"), 0, 0, "L", 1);
 
-$pdf->SetFillColor(0, 0, 0);
+$pdf->SetFillColor(255, 255, 255);
 
-$hhBancoMensal = (int)$hhBancoMensal;
-if ($hhBancoMensal < 0) {
-    $pdf->SetFillColor(255, 160, 122);
+if ($saldoBancoMensal != "00:00:00") {
+    $hhBancoMensalPartido = explode("-", $saldoBancoMensal);
+    $bancoNegativoSim = count($hhBancoMensalPartido);
+    if ($bancoNegativoSim > 1) {
+        $pdf->SetFillColor(255, 160, 122);
+    } else {
+        $pdf->SetFillColor(152, 251, 152);
+    }
 }
-if ($hhBancoMensal > 0) {
-    $pdf->SetFillColor(152, 251, 152);
-}
+
+
 
 $pdf->setY($linhaverticalteste + 7);
 $pdf->setX(5);
 $pdf->Cell(43.9, 7, iconv('UTF-8', 'windows-1252', "SALDO MENSAL: $saldoBancoMensal"), 0, 0, "L", 1);
 
-$pdf->SetFillColor(0, 0, 0);
+$pdf->SetFillColor(255, 255, 255);
 $pdf->setY($linhaverticalteste - 5);
 $pdf->setX(155);
 $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ASSINATURAS"), 0, 0, "L", 0);
