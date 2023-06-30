@@ -517,9 +517,11 @@ $pdf->Cell(90, 5, iconv('UTF-8', 'windows-1252', $codigoFuncionario), 0, 0, "L",
 
 $pdf->Line(5, 33, 205, 33); //linha abaixo do nome e matricula
 
-$pdf->setY(36);
+
+$pdf->SetFillColor(220, 220, 220); //CINZA TITULO
+$pdf->setY(33.2);
 $pdf->setX(5);
-$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "DIAS"), 0, 0, "L", 0);
+$pdf->Cell(200, 9.8, iconv('UTF-8', 'windows-1252', "DIAS"), 0, 0, "L", 1);
 
 $pdf->setY(36);
 $pdf->setX(16);
@@ -557,6 +559,7 @@ $pdf->setY(36);
 $pdf->setX(148);
 $pdf->Cell(32, 5, iconv('UTF-8', 'windows-1252', "OBSERVAÇÃO"), 0, 0, "C", 0);
 
+$pdf->SetFillColor(238, 238, 238); //CINZA
 
 $pdf->Line(5, 43, 205, 43); // linha abaixo de diaas entrada saida observacao e visto
 $pdf->Line(32, 39, 67, 39); //linha abaixo do almoco
@@ -811,19 +814,6 @@ if ($ponto) {
             }
             $pdf->SetFont('Arial', 'B', 8);
 
-            // if ($registro['horaEntrada'] == "") {
-            //     $pdf->setX(32.2);
-            //     $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
-            //     $pdf->setX(49.2);
-            //     $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
-
-
-            //     $pdf->setX(86.2);
-            //     $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
-            //     $pdf->setX(106.3);
-            //     $pdf->Cell(19.6,  6.61, iconv('UTF-8', 'windows-1252', ""), 0, 0, "C", 0);
-            // }
-
             $linhavertical += 6.9;
             $linhahorizontalteste += 6.9;
             $linhaverticalteste += 6.9;
@@ -836,31 +826,51 @@ if ($ponto) {
 $y = $pdf->GetY();
 $pdf->Line(5, $y, 205, $y);
 
-
-$pdf->setY($linhaverticalteste - 5);
+$pdf->SetFillColor(220, 220, 220); //CINZA TITULO
+$pdf->setY($linhaverticalteste-6.4);
+$pdf->setX(5);
+$pdf->Cell(200, 6.5, iconv('UTF-8', 'windows-1252', ""), 0, 0, "L", 1);
 $pdf->setX(50);
-$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "RESUMO"), 0, 0, "L", 0);
+$pdf->Cell(200, 6.5, iconv('UTF-8', 'windows-1252', "RESUMO"), 0, 0, "L", 0);
 
+$pdf->SetFillColor(238, 238, 238); //CINZA
 $pdf->Line(49, $linhaverticalteste, 49, $linhaverticalteste + 14); //Linha lado esquerdo de horas negativas
 
-$pdf->setY($linhaverticalteste + 2);
+
+// $pdf->SetFillColor(0, 0, 0);
+
+if ($totalHorasPositivasMes != "00:00:00") {
+    $pdf->SetFillColor(152, 251, 152);
+}
+
+$pdf->setY($linhaverticalteste);
 $pdf->setX(5);
-$pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "HORAS POSITIVAS: $totalHorasPositivasMes"), 0, 0, "L", 0);
+$pdf->Cell(43.9, 7, iconv('UTF-8', 'windows-1252', "HORAS POSITIVAS: $totalHorasPositivasMes"), 0, 0, "L", 1);
 
 $pdf->SetFillColor(0, 0, 0);
+
 if ($totalHorasNegativasMes != "00:00:00") {
     $pdf->SetFillColor(255, 160, 122);
 }
 $pdf->setY($linhaverticalteste);
-$pdf->setX(49.28);
+$pdf->setX(49.22);
 $pdf->Cell(76.5, 7, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasNegativasMes"), 0, 0, "L", 1);
 
 $pdf->SetFillColor(0, 0, 0);
 
-$pdf->setY($linhaverticalteste + 11);
-$pdf->setX(5);
-$pdf->Cell(0, 0, iconv('UTF-8', 'windows-1252', "SALDO MENSAL: $saldoBancoMensal"), 0, 0, "L", 0);
+$hhBancoMensal = (int)$hhBancoMensal;
+if ($hhBancoMensal < 0) {
+    $pdf->SetFillColor(255, 160, 122);
+}
+if ($hhBancoMensal > 0) {
+    $pdf->SetFillColor(152, 251, 152);
+}
 
+$pdf->setY($linhaverticalteste + 7);
+$pdf->setX(5);
+$pdf->Cell(43.9, 7, iconv('UTF-8', 'windows-1252', "SALDO MENSAL: $saldoBancoMensal"), 0, 0, "L", 1);
+
+$pdf->SetFillColor(0, 0, 0);
 $pdf->setY($linhaverticalteste - 5);
 $pdf->setX(155);
 $pdf->Cell(20, 5, iconv('UTF-8', 'windows-1252', "ASSINATURAS"), 0, 0, "L", 0);
@@ -887,7 +897,6 @@ while ($i != 3) {
     $linhahorizontalteste += 7;
     $linhaverticalteste += 7;
 }
-
 
 $pdf->Ln(8);
 $pdf->Output();
