@@ -468,7 +468,7 @@ $pdf->SetFont('Arial', '', 8);
 $pdf->setY(21);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->setX(67);
-$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Cliente: GIR"), 0, 0, "L", 0);
+$pdf->Cell(18, 5, iconv('UTF-8', 'windows-1252', "Cliente: GIR ESTÁTICO"), 0, 0, "L", 0);
 $pdf->setY(25);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->setX(67);
@@ -799,24 +799,20 @@ if ($ponto) {
 
             $pdf->SetFont('Arial', 'B', 8);
             $pdf->setX(14);
-            // if ($entrada != "-") {
-            //     if ($horaExtra != "") {
-            //         $pdf->SetTextColor(0,139,139);
-            //     }
-            // }
+            if ($entrada != "-") {
+                if ($atraso != "") {
+                    $pdf->SetTextColor(255, 0, 0);
+                }
+            }
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $entrada), 0, 0, "C", 0); // hora entrada
+            $pdf->SetTextColor(0, 0, 0);           
             $pdf->setX(32.2);
             $pdf->SetTextColor(0, 0, 0);  
             $pdf->Cell(16.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoInicio), 0, 0, "C", 0); // inicio almoco
             $pdf->setX(49.2);
             $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 0); // fim almoco
-            if ($saida != "-") {
-                if ($atraso != "") {
-                    $pdf->SetTextColor(255, 0, 0);
-                }
-            }
+            
             $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
-            $pdf->SetTextColor(0, 0, 0);           
             $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horasPositivasDia']), 0, 0, "C", 0); // HORA POSITIVA
             $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horasNegativasDia']), 0, 0, "C", 0); // HORA NEGATIVA
             $pdf->setX(127);

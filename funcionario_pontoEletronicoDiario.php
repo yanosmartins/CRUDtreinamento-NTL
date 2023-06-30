@@ -1044,10 +1044,10 @@ include("inc/scripts.php");
     });
 
     function gravar() {
-        const dataAtual = new Date();
-        const dia = dataAtual.getDate();
+        var dataAtual = new Date();
+        var dia = dataAtual.getDate();
         var mes = dataAtual.getMonth();
-
+        
 
 
         mes += 1;
@@ -1748,6 +1748,7 @@ include("inc/scripts.php");
         var dataAtual = new Date();
         var dia = dataAtual.getDate();
 
+
         var funcionario = $("#funcionario").val();
 
         $('#mesAno').val(mesAno);
@@ -1805,6 +1806,7 @@ include("inc/scripts.php");
                     $("#labelFimAlmoco").css('font-weight', 'bold').css('color', 'red');
                 }
 
+                
                 $(`#labelEntrada`).text(horaEntrada);
                 $(`#labelInicioAlmoco`).text(inicioAlmoco);
                 $(`#labelFimAlmoco`).text(fimAlmoco);
