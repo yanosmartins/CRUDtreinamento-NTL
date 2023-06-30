@@ -1525,12 +1525,59 @@ include("inc/scripts.php");
         var mmPositivas = mmTotalDia - mmExpedienteEscala;
         var ssPositivas = ssTotalDia - ssExpedienteEscala;
 
+        if (ssPositivas < 0) {
+            ssPositivas = 60 + ssPositivas; // SOMANDO POIS O VALOR PASSA COMO NEGATIVO E "(+)+(-)" = "-"
+            mmPositivas -= 1;
+        }
+        if (mmPositivas < 0) {
+            mmPositivas = 60 + mmPositivas;
+            hhPositivas -= 1;
+        }
+        if (hhPositivas.toString().length == 1) {
+            hhPositivas = "0" + hhPositivas;
+        }
+        if (mmPositivas.toString().length == 1) {
+            mmPositivas = "0" + mmPositivas;
+        }
+        if (ssPositivas.toString().length == 1) {
+            ssPositivas = "0" + ssPositivas;
+        }
 
-//controle da horas positivas
+        var hhNegativas = hhExpedienteEscala - hhTotalDia;
+        var mmNegativas = mmExpedienteEscala - mmTotalDia;
+        var ssNegativas = ssExpedienteEscala - ssTotalDia;
+
+        if (ssNegativas < 0) {
+            ssNegativas = 60 + ssNegativas; // SOMANDO POIS O VALOR PASSA COMO NEGATIVO E "(+)+(-)" = "-"
+            mmNegativas -= 1;
+        }
+        if (mmNegativas < 0) {
+            mmNegativas = 60 + mmNegativas;
+            hhNegativas -= 1;
+        }
+
+        if (hhNegativas.toString().length == 1) {
+            hhNegativas = "0" + hhNegativas;
+        }
+        if (mmNegativas.toString().length == 1) {
+            mmNegativas = "0" + mmNegativas;
+        }
+        if (ssNegativas.toString().length == 1) {
+            ssNegativas = "0" + ssNegativas;
+        }
+
+
+
+        //controle da horas positivas
         if (hhTotalDia >= hhExpedienteEscala && mmTotalDia >= mmExpedienteEscala && ssTotalDia >= ssExpedienteEscala) {
             var horasPositivasDiaOK = 1;
         } else {
             var horasPositivasDiaOK = 0;
+        }
+        if (hhTotalDia <= hhExpedienteEscala && mmTotalDia <= mmExpedienteEscala && ssTotalDia <= ssExpedienteEscala) {
+            var horasNegativasDiaOK = 1;
+        } else {
+            var horasNegativasDiaOK = 0;
         }
 
 
@@ -1539,7 +1586,9 @@ include("inc/scripts.php");
             if (horasPositivasDiaOK = 1) {
                 var horasPositivasDia = hhPositivas + ":" + mmPositivas + ":" + ssPositivas;
             }
-            var horasNegativasDia = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
+            if (horasNegativasDiaOK = 1) {
+                var horasNegativasDia = hhNegativas + ":" + mmNegativas + ":" + ssNegativas;
+            }
         }
 
 
