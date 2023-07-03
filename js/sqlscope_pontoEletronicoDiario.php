@@ -56,8 +56,13 @@ if ($funcao == 'consultaLancamentoAbono') {
 if ($funcao == 'recuperaDados') {
     call_user_func($funcao);
 }
+if ($funcao == 'selecionaHora') {
+    call_user_func($funcao);
+}
 
 return;
+
+
 
 function gravar()
 {
@@ -235,6 +240,9 @@ function recupera()
     return;
 }
 
+
+
+
 function validarIp()
 {
 
@@ -393,14 +401,15 @@ function verificarAutorizacao()
 function selecionaHora()
 {
 
-    $sql = "SELECT CONVERT (time, GETDATE()) as hora";
+    $sql = "SELECT GETDATE() as hora";
     $reposit = new reposit();
 
     $result = $reposit->RunQuery($sql);
 
     if ($row = $result[0]) {
-        $hora = explode(".", $row['hora']);
-        $hora = $hora[0];
+        // $hora = explode(".", $row['hora']);
+        // $hora = $hora[0];
+        $hora = $row['hora'];
     }
 
     $out = $hora;
