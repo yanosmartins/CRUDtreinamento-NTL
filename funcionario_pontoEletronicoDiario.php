@@ -1275,10 +1275,6 @@ include("inc/scripts.php");
 
 
 
-
-
-
-
         //////////////////////////////////////
 
 
@@ -1287,7 +1283,7 @@ include("inc/scripts.php");
         var ssEntradaPermitida = ssEntradaEscala + ssTolerancia;
 
 
-        if (hhEntrada <= hhEntradaPermitida && mmEntrada <= mmEntradaPermitida && ssEntrada <= ssEntradaPermitida) {
+        if (hhEntrada <= hhEntradaPermitida || mmEntrada <= mmEntradaPermitida || ssEntrada <= ssEntradaPermitida) {
             //calculo de hora extra por entrada
             var hhExtraEntrada = hhEntradaEscala - hhEntrada;
             var mmExtraEntrada = mmEntradaEscala - mmEntrada;
@@ -1297,12 +1293,6 @@ include("inc/scripts.php");
             mmExtraEntrada = "00";
             ssExtraEntrada = "00";
         }
-
-
-
-
-
-
 
 
         if (Number(hhExtraEntrada) < 0) {
