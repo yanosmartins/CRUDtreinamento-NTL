@@ -106,7 +106,7 @@ include("inc/nav.php");
                                                                         }
                                                                     </script>
                                                                 </h5>
-                                                                <script>
+                                                                <!-- <script>
                                                                     var myVar = setInterval(myTimer, 1000);
 
                                                                     function myTimer() {
@@ -122,7 +122,7 @@ include("inc/nav.php");
                                                                         document.getElementById("hora").innerHTML = displayDate;
                                                                         $("#horaAtual").val(displayDate);
                                                                     }
-                                                                </script>
+                                                                </script> -->
                                                                 <div id="hora" style="font-size: 17px;">
                                                                 </div>
                                                                 <div class="#"><br>
@@ -665,6 +665,12 @@ include("inc/scripts.php");
     var arrDiasAlterados = [];
     $(document).ready(function() {
         resetaTempo();
+        getHoraServidor();
+
+        setInterval(() => {
+            horaServidor = moment(horaServidor).add(1, 'seconds');
+            document.getElementById("hora").innerHTML = moment(horaServidor).format('HH:mm:ss');
+        }, 1000);
 
 
         carregaPonto()
@@ -1047,7 +1053,7 @@ include("inc/scripts.php");
         var dataAtual = new Date();
         var dia = dataAtual.getDate();
         var mes = dataAtual.getMonth();
-        
+
 
 
         mes += 1;
@@ -1796,7 +1802,7 @@ include("inc/scripts.php");
                     $("#labelFimAlmoco").css('font-weight', 'bold').css('color', 'red');
                 }
 
-                
+
                 $(`#labelEntrada`).text(horaEntrada);
                 $(`#labelInicioAlmoco`).text(inicioAlmoco);
                 $(`#labelFimAlmoco`).text(fimAlmoco);
@@ -2566,5 +2572,33 @@ include("inc/scripts.php");
 
         mudaHoraClick(botao, horaBotao)
         return
+    }
+
+    function getHoraServidor() {
+        $.ajax({
+            url: 'js/sqlscope_pontoEletronicoDiario.php',
+            dataType: 'html', //tipo do retorno
+            type: 'post', //metodo de envio
+            async: false,
+            data: {
+                funcao: 'selecionaHora',
+            },
+
+            success: function(data) {
+                data = data.replace(/failed/gi, '');
+                var piece = data.split("#");
+
+                var mensagem = piece[0];
+                var out = piece[1];
+                piece = out.split("^");
+
+                horaServidor = piece[0];
+
+                return;
+            },
+            error: function(xhr, er) {
+                console.log(xhr, er);
+            }
+        });
     }
 </script>
