@@ -346,13 +346,13 @@ include("inc/nav.php");
                                                                         <?php
 
                                                                         $reposit = new reposit();
-                                                                        $sql = "SELECT codigo, sigla, descricao FROM dbo.lancamento where ativo = 1 ORDER BY codigo";
+                                                                        $sql = "SELECT codigo, descricao FROM dbo.lancamento where ativo = 1 ORDER BY codigo";
                                                                         $result = $reposit->RunQuery($sql);
                                                                         foreach ($result as $row) {
                                                                             // $codigo = $row['codigo'];
-                                                                            $sigla = $row['sigla'];
+                                                                            $codigo = $row['codigo'];
                                                                             $descricao = $row['descricao'];
-                                                                            echo '<option value=' . $sigla . '>' . $descricao . '</option>';
+                                                                            echo '<option value=' . $codigo . '>' . $descricao . '</option>';
                                                                         }
                                                                         ?>
                                                                     </select><i></i>

@@ -27,7 +27,7 @@ $sql = "SELECT FPMDD.folhaPontoMensal, FPMDD.dia, FPMDD.horaEntrada, FPMDD.inici
 FPMDD.lancamento, L.descricao, L.diaFolga, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.horasPositivasDia, FPMDD.horasNegativasDia, FPM.mesAno, FPM.funcionarioId as codigoFuncionario
 FROM dbo.folhaPontoMensalDetalheDiario FPMDD
 LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo
-LEFT JOIN dbo.lancamento L on L.sigla = FPMDD.lancamento
+LEFT JOIN dbo.lancamento L on L.codigo = FPMDD.lancamento
 WHERE FPMDD.folhaPontoMensal = $idFolha";
 $reposit = new reposit();
 $result = $reposit->RunQuery($sql);
@@ -139,7 +139,7 @@ while ($contador <= $totalDiasMes) {
         FPMDD.lancamento, L.diaFolga, L.descricao as descricao, FPMDD.atrasoAlmoco, FPMDD.horaTotalDia, FPMDD.horasPositivasDia, FPMDD.horasNegativasDia, FPM.mesAno, FPM.funcionarioId as codigoFuncionario
         FROM dbo.folhaPontoMensalDetalheDiario FPMDD
         LEFT JOIN dbo.folhaPontoMensal FPM on FPMDD.folhaPontoMensal = FPM.codigo
-        LEFT JOIN dbo.lancamento L on L.sigla = FPMDD.lancamento
+        LEFT JOIN dbo.lancamento L on L.codigo = FPMDD.lancamento
         WHERE FPMDD.folhaPontoMensal = $idFolha AND FPMDD.dia = $diaPonto";
         $reposit = new reposit();
         $result2 = $reposit->RunQuery($sql2);
