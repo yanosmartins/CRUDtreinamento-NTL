@@ -1599,6 +1599,7 @@ include("inc/scripts.php");
             horaTotalDia = "00:00:00";
         }
 
+
         //seletor de justificativa (de atraso na entrada ou na saida)
         if (horaSaida != "00:00:00") {
             var justificativaAtraso = $("#observacaoAtraso").val();
@@ -1606,6 +1607,9 @@ include("inc/scripts.php");
 
         } else {
             var justificativaAtraso = $("#justificativa").val();
+        }
+        if (horasPositivasDia!= "00:00:00"){
+            horaExtra= horasPositivasDia;
         }
 
         //ALERTA DE ATRASO DE ENTRADA E DE SAIDA
@@ -1798,10 +1802,10 @@ include("inc/scripts.php");
                     $("#labelEntrada").css('font-weight', 'bold').css('color', 'red');
                     // $("#labelEntrada").css('color', 'red');
                 }
-                if (horaExtra != "00:00:00") {
+                // if (horaExtra != "00:00:00") {
                     // smartAlert("Atenção", "O funcionário possui horas extras", "erro");
-                    $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan');
-                }
+                    // $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan');
+                // }
                 if (atrasoAlmoco !== "00:00:00") {
                     $("#labelFimAlmoco").css('font-weight', 'bold').css('color', 'red');
                 }
@@ -1832,9 +1836,6 @@ include("inc/scripts.php");
                 $(`#horasPositivasDia`).val(horasPositivasDia);
                 $(`#horasNegativasDia`).val(horasNegativasDia);
 
-
-
-
                 // $("#lancamento").val(lancamento);
                 // $("#status").val(status);
                 // $("#registraAlmoco").val(registraAlmoco);
@@ -1848,13 +1849,7 @@ include("inc/scripts.php");
                 // $("#inicioSegundaPausa").val(inicioSegundaPausa);
                 // $("#fimSegundaPausa").val(fimSegundaPausa);
 
-
                 habilitaBotões();
-
-                // if ((registraPonto == 0) || (ferias == 1) || (folga == 1 && folgaCobertura != 1) || (documento == 1)) {
-                //     desabilitaBotões();
-                // } else {
-
                 if (horaEntrada == "00:00:00") {
                     $("#btnSaida").prop('disabled', true);
                 } else {
@@ -2322,7 +2317,7 @@ include("inc/scripts.php");
                     } else {
                         $('#dlgSimplePonto').dialog('open');
 
-                        if (horaRetorno) {
+                        if (inicioALmoco!="00:00:00") {
                             $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
                         }
                     }
