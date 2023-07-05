@@ -29,10 +29,6 @@ if ($funcao == 'verificarAutorizacao') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'selecionaHora') {
-    call_user_func($funcao);
-}
-
 if ($funcao == 'consultarAbateBancoHoras') {
     call_user_func($funcao);
 }
@@ -411,6 +407,10 @@ function selecionaHora()
         // $hora = $hora[0];
         $hora = $row['hora'];
     }
+
+    $horaPartida = explode(" ", $hora);
+    $hora = $horaPartida[1];
+    $hora = substr($hora, 0, 8); 
 
     $out = $hora;
 

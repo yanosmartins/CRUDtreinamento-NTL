@@ -2594,8 +2594,12 @@ include("inc/scripts.php");
 
                 horaServidor = piece[0];
 
+
+                
                 return;
             },
+
+
             error: function(xhr, er) {
                 console.log(xhr, er);
             }
