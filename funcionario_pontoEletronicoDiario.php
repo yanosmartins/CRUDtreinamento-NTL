@@ -342,7 +342,7 @@ include("inc/nav.php");
                                                                 <label class="label" for="lancamento">Ocorrência/Lançamento</label>
                                                                 <label class="select">
                                                                     <select id="lancamento" name="lancamento" style="height: 40px; border-radius: 0px !important;">
-                                                                        <option selected value=""></option>
+                                                                        <!-- <option selected value=""></option> -->
                                                                         <?php
 
                                                                         $reposit = new reposit();
