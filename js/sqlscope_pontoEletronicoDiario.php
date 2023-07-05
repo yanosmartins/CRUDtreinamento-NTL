@@ -406,13 +406,16 @@ function selecionaHora()
         // $hora = explode(".", $row['hora']);
         // $hora = $hora[0];
         $hora = $row['hora'];
+        $horaDisplay = $row['hora'];
     }
 
     $horaPartida = explode(" ", $hora);
     $hora = $horaPartida[1];
     $hora = substr($hora, 0, 8); 
 
-    $out = $hora;
+    $out = $hora
+     . "^" .
+     $horaDisplay;
 
     echo "sucess#" . $out;
     return true;

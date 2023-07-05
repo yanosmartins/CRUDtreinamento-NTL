@@ -668,8 +668,8 @@ include("inc/scripts.php");
         getHoraServidor();
 
         setInterval(() => {
-            horaServidor = moment(horaServidor).add(1, 'seconds');
-            document.getElementById("hora").innerHTML = moment(horaServidor).format('HH:mm:ss');
+            horaDisplay = moment(horaDisplay).add(1, 'seconds');
+            document.getElementById("hora").innerHTML = moment(horaDisplay).format('HH:mm:ss');
         }, 1000);
 
 
@@ -1470,7 +1470,8 @@ include("inc/scripts.php");
 
 
 
-        //VALOR DO EXPEDIENTE TOTAL DO FUNCIONARIO
+        //VALOR DO EXPEDIENTE TOTAL DO FUNCIONARIOlet horaPartida =  hora.split(' ');
+                    
         var expedienteEscala = $("#expedienteEscala").val();
         var expedienteEscalaPartida = expedienteEscala.split(":");
         var hhExpedienteEscala = Number(expedienteEscalaPartida[0]);
@@ -1699,7 +1700,10 @@ include("inc/scripts.php");
     }
 
     function aleatorizarTempo(hora, expediente) {
-        let separador = hora.split(':');
+        let horaPartida = hora.split(' ');
+        var hora = horaPartida[1];
+        var horaNova = hora.substring(0, 8);
+        let separador = horaNova.split(':');
         let h = Number(separador[0]);
         let m = Number(separador[1]);
         let s = Number(separador[2]);
@@ -2116,37 +2120,56 @@ include("inc/scripts.php");
                 totalHorasSegundaPausa = fimSegundaPausa - inicioSegundaPausa;
 
                 if (campo == 'Entrada') {
-                    if (validaHoraAtual(hora) == false) {
+                    if (validaHoraAtual(horaAtual) == false) {
                         $('#modalErro').modal('show');
                         return;
                     }
+                    let horaPartida = hora.split(' ');
+                    var hora = horaPartida[1];
+                    var horaNova = hora.substring(0, 8);
+                    let separador = horaNova.split(':');
+                    let h = separador[0];
+                    let m = separador[1];
+                    let s = separador[2];
+
+                    var hora = `${h}:${m}:${s}`;
                     $("#horaEntrada").val(hora)
                     campo = 'horaEntrada';
+
+                    // var inicioIntervalo = $("#inicioAlmoco").val()
+                    // horaRetorno = converteHora(parse(inicioIntervalo) + totalHorasIntervalo);
+
                 }
                 if (campo == 'Saida') {
-                    var horaEntrada = $("#horaEntrada").val();
-
-                    if (validaHoraAtual(hora) == false) {
+                    if (validaHoraAtual(horaAtual) == false) {
                         $('#modalErro').modal('show');
                         return;
                     }
-                    $("#horaSaida").val(hora)
+                    let horaPartida = hora.split(' ');
+                    var hora = horaPartida[1];
+                    var horaNova = hora.substring(0, 8);
+                    let separador = horaNova.split(':');
+                    let h = separador[0];
+                    let m = separador[1];
+                    let s = separador[2];
 
-                    if (tipoEscala == 1) {
-                        if (horaEntrada == '00:00:00') {
-                            $("#horaSaida").val('00:00:00');
-                            smartAlert("Atenção", "Registre primeiro a hora de entrada!", "error");
-                            return false;
-                        }
-                    }
+                    var hora = `${h}:${m}:${s}`;
+                    $("#horaSaida").val(hora)
                     campo = 'horaSaida';
+
+                    var inicioIntervalo = $("#inicioAlmoco").val()
+                    horaRetorno = converteHora(parse(inicioIntervalo) + totalHorasIntervalo);
+
                 }
                 if (campo == 'Inicio Almoço') {
                     if (validaHoraAtual(hora) == false) {
                         $('#modalErro').modal('show');
                         return;
                     }
-                    let separador = hora.split(':');
+                    let horaPartida = hora.split(' ');
+                    var hora = horaPartida[1];
+                    var horaNova = hora.substring(0, 8);
+                    let separador = horaNova.split(':');
                     let h = separador[0];
                     let m = separador[1];
                     let s = separador[2];
@@ -2161,8 +2184,10 @@ include("inc/scripts.php");
                         $('#modalErro').modal('show');
                         return;
                     }
-
-                    let separador = hora.split(':');
+                    let horaPartida = hora.split(' ');
+                    var hora = horaPartida[1];
+                    var horaNova = hora.substring(0, 8);
+                    let separador = horaNova.split(':');
                     let h = separador[0];
                     let m = separador[1];
                     let s = separador[2];
@@ -2175,6 +2200,9 @@ include("inc/scripts.php");
                     horaRetorno = converteHora(parse(inicioIntervalo) + totalHorasIntervalo);
 
                 }
+
+                ///////////////////////////////////////////////////////////
+
                 if (campo == 'inicioPrimeiraPausa') {
                     if (validaHoraAtual(hora) == false) {
                         $('#modalErro').modal('show');
@@ -2593,9 +2621,9 @@ include("inc/scripts.php");
                 piece = out.split("^");
 
                 horaServidor = piece[0];
+                horaDisplay = piece[1];
 
 
-                
                 return;
             },
 
