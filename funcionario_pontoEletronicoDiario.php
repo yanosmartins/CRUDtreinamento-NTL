@@ -372,6 +372,7 @@ include("inc/nav.php");
                                                         <input id="horaSaida" name="horaSaida" type="text" class="hidden">
                                                         <input id="inicioAlmoco" name="inicioAlmoco" type="text" class="hidden">
                                                         <input id="fimAlmoco" name="fimAlmoco" type="text" class="hidden">
+                                                        <input id="horarioAlmocoTolerado" name="horarioAlmocoTolerado" type="text" class="hidden">
                                                         <input id="status" name="status" type="text" class="hidden">
                                                         <input id="registraAlmoco" name="registraAlmoco" type="text" class="hidden">
                                                         <input id="tipoEscala" name="tipoEscala" type="text" class="hidden">
@@ -1077,6 +1078,7 @@ include("inc/scripts.php");
         var justificativaExtra = $("#observacaoExtra").val();
         var lancamento = $("#lancamento").val();
 
+
         //HORA ENTRADA SETADA NA ESCALA
         var horaEntradaEscala = $("#horaEntradaEscala").val();
         var horaEntradaEscalaPartida = horaEntradaEscala.split(":");
@@ -1154,7 +1156,6 @@ include("inc/scripts.php");
         var mmInicioAlmoco = Number(inicioAlmocoPartido[1]);
         var ssInicioAlmoco = Number(inicioAlmocoPartido[2]);
 
-        //HORARIO TOLERADO DE INTERVALO (INICIO DO INTERVALO+ TEMPO DE INTERVALO NA ESCALA)
         var hhAlmocoTolerado = Number(hhInicioAlmoco) + Number(hhIntervalo);
         var mmAlmocoTolerado = Number(mmInicioAlmoco) + Number(mmIntervalo);
         var ssAlmocoTolerado = Number(ssInicioAlmoco) + Number(ssIntervalo);
@@ -1168,7 +1169,17 @@ include("inc/scripts.php");
             mmAlmocoTolerado = mmAlmocoTolerado - 60;
             hhAlmocoTolerado += 1;
         }
+        if (hhAlmocoTolerado.toString().length == 1) {
+            hhAlmocoTolerado = "0" + hhAlmocoTolerado;
+        }
+        if (mmAlmocoTolerado.toString().length == 1) {
+            mmAlmocoTolerado = "0" + mmAlmocoTolerado;
+        }
+        if (ssAlmocoTolerado.toString().length == 1) {
+            ssAlmocoTolerado = "0" + ssAlmocoTolerado;
+        }
 
+        var horarioAlmocoTolerado = hhAlmocoTolerado + ":" + mmAlmocoTolerado + ":" + ssAlmocoTolerado;
 
 
         //HORARIO DO FIM DO INTERVALO DO FUNCIONARIO DIVIDIDO
@@ -1190,17 +1201,6 @@ include("inc/scripts.php");
             var mmAtrasoIntervalo = 0;
             var ssAtrasoIntervalo = 0;
         }
-
-        /////////////////////////////////////////////////////////
-        // if (ssAtrasoIntervalo < 0) {
-        //     ssAtrasoIntervalo = 60 + ssAtrasoIntervalo; // SOMANDO POIS O VALOR PASSA COMO NEGATIVO E "(+)+(-)" = "-"
-        //     // mmAtrasoIntervalo-=1;
-        // }
-        // if (mmAtrasoIntervalo < 0) {
-        //     mmAtrasoIntervalo = 60 + mmAtrasoIntervalo;
-        //     // hhAtrasoIntervalo-=1;
-        // }
-
 
         if (Number(ssAtrasoIntervalo) < 0 || Number(mmAtrasoIntervalo) < 0 || Number(hhAtrasoIntervalo) < 0) {
             atrasoAlmoco = "00:00:00";
@@ -1232,6 +1232,9 @@ include("inc/scripts.php");
             }
         }
 
+
+
+       
         $("#atrasoAlmoco").val(atrasoAlmoco);
         //======================================================================================================================
 
@@ -1277,7 +1280,7 @@ include("inc/scripts.php");
         }
 
 
-
+        
 
 
 
@@ -1471,7 +1474,7 @@ include("inc/scripts.php");
 
 
         //VALOR DO EXPEDIENTE TOTAL DO FUNCIONARIOlet horaPartida =  hora.split(' ');
-                    
+
         var expedienteEscala = $("#expedienteEscala").val();
         var expedienteEscalaPartida = expedienteEscala.split(":");
         var hhExpedienteEscala = Number(expedienteEscalaPartida[0]);
@@ -1608,8 +1611,8 @@ include("inc/scripts.php");
         } else {
             var justificativaAtraso = $("#justificativa").val();
         }
-        if (horasPositivasDia!= "00:00:00"){
-            horaExtra= horasPositivasDia;
+        if (horasPositivasDia != "00:00:00") {
+            horaExtra = horasPositivasDia;
         }
 
         //ALERTA DE ATRASO DE ENTRADA E DE SAIDA
@@ -1622,7 +1625,7 @@ include("inc/scripts.php");
                 }
             }
         }
-
+        $("#horarioAlmocoTolerado").val(horarioAlmocoTolerado);
         setTimeout(function() {
             gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, atrasoAlmoco, horaTotalDia, horasPositivasDia, horasNegativasDia,
                 function(data) {
@@ -1803,12 +1806,13 @@ include("inc/scripts.php");
                     // $("#labelEntrada").css('color', 'red');
                 }
                 // if (horaExtra != "00:00:00") {
-                    // smartAlert("Atenção", "O funcionário possui horas extras", "erro");
-                    // $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan');
+                // smartAlert("Atenção", "O funcionário possui horas extras", "erro");
+                // $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan');
                 // }
                 if (atrasoAlmoco !== "00:00:00") {
                     $("#labelFimAlmoco").css('font-weight', 'bold').css('color', 'red');
                 }
+
 
 
                 $(`#labelEntrada`).text(horaEntrada);
@@ -1835,19 +1839,9 @@ include("inc/scripts.php");
                 $(`#horaTotalDia`).val(horaTotalDia);
                 $(`#horasPositivasDia`).val(horasPositivasDia);
                 $(`#horasNegativasDia`).val(horasNegativasDia);
+                $(`#horarioAlmocoTolerado`).val(horarioAlmocoTolerado);
 
-                // $("#lancamento").val(lancamento);
-                // $("#status").val(status);
-                // $("#registraAlmoco").val(registraAlmoco);
-                // $("#tipoEscala").val(tipoEscala);
-                // $("#layoutFolhaPonto").val(layoutFolhaPonto);
-                // // $("#verificaIp").val(verificaIp);
-                // $("#escalaDia").val(escalaDia);
-                // // Pausas
-                // $("#inicioPrimeiraPausa").val(inicioPrimeiraPausa);
-                // $("#fimPrimeiraPausa").val(fimPrimeiraPausa);
-                // $("#inicioSegundaPausa").val(inicioSegundaPausa);
-                // $("#fimSegundaPausa").val(fimSegundaPausa);
+
 
                 habilitaBotões();
                 if (horaEntrada == "00:00:00") {
@@ -2072,6 +2066,9 @@ include("inc/scripts.php");
 
     function getHora(campo) {
         var campo = campo;
+        var inicioAlmoco = $('#inicioAlmoco').val();
+        var fimAlmoco = $('#fimAlmoco').val();
+        var horarioAlmocoTolerado = $('#horarioAlmocoTolerado').val();
 
         selecionarHora(function(data) {
 
@@ -2317,9 +2314,9 @@ include("inc/scripts.php");
                     } else {
                         $('#dlgSimplePonto').dialog('open');
 
-                        if (inicioALmoco!="00:00:00") {
-                            $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
-                        }
+                        // if (inicioAlmoco != "00:00:00" && fimAlmoco == "00:00:00") {
+                        //     $("#alerta").html("O retorno do seu intervalo é às " + horarioAlmocoTolerado).css('color', 'red');
+                        // }
                     }
                 }
             }
