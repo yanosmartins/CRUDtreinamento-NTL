@@ -676,6 +676,7 @@ include("inc/scripts.php");
 
         carregaPonto()
 
+
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function(title) {
                 if (!this.options.title) {
@@ -700,11 +701,19 @@ include("inc/scripts.php");
             var fimAlmoco = $("#fimAlmoco").val();
             btnClicado = 'saida';
             resetaTempo();
+            if (($("#btnInicioAlmoco").prop('disabled')) == false) {
+                inicioAlmoco = "00:00:00";
+                fimAlmoco = "00:00:00";
+                $("#inicioAlmoco").val('00:00:00');
+                $("#fimAlmoco").val('00:00:00');
+            }
             if ((inicioAlmoco != "00:00:00") && (fimAlmoco == "00:00:00")) {
                 $("#horaSaida").val('00:00:00');
                 smartAlert("Atenção", "Registre primeiro o fim do Intervalo!", "error");
                 return false;
             }
+
+
 
             var campo = 'Saida';
             getHora(campo);
@@ -1056,9 +1065,7 @@ include("inc/scripts.php");
         var mes = dataAtual.getMonth();
 
 
-
         mes += 1;
-
 
         //Botão que desabilita a gravação até que ocorra uma mensagem de erro ou sucesso.
         $("#btnEntrada").prop('disabled', true);
@@ -1233,8 +1240,6 @@ include("inc/scripts.php");
         }
 
 
-
-       
         $("#atrasoAlmoco").val(atrasoAlmoco);
         //======================================================================================================================
 
@@ -1263,10 +1268,6 @@ include("inc/scripts.php");
         var mmSaida = Number(horaSaidaPartida[1]);
         var ssSaida = Number(horaSaidaPartida[2]);
 
-
-
-
-
         if (hhSaida >= hhSaidaTolerado && mmSaida <= mmSaidaTolerado && ssSaida <= ssSaidaTolerado) {
             //CALCULO DE EXTRA por saida
             var hhExtra = hhSaida - hhSaidaEscala;
@@ -1278,10 +1279,6 @@ include("inc/scripts.php");
             mmExtra = "00";
             ssExtra = "00";
         }
-
-
-        
-
 
 
         //////////////////////////////////////
@@ -1625,6 +1622,12 @@ include("inc/scripts.php");
                 }
             }
         }
+
+
+
+
+
+
         $("#horarioAlmocoTolerado").val(horarioAlmocoTolerado);
         setTimeout(function() {
             gravarPonto(codigo, idFolha, dia, horaEntrada, inicioAlmoco, fimAlmoco, horaSaida, horaExtra, atraso, justificativaAtraso, justificativaExtra, atrasoAlmoco, horaTotalDia, horasPositivasDia, horasNegativasDia,
