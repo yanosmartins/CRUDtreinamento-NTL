@@ -17,45 +17,48 @@ if ($funcao == 'recupera') {
     call_user_func($funcao);
 }
 
-if ($funcao == 'validarIp') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'verificaFeriado') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'verificarAutorizacao') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'consultarAbateBancoHoras') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'verificaLancamento') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'confirmaRegistro') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'registrarPausa') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'consultaLancamentoAbono') {
-    call_user_func($funcao);
-}
-
-if ($funcao == 'recuperaDados') {
-    call_user_func($funcao);
-}
 if ($funcao == 'selecionaHora') {
     call_user_func($funcao);
 }
 
+
+
+
+// if ($funcao == 'validarIp') {
+//     call_user_func($funcao);
+// }
+
+// if ($funcao == 'verificaFeriado') {
+//     call_user_func($funcao);
+// }
+
+// if ($funcao == 'verificarAutorizacao') {
+//     call_user_func($funcao);
+// }
+
+// if ($funcao == 'consultarAbateBancoHoras') {
+//     call_user_func($funcao);
+// }
+
+// if ($funcao == 'verificaLancamento') {
+//     call_user_func($funcao);
+// }
+
+// if ($funcao == 'confirmaRegistro') {
+//     call_user_func($funcao);
+// }
+
+// if ($funcao == 'registrarPausa') {
+//     call_user_func($funcao);
+// }
+
+// if ($funcao == 'consultaLancamentoAbono') {
+//     call_user_func($funcao);
+// }
+
+// if ($funcao == 'recuperaDados') {
+//     call_user_func($funcao);
+// }
 return;
 
 
@@ -763,23 +766,23 @@ function selecionaHora()
 //     return $out;
 // }
 
-function recuperaDados()
-{
-    $reposit = new reposit();
-    $funcionario = $_POST['funcionario'];
+// function recuperaDados()
+// {
+//     $reposit = new reposit();
+//     $funcionario = $_POST['funcionario'];
 
-    $sql = "SELECT BP.verificaIp, P.verificaIp AS verificaIpProjeto
-                FROM Ntl.beneficioProjeto BP
-                INNER JOIN Ntl.projeto P ON  P.codigo = BP.projeto
-                WHERE BP.funcionario = $funcionario
-                AND (BP.dataDemissaoFuncionario IS NULL OR BP.dataDemissaoFuncionario > GETDATE())";
-    $result = $reposit->RunQuery($sql);
+//     $sql = "SELECT BP.verificaIp, P.verificaIp AS verificaIpProjeto
+//                 FROM Ntl.beneficioProjeto BP
+//                 INNER JOIN Ntl.projeto P ON  P.codigo = BP.projeto
+//                 WHERE BP.funcionario = $funcionario
+//                 AND (BP.dataDemissaoFuncionario IS NULL OR BP.dataDemissaoFuncionario > GETDATE())";
+//     $result = $reposit->RunQuery($sql);
 
-    $verificaIp = $result[0]['verificaIp'];
+//     $verificaIp = $result[0]['verificaIp'];
 
-    if (!$verificaIp) {
-        $verificaIp = $result[0]['verificaIpProjeto'];
-    }
-    echo "sucess#" . "$verificaIp";
-    return $verificaIp;
-}
+//     if (!$verificaIp) {
+//         $verificaIp = $result[0]['verificaIpProjeto'];
+//     }
+//     echo "sucess#" . "$verificaIp";
+//     return $verificaIp;
+// }
