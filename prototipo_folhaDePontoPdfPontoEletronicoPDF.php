@@ -90,15 +90,18 @@ while ($contador <= $totalDiasMes) {
                     "horasPositivasDia" => $row["horasPositivasDia"],
                     "horasNegativasDia" => $row["horasNegativasDia"]
                 ];
-                $horaNegativa = $row["horasNegativasDia"];
-                $horaNegativaPartida = explode(":", $horaNegativa);
-                $hhNegativa = (int)$horaNegativaPartida[0];
-                $mmNegativa = (int)$horaNegativaPartida[1];
-                $ssNegativa = (int)$horaNegativaPartida[2];
+                $diaFolga = $row['diaFolga'];
+                if ($diaFolga != 1) {
+                    $horaNegativa = $row["horasNegativasDia"];
+                    $horaNegativaPartida = explode(":", $horaNegativa);
+                    $hhNegativa = (int)$horaNegativaPartida[0];
+                    $mmNegativa = (int)$horaNegativaPartida[1];
+                    $ssNegativa = (int)$horaNegativaPartida[2];
 
-                $hhNegativaTotal += $hhNegativa;
-                $mmNegativaTotal += $mmNegativa;
-                $ssNegativaTotal += $ssNegativa;
+                    $hhNegativaTotal += $hhNegativa;
+                    $mmNegativaTotal += $mmNegativa;
+                    $ssNegativaTotal += $ssNegativa;
+                }
             } else {
                 array_push($ponto, [
                     "codigo" => "",
@@ -160,45 +163,47 @@ while ($contador <= $totalDiasMes) {
                 "horasPositivasDia" => $row2["horasPositivasDia"],
                 "horasNegativasDia" => $row2["horasNegativasDia"]
             ]);
+            $diaFolga = $row2['diaFolga'];
+            if ($diaFolga != 1) {
 
-            $horaNegativa = $row2["horasNegativasDia"];
-            $horaNegativaPartida = explode(":", $horaNegativa);
-            $hhNegativa = (int)$horaNegativaPartida[0];
-            $mmNegativa = (int)$horaNegativaPartida[1];
-            $ssNegativa = (int)$horaNegativaPartida[2];
+                $horaNegativa = $row2["horasNegativasDia"];
+                $horaNegativaPartida = explode(":", $horaNegativa);
+                $hhNegativa = (int)$horaNegativaPartida[0];
+                $mmNegativa = (int)$horaNegativaPartida[1];
+                $ssNegativa = (int)$horaNegativaPartida[2];
 
-            $hhNegativaTotal += $hhNegativa;
-            $mmNegativaTotal += $mmNegativa;
-            $ssNegativaTotal += $ssNegativa;
+                $hhNegativaTotal += $hhNegativa;
+                $mmNegativaTotal += $mmNegativa;
+                $ssNegativaTotal += $ssNegativa;
 
-            if ($ssNegativaTotal >= 60) {
-                $ssNegativaTotal = $ssNegativaTotal - 60;
-                $mmNegativaTotal += 1;
+                if ($ssNegativaTotal >= 60) {
+                    $ssNegativaTotal = $ssNegativaTotal - 60;
+                    $mmNegativaTotal += 1;
+                }
+                if ($mmNegativaTotal >= 60) {
+                    $mmNegativaTotal = $mmNegativaTotal - 60;
+                    $hhNegativaTotal += 1;
+                }
+
+                $horaPositiva = $row2["horasPositivasDia"];
+                $horaPositivaPartida = explode(":", $horaPositiva);
+                $hhPositiva = (int)$horaPositivaPartida[0];
+                $mmPositiva = (int)$horaPositivaPartida[1];
+                $ssPositiva = (int)$horaPositivaPartida[2];
+
+                $hhPositivaTotal += $hhPositiva;
+                $mmPositivaTotal += $mmPositiva;
+                $ssPositivaTotal += $ssPositiva;
+
+                if ($ssPositivaTotal >= 60) {
+                    $ssPositivaTotal = $ssPositivaTotal - 60;
+                    $mmPositivaTotal += 1;
+                }
+                if ($mmPositivaTotal >= 60) {
+                    $mmPositivaTotal = $mmPositivaTotal - 60;
+                    $hhPositivaTotal += 1;
+                }
             }
-            if ($mmNegativaTotal >= 60) {
-                $mmNegativaTotal = $mmNegativaTotal - 60;
-                $hhNegativaTotal += 1;
-            }
-
-            $horaPositiva = $row2["horasPositivasDia"];
-            $horaPositivaPartida = explode(":", $horaPositiva);
-            $hhPositiva = (int)$horaPositivaPartida[0];
-            $mmPositiva = (int)$horaPositivaPartida[1];
-            $ssPositiva = (int)$horaPositivaPartida[2];
-
-            $hhPositivaTotal += $hhPositiva;
-            $mmPositivaTotal += $mmPositiva;
-            $ssPositivaTotal += $ssPositiva;
-
-            if ($ssPositivaTotal >= 60) {
-                $ssPositivaTotal = $ssPositivaTotal - 60;
-                $mmPositivaTotal += 1;
-            }
-            if ($mmPositivaTotal >= 60) {
-                $mmPositivaTotal = $mmPositivaTotal - 60;
-                $hhPositivaTotal += 1;
-            }
-
 
             $controleDiaPonto++;
         }
@@ -247,10 +252,12 @@ $ssBancoMensal = (int)$ssPositivaTotal - (int)$ssNegativaTotal;
 
 if ($hhBancoMensal || $mmBancoMensal || $ssBancoMensal) {
     if ($ssBancoMensal < 0) {
-        $ssBancoMensal = $ssBancoMensal * -1;
+        $ssBancoMensal = 60 + $ssBancoMensal;
+        $mmBancoMensal -=1;
     }
     if ($mmBancoMensal < 0) {
-        $mmBancoMensal = $mmBancoMensal * -1;
+        $mmBancoMensal = 60 + $mmBancoMensal;
+        $hhBancoMensal -=1;
     }
     if ($hhBancoMensal < 0) {
         $hhBancoMensalTesteNegativo = explode("-", $hhBancoMensal);
@@ -262,13 +269,13 @@ $hhBancoMensal = strval($hhBancoMensal);
 $mmBancoMensal = strval($mmBancoMensal);
 $ssBancoMensal = strval($ssBancoMensal);
 
-if (strlen($hhBancoMensal) < 2) {
+if (strlen($hhBancoMensal) == 1) {
     $hhBancoMensal = "0"  . $hhBancoMensal;
 }
-if (strlen($mmBancoMensal) < 2) {
+if (strlen($mmBancoMensal) == 1) {
     $mmBancoMensal = "0"  . $mmBancoMensal;
 }
-if (strlen($ssBancoMensal) < 2) {
+if (strlen($ssBancoMensal) == 1) {
     $ssBancoMensal = "0"  . $ssBancoMensal;
 }
 
