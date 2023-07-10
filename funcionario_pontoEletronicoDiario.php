@@ -292,22 +292,22 @@ include("inc/nav.php");
                                                             <div class="col col-xs-3">
 
                                                                 <button type="button" class="btn  btn-block btnEntrada" name="btnEntrada" id="btnEntrada" style="height: 100px; background-color:#05ad4f;" disabled>
-                                                                    <span class="fa fa-sign-in"></span><br>Entrada<br><label id="labelEntrada"></label>
+                                                                    <span class="fa fa-sign-in"></span><br>Entrada<br><label style="font-weight: bold;" id="labelEntrada"></label>
                                                                 </button>
                                                             </div>
                                                             <div class="col col-xs-3">
                                                                 <button type="button" class="btn  btn-block btnInicioAlmoco" id="btnInicioAlmoco" style=" background: #29c4e3; height:100px;" disabled>
-                                                                    <span class="fa fa-cutlery "></span><br> Inicio Intervalo<br><label id="labelInicioAlmoco"></label>
+                                                                    <span class="fa fa-cutlery "></span><br> Inicio Intervalo<br><label style="font-weight: bold;" id="labelInicioAlmoco"></label>
                                                                 </button>
                                                             </div>
                                                             <div class="col col-xs-3">
                                                                 <button type="button" class="btn  btn-block btnFimAlmoco" id="btnFimAlmoco" style="background: #d9d216; height:100px; " disabled>
-                                                                    <span class="fa fa-cutlery"></span><br> Fim Intervalo<br><label id="labelFimAlmoco"></label>
+                                                                    <span class="fa fa-cutlery"></span><br> Fim Intervalo<br><label style="font-weight: bold;" id="labelFimAlmoco"></label>
                                                                 </button>
                                                             </div>
                                                             <div class="col col-xs-3">
                                                                 <button type="button" class="btn  btn-block btnSaida" id="btnSaida" style="height: 100px;  background-color:#c42121;" disabled>
-                                                                    <span class="fa fa-sign-out"></span><br>Saida<br><label id="labelSaida"></label>
+                                                                    <span class="fa fa-sign-out"></span><br>Saida<br><label style="font-weight: bold;" id="labelSaida"></label>
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -1814,8 +1814,8 @@ include("inc/scripts.php");
                 // smartAlert("Atenção", "O funcionário possui horas extras", "erro");
                 // $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan');
                 // }
-                
-                
+
+
 
                 $(`#labelEntrada`).text(horaEntrada);
                 $(`#labelInicioAlmoco`).text(inicioAlmoco);
@@ -1842,7 +1842,7 @@ include("inc/scripts.php");
                 $(`#horasPositivasDia`).val(horasPositivasDia);
                 $(`#horasNegativasDia`).val(horasNegativasDia);
                 $(`#horarioAlmocoTolerado`).val(horarioAlmocoTolerado);
-                
+
                 if (atrasoAlmoco !== "00:00:00") {
                     $("#labelFimAlmoco").css('font-weight', 'bold').css('color', 'red');
                 }

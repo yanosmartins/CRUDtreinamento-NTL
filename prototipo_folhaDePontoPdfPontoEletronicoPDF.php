@@ -253,11 +253,11 @@ $ssBancoMensal = (int)$ssPositivaTotal - (int)$ssNegativaTotal;
 if ($hhBancoMensal || $mmBancoMensal || $ssBancoMensal) {
     if ($ssBancoMensal < 0) {
         $ssBancoMensal = 60 + $ssBancoMensal;
-        $mmBancoMensal -=1;
+        $mmBancoMensal -= 1;
     }
     if ($mmBancoMensal < 0) {
         $mmBancoMensal = 60 + $mmBancoMensal;
-        $hhBancoMensal -=1;
+        $hhBancoMensal -= 1;
     }
     if ($hhBancoMensal < 0) {
         $hhBancoMensalTesteNegativo = explode("-", $hhBancoMensal);
@@ -636,6 +636,14 @@ if ($ponto) {
             if ($atraso == '00:00:00') {
                 $atraso = '';
             }
+            $horaNegativaDia = $registro['horasNegativasDia'];
+            if ($horaNegativaDia == '00:00:00') {
+                $horaNegativaDia = '';
+            }
+            $horaPositivaDia = $registro['horasPositivasDia'];
+            if ($horaPositivaDia == '00:00:00') {
+                $horaPositivaDia = '';
+            }
 
             $diaFolga = $registro['diaFolga'];
             if ($diaFolga == '1') {
@@ -812,11 +820,7 @@ if ($ponto) {
 
             $pdf->SetFont('Arial', 'B', 8);
             $pdf->setX(14);
-            if ($entrada != "-") {
-                if ($atraso != "") {
-                    $pdf->SetTextColor(255, 0, 0);
-                }
-            }
+
             $pdf->Cell(20, 7, iconv('UTF-8', 'windows-1252', $entrada), 0, 0, "C", 0); // hora entrada
             $pdf->SetTextColor(0, 0, 0);
             $pdf->setX(32.2);
@@ -826,8 +830,20 @@ if ($ponto) {
             $pdf->Cell(17.65,  6.61, iconv('UTF-8', 'windows-1252', $almocoFim), 0, 0, "C", 0); // fim almoco
 
             $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
+            if ($entrada != "-") {
+                if ($horaPositivaDia != "") {
+                    $pdf->SetTextColor(0,0,205);
+                }
+            }
             $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horasPositivasDia']), 0, 0, "C", 0); // HORA POSITIVA
+            $pdf->SetTextColor(0, 0, 0);
+            if ($entrada != "-") {
+                if ($horaNegativaDia != "") {
+                    $pdf->SetTextColor(255, 0, 0);
+                }
+            }
             $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horasNegativasDia']), 0, 0, "C", 0); // HORA NEGATIVA
+            $pdf->SetTextColor(0, 0, 0);
             $pdf->setX(127);
             $pdf->SetFont('Arial', 'B', 8);
             $pdf->Cell(75,  6.61, iconv('UTF-8', 'windows-1252', $registro['descricaoLancamento']), 0, 0, "L", 0); //Observacao
