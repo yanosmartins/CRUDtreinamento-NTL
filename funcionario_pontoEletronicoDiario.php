@@ -674,6 +674,8 @@ include("inc/scripts.php");
         }, 1000);
 
 
+
+
         carregaPonto()
 
 
@@ -1812,11 +1814,8 @@ include("inc/scripts.php");
                 // smartAlert("Atenção", "O funcionário possui horas extras", "erro");
                 // $("#labelSaida").css('font-weight', 'bold').css('color', 'Cyan');
                 // }
-                if (atrasoAlmoco !== "00:00:00") {
-                    $("#labelFimAlmoco").css('font-weight', 'bold').css('color', 'red');
-                }
-
-
+                
+                
 
                 $(`#labelEntrada`).text(horaEntrada);
                 $(`#labelInicioAlmoco`).text(inicioAlmoco);
@@ -1843,7 +1842,22 @@ include("inc/scripts.php");
                 $(`#horasPositivasDia`).val(horasPositivasDia);
                 $(`#horasNegativasDia`).val(horasNegativasDia);
                 $(`#horarioAlmocoTolerado`).val(horarioAlmocoTolerado);
-
+                
+                if (atrasoAlmoco !== "00:00:00") {
+                    $("#labelFimAlmoco").css('font-weight', 'bold').css('color', 'red');
+                }
+                if (($("#labelEntrada").text()) == "00:00:00") {
+                    $("#labelEntrada").text("");
+                }
+                if (($("#labelSaida").text()) == "00:00:00") {
+                    $("#labelSaida").text("");
+                }
+                if (($("#labelInicioAlmoco").text()) == "00:00:00") {
+                    $("#labelInicioAlmoco").text("");
+                }
+                if (($("#labelFimAlmoco").text()) == "00:00:00") {
+                    $("#labelFimAlmoco").text("");
+                }
 
 
                 habilitaBotões();
