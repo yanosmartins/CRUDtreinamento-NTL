@@ -278,9 +278,7 @@ if ($hhBancoMensal || $mmBancoMensal || $ssBancoMensal) {
     }
 }
 
-// $hhBancoMensal = strval($hhBancoMensal);
-// $mmBancoMensal = strval($mmBancoMensal);
-// $ssBancoMensal = strval($ssBancoMensal);
+
 
 if (strlen($hhBancoMensal) == 1) {
     $hhBancoMensal = "0"  . $hhBancoMensal;

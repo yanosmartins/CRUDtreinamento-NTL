@@ -764,22 +764,8 @@ include("inc/scripts.php");
             } else {
                 gravarLancamento()
             }
-
-            // if (atraso != '00:00:00') {
-            //     abonarAtraso();
-            //     abateBancoHoras(lancamento, dia, horaEntrada, horaSaida, atraso);
-            // }
-            // if (extra != '00:00:00') {
-            //     compensarFalta(extra, dia, lancamento);
-            // }
-            // if ((atraso == '00:00:00') && (extra == '00:00:00')) {
-            //     gravarLancamento();
-            // }
         });
 
-        // $('#btnVerificarIp').on("click", function() {
-        //     resetaTempo();
-        // });
 
         $('#btnPdf').on("click", function() {
             // resetaTempo();
@@ -961,17 +947,6 @@ include("inc/scripts.php");
             var inicioAlmoco = $("#inicioAlmoco").val();
             var fimAlmoco = $("#fimAlmoco").val();
             var saida = $("#horaSaida").val();
-
-            // if ((!inicioPrimeiraPausa) || (!fimPrimeiraPausa)) {
-            //     $("#inicioSegundaPausa").val('');
-            //     smartAlert("Atenção", "Registre a primeira pausa!", "error");
-            //     return;
-            // }
-            // if ((inicioAlmoco == '00:00') || (fimAlmoco == '00:00')) {
-            //     $("#inicioSegundaPausa").val('');
-            //     smartAlert("Atenção", "A segunda pausa não pode ser registrada antes do intervalo!", "error");
-            //     return;
-            // }
 
             if (saida != '00:00:00') {
                 $("#inicioSegundaPausa").val('');
@@ -1711,32 +1686,6 @@ include("inc/scripts.php");
         $(location).attr('href', 'funcionario_pontoEletronicoDiario.php');
     }
 
-    // function aleatorizarTempo(hora, expediente) {
-    //     let horaPartida = hora.split(' ');
-    //     var hora = horaPartida[1];
-    //     var horaNova = hora.substring(0, 8);
-    //     let separador = horaNova.split(':');
-    //     let h = Number(separador[0]);
-    //     let m = Number(separador[1]);
-    //     let s = Number(separador[2]);
-
-    //     separador = expediente.split(':');
-    //     const eh = Number(separador[0]);
-    //     const em = Number(separador[1]);
-    //     let es = Number(separador[2]);
-    //     if (isNaN(es)) es = Number('00');
-
-    //     if ((h != 0) || (m != 0)) {
-    //         s = Math.floor(Math.random() * 50);
-    //     }
-
-    //     if (h.toString().length < 2) h = `0${h}`;
-    //     if (m.toString().length < 2) m = `0${m}`;
-    //     if (s.toString().length < 2) s = `0${s}`;
-
-    //     const result = `${h}:${m}:${s}`;
-    //     return result;
-    // }
 
     function parse(horario) {
         // divide a string em duas partes, separado por dois-pontos, e transforma em número
@@ -1884,41 +1833,6 @@ include("inc/scripts.php");
 
                 var weekday = dataAtual.getDay();
 
-                // if (descricaoStatus == "Fechado" || (folga == 1 && folgaCobertura == 1)) {
-                //     $("#lancamento").prop('disabled', true);
-                //     $("#btnLancamento").prop('disabled', true);
-                // }
-                // var data = mesAno.split("-");
-                // var date = new Date(data[0] + "-" + data[1] + "-" + dia);
-
-                // if (tipoEscala == 1) {
-                //     // Se for sabado e não tiver intervalo
-                //     if ((weekday == 6) && (intervaloSabado == 0)) {
-                //         $("#btnInicioAlmoco").prop('disabled', true);
-                //         $("#btnFimAlmoco").prop('disabled', true);
-                //     }
-
-                //     // Se for domingo e não tiver intervalo
-                //     if ((weekday == 0) && (intervaloDomingo == 0)) {
-                //         $("#btnInicioAlmoco").prop('disabled', true);
-                //         $("#btnFimAlmoco").prop('disabled', true);
-                //     }
-                // }
-
-                // if (inicioPrimeiraPausa) {
-                //     $("#btnInicioPrimeiraPausa").prop('disabled', true);
-                // }
-                // if (fimPrimeiraPausa) {
-                //     $("#btnFimPrimeiraPausa").prop('disabled', true);
-                // }
-                // if (inicioSegundaPausa) {
-                //     $("#btnInicioSegundaPausa").prop('disabled', true);
-                // }
-                // if (fimSegundaPausa) {
-                //     $("#btnFimSegundaPausa").prop('disabled', true);
-                // }
-                // }
-
             }
         );
     }
@@ -1932,46 +1846,6 @@ include("inc/scripts.php");
 
 
 
-    // function enviarEmail() {
-    //     var codigoFuncionario = $("#funcionario").val();
-    //     var horaAtual = $("#horaAtual").val();
-
-    //     enviaEmail(codigoFuncionario, horaAtual,
-    //         function(data) {
-    //             if (data.indexOf('sucess') < 0) {
-    //                 var piece = data.split("#");
-    //                 var mensagem = piece[1];
-    //                 if (mensagem !== "") {
-    //                     return false;
-    //                 } else {
-    //                     return false;
-    //                 }
-    //             }
-    //         }
-    //     );
-    // }
-
-    // async function getIpClient() {
-    //     try {
-    //         const response = await axios.get('https://api.ipify.org?format=json');
-    //         if (verificaIp == 1) {
-    //             $('#ip').val(response.data['ip']);
-    //             validarIp(response.data['ip']);
-    //         } else {
-    //             $('#ip').val(response.data['ip']);
-    //             // carregaPonto();
-    //         }
-
-    //     } catch (error) {
-    //         if (verificaIp == 1) {
-    //             $("#ipInvalido").html("Não foi possivel verificar o IP!");
-    //             $("#modalIp").modal('show');
-    //         } else {
-    //             // carregaPonto();
-    //         }
-
-    //     }
-    // }
 
     function validaHoraAtual(horaAtual) {
         if ((horaAtual == "") || (horaAtual == " ") || (!horaAtual) || (horaAtual == '00:00:00')) {
@@ -2002,15 +1876,6 @@ include("inc/scripts.php");
                 } else {
                     carregaPonto()
 
-                    // if (tipoEscala == 1) {
-                    //     verificarFeriado();
-                    // } else {
-                    //     $('#dlgSimplePonto').dialog('open');
-
-                    //     if (horaRetorno) {
-                    //         $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
-                    //     }
-                    // }
                 }
             }
         );
@@ -2018,26 +1883,6 @@ include("inc/scripts.php");
 
 
 
-    // function verificarFeriado() {
-    //     var mesAno = $("#mesAno").val();
-    //     const funcionario = $("#funcionario").val()
-
-    //     verificaFeriado(mesAno, funcionario, function(data) {
-    //         if (data.indexOf('failed') > -1) {
-    //             // if (horaRetorno) {
-    //             //     horaRetorno = converteHora(horaRetorno)
-    //             // }
-    //             $('#dlgSimplePonto').dialog('open');
-
-    //             if (horaRetorno) {
-    //                 // $("#alerta").html("O retorno do seu intervalo é as " + horaRetorno).css('color', 'red');
-    //             }
-    //         } else {
-    //             data = data.replace(/failed/g, '');
-    //             $('#dlgSimpleFeriado').dialog('open');
-    //         }
-    //     });
-    // }
 
     function desabilitaBotões() {
         $("#btnEntrada").prop('disabled', true);
@@ -2068,18 +1913,6 @@ include("inc/scripts.php");
         $("#btnFimSegundaPausa").prop('disabled', false);
     }
 
-    // function verificaAutorizacao(dia) {
-    //     var dia = dia;
-    //     var mesAno = $("#mesAno").val();
-    //     var funcionario = $("#funcionario").val();
-
-    //     verificarAutorizacao(dia, mesAno, funcionario, function(data) {
-
-    //         if (data.indexOf('failed') > -1) {
-    //             $('#modalAutorizacao').modal('show');
-    //         }
-    //     });
-    // }
 
     function getHora(campo) {
         var campo = campo;
@@ -2340,156 +2173,6 @@ include("inc/scripts.php");
         });
     }
 
-    // function abateBancoHoras(lancamento, dia, horaEntrada, horaSaida, atraso) {
-    //     let abateBancoHoras = 0;
-
-    //     consultarAbateBancoHoras(lancamento, atraso, horaEntrada, horaSaida, function(data) {
-
-    //         data = data.replace(/failed/gi, '');
-    //         var piece = data.split("#");
-
-    //         var out = piece[1];
-    //         var mensagem = piece[2];
-
-    //         piece = out.split("^");
-
-    //         abateBancoHoras = piece[0];
-
-    //         if (abateBancoHoras == 1) {
-    //             $("#atraso").val("00:00:00");
-    //         }
-
-    //         if (mensagem != '') {
-    //             smartAlert("Atenção", mensagem, "error");
-
-    //             $("#lancamento").val("");
-
-    //             return false;
-    //         }
-
-    //         gravar();
-    //         return;
-    //     })
-
-    // }
-
-    // function compensarFalta(horaExtra, dia, lancamento) {
-    //     const idFolha = $('#idFolha').val();
-    //     let compensaFalta = 0;
-
-    //     verificaLancamento(lancamento, horaExtra, idFolha, dia, function(data) {
-
-    //         data = data.replace(/failed/gi, '');
-    //         var piece = data.split("#");
-
-    //         var out = piece[1];
-    //         var mensagem = piece[2];
-    //         piece = out.split("^");
-
-    //         compensaFalta = piece[0];
-
-    //         if (compensaFalta == 1) {
-    //             $("#horaExtra").val("00:00:00");
-    //         }
-
-    //         if (mensagem) {
-    //             smartAlert("Atenção", mensagem, "error");
-
-    //             $("#lancamento").val("");
-    //             return false;
-    //         }
-
-    //         gravar();
-    //         return;
-    //     })
-    // }
-
-    // function confirmarRegistro(idFolha, dia, btnClicado, mesAno) {
-    //     confirmaRegistro(idFolha, dia, mesAno, function(data) {
-
-    //         data = data.replace(/failed/gi, '');
-    //         var piece = data.split("#");
-
-    //         var horaEntrada = piece[1];
-    //         var inicioAlmoco = piece[2];
-    //         var fimAlmoco = piece[3];
-    //         var horaSaida = piece[4];
-    //         var inicioPrimeiraPausa = piece[5];
-    //         var fimPrimeiraPausa = piece[6];
-    //         var inicioSegundaPausa = piece[7];
-    //         var fimSegundaPausa = piece[8];
-    //         var dataRegistro = piece[9];
-
-    //         $("#dataComprovante").html('Data: ' + dataRegistro);
-    //         if (btnClicado == 'entrada') {
-    //             $("#comprovanteRegistro").modal('show');
-    //             $("#horaComprovante").html('Hora Entrada: ' + horaEntrada);
-    //         } else if (btnClicado == 'inicioAlmoco') {
-    //             $("#comprovanteRegistro").modal('show');
-    //             $("#horaComprovante").html('Inicio Intervalo: ' + inicioAlmoco);
-    //         } else if (btnClicado == 'fimAlmoco') {
-    //             $("#comprovanteRegistro").modal('show');
-    //             $("#horaComprovante").html('Fim Intervalo: ' + fimAlmoco);
-    //         } else if (btnClicado == 'saida') {
-    //             $("#comprovanteRegistro").modal('show');
-    //             $("#horaComprovante").html('Hora Saida: ' + horaSaida);
-    //         } else if (btnClicado == 'inicioPrimeiraPausa') {
-    //             $("#comprovanteRegistro").modal('show');
-    //             $("#horaComprovante").html('Inicio Primeira Pausa: ' + inicioPrimeiraPausa);
-    //         } else if (btnClicado == 'fimPrimeiraPausa') {
-    //             $("#comprovanteRegistro").modal('show');
-    //             $("#horaComprovante").html('Fim Primeira Pausa: ' + fimPrimeiraPausa);
-    //         } else if (btnClicado == 'inicioSegundaPausa') {
-    //             $("#comprovanteRegistro").modal('show');
-    //             $("#horaComprovante").html('Inicio Segunda Pausa: ' + inicioSegundaPausa);
-    //         } else if (btnClicado == 'fimSegundaPausa') {
-    //             $("#comprovanteRegistro").modal('show');
-    //             $("#horaComprovante").html('Fim Segunda Pausa: ' + fimSegundaPausa);
-    //         }
-
-    //         return;
-    //     })
-    // }
-
-    // function registraPausa(btnClicado) {
-
-    //     // var codigoPausa = $("#codigoPausa").val();
-    //     var inicioPrimeiraPausa = $("#inicioPrimeiraPausa").val();
-    //     var fimPrimeiraPausa = $("#fimPrimeiraPausa").val();
-    //     var inicioSegundaPausa = $("#inicioSegundaPausa").val();
-    //     var fimSegundaPausa = $("#fimSegundaPausa").val();
-    //     var idFolha = $("#idFolha").val();
-    //     var mesAno = $("#mesAno").val();
-    //     var dataAtual = new Date();
-    //     var dia = dataAtual.getDate();
-    //     var justificativaPausa = $("#justificativaPausa").val();
-
-    //     registrarPausa(idFolha, mesAno, dia, inicioPrimeiraPausa, fimPrimeiraPausa, inicioSegundaPausa, fimSegundaPausa, btnClicado, justificativaPausa,
-    //         function(data) {
-
-    //             if (data.indexOf('sucess') < 0) {
-    //                 var piece = data.split("#");
-    //                 var mensagem = piece[1];
-    //                 if (mensagem !== "") {
-    //                     smartAlert("Atenção", mensagem, "error");
-    //                     return false;
-    //                 } else {
-    //                     smartAlert("Atenção", "Operação não realizada - entre em contato com o suporte!", "error");
-    //                     return false;
-    //                 }
-    //             } else {
-    //                 var piece = data.split("#");
-    //                 var mensagem = piece[2];
-    //                 if (!mensagem) {
-    //                     smartAlert("Sucesso", "Pausa marcada com sucesso!", "success");
-    //                 }
-    //                 confirmarRegistro(idFolha, dia, btnClicado, mesAno);
-    //                 // voltar()
-    //             }
-    //         }
-    //     );
-    // }
-
     function justificar(btnClicado) {
 
         $('#dlgSimpleJustificativa').dialog('open');
@@ -2499,40 +2182,6 @@ include("inc/scripts.php");
             $("#titulo").html("Justificativa de Hora Extra");
         }
     }
-
-//    function abonarAtraso() {
-//         const lancamento = $("#inputLancamento").val();
-//         let abonarAtraso = 0;
-
-//         $.ajax({
-//             url: 'js/sqlscope_pontoEletronicoDiario.php',
-//             dataType: 'html', //tipo do retorno
-//             type: 'post', //metodo de envio
-//             data: {
-//                 funcao: 'consultaLancamentoAbono',
-//                 lancamento: lancamento
-//             },
-//             success: function(data) {
-//                 data = data.replace(/failed/gi, '');
-//                 var piece = data.split("#");
-
-//                 var mensagem = piece[0];
-//                 var out = piece[1];
-//                 piece = out.split("^");
-
-//                 abonarAtraso = piece[0];
-
-//                 if (abonarAtraso == 1) {
-//                     $("#inputLancamento").val("00:00:00");
-//                 }
-
-//                 return;
-//             },
-//             error: function(xhr, er) {
-//                 console.log(xhr, er);
-//             }
-//         });
-//     }
 
     function avisoDaFolga() {
         smartAlert("Atenção", "Dia de Folga!", "error");
@@ -2551,38 +2200,6 @@ include("inc/scripts.php");
 
         return `${horas}:${minutos}:${segundos}`;
     }
-
-    // function recuperaDados() {
-    //     const funcionario = $("#funcionario").val();
-    //     $.ajax({
-    //         url: 'js/sqlscope_pontoEletronicoDiario.php',
-    //         dataType: 'html', //tipo do retorno
-    //         type: 'post', //metodo de envio
-    //         data: {
-    //             funcao: 'recuperaDados',
-    //             funcionario: funcionario
-    //         },
-    //         //essa é a function success, será executada se a requisição obtiver exito
-    //         success: function(data) {
-    //             data = data.replace(/failed/g, '');
-    //             var piece = data.split("#");
-
-    //             var mensagem = piece[0];
-    //             var out = piece[1];
-
-    //             piece = out.split("^");
-
-    //             //Atributos do funcionário
-    //             verificaIp = piece[0];
-
-    //             // if(verificaIp == 1){
-    //             getIpClient();
-    //             // }else{
-    //             //     carregaPonto();
-    //             // }
-    //         }
-    //     });
-    // }
 
     function resetaTempo() {
         var intervalo = 0;
