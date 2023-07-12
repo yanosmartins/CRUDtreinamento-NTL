@@ -246,9 +246,18 @@ if (strlen($ssPositivaTotal) == 1) {
 
 $totalHorasPositivasMes = $hhPositivaTotal . ":" . $mmPositivaTotal . ":" . $ssPositivaTotal;
 
-$hhBancoMensal = (int)$hhPositivaTotal - (int)$hhNegativaTotal;
-$mmBancoMensal = (int)$mmPositivaTotal - (int)$mmNegativaTotal;
-$ssBancoMensal = (int)$ssPositivaTotal - (int)$ssNegativaTotal;
+
+if ($totalHorasPositivasMes == "00:00:00") {
+    $bancoNegativoSim = 1;
+
+    $hhBancoMensal = "-" . (int)$hhNegativaTotal;
+    $mmBancoMensal = (int)$mmNegativaTotal;
+    $ssBancoMensal = (int)$ssNegativaTotal;
+} else {
+    $hhBancoMensal = (int)$hhPositivaTotal - (int)$hhNegativaTotal;
+    $mmBancoMensal = (int)$mmPositivaTotal - (int)$mmNegativaTotal;
+    $ssBancoMensal = (int)$ssPositivaTotal - (int)$ssNegativaTotal;
+}
 
 if ($hhBancoMensal || $mmBancoMensal || $ssBancoMensal) {
     if ($ssBancoMensal < 0) {
@@ -259,15 +268,19 @@ if ($hhBancoMensal || $mmBancoMensal || $ssBancoMensal) {
         $mmBancoMensal = 60 + $mmBancoMensal;
         $hhBancoMensal -= 1;
     }
-    if ($hhBancoMensal < 0) {
+    if ((int)$hhBancoMensal < 0) {
+        $hhBancoMensalTesteNegativo = explode("-", $hhBancoMensal);
+        $hhBancoMensal = $hhBancoMensalTesteNegativo[1];
+    }
+    if ($bancoNegativoSim == 1) {
         $hhBancoMensalTesteNegativo = explode("-", $hhBancoMensal);
         $hhBancoMensal = $hhBancoMensalTesteNegativo[1];
     }
 }
 
-$hhBancoMensal = strval($hhBancoMensal);
-$mmBancoMensal = strval($mmBancoMensal);
-$ssBancoMensal = strval($ssBancoMensal);
+// $hhBancoMensal = strval($hhBancoMensal);
+// $mmBancoMensal = strval($mmBancoMensal);
+// $ssBancoMensal = strval($ssBancoMensal);
 
 if (strlen($hhBancoMensal) == 1) {
     $hhBancoMensal = "0"  . $hhBancoMensal;
@@ -832,7 +845,7 @@ if ($ponto) {
             $pdf->Cell(19.7,  6.4, iconv('UTF-8', 'windows-1252', $saida), 0, 0, "C", 0); // HORA EXTRA SAIDA
             if ($entrada != "-") {
                 if ($horaPositivaDia != "") {
-                    $pdf->SetTextColor(0,0,205);
+                    $pdf->SetTextColor(0, 0, 205);
                 }
             }
             $pdf->Cell(19.55, 6.61, iconv('UTF-8', 'windows-1252', $registro['horasPositivasDia']), 0, 0, "C", 0); // HORA POSITIVA
@@ -896,6 +909,11 @@ $pdf->setX(49.22);
 $pdf->Cell(76.5, 7, iconv('UTF-8', 'windows-1252', "HORAS NEGATIVAS: $totalHorasNegativasMes"), 0, 0, "L", 1);
 
 $pdf->SetFillColor(255, 255, 255);
+
+if ($saldoBancoMensal == "::") {
+    $saldoBancoMensal = "00:00:00";
+}
+$bancoNegativoSim = 0;
 
 if ($saldoBancoMensal != "00:00:00") {
     $hhBancoMensalPartido = explode("-", $saldoBancoMensal);
