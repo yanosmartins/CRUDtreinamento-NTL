@@ -229,6 +229,7 @@ if (strlen($ssNegativaTotal) == 1) {
 
 $totalHorasNegativasMes = $hhNegativaTotal . ":" . $mmNegativaTotal . ":" . $ssNegativaTotal;
 
+
 $hhPositivaTotal = strval($hhPositivaTotal);
 $mmPositivaTotal = strval($mmPositivaTotal);
 $ssPositivaTotal = strval($ssPositivaTotal);
@@ -247,18 +248,19 @@ if (strlen($ssPositivaTotal) == 1) {
 $totalHorasPositivasMes = $hhPositivaTotal . ":" . $mmPositivaTotal . ":" . $ssPositivaTotal;
 
 
+
 if ($totalHorasPositivasMes == "00:00:00") {
     $bancoNegativoSim = 1;
-
-    $hhBancoMensal = "-" . (int)$hhNegativaTotal;
+    $hhBancoMensal = (int)$hhNegativaTotal;
     $mmBancoMensal = (int)$mmNegativaTotal;
     $ssBancoMensal = (int)$ssNegativaTotal;
-} else {
-    $hhBancoMensal = (int)$hhPositivaTotal - (int)$hhNegativaTotal;
-    $mmBancoMensal = (int)$mmPositivaTotal - (int)$mmNegativaTotal;
-    $ssBancoMensal = (int)$ssPositivaTotal - (int)$ssNegativaTotal;
+}else{
+    $hhBancoMensal = (int)$hhPositivaTotal -(int)$hhNegativaTotal;
+    $mmBancoMensal = (int)$mmPositivaTotal -(int)$mmNegativaTotal;
+    $ssBancoMensal = (int)$ssPositivaTotal -(int)$ssNegativaTotal;
 }
 
+///
 if ($hhBancoMensal || $mmBancoMensal || $ssBancoMensal) {
     if ($ssBancoMensal < 0) {
         $ssBancoMensal = 60 + $ssBancoMensal;
@@ -268,11 +270,7 @@ if ($hhBancoMensal || $mmBancoMensal || $ssBancoMensal) {
         $mmBancoMensal = 60 + $mmBancoMensal;
         $hhBancoMensal -= 1;
     }
-    if ((int)$hhBancoMensal < 0) {
-        $hhBancoMensalTesteNegativo = explode("-", $hhBancoMensal);
-        $hhBancoMensal = $hhBancoMensalTesteNegativo[1];
-    }
-    if ($bancoNegativoSim == 1) {
+    if ($hhBancoMensal < 0 && ($bancoNegativoSim != 1)) {
         $hhBancoMensalTesteNegativo = explode("-", $hhBancoMensal);
         $hhBancoMensal = $hhBancoMensalTesteNegativo[1];
     }
@@ -290,10 +288,8 @@ if (strlen($ssBancoMensal) == 1) {
     $ssBancoMensal = "0"  . $ssBancoMensal;
 }
 
-if ($hhBancoMensalTesteNegativo) {
-    if (count($hhBancoMensalTesteNegativo) > 1) {
-        $saldoBancoMensal = "- " . $hhBancoMensal . ":" . $mmBancoMensal . ":" . $ssBancoMensal;
-    }
+if ($bancoNegativoSim == 1) {
+    $saldoBancoMensal = "- " . $hhBancoMensal . ":" . $mmBancoMensal . ":" . $ssBancoMensal;
 } else {
     $saldoBancoMensal = $hhBancoMensal . ":" . $mmBancoMensal . ":" . $ssBancoMensal;
 }
