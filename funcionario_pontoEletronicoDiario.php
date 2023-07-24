@@ -1594,8 +1594,13 @@ include("inc/scripts.php");
             if (inicioAlmoco == "00:00:00") {
                 if (fimAlmoco == "00:00:00") {
 
-                    if (atraso != "00:00:00")
-                        smartAlert("Erro", "O funcionário possui atraso!", "error");
+                    if (atraso != "00:00:00") {
+                        smartAlert("Erro", "Você possui atraso!", "error");
+                    }
+                    
+                    if (horaExtra != "00:00:00") {
+                        smartAlert("Erro", "Você possui hora extra!", "primary");
+                    }
                 }
             }
         }
